@@ -1,13 +1,11 @@
 node_modules
 .envrc
+.env**
 .DS_Store
 build
 dist
-.next/**
 .cache
 .idea
 tags
 **/.coverage/**
-lerna-debug.log
 .eslintcache
-.turbo
