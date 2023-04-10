@@ -6,16 +6,19 @@
     "npm": ">= 8.0.0 < 9.0.0"
   },
   "packageManager": "npm@8.19.4",
-  "workspaces": ["apps/*"],
+  "workspaces": [
+    "apps/*"
+  ],
   "devDependencies": {
     "prettier": "2.8.7",
     "husky": "^8.0.0",
     "lint-staged": "^13.0.0"
   },
   "scripts": {
+    "build": "turbo run build",
+    "test": "turbo run test"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "lint-staged": {
     "*.{t,j}s?(x)": [
       "prettier --write"
