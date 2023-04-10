@@ -1,0 +1,11 @@
+node_modules
+.envrc
+.env**
+.DS_Store
+build
+dist
+.cache
+.idea
+tags
+**/.coverage/**
+.eslintcache
