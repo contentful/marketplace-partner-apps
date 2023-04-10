@@ -1,0 +1,24 @@
+{
+  "name": "@contentful/marketplace-partner-apps",
+  "private": false,
+  "engines": {
+    "node": ">=16.0.0 < 18.0.0",
+    "npm": ">= 8.0.0 < 9.0.0"
+  },
+  "packageManager": "npm@8.19.4",
+  "workspaces": ["apps/*"],
+  "devDependencies": {
+    "prettier": "2.8.7",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.0.0"
+  },
+  "scripts": {
+  },
+  "dependencies": {
+  },
+  "lint-staged": {
+    "*.{t,j}s?(x)": [
+      "prettier --write"
+    ]
+  }
+}
