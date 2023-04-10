@@ -17,7 +17,8 @@
   },
   "scripts": {
     "build": "turbo run build",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "deploy": "turbo run deploy"
   },
   "lint-staged": {
     "*.{t,j}s?(x)": [
