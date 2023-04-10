@@ -18,6 +18,7 @@
   "scripts": {
     "build": "turbo run build",
     "test": "turbo run test",
+    "lint": "turbo run lint",
     "deploy": "turbo run deploy"
   },
   "lint-staged": {

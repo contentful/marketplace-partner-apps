@@ -18,11 +18,9 @@
   "scripts": {
     "start": "cross-env BROWSER=none react-scripts start",
     "build": "react-scripts build",
+    "lint": "eslint **/*.ts **/*.tsx --max-warnings=0 --no-error-on-unmatched-pattern",
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 6Q0Y5EyXh91VAOUCkSLcV9 --token ${CONTENTFUL_CMA_TOKEN}",
     "deploy:test": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id ${TEST_APP_ID} --token ${CONTENTFUL_CMA_TOKEN}"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "browserslist": [
     "last 5 Chrome version",
