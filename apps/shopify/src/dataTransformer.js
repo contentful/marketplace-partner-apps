@@ -33,10 +33,7 @@ export const collectionDataTransformer = (collection, apiEndpoint) => {
   const handle = get(collection, ['handle'], undefined);
 
   const collectionId = decodeId(collection.id);
-  const externalLink =
-    apiEndpoint &&
-    collectionId &&
-    `https://${removeHttpsAndTrailingSlash(apiEndpoint)}/admin/collections/${collectionId}`;
+  const externalLink = apiEndpoint && collectionId && `https://${removeHttpsAndTrailingSlash(apiEndpoint)}/admin/collections/${collectionId}`;
 
   return {
     id: collection.id,
@@ -57,10 +54,7 @@ export const productDataTransformer = (product, apiEndpoint) => {
   const sku = get(product, ['variants', 0, 'sku'], undefined);
 
   const productId = decodeId(product.id);
-  const externalLink =
-    apiEndpoint &&
-    productId &&
-    `https://${removeHttpsAndTrailingSlash(apiEndpoint)}/admin/products/${productId}`;
+  const externalLink = apiEndpoint && productId && `https://${removeHttpsAndTrailingSlash(apiEndpoint)}/admin/products/${productId}`;
 
   return {
     id: product.id,
@@ -99,10 +93,7 @@ export const productsToVariantsTransformer = (products) =>
         id: convertStringToBase64(variant.id),
         sku: convertStringToBase64(variant.id),
         productId: product.id,
-        title:
-          variant.title === DEFAULT_SHOPIFY_VARIANT_TITLE
-            ? product.title
-            : `${product.title} (${variant.title})`,
+        title: variant.title === DEFAULT_SHOPIFY_VARIANT_TITLE ? product.title : `${product.title} (${variant.title})`,
       }));
       return variants;
     })
@@ -112,10 +103,7 @@ export const previewsToProductVariants =
   ({ apiEndpoint }) =>
   ({ sku, id, image, product, title }) => {
     const productId = decodeId(product.id);
-    const externalLink =
-      apiEndpoint &&
-      productId &&
-      `https://${removeHttpsAndTrailingSlash(apiEndpoint)}/admin/products/${productId}`;
+    const externalLink = apiEndpoint && productId && `https://${removeHttpsAndTrailingSlash(apiEndpoint)}/admin/products/${productId}`;
 
     return {
       id,

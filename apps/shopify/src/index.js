@@ -1,10 +1,5 @@
 import { setup, renderSkuPicker } from '@contentful/ecommerce-app-base';
-import {
-  fetchProductVariantPreviews,
-  fetchProductPreviews,
-  fetchCollectionPreviews,
-  makeSkuResolver,
-} from './skuResolvers';
+import { fetchProductVariantPreviews, fetchProductPreviews, fetchCollectionPreviews, makeSkuResolver } from './skuResolvers';
 import { SKU_TYPES } from './constants';
 
 import logo from './logo.svg';
@@ -130,8 +125,7 @@ setup({
   makeCTA,
   name: 'Shopify',
   logo,
-  description:
-    'The Shopify app allows editors to select products from their Shopify account and reference them inside of Contentful entries.',
+  description: 'The Shopify app allows editors to select products from their Shopify account and reference them inside of Contentful entries.',
   color: '#212F3F',
   parameterDefinitions: [
     {

@@ -4,21 +4,12 @@ import Client from 'shopify-buy';
 import makeProductVariantPagination from './productVariantPagination';
 import makeProductPagination from './productPagination';
 import makeCollectionPagination from './collectionPagination';
-import {
-  productDataTransformer,
-  collectionDataTransformer,
-  removeHttpsAndTrailingSlash,
-} from './dataTransformer';
+import { productDataTransformer, collectionDataTransformer, removeHttpsAndTrailingSlash } from './dataTransformer';
 
 import { validateParameters } from '.';
 import { previewsToProductVariants } from './dataTransformer';
 import { SHOPIFY_API_VERSION, SHOPIFY_ENTITY_LIMIT } from './constants';
-import {
-  convertStringToBase64,
-  convertBase64ToString,
-  convertCollectionToBase64,
-  convertProductToBase64,
-} from './utils/base64';
+import { convertStringToBase64, convertBase64ToString, convertCollectionToBase64, convertProductToBase64 } from './utils/base64';
 
 export async function makeShopifyClient(config) {
   const validationError = validateParameters(config);
@@ -37,9 +28,7 @@ export async function makeShopifyClient(config) {
 
 const graphqlRequest = async (config, query) => {
   const { apiEndpoint, storefrontAccessToken } = config;
-  const url = `https://${removeHttpsAndTrailingSlash(
-    apiEndpoint
-  )}/api/${SHOPIFY_API_VERSION}/graphql`;
+  const url = `https://${removeHttpsAndTrailingSlash(apiEndpoint)}/api/${SHOPIFY_API_VERSION}/graphql`;
 
   const response = await window.fetch(url, {
     method: 'POST',
@@ -101,9 +90,7 @@ export const fetchCollectionPreviews = async (skus, config) => {
   const collections = response.map((res) => convertCollectionToBase64(res));
 
   return validIds.map((validId) => {
-    const collection = collections.find(
-      (collection) => collection.id === convertStringToBase64(validId)
-    );
+    const collection = collections.find((collection) => collection.id === convertStringToBase64(validId));
     return collection
       ? collectionDataTransformer(collection, config.apiEndpoint)
       : {

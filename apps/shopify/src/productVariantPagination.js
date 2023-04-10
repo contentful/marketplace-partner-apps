@@ -40,9 +40,7 @@ class Pagination {
     // If there is a satisfactory size of variants to fill the next
     // page there is no need to fetch any more products and extract their variants
     // until the next click on the "Load more" button
-    const nothingLeftToFetch =
-      (!!this.products.length && !last(this.products).hasNextPage) ||
-      (!this.freshSearch && !this.products.length);
+    const nothingLeftToFetch = (!!this.products.length && !last(this.products).hasNextPage) || (!this.freshSearch && !this.products.length);
     const hasEnoughVariantsToConsume = this.variants.length >= PER_PAGE || nothingLeftToFetch;
     if (hasEnoughVariantsToConsume) {
       const variants = this.variants.splice(0, PER_PAGE);
@@ -70,11 +68,8 @@ class Pagination {
    */
   async _fetchMoreProducts(search) {
     const noProductsFetchedYet = this.products.length === 0;
-    const nextProducts = noProductsFetchedYet
-      ? await this._fetchProducts(search)
-      : await this._fetchNextPage(this.products);
-    this.hasNextProductPage =
-      nextProducts.length > 0 && nextProducts.every((product) => product.hasNextPage);
+    const nextProducts = noProductsFetchedYet ? await this._fetchProducts(search) : await this._fetchNextPage(this.products);
+    this.hasNextProductPage = nextProducts.length > 0 && nextProducts.every((product) => product.hasNextPage);
 
     const nextVariants = productsToVariantsTransformer(nextProducts);
     this.products = uniqBy([...this.products, ...nextProducts], 'id');
@@ -106,9 +101,7 @@ class Pagination {
    */
   async _fetchNextPage(products) {
     const nextProductVariants = (await this.shopifyClient.fetchNextPage(products)).model;
-    return nextProductVariants.map((nextProductVariant) =>
-      convertProductToBase64(nextProductVariant)
-    );
+    return nextProductVariants.map((nextProductVariant) => convertProductToBase64(nextProductVariant));
   }
 
   _resetPagination() {

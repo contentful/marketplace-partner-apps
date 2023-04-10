@@ -47,9 +47,7 @@ export default class BasePagination {
    */
   async _fetchMoreProducts(search) {
     const noProductsFetchedYet = this.products.length === 0;
-    const nextProducts = noProductsFetchedYet
-      ? await this._fetchProducts(search)
-      : await this._fetchNextPage(this.products);
+    const nextProducts = noProductsFetchedYet ? await this._fetchProducts(search) : await this._fetchNextPage(this.products);
 
     this.hasNextProductPage = nextProducts.length === PER_PAGE;
 
