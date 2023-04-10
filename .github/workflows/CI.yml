@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  build:
+    name: Build, Test, Deploy
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    env:
+      DEFINITIONS_ORG_ID: ${{ secrets.DEFINITIONS_ORG_ID }}
+      CONTENTFUL_CMA_TOKEN: ${{ secrets.CONTENTFUL_CMA_TOKEN }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build -- --filter=...[HEAD^1]
+      - name: Test
+        run: npm run test -- --filter=...[HEAD^1]
+      - name: Deploy
+        run: npm run deploy -- --filter=...[HEAD^1]
