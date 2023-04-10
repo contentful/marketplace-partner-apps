@@ -1,0 +1,13 @@
+node_modules
+.envrc
+.DS_Store
+build
+dist
+.next/**
+.cache
+.idea
+tags
+**/.coverage/**
+lerna-debug.log
+.eslintcache
+.turbo
