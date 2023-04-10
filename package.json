@@ -10,15 +10,15 @@
     "apps/*"
   ],
   "devDependencies": {
-    "prettier": "2.8.7",
     "husky": "^8.0.0",
-    "lint-staged": "^13.0.0"
+    "lint-staged": "^13.0.0",
+    "prettier": "2.8.7",
+    "turbo": "^1.8.8"
   },
   "scripts": {
     "build": "turbo run build",
     "test": "turbo run test"
   },
-  "dependencies": {},
   "lint-staged": {
     "*.{t,j}s?(x)": [
       "prettier --write"
