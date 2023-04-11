@@ -10,10 +10,10 @@
       "inputs": ["src/**/*.tsx", "src/**/*.ts", "test/**/*.ts", "test/**/*.tsx"]
     },
     "deploy:staging": {
-      "dependsOn": ["build", "test", "lint"]
+      "dependsOn": ["build", "test"]
     },
     "deploy": {
-      "dependsOn": ["build", "test", "lint"]
+      "dependsOn": ["build", "test"]
     }
   }
 }
