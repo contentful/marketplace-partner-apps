@@ -1,9 +1,5 @@
 # Marketplace Partner Apps
-This repository contains the source code for most apps on the [marketplace](https://www.contentful.com/marketplace/) and helpful resources to build your own apps for Contentful.
-
-This repository also includes two packages that help you developing your own apps:
-* [dam-app-base](packages/dam-app-base)
-* [ecommerce-app-base](packages/ecommerce-app-base)
+This repository contains the source code for partner apps on the [marketplace](https://www.contentful.com/marketplace/) and helpful resources to build your own apps for Contentful.
 
 ## Installing an app
 
