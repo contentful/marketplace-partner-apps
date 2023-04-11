@@ -1,5 +1,11 @@
 name: CI
 
+on:
+  push:
+    branches: ['main', 'production']
+  pull_request:
+    types: [opened, synchronize]
+
 jobs:
   build:
     name: Build
