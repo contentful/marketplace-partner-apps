@@ -11,7 +11,7 @@
   ],
   "devDependencies": {
     "husky": "^8.0.0",
-    "lint-staged": "^13.0.0",
+    "lint-staged": "^13.2.1",
     "prettier": "2.8.7",
     "turbo": "^1.8.8"
   },
@@ -19,11 +19,15 @@
     "build": "turbo run build",
     "test": "turbo run test",
     "deploy:staging": "turbo run deploy:staging",
-    "deploy": "turbo run deploy"
+    "deploy": "turbo run deploy",
+    "prepare": "husky install"
   },
   "lint-staged": {
     "*.{t,j}s?(x)": [
       "prettier --write"
     ]
+  },
+  "eslintConfig": {
+    "extends": "react-app"
   }
 }
