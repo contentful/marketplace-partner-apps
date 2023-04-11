@@ -1,11 +1,5 @@
 name: CI
 
-on:
-  push:
-    branches: ['main']
-  pull_request:
-    types: [opened, synchronize]
-
 jobs:
   runs-on: ubuntu-latest
   timeout-minutes: 15
