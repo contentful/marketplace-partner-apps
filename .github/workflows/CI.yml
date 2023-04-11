@@ -7,13 +7,10 @@ on:
     types: [opened, synchronize]
 
 jobs:
+  runs-on: ubuntu-latest
+  timeout-minutes: 15
   build:
-    name: Build, Test, Deploy
-    timeout-minutes: 15
-    runs-on: ubuntu-latest
-    env:
-      DEFINITIONS_ORG_ID: ${{ secrets.DEFINITIONS_ORG_ID }}
-      CONTENTFUL_CMA_TOKEN: ${{ secrets.CONTENTFUL_CMA_TOKEN }}
+    name: Build
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -28,7 +25,23 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build -- --filter=...[HEAD^1]
+  test:
+    name: Test
+    needs: build
+    steps:
       - name: Test
         run: npm run test -- --filter=...[HEAD^1]
-      - name: Deploy
+  deploy-staging:
+    name: Deploy staging
+    needs: [build, test]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy app
+        run: npm run deploy:test -- --filter=...[HEAD^1]
+  deploy-prod:
+    name: Deploy production
+    needs: [build, test]
+    if: github.ref == 'refs/heads/production'
+    steps:
+      - name: Deploy app
         run: npm run deploy -- --filter=...[HEAD^1]
