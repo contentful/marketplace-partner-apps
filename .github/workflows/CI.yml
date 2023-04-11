@@ -1,10 +1,10 @@
 name: CI
 
 jobs:
-  runs-on: ubuntu-latest
-  timeout-minutes: 15
   build:
     name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -21,12 +21,16 @@ jobs:
         run: npm run build -- --filter=...[HEAD^1]
   test:
     name: Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: build
     steps:
       - name: Test
         run: npm run test -- --filter=...[HEAD^1]
   deploy-staging:
     name: Deploy staging
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: [build, test]
     if: github.ref == 'refs/heads/main'
     steps:
@@ -34,6 +38,8 @@ jobs:
         run: npm run deploy:test -- --filter=...[HEAD^1]
   deploy-prod:
     name: Deploy production
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: [build, test]
     if: github.ref == 'refs/heads/production'
     steps:
