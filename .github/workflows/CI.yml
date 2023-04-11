@@ -32,7 +32,7 @@ jobs:
         run: npm run test -- --filter=...[HEAD^1]
       - name: Deploy Staging
         if: ${{ github.ref == 'refs/heads/main' }}
-        run: npm run deploy:test -- --filter=...[HEAD^1]
+        run: npm run deploy:staging -- --filter=...[HEAD^1]
       - name: Deploy Production
         if: ${{ github.ref == 'refs/heads/production' }}
         run: npm run deploy -- --filter=...[HEAD^1]
