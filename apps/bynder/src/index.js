@@ -86,6 +86,8 @@ function transformAsset(asset, selected) {
     thul: asset.files.thumbnail?.url,
   };
 
+  console.log('hello world!')
+
   Object.entries(asset.files)
     .filter(([name]) => !['webImage', 'thumbnail'].includes(name))
     .forEach(([key, value]) => (thumbnails[key] = value?.url));
