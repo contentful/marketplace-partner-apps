@@ -1,13 +1,13 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
+    "test": {
+      "dependsOn": ["^test"],
+      "inputs": ["src/**/*.spec.tsx", "src/**/*.spec.ts", "test/**/*.spec.ts", "test/**/*.spec.tsx"]
+    },
     "build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"]
-    },
-    "test": {
-      "dependsOn": ["build"],
-      "inputs": ["src/**/*.tsx", "src/**/*.ts", "test/**/*.ts", "test/**/*.tsx"]
     },
     "deploy:staging": {
       "dependsOn": ["build", "test"]

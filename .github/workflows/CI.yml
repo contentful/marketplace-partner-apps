@@ -28,10 +28,10 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm install
-      - name: Build
-        run: npm run build -- --filter=...[HEAD^1]
       - name: Test
         run: npm run test -- --filter=...[HEAD^1]
+      - name: Build
+        run: npm run build -- --filter=...[HEAD^1]
       - name: Deploy Staging
         if: ${{ github.ref == 'refs/heads/main' }}
         run: npm run deploy:staging -- --filter=...[HEAD^1]
