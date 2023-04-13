@@ -7,7 +7,7 @@
   },
   "packageManager": "npm@8.19.4",
   "workspaces": [
-    "apps/*"
+    "apps/**", "apps/**/*.spec.tsx"
   ],
   "devDependencies": {
     "husky": "^8.0.0",

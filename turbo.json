@@ -3,7 +3,7 @@
   "pipeline": {
     "test": {
       "dependsOn": ["^test"],
-      "inputs": ["src/**/*.spec.tsx", "src/**/*.spec.ts", "test/**/*.spec.ts", "test/**/*.spec.tsx"]
+      "inputs": []
     },
     "build": {
       "dependsOn": ["^build"],

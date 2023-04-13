@@ -1,0 +1,11 @@
+{
+  "extends": "@tsconfig/create-react-app/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "src",
+    "sourceMap": true,
+    "inlineSources": true,
+    "sourceRoot": "/src"
+  },
+  "include": ["src", "test"],
+  "exclude": ["node_modules"]
+}
