@@ -6,9 +6,5 @@
   "*.ts": [
     "prettier --write",
     "eslint"
-  ],
-  "*.html": [
-    "prettier --write",
-    "eslint"
   ]
 }
