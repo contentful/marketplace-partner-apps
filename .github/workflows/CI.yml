@@ -12,7 +12,6 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     env:
-      DEFINITIONS_ORG_ID: ${{ secrets.DEFINITIONS_ORG_ID }}
       CONTENTFUL_CMA_TOKEN: ${{ secrets.CONTENTFUL_CMA_TOKEN }}
       TEST_ORG_ID: ${{ secrets.TEST_ORG_ID }}
       TEST_CMA_TOKEN: ${{ secrets.TEST_CMA_TOKEN }}
