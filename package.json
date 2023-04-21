@@ -16,7 +16,7 @@
     "turbo": "^1.9.3"
   },
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build --force",
     "test": "turbo run test",
     "deploy:staging": "turbo run deploy:staging",
     "deploy": "turbo run deploy",
