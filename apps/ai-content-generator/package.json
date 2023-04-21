@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "4.14.1",
-    "@contentful/f36-components": "4.35.0",
+    "@contentful/f36-components": "4.35.1",
     "@contentful/f36-tokens": "4.0.1",
     "@contentful/react-apps-toolkit": "1.2.15",
     "@contentful/rich-text-plain-text-renderer": "^16.0.2",
@@ -21,9 +21,6 @@
     "build": "react-scripts build",
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 3iszK8Gl7aaxLvxGyCOhgA --token ${CONTENTFUL_CMA_TOKEN}",
     "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id 7sjBFUzBxj1fRrI0eUBwLc --token ${TEST_CMA_TOKEN}"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "browserslist": {
     "production": [
