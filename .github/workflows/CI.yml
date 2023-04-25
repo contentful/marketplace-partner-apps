@@ -61,12 +61,11 @@ jobs:
           --data '{
             "admin": true
             }'
-      - name: Comment env created
-        if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
-        uses: peter-evans/commit-comment@v2
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v2
         with:
-          body: |
-            Test environment has been created here: :ta-da:
+          message: |
+            Test environment has been created here: :tada:
             [https://app.contentful.com/spaces/${{steps.create_test_space.outputs.space_id}}](https://app.contentful.com/spaces/${{steps.create_test_space.outputs.space_id}})
       - name: Deploy Staging
         if: ${{ github.ref == 'refs/heads/main' }}
