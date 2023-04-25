@@ -36,9 +36,7 @@ jobs:
         run: npm run test -- --filter=...[HEAD^1]
       - name: Deploy Test Env
         if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
-        run: |
-          echo "Deploying to test environment" \
-          contentful space create -y --mt ${{ secrets.HaT_TOKEN }} --org ${{ secrets.HaT_ORG_ID }} -n ${{ github.ref_name }}
+        run: contentful space create -y --mt ${{ secrets.HaT_TOKEN }} --org ${{ secrets.HaT_ORG_ID }} -n ${{ github.ref_name }}
       - name: Deploy Staging
         if: ${{ github.ref == 'refs/heads/main' }}
         run: npm run deploy:staging -- --filter=...[HEAD^1]
