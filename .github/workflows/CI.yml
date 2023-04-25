@@ -32,7 +32,7 @@ jobs:
         run: npm install
       - name: Install contentful
         if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
-        run: brew install contentful
+        run: npm install contentful
       - name: Build
         run: npm run build -- --filter=...[HEAD^1]
       - name: Test
