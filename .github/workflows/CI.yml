@@ -49,7 +49,7 @@ jobs:
                 }' \
               https://api.contentful.com/spaces | \
               jq '.sys.id')
-          echo "::set-output name=space_id::$output"
+          echo "space_id=$output" >> $GITHUB_STATE
       - name: Add Team to Test Space
         if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
         run: |
@@ -57,7 +57,7 @@ jobs:
           --header 'Authorization: Bearer ${{ secrets.HAT_TOKEN }}' \
           --header 'X-Contentful-Team: ${{ secrets.PRD_ECOSYS_TEAM_ID }}' \
           --header 'Content-Type: application/vnd.contentful.management.v1+json' \
-          --url https://api.contentful.com/spaces/${{ steps.create_test_space.outputs.space_id }}/team_space_memberships \
+          --url https://api.contentful.com/spaces/${{ $GITHUB_STATE.space_id }}/team_space_memberships \
           --data '{
             "admin": true
             }'
