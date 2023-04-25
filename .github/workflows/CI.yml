@@ -43,7 +43,7 @@ jobs:
           --header 'Content-Type: application/vnd.contentful.management.v1+json' \
           --header 'X-Contentful-Organization: ${{ secrets.HaT_ORG_ID }}' \
           --data-binary '{
-            "name": ${{ github.ref_name }},
+            "name": "${{ github.ref_name }}",
             "defaultLocale": "en"
             }' \
           https://api.contentful.com/spaces
