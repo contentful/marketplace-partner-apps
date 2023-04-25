@@ -17,6 +17,7 @@ jobs:
       TEST_ORG_ID: ${{ secrets.TEST_ORG_ID }}
       TEST_CMA_TOKEN: ${{ secrets.TEST_CMA_TOKEN }}
       HaT_ORG_ID: ${{ secrets.HaT_ORG_ID }}
+      HaT_TOKEN: ${{ secrets.HaT_TOKEN }}
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -37,7 +38,7 @@ jobs:
         if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
         run: |
           echo "Deploying to test environment" \
-          contentful space create -y --org ${{ secrets.HaT_ORG_ID }} -n ${{ github.ref_name }}
+          contentful space create -y --mt ${{ secrets.HaT_TOKEN }} --org ${{ secrets.HaT_ORG_ID }} -n ${{ github.ref_name }}
       - name: Deploy Staging
         if: ${{ github.ref == 'refs/heads/main' }}
         run: npm run deploy:staging -- --filter=...[HEAD^1]
