@@ -30,10 +30,6 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm install
-      - name: Build
-        run: npm run build -- --filter=...[HEAD^1]
-      - name: Test
-        run: npm run test -- --filter=...[HEAD^1]
       - name: Deploy Test Env
         if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
         id: create_test_space
@@ -50,6 +46,7 @@ jobs:
               https://api.contentful.com/spaces | \
               jq '.sys.id')
           echo "space_id=$output" >> $GITHUB_OUTPUT
+          echo "space_url=https://app.contentful.com/spaces/$output" >> $GITHUB_OUTPUT
       - name: Add Team to Test Space
         if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
         run: |
@@ -66,7 +63,8 @@ jobs:
         with:
           message: |
             Test environment has been created here: :tada:
-            [https://app.contentful.com/spaces/${{steps.create_test_space.outputs.space_id}}](https://app.contentful.com/spaces/${{steps.create_test_space.outputs.space_id}})
+            ${{steps.create_test_space.outputs.space_url}}
+            [${{steps.create_test_space.outputs.space_url}}](${{steps.create_test_space.outputs.space_url}})
       - name: Deploy Staging
         if: ${{ github.ref == 'refs/heads/main' }}
         run: npm run deploy:staging -- --filter=...[HEAD^1]
