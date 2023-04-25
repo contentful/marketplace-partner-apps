@@ -16,6 +16,7 @@ jobs:
       CONTENTFUL_CMA_TOKEN: ${{ secrets.CONTENTFUL_CMA_TOKEN }}
       TEST_ORG_ID: ${{ secrets.TEST_ORG_ID }}
       TEST_CMA_TOKEN: ${{ secrets.TEST_CMA_TOKEN }}
+      HaT_ORG_ID: ${{ secrets.HaT_ORG_ID }}
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -34,7 +35,9 @@ jobs:
         run: npm run test -- --filter=...[HEAD^1]
       - name: Deploy Test Env
         if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
-        run: echo "Deploying to test environment"
+        run: |
+          echo "Deploying to test environment" \
+          contentful space create -y --org ${{ secrets.HaT_ORG_ID }} -n ${{ github.ref_name }}
       - name: Deploy Staging
         if: ${{ github.ref == 'refs/heads/main' }}
         run: npm run deploy:staging -- --filter=...[HEAD^1]

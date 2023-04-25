@@ -10,6 +10,7 @@
     "apps/**"
   ],
   "devDependencies": {
+    "contentful-cli": "^2.4.2",
     "husky": "^8.0.0",
     "lint-staged": "^13.2.1",
     "prettier": "2.8.7",
