@@ -30,5 +30,8 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "dependencies": {
+    "contentful": "^10.1.2"
   }
 }
