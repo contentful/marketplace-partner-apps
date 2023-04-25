@@ -36,17 +36,20 @@ jobs:
         run: npm run test -- --filter=...[HEAD^1]
       - name: Deploy Test Env
         if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
+        id: create_test_space
         run: |
-          curl --include \
-          --request POST \
-          --header 'Authorization: Bearer ${{ secrets.HAT_TOKEN }}' \
-          --header 'Content-Type: application/vnd.contentful.management.v1+json' \
-          --header 'X-Contentful-Organization: ${{ secrets.HaT_ORG_ID }}' \
-          --data-binary '{
-            "name": "${{ github.ref_name }}",
-            "defaultLocale": "en"
-            }' \
-          https://api.contentful.com/spaces
+          output=$( curl -s \
+              --request POST \
+              --header 'Authorization: Bearer ${{ secrets.HAT_TOKEN }}' \
+              --header 'Content-Type: application/vnd.contentful.management.v1+json' \
+              --header 'X-Contentful-Organization: ${{ secrets.HaT_ORG_ID }}' \
+              --data-binary '{
+                "name": "${{ github.ref_name }}",
+                "defaultLocale": "en"
+                }' \
+              https://api.contentful.com/spaces | \
+              jq '.sys.id')
+          echo "::set-output name=space_id::$output"
       - name: Add Team to Test Space
         if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
         run: |
@@ -54,7 +57,7 @@ jobs:
           --header 'Authorization: Bearer ${{ secrets.HAT_TOKEN }}' \
           --header 'X-Contentful-Team: ${{ secrets.PRD_ECOSYS_TEAM_ID }}' \
           --header 'Content-Type: application/vnd.contentful.management.v1+json' \
-          --url https://api.contentful.com/spaces/67e3o5g54rhp/team_space_memberships \
+          --url https://api.contentful.com/spaces/${{ steps.create_test_space.outputs.space_id }}/team_space_memberships \
           --data '{
             "admin": true
             }'
