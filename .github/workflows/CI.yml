@@ -44,7 +44,7 @@ jobs:
                 "defaultLocale": "en"
                 }' \
               https://api.contentful.com/spaces | \
-              jq '.sys.id')
+              jq -r '.sys.id')
           echo "space_id=$output" >> $GITHUB_OUTPUT
           echo "space_url=https://app.contentful.com/spaces/$output" >> $GITHUB_OUTPUT
       - name: Add Team to Test Space
