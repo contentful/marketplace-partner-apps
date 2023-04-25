@@ -62,8 +62,7 @@ jobs:
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
-            Test environment has been created here: :tada:
-            ${{steps.create_test_space.outputs.space_url}}
+            :tada: Test environment has been created here:
             [${{steps.create_test_space.outputs.space_url}}](${{steps.create_test_space.outputs.space_url}})
       - name: Deploy Staging
         if: ${{ github.ref == 'refs/heads/main' }}
