@@ -30,19 +30,13 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm install
-      - name: Install contentful
-        if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
-        run: |
-          npm install contentful-cli
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
       - name: Build
         run: npm run build -- --filter=...[HEAD^1]
       - name: Test
         run: npm run test -- --filter=...[HEAD^1]
       - name: Deploy Test Env
         if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
-        run: contentful space create -y --mt ${{ secrets.HaT_TOKEN }} --org ${{ secrets.HaT_ORG_ID }} -n ${{ github.ref_name }}
+        run: node_modules/contentful-cli/bin/contentful.js space create -y --mt ${{ secrets.HaT_TOKEN }} --org ${{ secrets.HaT_ORG_ID }} -n ${{ github.ref_name }}
       - name: Deploy Staging
         if: ${{ github.ref == 'refs/heads/main' }}
         run: npm run deploy:staging -- --filter=...[HEAD^1]
