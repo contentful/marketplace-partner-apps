@@ -76,12 +76,14 @@ jobs:
             "admin": true
             }'
       - name: Create Manifest File
-        run: echo 'Hello, world!' > ${{ github.ref_name | jsonencode }}.txt
+        run: |
+          FILE_NAME='${{ github.ref_name }}'        
+          echo 'Hello, world!' > ${{ github.ref | urlencode }}.txt
       - name: Upload Manifest File
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ github.ref_name | jsonencode }}_manifest
-          path: ${{ github.ref_name | jsonencode }}.txt
+          name: ${{ github.ref | urlencode }}_manifest
+          path: ${{ github.ref | urlencode }}.txt
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v2
         with:
