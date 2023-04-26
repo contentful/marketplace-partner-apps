@@ -78,7 +78,7 @@ jobs:
       - name: Create a file with the ref name
         id: create_manifest_file
         run: |
-          filename="artifact-${{ github.ref }}.txt"
+          filename="${{ github.ref }}.txt"
           filename="${filename//\//_}"
           echo "This is a file with the ref name" > $filename
           echo "filename=$filename" >> $GITHUB_OUTPUT
