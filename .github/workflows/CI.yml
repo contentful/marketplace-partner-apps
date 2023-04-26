@@ -49,7 +49,7 @@ jobs:
     steps:
       # - name: Create Test Contentful Space
       #   if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
-      #   id: create_test_space
+      #   v
       #   run: |
       #     output=$( curl -s \
       #         --request POST \
@@ -76,12 +76,17 @@ jobs:
       #       "admin": true
       #       }'
       - name: Create a file with the ref name
-        run: echo "This is a file with the ref name" > ${{ github.ref//\//_ }}
+        id: create_manifest_file
+        run: |
+        filename="artifact-${{ github.ref }}.txt"
+        filename="${filename//\//_}"
+        echo "This is a file with the ref name" > $filename
+        echo "filename=$filename" >> $GITHUB_OUTPUT
       - name: Create artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ github.ref//\//_ }}
-          path: ${{ github.ref//\//_ }}
+          name: ${{steps.create_manifest_file.outputs.filename}}
+          path: ${{steps.create_manifest_file.outputs.filename}}
       # - name: Comment PR
       #   uses: thollander/actions-comment-pull-request@v2
       #   with:
