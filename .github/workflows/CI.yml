@@ -44,36 +44,36 @@ jobs:
     if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
     steps:
       - name: Create Test Contentful Space
-          if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
-          id: create_test_space
-          run: |
-            output=$( curl -s \
-                --request POST \
-                --header 'Authorization: Bearer ${{ secrets.HAT_TOKEN }}' \
-                --header 'Content-Type: application/vnd.contentful.management.v1+json' \
-                --header 'X-Contentful-Organization: ${{ secrets.HaT_ORG_ID }}' \
-                --data-binary '{
-                  "name": "${{ github.ref_name }}",
-                  "defaultLocale": "en"
-                  }' \
-                https://api.contentful.com/spaces | \
-                jq -r '.sys.id')
-            echo "space_id=$output" >> $GITHUB_OUTPUT
-            echo "space_url=https://app.contentful.com/spaces/$output" >> $GITHUB_OUTPUT
-        - name: Add Team to Test Space
-          if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
-          run: |
-            curl --request POST \
-            --header 'Authorization: Bearer ${{ secrets.HAT_TOKEN }}' \
-            --header 'X-Contentful-Team: ${{ secrets.PRD_ECOSYS_TEAM_ID }}' \
-            --header 'Content-Type: application/vnd.contentful.management.v1+json' \
-            --url https://api.contentful.com/spaces/${{steps.create_test_space.outputs.space_id}}/team_space_memberships \
-            --data '{
-              "admin": true
-              }'
-        - name: Comment PR
-          uses: thollander/actions-comment-pull-request@v2
-          with:
-            message: |
-              :tada: Test environment has been created here:
-              [${{steps.create_test_space.outputs.space_url}}](${{steps.create_test_space.outputs.space_url}})
+        if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
+        id: create_test_space
+        run: |
+          output=$( curl -s \
+              --request POST \
+              --header 'Authorization: Bearer ${{ secrets.HAT_TOKEN }}' \
+              --header 'Content-Type: application/vnd.contentful.management.v1+json' \
+              --header 'X-Contentful-Organization: ${{ secrets.HaT_ORG_ID }}' \
+              --data-binary '{
+                "name": "${{ github.ref_name }}",
+                "defaultLocale": "en"
+                }' \
+              https://api.contentful.com/spaces | \
+              jq -r '.sys.id')
+          echo "space_id=$output" >> $GITHUB_OUTPUT
+          echo "space_url=https://app.contentful.com/spaces/$output" >> $GITHUB_OUTPUT
+      - name: Add Team to Test Space
+        if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
+        run: |
+          curl --request POST \
+          --header 'Authorization: Bearer ${{ secrets.HAT_TOKEN }}' \
+          --header 'X-Contentful-Team: ${{ secrets.PRD_ECOSYS_TEAM_ID }}' \
+          --header 'Content-Type: application/vnd.contentful.management.v1+json' \
+          --url https://api.contentful.com/spaces/${{steps.create_test_space.outputs.space_id}}/team_space_memberships \
+          --data '{
+            "admin": true
+            }'
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            :tada: Test environment has been created here:
+            [${{steps.create_test_space.outputs.space_url}}](${{steps.create_test_space.outputs.space_url}})
