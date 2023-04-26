@@ -71,6 +71,13 @@ jobs:
           --data '{
             "admin": true
             }'
+      - name: Create Manifest File
+        run: echo 'Hello, world!' > ${{steps.create_test_space.outputs.space_id}}.txt
+      - name: Upload Manifest File
+        uses: actions/upload-artifact@v2
+          with:
+            name: ${{steps.create_test_space.outputs.space_id}}_manifest
+            path: ${{steps.create_test_space.outputs.space_id}}.txt
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v2
         with:
