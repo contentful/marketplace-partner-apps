@@ -76,12 +76,12 @@ jobs:
       #       "admin": true
       #       }'
       - name: Create a file with the ref name
-        run: echo "This is a file with the ref name" > $( ${{ github.ref_name }} | sed -e 's/[:]//g' )
+        run: echo "This is a file with the ref name" > ${{ github.ref_name }}
       - name: Upload the file as an artifact with the escaped ref name
         uses: actions/upload-artifact@v2
         with:
-          name: $( ${{ github.ref_name }} | sed -e 's/[:]//g' )
-          path: $( ${{ github.ref_name }} | sed -e 's/[:]//g' )
+          name: ${{ github.ref_name }}
+          path: ${{ github.ref_name }}
       # - name: Comment PR
       #   uses: thollander/actions-comment-pull-request@v2
       #   with:
