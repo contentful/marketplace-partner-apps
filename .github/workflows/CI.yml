@@ -80,20 +80,19 @@ jobs:
       - name: Create a file with the ref name
         id: create_manifest_file
         run: |
-          filename="${{ github.ref }}"
+          filename="${{ github.ref }}.txt"
           filename="${filename//\//_}"
           echo "This is a file with the ref name" > $filename
           echo "filename=$filename" >> $GITHUB_OUTPUT
-          zip ${filename}.zip $filename
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ${filename}.zip
-          path: ${filename}.zip
+          name: ${{steps.create_manifest_file.outputs.filename}}
+          path: ${{steps.create_manifest_file.outputs.filename}}
       # - name: Determine file name
       #   id: calculate_file_name
       #   run: |
-      #     filename="${{ github.ref }}}"
+      #     filename="${{ github.ref }}.txt"
       #     filename="${filename//\//_}"
       #     echo "filename=$filename" >> $GITHUB_OUTPUT
       # - name: Download all artifacts and get artifact id
