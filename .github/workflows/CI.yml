@@ -76,15 +76,12 @@ jobs:
       #       "admin": true
       #       }'
       - name: Create a file with the ref name
-        run: |
-          ESCAPED_FILE_NAME=$(echo toJSON('${{ github.ref_name }}'))
-          echo "Escaped string: $ESCAPED_FILE_NAME"
-          echo "This is a file with the ref name" > $ESCAPED_FILE_NAME
+        run: echo "This is a file with the ref name" > toJSON('${{ github.ref_name }}')
       - name: Upload the file as an artifact with the escaped ref name
         uses: actions/upload-artifact@v2
         with:
-          name: $(echo toJSON('${{ github.ref_name }}'))
-          path: $(echo toJSON('${{ github.ref_name }}'))
+          name: toJSON('${{ github.ref_name }}')
+          path: toJSON('${{ github.ref_name }}')
       # - name: Comment PR
       #   uses: thollander/actions-comment-pull-request@v2
       #   with:
