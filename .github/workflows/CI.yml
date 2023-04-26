@@ -109,7 +109,7 @@ jobs:
       - name: Fetch artifact by artfact_id
         id: fetch_artifact
         run: |
-          output=$( curl -L \
+          output=$( curl -o archive.zip -L \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"\
             -H "X-GitHub-Api-Version: 2022-11-28" \
@@ -119,7 +119,7 @@ jobs:
       - name: Unzip and Read File
         id: unzip_and_read_file
         run: |
-          unzip ${{steps.fetch_artifact.outputs.file}}
+          unzip archive.zip
           cat ${{steps.calculate_file_name.outputs.filename}}
           echo "file_content=$(cat ${{steps.calculate_file_name.outputs.filename}})" >> $GITHUB_OUTPUT
       # - name: Comment PR
