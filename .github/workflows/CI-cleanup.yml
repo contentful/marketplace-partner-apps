@@ -11,8 +11,8 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
-          name: ${{ github.ref_name }}_manifest
-          path: ${{ github.ref_name }}.txt
+          name: ${{ github.ref_name | jsonencode }}_manifest
+          path: ${{ github.ref_name | jsonencode }}.txt
 
       - name: Read file
-        run: cat ${{ github.ref_name }}.txt
+        run: cat ${{ github.ref_name | jsonencode }}.txt
