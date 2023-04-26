@@ -47,6 +47,8 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       # - name: Create Test Contentful Space
       #   if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
       #   v
