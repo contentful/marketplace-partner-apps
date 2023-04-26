@@ -80,7 +80,7 @@ jobs:
       - name: Create a file with the ref name
         id: create_manifest_file
         run: |
-          filename="${{ github.ref }}.txt"
+          filename="${{ github.ref }}"
           filename="${filename//\//_}"
           echo "This is a file with the ref name" > $filename
           echo "filename=$filename" >> $GITHUB_OUTPUT
@@ -92,7 +92,7 @@ jobs:
       # - name: Determine file name
       #   id: calculate_file_name
       #   run: |
-      #     filename="${{ github.ref }}.txt"
+      #     filename="${{ github.ref }}"
       #     filename="${filename//\//_}"
       #     echo "filename=$filename" >> $GITHUB_OUTPUT
       # - name: Download all artifacts and get artifact id
