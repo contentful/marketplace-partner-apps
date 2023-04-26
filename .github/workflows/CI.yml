@@ -15,32 +15,32 @@ env:
   HaT_TOKEN: ${{ secrets.HaT_TOKEN }}
 
 jobs:
-  build:
-    name: Build, Test, Deploy
-    timeout-minutes: 15
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 2
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: 'npm'
-      # - name: Install dependencies
-      #   run: npm install
-      # - name: Build
-      #   run: npm run build -- --filter=...[HEAD^1]
-      # - name: Test
-      #   run: npm run test -- --filter=...[HEAD^1]
-      # - name: Deploy Staging
-      #   if: ${{ github.ref == 'refs/heads/main' }}
-      #   run: npm run deploy:staging -- --filter=...[HEAD^1]
-      # - name: Deploy Production
-      #   if: ${{ github.ref == 'refs/heads/production' }}
-      #   run: npm run deploy -- --filter=...[HEAD^1]
+  # build:
+  #   name: Build, Test, Deploy
+  #   timeout-minutes: 15
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Check out code
+  #       uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 2
+  #     - name: Setup Node.js environment
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 16
+  #         cache: 'npm'
+  # - name: Install dependencies
+  #   run: npm install
+  # - name: Build
+  #   run: npm run build -- --filter=...[HEAD^1]
+  # - name: Test
+  #   run: npm run test -- --filter=...[HEAD^1]
+  # - name: Deploy Staging
+  #   if: ${{ github.ref == 'refs/heads/main' }}
+  #   run: npm run deploy:staging -- --filter=...[HEAD^1]
+  # - name: Deploy Production
+  #   if: ${{ github.ref == 'refs/heads/production' }}
+  #   run: npm run deploy -- --filter=...[HEAD^1]
   create-contentful-test-space:
     needs: build
     name: Create Contentful Test Space
@@ -76,12 +76,15 @@ jobs:
       #       "admin": true
       #       }'
       - name: Create a file with the ref name
-        run: echo "This is a file with the ref name" > ${{ github.ref_name }}
+        run: |
+          ESCAPED_FILE_NAME=$(echo ${{ github.ref_name }} | jsonencode)
+          echo "Escaped string: $ESCAPED_FILE_NAME"
+          echo "This is a file with the ref name" > $ESCAPED_FILE_NAME
       - name: Upload the file as an artifact with the escaped ref name
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ github.ref_name }}
-          path: ${{ github.ref_name }}
+          name: $(echo ${{ github.ref_name }} | jsonencode)
+          path: $(echo ${{ github.ref_name }} | jsonencode)
       # - name: Comment PR
       #   uses: thollander/actions-comment-pull-request@v2
       #   with:
