@@ -29,14 +29,18 @@ jobs:
         with:
           node-version: 16
           cache: 'npm'
-      - name: Install dependencies
-        run: npm install
-      - name: Deploy Staging
-        if: ${{ github.ref == 'refs/heads/main' }}
-        run: npm run deploy:staging -- --filter=...[HEAD^1]
-      - name: Deploy Production
-        if: ${{ github.ref == 'refs/heads/production' }}
-        run: npm run deploy -- --filter=...[HEAD^1]
+      # - name: Install dependencies
+      #   run: npm install
+      # - name: Build
+      #   run: npm run build -- --filter=...[HEAD^1]
+      # - name: Test
+      #   run: npm run test -- --filter=...[HEAD^1]
+      # - name: Deploy Staging
+      #   if: ${{ github.ref == 'refs/heads/main' }}
+      #   run: npm run deploy:staging -- --filter=...[HEAD^1]
+      # - name: Deploy Production
+      #   if: ${{ github.ref == 'refs/heads/production' }}
+      #   run: npm run deploy -- --filter=...[HEAD^1]
   create-contentful-test-space:
     needs: build
     name: Create Contentful Test Space
@@ -72,7 +76,7 @@ jobs:
             "admin": true
             }'
       - name: Create Manifest File
-        run: echo 'Hello, world!' > ${{steps.create_test_space.outputs.space_id}}.txt
+        run: echo 'Hello, world!' > ${{ github.ref_name }}.txt
       - name: Upload Manifest File
         uses: actions/upload-artifact@v2
         with:
