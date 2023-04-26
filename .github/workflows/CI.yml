@@ -77,13 +77,13 @@ jobs:
             }'
       - name: Create Manifest File
         run: |
-          FILE_NAME='${{ github.ref_name }}'        
-          echo 'Hello, world!' > ${{ github.ref | urlencode }}.txt
+          FILE_NAME='${{ github.ref_name }}'
+          echo 'Hello, world!' > ${{ github.ref }}
       - name: Upload Manifest File
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ github.ref | urlencode }}_manifest
-          path: ${{ github.ref | urlencode }}.txt
+          name: ${{ github.ref | replace('/', '%2F') }}
+          path: ${{ github.ref }}
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v2
         with:
