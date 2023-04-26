@@ -52,3 +52,8 @@ jobs:
             --url 'https://api.contentful.com/spaces/${{steps.unzip_and_read_file.outputs.space_id}}' \
             --header 'Authorization: Bearer ${{ secrets.HAT_TOKEN }}' \
             --header 'Content-Type: application/vnd.contentful.management.v1+json'
+      - name: Comment on PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            :boom: Test environment at https://app.contentful.com/${{steps.unzip_and_read_file.outputs.space_id}}/ has been deleted :boom:
