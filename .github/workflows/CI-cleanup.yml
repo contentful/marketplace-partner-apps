@@ -1,0 +1,18 @@
+name: PR Closed Workflow
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  read:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ github.ref_name }}_manifest
+          path: ${{ github.ref_name }}.txt
+
+      - name: Read file
+        run: cat ${{ github.ref_name }}.txt

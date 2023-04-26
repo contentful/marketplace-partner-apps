@@ -76,8 +76,8 @@ jobs:
       - name: Upload Manifest File
         uses: actions/upload-artifact@v2
         with:
-          name: ${{steps.create_test_space.outputs.space_id}}_manifest
-          path: ${{steps.create_test_space.outputs.space_id}}.txt
+          name: ${{ github.ref_name }}_manifest
+          path: ${{ github.ref_name }}.txt
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v2
         with:
