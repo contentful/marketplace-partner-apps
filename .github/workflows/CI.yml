@@ -47,46 +47,44 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
     steps:
-      - name: Create Test Contentful Space
-        if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
-        id: create_test_space
-        run: |
-          output=$( curl -s \
-              --request POST \
-              --header 'Authorization: Bearer ${{ secrets.HAT_TOKEN }}' \
-              --header 'Content-Type: application/vnd.contentful.management.v1+json' \
-              --header 'X-Contentful-Organization: ${{ secrets.HaT_ORG_ID }}' \
-              --data-binary '{
-                "name": "${{ github.ref_name }}",
-                "defaultLocale": "en"
-                }' \
-              https://api.contentful.com/spaces | \
-              jq -r '.sys.id')
-          echo "space_id=$output" >> $GITHUB_OUTPUT
-          echo "space_url=https://app.contentful.com/spaces/$output" >> $GITHUB_OUTPUT
-      - name: Add Team to Test Space
-        if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
-        run: |
-          curl --request POST \
-          --header 'Authorization: Bearer ${{ secrets.HAT_TOKEN }}' \
-          --header 'X-Contentful-Team: ${{ secrets.PRD_ECOSYS_TEAM_ID }}' \
-          --header 'Content-Type: application/vnd.contentful.management.v1+json' \
-          --url https://api.contentful.com/spaces/${{steps.create_test_space.outputs.space_id}}/team_space_memberships \
-          --data '{
-            "admin": true
-            }'
-      - name: Create Manifest File
-        run: |
-          FILE_NAME='${{ github.ref_name }}'
-          echo 'Hello, world!' > ${{ github.ref }}
-      - name: Upload Manifest File
+      # - name: Create Test Contentful Space
+      #   if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
+      #   id: create_test_space
+      #   run: |
+      #     output=$( curl -s \
+      #         --request POST \
+      #         --header 'Authorization: Bearer ${{ secrets.HAT_TOKEN }}' \
+      #         --header 'Content-Type: application/vnd.contentful.management.v1+json' \
+      #         --header 'X-Contentful-Organization: ${{ secrets.HaT_ORG_ID }}' \
+      #         --data-binary '{
+      #           "name": "${{ github.ref_name }}",
+      #           "defaultLocale": "en"
+      #           }' \
+      #         https://api.contentful.com/spaces | \
+      #         jq -r '.sys.id')
+      #     echo "space_id=$output" >> $GITHUB_OUTPUT
+      #     echo "space_url=https://app.contentful.com/spaces/$output" >> $GITHUB_OUTPUT
+      # - name: Add Team to Test Space
+      #   if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
+      #   run: |
+      #     curl --request POST \
+      #     --header 'Authorization: Bearer ${{ secrets.HAT_TOKEN }}' \
+      #     --header 'X-Contentful-Team: ${{ secrets.PRD_ECOSYS_TEAM_ID }}' \
+      #     --header 'Content-Type: application/vnd.contentful.management.v1+json' \
+      #     --url https://api.contentful.com/spaces/${{steps.create_test_space.outputs.space_id}}/team_space_memberships \
+      #     --data '{
+      #       "admin": true
+      #       }'
+      - name: Create a file with the ref name
+        run: echo "This is a file with the ref name" > ${{ github.ref }}
+      - name: Upload the file as an artifact with the escaped ref name
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ github.ref | replace('/', '%2F') }}
+          name: ${{ github.ref | escape }}
           path: ${{ github.ref }}
-      - name: Comment PR
-        uses: thollander/actions-comment-pull-request@v2
-        with:
-          message: |
-            :tada: Test environment has been created here:
-            [${{steps.create_test_space.outputs.space_url}}](${{steps.create_test_space.outputs.space_url}})
+      # - name: Comment PR
+      #   uses: thollander/actions-comment-pull-request@v2
+      #   with:
+      #     message: |
+      #       :tada: Test environment has been created here:
+      #       [${{steps.create_test_space.outputs.space_url}}](${{steps.create_test_space.outputs.space_url}})
