@@ -4,8 +4,12 @@ on:
   pull_request:
     types: [closed]
 
+env:
+  HaT_TOKEN: ${{ secrets.HaT_TOKEN }}
+
 jobs:
   read:
+    if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
     runs-on: ubuntu-latest
     steps:
       - name: Determine file name
@@ -40,4 +44,11 @@ jobs:
         run: |
           unzip archive.zip
           cat ${{steps.calculate_file_name.outputs.filename}}
-          echo "file_content=$(cat ${{steps.calculate_file_name.outputs.filename}})" >> $GITHUB_OUTPUT
+          echo "space_id=$(cat ${{steps.calculate_file_name.outputs.filename}})" >> $GITHUB_OUTPUT
+      - name: Delete Contentful Test Space
+        id: delete_test_space
+        run: |
+          curl --request DELETE \
+            --url 'https://api.contentful.com/spaces/${{steps.unzip_and_read_file.outputs.space_id}}' \
+            --header 'Authorization: Bearer ${{ secrets.HAT_TOKEN }}' \
+            --header 'Content-Type: application/vnd.contentful.management.v1+json'
