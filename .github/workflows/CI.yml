@@ -84,12 +84,12 @@ jobs:
           filename="${filename//\//_}"
           echo "This is a file with the ref name" > $filename
           echo "filename=$filename" >> $GITHUB_OUTPUT
-          zip ${{filename}}.zip $filename
+          zip ${filename}.zip $filename
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ${{filename}}.zip
-          path: ${{filename}}.zip
+          name: ${filename}.zip
+          path: ${filename}.zip
       # - name: Determine file name
       #   id: calculate_file_name
       #   run: |
