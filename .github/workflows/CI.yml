@@ -6,18 +6,19 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+env:
+  DEFINITIONS_ORG_ID: ${{ secrets.DEFINITIONS_ORG_ID }}
+  CONTENTFUL_CMA_TOKEN: ${{ secrets.CONTENTFUL_CMA_TOKEN }}
+  TEST_ORG_ID: ${{ secrets.TEST_ORG_ID }}
+  TEST_CMA_TOKEN: ${{ secrets.TEST_CMA_TOKEN }}
+  HaT_ORG_ID: ${{ secrets.HaT_ORG_ID }}
+  HaT_TOKEN: ${{ secrets.HaT_TOKEN }}
+
 jobs:
   build:
     name: Build, Test, Deploy
     timeout-minutes: 15
     runs-on: ubuntu-latest
-    env:
-      DEFINITIONS_ORG_ID: ${{ secrets.DEFINITIONS_ORG_ID }}
-      CONTENTFUL_CMA_TOKEN: ${{ secrets.CONTENTFUL_CMA_TOKEN }}
-      TEST_ORG_ID: ${{ secrets.TEST_ORG_ID }}
-      TEST_CMA_TOKEN: ${{ secrets.TEST_CMA_TOKEN }}
-      HaT_ORG_ID: ${{ secrets.HaT_ORG_ID }}
-      HaT_TOKEN: ${{ secrets.HaT_TOKEN }}
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -30,43 +31,49 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm install
-      - name: Deploy Test Env
-        if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
-        id: create_test_space
-        run: |
-          output=$( curl -s \
-              --request POST \
-              --header 'Authorization: Bearer ${{ secrets.HAT_TOKEN }}' \
-              --header 'Content-Type: application/vnd.contentful.management.v1+json' \
-              --header 'X-Contentful-Organization: ${{ secrets.HaT_ORG_ID }}' \
-              --data-binary '{
-                "name": "${{ github.ref_name }}",
-                "defaultLocale": "en"
-                }' \
-              https://api.contentful.com/spaces | \
-              jq -r '.sys.id')
-          echo "space_id=$output" >> $GITHUB_OUTPUT
-          echo "space_url=https://app.contentful.com/spaces/$output" >> $GITHUB_OUTPUT
-      - name: Add Team to Test Space
-        if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
-        run: |
-          curl --request POST \
-          --header 'Authorization: Bearer ${{ secrets.HAT_TOKEN }}' \
-          --header 'X-Contentful-Team: ${{ secrets.PRD_ECOSYS_TEAM_ID }}' \
-          --header 'Content-Type: application/vnd.contentful.management.v1+json' \
-          --url https://api.contentful.com/spaces/${{steps.create_test_space.outputs.space_id}}/team_space_memberships \
-          --data '{
-            "admin": true
-            }'
-      - name: Comment PR
-        uses: thollander/actions-comment-pull-request@v2
-        with:
-          message: |
-            :tada: Test environment has been created here:
-            [${{steps.create_test_space.outputs.space_url}}](${{steps.create_test_space.outputs.space_url}})
       - name: Deploy Staging
         if: ${{ github.ref == 'refs/heads/main' }}
         run: npm run deploy:staging -- --filter=...[HEAD^1]
       - name: Deploy Production
         if: ${{ github.ref == 'refs/heads/production' }}
         run: npm run deploy -- --filter=...[HEAD^1]
+  create-contentful-test-space:
+    needs: build
+    name: Create Contentful Test Space
+    runs-on: ubuntu-latest
+    if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
+    steps:
+      - name: Create Test Contentful Space
+          if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
+          id: create_test_space
+          run: |
+            output=$( curl -s \
+                --request POST \
+                --header 'Authorization: Bearer ${{ secrets.HAT_TOKEN }}' \
+                --header 'Content-Type: application/vnd.contentful.management.v1+json' \
+                --header 'X-Contentful-Organization: ${{ secrets.HaT_ORG_ID }}' \
+                --data-binary '{
+                  "name": "${{ github.ref_name }}",
+                  "defaultLocale": "en"
+                  }' \
+                https://api.contentful.com/spaces | \
+                jq -r '.sys.id')
+            echo "space_id=$output" >> $GITHUB_OUTPUT
+            echo "space_url=https://app.contentful.com/spaces/$output" >> $GITHUB_OUTPUT
+        - name: Add Team to Test Space
+          if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
+          run: |
+            curl --request POST \
+            --header 'Authorization: Bearer ${{ secrets.HAT_TOKEN }}' \
+            --header 'X-Contentful-Team: ${{ secrets.PRD_ECOSYS_TEAM_ID }}' \
+            --header 'Content-Type: application/vnd.contentful.management.v1+json' \
+            --url https://api.contentful.com/spaces/${{steps.create_test_space.outputs.space_id}}/team_space_memberships \
+            --data '{
+              "admin": true
+              }'
+        - name: Comment PR
+          uses: thollander/actions-comment-pull-request@v2
+          with:
+            message: |
+              :tada: Test environment has been created here:
+              [${{steps.create_test_space.outputs.space_url}}](${{steps.create_test_space.outputs.space_url}})
