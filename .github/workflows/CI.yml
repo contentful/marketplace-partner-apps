@@ -76,12 +76,12 @@ jobs:
       #       "admin": true
       #       }'
       - name: Create a file with the ref name
-        run: echo "This is a file with the ref name" > toJSON('${{ github.ref_name }}')
-      - name: Upload the file as an artifact with the escaped ref name
+        run: echo "This is a file with the ref name" > ${{ github.ref }}
+      - name: Create artifact
         uses: actions/upload-artifact@v2
         with:
-          name: toJSON('${{ github.ref_name }}')
-          path: toJSON('${{ github.ref_name }}')
+          name: ${{ github.ref }}
+          path: ${{ github.ref }}
       # - name: Comment PR
       #   uses: thollander/actions-comment-pull-request@v2
       #   with:
