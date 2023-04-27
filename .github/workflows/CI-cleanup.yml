@@ -8,7 +8,8 @@ env:
   HaT_TOKEN: ${{ secrets.HaT_TOKEN }}
 
 jobs:
-  read:
+  clean-up-test-space:
+    name: Cleanup Contentful Test Space
     if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production' }}
     runs-on: ubuntu-latest
     steps:
