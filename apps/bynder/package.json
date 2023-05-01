@@ -15,7 +15,11 @@
   "scripts": {
     "start": "cross-env BROWSER=none react-scripts start",
     "build": "react-scripts build",
+    "install-ci": "npm ci",
     "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id 6weJYfzgz370YDmFVi4B6w --token ${TEST_CMA_TOKEN}"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
   },
   "browserslist": [
     "last 5 Chrome version",
