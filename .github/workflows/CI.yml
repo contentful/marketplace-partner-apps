@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: 16
       - name: Print commit SHA
-        run: echo ${{ github.event.after }}
+        run: echo ${{ github.event.pull_request.head.sha }}
       - name: Print main SHA
         run: echo ${{ github.event.pull_request.base.sha }}
       - name: Cache environment
