@@ -25,17 +25,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: Print commit SHA
-        run: echo ${{ github.event.pull_request.head.sha }}
-      - name: Print main SHA
-        run: echo ${{ github.event.pull_request.base.sha }}
+      - name: Print main package-lock hash
+        run: echo ${{ hashFiles('**/package-lock.json') }}
       - name: Cache environment
         uses: actions/cache@v3
         with:
           path: /tmp/github-cache
-          key: ${{ runner.os }}-${{ github.event.pull_request.head.sha }}
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-${{ github.event.pull_request.base.sha }}
+            ${{ runner.os }}-
       - name: Root dependencies
         run: npm install
       - name: App dependencies
