@@ -27,8 +27,10 @@ jobs:
           node-version: 16
       - name: Print commit SHA
         run: echo ${{ github.event.after }}
-      - name: Print main SHA
+      - name: Print branch baseline SHA
         run: echo ${{ github.event.pull_request.base.sha }}
+      - name: Restore mainline key
+        run: echo ${{ github.sha }}
       - name: Cache environment
         uses: actions/cache@v3
         with:
