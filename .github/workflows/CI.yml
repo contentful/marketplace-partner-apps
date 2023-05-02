@@ -29,15 +29,13 @@ jobs:
         run: echo ${{ github.event.after }}
       - name: Print branch baseline SHA
         run: echo ${{ github.event.pull_request.base.sha }}
-      - name: Restore mainline key
-        run: echo ${{ github.sha }}
       - name: Cache environment
         uses: actions/cache@v3
         with:
           path: /tmp/nxcache
-          key: ${{ runner.os }}-${{ github.event.after }}
+          key: ${{ runner.os }}-${{ github.event.pull_request.base.sha }}
           restore-keys: |
-            ${{ runner.os }}-${{ github.event.pull_request.base.sha }}
+            ${{ runner.os }}-da805d78041afa58eaab0ec251b9ce08d8e68edc
       - name: Root dependencies
         run: npm install
       - name: App dependencies
