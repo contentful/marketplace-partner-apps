@@ -1,0 +1,16 @@
+
+> @contentful/ai-content-generator@0.1.0 install-ci
+> npm ci
+
+
+added 1575 packages, and audited 1576 packages in 1m
+
+252 packages are looking for funding
+  run `npm fund` for details
+
+6 high severity vulnerabilities
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.

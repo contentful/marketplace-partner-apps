@@ -8,7 +8,7 @@
           "test",
           "install-ci"
         ],
-        "cacheDirectory": "~/.local"
+        "cacheDirectory": "/tmp"
       }
     }
   }
