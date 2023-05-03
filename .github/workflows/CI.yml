@@ -20,9 +20,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 2
-      # - name: Setup upterm session
-      #   uses: lhotari/action-upterm@v1
+          fetch-depth: 0
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
@@ -35,15 +33,10 @@ jobs:
         run: echo ${{ github.job_workflow_sha }}
       - name: Print main package-lock hash
         run: echo ${{ hashFiles('**/package-lock.json') }}
-      - name: Cache environment
-        uses: actions/cache@v3
-        with:
-          path: /home/runner/nxcache
-          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-
       - name: Root dependencies
         run: npm install
+      # - name: Setup upterm session
+      #   uses: lhotari/action-upterm@v1
       - name: App dependencies
         run: npm run install-apps
       - name: Build

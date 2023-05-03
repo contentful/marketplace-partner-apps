@@ -27,6 +27,7 @@ const FIELDS_TO_PERSIST = [
   'original',
   'thumbnails',
   'type',
+  'deleteTHISNOW',
   'watermarked',
   'width',
   'videoPreviewURLs',
