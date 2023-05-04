@@ -17,18 +17,20 @@ jobs:
       TEST_ORG_ID: ${{ secrets.TEST_ORG_ID }}
       TEST_CMA_TOKEN: ${{ secrets.TEST_CMA_TOKEN }}
     steps:
-      - name: Check out code
+      - name: Check out code for target branch
+        run: git checkout origin/main
+      - name: Check out code for source branch
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
+          ref: ${GITHUB_REF}
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
           node-version: 16
       - name: Base ref
-        run: echo ${{ github.base_ref }}
+        run: echo ${{ github.event.pull_request.base.ref }}
       - name: Head ref
-        run: echo ${{ github.head_ref }}
+        run: echo ${GITHUB_REF}
       - name: Job workflow
         run: echo ${{ github.job_workflow_sha }}
       - name: Print main package-lock hash
