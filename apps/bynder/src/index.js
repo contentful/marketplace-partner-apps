@@ -24,6 +24,7 @@ const FIELDS_TO_PERSIST = [
   'limited',
   'name',
   'orientation',
+  'DELETETHIS',
   'original',
   'thumbnails',
   'type',
