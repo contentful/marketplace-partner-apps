@@ -27,21 +27,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: Base ref
-        run: echo ${{ github.base_ref }}
-      - name: Head ref
-        run: echo ${{ github.head_ref }}
-      - name: Job workflow
-        run: echo ${{ github.job_workflow_sha }}
-      - name: Print main package-lock hash
-        run: echo ${{ hashFiles('**/package-lock.json') }}
-      - name: Cache environment
-        uses: actions/cache@v3
-        with:
-          path: ~/.local
-          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-
       - name: Root dependencies
         run: npm install
       - name: App dependencies
