@@ -4,7 +4,6 @@ orbs:
   node: circleci/node@5.0.2
   vault: contentful/vault@1
 
-
 commands:
   publish:
     steps:
@@ -37,7 +36,7 @@ jobs:
           name: Install apps dependencies
           command: npm run install-apps
       - run:
-          name: Test
+          name: Build
           command: npm run build
 
 workflows:
