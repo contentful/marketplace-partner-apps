@@ -12,8 +12,8 @@
     "prettier": "2.8.7"
   },
   "scripts": {
-    "build": "lerna run build --concurrency=1 --stream --since=origin/${{ github.base_ref }}",
-    "test": "lerna run test --concurrency=1 --stream --since=origin/${{ github.base_ref }}",
+    "build": "lerna run build --concurrency=1 --stream",
+    "test": "lerna run test --concurrency=1 --stream",
     "install-apps": "lerna run install-ci",
     "deploy:staging": "lerna run deploy:staging --concurrency=3",
     "deploy": "lerna run deploy --concurrency=3",

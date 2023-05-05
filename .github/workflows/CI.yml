@@ -30,7 +30,7 @@ jobs:
       - name: App dependencies
         run: npm run install-apps
       - name: Build
-        run: npm run build
+        run: npm run build -- --since=origin/${{ github.base_ref }}
       - name: Test
         run: npm run test
       - name: Deploy Staging
