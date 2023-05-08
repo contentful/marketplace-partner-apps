@@ -12,11 +12,11 @@
     "prettier": "2.8.7"
   },
   "scripts": {
-    "build": "lerna run build --concurrency=1 --stream",
-    "test": "lerna run test --concurrency=1 --stream",
-    "install-apps": "lerna run install-ci",
-    "deploy:staging": "lerna run deploy:staging --concurrency=3",
-    "deploy": "lerna run deploy --concurrency=3",
+    "build": "lerna run build --concurrency=1 --stream --since main",
+    "test": "lerna run test --concurrency=1 --stream --since main",
+    "install-apps": "lerna run install-ci --concurrency=1 --stream --since main",
+    "deploy:staging": "lerna run deploy:staging --concurrency=3 --since main",
+    "deploy": "lerna run deploy --concurrency=3 --since main",
     "prepare": "husky install"
   },
   "lint-staged": {
