@@ -1,0 +1,54 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.0.2
+  vault: contentful/vault@1
+
+commands:
+  publish:
+    steps:
+      - vault/get-secrets:
+          template-preset: 'semantic-release-ecosystem'
+      - run:
+          name: Setup NPM
+          command: |
+            echo $'@contentful:registry=https://registry.npmjs.org/
+            //registry.npmjs.org/:_authToken=${NPM_TOKEN}' >> ~/.npmrc
+      - run: export GH_TOKEN=${GITHUB_TOKEN}
+      - run: git config --global user.email "${GIT_AUTHOR_EMAIL}"
+      - run: git config --global user.name "${GIT_AUTHOR_NAME}"
+      - run:
+          name: Publish packages
+          command: npm run publish-packages
+
+jobs:
+  apps-ci:
+    docker:
+      - image: cimg/base:stable
+    resource_class: medium+
+    steps:
+      - checkout
+      - node/install
+      - run:
+          name: Install root dependencies
+          command: npm install
+      - run:
+          name: Install apps dependencies
+          command: npm run install-apps
+      - run:
+          name: Build apps
+          command: npm run build-apps
+      - run:
+          name: Test apps
+          command: npm run test-apps
+      - run:
+          name: Deploy staging
+          command: npm run deploy:staging
+
+workflows:
+  version: 2
+  test-deploy:
+    jobs:
+      - apps-ci:
+          context:
+            - vault
