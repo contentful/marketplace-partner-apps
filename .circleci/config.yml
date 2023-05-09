@@ -22,7 +22,7 @@ commands:
           command: npm run publish-packages
 
 jobs:
-  apps-ci:
+  apps-checks:
     docker:
       - image: cimg/base:stable
     resource_class: medium+
@@ -41,14 +41,70 @@ jobs:
       - run:
           name: Test apps
           command: npm run test-apps
+
+  deploy-staging:
+    docker:
+      - image: cimg/base:stable
+    resource_class: medium+
+    steps:
+      - checkout
+      - node/install
+      - run:
+          name: Install root dependencies
+          command: npm install
+      - run:
+          name: Install apps dependencies
+          command: npm run install-apps:deploy
+      - run:
+          name: Build apps
+          command: npm run build-apps:deploy
       - run:
           name: Deploy staging
           command: npm run deploy:staging
 
+  deploy-prod:
+    docker:
+      - image: cimg/base:stable
+    resource_class: medium+
+    steps:
+      - checkout
+      - node/install
+      - run:
+          name: Install root dependencies
+          command: npm install
+      - run:
+          name: Install apps dependencies
+          command: npm run install-apps:deploy
+      - run:
+          name: Build apps
+          command: npm run build-apps:deploy
+      - run:
+          name: Deploy production
+          command: npm run deploy:production
+
 workflows:
   version: 2
-  test-deploy:
+  apps-ci-pipeline:
     jobs:
-      - apps-ci:
+      - apps-checks:
           context:
             - vault
+          filters:
+            branches:
+              ignore:
+                - main
+                - production  
+      - deploy-staging:
+          context:
+            - vault
+          filters:
+            branches:
+              only:
+                - main
+      - deploy-prod:
+          context:
+            - vault
+          filters:
+            branches:
+              only:
+                - production
