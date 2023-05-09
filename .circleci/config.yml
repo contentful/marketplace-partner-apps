@@ -71,10 +71,10 @@ jobs:
           command: npm install
       - run:
           name: Install apps dependencies
-          command: npm run install-apps
+          command: npm run install-apps:deploy
       - run:
           name: Build apps
-          command: npm run build-apps
+          command: npm run build-apps:deploy
       - run:
           name: Deploy staging
           command: npm run deploy:staging
@@ -91,10 +91,10 @@ jobs:
           command: npm install
       - run:
           name: Install apps dependencies
-          command: npm run install-apps
+          command: npm run install-apps:deploy
       - run:
           name: Build apps
-          command: npm run build-apps
+          command: npm run build-apps:deploy
       - run:
           name: Deploy production
           command: npm run deploy
@@ -110,7 +110,7 @@ workflows:
             branches:
               ignore:
                 - main
-                - production            
+                - production  
       - apps-deploy:
           context:
             - vault
