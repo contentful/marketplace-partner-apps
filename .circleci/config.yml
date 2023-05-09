@@ -54,7 +54,7 @@ jobs:
           command: npm install
       - run:
           name: Install apps dependencies
-          command: npm run install-apps
+          command: npm run install-apps:deploy
       - run:
           name: Build apps
           command: npm run build-apps:deploy

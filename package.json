@@ -16,6 +16,7 @@
     "build-apps:deploy": "lerna run build --concurrency=1 --stream",
     "test-apps": "lerna run test --concurrency=1 --stream --since main",
     "install-apps": "lerna run install-ci --concurrency=1 --stream --since main",
+    "install-apps:deploy": "lerna run install-ci --concurrency=1 --stream",
     "deploy:staging": "lerna run deploy:staging --concurrency=3",
     "deploy": "lerna run deploy --concurrency=3",
     "prepare": "husky install"
