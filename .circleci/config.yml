@@ -79,7 +79,7 @@ jobs:
           name: Build apps
           command: npm run build-apps
       - run:
-          name: Deploy staging
+          name: Deploy production
           command: npm run deploy
 
 workflows:
