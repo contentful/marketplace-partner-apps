@@ -13,6 +13,7 @@
   },
   "scripts": {
     "build-apps": "lerna run build --concurrency=1 --stream --since main",
+    "build-apps:deploy": "lerna run build --concurrency=1 --stream",
     "test-apps": "lerna run test --concurrency=1 --stream --since main",
     "install-apps": "lerna run install-ci --concurrency=1 --stream --since main",
     "deploy:staging": "lerna run deploy:staging --concurrency=3",
