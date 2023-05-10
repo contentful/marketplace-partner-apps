@@ -14,10 +14,10 @@
   "scripts": {
     "test-apps": "lerna run test --concurrency=1 --stream --since main",
     "build-apps": "lerna run build --concurrency=1 --stream --since main",
-    "build-apps:deploy": "lerna run build --concurrency=1 --stream",
+    "build-apps:deploy": "lerna run build --concurrency=1 --stream --since $(git merge-base origin/master HEAD)",
     "install-apps": "lerna run install-ci --concurrency=1 --stream --since main",
-    "install-apps:deploy": "lerna run install-ci --concurrency=1 --stream",
-    "deploy:staging": "lerna run deploy:staging --concurrency=3",
+    "install-apps:deploy": "lerna run install-ci --concurrency=1 --stream --since $(git merge-base origin/master HEAD)",
+    "deploy:staging": "lerna run deploy:staging --concurrency=3 --since $(git merge-base origin/master HEAD)",
     "deploy:production": "lerna run deploy --concurrency=3",
     "prepare": "husky install"
   },
