@@ -1,14 +1,17 @@
 {
-  "name": "@contentful/bynder-assets",
-  "version": "1.11.16",
+  "name": "@contentful/cloudinary-assets",
+  "version": "1.6.14",
   "private": true,
   "devDependencies": {
     "@contentful/app-scripts": "1.2.0",
     "cross-env": "7.0.3",
-    "react-scripts": "5.0.1"
+    "react-scripts": "4.0.3"
   },
   "dependencies": {
+    "@contentful/app-sdk": "4.10.0",
     "@contentful/dam-app-base": "^2.0.35",
+    "cloudinary-core": "2.13.0",
+    "core-js": "3.30.2",
     "react": "16.12.0",
     "react-dom": "16.12.0"
   },
@@ -16,8 +19,7 @@
     "start": "cross-env BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "install-ci": "npm ci",
-    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 5KySdUzG7OWuCE2V3fgtIa --token ${CONTENTFUL_CMA_TOKEN}",
-    "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id 6weJYfzgz370YDmFVi4B6w --token ${TEST_CMA_TOKEN}"
+    "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id 3OMVIvG6YcugUajdy2s5D5 --token ${TEST_CMA_TOKEN}"
   },
   "eslintConfig": {
     "extends": "react-app"
