@@ -8,31 +8,23 @@
 
 ### General
 
-
 ### Authorization
-
 
 ### Google Analytics Data
 
-
 ### Lambda
-
 
 ## Local Development
 
 ### Frontend
 
-
 ### Backend (Lambda)
 
-
 #### Secrets
-
 
 ### Available Scripts
 
 #### `npm start`
-
 
 #### `npm run build`
 
