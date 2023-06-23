@@ -30,6 +30,6 @@
     "extends": "react-app"
   },
   "dependencies": {
-    "lerna": "^6.6.1"
+    "lerna": "^7.0.2"
   }
 }
