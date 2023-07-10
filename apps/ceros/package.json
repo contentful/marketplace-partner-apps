@@ -20,6 +20,7 @@
     "eject": "react-scripts eject",
     "create-app-definition": "contentful-app-scripts create-app-definition",
     "install-ci": "npm ci",
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 3ts0Y8tta9da2qV0qQSoZG --token ${CONTENTFUL_CMA_TOKEN}",
     "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id 4S4r9KtVsjT88RAjrkhuMM --token ${TEST_CMA_TOKEN}"
   },
   "eslintConfig": {
