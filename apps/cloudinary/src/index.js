@@ -8,22 +8,7 @@ import logo from './logo.svg';
 
 const MAX_FILES_UPPER_LIMIT = 1000;
 const CTA = 'Select or upload a file on Cloudinary';
-const VALID_IMAGE_FORMATS = [
-  'svg',
-  'jpg',
-  'png',
-  'gif',
-  'jpeg',
-  'tiff',
-  'ico',
-  'webp',
-  'pdf',
-  'bmp',
-  'psd',
-  'eps',
-  'jxr',
-  'wdp',
-];
+const VALID_IMAGE_FORMATS = ['svg', 'jpg', 'png', 'gif', 'jpeg', 'tiff', 'ico', 'webp', 'pdf', 'bmp', 'psd', 'eps', 'jxr', 'wdp'];
 const FIELDS_TO_PERSIST = [
   'url',
   'tags',
@@ -196,8 +181,7 @@ setup({
     {
       id: 'maxFiles',
       name: 'Max number of files',
-      description:
-        'The max number of files that can be added to a single field. Must be between 1 and 25',
+      description: `The max number of files that can be added to a single field. Must be between 1 and ${MAX_FILES_UPPER_LIMIT}`,
       type: 'Number',
       required: false,
       default: 10,
@@ -205,8 +189,7 @@ setup({
     {
       id: 'startFolder',
       name: 'Starting folder',
-      description:
-        'A path to a folder which the Cloudinary Media Library will automatically browse to on load',
+      description: 'A path to a folder which the Cloudinary Media Library will automatically browse to on load',
       type: 'Symbol',
       required: false,
       default: '',
@@ -227,8 +210,7 @@ setup({
       description:
         "The format of the assets. This can be set manually to a specific format - 'jpg' as an example (all supported formats can be found here - https://cloudinary.com/documentation/image_transformations#supported_image_formats. By setting it to 'auto', Cloudinary will decide on the most optimized format for your users. If you wish to keep the original format, set it to 'none'.",
       type: 'List',
-      value:
-        'auto,none,gif,webp,bmp,flif,heif,heic,ico,jpg,jpe,jpeg,jp2,wdp,jxr,hdp,png,psd,arw,cr2,svg,tga,tif,tiff',
+      value: 'auto,none,gif,webp,bmp,flif,heif,heic,ico,jpg,jpe,jpeg,jp2,wdp,jxr,hdp,png,psd,arw,cr2,svg,tga,tif,tiff',
       required: true,
       default: 'auto',
     },
