@@ -1,0 +1,18 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: '/'
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: UTC
+    open-pull-requests-limit: 15
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@contentful/app-sdk'
