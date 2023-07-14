@@ -10,7 +10,7 @@
     "@extractus/oembed-extractor": "^3.1.9",
     "contentful-management": "10.35.6",
     "@emotion/css": "11.11.0",
-    "react": "18.2.0",
+    "react": "16.14.0",
     "react-dom": "16.14.0"
   },
   "scripts": {
