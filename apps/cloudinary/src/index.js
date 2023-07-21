@@ -6,7 +6,7 @@ import { loadScript } from './utils';
 
 import logo from './logo.svg';
 
-const MAX_FILES_UPPER_LIMIT = 25;
+const MAX_FILES_UPPER_LIMIT = 1000;
 const CTA = 'Select or upload a file on Cloudinary';
 const VALID_IMAGE_FORMATS = [
   'svg',
@@ -162,8 +162,8 @@ function validateParameters(parameters) {
   }
 
   const validFormat = /^[1-9][0-9]*$/.test(parameters.maxFiles);
-  const int = parseInt(parameters.maxFiles, 10);
-  const valid = validFormat && int > 0 && int <= MAX_FILES_UPPER_LIMIT;
+  const maxFileParam = parseInt(parameters.maxFiles, 10);
+  const valid = validFormat && maxFileParam > 0 && maxFileParam <= MAX_FILES_UPPER_LIMIT;
   if (!valid) {
     return `Max files should be a number between 1 and ${MAX_FILES_UPPER_LIMIT}.`;
   }
