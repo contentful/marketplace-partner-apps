@@ -19,6 +19,7 @@
     "react-dom": "18.2.0"
   },
   "scripts": {
+    "install-ci": "npm ci",
     "start": "vite",
     "build": "tsc && vite build",
     "test": "vitest",
