@@ -4,6 +4,7 @@ import { useCallback, useMemo } from 'react';
 import { ContentTypeProps } from 'contentful-management';
 import tokens from '@contentful/f36-tokens';
 import { css } from 'emotion';
+import { NoContentTypes } from './NoContentTypes';
 
 interface Props {
   space: string;
@@ -21,7 +22,7 @@ export function FieldSelector({ environment, space, contentTypes: allContentType
         const fields = compatibleFields[ct.sys.id];
         return fields && fields.length > 0;
       }),
-    [compatibleFields, allContentTypes]
+    [compatibleFields, allContentTypes],
   );
 
   const changeSelectedFields = useCallback(
@@ -36,32 +37,11 @@ export function FieldSelector({ environment, space, contentTypes: allContentType
 
       onSelectedFieldChanged(updated);
     },
-    [selectedFields, onSelectedFieldChanged]
+    [selectedFields, onSelectedFieldChanged],
   );
 
   if (contentTypes.length === 0) {
-    return (
-      <>
-        <Paragraph>
-          This app can be used only with <strong>JSON object</strong> fields.
-        </Paragraph>
-        <Note variant="warning">
-          There are <strong>no content types with JSON object</strong> fields in this environment. You can add one in your{' '}
-          <TextLink
-            variant="primary"
-            target="_blank"
-            rel="noopener noreferrer"
-            href={
-              environment === 'master'
-                ? `https://app.contentful.com/spaces/${space}/content_types`
-                : `https://app.contentful.com/spaces/${space}/environments/${environment}/content_types`
-            }>
-            content model
-          </TextLink>{' '}
-          and assign it to the app from this screen.
-        </Note>
-      </>
-    );
+    return <NoContentTypes space={space} environment={environment} />;
   }
 
   return (
@@ -76,7 +56,8 @@ export function FieldSelector({ environment, space, contentTypes: allContentType
             {compatibleFields[contentType.sys.id].map((field) => (
               <Checkbox
                 key={field.id}
-                id={`field-box-${contentType.sys.id}-${field.id}`}
+                id={`field-${contentType.sys.id}-${field.id}`}
+                testId={`field-${contentType.sys.id}-${field.id}`}
                 helpText={`Field ID: ${field.id}`}
                 isChecked={(selectedFields[contentType.sys.id] ?? []).includes(field.id)}
                 onChange={(e) => changeSelectedFields(contentType.sys.id, field.id, e.currentTarget.checked)}>
