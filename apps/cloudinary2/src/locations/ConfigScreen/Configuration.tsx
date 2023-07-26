@@ -19,12 +19,13 @@ export function Configuration({ parameters, onParametersChange }: Props) {
       };
       onParametersChange(newParameters);
     },
-    [parameters, onParametersChange]
+    [parameters, onParametersChange],
   );
 
   return (
     <Form>
       <TextField
+        testId="config-cloudName"
         name="Cloud name"
         description="The Cloudinary cloud name that the app will connect to."
         value={parameters.cloudName}
@@ -33,6 +34,7 @@ export function Configuration({ parameters, onParametersChange }: Props) {
         type="text"
       />
       <TextField
+        testId="config-apiKey"
         name="API key"
         description="The Cloudinary API Key that can be found in your Cloudinary console."
         value={parameters.apiKey}
@@ -41,6 +43,7 @@ export function Configuration({ parameters, onParametersChange }: Props) {
         type="text"
       />
       <TextField
+        testId="config-maxFiles"
         name="Max number of files"
         description={`The max number of files that can be added to a single field. Must be between 1 and ${MAX_FILES_UPPER_LIMIT}`}
         value={String(parameters.maxFiles)}
@@ -54,6 +57,7 @@ export function Configuration({ parameters, onParametersChange }: Props) {
         inputProps={{ min: 1, max: MAX_FILES_UPPER_LIMIT }}
       />
       <TextField
+        testId="config-startFolder"
         name="Starting folder"
         description="A path to a folder which the Cloudinary Media Library will automatically browse to on load."
         value={parameters.startFolder}
@@ -62,6 +66,7 @@ export function Configuration({ parameters, onParametersChange }: Props) {
         type="text"
       />
       <SelectField
+        testId="config-quality"
         name="Media Quality"
         description="The quality level of your assets. This can be a fixed number ranging from 1-100, or you can get Cloudinary to decide the most optimized level by setting it to 'auto'. More options are available such as: auto:low/auto:eco/auto:good/auto:best. If you wish to use the original level, set it to 'none'."
         isRequired
@@ -70,6 +75,7 @@ export function Configuration({ parameters, onParametersChange }: Props) {
         onChange={(value) => onParameterChange('quality', value)}
       />
       <SelectField
+        testId="config-format"
         name="Format"
         description={
           <>
@@ -126,9 +132,10 @@ interface TextFieldProps {
   type: 'text' | 'number';
 
   inputProps?: Pick<TextInputProps, 'max' | 'min'>;
+  testId: string;
 }
 
-function TextField({ name, description, value, onChange, isRequired = false, type, inputProps }: TextFieldProps) {
+function TextField({ name, description, value, onChange, isRequired = false, type, inputProps, testId }: TextFieldProps) {
   return (
     <FieldWrapper name={name} description={description} counter>
       <TextInput
@@ -139,6 +146,7 @@ function TextField({ name, description, value, onChange, isRequired = false, typ
         isRequired={isRequired}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        testId={testId}
         {...inputProps}
       />
     </FieldWrapper>
@@ -154,12 +162,13 @@ interface SelectFieldProps {
 
   isRequired: boolean;
   options: string[];
+  testId: string;
 }
 
-function SelectField({ name, description, value, onChange, isRequired, options }: SelectFieldProps) {
+function SelectField({ name, description, value, onChange, isRequired, options, testId }: SelectFieldProps) {
   return (
     <FieldWrapper name={name} description={description}>
-      <Select name={useId()} isRequired={isRequired} onChange={(e) => onChange(e.target.value)} value={value}>
+      <Select name={useId()} isRequired={isRequired} onChange={(e) => onChange(e.target.value)} value={value} testId={testId}>
         {options.map((currValue: string) => (
           <Option value={currValue} key={currValue}>
             {currValue}
