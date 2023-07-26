@@ -50,30 +50,9 @@ interface Props {
 
 export function Thumbnail({ asset, isDisabled, onDelete }: Props) {
   const sdk = useSDK<FieldAppSDK<AppInstallationParameters>>();
-  const { url, alt } = useMemo(() => {
-    const cloudinary = new cloudinaryCore({
-      cloud_name: sdk.parameters.installation.cloudName,
-      api_key: sdk.parameters.installation.apiKey,
-    });
 
-    const alt = [asset.public_id, ...(asset.tags ?? [])].join(', ');
-    const transformations = `${asset.raw_transformation ?? ''}/c_fill,h_100,w_150`;
-
-    let url: string | undefined;
-    if (asset.resource_type === 'image' && VALID_IMAGE_FORMATS.includes(asset.format)) {
-      url = cloudinary.url(asset.public_id, {
-        type: asset.type,
-        rawTransformation: transformations,
-      });
-    } else if (asset.resource_type === 'video') {
-      url = cloudinary.video_thumbnail_url(asset.public_id, {
-        type: asset.type,
-        rawTransformation: transformations,
-      });
-    }
-
-    return { alt, url };
-  }, [asset, sdk.parameters.installation.apiKey, sdk.parameters.installation.cloudName]);
+  const alt = [asset.public_id, ...(asset.tags ?? [])].join(', ');
+  const url = useMemo(() => getUrlFromAsset(sdk.parameters.installation, asset), [asset, sdk.parameters.installation]);
 
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: asset.id });
 
@@ -89,4 +68,25 @@ export function Thumbnail({ asset, isDisabled, onDelete }: Props) {
       {!isDisabled && <IconButton variant="transparent" icon={<CloseIcon variant="muted" />} aria-label="Close" onClick={onDelete} className={styles.remove} />}
     </Card>
   );
+}
+
+function getUrlFromAsset(installationParams: AppInstallationParameters, asset: CloudinaryAsset): string | undefined {
+  const cloudinary = new cloudinaryCore({
+    cloud_name: installationParams.cloudName,
+    api_key: installationParams.apiKey,
+  });
+
+  const transformations = `${asset.raw_transformation ?? ''}/c_fill,h_100,w_150`;
+  if (asset.resource_type === 'image' && VALID_IMAGE_FORMATS.includes(asset.format)) {
+    return cloudinary.url(asset.public_id, {
+      type: asset.type,
+      rawTransformation: transformations,
+    });
+  }
+  if (asset.resource_type === 'video') {
+    return cloudinary.video_thumbnail_url(asset.public_id, {
+      type: asset.type,
+      rawTransformation: transformations,
+    });
+  }
 }
