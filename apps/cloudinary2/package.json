@@ -1,0 +1,52 @@
+{
+  "name": "cloudinary2",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@contentful/app-sdk": "4.22.1",
+    "@contentful/f36-components": "4.48.0",
+    "@contentful/f36-icons": "4.27.0",
+    "@contentful/f36-tokens": "4.0.2",
+    "@contentful/react-apps-toolkit": "1.2.16",
+    "@dnd-kit/core": "6.0.8",
+    "@dnd-kit/sortable": "7.0.2",
+    "@dnd-kit/utilities": "3.2.1",
+    "cloudinary-core": "2.13.0",
+    "contentful-management": "10.39.2",
+    "emotion": "10.0.27",
+    "lodash": "4.17.21",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "scripts": {
+    "install-ci": "npm ci",
+    "start": "vite",
+    "build": "tsc && vite build",
+    "test": "vitest",
+    "lint": "eslint src",
+    "prettier": "prettier --write src"
+  },
+  "devDependencies": {
+    "@contentful/app-scripts": "1.10.2",
+    "@testing-library/react": "14.0.0",
+    "@testing-library/user-event": "14.4.3",
+    "@tsconfig/vite-react": "2.0.0",
+    "@types/lodash": "4.14.196",
+    "@types/node": "16.18.38",
+    "@types/react": "18.2.16",
+    "@types/react-dom": "18.2.7",
+    "@typescript-eslint/eslint-plugin": "6.2.0",
+    "@typescript-eslint/parser": "6.2.0",
+    "@vitejs/plugin-react": "4.0.3",
+    "eslint": "8.45.0",
+    "eslint-config-prettier": "8.8.0",
+    "eslint-plugin-prettier": "5.0.0",
+    "eslint-plugin-react": "7.33.0",
+    "eslint-plugin-react-hooks": "4.6.0",
+    "happy-dom": "10.5.2",
+    "prettier": "3.0.0",
+    "typescript": "5.1.6",
+    "vite": "4.4.7",
+    "vitest": "0.33.0"
+  }
+}
