@@ -2,7 +2,7 @@ import { DialogAppSDK } from '@contentful/app-sdk';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { css, injectGlobal } from 'emotion';
 import { useCallback } from 'react';
-import { AppInstallationParameters, MLResult } from '../types';
+import { AppInstallationParameters, MediaLibraryResult } from '../types';
 import { loadScript } from '../utils';
 
 const styles = {
@@ -41,7 +41,7 @@ declare global {
       createMediaLibrary: (
         options: MediaLibraryOptions,
         callbacks: {
-          insertHandler: (data: MLResult) => void;
+          insertHandler: (data: MediaLibraryResult) => void;
         }
       ) => MediaLibraryInstance;
     };

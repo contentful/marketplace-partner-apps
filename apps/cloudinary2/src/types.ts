@@ -33,12 +33,12 @@ export type CloudinaryAsset = {
 /**
  * Auto-generated, might not be accurate
  */
-export interface MLResult {
-  assets: MLResultAsset[];
+export interface MediaLibraryResult {
+  assets: MediaLibraryResultAsset[];
   mlId: string;
 }
 
-export interface MLResultAsset {
+export interface MediaLibraryResultAsset {
   public_id: string;
   resource_type: string;
   type: string;
@@ -53,19 +53,19 @@ export interface MLResultAsset {
   tags: unknown[];
   metadata: unknown[];
   created_at: string;
-  derived: MLResultDerived[];
+  derived: MediaLibraryResultDerived[];
   access_mode: string;
   access_control: unknown[];
-  created_by: MLResultActor;
-  uploaded_by: MLResultActor;
+  created_by: MediaLibraryResultActor;
+  uploaded_by: MediaLibraryResultActor;
 }
 
-export interface MLResultActor {
+export interface MediaLibraryResultActor {
   type: string;
   id: string;
 }
 
-export interface MLResultDerived {
+export interface MediaLibraryResultDerived {
   url: string;
   secure_url: string;
   raw_transformation: string;

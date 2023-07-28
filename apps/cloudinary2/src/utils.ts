@@ -1,5 +1,5 @@
 import { pick } from 'lodash';
-import { CloudinaryAsset, MLResultAsset } from './types';
+import { CloudinaryAsset, MediaLibraryResultAsset } from './types';
 
 export function loadScript(src: string) {
   return new Promise<void>((resolve, reject) => {
@@ -37,7 +37,7 @@ const FIELDS_TO_PERSIST = [
   'raw_transformation',
 ] as const;
 
-export function extractAsset(asset: MLResultAsset): CloudinaryAsset {
+export function extractAsset(asset: MediaLibraryResultAsset): CloudinaryAsset {
   let res = pick(asset, FIELDS_TO_PERSIST) as CloudinaryAsset;
   // if we have a derived images, we replace the URL with the derived URL and store the origianl URL seperatly
   if (asset.derived) {

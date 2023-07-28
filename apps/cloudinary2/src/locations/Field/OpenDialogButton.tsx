@@ -4,7 +4,7 @@ import tokens from '@contentful/f36-tokens';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { css } from 'emotion';
 import { useCallback } from 'react';
-import { CloudinaryAsset, MLResult } from '../../types';
+import { CloudinaryAsset, MediaLibraryResult } from '../../types';
 import { extractAsset } from '../../utils';
 import logo from '../../assets/logo.svg';
 
@@ -28,7 +28,7 @@ interface Props {
 export function OpenDialogButton({ onNewAssetsAdded, isDisabled }: Props) {
   const sdk = useSDK();
   const handleDialogOpenClick = useCallback(async () => {
-    const result: MLResult | undefined = await sdk.dialogs.openCurrentApp({
+    const result: MediaLibraryResult | undefined = await sdk.dialogs.openCurrentApp({
       position: 'center',
       title: 'Select or upload a file on Cloudinary',
       shouldCloseOnOverlayClick: true,
