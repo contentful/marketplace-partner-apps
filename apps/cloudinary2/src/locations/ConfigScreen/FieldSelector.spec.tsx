@@ -1,9 +1,9 @@
-import { render, waitFor, within } from '@testing-library/react';
+import { render, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { ContentTypeProps } from 'contentful-management';
 import { noop } from 'lodash';
 import { describe, expect, it, vi } from 'vitest';
 import { FieldSelector } from './FieldSelector';
-import { ContentTypeProps } from 'contentful-management';
-import userEvent from '@testing-library/user-event';
 
 const contentTypes = [
   {
@@ -85,7 +85,6 @@ describe('FieldSelector', () => {
       ct3: ['baz'],
     });
   });
-
 
   it('checking checkbox `onSelectedFieldChanged` correctly', async () => {
     const onSelectedFieldChanged = vi.fn();

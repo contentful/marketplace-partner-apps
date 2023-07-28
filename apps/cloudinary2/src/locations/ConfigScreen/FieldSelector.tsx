@@ -1,10 +1,10 @@
-import { Checkbox, Form, Note, Paragraph, Subheading, TextLink } from '@contentful/f36-components';
-import { SelectedFields, getCompatibleFields } from './fields';
-import { useCallback, useMemo } from 'react';
-import { ContentTypeProps } from 'contentful-management';
+import { Checkbox, Form, Paragraph, Subheading } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
+import { ContentTypeProps } from 'contentful-management';
 import { css } from 'emotion';
+import { useCallback, useMemo } from 'react';
 import { NoContentTypes } from './NoContentTypes';
+import { SelectedFields, getCompatibleFields } from './fields';
 
 interface Props {
   space: string;
