@@ -8,7 +8,7 @@ import { Thumbnails } from './Thumbnails';
 
 const Field = () => {
   const sdk = useSDK<FieldAppSDK<AppInstallationParameters>>();
-  useAutoResizer();
+  useAutoResizer({ absoluteElements: true });
 
   const [assets = [], setAssets] = useFieldValue<CloudinaryAsset[]>();
 

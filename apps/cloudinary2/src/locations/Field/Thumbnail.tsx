@@ -1,44 +1,52 @@
-import { useSDK } from '@contentful/react-apps-toolkit';
-import { AppInstallationParameters, CloudinaryAsset } from '../../types';
 import { FieldAppSDK } from '@contentful/app-sdk';
-import { useMemo } from 'react';
-import { Cloudinary as cloudinaryCore } from 'cloudinary-core';
-import { VALID_IMAGE_FORMATS } from '../../constants';
+import { AssetCard, DateTime, DragHandle, Menu, MenuDivider, MenuItem } from '@contentful/f36-components';
+import { ExternalLinkIcon } from '@contentful/f36-icons';
+import tokens from '@contentful/f36-tokens';
+import { useSDK } from '@contentful/react-apps-toolkit';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Card, IconButton } from '@contentful/f36-components';
-import { CloseIcon } from '@contentful/f36-icons';
+import { Cloudinary as cloudinaryCore } from 'cloudinary-core';
 import { css } from 'emotion';
+import { useMemo } from 'react';
+import logo from '../../assets/logo.svg';
+import { VALID_IMAGE_FORMATS } from '../../constants';
+import { AppInstallationParameters, CloudinaryAsset } from '../../types';
+import fileSize from 'file-size';
 
 const styles = {
-  container: css({
-    maxWidth: '600px',
+  dragHandle: css({
+    alignSelf: 'stretch',
   }),
-  grid: css({
-    display: 'grid',
-    gap: '20px',
-    gridTemplateColumns: 'repeat(3, 1fr)',
-  }),
-  card: (disabled: boolean) =>
-    css({
-      margin: '10px',
-      position: 'relative',
-      img: {
-        cursor: disabled ? 'move' : 'pointer',
-        display: 'block',
-        maxWidth: '150px',
-        maxHeight: '100px',
-        margin: 'auto',
-        userSelect: 'none', // Image selection sometimes makes drag and drop ugly.
+  fileInformation: {
+    menuItem: css({
+      opacity: 1,
+    }),
+    dl: css({
+      backgroundColor: tokens.gray100,
+      borderRadius: tokens.borderRadiusMedium,
+      padding: tokens.spacingXs,
+      width: '200px',
+      lineHeight: tokens.lineHeightS,
+      fontSize: tokens.fontSizeS,
+
+      dt: {
+        color: tokens.gray700,
+        marginRight: tokens.spacingXs,
+        paddingTop: tokens.spacing2Xs,
+        paddingBottom: tokens.spacing2Xs,
+        float: 'left',
+        clear: 'left',
+      },
+      dd: {
+        marginLeft: 0,
+        color: tokens.gray900,
+        paddingTop: tokens.spacing2Xs,
+        paddingBottom: tokens.spacing2Xs,
       },
     }),
-  remove: css({
-    position: 'absolute',
-    top: '-10px',
-    right: '-10px',
-    backgroundColor: 'white',
-    padding: 0,
-    minHeight: 'initial',
+  },
+  menuItemIcon: css({
+    fill: tokens.gray900,
   }),
 };
 
@@ -62,11 +70,46 @@ export function Thumbnail({ asset, isDisabled, onDelete }: Props) {
   };
 
   return (
-    <Card className={styles.card(isDisabled)} ref={setNodeRef} style={style} {...attributes}>
-      {url ? <img src={url} alt={alt} {...listeners} /> : <div {...listeners}>Asset not available</div>}
-
-      {!isDisabled && <IconButton variant="transparent" icon={<CloseIcon variant="muted" />} aria-label="Close" onClick={onDelete} className={styles.remove} />}
-    </Card>
+    <div ref={setNodeRef}>
+      <AssetCard
+        style={style}
+        dragHandleRender={() => <DragHandle as="button" className={styles.dragHandle} label="Move card" {...attributes} {...listeners} />}
+        withDragHandle={!isDisabled}
+        src={url}
+        title={alt}
+        type="image"
+        icon={<img src={logo} alt="" width={24} height={24} />}
+        size="small"
+        actions={[
+          <MenuItem key="edit" as="a" href="https://contentful.com" target="_blank">
+            Edit in Cloudinary <ExternalLinkIcon className={styles.menuItemIcon} />
+          </MenuItem>,
+          <MenuItem key="remove" onClick={onDelete} isDisabled={isDisabled}>
+            Remove
+          </MenuItem>,
+          <MenuDivider key="divider" />,
+          <Menu.SectionTitle key="file-information-title">File information</Menu.SectionTitle>,
+          <MenuItem key="file-information" className={styles.fileInformation.menuItem} isDisabled>
+            <dl className={styles.fileInformation.dl}>
+              <dt>Location:</dt>
+              <dd>{asset.public_id.split('/').slice(0, -1).join('/') || 'Home'}</dd>
+              <dt>Format:</dt>
+              <dd>{asset.format}</dd>
+              <dt>Size:</dt>
+              <dd>{fileSize(asset.bytes).human('jedec')}</dd>
+              <dt>Dimensions:</dt>
+              <dd>
+                {asset.width} x {asset.height} px
+              </dd>
+              <dt>Created on:</dt>
+              <dd>
+                <DateTime date={asset.created_at} format="day" />
+              </dd>
+            </dl>
+          </MenuItem>,
+        ]}
+      />
+    </div>
   );
 }
 
@@ -76,7 +119,7 @@ function getUrlFromAsset(installationParams: AppInstallationParameters, asset: C
     api_key: installationParams.apiKey,
   });
 
-  const transformations = `${asset.raw_transformation ?? ''}/c_fill,h_100,w_150`;
+  const transformations = `${asset.raw_transformation ?? ''}/c_crop,h_300,w_300`;
   if (asset.resource_type === 'image' && VALID_IMAGE_FORMATS.includes(asset.format)) {
     return cloudinary.url(asset.public_id, {
       type: asset.type,

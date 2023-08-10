@@ -42,7 +42,7 @@ export function Thumbnails({ assets, isDisabled, onChange }: Props) {
     (indexToDelete: number) => {
       onChange(assets.filter((_, assetIndex) => assetIndex !== indexToDelete));
     },
-    [assets, onChange]
+    [assets, onChange],
   );
 
   const handleDragEnd = useCallback(
@@ -55,7 +55,7 @@ export function Thumbnails({ assets, isDisabled, onChange }: Props) {
         onChange(arrayMove(assets, activeIndex, overIndex));
       }
     },
-    [assets, assetsWithIds, onChange]
+    [assets, assetsWithIds, onChange],
   );
 
   return (

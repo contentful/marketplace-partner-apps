@@ -48,7 +48,7 @@ export function OpenDialogButton({ onNewAssetsAdded, isDisabled }: Props) {
     <div className={styles.container}>
       <img src={logo} alt="Logo" className={styles.logo} />
       <Button startIcon={<AssetIcon />} variant="secondary" size="small" onClick={handleDialogOpenClick} isDisabled={isDisabled}>
-        Select or upload a file on Cloudinary
+        Select or upload an asset
       </Button>
     </div>
   );
