@@ -69,6 +69,10 @@ export function Thumbnail({ asset, isDisabled, onDelete }: Props) {
     transition,
   };
 
+  const consoleUrl = `https://console.cloudinary.com/console/media_library/query_search?q=${encodeURIComponent(
+    `{"userExpression":"(public_id = \\"${asset.public_id}\\")"}`,
+  )}`;
+
   return (
     <div ref={setNodeRef}>
       <AssetCard
@@ -81,7 +85,7 @@ export function Thumbnail({ asset, isDisabled, onDelete }: Props) {
         icon={<img src={logo} alt="" width={24} height={24} />}
         size="small"
         actions={[
-          <MenuItem key="edit" as="a" href="https://contentful.com" target="_blank">
+          <MenuItem key="edit" as="a" href={consoleUrl} target="_blank" onClick={() => window.open(consoleUrl, "_blank")}>
             Edit in Cloudinary <ExternalLinkIcon className={styles.menuItemIcon} />
           </MenuItem>,
           <MenuItem key="remove" onClick={onDelete} isDisabled={isDisabled}>
