@@ -73,7 +73,9 @@ const ConfigScreen = () => {
 
   useEffect(() => {
     return sdk.app.onConfigurationCompleted(() => {
-      updateBackendParameters(backendParameters, sdk);
+      if (backendParameters.apiSecret.length > 0) {
+        updateBackendParameters(backendParameters, sdk);
+      }
     });
   }, [backendParameters, sdk]);
 
