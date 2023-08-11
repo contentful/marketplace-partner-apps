@@ -6,9 +6,6 @@ import { CloudinaryAsset } from '../../types';
 import { Thumbnail } from './Thumbnail';
 
 const styles = {
-  container: css({
-    maxWidth: '600px',
-  }),
   grid: css({
     display: 'grid',
     gap: '20px',
@@ -61,12 +58,10 @@ export function Thumbnails({ assets, isDisabled, onChange }: Props) {
   return (
     <DndContext onDragEnd={handleDragEnd}>
       <SortableContext items={assetsWithIds}>
-        <div className={styles.container}>
-          <div className={styles.grid}>
-            {assetsWithIds.map((asset, index) => (
-              <Thumbnail key={asset.id} asset={asset} isDisabled={isDisabled} onDelete={() => handleDelete(index)} />
-            ))}
-          </div>
+        <div className={styles.grid}>
+          {assetsWithIds.map((asset, index) => (
+            <Thumbnail key={asset.id} asset={asset} isDisabled={isDisabled} onDelete={() => handleDelete(index)} />
+          ))}
         </div>
       </SortableContext>
     </DndContext>

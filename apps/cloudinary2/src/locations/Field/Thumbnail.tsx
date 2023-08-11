@@ -123,7 +123,7 @@ function getUrlFromAsset(installationParams: AppInstallationParameters, asset: C
     api_key: installationParams.apiKey,
   });
 
-  const transformations = `${asset.raw_transformation ?? ''}/c_crop,h_300,w_300`;
+  const transformations = `${asset.raw_transformation ?? ''}/c_crop,h_149,w_194`;
   if (asset.resource_type === 'image' && VALID_IMAGE_FORMATS.includes(asset.format)) {
     return cloudinary.url(asset.public_id, {
       type: asset.type,
