@@ -1,4 +1,4 @@
-service: sls-apps-slack-backend
+service: sls-apps-cloudinary-backend
 
 frameworkVersion: '>=3.0.0'
 variablesResolutionMode: 20210326
@@ -37,9 +37,9 @@ package:
     - '!**/*.ts'
 
 functions:
-  slack-app-api:
+  cloudinary-app-api:
     handler: build/index.handler
-    description: Slack App Backend
+    description: Cloudinary App Backend
     environment:
       DYNAMO_ENDPOINT: ${self:custom.dynamo.endpoint}
       DYNAMO_TABLE_NAME: ${self:custom.dynamo.tableName}
