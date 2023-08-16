@@ -1,0 +1,65 @@
+service: sls-apps-slack-backend
+
+frameworkVersion: '>=3.0.0'
+variablesResolutionMode: 20210326
+
+plugins:
+  - serverless-domain-manager
+  - serverless-offline
+
+custom: ${file(./config/serverless.${opt:stage, 'dev'}.yml):variables}
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: dev
+  region: 'us-east-1'
+  timeout: 30
+  lambdaHashingVersion: 20201221
+  deploymentBucket:
+    name: cf-apps-serverless-deployment
+  deploymentPrefix: ${self:custom.deploymentPrefix}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:DescribeTable
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:Query
+          Resource: 'arn:aws:dynamodb:*:*:table/${self:custom.tableName}*'
+package:
+  patterns:
+    - 'built/**'
+    - '!.git/**'
+    - '!**/*.ts'
+
+functions:
+  slack-app-api:
+    handler: build/index.handler
+    description: Slack App Backend
+    environment:
+      DYNAMO_ENDPOINT: ${self:custom.dynamo.endpoint}
+      DYNAMO_TABLE_NAME: ${self:custom.dynamo.tableName}
+      CTFL_SIGNING_SECRET: ${self:custom.ctfl.appSigningSecret}
+      SERVERLESS_PATH_PREFIX: ${self:custom.serverless.pathPrefix}
+    events:
+      - http:
+          method: ANY
+          path: /api/{proxy+}
+
+resources:
+  Resources:
+    TokenTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.tableName}
+        KeySchema:
+          - AttributeName: uuid
+            KeyType: HASH
+          - AttributeName: typ
+            KeyType: RANGE
+
+        BillingMode: PAY_PER_REQUEST
