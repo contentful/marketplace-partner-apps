@@ -2,16 +2,16 @@ import { ConfigAppSDK } from '@contentful/app-sdk';
 import { GlobalStyles, Heading, Paragraph } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
 import { useSDK } from '@contentful/react-apps-toolkit';
-import { ContentTypeProps, CreateAppSignedRequestProps } from 'contentful-management';
+import { ContentTypeProps } from 'contentful-management';
 import { css } from 'emotion';
 import { useCallback, useEffect, useState } from 'react';
 import logo from '../../assets/logo.svg';
-import { BACKEND_BASE_URL, DEFAULT_APP_INSTALLATION_PARAMETERS, DEFAULT_BACKEND_PARAMETERS } from '../../constants';
+import { DEFAULT_APP_INSTALLATION_PARAMETERS, DEFAULT_BACKEND_PARAMETERS } from '../../constants';
 import { AppInstallationParameters, BackendParameters } from '../../types';
-import { FieldSelector } from './FieldSelector';
-import { SelectedFields, editorInterfacesToSelectedFields, selectedFieldsToTargetState } from './fields';
-import { InstallParamsConfiguration } from './InstallParamsConfiguration';
 import { BackendConfiguration } from './BackendConfiguration';
+import { FieldSelector } from './FieldSelector';
+import { InstallParamsConfiguration } from './InstallParamsConfiguration';
+import { SelectedFields, editorInterfacesToSelectedFields, selectedFieldsToTargetState } from './fields';
 import { updateBackendParameters } from './helpers';
 
 const styles = {
