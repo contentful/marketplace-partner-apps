@@ -7,6 +7,10 @@ export interface AppInstallationParameters {
   format: string;
 }
 
+export interface BackendParameters {
+  apiSecret: string;
+}
+
 /**
  * Auto-generated, might not be accurate
  */

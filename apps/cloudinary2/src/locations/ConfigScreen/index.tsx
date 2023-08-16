@@ -6,11 +6,13 @@ import { ContentTypeProps } from 'contentful-management';
 import { css } from 'emotion';
 import { useCallback, useEffect, useState } from 'react';
 import logo from '../../assets/logo.svg';
-import { DEFAULT_APP_INSTALLATION_PARAMETERS } from '../../constants';
-import { AppInstallationParameters } from '../../types';
+import { DEFAULT_APP_INSTALLATION_PARAMETERS, DEFAULT_BACKEND_PARAMETERS } from '../../constants';
+import { AppInstallationParameters, BackendParameters } from '../../types';
+import { BackendConfiguration } from './BackendConfiguration';
 import { FieldSelector } from './FieldSelector';
+import { InstallParamsConfiguration } from './InstallParamsConfiguration';
 import { SelectedFields, editorInterfacesToSelectedFields, selectedFieldsToTargetState } from './fields';
-import { Configuration } from './Configuration';
+import { updateBackendParameters } from './helpers';
 
 const styles = {
   body: css({
@@ -57,19 +59,28 @@ const styles = {
 
 const ConfigScreen = () => {
   const [parameters, setParameters] = useState<AppInstallationParameters>(DEFAULT_APP_INSTALLATION_PARAMETERS);
+  const [backendParameters, setBackendParameters] = useState<BackendParameters>(DEFAULT_BACKEND_PARAMETERS);
   const sdk = useSDK<ConfigAppSDK<AppInstallationParameters>>();
   const [contentTypes, setContentTypes] = useState<ContentTypeProps[]>([]);
   const [selectedFields, setSelectedFields] = useState<SelectedFields>({});
 
   const onConfigure = useCallback(async () => {
     return {
-      parameters,
+      parameters: parameters,
       targetState: selectedFieldsToTargetState(contentTypes, selectedFields),
     };
   }, [parameters, contentTypes, selectedFields]);
 
   useEffect(() => {
-    sdk.app.onConfigure(() => onConfigure());
+    return sdk.app.onConfigurationCompleted(() => {
+      if (backendParameters.apiSecret.length > 0) {
+        updateBackendParameters(backendParameters, sdk);
+      }
+    });
+  }, [backendParameters, sdk]);
+
+  useEffect(() => {
+    return sdk.app.onConfigure(() => onConfigure());
   }, [sdk, onConfigure]);
 
   useEffect(() => {
@@ -106,7 +117,8 @@ const ConfigScreen = () => {
           reference.
         </Paragraph>
         <hr className={styles.splitter} />
-        <Configuration parameters={parameters} onParametersChange={setParameters} />
+        <InstallParamsConfiguration parameters={parameters} onParametersChange={setParameters} />
+        <BackendConfiguration parameters={backendParameters} onParametersChange={setBackendParameters} />
         <hr className={styles.splitter} />
         <FieldSelector
           space={sdk.ids.space}
