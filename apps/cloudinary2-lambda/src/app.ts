@@ -3,6 +3,7 @@ import express from 'express';
 import serverless from 'serverless-http';
 
 import { makeDynamoDocumentClient, makeSingleTableClient } from './clients';
+import { BackendParametersController, BackendParametersRepository } from './routes/backend-parameters';
 
 import { config } from './config';
 import { errorMiddleware } from './middlewares';
@@ -16,6 +17,8 @@ export function bootstrap(): serverless.Application {
 
   const dynamoDocumentClient = makeDynamoDocumentClient(config.dynamo);
   const singleTableClient = makeSingleTableClient(config.dynamo.tableName, dynamoDocumentClient);
+  const backendParametersRepository = new BackendParametersRepository(singleTableClient);
+  const backendParametersController = new BackendParametersController(backendParametersRepository);
 
   app.use(createServerlessMiddleware(config.serverless));
   app.use(
@@ -24,7 +27,7 @@ export function bootstrap(): serverless.Application {
     })
   );
 
-  // TODO: routes
+  app.post('/api/backend-parameters', backendParametersController.put);
 
   app.use(errorMiddleware);
 

@@ -3,6 +3,6 @@ export enum Entity {
 }
 
 export interface BackendParameters {
-  uuid: string;
+  installationUuid: string;
   apiSecret: string;
 }
