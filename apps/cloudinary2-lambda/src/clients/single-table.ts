@@ -1,7 +1,9 @@
 import { DynamoDB } from 'aws-sdk';
-import { Entity } from '../interfaces';
+import { BackendParameters, Entity } from '../interfaces';
 
-interface EntityTypeMap {}
+interface EntityTypeMap {
+  [Entity.BackendParameters]: BackendParameters
+}
 
 type EntityType = keyof EntityTypeMap;
 
@@ -32,7 +34,7 @@ export class SingleTableClient {
     this.docClient = docClient;
   }
 
-  public async put<T extends EntityType>(typ: Entity[T], uuid: string, container: string[], item: EntityTypeMap[T]): Promise<EntityTypeMap[T]> {
+  public async put<T extends EntityType>(typ: T, uuid: string, container: string[], item: EntityTypeMap[T]): Promise<EntityTypeMap[T]> {
     const Item = {
       ...item,
       uuid,
