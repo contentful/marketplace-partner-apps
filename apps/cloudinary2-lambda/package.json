@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
+    "install-ci": "npm ci",
     "build": "rimraf build && tsc",
     "test": "TS_NODE_TRANSPILE_ONLY=1 mocha -r ts-node/register ./lib/**/*.test.ts",
     "lint": "eslint --ext .ts,.js ./",
