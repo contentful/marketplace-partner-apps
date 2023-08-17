@@ -1,7 +1,9 @@
-import { Form, FormControl, Select, Option, TextLink, Flex, TextInput, TextInputProps } from '@contentful/f36-components';
-import { PropsWithChildren, ReactNode, useCallback, useId } from 'react';
-import { AppInstallationParameters } from '../../types';
+import { Form, TextLink } from '@contentful/f36-components';
+import { useCallback } from 'react';
+import { SelectField } from '../../components/SelectField';
+import { TextField } from '../../components/TextField';
 import { DEFAULT_APP_INSTALLATION_PARAMETERS } from '../../constants';
+import { AppInstallationParameters } from '../../types';
 
 const MAX_FILES_UPPER_LIMIT = 1000;
 
@@ -10,7 +12,7 @@ interface Props {
   onParametersChange: (parameters: AppInstallationParameters) => void;
 }
 
-export function Configuration({ parameters, onParametersChange }: Props) {
+export function InstallParamsConfiguration({ parameters, onParametersChange }: Props) {
   const onParameterChange = useCallback(
     <Key extends keyof AppInstallationParameters>(key: Key, value: AppInstallationParameters[Key]) => {
       const newParameters = {
@@ -118,83 +120,5 @@ export function Configuration({ parameters, onParametersChange }: Props) {
         onChange={(value) => onParameterChange('format', value)}
       />
     </Form>
-  );
-}
-
-interface TextFieldProps {
-  name: string;
-  description: ReactNode;
-
-  value: string;
-  onChange: (value: string) => void;
-
-  isRequired?: boolean;
-  type: 'text' | 'number';
-
-  inputProps?: Pick<TextInputProps, 'max' | 'min'>;
-  testId: string;
-}
-
-function TextField({ name, description, value, onChange, isRequired = false, type, inputProps, testId }: TextFieldProps) {
-  return (
-    <FieldWrapper name={name} description={description} counter>
-      <TextInput
-        name={useId()}
-        width={type === 'text' ? 'large' : 'medium'}
-        type={type}
-        maxLength={255}
-        isRequired={isRequired}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        testId={testId}
-        {...inputProps}
-      />
-    </FieldWrapper>
-  );
-}
-
-interface SelectFieldProps {
-  name: string;
-  description: ReactNode;
-
-  value: string;
-  onChange: (value: string) => void;
-
-  isRequired: boolean;
-  options: string[];
-  testId: string;
-}
-
-function SelectField({ name, description, value, onChange, isRequired, options, testId }: SelectFieldProps) {
-  return (
-    <FieldWrapper name={name} description={description}>
-      <Select name={useId()} isRequired={isRequired} onChange={(e) => onChange(e.target.value)} value={value} testId={testId}>
-        {options.map((currValue: string) => (
-          <Option value={currValue} key={currValue}>
-            {currValue}
-          </Option>
-        ))}
-      </Select>
-    </FieldWrapper>
-  );
-}
-
-interface FieldWrapperProps {
-  name: string;
-  description: ReactNode;
-  counter?: boolean;
-}
-
-function FieldWrapper({ name, description, counter = false, children }: PropsWithChildren<FieldWrapperProps>) {
-  return (
-    <FormControl id={useId()}>
-      <FormControl.Label>{name}</FormControl.Label>
-      {children}
-
-      <Flex justifyContent="space-between">
-        <FormControl.HelpText>{description}</FormControl.HelpText>
-        {counter && <FormControl.Counter />}
-      </Flex>
-    </FormControl>
   );
 }
