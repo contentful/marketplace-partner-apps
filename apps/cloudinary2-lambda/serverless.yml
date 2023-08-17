@@ -56,7 +56,7 @@ resources:
     TokenTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.tableName}
+        TableName: ${self:custom.dynamo.tableName}
         KeySchema:
           - AttributeName: uuid
             KeyType: HASH
