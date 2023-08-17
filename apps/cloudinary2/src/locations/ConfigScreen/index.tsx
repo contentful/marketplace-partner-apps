@@ -74,10 +74,10 @@ const ConfigScreen = () => {
   useEffect(() => {
     return sdk.app.onConfigurationCompleted(() => {
       if (backendParameters.apiSecret.length > 0) {
-        updateBackendParameters(backendParameters, sdk);
+        updateBackendParameters(parameters.installationUuid, backendParameters, sdk);
       }
     });
-  }, [backendParameters, sdk]);
+  }, [backendParameters, parameters.installationUuid, sdk]);
 
   useEffect(() => {
     return sdk.app.onConfigure(() => onConfigure());
@@ -93,6 +93,7 @@ const ConfigScreen = () => {
 
       setContentTypes(contentTypesResponse.items);
       setParameters({
+        installationUuid: currentParameters?.installationUuid ?? window.crypto.randomUUID(),
         cloudName: currentParameters?.cloudName ?? DEFAULT_APP_INSTALLATION_PARAMETERS.cloudName,
         apiKey: currentParameters?.apiKey ?? DEFAULT_APP_INSTALLATION_PARAMETERS.apiKey,
         maxFiles: currentParameters?.maxFiles ?? DEFAULT_APP_INSTALLATION_PARAMETERS.maxFiles,

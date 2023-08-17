@@ -2,12 +2,13 @@ import { KnownAppSDK } from '@contentful/app-sdk';
 import { BACKEND_BASE_URL } from '../../constants';
 import { BackendParameters } from '../../types';
 
-export async function updateBackendParameters(parameters: BackendParameters, sdk: KnownAppSDK): Promise<void> {
+export async function updateBackendParameters(installationUuid: string, parameters: BackendParameters, sdk: KnownAppSDK): Promise<void> {
   const request = {
     method: 'PUT' as const,
-    url: new URL(`${BACKEND_BASE_URL}/parameters`),
+    url: new URL(`${BACKEND_BASE_URL}/backend-parameters`),
     body: JSON.stringify(parameters),
     headers: {
+      'X-Contentful-UUID': installationUuid,
       'Content-Type': 'application/json',
     },
   };
