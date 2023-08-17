@@ -1,0 +1,10 @@
+variables:
+  deploymentPrefix: sls-apps-cloudinary-backend-prd
+  dynamo:
+    tableName: sls-apps-cloudinary-backend-prd
+    endpoint: https://dynamodb.us-east-1.amazonaws.com
+    encryptionSecret: ${ssm:/aws/reference/secretsmanager/ci/apps/cloudinary/prd/encryption-secret}
+  ctfl:
+    appSigningSecret: ${ssm:/aws/reference/secretsmanager/ci/apps/cloudinary/prd/signing-secret}
+  serverless:
+    pathPrefix: ''

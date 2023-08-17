@@ -29,7 +29,7 @@ provider:
             - dynamodb:PutItem
             - dynamodb:UpdateItem
             - dynamodb:Query
-          Resource: 'arn:aws:dynamodb:*:*:table/${self:custom.tableName}*'
+          Resource: 'arn:aws:dynamodb:*:*:table/${self:custom.dynamo.tableName}*'
 package:
   patterns:
     - 'built/**'

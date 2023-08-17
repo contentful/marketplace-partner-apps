@@ -1,0 +1,10 @@
+variables:
+  deploymentPrefix: sls-apps-cloudinary-backend-test
+  dynamo:
+    tableName: sls-apps-cloudinary-backend-test
+    endpoint: https://dynamodb.us-east-1.amazonaws.com
+    encryptionSecret: ${ssm:/aws/reference/secretsmanager/ci/apps/cloudinary/test/encryption-secret}
+  ctfl:
+    appSigningSecret: ${ssm:/aws/reference/secretsmanager/ci/apps/cloudinary/test/signing-secret}
+  serverless:
+    pathPrefix: ''
