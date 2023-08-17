@@ -17,7 +17,7 @@ export function bootstrap(): serverless.Application {
 
   const dynamoDocumentClient = makeDynamoDocumentClient(config.dynamo);
   const singleTableClient = makeSingleTableClient(config.dynamo.tableName, dynamoDocumentClient);
-  const backendParametersRepository = new BackendParametersRepository(singleTableClient);
+  const backendParametersRepository = new BackendParametersRepository(config.dynamo, singleTableClient);
   const backendParametersController = new BackendParametersController(backendParametersRepository);
 
   app.use(createServerlessMiddleware(config.serverless));

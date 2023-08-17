@@ -43,6 +43,7 @@ functions:
     environment:
       DYNAMO_ENDPOINT: ${self:custom.dynamo.endpoint}
       DYNAMO_TABLE_NAME: ${self:custom.dynamo.tableName}
+      DYNAMO_ENCRYPTION_SECRET: ${self:custom.dynamo.encryptionSecret}
       CTFL_SIGNING_SECRET: ${self:custom.ctfl.appSigningSecret}
       SERVERLESS_PATH_PREFIX: ${self:custom.serverless.pathPrefix}
     events:

@@ -5,6 +5,7 @@ export const config = {
     endpoint: envOr('DYNAMO_ENDPOINT', 'local-dynamo-endpoint'),
     timeout: 10000,
     tableName: envOr('DYNAMO_TABLE_NAME', 'dynamo-table-name'),
+    encryptionSecret: envOr('DYNAMO_ENCRYPTION_SECRET', 'secret')
   },
   contentful: {
     signingSecret: envOr('CTFL_SIGNING_SECRET', 'shhhh'),

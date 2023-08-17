@@ -52,5 +52,6 @@ services:
       AWS_SECRET_ACCESS_KEY: test
       DYNAMO_TABLE_NAME: sls-apps-cloudinary-backend-dev-SecretTable
       DYNAMO_ENDPOINT: http://dynamodb:8000
+      DYNAMO_ENCRYPTION_SECRET: secret
     depends_on:
       - dynamodb
