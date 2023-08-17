@@ -6,9 +6,6 @@ import { CloudinaryAsset } from '../../types';
 import { Thumbnail } from './Thumbnail';
 
 const styles = {
-  container: css({
-    maxWidth: '600px',
-  }),
   grid: css({
     display: 'grid',
     gap: '20px',
@@ -42,7 +39,7 @@ export function Thumbnails({ assets, isDisabled, onChange }: Props) {
     (indexToDelete: number) => {
       onChange(assets.filter((_, assetIndex) => assetIndex !== indexToDelete));
     },
-    [assets, onChange]
+    [assets, onChange],
   );
 
   const handleDragEnd = useCallback(
@@ -55,18 +52,16 @@ export function Thumbnails({ assets, isDisabled, onChange }: Props) {
         onChange(arrayMove(assets, activeIndex, overIndex));
       }
     },
-    [assets, assetsWithIds, onChange]
+    [assets, assetsWithIds, onChange],
   );
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
       <SortableContext items={assetsWithIds}>
-        <div className={styles.container}>
-          <div className={styles.grid}>
-            {assetsWithIds.map((asset, index) => (
-              <Thumbnail key={asset.id} asset={asset} isDisabled={isDisabled} onDelete={() => handleDelete(index)} />
-            ))}
-          </div>
+        <div className={styles.grid}>
+          {assetsWithIds.map((asset, index) => (
+            <Thumbnail key={asset.id} asset={asset} isDisabled={isDisabled} onDelete={() => handleDelete(index)} />
+          ))}
         </div>
       </SortableContext>
     </DndContext>
