@@ -5,11 +5,20 @@
   "devDependencies": {
     "@contentful/app-scripts": "1.10.2",
     "cross-env": "7.0.3",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "relative-deps": "^1.0.7"
+  },
+  "relativeDependencies": {
+    "@contentful/ecommerce-app-base": "../../../apps/packages/ecommerce-app-base"
   },
   "dependencies": {
     "@contentful/ecommerce-app-base": "^3.1.41",
+    "@contentful/f36-components": "^4.48.1",
+    "@contentful/f36-icons": "^4.27.0",
+    "@contentful/f36-tokens": "^4.0.2",
+    "@contentful/react-apps-toolkit": "^1.2.16",
     "core-js": "3.32.0",
+    "emotion": "^10.0.0",
     "react": "16.14.0",
     "react-dom": "16.14.0",
     "shopify-buy": "2.20.1",
@@ -17,8 +26,10 @@
   },
   "scripts": {
     "start": "cross-env BROWSER=none react-scripts start",
+    "prestart": "rm -rf node_modules/.cache/",
     "build": "react-scripts build",
     "install-ci": "npm ci",
+    "prepare": "relative-deps",
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 60S8P6KWlzfazXqMjhsJ1v --token ${CONTENTFUL_CMA_TOKEN}",
     "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id 6Q0Y5EyXh91VAOUCkSLcV9 --token ${TEST_CMA_TOKEN}"
   },
