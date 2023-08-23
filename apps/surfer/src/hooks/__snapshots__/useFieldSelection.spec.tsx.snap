@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`useFieldSelection SelectionComponent renders a FieldSelection component if there are multiple rich text fields 1`] = `
+<ForwardRef
+  isSelected={[Function]}
+  richTextFields={
+    Array [
+      Object {
+        "id": "test-id",
+        "type": "RichText",
+      },
+      Object {
+        "id": "test-id2",
+        "type": "RichText",
+      },
+    ]
+  }
+  selectedFields={
+    Array [
+      Object {
+        "id": "test-id",
+        "type": "RichText",
+      },
+      Object {
+        "id": "test-id2",
+        "type": "RichText",
+      },
+    ]
+  }
+  toggleSelection={[Function]}
+/>
+`;
