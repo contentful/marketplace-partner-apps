@@ -28,7 +28,7 @@
     "prettier": "prettier --write src"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.11.0",
+    "@contentful/app-scripts": "1.12.0",
     "@testing-library/react": "14.0.0",
     "@testing-library/user-event": "14.4.3",
     "@tsconfig/vite-react": "2.0.0",
