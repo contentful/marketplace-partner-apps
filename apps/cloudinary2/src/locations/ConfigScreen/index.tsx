@@ -65,19 +65,21 @@ const ConfigScreen = () => {
   const [selectedFields, setSelectedFields] = useState<SelectedFields>({});
 
   const onConfigure = useCallback(async () => {
+    let installationUuid = parameters.installationUuid;
+    if (backendParameters.apiSecret.length > 0) {
+      installationUuid = window.crypto.randomUUID();
+      await updateBackendParameters(installationUuid, backendParameters, sdk);
+      setBackendParameters({ apiSecret: '' });
+    }
+
     return {
-      parameters: parameters,
+      parameters: {
+        ...parameters,
+        installationUuid,
+      },
       targetState: selectedFieldsToTargetState(contentTypes, selectedFields),
     };
-  }, [parameters, contentTypes, selectedFields]);
-
-  useEffect(() => {
-    return sdk.app.onConfigurationCompleted(() => {
-      if (backendParameters.apiSecret.length > 0) {
-        updateBackendParameters(parameters.installationUuid, backendParameters, sdk);
-      }
-    });
-  }, [backendParameters, parameters.installationUuid, sdk]);
+  }, [backendParameters, parameters, contentTypes, selectedFields, sdk]);
 
   useEffect(() => {
     return sdk.app.onConfigure(() => onConfigure());
