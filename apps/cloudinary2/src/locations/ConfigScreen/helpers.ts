@@ -23,7 +23,7 @@ export async function updateBackendParameters(installationUuid: string, paramete
     },
   );
 
-  const response = await fetch(request.url, {
+  await fetch(request.url, {
     method: request.method,
     body: request.body,
     headers: {
@@ -31,6 +31,4 @@ export async function updateBackendParameters(installationUuid: string, paramete
       ...signedHeaders,
     },
   });
-
-  await response.json();
 }
