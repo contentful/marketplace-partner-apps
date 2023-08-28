@@ -6,6 +6,7 @@ import { AppInstallationParameters } from '../../types';
 import userEvent from '@testing-library/user-event';
 
 const installationParameters: AppInstallationParameters = {
+  installationUuid: 'whatever',
   apiKey: 'key',
   cloudName: 'cloud',
   format: 'webp',
