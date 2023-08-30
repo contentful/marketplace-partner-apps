@@ -19,7 +19,7 @@ export async function updateBackendParameters(parameters: BackendParameters, sdk
       path: request.url.pathname,
       body: request.body,
       headers: request.headers,
-    },
+    }
   );
 
   const response = await fetch(request.url, {
