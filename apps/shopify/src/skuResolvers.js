@@ -60,11 +60,16 @@ const paginateGraphQLRequest = async (config, ids, queryFunction) => {
  */
 const collectionQuery = (validIds) => {
   const queryIds = validIds.map((sku) => `"${sku}"`).join(',');
+
+  /**
+   * We select 101 products in order to differentiate between up to 100 items (where we show the exact number)
+   * and more than 100 (we don't show the exact number).
+   */
   return `
   {
     nodes (ids: [${queryIds}]) {
       id,
-      ...on Collection {
+      ... on Collection {
         handle,
         title,
         description,
