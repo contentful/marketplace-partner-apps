@@ -68,12 +68,13 @@ export const AdditionalDataRenderer = ({ product }) => {
   };
 
   const columns = [firstColumn];
+  const { type } = additionalData ?? {};
 
-  if (additionalData.type === ENTITY_TYPE.collection) {
+  if (type === ENTITY_TYPE.collection) {
     firstColumn.items.push(createProductsCount(additionalData.productsCount));
     firstColumn.items.push(createUpdatedDate(additionalData.updatedAt));
     firstColumn.items.push(createExternalLink(externalLink));
-  } else {
+  } else if ([ENTITY_TYPE.product, ENTITY_TYPE.variant].includes(type)) {
     firstColumn.items.push(createInventory(additionalData.quantityAvailable));
     firstColumn.items.push(createCreatedDate(additionalData.createdAt));
     firstColumn.items.push(createUpdatedDate(additionalData.updatedAt));
@@ -86,12 +87,9 @@ export const AdditionalDataRenderer = ({ product }) => {
     secondColumn.items.push(createVendor(additionalData.vendor));
     secondColumn.items.push(createExternalLink(externalLink));
     columns.push(secondColumn);
+  } else {
+    return null;
   }
 
-  return (
-    <>
-      <MetaDataRenderer columns={columns} footer={footer} />
-      {/*<RawDataRenderer value={additionalData}/>*/}
-    </>
-  );
+  return <MetaDataRenderer columns={columns} footer={footer} />;
 };
