@@ -5,6 +5,8 @@ import logo from './logo.svg';
 
 const CTA = 'Select a file on Bynder';
 
+// DOCS POINT TO THIS
+// const BYNDER_BASE_URL = 'https://ucv.bynder.com';
 const BYNDER_BASE_URL = 'https://d8ejoa1fys2rk.cloudfront.net';
 const BYNDER_SDK_URL = `${BYNDER_BASE_URL}/5.0.5/modules/compactview/bynder-compactview-3-latest.js`;
 
@@ -32,6 +34,7 @@ const FIELDS_TO_PERSIST = [
   'videoPreviewURLs',
   'tags',
   'selectedFile',
+  'textMetaproperties',
 ];
 
 const FIELD_SELECTION = `
@@ -57,6 +60,10 @@ const FIELD_SELECTION = `
   createdAt
   files
   originalUrl
+  textMetaproperties {
+    name
+    value
+  }
   ... on Video {
     previewUrls
   }
@@ -113,6 +120,7 @@ function transformAsset(asset, selected) {
     thumbnails: thumbnails,
     original: asset.originalUrl,
     videoPreviewURLs: asset.previewUrls || [],
+    textMetaproperties: asset.textMetaproperties || [],
     tags: asset.tags,
     selectedFile: selected.selectedFile,
   };
@@ -165,7 +173,7 @@ function renderDialog(sdk) {
       portal: { url: bynderURL, editable: true },
       assetFieldSelection: FIELD_SELECTION,
       container: document.getElementById('bynder-compactview'),
-      onSuccess: onSuccess,
+      onSuccess,
     });
   });
 }
@@ -244,7 +252,8 @@ setup({
       type: 'List',
       value: 'MultiSelect,SingleSelectFile',
       default: 'MultiSelect',
-      description: '"MultiSelect is the best choice for most customers. If you specifically need access to dynamic transformations, use SingleSelectFile mode. (Note that with SingleSelectFile mode, you will likely need to change your frontend to reference the specific transformations chosen by your content editors.)',
+      description:
+        '"MultiSelect is the best choice for most customers. If you specifically need access to dynamic transformations, use SingleSelectFile mode. (Note that with SingleSelectFile mode, you will likely need to change your frontend to reference the specific transformations chosen by your content editors.)',
       required: true,
     },
   ],
