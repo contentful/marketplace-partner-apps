@@ -3,6 +3,7 @@ import { fetchProductVariantPreviews, fetchProductPreviews, fetchCollectionPrevi
 import { SKU_TYPES } from './constants';
 
 import logo from './logo.svg';
+// import { AdditionalDataRenderer } from './additionalDataRenderer';
 
 const DIALOG_ID = 'dialog-root';
 
@@ -150,4 +151,7 @@ setup({
   openDialog,
   isDisabled,
   validateParameters,
+
+  // productCardVersion: 'v2',
+  // additionalDataRenderer: AdditionalDataRenderer,
 });
