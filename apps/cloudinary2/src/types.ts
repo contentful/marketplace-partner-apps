@@ -1,4 +1,5 @@
 export interface AppInstallationParameters {
+  installationUuid: string;
   cloudName: string;
   apiKey: string;
   maxFiles: number;
