@@ -1,0 +1,52 @@
+{
+  "name": "voucherify-contentful-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "cross-env BROWSER=none react-scripts start",
+    "postinstall": "npm run build",
+    "build": "react-scripts build",
+    "install-ci": "npm ci",
+    "create-app-definition": "contentful-app-scripts create-app-definition",
+    "upload": "contentful-app-scripts upload --bundle-dir ./build",
+    "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN",
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 6xt1AyXyw6aSnn5JDXaFin --token ${CONTENTFUL_CMA_TOKEN}",
+    "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id 6xt1AyXyw6aSnn5JDXaFin --token ${TEST_CMA_TOKEN}"
+  },
+  "dependencies": {
+    "@contentful/app-sdk": "4.17.1",
+    "@contentful/f36-components": "4.37.0",
+    "@contentful/f36-icons": "4.25.0",
+    "@contentful/react-apps-toolkit": "1.2.15",
+    "@emotion/css": "11.11.0",
+    "@emotion/react": "11.10.8",
+    "@emotion/styled": "11.10.8",
+    "axios": "1.4.0",
+    "http-status-codes": "2.2.0",
+    "lodash": "4.17.21",
+    "prop-types": "15.8.1",
+    "react": "18.2.0",
+    "react-hook-form": "7.44.3",
+    "react-router-dom": "6.10.0"
+  },
+  "devDependencies": {
+    "cross-env": "7.0.3",
+    "eslint": "^8.14.0",
+    "eslint-plugin-react": "~7.29.2",
+    "react-scripts": "5.0.1",
+    "@contentful/app-scripts": "1.13.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "homepage": "."
+}
