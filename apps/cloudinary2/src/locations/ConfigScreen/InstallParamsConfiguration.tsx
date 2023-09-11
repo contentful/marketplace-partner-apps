@@ -42,7 +42,7 @@ export function InstallParamsConfiguration(props: Props) {
       <TextField
         testId="config-apiKey"
         name="API key"
-        description={<>`You can access the API key through Cloudinary's <TextLink href="https://console.cloudinary.com/settings/api-keys" target="_blank" rel="noreferrer noopener" icon={<ExternalLinkTrimmedIcon size="tiny" />} alignIcon="end">Access keys</TextLink></>}
+        description={<>You can access the API key through Cloudinary's <TextLink href="https://console.cloudinary.com/settings/api-keys" target="_blank" rel="noreferrer noopener" icon={<ExternalLinkTrimmedIcon />} alignIcon="end">Access keys</TextLink></>}
         value={parameters.apiKey}
         onChange={(value) => onParameterChange('apiKey', value)}
         isRequired
