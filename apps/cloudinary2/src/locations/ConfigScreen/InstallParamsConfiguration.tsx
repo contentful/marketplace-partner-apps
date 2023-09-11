@@ -4,15 +4,19 @@ import { SelectField } from '../../components/SelectField';
 import { TextField } from '../../components/TextField';
 import { DEFAULT_APP_INSTALLATION_PARAMETERS } from '../../constants';
 import { AppInstallationParameters } from '../../types';
+import { ExternalLinkTrimmedIcon } from '@contentful/f36-icons';
+import { BackendConfiguration } from './BackendConfiguration';
 
 const MAX_FILES_UPPER_LIMIT = 1000;
 
-interface Props {
+type Props = {
   parameters: AppInstallationParameters;
   onParametersChange: (parameters: AppInstallationParameters) => void;
-}
+} & React.ComponentProps<typeof BackendConfiguration>
 
-export function InstallParamsConfiguration({ parameters, onParametersChange }: Props) {
+export function InstallParamsConfiguration(props: Props) {
+  const { parameters, onParametersChange } = props;
+  const { backendParameters, onBackendParametersChange } = props;
   const onParameterChange = useCallback(
     <Key extends keyof AppInstallationParameters>(key: Key, value: AppInstallationParameters[Key]) => {
       const newParameters = {
@@ -38,12 +42,13 @@ export function InstallParamsConfiguration({ parameters, onParametersChange }: P
       <TextField
         testId="config-apiKey"
         name="API key"
-        description="The Cloudinary API Key that can be found in your Cloudinary console."
+        description={<>`You can access the API key through Cloudinary's <TextLink href="https://console.cloudinary.com/settings/api-keys" target="_blank" rel="noreferrer noopener" icon={<ExternalLinkTrimmedIcon size="tiny" />} alignIcon="end">Access keys</TextLink></>}
         value={parameters.apiKey}
         onChange={(value) => onParameterChange('apiKey', value)}
         isRequired
         type="text"
       />
+      <BackendConfiguration backendParameters={backendParameters} onBackendParametersChange={onBackendParametersChange} />
       <TextField
         testId="config-maxFiles"
         name="Max number of files"

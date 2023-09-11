@@ -3,21 +3,21 @@ import { useCallback } from 'react';
 import { TextField } from '../../components/TextField';
 import { BackendParameters } from '../../types';
 
-interface Props {
-  parameters: BackendParameters;
-  onParametersChange: (parameters: BackendParameters) => void;
+type Props = {
+  backendParameters: BackendParameters;
+  onBackendParametersChange: (parameters: BackendParameters) => void;
 }
 
-export function BackendConfiguration({ parameters, onParametersChange }: Props) {
+export function BackendConfiguration({ backendParameters, onBackendParametersChange }: Props) {
   const onParameterChange = useCallback(
     <Key extends keyof BackendParameters>(key: Key, value: BackendParameters[Key]) => {
       const newParameters = {
-        ...parameters,
+        ...backendParameters,
         [key]: value,
       };
-      onParametersChange(newParameters);
+      onBackendParametersChange(newParameters);
     },
-    [parameters, onParametersChange],
+    [backendParameters, onBackendParametersChange],
   );
 
   return (
@@ -25,8 +25,8 @@ export function BackendConfiguration({ parameters, onParametersChange }: Props) 
       <TextField
         testId="config-apiSecret"
         name="API secret (write-only)"
-        description=""
-        value={parameters.apiSecret}
+        description="The API secret can be found with the above corresponding API Key"
+        value={backendParameters.apiSecret}
         onChange={(value) => onParameterChange('apiSecret', value)}
         isRequired
         type="text"
