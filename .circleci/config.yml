@@ -93,10 +93,11 @@ workflows:
             branches:
               ignore:
                 - main
-                - production  
+                - production
       - deploy-staging:
           context:
             - vault
+            - marketplace-partner-apps-staging
           filters:
             branches:
               only:
@@ -104,6 +105,7 @@ workflows:
       - deploy-prod:
           context:
             - vault
+            - marketplace-partner-apps-production
           filters:
             branches:
               only:
