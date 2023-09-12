@@ -2,7 +2,7 @@ import { fireEvent, render } from '@testing-library/react';
 import { noop } from 'lodash';
 import { describe, expect, it, vi } from 'vitest';
 import { InstallParamsConfiguration } from './InstallParamsConfiguration';
-import { AppInstallationParameters } from '../../types';
+import { AppInstallationParameters, BackendParameters } from '../../types';
 import userEvent from '@testing-library/user-event';
 
 const installationParameters: AppInstallationParameters = {
@@ -15,9 +15,13 @@ const installationParameters: AppInstallationParameters = {
   startFolder: 'start folder',
 };
 
+const backendParameters: BackendParameters = {
+  apiSecret: ''
+}
+
 describe('Configuration', () => {
   it('renders fields correctly', () => {
-    const { getByTestId } = render(<InstallParamsConfiguration parameters={installationParameters} onParametersChange={noop} />);
+    const { getByTestId } = render(<InstallParamsConfiguration parameters={installationParameters} onParametersChange={noop} backendParameters={backendParameters} onBackendParametersChange={noop} />);
 
     expect((getByTestId('config-cloudName') as HTMLInputElement).value).toBe('cloud');
     expect((getByTestId('config-apiKey') as HTMLInputElement).value).toBe('key');
@@ -29,7 +33,7 @@ describe('Configuration', () => {
 
   it('max files number is parsed correctly', async () => {
     const onParametersChange = vi.fn();
-    const { getByTestId } = render(<InstallParamsConfiguration parameters={installationParameters} onParametersChange={onParametersChange} />);
+    const { getByTestId } = render(<InstallParamsConfiguration parameters={installationParameters} onParametersChange={onParametersChange} backendParameters={backendParameters} onBackendParametersChange={noop} />);
 
     const input = getByTestId('config-maxFiles') as HTMLInputElement;
     await userEvent.type(input, '5'); // appending a 5
@@ -42,7 +46,7 @@ describe('Configuration', () => {
 
   it('max files default to 10', async () => {
     const onParametersChange = vi.fn();
-    const { getByTestId } = render(<InstallParamsConfiguration parameters={installationParameters} onParametersChange={onParametersChange} />);
+    const { getByTestId } = render(<InstallParamsConfiguration parameters={installationParameters} onParametersChange={onParametersChange} backendParameters={backendParameters} onBackendParametersChange={noop} />);
 
     const input = getByTestId('config-maxFiles') as HTMLInputElement;
     await userEvent.clear(input);
@@ -55,7 +59,7 @@ describe('Configuration', () => {
 
   it('cloud name can be changed', async () => {
     const onParametersChange = vi.fn();
-    const { getByTestId } = render(<InstallParamsConfiguration parameters={installationParameters} onParametersChange={onParametersChange} />);
+    const { getByTestId } = render(<InstallParamsConfiguration parameters={installationParameters} onParametersChange={onParametersChange} backendParameters={backendParameters} onBackendParametersChange={noop} />);
 
     const input = getByTestId('config-cloudName') as HTMLInputElement;
     await userEvent.type(input, 'y');
@@ -68,7 +72,7 @@ describe('Configuration', () => {
 
   it('quality can be changed', async () => {
     const onParametersChange = vi.fn();
-    const { getByTestId } = render(<InstallParamsConfiguration parameters={installationParameters} onParametersChange={onParametersChange} />);
+    const { getByTestId } = render(<InstallParamsConfiguration parameters={installationParameters} onParametersChange={onParametersChange} backendParameters={backendParameters} onBackendParametersChange={noop} />);
 
     const input = getByTestId('config-quality') as HTMLInputElement;
     fireEvent.change(input, { target: { value: 'auto:eco' } });

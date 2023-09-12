@@ -120,8 +120,10 @@ const ConfigScreen = () => {
           reference.
         </Paragraph>
         <hr className={styles.splitter} />
-        <InstallParamsConfiguration parameters={parameters} onParametersChange={setParameters} />
-        <BackendConfiguration parameters={backendParameters} onParametersChange={setBackendParameters} />
+        <InstallParamsConfiguration
+          parameters={parameters} onParametersChange={setParameters}
+          backendParameters={backendParameters} onBackendParametersChange={setBackendParameters}
+        />
         <hr className={styles.splitter} />
         <FieldSelector
           space={sdk.ids.space}
