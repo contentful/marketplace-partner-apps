@@ -10,7 +10,7 @@ import { ExternalLinkIcon } from '@contentful/f36-icons';
 const DialogView = () => {
   const sdk = useSDK();
   const { appId, secretKey, customURL } = sdk.parameters.installation.credentials;
-  const [selectedResourceId, setSelectedResourceId] = useState();
+  const [selectedResourceId, setSelectedResourceId] = useState('');
   const [currentItems, setCurrentItems] = useState([]);
   const [page, setPage] = useState(0);
   const [totalItems, setTotalItems] = useState();
