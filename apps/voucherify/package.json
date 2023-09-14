@@ -17,7 +17,7 @@
     "@contentful/f36-icons": "4.25.0",
     "@contentful/react-apps-toolkit": "1.2.15",
     "@emotion/css": "11.11.0",
-    "@emotion/react": "11.10.8",
+    "@emotion/react": "11.11.1",
     "@emotion/styled": "11.10.8",
     "axios": "1.4.0",
     "http-status-codes": "2.2.0",
