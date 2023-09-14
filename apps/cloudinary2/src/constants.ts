@@ -7,6 +7,7 @@ export const DEFAULT_APP_INSTALLATION_PARAMETERS: AppInstallationParameters = {
   startFolder: '',
   quality: 'auto',
   format: 'auto',
+  installationUuid: '',
 };
 export const DEFAULT_BACKEND_PARAMETERS: BackendParameters = {
   apiSecret: '',

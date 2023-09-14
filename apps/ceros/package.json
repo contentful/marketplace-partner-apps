@@ -4,11 +4,11 @@
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "^4.17.2",
-    "@contentful/f36-components": "4.50.0",
+    "@contentful/f36-components": "4.50.2",
     "@contentful/f36-tokens": "4.0.2",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@extractus/oembed-extractor": "^3.1.9",
-    "contentful-management": "10.42.0",
+    "contentful-management": "10.45.1",
     "@emotion/css": "11.11.2",
     "react": "16.14.0",
     "react-dom": "16.14.0"
@@ -44,7 +44,7 @@
     "@testing-library/react": "14.0.0",
     "@tsconfig/create-react-app": "1.0.3",
     "@types/jest": "29.5.4",
-    "@types/node": "16.18.48",
+    "@types/node": "16.18.50",
     "@types/react": "18.2.7",
     "@types/react-dom": "18.2.4",
     "cross-env": "7.0.3",
