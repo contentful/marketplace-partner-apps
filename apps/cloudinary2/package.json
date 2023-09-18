@@ -31,7 +31,7 @@
     "@contentful/app-scripts": "1.13.0",
     "@testing-library/react": "14.0.0",
     "@testing-library/user-event": "14.5.0",
-    "@tsconfig/vite-react": "2.0.0",
+    "@tsconfig/vite-react": "2.0.1",
     "@types/file-size": "1.0.1",
     "@types/lodash": "4.14.198",
     "@types/node": "16.18.52",
