@@ -11,6 +11,7 @@ const ComponentLocationSettings = {
   [locations.LOCATION_DIALOG]: Dialog,
 };
 
+
 const App = () => {
   const sdk = useSDK();
 

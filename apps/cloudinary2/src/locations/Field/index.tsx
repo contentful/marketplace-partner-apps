@@ -5,6 +5,14 @@ import { useEffect, useState } from 'react';
 import { AppInstallationParameters, CloudinaryAsset } from '../../types';
 import { OpenDialogButton } from './OpenDialogButton';
 import { Thumbnails } from './Thumbnails';
+import { css, Global } from '@emotion/core';
+
+const globalStyles = css`
+  html {
+    width: 100vw;
+    overflow-x: hidden;
+  }
+`;
 
 const Field = () => {
   const sdk = useSDK<FieldAppSDK<AppInstallationParameters>>();
@@ -21,6 +29,7 @@ const Field = () => {
 
   return (
     <>
+      <Global styles={globalStyles} />
       <GlobalStyles />
       <Stack spacing="spacingM" flexDirection="column" alignItems="flex-start">
         {assets.length > 0 && <Thumbnails assets={assets} onChange={setAssets} isDisabled={!editingEnabled} />}

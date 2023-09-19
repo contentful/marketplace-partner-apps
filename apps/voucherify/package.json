@@ -13,9 +13,9 @@
   },
   "dependencies": {
     "@contentful/app-sdk": "4.17.1",
-    "@contentful/f36-components": "4.37.0",
+    "@contentful/f36-components": "4.50.2",
     "@contentful/f36-icons": "4.27.0",
-    "@contentful/react-apps-toolkit": "1.2.15",
+    "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "11.11.2",
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
@@ -30,7 +30,7 @@
   "devDependencies": {
     "cross-env": "7.0.3",
     "eslint": "^8.14.0",
-    "eslint-plugin-react": "~7.29.2",
+    "eslint-plugin-react": "~7.33.2",
     "react-scripts": "5.0.1",
     "@contentful/app-scripts": "1.13.0"
   },
