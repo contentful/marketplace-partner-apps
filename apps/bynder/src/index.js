@@ -82,7 +82,7 @@ function makeThumbnail(resource) {
 function prepareBynderHTML() {
   return `
     <div class="dialog-container">
-      <div id="bynder-compactview" />
+      <div id="bynder-compactview" style="overflow-x:auto; width:100%;" />
     </div>      
   `;
 }

@@ -3,7 +3,7 @@
   "version": "1.6.14",
   "private": true,
   "devDependencies": {
-    "@contentful/app-scripts": "1.11.0",
+    "@contentful/app-scripts": "1.13.0",
     "cross-env": "7.0.3",
     "react-scripts": "5.0.1"
   },
@@ -11,7 +11,7 @@
     "@contentful/app-sdk": "4.10.0",
     "@contentful/dam-app-base": "^2.0.35",
     "cloudinary-core": "2.13.0",
-    "core-js": "3.32.1",
+    "core-js": "3.32.2",
     "react": "16.14.0",
     "react-dom": "16.14.0"
   },

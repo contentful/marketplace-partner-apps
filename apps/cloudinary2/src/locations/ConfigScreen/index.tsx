@@ -8,7 +8,6 @@ import { useCallback, useEffect, useState } from 'react';
 import logo from '../../assets/logo.svg';
 import { DEFAULT_APP_INSTALLATION_PARAMETERS, DEFAULT_BACKEND_PARAMETERS } from '../../constants';
 import { AppInstallationParameters, BackendParameters } from '../../types';
-import { BackendConfiguration } from './BackendConfiguration';
 import { FieldSelector } from './FieldSelector';
 import { InstallParamsConfiguration } from './InstallParamsConfiguration';
 import { SelectedFields, editorInterfacesToSelectedFields, selectedFieldsToTargetState } from './fields';
@@ -64,23 +63,43 @@ const ConfigScreen = () => {
   const [contentTypes, setContentTypes] = useState<ContentTypeProps[]>([]);
   const [selectedFields, setSelectedFields] = useState<SelectedFields>({});
 
-  const onConfigure = useCallback(async () => {
-    return {
-      parameters: parameters,
-      targetState: selectedFieldsToTargetState(contentTypes, selectedFields),
-    };
-  }, [parameters, contentTypes, selectedFields]);
+  const onConfigure = useCallback(() => ({
+    parameters: {
+      ...parameters,
+      installationUuid: parameters.installationUuid || window.crypto.randomUUID(),
+    },
+    targetState: selectedFieldsToTargetState(contentTypes, selectedFields),
+  }), [backendParameters, parameters, contentTypes, selectedFields, sdk]);
 
-  useEffect(() => {
-    return sdk.app.onConfigurationCompleted(() => {
-      if (backendParameters.apiSecret.length > 0) {
-        updateBackendParameters(backendParameters, sdk);
+  const onConfigurationCompleted = useCallback(
+    async (error: any) => {
+      const genericErrorMessage =
+        'Unable to store configuration. Please try again.';
+
+      if (error) {
+        sdk.notifier.error(genericErrorMessage);
+        return;
       }
-    });
-  }, [backendParameters, sdk]);
+
+      const parameters = await sdk.app.getParameters<AppInstallationParameters>();
+      const installationUuid = parameters?.installationUuid;
+
+      try {
+        if (backendParameters.apiSecret.length > 0 && installationUuid) {
+          await updateBackendParameters(installationUuid, backendParameters, sdk);
+          setBackendParameters({ apiSecret: '' });
+        }
+      } catch (e) {
+        console.error(e);
+        sdk.notifier.error(genericErrorMessage);
+      }
+    },
+    [setBackendParameters, sdk.app.getParameters, backendParameters]
+  );
 
   useEffect(() => {
-    return sdk.app.onConfigure(() => onConfigure());
+    sdk.app.onConfigure(() => onConfigure());
+    sdk.app.onConfigurationCompleted((error) => onConfigurationCompleted(error));
   }, [sdk, onConfigure]);
 
   useEffect(() => {
@@ -93,6 +112,7 @@ const ConfigScreen = () => {
 
       setContentTypes(contentTypesResponse.items);
       setParameters({
+        installationUuid: currentParameters?.installationUuid ?? window.crypto.randomUUID(),
         cloudName: currentParameters?.cloudName ?? DEFAULT_APP_INSTALLATION_PARAMETERS.cloudName,
         apiKey: currentParameters?.apiKey ?? DEFAULT_APP_INSTALLATION_PARAMETERS.apiKey,
         maxFiles: currentParameters?.maxFiles ?? DEFAULT_APP_INSTALLATION_PARAMETERS.maxFiles,
@@ -117,8 +137,10 @@ const ConfigScreen = () => {
           reference.
         </Paragraph>
         <hr className={styles.splitter} />
-        <InstallParamsConfiguration parameters={parameters} onParametersChange={setParameters} />
-        <BackendConfiguration parameters={backendParameters} onParametersChange={setBackendParameters} />
+        <InstallParamsConfiguration
+          parameters={parameters} onParametersChange={setParameters}
+          backendParameters={backendParameters} onBackendParametersChange={setBackendParameters}
+        />
         <hr className={styles.splitter} />
         <FieldSelector
           space={sdk.ids.space}
