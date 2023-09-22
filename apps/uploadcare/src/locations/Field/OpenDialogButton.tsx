@@ -22,14 +22,15 @@ const styles = {
 type Props = {
   onAssetsChanged: (newAssets: Asset[] | undefined) => Promise<void>;
   isDisabled: boolean;
+  maxFiles: number;
 };
 
-export function OpenDialogButton({ onAssetsChanged, isDisabled }: Props) {
+export function OpenDialogButton({ onAssetsChanged, isDisabled, maxFiles }: Props) {
   const sdk = useSDK<FieldAppSDK<AppInstallationParameters>>();
 
   const params = sdk.parameters.installation;
 
-  const title = `Upload ${params.maxFiles !== '1' ? 'images' : 'image'} to Uploadcare`;
+  const title = `Upload ${params.maxFiles !== 1 ? 'images' : 'image'} to Uploadcare`;
 
   const handleDialogOpen = useCallback(async () => {
     const result: Asset[] | undefined = await sdk.dialogs.openCurrentApp({
@@ -38,6 +39,9 @@ export function OpenDialogButton({ onAssetsChanged, isDisabled }: Props) {
       shouldCloseOnOverlayClick: true,
       shouldCloseOnEscapePress: true,
       width: 800,
+      parameters: {
+        maxFiles,
+      }
     });
 
     await onAssetsChanged(result);

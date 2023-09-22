@@ -14,11 +14,13 @@ const styles = {
   }),
 };
 
+type InvocationParams = {
+  maxFiles: number;
+};
+
 export default function Dialog(): ReactElement {
   const sdk = useSDK<DialogAppSDK<AppInstallationParameters>>();
   useAutoResizer();
-
-  const params = sdk.parameters.installation;
 
   const assetsRef = useRef<Asset[]>([]);
 
@@ -42,19 +44,23 @@ export default function Dialog(): ReactElement {
     };
   }, []);
 
+  const installParams = sdk.parameters.installation;
+
   const sourceList = useMemo(() => {
-    return objectKeys(params.uploadSources)
-      .filter(k => k in params.uploadSources && params.uploadSources[k])
+    return objectKeys(installParams.uploadSources)
+      .filter(k => k in installParams.uploadSources && installParams.uploadSources[k])
       .join(', ');
-  }, [params.uploadSources]);
+  }, [installParams.uploadSources]);
+
+  const invokeParams = sdk.parameters.invocation as InvocationParams
 
   return (
     <div className={styles.container}>
       <lr-config
         ctx-name="uploadcare"
-        pubkey={params.apiKey}
-        multiple={params.maxFiles !== 1}
-        multipleMax={params.maxFiles !== 0 ? params.maxFiles : undefined}
+        pubkey={installParams.apiKey}
+        multiple={invokeParams.maxFiles !== 1}
+        multipleMax={invokeParams.maxFiles !== 0 ? invokeParams.maxFiles : undefined}
         sourceList={sourceList}
       />
 

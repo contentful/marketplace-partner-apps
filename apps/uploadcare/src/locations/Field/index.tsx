@@ -23,13 +23,24 @@ export default function Field(): ReactElement {
     await setAssets([...assets, ...newAssets]);
   }, []);
 
+  const installParams = sdk.parameters.installation;
+
+  const isFileNumberLimited = installParams.maxFiles !== 0;
+  const canAddMoreFiles = !isFileNumberLimited || assets.length < installParams.maxFiles;
+  const maxFiles = !isFileNumberLimited ? 0 : Math.max(0, installParams.maxFiles - assets.length);
+
   return (
     <>
       <GlobalStyles />
 
       <Stack spacing="spacingM" flexDirection="column" alignItems="flex-start">
         {assets.length > 0 && <Thumbnails assets={assets} onChange={setAssets} isDisabled={!editingEnabled} />}
-        <OpenDialogButton onAssetsChanged={handleAssetsChanged} isDisabled={!editingEnabled} />
+
+        <OpenDialogButton
+          onAssetsChanged={handleAssetsChanged}
+          isDisabled={!editingEnabled || !canAddMoreFiles}
+          maxFiles={maxFiles}
+        />
       </Stack>
     </>
   );

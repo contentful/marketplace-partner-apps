@@ -19,7 +19,7 @@
     "react-dom": "18.2.0"
   },
   "scripts": {
-    "lint": "eslint --cache src/**/*.{ts,tsx}",
+    "lint": "eslint --cache src/**/*.{ts,tsx} && tsc --noEmit",
     "format": "prettier src/**/*.{ts,tsx} --write",
     "start": "cross-env BROWSER=none react-scripts start",
     "build": "react-scripts build",
@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "@contentful/app-scripts": "1.10.2",
-    "@tsconfig/create-react-app": "2.0.1",
+    "@tsconfig/create-react-app": "1.0.3",
     "@types/node": "16.18.40",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
@@ -54,6 +54,11 @@
     "react-scripts": "5.0.1",
     "ts-extras": "0.11.0",
     "typescript": "4.9.5"
+  },
+  "overrides": {
+    "react-scripts": {
+      "nth-check": "2.0.1"
+    }
   },
   "homepage": "."
 }
