@@ -46,6 +46,7 @@ export function Thumbnails({ assets, isDisabled, onChange }: Props) {
     <DndContext onDragEnd={handleDragEnd}>
       <SortableContext items={assetsUUIDs}>
         <div className={styles.grid}>
+          {/* TODO: handle non image thumbnail? */}
           {assets.map(asset => (
             <Thumbnail
               key={asset.uuid}

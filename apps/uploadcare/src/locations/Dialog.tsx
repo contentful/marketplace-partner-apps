@@ -52,7 +52,7 @@ export default function Dialog(): ReactElement {
       .join(', ');
   }, [installParams.uploadSources]);
 
-  const invokeParams = sdk.parameters.invocation as InvocationParams
+  const invokeParams = sdk.parameters.invocation as InvocationParams;
 
   return (
     <div className={styles.container}>
@@ -62,6 +62,8 @@ export default function Dialog(): ReactElement {
         multiple={invokeParams.maxFiles !== 1}
         multipleMax={invokeParams.maxFiles !== 0 ? invokeParams.maxFiles : undefined}
         sourceList={sourceList}
+        imgOnly={installParams.imgOnly}
+        className={installParams.customCname || undefined}
       />
 
       <lr-file-uploader-inline

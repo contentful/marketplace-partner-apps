@@ -21,7 +21,7 @@ export default function Field(): ReactElement {
     if (!newAssets) return;
 
     await setAssets([...assets, ...newAssets]);
-  }, []);
+  }, [assets]);
 
   const installParams = sdk.parameters.installation;
 
@@ -34,7 +34,13 @@ export default function Field(): ReactElement {
       <GlobalStyles />
 
       <Stack spacing="spacingM" flexDirection="column" alignItems="flex-start">
-        {assets.length > 0 && <Thumbnails assets={assets} onChange={setAssets} isDisabled={!editingEnabled} />}
+        {assets.length > 0 && (
+          <Thumbnails
+            assets={assets}
+            onChange={setAssets}
+            isDisabled={!editingEnabled}
+          />
+        )}
 
         <OpenDialogButton
           onAssetsChanged={handleAssetsChanged}

@@ -83,6 +83,14 @@ export async function validateParameters(
     validationErrors.uploadSources = 'Pick at least one upload source.';
   }
 
+  if (parameters.customCname.length > 0) {
+    try {
+      new URL(parameters.customCname);
+    } catch (err) {
+      validationErrors.customCname = 'Custom CNAME should be a valid URL starting with a scheme (usually, https). E.g.: https://ucarecdn.com.';
+    }
+  }
+
   return validationErrors;
 }
 

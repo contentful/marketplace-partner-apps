@@ -64,6 +64,7 @@ export const DEFAULT_UPLOAD_SOURCES_VALUES = ['local', 'url', 'camera', 'dropbox
 export const DEFAULT_PARAMETERS: AppInstallationParameters = {
   apiKey: '',
   maxFiles: 0,
+  imgOnly: false,
   uploadSources: UPLOAD_SOURCES.reduce(
     (acc, { value }) => {
       acc[value] = DEFAULT_UPLOAD_SOURCES_VALUES.includes(value);
@@ -71,4 +72,5 @@ export const DEFAULT_PARAMETERS: AppInstallationParameters = {
     },
     {} as AppInstallationParameters['uploadSources'],
   ),
+  customCname: '',
 } as const;

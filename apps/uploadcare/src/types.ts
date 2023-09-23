@@ -4,6 +4,8 @@ export type AppInstallationParameters = {
   apiKey: string;
   maxFiles: number;
   uploadSources: Record<(typeof UPLOAD_SOURCES)[number]['value'], boolean>;
+  imgOnly: boolean;
+  customCname: string;
 };
 
 export type Asset = {

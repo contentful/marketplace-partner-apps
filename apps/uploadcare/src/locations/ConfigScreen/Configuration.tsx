@@ -1,4 +1,4 @@
-import { Checkbox, Form, FormControl, TextInput } from '@contentful/f36-components';
+import { Checkbox, Form, FormControl, TextInput, TextLink } from '@contentful/f36-components';
 import { ReactElement, useId } from 'react';
 import { objectKeys } from 'ts-extras';
 import { UPLOAD_SOURCES } from '../../constants';
@@ -26,6 +26,13 @@ export function Configuration({ parameters, parametersValidationErrors, onParame
     });
   }
 
+  function handleImgOnlyChange() {
+    onParametersChange({
+      ...parameters,
+      imgOnly: !parameters.imgOnly,
+    });
+  }
+
   function handleUploadSourceChange(uploadSource: keyof AppInstallationParameters['uploadSources']) {
     onParametersChange({
       ...parameters,
@@ -33,6 +40,13 @@ export function Configuration({ parameters, parametersValidationErrors, onParame
         ...parameters.uploadSources,
         [uploadSource]: !parameters.uploadSources[uploadSource],
       },
+    });
+  }
+
+  function handleCustomCnameChange(value: string) {
+    onParametersChange({
+      ...parameters,
+      customCname: value.trim(),
     });
   }
 
@@ -57,6 +71,20 @@ export function Configuration({ parameters, parametersValidationErrors, onParame
 
         <FormControl.HelpText>
           The Uploadcare public API key that can be found in your Uploadcare dashboard.
+        </FormControl.HelpText>
+      </FormControl>
+
+      <FormControl>
+        <Checkbox
+          name={useId()}
+          isChecked={parameters.imgOnly}
+          onChange={handleImgOnlyChange}
+        >
+          Allow to upload images only
+        </Checkbox>
+
+        <FormControl.HelpText>
+          If checked then editors won't be able to upload anything but images.
         </FormControl.HelpText>
       </FormControl>
 
@@ -100,6 +128,40 @@ export function Configuration({ parameters, parametersValidationErrors, onParame
         {!!parametersValidationErrors.uploadSources && (
           <FormControl.ValidationMessage>{parametersValidationErrors.uploadSources}</FormControl.ValidationMessage>
         )}
+      </FormControl>
+
+      <FormControl>
+        <FormControl.Label>Custom CNAME</FormControl.Label>
+
+        <TextInput
+          name={useId()}
+          width="large"
+          type="text"
+          maxLength={255}
+          value={parameters.customCname}
+          isInvalid={!!parametersValidationErrors.customCname}
+          onChange={e => handleCustomCnameChange(e.target.value)}
+        />
+
+        {!!parametersValidationErrors.customCname && (
+          <FormControl.ValidationMessage>{parametersValidationErrors.customCname}</FormControl.ValidationMessage>
+        )}
+
+        <FormControl.HelpText>
+          Your own domain for CDN links to your files stored with Uploadcare.
+          Set it here if you have one, or leave it empty if you do not.
+          See
+          {' '}
+          <TextLink
+            href="https://uploadcare.com/docs/delivery/cdn/#custom-cdn-cname"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            docs
+          </TextLink>
+          {' '}
+          for details.
+        </FormControl.HelpText>
       </FormControl>
     </Form>
   );
