@@ -1,5 +1,11 @@
 import { UPLOAD_SOURCES } from './constants';
 
+export type InstanceParameters = {
+  maxFiles?: number;
+  uploadSourcesString?: string;
+  imgOnly: 'useGlobalAppSetting' | 'allowAnyFiles' | 'allowImagesOnly';
+};
+
 export type AppInstallationParameters = {
   apiKey: string;
   maxFiles: number;

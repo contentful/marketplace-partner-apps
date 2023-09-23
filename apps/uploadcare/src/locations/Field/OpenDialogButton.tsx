@@ -23,9 +23,11 @@ type Props = {
   onAssetsChanged: (newAssets: Asset[] | undefined) => Promise<void>;
   isDisabled: boolean;
   maxFiles: number;
+  uploadSourcesString: string;
+  imgOnly: boolean;
 };
 
-export function OpenDialogButton({ onAssetsChanged, isDisabled, maxFiles }: Props) {
+export function OpenDialogButton({ onAssetsChanged, isDisabled, maxFiles, uploadSourcesString, imgOnly }: Props) {
   const sdk = useSDK<FieldAppSDK<AppInstallationParameters>>();
 
   const params = sdk.parameters.installation;
@@ -41,7 +43,9 @@ export function OpenDialogButton({ onAssetsChanged, isDisabled, maxFiles }: Prop
       width: 800,
       parameters: {
         maxFiles,
-      }
+        uploadSourcesString,
+        imgOnly,
+      },
     });
 
     await onAssetsChanged(result);

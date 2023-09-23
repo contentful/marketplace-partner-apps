@@ -75,11 +75,7 @@ export function Configuration({ parameters, parametersValidationErrors, onParame
       </FormControl>
 
       <FormControl>
-        <Checkbox
-          name={useId()}
-          isChecked={parameters.imgOnly}
-          onChange={handleImgOnlyChange}
-        >
+        <Checkbox name={useId()} isChecked={parameters.imgOnly} onChange={handleImgOnlyChange}>
           Allow to upload images only
         </Checkbox>
 
@@ -148,18 +144,15 @@ export function Configuration({ parameters, parametersValidationErrors, onParame
         )}
 
         <FormControl.HelpText>
-          Your own domain for CDN links to your files stored with Uploadcare.
-          Set it here if you have one, or leave it empty if you do not.
-          See
-          {' '}
+          Your own domain for CDN links to your files stored with Uploadcare. Set it here if you have one, or leave it
+          empty if you do not. See{' '}
           <TextLink
             href="https://uploadcare.com/docs/delivery/cdn/#custom-cdn-cname"
             target="_blank"
             rel="noopener noreferrer"
           >
             docs
-          </TextLink>
-          {' '}
+          </TextLink>{' '}
           for details.
         </FormControl.HelpText>
       </FormControl>

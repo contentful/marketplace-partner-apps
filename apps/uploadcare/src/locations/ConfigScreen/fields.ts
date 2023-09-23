@@ -87,7 +87,8 @@ export async function validateParameters(
     try {
       new URL(parameters.customCname);
     } catch (err) {
-      validationErrors.customCname = 'Custom CNAME should be a valid URL starting with a scheme (usually, https). E.g.: https://ucarecdn.com.';
+      validationErrors.customCname =
+        'Custom CNAME should be a valid URL starting with a scheme (usually, https). E.g.: https://ucarecdn.com.';
     }
   }
 

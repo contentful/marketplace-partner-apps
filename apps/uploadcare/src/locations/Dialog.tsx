@@ -2,8 +2,7 @@ import { DialogAppSDK } from '@contentful/app-sdk';
 import { useAutoResizer, useSDK } from '@contentful/react-apps-toolkit';
 import * as LR from '@uploadcare/blocks';
 import { css } from 'emotion';
-import { ReactElement, useEffect, useMemo, useRef } from 'react';
-import { objectKeys } from 'ts-extras';
+import { ReactElement, useEffect, useRef } from 'react';
 import { AppInstallationParameters, Asset } from '../types';
 
 LR.registerBlocks(LR);
@@ -16,10 +15,12 @@ const styles = {
 
 type InvocationParams = {
   maxFiles: number;
+  uploadSourcesString: string;
+  imgOnly: boolean;
 };
 
 export default function Dialog(): ReactElement {
-  const sdk = useSDK<DialogAppSDK<AppInstallationParameters>>();
+  const sdk = useSDK<DialogAppSDK<AppInstallationParameters, InvocationParams>>();
   useAutoResizer();
 
   const assetsRef = useRef<Asset[]>([]);
@@ -44,15 +45,7 @@ export default function Dialog(): ReactElement {
     };
   }, []);
 
-  const installParams = sdk.parameters.installation;
-
-  const sourceList = useMemo(() => {
-    return objectKeys(installParams.uploadSources)
-      .filter(k => k in installParams.uploadSources && installParams.uploadSources[k])
-      .join(', ');
-  }, [installParams.uploadSources]);
-
-  const invokeParams = sdk.parameters.invocation as InvocationParams;
+  const { installation: installParams, invocation: invokeParams } = sdk.parameters;
 
   return (
     <div className={styles.container}>
@@ -61,9 +54,9 @@ export default function Dialog(): ReactElement {
         pubkey={installParams.apiKey}
         multiple={invokeParams.maxFiles !== 1}
         multipleMax={invokeParams.maxFiles !== 0 ? invokeParams.maxFiles : undefined}
-        sourceList={sourceList}
-        imgOnly={installParams.imgOnly}
-        className={installParams.customCname || undefined}
+        sourceList={invokeParams.uploadSourcesString}
+        imgOnly={invokeParams.imgOnly}
+        cdnCname={installParams.customCname || undefined}
       />
 
       <lr-file-uploader-inline
