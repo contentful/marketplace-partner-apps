@@ -3,7 +3,7 @@ import { useAutoResizer, useSDK } from '@contentful/react-apps-toolkit';
 import * as LR from '@uploadcare/blocks';
 import { css } from 'emotion';
 import { ReactElement, useEffect, useRef } from 'react';
-import { AppInstallationParameters, Asset } from '../types';
+import { Asset, InstallParams } from '../types';
 
 LR.registerBlocks(LR);
 
@@ -20,7 +20,7 @@ type InvocationParams = {
 };
 
 export default function Dialog(): ReactElement {
-  const sdk = useSDK<DialogAppSDK<AppInstallationParameters, InvocationParams>>();
+  const sdk = useSDK<DialogAppSDK<InstallParams, InvocationParams>>();
   useAutoResizer();
 
   const assetsRef = useRef<Asset[]>([]);

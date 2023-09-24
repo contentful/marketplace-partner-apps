@@ -1,4 +1,4 @@
-import { AppInstallationParameters } from './types';
+import { InstallParams } from './types';
 
 export const UPLOAD_SOURCES = [
   {
@@ -61,7 +61,7 @@ export const UPLOAD_SOURCES = [
 
 export const DEFAULT_UPLOAD_SOURCES_VALUES = ['local', 'url', 'camera', 'dropbox', 'gdrive'];
 
-export const DEFAULT_PARAMETERS: AppInstallationParameters = {
+export const DEFAULT_PARAMS: InstallParams = {
   apiKey: '',
   maxFiles: 0,
   imgOnly: false,
@@ -70,7 +70,7 @@ export const DEFAULT_PARAMETERS: AppInstallationParameters = {
       acc[value] = DEFAULT_UPLOAD_SOURCES_VALUES.includes(value);
       return acc;
     },
-    {} as AppInstallationParameters['uploadSources'],
+    {} as InstallParams['uploadSources'],
   ),
   customCname: '',
 } as const;

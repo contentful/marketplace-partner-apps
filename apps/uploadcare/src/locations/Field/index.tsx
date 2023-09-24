@@ -3,12 +3,14 @@ import { GlobalStyles, Stack } from '@contentful/f36-components';
 import { useAutoResizer, useFieldValue, useSDK } from '@contentful/react-apps-toolkit';
 import { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import { objectKeys } from 'ts-extras';
-import { AppInstallationParameters, Asset, InstanceParameters } from '../../types';
+import { Asset, InstallParams, InstanceParams } from '../../types';
+import { validateInstallParams, validateInstanceParams } from '../../utils';
 import { OpenDialogButton } from './OpenDialogButton';
+import { ParamsValidationNotes } from './ParamsValidationNotes';
 import { Thumbnails } from './Thumbnails';
 
 export default function Field(): ReactElement {
-  const sdk = useSDK<FieldAppSDK<AppInstallationParameters, InstanceParameters>>();
+  const sdk = useSDK<FieldAppSDK<InstallParams, InstanceParams>>();
   useAutoResizer();
 
   const [assets = [], setAssets] = useFieldValue<Asset[]>();
@@ -30,6 +32,9 @@ export default function Field(): ReactElement {
   const installParams = sdk.parameters.installation;
   const instanceParams = sdk.parameters.instance;
 
+  const installParamsValidationErrors = useMemo(() => validateInstallParams(installParams), [installParams]);
+  const instanceParamsValidationErrors = useMemo(() => validateInstanceParams(instanceParams), [instanceParams]);
+
   const maxFilesParam =
     typeof instanceParams.maxFiles !== 'undefined' ? instanceParams.maxFiles : installParams.maxFiles;
   const isFileNumberLimited = maxFilesParam !== 0;
@@ -45,7 +50,24 @@ export default function Field(): ReactElement {
   }, [installParams.uploadSources, instanceParams.uploadSourcesString]);
 
   const imgOnly =
-    instanceParams.imgOnly !== 'useGlobalAppSetting' ? instanceParams.imgOnly === 'allowImagesOnly' : installParams.imgOnly;
+    instanceParams.imgOnly !== 'useGlobalAppSetting'
+      ? instanceParams.imgOnly === 'allowImagesOnly'
+      : installParams.imgOnly;
+
+  if (
+    !Object.values(installParamsValidationErrors).every(v => !v) ||
+    !Object.values(instanceParamsValidationErrors).every(v => !v)
+  ) {
+    return (
+      <>
+        <GlobalStyles />
+        <ParamsValidationNotes
+          installParamsValidationErrors={installParamsValidationErrors}
+          instanceParamsValidationErrors={instanceParamsValidationErrors}
+        />
+      </>
+    );
+  }
 
   return (
     <>

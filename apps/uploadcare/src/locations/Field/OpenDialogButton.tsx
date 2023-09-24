@@ -5,7 +5,7 @@ import { useSDK } from '@contentful/react-apps-toolkit';
 import { css } from 'emotion';
 import { useCallback } from 'react';
 import logo from '../../assets/logo.svg';
-import { AppInstallationParameters, Asset } from '../../types';
+import { Asset, InstallParams } from '../../types';
 
 const styles = {
   container: css({
@@ -28,7 +28,7 @@ type Props = {
 };
 
 export function OpenDialogButton({ onAssetsChanged, isDisabled, maxFiles, uploadSourcesString, imgOnly }: Props) {
-  const sdk = useSDK<FieldAppSDK<AppInstallationParameters>>();
+  const sdk = useSDK<FieldAppSDK<InstallParams>>();
 
   const params = sdk.parameters.installation;
 

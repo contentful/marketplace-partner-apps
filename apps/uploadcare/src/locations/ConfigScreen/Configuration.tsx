@@ -2,50 +2,49 @@ import { Checkbox, Form, FormControl, TextInput, TextLink } from '@contentful/f3
 import { ReactElement, useId } from 'react';
 import { objectKeys } from 'ts-extras';
 import { UPLOAD_SOURCES } from '../../constants';
-import { AppInstallationParameters } from '../../types';
-import { AppInstallationParametersValidationErrors } from './fields';
+import { InstallParams, InstallParamsValidationErrors } from '../../types';
 
 type Props = {
-  parameters: AppInstallationParameters;
-  parametersValidationErrors: AppInstallationParametersValidationErrors;
-  onParametersChange: (params: AppInstallationParameters) => void;
+  params: InstallParams;
+  paramsValidationErrors: InstallParamsValidationErrors;
+  onParamsChange: (params: InstallParams) => void;
 };
 
-export function Configuration({ parameters, parametersValidationErrors, onParametersChange }: Props): ReactElement {
+export function Configuration({ params, paramsValidationErrors, onParamsChange }: Props): ReactElement {
   function handleApiKeyChange(value: string) {
-    onParametersChange({
-      ...parameters,
+    onParamsChange({
+      ...params,
       apiKey: value.trim(),
     });
   }
 
   function handleMaxFilesChange(value: string) {
-    onParametersChange({
-      ...parameters,
+    onParamsChange({
+      ...params,
       maxFiles: +value.trim(),
     });
   }
 
   function handleImgOnlyChange() {
-    onParametersChange({
-      ...parameters,
-      imgOnly: !parameters.imgOnly,
+    onParamsChange({
+      ...params,
+      imgOnly: !params.imgOnly,
     });
   }
 
-  function handleUploadSourceChange(uploadSource: keyof AppInstallationParameters['uploadSources']) {
-    onParametersChange({
-      ...parameters,
+  function handleUploadSourceChange(uploadSource: keyof InstallParams['uploadSources']) {
+    onParamsChange({
+      ...params,
       uploadSources: {
-        ...parameters.uploadSources,
-        [uploadSource]: !parameters.uploadSources[uploadSource],
+        ...params.uploadSources,
+        [uploadSource]: !params.uploadSources[uploadSource],
       },
     });
   }
 
   function handleCustomCnameChange(value: string) {
-    onParametersChange({
-      ...parameters,
+    onParamsChange({
+      ...params,
       customCname: value.trim(),
     });
   }
@@ -60,13 +59,13 @@ export function Configuration({ parameters, parametersValidationErrors, onParame
           width="large"
           type="text"
           maxLength={255}
-          value={parameters.apiKey}
+          value={params.apiKey}
           onChange={e => handleApiKeyChange(e.target.value)}
-          isInvalid={!!parametersValidationErrors.apiKey}
+          isInvalid={!!paramsValidationErrors.apiKey}
         />
 
-        {!!parametersValidationErrors.apiKey && (
-          <FormControl.ValidationMessage>{parametersValidationErrors.apiKey}</FormControl.ValidationMessage>
+        {!!paramsValidationErrors.apiKey && (
+          <FormControl.ValidationMessage>{paramsValidationErrors.apiKey}</FormControl.ValidationMessage>
         )}
 
         <FormControl.HelpText>
@@ -75,7 +74,7 @@ export function Configuration({ parameters, parametersValidationErrors, onParame
       </FormControl>
 
       <FormControl>
-        <Checkbox name={useId()} isChecked={parameters.imgOnly} onChange={handleImgOnlyChange}>
+        <Checkbox name={useId()} isChecked={params.imgOnly} onChange={handleImgOnlyChange}>
           Allow to upload images only
         </Checkbox>
 
@@ -92,13 +91,13 @@ export function Configuration({ parameters, parametersValidationErrors, onParame
           width="large"
           type="number"
           maxLength={255}
-          value={parameters.maxFiles.toString()}
-          isInvalid={!!parametersValidationErrors.maxFiles}
+          value={params.maxFiles.toString()}
+          isInvalid={!!paramsValidationErrors.maxFiles}
           onChange={e => handleMaxFilesChange(e.target.value)}
         />
 
-        {!!parametersValidationErrors.maxFiles && (
-          <FormControl.ValidationMessage>{parametersValidationErrors.maxFiles}</FormControl.ValidationMessage>
+        {!!paramsValidationErrors.maxFiles && (
+          <FormControl.ValidationMessage>{paramsValidationErrors.maxFiles}</FormControl.ValidationMessage>
         )}
 
         <FormControl.HelpText>
@@ -106,13 +105,13 @@ export function Configuration({ parameters, parametersValidationErrors, onParame
         </FormControl.HelpText>
       </FormControl>
 
-      <FormControl as="fieldset" isInvalid={!!parametersValidationErrors.uploadSources}>
+      <FormControl as="fieldset" isInvalid={!!paramsValidationErrors.uploadSources}>
         <FormControl.Label as="legend">Upload sources</FormControl.Label>
 
         <Checkbox.Group
           name="upload-sources"
-          value={objectKeys(parameters.uploadSources).filter(k => parameters.uploadSources[k])}
-          onChange={e => handleUploadSourceChange(e.target.value as keyof AppInstallationParameters['uploadSources'])}
+          value={objectKeys(params.uploadSources).filter(k => params.uploadSources[k])}
+          onChange={e => handleUploadSourceChange(e.target.value as keyof InstallParams['uploadSources'])}
         >
           {UPLOAD_SOURCES.map(({ value, title }) => (
             <Checkbox key={value} value={value}>
@@ -121,8 +120,8 @@ export function Configuration({ parameters, parametersValidationErrors, onParame
           ))}
         </Checkbox.Group>
 
-        {!!parametersValidationErrors.uploadSources && (
-          <FormControl.ValidationMessage>{parametersValidationErrors.uploadSources}</FormControl.ValidationMessage>
+        {!!paramsValidationErrors.uploadSources && (
+          <FormControl.ValidationMessage>{paramsValidationErrors.uploadSources}</FormControl.ValidationMessage>
         )}
       </FormControl>
 
@@ -134,13 +133,13 @@ export function Configuration({ parameters, parametersValidationErrors, onParame
           width="large"
           type="text"
           maxLength={255}
-          value={parameters.customCname}
-          isInvalid={!!parametersValidationErrors.customCname}
+          value={params.customCname}
+          isInvalid={!!paramsValidationErrors.customCname}
           onChange={e => handleCustomCnameChange(e.target.value)}
         />
 
-        {!!parametersValidationErrors.customCname && (
-          <FormControl.ValidationMessage>{parametersValidationErrors.customCname}</FormControl.ValidationMessage>
+        {!!paramsValidationErrors.customCname && (
+          <FormControl.ValidationMessage>{paramsValidationErrors.customCname}</FormControl.ValidationMessage>
         )}
 
         <FormControl.HelpText>

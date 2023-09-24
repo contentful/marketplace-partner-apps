@@ -6,17 +6,11 @@ import { ContentTypeProps } from 'contentful-management';
 import { css } from 'emotion';
 import { ReactElement, useCallback, useEffect, useState } from 'react';
 import logo from '../../assets/logo.svg';
-import { DEFAULT_PARAMETERS } from '../../constants';
-import { AppInstallationParameters } from '../../types';
+import { DEFAULT_PARAMS } from '../../constants';
+import { InstallParams, InstallParamsValidationErrors } from '../../types';
+import { getEmptyInstallParamsValidationErrorsObject, isPublicKeyInvalid, validateInstallParams } from '../../utils';
 import { Configuration } from './Configuration';
-import {
-  AppInstallationParametersValidationErrors,
-  editorInterfacesToSelectedFields,
-  getEmptyParamsValidationErrorsObject,
-  SelectedFields,
-  selectedFieldsToTargetState,
-  validateParameters,
-} from './fields';
+import { editorInterfacesToSelectedFields, SelectedFields, selectedFieldsToTargetState } from './fields';
 import { FieldSelector } from './FieldSelector';
 
 const styles = {
@@ -53,31 +47,38 @@ const styles = {
 };
 
 export default function ConfigScreen(): ReactElement {
-  const sdk = useSDK<ConfigAppSDK<AppInstallationParameters>>();
+  const sdk = useSDK<ConfigAppSDK<InstallParams>>();
 
-  const [parameters, setParameters] = useState<AppInstallationParameters>({
-    ...DEFAULT_PARAMETERS,
+  const [params, setParams] = useState<InstallParams>({
+    ...DEFAULT_PARAMS,
   });
-  const [parametersValidationErrors, setParametersValidationErrors] =
-    useState<AppInstallationParametersValidationErrors>(getEmptyParamsValidationErrorsObject(parameters));
+  const [paramsValidationErrors, setParamsValidationErrors] = useState<InstallParamsValidationErrors>(
+    getEmptyInstallParamsValidationErrorsObject(params),
+  );
   const [contentTypes, setContentTypes] = useState<ContentTypeProps[]>([]);
   const [selectedFields, setSelectedFields] = useState<SelectedFields>({});
 
   const onConfigure = useCallback<OnConfigureHandler>(async () => {
-    const validationErrors = await validateParameters(parameters);
+    const validationErrors = validateInstallParams(params);
+
+    // we're validating the key separately here, because validation function is used in the Field too
+    // and we do not want to send network requests there
+    if (!validationErrors.apiKey && (await isPublicKeyInvalid(params.apiKey))) {
+      validationErrors.apiKey = 'Public API key does not look valid.';
+    }
 
     if (!Object.values(validationErrors).every(v => !v)) {
-      setParametersValidationErrors(validationErrors);
+      setParamsValidationErrors(validationErrors);
       return false;
     }
 
-    setParametersValidationErrors(getEmptyParamsValidationErrorsObject(parameters));
+    setParamsValidationErrors(getEmptyInstallParamsValidationErrorsObject(params));
 
     return {
-      parameters,
+      parameters: params,
       targetState: selectedFieldsToTargetState(contentTypes, selectedFields),
     };
-  }, [parameters, contentTypes, selectedFields]);
+  }, [params, contentTypes, selectedFields]);
 
   useEffect(() => {
     sdk.app.onConfigure(onConfigure);
@@ -85,17 +86,17 @@ export default function ConfigScreen(): ReactElement {
 
   useEffect(() => {
     (async () => {
-      const currentParameters = await sdk.app.getParameters<AppInstallationParameters>();
+      const currentParams = await sdk.app.getParameters<InstallParams>();
       const contentTypesResponse = await sdk.cma.contentType.getMany({});
       const editorInterfacesResponse = await sdk.cma.editorInterface.getMany({});
 
       setContentTypes(contentTypesResponse.items);
-      setParameters({
-        ...DEFAULT_PARAMETERS,
-        ...currentParameters,
+      setParams({
+        ...DEFAULT_PARAMS,
+        ...currentParams,
         uploadSources: {
-          ...DEFAULT_PARAMETERS.uploadSources,
-          ...currentParameters?.uploadSources,
+          ...DEFAULT_PARAMS.uploadSources,
+          ...currentParams?.uploadSources,
         },
       });
       setSelectedFields(editorInterfacesToSelectedFields(editorInterfacesResponse.items, sdk.ids.app));
@@ -115,11 +116,7 @@ export default function ConfigScreen(): ReactElement {
 
         <hr className={styles.splitter} />
 
-        <Configuration
-          parameters={parameters}
-          parametersValidationErrors={parametersValidationErrors}
-          onParametersChange={setParameters}
-        />
+        <Configuration params={params} paramsValidationErrors={paramsValidationErrors} onParamsChange={setParams} />
 
         <hr className={styles.splitter} />
 
