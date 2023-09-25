@@ -9,7 +9,7 @@ const styles = {
   grid: css({
     display: 'grid',
     gap: '20px',
-    gridTemplateColumns: 'repeat(4, 1fr)',
+    gridTemplateColumns: 'repeat(3, 1fr)',
   }),
 };
 

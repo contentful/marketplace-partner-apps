@@ -1,5 +1,4 @@
-import { Card, IconButton } from '@contentful/f36-components';
-import { CloseIcon } from '@contentful/f36-icons';
+import { AssetCard, DragHandle, MenuItem } from '@contentful/f36-components';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { css } from 'emotion';
@@ -8,33 +7,8 @@ import { Asset } from '../../types';
 
 const styles = {
   card: css({
-    margin: '10px',
-    position: 'relative',
-    padding: 0,
+    cursor: 'default', // for some reason it's `pointer` by default
   }),
-  sortableWrapper: (isDisabled: boolean) =>
-    css({
-      padding: '1rem',
-      cursor: isDisabled ? 'default' : 'move',
-    }),
-  img: css({
-    display: 'block',
-    maxWidth: '100px',
-    maxHeight: '100px',
-    margin: 'auto',
-    userSelect: 'none',
-  }),
-  remove: (isDisabled: boolean) =>
-    css({
-      position: 'absolute',
-      top: '-10px',
-      right: '-10px',
-      backgroundColor: '#fff',
-      padding: 0,
-      minHeight: 'initial',
-      cursor: isDisabled ? 'not-allowed' : 'cursor',
-      zIndex: 1,
-    }),
 };
 
 type Props = {
@@ -44,34 +18,37 @@ type Props = {
 };
 
 export function Thumbnail({ asset, isDisabled, onDelete }: Props) {
-  const { cdnUrl, originalFilename, uuid } = asset;
+  const { cdnUrl, originalFilename, uuid, isImage } = asset;
 
   const url = useMemo(() => {
-    return cdnUrl + '-/scale_crop/100x100/';
+    return cdnUrl + '-/resize/x300/';
   }, [asset]);
 
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: uuid });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: uuid });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    zIndex: isDragging ? 1 : 0,
   };
 
   return (
-    <Card className={styles.card} ref={setNodeRef} style={style} {...attributes}>
-      <div className={styles.sortableWrapper(isDisabled)} {...listeners}>
-        <img className={styles.img} src={url} alt={originalFilename} />
-      </div>
-
-      {!isDisabled && (
-        <IconButton
-          className={styles.remove(isDisabled)}
-          variant="transparent"
-          icon={<CloseIcon variant="muted" />}
-          aria-label="Remove"
-          onClick={onDelete}
-        />
-      )}
-    </Card>
+    <div ref={setNodeRef} {...attributes} style={style}>
+      <AssetCard
+        className={styles.card}
+        src={url}
+        type={isImage ? 'image' : 'archive'}
+        size="small"
+        title={originalFilename}
+        actions={[
+          <MenuItem key="delete" onClick={onDelete} isDisabled={isDisabled}>
+            Delete
+          </MenuItem>,
+        ]}
+        withDragHandle={!isDisabled}
+        isDragging={isDragging}
+        dragHandleRender={() => <DragHandle as="button" label="Move entry" {...listeners} />}
+      />
+    </div>
   );
 }

@@ -30,9 +30,8 @@ type Props = {
 export function OpenDialogButton({ onAssetsChanged, isDisabled, maxFiles, uploadSourcesString, imgOnly }: Props) {
   const sdk = useSDK<FieldAppSDK<InstallParams>>();
 
-  const params = sdk.parameters.installation;
-
-  const title = `Upload ${params.maxFiles !== 1 ? 'images' : 'image'} to Uploadcare`;
+  const fileTypeName = imgOnly ? 'image' : 'file';
+  const title = `Upload ${fileTypeName}${maxFiles !== 1 ? 's' : ''} to Uploadcare`;
 
   const handleDialogOpen = useCallback(async () => {
     const result: Asset[] | undefined = await sdk.dialogs.openCurrentApp({
