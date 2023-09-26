@@ -7,9 +7,9 @@ import { Thumbnail } from './Thumbnail';
 
 const styles = {
   grid: css({
-    display: 'grid',
+    display: 'flex',
     gap: '20px',
-    gridTemplateColumns: 'repeat(3, 1fr)',
+    flexWrap: 'wrap',
   }),
 };
 
