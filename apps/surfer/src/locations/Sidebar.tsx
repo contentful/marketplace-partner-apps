@@ -21,8 +21,9 @@ const Sidebar = () => {
   const { entry, window, parameters } = useSDK<SidebarAppSDK>();
 
   const richTextFields = Object.values(entry.fields).filter(isRichText);
+  const selectedFields = parameters?.installation?.selectedContentFields?.[entry.getSys().contentType.sys.id] || [];
   const widgetSizePx = richTextFields.length ? FULL_SIZE_PX : WARNING_SIZE_PX;
-  const contentHtml = useContentHtml(richTextFields, parameters.installation.selectedContentFields[entry.getSys().contentType.sys.id]);
+  const contentHtml = useContentHtml(richTextFields, selectedFields);
 
   const shareToken = buildShareToken(entry.getSys());
   const { openConfigurationDialog, isConfigurationOpen } = useConfigurationDialog(shareToken);
