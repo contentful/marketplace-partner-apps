@@ -10,14 +10,20 @@ describe('useContentHtml', () => {
     { id: 'field4', onValueChanged: jest.fn() },
   ] as any;
 
-  it('subscribes to all fields on change events only once', () => {
-    const { rerender } = renderHook(() => useContentHtml(fakeFields, fakeFields.slice(0, 2)));
+  const fakeSelectedFields = fakeFields.slice(2).map(({ id }) => id);
+
+  it('subscribes to all selected fields on change events only once', () => {
+    const { rerender } = renderHook(() => useContentHtml(fakeFields, fakeSelectedFields));
 
     rerender();
     rerender();
 
-    fakeFields.forEach((field) => {
+    fakeFields.slice(2).forEach((field) => {
       expect(field.onValueChanged).toHaveBeenCalledTimes(1);
+    });
+
+    fakeFields.slice(0, 2).forEach((field) => {
+      expect(field.onValueChanged).not.toHaveBeenCalled();
     });
   });
 
@@ -42,7 +48,7 @@ describe('useContentHtml', () => {
         })
       ),
     }));
-    const { result } = renderHook(() => useContentHtml(fieldsWithValues, fieldsWithValues.slice(2)));
+    const { result } = renderHook(() => useContentHtml(fieldsWithValues, fakeSelectedFields));
 
     expect(result.current).toBe('<p>field3</p><p>field4</p>');
   });

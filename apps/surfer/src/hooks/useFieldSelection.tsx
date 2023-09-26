@@ -1,28 +1,91 @@
-import { EntryFieldAPI } from '@contentful/app-sdk';
-import { useCallback, useMemo, useState } from 'react';
-import { FieldSelection } from '../components/FieldSelection';
+import { useCallback, useState } from 'react';
+import { ContentTypeId, ContentFieldsMap, ContentFieldId } from '../types';
+import { SurferCompatibility } from './useSurferCompatibility';
 
-export const useFieldSelection = (entryFields: EntryFieldAPI[]) => {
-  const richTextFields = useMemo(() => Object.values(entryFields).filter((field) => field.type === 'RichText'), [entryFields]);
-  const [selectedFields, setSelectedFields] = useState<EntryFieldAPI[]>(richTextFields);
+export const useFieldSelection = (compatibility: SurferCompatibility = { compatibleFields: {}, compatibleContentTypes: [] }) => {
+  const [selectedContentTypes, setSelectedContentTypes] = useState<ContentTypeId[]>([]);
+  const [selectedContentFields, setSelectedContentFields] = useState<ContentFieldsMap>({});
 
-  const isSelected = useCallback((field: EntryFieldAPI) => selectedFields.some((selectedField) => selectedField.id === field.id), [selectedFields]);
+  const turnContentTypeOff = (id: ContentTypeId) => {
+    setSelectedContentTypes((prevState) => prevState.filter((contentTypeId) => contentTypeId !== id));
+    setSelectedContentFields((prevState) => {
+      delete prevState[id];
 
-  const toggleSelection = useCallback(
-    (field?: EntryFieldAPI) => {
-      if (field && isSelected(field)) {
-        return setSelectedFields((selectedFields) => selectedFields.filter((selectedField) => selectedField.id !== field.id));
-      } else if (field) {
-        setSelectedFields((selectedFields) => [...selectedFields, field]);
-      }
+      return prevState;
+    });
+  };
+
+  const turnContentTypeOn = useCallback(
+    (id: ContentTypeId, preSelectedFields?: ContentFieldId[]) => {
+      setSelectedContentTypes((prevState) => [...prevState, id]);
+      setSelectedContentFields((prevState) => {
+        prevState[id] = preSelectedFields ?? compatibility.compatibleFields[id];
+
+        return prevState;
+      });
     },
-    [isSelected]
+    [compatibility.compatibleFields]
   );
 
-  const SelectionComponent =
-    richTextFields.length > 1
-      ? () => <FieldSelection selectedFields={selectedFields} richTextFields={richTextFields} toggleSelection={toggleSelection} isSelected={isSelected} />
-      : () => null;
+  const toggleContentType = (id: ContentTypeId) => {
+    if (selectedContentTypes.includes(id)) {
+      turnContentTypeOff(id);
+    } else {
+      turnContentTypeOn(id);
+    }
+  };
 
-  return [selectedFields, SelectionComponent, richTextFields] as const;
+  const toggleField = (contentTypeId: ContentTypeId, fieldId: ContentFieldId) => {
+    const currentlySelectedFields = selectedContentFields[contentTypeId];
+    const isContentTypeSelected = selectedContentTypes.includes(contentTypeId);
+    const isFieldSelected = currentlySelectedFields?.includes(fieldId);
+
+    if (isFieldSelected) {
+      if (currentlySelectedFields.length === 1) {
+        turnContentTypeOff(contentTypeId);
+
+        return;
+      }
+
+      setSelectedContentFields({
+        ...selectedContentFields,
+        [contentTypeId]: currentlySelectedFields.filter((field) => field !== fieldId),
+      });
+    } else {
+      if (!isContentTypeSelected) {
+        turnContentTypeOn(contentTypeId, [fieldId]);
+
+        return;
+      }
+
+      setSelectedContentFields({
+        ...selectedContentFields,
+        [contentTypeId]: [...currentlySelectedFields, fieldId],
+      });
+    }
+  };
+
+  const selectMany = useCallback(
+    (ids: ContentTypeId[], preSelectedFields = compatibility.compatibleFields) => {
+      const fieldsToSelect = Object.fromEntries(Object.entries(preSelectedFields).filter(([id]) => ids.includes(id as ContentTypeId)));
+
+      setSelectedContentTypes(ids);
+      setSelectedContentFields(fieldsToSelect);
+    },
+    [compatibility]
+  );
+
+  const selectAllCompatible = useCallback(() => {
+    setSelectedContentTypes([...compatibility.compatibleContentTypes]);
+    setSelectedContentFields({ ...compatibility.compatibleFields });
+  }, [compatibility]);
+
+  return {
+    selectedContentFields,
+    selectedContentTypes,
+    toggleContentType,
+    toggleField,
+    selectMany,
+    selectAllCompatible,
+  };
 };

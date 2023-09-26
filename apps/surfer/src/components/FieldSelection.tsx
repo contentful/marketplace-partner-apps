@@ -1,35 +1,70 @@
-import { EntryFieldAPI } from '@contentful/app-sdk';
-import { FormControl } from '@contentful/f36-components';
-import { Multiselect } from '@contentful/f36-multiselect';
-import { forwardRef } from 'react';
+import { Box, Flex, Switch, Tooltip } from '@contentful/f36-components';
+import tokens from '@contentful/f36-tokens';
+import { ContentTypeProps } from 'contentful-management';
+import { ContentFieldId, ContentFieldsMap, ContentTypeId } from '../types';
+import { SurferCompatibility } from '../hooks/useSurferCompatibility';
 
 export interface FieldSelectionProps {
-  selectedFields: EntryFieldAPI[];
-  richTextFields: EntryFieldAPI[];
-  toggleSelection: (field: EntryFieldAPI) => void;
-  isSelected: (fields: EntryFieldAPI) => boolean;
+  contentTypes: ContentTypeProps[];
+  selectedContentTypes: ContentTypeId[];
+  selectedContentFields: ContentFieldsMap;
+  compatibility: SurferCompatibility | undefined;
+  handleContentTypeSelection: (id: ContentTypeId) => void;
+  handleFieldSelection: (id: ContentTypeId, fieldId: ContentFieldId) => void;
 }
 
-export const FieldSelection = forwardRef<HTMLDivElement, FieldSelectionProps>(({ selectedFields, richTextFields, toggleSelection, isSelected }, ref) => {
+export const FieldSelection = ({
+  contentTypes,
+  selectedContentFields,
+  selectedContentTypes,
+  compatibility,
+  handleContentTypeSelection,
+  handleFieldSelection,
+}: FieldSelectionProps) => {
   return (
-    <div ref={ref}>
-      <FormControl>
-        <FormControl.Label>Choose the input fields:</FormControl.Label>
-        <Multiselect currentSelection={selectedFields.map((field) => field.name)}>
-          {richTextFields.map((field) => (
-            <Multiselect.Option
-              key={field.id}
-              value={field.id}
-              itemId={field.id}
-              label={field.name}
-              onSelectItem={() => {
-                toggleSelection(field);
-              }}
-              isChecked={isSelected(field)}
-            />
-          ))}
-        </Multiselect>
-      </FormControl>
-    </div>
+    <Box marginTop="spacingM">
+      {contentTypes.map((contentType) => {
+        const contentTypeId = contentType.sys.id;
+        const isCompatible = compatibility?.compatibleContentTypes.includes(contentTypeId);
+
+        const toggle = (
+          <Flex flexDirection="column" gap={tokens.spacingS} marginBottom="spacingS">
+            <Switch
+              id={contentTypeId}
+              isChecked={selectedContentTypes.includes(contentTypeId)}
+              isDisabled={!isCompatible}
+              onChange={() => handleContentTypeSelection(contentTypeId)}>
+              {contentType.name}
+            </Switch>
+            <Flex flexDirection="column" gap={tokens.spacingS} paddingLeft="spacing2Xl">
+              {contentType.fields.map(
+                (field) =>
+                  compatibility?.compatibleFields[contentTypeId]?.includes(field.id) && (
+                    <Switch
+                      key={`${contentTypeId}_${field.id}`}
+                      id={field.id}
+                      isChecked={selectedContentFields[contentTypeId]?.includes(field.id) ?? false}
+                      onChange={() => handleFieldSelection(contentTypeId, field.id)}>
+                      {field.name}
+                    </Switch>
+                  )
+              )}
+            </Flex>
+          </Flex>
+        );
+
+        return (
+          <div key={contentTypeId}>
+            {isCompatible ? (
+              toggle
+            ) : (
+              <Tooltip placement="left-start" content="This content type doesn't contain any RichText fields">
+                {toggle}
+              </Tooltip>
+            )}
+          </div>
+        );
+      })}
+    </Box>
   );
-});
+};

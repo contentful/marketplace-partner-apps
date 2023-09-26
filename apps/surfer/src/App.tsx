@@ -3,10 +3,12 @@ import { locations } from '@contentful/app-sdk';
 import Dialog from './locations/Dialog';
 import Sidebar from './locations/Sidebar';
 import { useSDK } from '@contentful/react-apps-toolkit';
+import { ConfigScreen } from './locations/ConfigScreen';
 
 const ComponentLocationSettings = {
   [locations.LOCATION_DIALOG]: Dialog,
   [locations.LOCATION_ENTRY_SIDEBAR]: Sidebar,
+  [locations.LOCATION_APP_CONFIG]: ConfigScreen,
 };
 
 const App = () => {

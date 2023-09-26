@@ -1,17 +1,18 @@
 import { EntryFieldAPI } from '@contentful/app-sdk';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { ContentFieldId } from '../types';
 
 const getAllHtml = (fieldValues: any[]) => fieldValues.map((field) => documentToHtmlString(field)).join('');
 
-export const useContentHtml = (allFields: EntryFieldAPI[], selectedFields: EntryFieldAPI[]) => {
+export const useContentHtml = (allRichTextFields: EntryFieldAPI[], selectedFields: ContentFieldId[]) => {
   const [contentHtml, setContentHtml] = useState<string>('');
   const [fieldValues, setFieldValues] = useState<{ [fieldId: string]: string }>({});
 
-  const selectedFieldsIds = useMemo(() => selectedFields.map(({ id }) => id), [selectedFields]);
-
   useEffect(() => {
-    for (const field of allFields) {
+    const allSelectedFields = allRichTextFields.filter(({ id }) => selectedFields.includes(id));
+
+    for (const field of allSelectedFields) {
       field.onValueChanged((value) => {
         setFieldValues((values) => ({ ...values, [field.id]: value }));
       });
@@ -20,12 +21,10 @@ export const useContentHtml = (allFields: EntryFieldAPI[], selectedFields: Entry
   }, []);
 
   useEffect(() => {
-    const selectedFieldsValues = Object.entries(fieldValues)
-      .filter(([fieldId]) => selectedFieldsIds.includes(fieldId))
-      .map(([_fieldId, value]) => value);
+    const selectedFieldsValues = Object.values(fieldValues);
 
     setContentHtml(getAllHtml(selectedFieldsValues));
-  }, [fieldValues, selectedFieldsIds]);
+  }, [fieldValues]);
 
   return contentHtml;
 };

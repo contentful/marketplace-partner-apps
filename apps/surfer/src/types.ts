@@ -1,3 +1,5 @@
+import { ContentTypeProps, ContentFields } from 'contentful-management';
+
 export type SurferView = 'guidelines' | 'draft_configuration' | 'draft_creation' | 'draft_not_found';
 
 export interface SurferContext {
@@ -28,4 +30,11 @@ export interface SurferOptions {
   shareToken: string;
   onReady?: (context: SurferContext) => void;
   onRpcMessage?: (message: SurferRpcMessage, context: SurferContext) => void;
+}
+
+export type ContentTypeId = ContentTypeProps['sys']['id'];
+export type ContentFieldId = ContentFields['id'];
+
+export interface ContentFieldsMap {
+  [id: ContentTypeId]: ContentFieldId[];
 }
