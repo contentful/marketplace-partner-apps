@@ -13,18 +13,18 @@
   },
   "dependencies": {
     "@contentful/app-sdk": "4.17.1",
-    "@contentful/f36-components": "4.50.2",
+    "@contentful/f36-components": "4.52.0",
     "@contentful/f36-icons": "4.27.0",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "11.11.2",
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
     "axios": "1.5.0",
-    "http-status-codes": "2.2.0",
+    "http-status-codes": "2.3.0",
     "lodash": "4.17.21",
     "prop-types": "15.8.1",
     "react": "18.2.0",
-    "react-hook-form": "7.46.1",
+    "react-hook-form": "7.46.2",
     "react-router-dom": "6.16.0"
   },
   "devDependencies": {
