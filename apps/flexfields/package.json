@@ -17,6 +17,7 @@
     "react-scripts": "5.0.1"
   },
   "scripts": {
+    "install-ci": "npm ci",
     "start": "cross-env BROWSER=none react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "build:autoincrement": "npm --no-git-tag-version version patch && cross-env GENERATE_SOURCEMAP=false react-scripts build",
