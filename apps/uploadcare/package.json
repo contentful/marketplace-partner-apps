@@ -11,7 +11,7 @@
     "@dnd-kit/core": "6.0.8",
     "@dnd-kit/sortable": "7.0.2",
     "@dnd-kit/utilities": "3.2.1",
-    "@uploadcare/blocks": "0.25.4",
+    "@uploadcare/blocks": "0.25.6",
     "@uploadcare/upload-client": "6.6.1",
     "contentful-management": "10.39.2",
     "emotion": "10.0.27",
