@@ -24,7 +24,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "create-app-definition": "contentful-app-scripts create-app-definition",
-    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 5EJGHo8tYJcjnEhYWDxivp --token ${CONTENTFUL_CMA_TOKEN}"
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 7GbS2x3SdVh7D2hb1FFsS6 --token ${CONTENTFUL_CMA_TOKEN}"
   },
   "eslintConfig": {
     "extends": "react-app"
