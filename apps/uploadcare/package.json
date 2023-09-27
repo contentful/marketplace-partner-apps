@@ -19,6 +19,7 @@
     "react-dom": "18.2.0"
   },
   "scripts": {
+    "install-ci": "npm ci",
     "lint": "eslint --cache src/**/*.{ts,tsx} && tsc --noEmit",
     "format": "prettier src/**/*.{ts,tsx} --write",
     "start": "cross-env BROWSER=none react-scripts start",
