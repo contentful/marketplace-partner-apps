@@ -264,7 +264,7 @@ const ConfigScreen = () => {
 
       setConditionOptions(conditionOptions);
     }
-  }, [contentTypeField]);
+  }, [contentTypeField, contentType, contentTypes]);
 
   // get child entities of main content type
   useEffect(() => {

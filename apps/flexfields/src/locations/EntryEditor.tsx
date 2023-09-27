@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { EditorExtensionSDK } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
 import { Field, FieldWrapper } from "@contentful/default-field-editors";
@@ -32,7 +32,7 @@ const EntryEditor = () => {
     calculateEditorFields(entryId, sdk.entry.fields, sdk, isFirstLoad.current)
   );
 
-  const handlePageHide = () => {
+  const handlePageHide = useCallback(() => {
     const savedRules = JSON.parse(
       sessionStorage.getItem("filteredRules") || "[]"
     );
@@ -43,7 +43,7 @@ const EntryEditor = () => {
       )
     );
     window.removeEventListener("pagehide", handlePageHide);
-  };
+  }, [entryId]);
 
   useEffect(() => {
     isFirstLoad.current = false;
@@ -51,7 +51,7 @@ const EntryEditor = () => {
     return () => {
       window.removeEventListener("pagehide", handlePageHide);
     };
-  }, []);
+  }, [handlePageHide]);
 
   return (
     <Workbench>
