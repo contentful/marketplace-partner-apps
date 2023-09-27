@@ -1,6 +1,6 @@
 {
   "name": "uploadcare-contentful-app",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "^4.22.1",
@@ -19,14 +19,14 @@
     "react-dom": "18.2.0"
   },
   "scripts": {
+    "install-ci": "npm ci",
     "lint": "eslint --cache src/**/*.{ts,tsx} && tsc --noEmit",
     "format": "prettier src/**/*.{ts,tsx} --write",
     "start": "cross-env BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
     "create-app-definition": "contentful-app-scripts create-app-definition",
-    "upload": "contentful-app-scripts upload --bundle-dir ./build",
-    "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN"
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 3Ju8DSs6cEG3TnqFa979vc --token ${CONTENTFUL_CMA_TOKEN}"
   },
   "browserslist": {
     "production": [

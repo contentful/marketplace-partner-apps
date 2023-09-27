@@ -26,9 +26,6 @@
       "prettier --write"
     ]
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "dependencies": {
     "lerna": "^7.0.2"
   }

@@ -1,6 +1,6 @@
 {
-  "name": "@contentful/surfer",
-  "version": "1.2.1",
+  "name": "surfer-contentful-app",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "4.22.0",
@@ -22,8 +22,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "create-app-definition": "contentful-app-scripts create-app-definition",
-    "upload": "contentful-app-scripts upload --bundle-dir ./build",
-    "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id $CONTENTFUL_ORG_ID --definition-id Afd05hquon7qWMLn7VsCI --token $CONTENTFUL_ACCESS_TOKEN"
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 4c6SxDAXoHPLcFmoMLvGde --token ${CONTENTFUL_CMA_TOKEN}"
   },
   "eslintConfig": {
     "extends": "react-app"
