@@ -39,7 +39,13 @@ export function OpenDialogButton({ onAssetsChanged, isDisabled, maxFiles, upload
       title,
       shouldCloseOnOverlayClick: true,
       shouldCloseOnEscapePress: true,
-      width: 800,
+      width: 'fullWidth',
+      // there is no way for us to figure out the user's browser window height
+      // but Uploadcare File Uploader expects to know it
+      // so to make it work we're setting dialog's height to the max possible
+      // -200px is just an assumption that all the Contentful UI related to dialogs (e.g. headline, cross button, etc)
+      // will fit in 200px
+      minHeight: 'calc(100vh - 200px)',
       parameters: {
         maxFiles,
         uploadSourcesString,

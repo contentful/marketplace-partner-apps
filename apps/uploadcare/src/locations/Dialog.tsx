@@ -1,5 +1,5 @@
 import { DialogAppSDK } from '@contentful/app-sdk';
-import { useAutoResizer, useSDK } from '@contentful/react-apps-toolkit';
+import { useSDK } from '@contentful/react-apps-toolkit';
 import * as LR from '@uploadcare/blocks';
 import { css } from 'emotion';
 import { ReactElement, useEffect, useRef } from 'react';
@@ -9,7 +9,7 @@ LR.registerBlocks(LR);
 
 const styles = {
   container: css({
-    height: '100%',
+    height: '100vh',
   }),
 };
 
@@ -21,7 +21,6 @@ type InvocationParams = {
 
 export default function Dialog(): ReactElement {
   const sdk = useSDK<DialogAppSDK<InstallParams, InvocationParams>>();
-  useAutoResizer();
 
   const assetsRef = useRef<Asset[]>([]);
 
