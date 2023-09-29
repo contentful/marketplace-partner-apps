@@ -32,6 +32,7 @@ const Sidebar = () => {
     setHtml(contentHtml);
     configureView({
       configurationToggleOverride: true,
+      disableBatchContentEditorCreation: true,
     });
   };
 
