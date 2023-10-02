@@ -9,7 +9,7 @@
     "@contentful/f36-multiselect": "^4.20.12",
     "@contentful/f36-tokens": "4.0.1",
     "@contentful/f36-workbench": "^4.21.0",
-    "@contentful/react-apps-toolkit": "1.2.15",
+    "@contentful/react-apps-toolkit": "1.2.16",
     "contentful-management": "10.27.4",
     "emotion": "10.0.27",
     "react": "17.0.2",
