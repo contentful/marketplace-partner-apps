@@ -74,7 +74,7 @@ const validAssetTypes = ['image', 'audio', 'document', 'video'];
 function makeThumbnail(resource) {
   const thumbnail = (resource.thumbnails && resource.thumbnails.webimage) || resource.src;
   const url = typeof thumbnail === 'string' ? thumbnail : undefined;
-  const alt = [resource.id, ...(resource.tags || [])].join(', ');
+  const alt = [resource.name || resource.id, ...(resource.tags || [])].join(', ');
 
   return [url, alt];
 }
