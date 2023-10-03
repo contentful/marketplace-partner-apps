@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "4.22.1",
-    "@contentful/f36-components": "4.52.0",
+    "@contentful/f36-components": "4.52.1",
     "@contentful/f36-icons": "4.27.0",
     "@contentful/f36-tokens": "4.0.2",
     "@contentful/react-apps-toolkit": "1.2.16",
@@ -37,10 +37,10 @@
     "@tsconfig/vite-react": "2.0.1",
     "@types/file-size": "1.0.1",
     "@types/lodash": "4.14.199",
-    "@types/node": "16.18.54",
+    "@types/node": "16.18.57",
     "@types/react": "18.2.16",
     "@types/react-dom": "18.2.7",
-    "@typescript-eslint/eslint-plugin": "6.7.2",
+    "@typescript-eslint/eslint-plugin": "6.7.4",
     "@typescript-eslint/parser": "6.7.3",
     "@vitejs/plugin-react": "4.1.0",
     "eslint": "8.50.0",
@@ -52,6 +52,6 @@
     "prettier": "3.0.0",
     "typescript": "5.1.6",
     "vite": "4.4.9",
-    "vitest": "0.34.5"
+    "vitest": "0.34.6"
   }
 }
