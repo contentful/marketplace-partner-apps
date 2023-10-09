@@ -97,14 +97,22 @@ export function Thumbnail({ asset, isDisabled, onDelete }: Props) {
             <dl className={styles.fileInformation.dl}>
               <dt>Location:</dt>
               <dd>{asset.public_id.split('/').slice(0, -1).join('/') || 'Home'}</dd>
-              <dt>Format:</dt>
-              <dd>{asset.format}</dd>
+              {asset.format && (
+                <>
+                  <dt>Format:</dt>
+                  <dd>{asset.format}</dd>
+                </>
+              )}
               <dt>Size:</dt>
               <dd>{fileSize(asset.bytes).human('jedec')}</dd>
-              <dt>Dimensions:</dt>
-              <dd>
-                {asset.width} x {asset.height} px
-              </dd>
+              {asset.width && asset.height && (
+                <>
+                  <dt>Dimensions:</dt>
+                  <dd>
+                    {asset.width} x {asset.height} px
+                  </dd>
+                </>
+              )}
               <dt>Created on:</dt>
               <dd>
                 <DateTime date={asset.created_at} format="day" />
