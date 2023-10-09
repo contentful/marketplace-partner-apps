@@ -6,7 +6,12 @@ export interface SurferContext {
   setHtml: (html: string | null) => void;
   requestView: (requestedView: SurferView) => void;
   refreshDraft: () => void;
-  configureView: (config: { disableDraftConfiguration?: boolean; configurationOnCancelOverride?: boolean; configurationToggleOverride?: boolean }) => void;
+  configureView: (config: {
+    disableDraftConfiguration?: boolean;
+    configurationOnCancelOverride?: boolean;
+    configurationToggleOverride?: boolean;
+    disableBatchContentEditorCreation?: boolean;
+  }) => void;
 }
 
 export enum SurferRpcCommands {
