@@ -43,7 +43,7 @@
   "devDependencies": {
     "@contentful/app-scripts": "1.13.0",
     "@tsconfig/create-react-app": "1.0.3",
-    "@types/node": "16.18.58",
+    "@types/node": "16.18.59",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
     "cross-env": "7.0.3",
