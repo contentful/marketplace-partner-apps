@@ -1,0 +1,13 @@
+{
+	"packages": {
+		"apps/bynder": {},
+		"apps/ceros": {},
+		"apps/cloudinary": {},
+		"apps/cloudinary2": {},
+		"apps/flexfields": {},
+		"apps/shopify": {},
+		"apps/surfer": {},
+		"apps/uploadcare": {},
+		"apps/voucherify": {}
+	}
+}
