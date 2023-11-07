@@ -28,7 +28,7 @@ const SelectImage = ({
   const [uploadAsLink, setUploadAsLink] = useState("");
   const [uploadExisting, setUploadExisting] = useState("");
 
-  const [imageInExisting, setImageInExisting] = useState(null);
+  const [imageInExisting, setImageInExisting] = useState<any>(null);
 
   const [showUrlPreview, setShowUrlPreview] = useState(false);
   const [urlInput, setUrlInput] = useState("");
@@ -114,6 +114,7 @@ const SelectImage = ({
    * @param {Blob} file - The blob file of the Image
    */
   const uploadImage = async (bufferData: any, file: any) => {
+    console.log(showUrlPreview)
     const cma = createClient({ apiAdapter: sdk.cmaAdapter });
 
     const space = await cma.getSpace(sdk.ids.space);
@@ -152,7 +153,7 @@ const SelectImage = ({
   //   setSelectedOption(e.target.value);
   // };
 
-  const handleUrlInputChange = (e) => {
+  const handleUrlInputChange = (e:any) => {
     setUrlInput(e.target.value);
   };
 
@@ -314,7 +315,7 @@ const SelectImage = ({
                       : "No Existing Images"}
                   </div>
                   <div className="existingImageContainer">
-                    {(imageAssets || []).map((image, index) => (
+                    {(imageAssets || []).map((image:any, index:any) => (
                       <div key={index} className="radio-img">
                         <input
                           type="radio"
