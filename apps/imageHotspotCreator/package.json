@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@contentful/app-sdk": "^4.22.0",
     "@contentful/f36-components": "4.45.0",
     "@contentful/f36-tokens": "4.0.2",
