@@ -1,13 +1,13 @@
 {
 	"packages": {
-		"apps/bynder": "1.11.16",
-		"apps/ceros": "0.2.0",
-		"apps/cloudinary": "1.6.14",
-		"apps/cloudinary2": "2.0.0",
-		"apps/flexfields": "1.0.0",
-		"apps/shopify": "1.8.117",
-		"apps/surfer": "1.0.0",
-		"apps/uploadcare": "1.0.0",
-		"apps/voucherify": "0.1.0"
+		"apps/bynder": {},
+		"apps/ceros": {},
+		"apps/cloudinary": {},
+		"apps/cloudinary2": {},
+		"apps/flexfields": {},
+		"apps/shopify": {},
+		"apps/surfer": {},
+		"apps/uploadcare": {},
+		"apps/voucherify": {}
 	}
 }
