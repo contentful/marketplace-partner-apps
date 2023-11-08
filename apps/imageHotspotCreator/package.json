@@ -31,7 +31,7 @@
   "scripts": {
     "start": "cross-env BROWSER=none react-scripts start",
     "build": "CI=false react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
     "generate-docs": "jsdoc -c jsdoc.json",
     "create-app-definition": "contentful-app-scripts create-app-definition",
