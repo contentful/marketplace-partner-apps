@@ -1,0 +1,363 @@
+/* plug in css */
+
+body {
+  color: rgba(64, 64, 64, 0.65);
+  font: 500 1em Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizelegibility;
+  margin: 0;
+  padding: 0;
+}
+
+*:focus {
+  outline: none !important;
+}
+
+*,
+::after,
+::before {
+  box-sizing: border-box;
+}
+
+.Dropzone-input-wrapper {
+  width: 100%;
+  max-width: 800px;
+}
+
+.Dropzone-input {
+  background-color: white;
+  line-height: normal;
+  align-self: center;
+  border-radius: 2px;
+  margin: 40px 0;
+  border: none;
+  height: 52px;
+  width: 100%;
+  font-size: 1.1em;
+  font-family: normal 1em Helvetica, sans-serif;
+  padding: 0px 22px;
+  color: rgb(64, 64, 64);
+  box-shadow: rgba(0, 0, 0, 0.14902) 0px 2px 2px 0px,
+    rgba(0, 0, 0, 0.0784314) 0px 0px 0px 1px;
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.Dropzone-input:hover {
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 9px 0px,
+    rgba(0, 0, 0, 0.0784314) 0px 0px 0px 1px;
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.Dropzone-img {
+  margin: 5px;
+  width: 100px;
+  height: 100px;
+  border: thin solid rgba(64, 64, 64, 0.15);
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.Dropzone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: thin dashed #c2c2c2;
+  background: #fcfcfc;
+  width: 400px;
+  height: 250px;
+  padding: 16px 11px;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.Dropzone-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+   height: 100%;
+  /* width: 200px; */
+}
+
+.Dropzone-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+/* plug in css end here */
+
+.selectContainer{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.uploadSection{
+  min-height: 300px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  /* border-bottom: 1.5px dashed rgb(165, 164, 164); */
+}
+.arrowContainer{
+  position: absolute;
+  bottom: 43px;
+  right: 0.2px;
+  width: 40px;
+  display: flex;
+  background-color: white;
+  justify-content: center;
+  border: 1.5px solid #b8b6b6;
+  border-radius: 3px;
+}
+
+.selectSection{
+  margin-top: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.selectParentContainer{
+  display: flex;
+  align-items: flex-starts;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.linkInputSection {
+  /* border-bottom: 1.5px dashed rgb(165, 164, 164); */
+  padding: 20px;
+  width: 100%;
+  color: rgb(91, 90, 90);
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.linkInputSection > input {
+  color: rgb(91, 90, 90);
+  font-size: 0.875rem;
+}
+
+.linkInputSection > input::placeholder {
+  color: #414D63;
+  font-size: 0.875rem;
+}
+
+.radioButtonsSection {
+  display: flex;
+  /* background: lightseagreen; */
+  width: 100%;
+  height: 20%;
+  align-items: center;
+  justify-content: center;
+  padding: 0 100px 0 100px;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.radioSectionContainer {
+  width: 100%;
+  height: 100%;
+  justify-content: flex-start !important;
+  align-items: flex-start;
+  padding: 50px;
+}
+
+.radioButtonsSection > div > input[type=radio] {
+  border: 0px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.radioButtonsAlignContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.radioButtonsAlignContainer > div {
+  display: flex;
+  gap: 10px;
+}
+
+.radioButtonsAlignContainer > div > input {
+  width: 20px;
+  height: 20px;
+}
+
+.radioButtonsSection > div label {
+  margin-top: 4px;
+} 
+
+.radioSectionContainer > div:nth-child(1) {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 70%;
+  width: 100%;
+  padding: 0 100px 50px 100px;
+}
+
+.linkInputSection > input {
+  width: 500px;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  height: 40px;
+  justify-content: center;
+}
+
+.linkInputContainer > input {
+  width: 400px;
+}
+
+.cancelProceedButtons {
+  height: 40px;
+}
+
+.existingImageContainer {
+  display: flex;
+  gap: 10px;
+  overflow: auto;
+  width: 700px;
+  height: 367px;
+  flex-wrap: wrap;
+}
+
+.existingImageContainer > div > img {
+  cursor: pointer;
+}
+
+.existingImageContainer::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  color: black;
+}
+
+.existingImageContainer::-webkit-scrollbar-thumb {
+  background: rgb(217, 217, 217);
+  border-radius: 4px;
+}
+
+.image {
+  opacity: 0.8;
+  width: 200px;
+  height: 160px;
+  background-position: center center;
+  background-color: gray; 
+  display: inline-block;
+  margin: 10px;
+  cursor: pointer;
+  border: 2px solid transparent; 
+  transition: opacity 0.3s, border 0.3s; 
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.image:hover {
+  opacity: 4;
+}
+
+.radio-img input[type="radio"] {
+  display: none;
+}
+
+.radio-img .image {
+  background-position: center center;
+  background-color: gray; 
+  transition: border-color 0.3s ease; 
+  cursor: pointer;
+}
+
+.radio-img input[type="radio"]:checked + label .image {
+  border: 3px solid rgb(13, 157, 240);
+}
+
+.imagePreview {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.imagePreview > div:nth-child(2) {
+  display: flex;
+  gap: 10px;
+}
+
+.linkInputContainer {
+  display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.linkInputContainer > div > input {
+  width: 320px;
+  height: 30px;
+  border-radius: 5px;
+}
+
+.linkUploadSection {
+  min-height: 350px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  align-items: center;
+}
+
+.linkUploadSection > div {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: thin dashed #c2c2c2;
+  background: #fcfcfc;
+  width: 400px;
+  height: 250px;
+  padding: 16px 11px;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.linkUploadImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  height: 100%;
+}
+
+.linkUploadImage > img {
+  width: 100%;
+  display: block;
+  height: 100%;
+}
+
+.selectFromExistingContainer {
+  display: flex;
+  gap: 10px;
+}
+
+
+
