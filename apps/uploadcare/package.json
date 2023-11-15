@@ -41,7 +41,7 @@
     ]
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.13.0",
+    "@contentful/app-scripts": "1.13.1",
     "@tsconfig/create-react-app": "1.0.3",
     "@types/node": "16.18.58",
     "@types/react": "18.2.20",
