@@ -1,0 +1,27 @@
+{
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": ["jsdoc", "closure"]
+  },
+  "source": {
+    "include": ["src"],
+    "includePattern": "\\.(jsx|js|ts|tsx)$",
+    "excludePattern": "(^|\\/|\\\\)_"
+  },
+  "plugins": ["plugins/markdown", "better-docs/component", "better-docs/typescript"],
+  "templates": {
+    "better-docs": {
+      "name": "Image Hotspot Creator"
+    }
+  },
+  "linterOptions": {
+    "exclude": [
+      "docs"
+    ]
+  },
+  "opts": {
+    "destination": "docs",
+    "recurse": true,
+    "readme": "README.md"
+  }
+}

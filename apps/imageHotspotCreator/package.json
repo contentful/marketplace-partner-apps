@@ -1,0 +1,76 @@
+{
+  "name": "image-hotspot-creator",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@contentful/app-sdk": "^4.22.0",
+    "@contentful/f36-components": "4.45.0",
+    "@contentful/f36-tokens": "4.0.2",
+    "@contentful/forma-36-react-components": "^3.100.7",
+    "@contentful/react-apps-toolkit": "1.2.16",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.13.7",
+    "@mui/material": "^5.13.7",
+    "@mui/styled-engine-sc": "^5.12.0",
+    "axios": "^1.4.0",
+    "clone-deep": "^4.0.1",
+    "contentful": "^10.3.3",
+    "contentful-management": "10.38.4",
+    "emotion": "10.0.27",
+    "path-browserify": "^1.0.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-image-crop": "^10.1.5",
+    "react-magic-dropzone": "^1.0.1",
+    "react-scripts": "5.0.1",
+
+    "styled-components": "^6.0.3"
+  },
+  "scripts": {
+    "start": "cross-env BROWSER=none react-scripts start",
+    "build": "CI=false react-scripts build",
+    "test": "react-scripts test --passWithNoTests",
+    "eject": "react-scripts eject",
+    "generate-docs": "jsdoc -c jsdoc.json",
+    "create-app-definition": "contentful-app-scripts create-app-definition",
+    "upload": "contentful-app-scripts upload --bundle-dir ./build",
+    "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN",
+    "install-ci": "npm ci",
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 5KySdUzG7OWuCE2V3fgtIa --token ${CONTENTFUL_CMA_TOKEN}",
+    "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id 6weJYfzgz370YDmFVi4B6w --token ${TEST_CMA_TOKEN}"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@contentful/app-scripts": "1.10.2",
+    "@testing-library/jest-dom": "5.16.5",
+    "@testing-library/react": "14.0.0",
+    "@tsconfig/create-react-app": "2.0.0",
+    "@types/jest": "29.5.2",
+    "@types/node": "18.16.19",
+    "@types/react": "18.2.14",
+    "@types/react-dom": "18.2.6",
+    "better-docs": "^2.7.2",
+    "cross-env": "7.0.3",
+    "dotenv": "^16.3.1",
+    "esbuild": "^0.18.11",
+    "jsdoc": "^4.0.2",
+    "typescript": "4.9.5"
+  },
+  "homepage": "."
+}
