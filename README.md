@@ -38,6 +38,7 @@ In order for your app to be deployed successfully (with the exception of the tes
 When you are ready to submit your app to the [marketplace apps repo](https://github.com/contentful/marketplace-partner-apps), clone the repo locally, create a new branch with a descriptive name for the app/changes you are introducing, and create a pull-request against the `main` branch. An ecosystems integrations will review your PR soon and let you know if any changes or clarifications are needed. To ensure the fastest approval time on your PR, make sure you:
 
 - PR titles must confirm to the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) standard. (A Github Action will emit a failing status check if your PR title does not match)
+- Add the new app to the release-please-config.json file so that the release workflow will include the new app. The release workflow encapsulates versioning as well as the creation and maintenance of a changelog,
 - Fill out the pull-request template as much as possible. Screenshots, images, and videos are often helpful for providing context and are encouraged.
 - Comment your changes, either in GitHub or the code itself to provide reviewers more context than they might get otherwise.
 - Ensure your changes are wholly contained within your app's folder, and do not make alterations to other folders or the root level. If you have need for root-level changes, please create an issue instead.
