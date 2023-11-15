@@ -1,6 +1,6 @@
 {
   "name": "image-hotspot-creator",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
@@ -25,7 +25,6 @@
     "react-image-crop": "^10.1.5",
     "react-magic-dropzone": "^1.0.1",
     "react-scripts": "5.0.1",
-
     "styled-components": "^6.0.3"
   },
   "scripts": {
