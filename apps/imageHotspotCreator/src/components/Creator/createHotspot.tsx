@@ -85,11 +85,11 @@ const CreateHotspot = ({
     hotspotX: 0,
     hotspotY: 0,
   })
-  const [canvasInfo, setCanvas] = useState<HTMLCanvasElement|undefined>()
+  const [canvasInfo, setCanvas] = useState<HTMLCanvasElement|any|undefined>()
 
   //Initial use effect for drawing the canvas and image in the image container
   useEffect(() => {
-    sdk.entry.fields.imageUrl.setValue(imageUrl)
+    sdk?.entry?.fields?.imageUrl?.setValue(imageUrl)
     const container:HTMLDivElement|any = containerRef.current
     const canvas:HTMLCanvasElement | any = canvasRef.current
     const context = canvas?.getContext('2d')
@@ -121,8 +121,8 @@ const CreateHotspot = ({
         sdk.entry.fields.hotspots.setValue({
           hotspots: [],
         })
-        setRectArray(sdk.entry.fields.hotspots.getValue().hotspots)
-        setListArray(sdk.entry.fields.hotspots.getValue().hotspots)
+        setRectArray(sdk?.entry?.fields?.hotspots?.getValue().hotspots)
+        setListArray(sdk?.entry?.fields?.hotspots?.getValue().hotspots)
       }
     }
   }, [])
@@ -280,8 +280,8 @@ const CreateHotspot = ({
       hotspotX:0,
       hotspotY:0,
     })
-    sdk.entry.fields.imageUrl.setValue(imageUrl)
-    sdk.entry.fields.hotspots.setValue({ hotspots: rectArray })
+    sdk?.entry?.fields?.imageUrl?.setValue(imageUrl)
+    sdk?.entry?.fields?.hotspots?.setValue({ hotspots: rectArray })
     setEditing(false)
   }
 
@@ -330,8 +330,8 @@ const CreateHotspot = ({
         tempList.splice(index,1)
         setRectArray(tempArr)
         setListArray(tempList)
-        sdk.entry.fields.imageUrl.setValue(imageUrl)
-        sdk.entry.fields.hotspots.setValue({ hotspots: tempArr })
+        sdk?.entry?.fields?.imageUrl?.setValue(imageUrl)
+        sdk?.entry?.fields?.hotspots?.setValue({ hotspots: tempArr })
       }
       else{
         setRect({
@@ -351,8 +351,8 @@ const CreateHotspot = ({
         setEditing(false)
         setRectArray(tempArr)
         setListArray(tempArr)
-        sdk.entry.fields.imageUrl.setValue(imageUrl)
-        sdk.entry.fields.hotspots.setValue({ hotspots: tempArr })
+        sdk?.entry?.fields?.imageUrl?.setValue(imageUrl)
+        sdk?.entry?.fields?.hotspots?.setValue({ hotspots: tempArr })
       }
     }
 
