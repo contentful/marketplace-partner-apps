@@ -5,7 +5,7 @@
   "dependencies": {
     "@contentful/app-sdk": "4.14.1",
     "@contentful/default-field-editors": "^1.5.8",
-    "@contentful/f36-components": "4.52.1",
+    "@contentful/f36-components": "4.52.3",
     "@contentful/f36-multiselect": "^4.20.12",
     "@contentful/f36-tokens": "4.0.2",
     "@contentful/f36-workbench": "^4.21.0",
