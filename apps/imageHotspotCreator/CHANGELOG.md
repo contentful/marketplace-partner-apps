@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.0...image-hotspot-creator-v1.0.1) (2023-11-27)
+
+
+### Bug Fixes
+
+* Update createHotspot.css ([#488](https://github.com/contentful/marketplace-partner-apps/issues/488)) ([432cad0](https://github.com/contentful/marketplace-partner-apps/commit/432cad03993883a683264052af2422071e9fe60d))
+* Update createHotspot.tsx ([#484](https://github.com/contentful/marketplace-partner-apps/issues/484)) ([4ae40f4](https://github.com/contentful/marketplace-partner-apps/commit/4ae40f4365b6f5616160c862a2161425f805ccdf))
+
 ## 1.0.0 (2023-11-15)
 
 
