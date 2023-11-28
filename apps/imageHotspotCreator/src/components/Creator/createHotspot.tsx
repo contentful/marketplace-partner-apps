@@ -86,6 +86,61 @@ const CreateHotspot = ({
     hotspotY: 0,
   })
   const [canvasInfo, setCanvas] = useState<HTMLCanvasElement|any|undefined>()
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [cursorStyle,setCursorStyle] = useState<string>("auto")
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    // Attach event listener for window resize
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []); 
+
+  const handleResize = () => {
+    const container:any = containerRef.current;
+    const canvas:any = canvasRef.current;
+    const context:any = canvas?.getContext('2d');
+    const image:any = imageRef.current;
+
+    const containerWidth = container?.offsetWidth;
+    const containerHeight = container?.offsetHeight;
+
+    const imageWidth = image?.width;
+    const imageHeight = image?.height;
+
+    const widthRatio = containerWidth / imageWidth;
+    const heightRatio = containerHeight / imageHeight;
+
+    const scale = Math.min(widthRatio, heightRatio);
+
+    const scaledWidth = imageWidth * scale;
+    const scaledHeight = imageHeight * scale;
+
+    canvas.width = scaledWidth;
+    canvas.height = scaledHeight;
+    canvas.style.cursor = cursorStyle;
+    context.drawImage(image, 0, 0, scaledWidth, scaledHeight);
+    setCanvas(canvas);
+
+    // Update hotspot arrays based on the new canvas size
+    if (sdk.entry.fields.hotspots.getValue()?.hotspots) {
+      setRectArray(sdk.entry.fields.hotspots.getValue().hotspots)
+      setListArray(sdk.entry.fields.hotspots.getValue().hotspots)
+    } else {
+      sdk.entry.fields.hotspots.setValue({
+        hotspots: [],
+      })
+      setRectArray(sdk?.entry?.fields?.hotspots?.getValue().hotspots)
+      setListArray(sdk?.entry?.fields?.hotspots?.getValue().hotspots)
+    }
+  };
 
   //Initial use effect for drawing the canvas and image in the image container
   useEffect(() => {
@@ -95,37 +150,56 @@ const CreateHotspot = ({
     const context = canvas?.getContext('2d')
     const image:HTMLImageElement|any = imageRef.current
     image.onload = () => {
-      const containerWidth = container?.offsetWidth
-      const containerHeight = container?.offsetHeight
+      // const containerWidth = container?.offsetWidth
+      // const containerHeight = container?.offsetHeight
 
-      const imageWidth = image?.width
-      const imageHeight = image?.height
+      // const imageWidth = image?.width
+      // const imageHeight = image?.height
 
-      const widthRatio = containerWidth / imageWidth
-      const heightRatio = containerHeight / imageHeight
+      // const widthRatio = containerWidth / imageWidth
+      // const heightRatio = containerHeight / imageHeight
 
-      const scale = Math.min(widthRatio, heightRatio)
+      // const scale = Math.min(widthRatio, heightRatio)
 
-      const scaledWidth = imageWidth * scale
-      const scaledHeight = imageHeight * scale
+      // const scaledWidth = imageWidth * scale
+      // const scaledHeight = imageHeight * scale
 
-      canvas.width = scaledWidth
-      canvas.height = scaledHeight
-      context.drawImage(image, 0, 0, scaledWidth, scaledHeight)
-      setCanvas(canvas)
+      // canvas.width = scaledWidth
+      // canvas.height = scaledHeight
+      // canvas.style.cursor = cursorStyle;
+      // context.drawImage(image, 0, 0, scaledWidth, scaledHeight)
+      // setCanvas(canvas)
 
-      if (sdk.entry.fields.hotspots.getValue()?.hotspots) {
-        setRectArray(sdk.entry.fields.hotspots.getValue().hotspots)
-        setListArray(sdk.entry.fields.hotspots.getValue().hotspots)
-      } else {
-        sdk.entry.fields.hotspots.setValue({
-          hotspots: [],
-        })
-        setRectArray(sdk?.entry?.fields?.hotspots?.getValue().hotspots)
-        setListArray(sdk?.entry?.fields?.hotspots?.getValue().hotspots)
-      }
+      // if (sdk.entry.fields.hotspots.getValue()?.hotspots) {
+      //   setRectArray(sdk.entry.fields.hotspots.getValue().hotspots)
+      //   setListArray(sdk.entry.fields.hotspots.getValue().hotspots)
+      // } else {
+      //   sdk.entry.fields.hotspots.setValue({
+      //     hotspots: [],
+      //   })
+      //   setRectArray(sdk?.entry?.fields?.hotspots?.getValue().hotspots)
+      //   setListArray(sdk?.entry?.fields?.hotspots?.getValue().hotspots)
+      // }
+      handleResize();
     }
   }, [])
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(()=>{
+    const canvas:HTMLCanvasElement | any = canvasRef.current
+    canvas.style.cursor = cursorStyle;
+    canvas.style.border = '0px';
+    if(cursorStyle==="crosshair"){
+      canvas.style.border = '3px dotted red';
+    }
+  },[cursorStyle])
 
   /**
    * Handle Mouse Down Function happens when the mouse is down on the image and initiates the creation of hotspots.
@@ -265,6 +339,7 @@ const CreateHotspot = ({
    * @function saveBoundingBox
    */
   const saveBoundingBox = () => {
+    setCursorStyle('auto')
     setListArray(rectArray)
     setCanDraw(false)
     setShowDetail(false)
@@ -363,7 +438,7 @@ const CreateHotspot = ({
    * @function cancelBoundingBox
    */
   const cancelBoundingBox = () => {
-
+    setCursorStyle('auto')
     setRectArray(listArray)
     setRect({
     x: 0,
@@ -504,7 +579,7 @@ const CreateHotspot = ({
       context.clearRect(0, 0, canvas.width, canvas.height)
       context.drawImage(imageRef.current, 0, 0, canvas.width, canvas.height)
       if (rectArray.length > 0) {
-        rectArray.forEach((element: any) => {
+                rectArray.forEach((element: any) => {
           context.strokeStyle = element.borderColor
           context.lineWidth = 1.5
           context.strokeRect(
@@ -578,9 +653,17 @@ const CreateHotspot = ({
                   <div
                     className="hotspot_title_container"
                     onClick={() => {
-                      setSelectedBoundingBoxIndex(index)
-                      setEditing(true)
-                    }}
+                        if(!canDraw){
+                          setSelectedBoundingBoxIndex(index)
+                          setEditing(true)
+                        }
+                        else{
+                         setCanDraw(!canDraw)
+                         setCursorStyle("auto")
+                         setSelectedBoundingBoxIndex(index)
+                         setEditing(true)
+                        }
+                      }}
                     role="none"
                     style={
                       selectedBoundingBoxIndex === index
@@ -634,6 +717,7 @@ const CreateHotspot = ({
               >
                 <CropIcon color="primary" />
               </div>
+
             ) : (
               <div
                 className="add_icon"
@@ -641,6 +725,7 @@ const CreateHotspot = ({
                   !canDraw ? { opacity: 1 } : { opacity: 0.5, cursor: 'auto' }
                 }
                 onClick={() => {
+                  setCursorStyle('crosshair')
                   setCanDraw(!canDraw)
                 }}
                 role="none"
@@ -829,3 +914,4 @@ const CreateHotspot = ({
   )
 }
 export default CreateHotspot
+
