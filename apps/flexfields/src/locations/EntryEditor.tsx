@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { EditorExtensionSDK } from "@contentful/app-sdk";
+import { EditorAppSDK } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
 import { Field, FieldWrapper } from "@contentful/default-field-editors";
 import { Workbench } from "@contentful/f36-workbench";
@@ -25,7 +25,7 @@ const DefaultField = (props: DefaultFieldProps) => {
 };
 
 const EntryEditor = () => {
-  const sdk = useSDK<EditorExtensionSDK>();
+  const sdk = useSDK<EditorAppSDK>();
   const entryId = sdk.entry.getSys().id;
   const isFirstLoad = useRef(true);
   const [editorFields, setEditorFields] = useState(
@@ -62,7 +62,7 @@ const EntryEditor = () => {
             // ev.target.id looks like fieldId-locale-contentTypeId
             const fieldId = id.split("-")[0];
             const entryFieldsCopy: any = { ...sdk.entry.fields };
-            entryFieldsCopy[fieldId] = { ...entryFieldsCopy[fieldId], value };
+              entryFieldsCopy[fieldId] = { ...entryFieldsCopy[fieldId], value };
 
             setEditorFields(
               calculateEditorFields(
@@ -79,7 +79,6 @@ const EntryEditor = () => {
               (control) => control.fieldId === field.id
             );
             const widgetId = control?.widgetId || null;
-
             return (
               <DefaultField
                 key={field.id}
