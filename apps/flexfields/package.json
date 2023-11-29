@@ -18,8 +18,7 @@
     "react-scripts": "5.0.1"
   },
   "peerDependencies": {
-    "@udecode/plate-common": "23.6.0",
-    "slate-react": "0.95.0"
+    "@udecode/plate-common": "23.6.0"
   },
   "scripts": {
     "install-ci": "npm ci",
