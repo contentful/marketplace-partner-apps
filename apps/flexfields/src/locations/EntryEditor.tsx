@@ -17,7 +17,6 @@ interface DefaultFieldProps {
 // Render default contentful fields using Forma 36 Component
 const DefaultField = (props: DefaultFieldProps) => {
   const { name, sdk, widgetId } = props;
-  console.log("widgetId",widgetId)
   return (
     <FieldWrapper sdk={sdk} name={name} showFocusBar={true}>
       <Field sdk={sdk} widgetId={widgetId!} />
