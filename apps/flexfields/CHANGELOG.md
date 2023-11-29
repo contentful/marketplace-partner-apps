@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.0.0...thrillworks-flex-fields-app-v1.0.1) (2023-11-29)
+
+
+### Bug Fixes
+
+* flexfields to render rich text fields ([#496](https://github.com/contentful/marketplace-partner-apps/issues/496)) ([ff9025d](https://github.com/contentful/marketplace-partner-apps/commit/ff9025dc9f26e26706d90f74c6bbdb07f890bf65))
+
 ## 1.0.0 (2023-11-07)
 
 
