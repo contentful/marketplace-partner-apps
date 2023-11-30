@@ -46,8 +46,7 @@ export const isRuleValid = (
 
   //get content type field value
   const contentTypeFieldValue =
-    entryFields[contentTypeField].value ||
-    entryFields[contentTypeField].getValue();
+  entryFields[contentTypeField].value || entryFields[contentTypeField].getValue?.();
 
   switch (condition) {
     case "is equal":
