@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.0.1...thrillworks-flex-fields-app-v1.0.2) (2023-11-30)
+
+
+### Bug Fixes
+
+* update isRuleValid to run getValue if it exists on the field ([#504](https://github.com/contentful/marketplace-partner-apps/issues/504)) ([30a5b26](https://github.com/contentful/marketplace-partner-apps/commit/30a5b26518104aad205e8c99e052c6ec0f43ce7b))
+
 ## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.0.0...thrillworks-flex-fields-app-v1.0.1) (2023-11-29)
 
 
