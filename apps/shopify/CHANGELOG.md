@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v1.0.0...shopify-sku-v1.0.1) (2023-12-04)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/ecommerce-app-base from 3.3.22 to 3.4.5 ([#514](https://github.com/contentful/marketplace-partner-apps/issues/514)) ([c535827](https://github.com/contentful/marketplace-partner-apps/commit/c5358279db4295a1cb4e308bc276182b10beaea5))
+* **deps:** bump @contentful/ecommerce-app-base from 3.4.5 to 3.4.6 ([#528](https://github.com/contentful/marketplace-partner-apps/issues/528)) ([8fe8b43](https://github.com/contentful/marketplace-partner-apps/commit/8fe8b43d7bcdc124105f591ee943d0e4bb2294d5))
+* **deps:** bump @contentful/f36-components from 4.45.0 to 4.54.5 ([#527](https://github.com/contentful/marketplace-partner-apps/issues/527)) ([9c4f2ba](https://github.com/contentful/marketplace-partner-apps/commit/9c4f2ba7ab429da82638416a34eee6cb881421f6))
+
 ## 1.0.0 (2023-11-07)
 
 

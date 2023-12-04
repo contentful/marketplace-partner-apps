@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.2...image-hotspot-creator-v1.0.3) (2023-12-04)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.45.0 to 4.54.5 ([#527](https://github.com/contentful/marketplace-partner-apps/issues/527)) ([9c4f2ba](https://github.com/contentful/marketplace-partner-apps/commit/9c4f2ba7ab429da82638416a34eee6cb881421f6))
+* **deps:** bump axios from 1.5.1 to 1.6.2 ([#459](https://github.com/contentful/marketplace-partner-apps/issues/459)) ([1b4c36a](https://github.com/contentful/marketplace-partner-apps/commit/1b4c36a20c1f634894da2e7572620d4e4750190d))
+* **deps:** bump contentful-management from 10.38.4 to 10.46.4 ([#524](https://github.com/contentful/marketplace-partner-apps/issues/524)) ([dbe9418](https://github.com/contentful/marketplace-partner-apps/commit/dbe9418e478c196431e5a79f53e929c4e4196cd5))
+
 ## [1.0.2](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.1...image-hotspot-creator-v1.0.2) (2023-11-29)
 
 

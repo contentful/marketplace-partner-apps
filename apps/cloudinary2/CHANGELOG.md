@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.0.0...cloudinary-assets-v1.0.1) (2023-12-04)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.45.0 to 4.54.5 ([#527](https://github.com/contentful/marketplace-partner-apps/issues/527)) ([9c4f2ba](https://github.com/contentful/marketplace-partner-apps/commit/9c4f2ba7ab429da82638416a34eee6cb881421f6))
+* **deps:** bump @dnd-kit/utilities from 3.2.1 to 3.2.2 ([#526](https://github.com/contentful/marketplace-partner-apps/issues/526)) ([1f29887](https://github.com/contentful/marketplace-partner-apps/commit/1f29887d22d06975e724135ba1feb0ea7857245a))
+
 ## 1.0.0 (2023-11-07)
 
 
