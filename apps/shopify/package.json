@@ -1,6 +1,6 @@
 {
   "name": "@contentful/shopify-sku",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "devDependencies": {
     "@contentful/app-scripts": "1.13.1",
