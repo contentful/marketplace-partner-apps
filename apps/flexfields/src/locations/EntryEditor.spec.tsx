@@ -8,13 +8,10 @@ jest.mock("@contentful/react-apps-toolkit", () => ({
   useCMA: () => mockCma,
 }));
 
-// TODO: enable and fix tests
-xdescribe("Entry component", () => {
-  it("Component text exists", () => {
-    const { getByText } = render(<EntryEditor />);
+describe("Entry Editor component", () => {
+  it("EntryEditor form exists", () => {
+    const { container } = render(<EntryEditor />);
 
-    expect(
-      getByText("Hello Entry Editor Component (AppId: test-app)")
-    ).toBeInTheDocument();
+    expect(container.querySelector("form")).toBeInTheDocument();
   });
 });

@@ -56,6 +56,7 @@ const ConfigScreen = () => {
     rules: [],
   });
   const [isRuleDeleted, setIsRuleDeleted] = useState(false);
+  const [ruleToEditIndex, setRuleToEditIndex] = useState<number>();
   const sdk = useSDK<AppExtensionSDK>();
 
   const [contentTypes, setContentTypes] = useState<any>([]);
@@ -134,6 +135,11 @@ const ConfigScreen = () => {
     let newRules = [];
     if (!parameters.rules) {
       newRules.push(newRule);
+    } else if (ruleToEditIndex !== undefined) {
+      const rulesCopy = [...parameters.rules];
+      rulesCopy.splice(ruleToEditIndex, 1, newRule);
+
+      newRules = rulesCopy;
     } else {
       newRules = [...parameters.rules, newRule];
     }
@@ -167,6 +173,7 @@ const ConfigScreen = () => {
     setConditionValue("");
     setTargetEntity("");
     setTargetEntityField([]);
+    setRuleToEditIndex(undefined);
 
     //uncomments and save config screent to reset rules
     //return {};
@@ -192,6 +199,7 @@ const ConfigScreen = () => {
     targetEntityField,
     conditionValue,
     parameters,
+    ruleToEditIndex
   ]);
 
   useEffect(() => {
@@ -200,6 +208,23 @@ const ConfigScreen = () => {
     // its configuration.
     sdk.app.onConfigure(() => onConfigure());
   }, [sdk, onConfigure]);
+
+  useEffect(() => {
+    if (ruleToEditIndex !== undefined) {
+      const ruleToEdit = parameters.rules[ruleToEditIndex];
+
+      setContentType(ruleToEdit.contentType);
+      // The fields are fetched dynamically based on content type
+      setTimeout(() => {
+        setContentTypeField(ruleToEdit.contentTypeField);
+        setCondition(ruleToEdit.condition);
+        setConditionValue(ruleToEdit.conditionValue);
+        setTargetEntity(ruleToEdit.targetEntity);
+        setTargetEntityField(ruleToEdit.targetEntityField);
+      }, 100);
+    }    
+    
+  }, [ruleToEditIndex, parameters.rules]);
 
   useEffect(() => {
     (async () => {
@@ -291,13 +316,13 @@ const ConfigScreen = () => {
           {
             id: contentType,
             name: `${
-              contentTypes.find((c: Entry) => c.sys.id === contentType).name
+              contentTypes.find((c: Entry) => c.sys.id === contentType)?.name
             } (Same content type)`,
           },
           ...childrenEntities.map((contentType) => ({
             id: contentType,
             name: contentTypes.find((c: Entry) => c.sys.id === contentType)
-              .name,
+              ?.name,
           })),
         ];
 
@@ -663,7 +688,7 @@ const ConfigScreen = () => {
       </Form>
 
       {!!parameters.rules && (
-        <RulesList deleteRule={deleteRule} rules={parameters.rules} />
+        <RulesList deleteRule={deleteRule} rules={parameters.rules} setRuleToEditIndex={setRuleToEditIndex} ruleToEditIndex={ruleToEditIndex} />
       )}
 
       <Text
