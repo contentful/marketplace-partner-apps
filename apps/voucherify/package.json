@@ -32,7 +32,7 @@
     "eslint": "^8.14.0",
     "eslint-plugin-react": "~7.33.2",
     "react-scripts": "5.0.1",
-    "@contentful/app-scripts": "1.13.0"
+    "@contentful/app-scripts": "1.13.1"
   },
   "browserslist": {
     "production": [
