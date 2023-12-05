@@ -11,7 +11,7 @@
     "@contentful/app-sdk": "4.10.0",
     "@contentful/dam-app-base": "^2.0.35",
     "cloudinary-core": "2.13.0",
-    "core-js": "3.33.0",
+    "core-js": "3.33.3",
     "react": "16.14.0",
     "react-dom": "16.14.0"
   },
