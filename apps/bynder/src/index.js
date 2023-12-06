@@ -174,22 +174,36 @@ function renderDialog(sdk) {
       assetFieldSelection: FIELD_SELECTION,
       container: document.getElementById('bynder-compactview'),
       onSuccess,
+      selectedAssets: config.selectedAssets,
     });
   });
 }
 
 async function openDialog(sdk, _currentValue, config) {
+  const parameters = { ...config };
+
+  if (config.prefillSelectedAssets === 'Yes') {
+    const assetIds = _currentValue.map((asset) => asset.id);
+    parameters.selectedAssets = assetIds;
+  } else {
+    parameters.selectedAssets = [];
+  }
+
   const result = await sdk.dialogs.openCurrentApp({
     position: 'center',
     title: CTA,
     shouldCloseOnOverlayClick: true,
     shouldCloseOnEscapePress: true,
-    parameters: { ...config },
+    parameters,
     width: 1400,
   });
 
   if (!Array.isArray(result)) {
-    return [];
+    if (config.prefillSelectedAssets === 'Yes') {
+      return null;
+    } else {
+      return [];
+    }
   }
 
   return result.map((item) => ({
@@ -221,6 +235,18 @@ function validateParameters({ bynderURL, assetTypes }) {
   }
 
   return null;
+}
+
+async function customUpdateStateValue({ currentValue, result, config }, updateStateValue) {
+  if (config.prefillSelectedAssets === 'Yes') {
+    if (result) await updateStateValue(result);
+  } else {
+    if (Array.isArray(result) && result.length > 0) {
+      const newValue = [...(currentValue || []), ...result];
+
+      await updateStateValue(newValue);
+    }
+  }
 }
 
 setup({
@@ -256,10 +282,19 @@ setup({
         'MultiSelect is the best choice for most customers. If you specifically need access to dynamic transformations, use SingleSelectFile mode. (Note that with SingleSelectFile mode, you will likely need to change your frontend to reference the specific transformations chosen by your content editors.)',
       required: true,
     },
+    {
+      id: 'prefillSelectedAssets',
+      name: 'Prefill Selected Assets',
+      type: 'List',
+      value: 'No,Yes',
+      default: 'No',
+      description: 'Determines whether the selected assets will be prefilled when opening the asset picker.',
+    },
   ],
   makeThumbnail,
   renderDialog,
   openDialog,
   isDisabled,
   validateParameters,
+  customUpdateStateValue,
 });
