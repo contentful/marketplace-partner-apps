@@ -6,11 +6,11 @@ on:
       - opened
       - edited
       - synchronize
+    branches:
+      - 'main'
 
 permissions:
   pull-requests: read
-  branches:
-  - 'main'
 
 jobs:
   main:
