@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.0.1...bynder-assets-v1.1.0) (2023-12-06)
+
+
+### Features
+
+* display additional asset info and preselect assets in modal [INTEG-1611] ([#557](https://github.com/contentful/marketplace-partner-apps/issues/557)) ([07b7811](https://github.com/contentful/marketplace-partner-apps/commit/07b7811138fa374c294bced846fca14c3ce3e246))
+
 ## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.0.0...bynder-assets-v1.0.1) (2023-12-04)
 
 
