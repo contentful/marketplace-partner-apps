@@ -249,6 +249,13 @@ async function customUpdateStateValue({ currentValue, result, config }, updateSt
   }
 }
 
+function getAdditionalData(resource) {
+  return {
+    primary: resource.name,
+    secondary: resource.id,
+  };
+}
+
 setup({
   cta: CTA,
   name: 'Bynder',
@@ -297,4 +304,5 @@ setup({
   isDisabled,
   validateParameters,
   customUpdateStateValue,
+  getAdditionalData,
 });
