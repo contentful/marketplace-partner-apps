@@ -9,6 +9,8 @@ on:
 
 permissions:
   pull-requests: read
+  branches:
+  - 'main'
 
 jobs:
   main:
