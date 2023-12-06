@@ -74,7 +74,7 @@ const validAssetTypes = ['image', 'audio', 'document', 'video'];
 function makeThumbnail(resource) {
   const thumbnail = (resource.thumbnails && resource.thumbnails.webimage) || resource.src;
   const url = typeof thumbnail === 'string' ? thumbnail : undefined;
-  const alt = [resource.name || resource.id, ...(resource.tags || [])].join(', ');
+  const alt = `${resource.name} - ${resource.id}`;
 
   return [url, alt];
 }
@@ -253,7 +253,7 @@ setup({
       value: 'MultiSelect,SingleSelectFile',
       default: 'MultiSelect',
       description:
-        '"MultiSelect is the best choice for most customers. If you specifically need access to dynamic transformations, use SingleSelectFile mode. (Note that with SingleSelectFile mode, you will likely need to change your frontend to reference the specific transformations chosen by your content editors.)',
+        'MultiSelect is the best choice for most customers. If you specifically need access to dynamic transformations, use SingleSelectFile mode. (Note that with SingleSelectFile mode, you will likely need to change your frontend to reference the specific transformations chosen by your content editors.)',
       required: true,
     },
   ],
