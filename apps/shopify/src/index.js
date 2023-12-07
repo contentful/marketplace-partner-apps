@@ -64,7 +64,7 @@ export function validateParameters(parameters) {
   }
 
   if (parameters.apiEndpoint.length < 1) {
-    return 'Provide the Shopify API endpoint.';
+    return 'Provide the Shopify store URL.';
   }
 
   return null;
@@ -138,8 +138,8 @@ setup({
     },
     {
       id: 'apiEndpoint',
-      name: 'API Endpoint',
-      description: 'The Shopify API endpoint',
+      name: 'Store URL',
+      description: 'The Shopify store URL (e.g. [your-shop-name].myshopify.com)',
       type: 'Symbol',
       required: true,
     },
