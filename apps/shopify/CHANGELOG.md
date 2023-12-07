@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v1.0.1...shopify-sku-v1.0.2) (2023-12-07)
+
+
+### Bug Fixes
+
+* update copy for store url [INTEG-1440] ([#563](https://github.com/contentful/marketplace-partner-apps/issues/563)) ([79e0d7a](https://github.com/contentful/marketplace-partner-apps/commit/79e0d7a5e2dad55531ff33ec9dfd60b28009aeea))
+
 ## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v1.0.0...shopify-sku-v1.0.1) (2023-12-04)
 
 
