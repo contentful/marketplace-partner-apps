@@ -1,0 +1,12 @@
+logs
+node_modules
+coverage
+.DS_store
+.nyc_output
+.idea
+.python-version
+
+*/config/local.yml
+/**/*.tgz
+*/tests/**/__snapshots__
+tags

@@ -1,0 +1,53 @@
+{
+  "name": "contentful-native-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@contentful/app-sdk": "4.22.0",
+    "@contentful/f36-components": "4.45.0",
+    "@contentful/f36-icons": "^4.27.0",
+    "@contentful/f36-tokens": "4.0.2",
+    "@contentful/react-apps-toolkit": "1.2.16",
+    "contentful-management": "^10.46.4",
+    "emotion": "10.0.27",
+    "eslint": "^8.53.0",
+    "prop-type": "^0.0.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-query": "^3.39.3",
+    "nconf": "^0.12.0"
+  },
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "build:staging": "vite build --mode=staging",
+    "build:production": "vite build --mode=production",
+    "lint": "prettier --write ./src && eslint --fix --ext js,jsx ./src",
+    "preview": "vite preview",
+    "test": "vitest run --coverage",
+    "testwatch": "vitest watch --coverage",
+    "create-app-definition": "contentful-app-scripts create-app-definition",
+    "upload": "contentful-app-scripts upload --bundle-dir ./dist",
+    "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./dist  --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN",
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 6C1iuvnKYPEDjbMsoBFdFb --token ${CONTENTFUL_CMA_TOKEN}",
+    "deploy:staging" : "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 6C1iuvnKYPEDjbMsoBFdFb --token ${CONTENTFUL_CMA_TOKEN}"
+  },
+  "devDependencies": {
+    "@contentful/app-scripts": "^1.13.1",
+    "@testing-library/react": "14.0.0",
+    "@types/node": "16.18.38",
+    "@types/react": "18.2.14",
+    "@types/react-dom": "18.2.6",
+    "@vitejs/plugin-react": "4.0.1",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "happy-dom": "9.20.3",
+    "prettier": "^3.1.0",
+    "typescript": "5.1.6",
+    "vite": "4.3.9",
+    "vitest": "0.32.4"
+  }
+}

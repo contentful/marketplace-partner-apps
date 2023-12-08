@@ -1,0 +1,49 @@
+/* Define CSS variables */
+:root {
+  --CORE-untranslated-color: #e9ebef;
+  --CORE-translated-color: #26d9ce;
+  --CORE-reviewed-color: #359bfa;
+  --CORE-finalized-color: #dd80fe;
+}
+
+.progress-container {
+  display: flex;
+  height: 20px;
+  background-color: var(--CORE-untranslated-color);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.progress-bar {
+  height: 100%;
+  transition: width 0.5s ease-in-out;
+  position: absolute;
+  top: 0;
+}
+
+.progress-bar.translated {
+  background-color: var(--CORE-translated-color);
+}
+
+.progress-bar.reviewed {
+  background-color: var(--CORE-reviewed-color);
+}
+
+.progress-bar.proofread {
+  background-color: var(--CORE-finalized-color);
+}
+
+.bullet.translated {
+  color: var(--CORE-translated-color);
+}
+
+.bullet.reviewed {
+  color: var(--CORE-reviewed-color);
+}
+
+.bullet.proofread {
+  color: var(--CORE-finalized-color);
+}
