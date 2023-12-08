@@ -10,3 +10,5 @@ coverage
 /**/*.tgz
 */tests/**/__snapshots__
 tags
+!.env.staging
+!.env.prod
