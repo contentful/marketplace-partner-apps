@@ -3,7 +3,7 @@
   "version": "1.0.2",
   "private": true,
   "devDependencies": {
-    "@contentful/app-scripts": "1.13.1",
+    "@contentful/app-scripts": "1.13.2",
     "cross-env": "7.0.3",
     "react-scripts": "5.0.1"
   },
