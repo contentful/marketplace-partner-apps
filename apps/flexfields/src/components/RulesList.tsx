@@ -5,6 +5,7 @@ import { useCMA } from "@contentful/react-apps-toolkit";
 
 import {
   DeleteIcon,
+  EditIcon,
   ListBulletedIcon,
   ReferencesIcon,
 } from "@contentful/f36-icons";
@@ -94,6 +95,11 @@ const RulesList = (props: any) => {
                   boxShadow: "rgba(0, 0, 0, 0.1) 0px 3px 8px;",
                   transition: "all 0.2s ease-in-out",
                 },
+                ...(
+                  index === props.ruleToEditIndex ? {
+                    backgroundColor: "#eee"
+                  } : {}
+                )
               })}
             >
               <Flex alignItems="center" justifyContent="space-between">
@@ -180,24 +186,63 @@ const RulesList = (props: any) => {
                   field(s)
                 </Text>
 
-                <DeleteIcon
-                  onClick={() => props.deleteRule(rule)}
+                <span
                   className={css({
-                    cursor: "pointer",
-                    marginLeft: "0.5rem",
-                    width: "1.2rem",
-                    height: "1.2rem",
-                    transition: "all 0.2s ease-in-out",
-                    ":hover": {
-                      fill: "red",
-                      transform: "scale(1.1)",
-                    },
+                    minWidth: "3.4rem",
                   })}
-                  alt="Delete Rule"
-                  aria-label="Delete Rule"
-                  title="Delete Rule"
-                  role="img"
-                />
+                >
+                  <EditIcon
+                    onClick={() => {
+                      if (index !== props.ruleToEditIndex) {
+                        props.setRuleToEditIndex(index);
+                      }
+                    }}
+                    className={css({
+                      marginLeft: "0.5rem",
+                      width: "1.2rem",
+                      height: "1.2rem",
+                      ...(index === props.ruleToEditIndex ? {
+                        fill: "grey",
+                      } : {
+                        cursor: "pointer",
+                        transition: "all 0.2s ease-in-out",
+                        ":hover": {
+                          transform: "scale(1.1)",
+                        },
+                      }),
+                    })}
+                    alt="Edit Rule"
+                    aria-label="Edit Rule"
+                    title="Edit Rule"
+                    role="img"
+                  />
+                  <DeleteIcon
+                    onClick={() => {
+                      if (index !== props.ruleToEditIndex) {
+                        props.deleteRule(rule);
+                      }
+                    }}
+                    className={css({
+                      ...(index === props.ruleToEditIndex ? {
+                        fill: "grey",
+                      } : {
+                        cursor: "pointer",
+                        transition: "all 0.2s ease-in-out",
+                        ":hover": {
+                          fill: "red",
+                          transform: "scale(1.1)",
+                        },
+                      }),
+                      marginLeft: "0.5rem",
+                      width: "1.2rem",
+                      height: "1.2rem",
+                    })}
+                    alt="Delete Rule"
+                    aria-label="Delete Rule"
+                    title="Delete Rule"
+                    role="img"
+                  />
+                </span>
               </Flex>
             </li>
           ))}
