@@ -7,10 +7,9 @@ jobs:
     permissions:
       contents: write
       id-token: write
-      pull-requests: write
     runs-on: ubuntu-latest
     if: github.actor == 'dependabot[bot]'
     steps:
-      - uses: contentful/github-auto-merge@v1
+      - uses: contentful/github-auto-merge@071f24309195c3d8c8ec641c8ddb3f64c07e041b
         with:
           VAULT_URL: ${{ secrets.VAULT_URL }}
