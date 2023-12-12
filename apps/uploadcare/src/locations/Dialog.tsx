@@ -25,7 +25,7 @@ export default function Dialog(): ReactElement {
   const assetsRef = useRef<Asset[]>([]);
 
   useEffect(() => {
-    const handleUploadEvent = (e: CustomEvent<{ data: Asset[] }>) => {
+    const handleUploadEvent = (e: CustomEvent) => {
       if (e.detail?.data) {
         assetsRef.current = e.detail.data;
       }
