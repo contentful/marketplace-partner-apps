@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.0.3...thrillworks-flex-fields-app-v1.1.0) (2023-12-13)
+
+
+### Features
+
+* Add edit rule functionality ([#552](https://github.com/contentful/marketplace-partner-apps/issues/552)) ([e809d74](https://github.com/contentful/marketplace-partner-apps/commit/e809d74877e675b99ffb07304deacbdd0ac5c18e))
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/default-field-editors from 1.5.25 to 1.6.0 ([#584](https://github.com/contentful/marketplace-partner-apps/issues/584)) ([7655b3b](https://github.com/contentful/marketplace-partner-apps/commit/7655b3bbc7b5feab999abbc97a26800b645cbb46))
+* **deps:** bump @contentful/f36-components from 4.54.5 to 4.56.2 ([#578](https://github.com/contentful/marketplace-partner-apps/issues/578)) ([0d9c45f](https://github.com/contentful/marketplace-partner-apps/commit/0d9c45f96ecd14bf4689d8d11da0bbccd6e46307))
+* **deps:** bump @contentful/f36-tokens from 4.0.2 to 4.0.3 ([#582](https://github.com/contentful/marketplace-partner-apps/issues/582)) ([c3f146e](https://github.com/contentful/marketplace-partner-apps/commit/c3f146eeccaad79af389e4175d35f9d3a2cb9c56))
+
 ## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.0.2...thrillworks-flex-fields-app-v1.0.3) (2023-12-04)
 
 
