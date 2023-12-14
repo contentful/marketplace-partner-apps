@@ -19,6 +19,11 @@ jobs:
         node-version: 18
     - run: npm ci
     - run: npm run install-apps:deploy
+    - run: npm run build-apps:deploy
+    - uses: actions/upload-artifact@v4
+      with:
+        name: build-artifacts
+        path: apps/**/*/build/
     # - run: npm run build-apps:deploy
     # - uses: google-github-actions/release-please-action@v3
       # id: release
@@ -26,4 +31,3 @@ jobs:
         # command: manifest
         # token: ${{secrets.GITHUB_TOKEN}}
         # default-branch: main
-
