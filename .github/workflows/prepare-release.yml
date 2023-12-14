@@ -24,7 +24,7 @@ jobs:
       with:
         name: build-artifacts
         path: |
-          apps/**/build/
+          apps/**/*/build/
           !apps/**/node_modules/
     # - run: npm run build-apps:deploy
     # - uses: google-github-actions/release-please-action@v3
