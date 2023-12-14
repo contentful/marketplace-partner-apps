@@ -1,0 +1,29 @@
+on:
+  pull_request:
+  # push:
+    # branches:
+      # - test/release
+
+permissions:
+  contents: write
+  pull-requests: write
+
+name: Prepare release
+jobs:
+  build-apps:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+    - run: npm ci
+    - run: npm run install-apps:deploy
+    # - run: npm run build-apps:deploy
+    # - uses: google-github-actions/release-please-action@v3
+      # id: release
+      # with:
+        # command: manifest
+        # token: ${{secrets.GITHUB_TOKEN}}
+        # default-branch: main
+
