@@ -1,0 +1,156 @@
+*,
+p,
+h1,
+h2,
+div {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif,
+    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+}
+
+html,
+body,
+div {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+.send-button label {
+  line-height: 1;
+}
+
+.progress-item {
+  display: grid;
+  font-style: italic;
+  grid-template-columns: repeat(9, 1fr);
+}
+
+.progress-locale {
+  grid-column: span 2;
+}
+
+.progress-status {
+  grid-column: span 3;
+}
+
+.progress-lqa {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  font-style: italic;
+  grid-column: span 2;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.progress-lqa:focus {
+  outline: none;
+}
+
+.progress-feedback {
+  grid-column: span 9;
+}
+
+.progress-feedback button {
+  float: right;
+}
+
+.app-config {
+  max-width: 768px;
+  margin: 0 auto;
+}
+
+.config-form {
+  display: block;
+  padding-top: 1.5rem;
+}
+
+.config-form.hidden {
+  display: none;
+}
+
+.config-form .content-types {
+  display: flex;
+  flex-direction: column;
+}
+
+.config-form .save {
+  float: right;
+}
+
+.dialog-wrapper {
+  margin: 75px 150px;
+  min-height: 270px;
+}
+
+.entry-selector-dialog-wrapper {
+  margin: 50px 10px;
+  min-height: 270px;
+}
+
+.entry-selector-dialog-wrapper > .table-container {
+  overflow-y: scroll;
+  max-height: 600px;
+  margin: 10px 0;
+}
+
+.dialog-buttons {
+  text-align: right;
+}
+
+.dialog-buttons .progress-lqa {
+  margin-left: 10px;
+}
+
+.config-editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.warning-box {
+  margin: 10px 0;
+}
+
+.target-locales-hint-tag {
+  padding: 0 0 0 10px;
+}
+
+.underline-text {
+  text-decoration: underline !important;
+}
+
+.no-margin {
+  margin: 0 !important;
+}
+
+.vertical-padding {
+  padding: 10px 0;
+}
+
+.entry-checkbox-cell {
+  display: flex;
+  align-items: center;
+}
+
+.entry-checkbox-cell > span {
+  display: flex;
+}
+
+#emc-root {
+  width: 100%;
+  min-height: 38rem;
+  overflow-y: hidden;
+}
+
+#emc-root div {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+#emc-root div::-webkit-scrollbar{
+  display: none;
+}

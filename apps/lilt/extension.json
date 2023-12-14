@@ -1,0 +1,22 @@
+{
+  "id": "contentful-lilt-extension",
+  "name": "Lilt",
+  "srcdoc": "./build/index.html",
+  "sidebar": true,
+  "parameters": {
+    "installation": [
+      {
+        "id": "api_token",
+        "name": "API Token",
+        "type": "Symbol",
+        "default": ""
+      },
+      {
+        "id": "base_url",
+        "name": "Lilt API Base URL",
+        "type": "Symbol",
+        "default": "https://lilt.com/2"
+      }
+    ]
+  }}
+
