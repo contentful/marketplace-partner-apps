@@ -16,7 +16,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Read release-please-config.json
         id: read-release-please-config
-        run: echo "releasePleaseConfig=`cat release-please-config.json`" >> "$GITHUB_OUTPUT" 
+        run: |
+          echo 'releasePleaseConfig="`cat release-please-config.json`"' >> "$GITHUB_OUTPUT" 
       - run: echo "ok cool ${{ steps.read-release-please-config.outputs.releasePleaseConfig }}"
 
   # release-please:
