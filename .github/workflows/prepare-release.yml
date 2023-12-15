@@ -39,7 +39,7 @@ jobs:
         # token: ${{secrets.GITHUB_TOKEN}}
         # default-branch: main
     outputs:
-      pathsReleased: ["foo", "bar"]
+      pathsReleased: '["foo", "bar"]'
       releasesCreated: true
       # pathsReleased: ${{ steps.release.outputs.paths_released }}
       # releasesCreated: ${{ steps.release.outputs.releases_created }}
