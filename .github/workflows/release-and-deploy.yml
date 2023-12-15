@@ -45,6 +45,7 @@ jobs:
       working-directory: ${{ matrix.package }}
     - run: npm run build
       working-directory: ${{ matrix.package }}
+    - run: echo "done"
     # - uses: actions/upload-artifact@v4
       # with:
         # name: build-artifacts
