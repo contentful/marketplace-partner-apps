@@ -19,7 +19,7 @@ jobs:
         run: |
           # releasePleaseConfig="`cat release-please-config.json`"
           # echo 'releasePleaseConfig="`cat release-please-config.json`"' >> "$GITHUB_OUTPUT" 
-          echo jq '.packages | keys[]' release-please-config.json
+          jq '.packages | keys[]' release-please-config.json
 
   # release-please:
     # runs-on: ubuntu-latest
