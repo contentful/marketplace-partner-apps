@@ -30,6 +30,7 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     needs: build-apps
+    steps:
     - uses: google-github-actions/release-please-action@v3
       id: release
       with:
@@ -44,8 +45,8 @@ jobs:
   upload-build-artifacts:
     needs: release-please
     runs-on: ubuntu-latest
-        steps:
-        - run: echo "here i am"
-        - run: echo "${{ needs.release-please.outputs.releaseOutputs }}"
+    steps:
+      - run: echo "here i am"
+      - run: echo "${{ needs.release-please.outputs.releaseOutputs }}"
 
 
