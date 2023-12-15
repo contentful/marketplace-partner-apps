@@ -17,9 +17,9 @@ jobs:
       - name: Read release-please-config.json
         id: read-release-please-config
         run: |
-          releasePleaseConfig="`cat release-please-config.json`"
+          # releasePleaseConfig="`cat release-please-config.json`"
           # echo 'releasePleaseConfig="`cat release-please-config.json`"' >> "$GITHUB_OUTPUT" 
-          echo "ok cool $releasePleaseConfig"
+          echo jq '.packages | keys[]' release-please-config.json
 
   # release-please:
     # runs-on: ubuntu-latest
