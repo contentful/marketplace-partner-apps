@@ -50,6 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "here i am no"
+      - run: echo "${{ needs.release-please.pathsReleased }}"
       - run: echo "${{ needs.release-please.releasesCreated }}"
       - run: echo "${{ needs.release-please.releaseOutputs }}"
       # - run: "gh release upload ${{ steps.release.outputs.tag_name }} ./artifact/some-build-artifact.zip"
