@@ -53,7 +53,7 @@ jobs:
       - name: foo
         env:
           releaseOutputs: ${{ fromJSON(needs.release-please.outputs.releaseOutputs) }}
-        run: echo "${{ toJSON(needs.release-please.outputs.releaseOutputs }}"
+        run: echo "${{ toJSON(needs.release-please.outputs.releaseOutputs) }}"
       # - run: "gh release upload ${{ steps.release.outputs.tag_name }} ./artifact/some-build-artifact.zip"
 
 
