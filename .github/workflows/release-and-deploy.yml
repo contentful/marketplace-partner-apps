@@ -18,7 +18,7 @@ jobs:
         id: read-release-please-config
         run: |
           echo 'releasePleaseConfig="`cat release-please-config.json`"' >> "$GITHUB_OUTPUT" 
-      - run: echo "ok cool ${{ steps.read-release-please-config.outputs.releasePleaseConfig }}"
+          echo "ok cool $releasePleaseConfig"
 
   # release-please:
     # runs-on: ubuntu-latest
