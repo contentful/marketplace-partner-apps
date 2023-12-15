@@ -40,7 +40,7 @@ jobs:
     outputs:
       pathsReleased: '["foo", "bar"]'
       releasesCreated: true
-      releaseOutputs: '${{ toJSON(steps.release.outputs) }}'
+      releaseOutputs: '${{ steps.release.outputs }}'
       # pathsReleased: ${{ steps.release.outputs.paths_released }}
       # releasesCreated: ${{ steps.release.outputs.releases_created }}
 
