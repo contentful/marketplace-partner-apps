@@ -50,7 +50,7 @@ jobs:
     steps:
       - run: echo "here i am no"
       - name: foo
-        env:
+        with:
           releaseOutputs: ${{ fromJSON(needs.release-please.outputs.releaseOutputs) }}
         run: echo "${{ toJSON(env.releaseOutputs) }}"
       # - run: "gh release upload ${{ steps.release.outputs.tag_name }} ./artifact/some-build-artifact.zip"
