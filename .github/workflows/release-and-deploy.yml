@@ -21,9 +21,9 @@ jobs:
           echo 'releasePleaseConfig="`jq '\''.'\'' release-please-config.json`"' >> "$GITHUB_OUTPUT" 
           # capture the packages as an array steps.read-release-please-config.outputs.releasePleaseConfigPackages
           echo 'releasePleaseConfigPackages="`jq '\''.packages | keys[]'\'' release-please-config.json | jq -n '\''[inputs]'\''`"' >> "$GITHUB_OUTPUT" 
-  outputs:
-    releasePleaseConfig: ${{ steps.read-release-please-config.outputs.releasePleaseConfig }} 
-    releasePleaseConfigPackages: ${{ steps.read-release-please-config.outputs.releasePleaseConfigPackages }} 
+    outputs:
+      releasePleaseConfig: ${{ steps.read-release-please-config.outputs.releasePleaseConfig }} 
+      releasePleaseConfigPackages: ${{ steps.read-release-please-config.outputs.releasePleaseConfigPackages }} 
 
   build-packages:
     runs-on: ubuntu-latest
