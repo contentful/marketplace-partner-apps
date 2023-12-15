@@ -17,7 +17,7 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: 18
-    - run: npm ci
+    # - run: npm ci
     # - run: npm run install-apps:deploy
     # - run: npm run build-apps:deploy
     # - uses: actions/upload-artifact@v4
@@ -40,9 +40,9 @@ jobs:
     outputs:
       pathsReleased: '["foo", "bar"]'
       releasesCreated: true
-      releaseOutputs: "${{ toJSON(steps.release.outputs) }}"
+      releaseOutputs: ${{ toJSON(steps.release.outputs) }}
       # pathsReleased: ${{ steps.release.outputs.paths_released }}
-      # releasesCreated: ${{ steps.release.outputs.releases_created }}
+      releasesCreated: ${{ steps.release.outputs.releases_created }}
 
 
   upload-build-artifacts:
@@ -51,6 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "here i am no"
+      - run: echo "${{ needs.release-please.releasesCreated }}"
       - run: echo "${{ needs.release-please.releaseOutputs }}"
       # - run: "gh release upload ${{ steps.release.outputs.tag_name }} ./artifact/some-build-artifact.zip"
 
