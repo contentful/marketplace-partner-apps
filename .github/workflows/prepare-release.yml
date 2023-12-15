@@ -40,13 +40,16 @@ jobs:
         skip-github-release: true
         skip-github-pull-request: true
     outputs:
-      releaseOutputs: ${{ steps.release.outputs }}
+      pathsReleased: ${{ steps.release.outputs.paths_released }}
 
   upload-build-artifacts:
     needs: release-please
     runs-on: ubuntu-latest
+    strategy:
+        matrix:
+          path:  "${{ needs.release-please.outputs.pathsReleased }}"
     steps:
       - run: echo "here i am"
-      - run: echo "${{ needs.release-please.outputs.releaseOutputs }}"
+      - run: echo "${{ matrix.path }}"
 
 
