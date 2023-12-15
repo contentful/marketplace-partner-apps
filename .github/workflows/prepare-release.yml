@@ -55,7 +55,7 @@ jobs:
     steps:
       - run: echo "here i am no"
       - name: "upload build artifact to release"
-        run: echo "${{ env.myPath }}"
+        run: echo "what now ${{ env.myPath }}"
       - run: echo "here i am no"
       # - run: "gh release upload ${{ steps.release.outputs.tag_name }} ./artifact/some-build-artifact.zip"
 
