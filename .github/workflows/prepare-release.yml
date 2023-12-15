@@ -55,6 +55,7 @@ jobs:
     steps:
       - name: "upload build artifact to release"
         run: echo "pathTagName: ${{ env.pathTagName }}"
+      - run: echo "here i am no"
       - run: echo "gh release upload ${{ fromJSON(needs.release-please.outputs.releaseOutputs)[env.pathTagName] }}"
 
 
