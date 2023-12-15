@@ -10,20 +10,27 @@ permissions:
 
 name: Release and deploy
 jobs:
-  list-packages:
+  read-release-please-config:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Read release-please-config.json
+      - name: Parse release-please-config.json to outputs
         id: read-release-please-config
         run: |
+          # capture the whole config as steps.read-release-please-config.outputs.releasePleaseConfig
           echo 'releasePleaseConfig="`jq '\''.'\'' release-please-config.json`"' >> "$GITHUB_OUTPUT" 
+          # capture the packages as an array steps.read-release-please-config.outputs.releasePleaseConfigPackages
           echo 'releasePleaseConfigPackages="`jq '\''.packages | keys[]'\'' release-please-config.json | jq -n '\''[inputs]'\''`"' >> "$GITHUB_OUTPUT" 
-          # jq '.packages | keys[]' release-please-config.json
+
+  build-packages:
+    runs-on: ubuntu-latest
+    needs: read-release-please-config
+    steps:
       - name: what
         run: |
-          echo ${{ steps.read-release-please-config.outputs.releasePleaseConfig }} 
-          echo ${{ steps.read-release-please-config.outputs.releasePleaseConfigPackages }} 
+          echo ${{ needs.read-release-please-config.outputs.releasePleaseConfig }} 
+          echo ${{ needs.read-release-please-config.outputs.releasePleaseConfigPackages }} 
+
 
   # release-please:
     # runs-on: ubuntu-latest
