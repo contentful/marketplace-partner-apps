@@ -52,7 +52,7 @@ jobs:
         matrix:
           path:  "${{ fromJSON(needs.release-please.outputs.pathsReleased) }}"
     steps:
-      - run: echo "here i am"
+      - run: echo "here i am no"
       - run: echo "${{ matrix.path }}"
 
 
