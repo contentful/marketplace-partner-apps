@@ -17,7 +17,7 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: 18
-    - run: npm ci
+    # - run: npm ci
     # - run: npm run install-apps:deploy
     # - run: npm run build-apps:deploy
     # - uses: actions/upload-artifact@v4
@@ -51,10 +51,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - name: "foobar"
-          env:
+          with:
             paths:  "${{ fromJSON(needs.release-please.outputs.pathsReleased) }}"
           run: |
-            for path in $paths; do
+            for path in ${{ paths }}; do
               echo "$path was modified"
             done
 
