@@ -47,12 +47,11 @@ jobs:
   upload-build-artifacts:
     needs: release-please
     runs-on: ubuntu-latest
+    env:
+      myPath: "paths_released"
     steps:
       - run: echo "here i am no"
-      - name: foo
-        with:
-          releaseOutputs: ${{ fromJSON(needs.release-please.outputs.releaseOutputs) }}
-        run: echo "${{ toJSON(env.releaseOutputs) }}"
+      - run: echo "${{ fromJSON(needs.release-please.outputs.releaseOutputs)[env.myPath] }}"
       # - run: "gh release upload ${{ steps.release.outputs.tag_name }} ./artifact/some-build-artifact.zip"
 
 
