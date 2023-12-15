@@ -53,11 +53,10 @@ jobs:
         matrix:
           path: ${{ fromJSON(needs.release-please.outputs.pathsReleased) }}
     steps:
-      - run: echo "here i am no"
       - name: "upload build artifact to release"
-        run: echo "what now ${{ env.pathTagName }}"
+        run: echo "pathTagName ${{ env.pathTagName }}"
       - run: echo "here i am no"
-      # - run: "gh release upload ${{ steps.release.outputs.tag_name }} ./artifact/some-build-artifact.zip"
+      - run: echo "gh release upload ${{ env.pathTagName }} ./artifact/some-build-artifact.zip"
 
 
 
