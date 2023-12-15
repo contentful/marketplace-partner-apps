@@ -48,15 +48,18 @@ jobs:
     needs: release-please
     runs-on: ubuntu-latest
     env:
-      PATH_TAG_NAME: "${{ matrix.path }}--tag_name"
+      myPath: "paths_released"
     strategy:
-      matrix:
-        path: ${{ fromJSON(needs.release-please.outputs.pathsReleased) }}
+        matrix:
+          path: ${{ fromJSON(needs.release-please.outputs.pathsReleased) }}
     steps:
-      - name: "upload build artifact to release"
-        run: echo "pathTagName: ${{ env.PATH_TAG_NAME }}"
       - run: echo "here i am no"
-      - run: echo "gh release upload ${{ fromJSON(needs.release-please.outputs.releaseOutputs)[env.pathTagName] }}"
+      - name: "upload build artifact to release"
+        env:
+          myPath: "${{ matrix.path }}--tag_name"
+        run: echo "${{ env.myPath }}"
+      - run: echo "here i am no"
+      # - run: "gh release upload ${{ steps.release.outputs.tag_name }} ./artifact/some-build-artifact.zip"
 
 
 
