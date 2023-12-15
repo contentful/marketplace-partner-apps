@@ -39,7 +39,7 @@ jobs:
         default-branch: main
     outputs:
       pathsReleased: '["foo", "bar"]'
-      releaseOutputs: "${{ toJSON(steps.release.outputs) }}"
+      releaseOutputs: ${{ toJSON(steps.release.outputs) }}
       # pathsReleased: ${{ steps.release.outputs.paths_released }}
       releasesCreated: ${{ steps.release.outputs.releases_created }}
 
@@ -50,9 +50,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "here i am no"
-      - run: echo "${{ needs.release-please.pathsReleased }}"
-      - run: echo "${{ needs.release-please.releasesCreated }}"
-      - run: echo "${{ needs.release-please.releaseOutputs }}"
+      - run: echo "${{ needs.release-please.outputs.pathsReleased }}"
+      - run: echo "${{ needs.release-please.outputs.releasesCreated }}"
+      - run: echo "${{ needs.release-please.outputs.releaseOutputs }}"
       # - run: "gh release upload ${{ steps.release.outputs.tag_name }} ./artifact/some-build-artifact.zip"
 
 
