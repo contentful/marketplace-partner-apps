@@ -46,13 +46,14 @@ jobs:
 
   upload-build-artifacts:
     needs: release-please
-    # if: "${{ needs.release-please.outputs.releasesCreated }}"
+    if: "${{ needs.release-please.outputs.releasesCreated }}"
     runs-on: ubuntu-latest
     steps:
       - run: echo "here i am no"
-      - run: echo "${{ needs.release-please.outputs.pathsReleased }}"
-      - run: echo "${{ needs.release-please.outputs.releasesCreated }}"
-      - run: echo "${{ toJSON(fromJSON(needs.release-please.outputs.releaseOutputs)) }}"
+      - name: foo
+        with:
+          releaseOutputs: ${{ fromJSON(needs.release-please.outputs.releaseOutputs }}
+        run: echo "${{ toJSON(needs.release-please.outputs.releaseOutputs }}"
       # - run: "gh release upload ${{ steps.release.outputs.tag_name }} ./artifact/some-build-artifact.zip"
 
 
