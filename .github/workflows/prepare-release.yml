@@ -38,7 +38,7 @@ jobs:
         token: ${{secrets.GITHUB_TOKEN}}
         default-branch: main
     outputs:
-      pathsReleased: ["foo", "bar"]
+      pathsReleased: '["foo", "bar"]'
       releaseOutputs: ${{ toJSON(steps.release.outputs) }}
       # pathsReleased: ${{ steps.release.outputs.paths_released }}
       releasesCreated: ${{ steps.release.outputs.releases_created }}
@@ -51,7 +51,7 @@ jobs:
       myPath: "paths_released"
     strategy:
         matrix:
-          path: ${{ needs.release-please.outputs.pathsReleased }}
+          path: ${{ fromJSON(needs.release-please.outputs.pathsReleased) }}
     steps:
       - run: echo "here i am no"
       - name: "upload build artifact to release"
