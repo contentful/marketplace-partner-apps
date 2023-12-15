@@ -49,11 +49,13 @@ jobs:
     needs: release-please
     if:  "${{ needs.release-please.outputs.releasesCreated }}"
     runs-on: ubuntu-latest
-    strategy:
-        matrix:
-          path:  "${{ fromJSON(needs.release-please.outputs.pathsReleased) }}"
     steps:
-      - run: echo "here i am"
-      - run: echo "${{ matrix.path }}"
+        - name: "foobar"
+          env:
+            paths:  "${{ fromJSON(needs.release-please.outputs.pathsReleased) }}"
+          run: |
+            for path in ${{ paths }}; do
+              echo "$path was modified"
+            done
 
 
