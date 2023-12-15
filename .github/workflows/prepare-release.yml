@@ -10,23 +10,6 @@ permissions:
 
 name: Prepare release
 jobs:
-  build-apps:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 18
-    # - run: npm ci
-    # - run: npm run install-apps:deploy
-    # - run: npm run build-apps:deploy
-    # - uses: actions/upload-artifact@v4
-      # with:
-        # name: build-artifacts
-        # path: |
-          # apps/**/*/build/
-          # !apps/**/node_modules/
-
   release-please:
     runs-on: ubuntu-latest
     needs: build-apps
@@ -39,24 +22,30 @@ jobs:
         default-branch: main
     outputs:
       pathsReleased: '["foo", "bar"]'
-      releaseOutputs: ${{ toJSON(steps.release.outputs) }}
+      releasesCreated: true
       # pathsReleased: ${{ steps.release.outputs.paths_released }}
-      releasesCreated: ${{ steps.release.outputs.releases_created }}
+      # releasesCreated: ${{ steps.release.outputs.releases_created }}
 
 
-  upload-build-artifacts:
+  build-and-deploy-releases:
     needs: release-please
+    if: "${{ needs.release-please.outputs.releasesCreated }}"
     runs-on: ubuntu-latest
-    env:
-      pathTagName: "${{ matrix.path }}--tag_name"
-    strategy:
-        matrix:
-          path: ${{ fromJSON(needs.release-please.outputs.pathsReleased) }}
     steps:
-      - name: "upload build artifact to release"
-        run: echo "pathTagName ${{ env.pathTagName }}"
-      - run: echo "here i am no"
-      - run: echo "gh release upload ${{ env.pathTagName }} ./artifact/some-build-artifact.zip"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - run: npm ci
+      - run: npm run install-apps:deploy
+      # - run: npm run build-apps:deploy
+      # - uses: actions/upload-artifact@v4
+        # with:
+          # name: build-artifacts
+          # path: |
+            # apps/**/*/build/
+            # !apps/**/node_modules/
+      # - run: "gh release upload ${{ steps.release.outputs.tag_name }} ./artifact/some-build-artifact.zip"
 
 
 
