@@ -50,7 +50,7 @@ jobs:
     if:  "${{ needs.release-please.outputs.releasesCreated }}"
     runs-on: ubuntu-latest
     with:
-      paths:  "${{ fromJSON(needs.release-please.outputs.pathsReleased) }}"
+      paths: ${{ fromJSON(needs.release-please.outputs.pathsReleased) }}
     steps:
         - name: "foobar"
           run: |
