@@ -39,8 +39,8 @@ jobs:
         default-branch: main
         skip-github-release: true
         skip-github-pull-request: true
-      outputs:
-        releaseOutputs: ${{ steps.release.outputs }}
+    outputs:
+      releaseOutputs: ${{ steps.release.outputs }}
 
   upload-build-artifacts:
     needs: release-please
