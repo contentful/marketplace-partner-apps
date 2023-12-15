@@ -40,19 +40,19 @@ jobs:
     outputs:
       pathsReleased: '["foo", "bar"]'
       releasesCreated: true
+      releaseOutputs: '${{ toJSON(steps.release.outputs) }}'
       # pathsReleased: ${{ steps.release.outputs.paths_released }}
       # releasesCreated: ${{ steps.release.outputs.releases_created }}
 
 
   upload-build-artifacts:
     needs: release-please
-    if: "${{ needs.release-please.outputs.releasesCreated }}"
+    # if: "${{ needs.release-please.outputs.releasesCreated }}"
     runs-on: ubuntu-latest
-    strategy:
-        matrix:
-          path:  "${{ fromJSON(needs.release-please.outputs.pathsReleased) }}"
     steps:
       - run: echo "here i am no"
-      - run: echo "${{ matrix.path }}"
+      - run: echo "${{ needs.release-please.releaseOutputs }}"
+      # - run: "gh release upload ${{ steps.release.outputs.tag_name }} ./artifact/some-build-artifact.zip"
+
 
 
