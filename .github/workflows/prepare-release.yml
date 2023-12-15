@@ -46,14 +46,13 @@ jobs:
 
   upload-build-artifacts:
     needs: release-please
-    if: "${{ needs.release-please.outputs.releasesCreated }}"
     runs-on: ubuntu-latest
     steps:
       - run: echo "here i am no"
       - name: foo
         env:
           releaseOutputs: ${{ fromJSON(needs.release-please.outputs.releaseOutputs) }}
-        run: echo "${{ env.releaseOutputs }}"
+        run: echo "${{ toJSON(env.releaseOutputs) }}"
       # - run: "gh release upload ${{ steps.release.outputs.tag_name }} ./artifact/some-build-artifact.zip"
 
 
