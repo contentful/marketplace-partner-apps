@@ -1,0 +1,30 @@
+on:
+  pull_request:
+  # push:
+    # branches:
+      # - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+name: Release and deploy
+jobs:
+  list-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read release-please-config.json
+        id: read-release-please-config
+        run: echo "releasePleaseConfig=`cat release-please-config.json`" >> "$GITHUB_OUTPUT" 
+      - run: echo "ok cool ${{ steps.read-release-please-config.outputs.releasePleaseConfig }}"
+
+  # release-please:
+    # runs-on: ubuntu-latest
+    # steps:
+      # - uses: google-github-actions/release-please-action@v3
+        # id: release
+        # with:
+          # command: manifest
+          # token: ${{secrets.GITHUB_TOKEN}}
+          # default-branch: main
