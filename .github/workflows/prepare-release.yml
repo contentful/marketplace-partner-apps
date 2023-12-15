@@ -52,7 +52,7 @@ jobs:
       - run: echo "here i am no"
       - run: echo "${{ needs.release-please.outputs.pathsReleased }}"
       - run: echo "${{ needs.release-please.outputs.releasesCreated }}"
-      - run: echo "${{ needs.release-please.outputs.releaseOutputs }}"
+      - run: echo "${{ fromJSON(needs.release-please.outputs.releaseOutputs) }}"
       # - run: "gh release upload ${{ steps.release.outputs.tag_name }} ./artifact/some-build-artifact.zip"
 
 
