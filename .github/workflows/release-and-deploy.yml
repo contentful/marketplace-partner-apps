@@ -18,7 +18,7 @@ jobs:
         id: read-release-please-config
         run: |
           releasePleaseConfig="`jq '.' release-please-config.json`"
-          releasePleaseConfigPackages="`jq '.packages | keys[]' release-please-config.json`"
+          releasePleaseConfigPackages="`jq '.packages | keys[]' release-please-config.json | jq -n '[inputs]'`"
           echo $releasePleaseConfig
           echo $releasePleaseConfigPackages
           # echo 'releasePleaseConfig="`cat release-please-config.json`"' >> "$GITHUB_OUTPUT" 
