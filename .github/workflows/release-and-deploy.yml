@@ -17,10 +17,10 @@ jobs:
       - name: Parse release-please-config.json to outputs
         id: read-release-please-config
         run: |
-          # capture the whole config as steps.read-release-please-config.outputs.releasePleaseConfig
-          echo 'releasePleaseConfig="`jq '\''.'\'' release-please-config.json`"' >> "$GITHUB_OUTPUT" 
-          # capture the packages as an array steps.read-release-please-config.outputs.releasePleaseConfigPackages
-          echo 'releasePleaseConfigPackages="`jq '\''.packages | keys[]'\'' release-please-config.json | jq -n '\''[inputs]'\''`"' >> "$GITHUB_OUTPUT" 
+          releasePleaseConfig=`jq '.' release-please-config.json`
+          releasePleaseConfigPackages=`jq '.packages | keys[]' release-please-config.json | jq -n '[inputs]'`
+          echo releasePleaseConfig=$releasePleaseConfig >> "$GITHUB_OUTPUT" 
+          echo releasePleaseConfigPackages=$releasePleaseConfigPackages >> "$GITHUB_OUTPUT" 
     outputs:
       releasePleaseConfig: ${{ steps.read-release-please-config.outputs.releasePleaseConfig }} 
       releasePleaseConfigPackages: ${{ steps.read-release-please-config.outputs.releasePleaseConfigPackages }} 
