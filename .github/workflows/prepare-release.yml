@@ -38,7 +38,7 @@ jobs:
         token: ${{secrets.GITHUB_TOKEN}}
         default-branch: main
     outputs:
-      pathsReleased: '["foo", "bar"]'
+      pathsReleased: ["foo", "bar"]
       releaseOutputs: ${{ toJSON(steps.release.outputs) }}
       # pathsReleased: ${{ steps.release.outputs.paths_released }}
       releasesCreated: ${{ steps.release.outputs.releases_created }}
@@ -49,9 +49,15 @@ jobs:
     runs-on: ubuntu-latest
     env:
       myPath: "paths_released"
+    strategy:
+        matrix:
+          path: ${{ needs.release-please.outputs.pathsReleased }}
     steps:
       - run: echo "here i am no"
-      - run: echo "${{ fromJSON(needs.release-please.outputs.releaseOutputs)[env.myPath] }}"
+      - name: "upload build artifact to release"
+        env:
+          myPath: "${{ matrix.path }}--tag_name"
+        run: echo "${{ env.myPath }}"
       # - run: "gh release upload ${{ steps.release.outputs.tag_name }} ./artifact/some-build-artifact.zip"
 
 
