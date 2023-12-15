@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - name: "foobar"
-          with:
+          env:
             paths: ${{ fromJSON(needs.release-please.outputs.pathsReleased) }}
           run: |
             for path in ${{ paths }}; do
