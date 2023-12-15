@@ -39,9 +39,9 @@ jobs:
         default-branch: main
     outputs:
       pathsReleased: '["foo", "bar"]'
-      releaseOutputs: ${{ toJSON(steps.release.outputs) }}
+      releaseOutputs: "${{ toJSON(steps.release.outputs) }}"
       # pathsReleased: ${{ steps.release.outputs.paths_released }}
-      releasesCreated: ${{ steps.release.outputs.releases_created }}
+      releasesCreated: "${{ steps.release.outputs.releases_created }}"
 
 
   upload-build-artifacts:
