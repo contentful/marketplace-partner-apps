@@ -19,7 +19,7 @@ jobs:
           token: ${{secrets.GITHUB_TOKEN}}
           default-branch: main
     outputs:
-      release_created: ${{ steps.release.outputs.release_created }}
+      releases_created: ${{ steps.release.outputs.releases_created }}
 
   build-and-deploy:
     needs: release-please
@@ -46,5 +46,5 @@ jobs:
       - name: Deploy staging
         run: npm run deploy:staging
       - name: Deploy apps
-        if: ${{ needs.release-please.outputs.release_created }}
+        if: ${{ needs.release-please.outputs.releases_created }}
         run: npm run deploy:production
