@@ -1,13 +1,14 @@
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+  # push:
+    # branches:
+      # - main
 
 permissions:
   contents: write
   pull-requests: write
 
-name: Run Release Please
+name: Release and deploy apps
 jobs:
   release-please:
     runs-on: ubuntu-latest
@@ -18,3 +19,33 @@ jobs:
           command: manifest
           token: ${{secrets.GITHUB_TOKEN}}
           default-branch: main
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+
+  build-and-deploy:
+    needs: release-please
+    runs-on: ubuntu-latest
+    env:
+      # "production" deploy secrets
+      DEFINITIONS_ORG_ID: ${{ secrets.DEFINITIONS_ORG_ID }}
+      CONTENTFUL_CMA_TOKEN: ${{ secrets.CONTENTFUL_CMA_TOKEN }}
+
+      # "staging" deploy secrets
+      TEST_ORG_ID: ${{ secrets.TEST_ORG_ID }}
+      TEST_CMA_TOKEN: ${{ secrets.TEST_CMA_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Install root-level project
+        run: npm ci
+      - name: Install apps
+        run: npm run install-apps:deploy
+      - name: Build apps
+        run: npm run build-apps:deploy
+      # - name: Deploy staging
+        # run: npm run deploy:staging
+      # - name: Deploy apps
+        # if: ${{ needs.release-please.outputs.release_created }}
+        # run: npm run deploy:production
