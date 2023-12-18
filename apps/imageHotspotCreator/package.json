@@ -25,7 +25,7 @@
     "react-image-crop": "^10.1.5",
     "react-magic-dropzone": "^1.0.1",
     "react-scripts": "5.0.1",
-    "styled-components": "^6.0.3"
+    "styled-components": "5.3.1"
   },
   "scripts": {
     "start": "cross-env BROWSER=none react-scripts start",
