@@ -1,8 +1,7 @@
 on:
-  pull_request:
-  # push:
-    # branches:
-      # - main
+  push:
+    branches:
+      - main
 
 permissions:
   contents: write
@@ -44,8 +43,8 @@ jobs:
         run: npm run install-apps:deploy
       - name: Build apps
         run: npm run build-apps:deploy
-      # - name: Deploy staging
-        # run: npm run deploy:staging
-      # - name: Deploy apps
-        # if: ${{ needs.release-please.outputs.release_created }}
-        # run: npm run deploy:production
+      - name: Deploy staging
+        run: npm run deploy:staging
+      - name: Deploy apps
+        if: ${{ needs.release-please.outputs.release_created }}
+        run: npm run deploy:production
