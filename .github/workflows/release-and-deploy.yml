@@ -43,8 +43,9 @@ jobs:
         run: npm run install-apps:deploy
       - name: Build apps
         run: npm run build-apps:deploy
-      - name: Deploy staging
+      - name: Deploy apps (staging)
+        if: ${{ !needs.release-please.outputs.releases_created }}
         run: npm run deploy:staging
-      - name: Deploy apps
+      - name: Deploy apps (production)
         if: ${{ needs.release-please.outputs.releases_created }}
         run: npm run deploy:production
