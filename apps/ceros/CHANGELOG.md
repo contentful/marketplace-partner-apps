@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.0.2...ceros-contentful-app-v1.0.3) (2023-12-19)
+
+
+### Bug Fixes
+
+* resolve dependency graph conflicts ([#603](https://github.com/contentful/marketplace-partner-apps/issues/603)) ([7da74ae](https://github.com/contentful/marketplace-partner-apps/commit/7da74aefcd77e35833d4f2bcdce0521b83d549af))
+
 ## [1.0.2](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.0.1...ceros-contentful-app-v1.0.2) (2023-12-13)
 
 

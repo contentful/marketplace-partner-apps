@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.5](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.4...image-hotspot-creator-v1.0.5) (2023-12-19)
+
+
+### Bug Fixes
+
+* resolve dependency graph conflicts ([#603](https://github.com/contentful/marketplace-partner-apps/issues/603)) ([7da74ae](https://github.com/contentful/marketplace-partner-apps/commit/7da74aefcd77e35833d4f2bcdce0521b83d549af))
+
 ## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.3...image-hotspot-creator-v1.0.4) (2023-12-13)
 
 
