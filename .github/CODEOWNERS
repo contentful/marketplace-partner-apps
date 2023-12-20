@@ -1,2 +1,3 @@
 * @contentful/team-integrations
-apps @contentful/team-integrations @contentful/team-developer-experience @gavinmatt
+apps/*/src @contentful/team-integrations @contentful/team-developer-experience @gavinmatt
+apps/*/public @contentful/team-integrations @contentful/team-developer-experience @gavinmatt
