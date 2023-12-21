@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.2...uploadcare-contentful-app-v1.0.3) (2023-12-21)
+
+
+### Bug Fixes
+
+* **deps:** bump @uploadcare/blocks from 0.30.5 to 0.30.6 ([#624](https://github.com/contentful/marketplace-partner-apps/issues/624)) ([1996c61](https://github.com/contentful/marketplace-partner-apps/commit/1996c61165335623e1339e812a2b46dab6b79109))
+* **deps:** bump @uploadcare/upload-client from 6.11.0 to 6.11.1 ([#617](https://github.com/contentful/marketplace-partner-apps/issues/617)) ([9659298](https://github.com/contentful/marketplace-partner-apps/commit/96592988500014f2e1ce9278e468bb8110bae1a1))
+
 ## [1.0.2](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.1...uploadcare-contentful-app-v1.0.2) (2023-12-13)
 
 
