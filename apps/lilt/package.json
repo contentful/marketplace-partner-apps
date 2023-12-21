@@ -14,9 +14,7 @@
     "login": "contentful login",
     "logout": "contentful logout",
     "help": "contentful-extension-scripts help",
-    "install-ci": "npm ci",
-    "deploy": "contentful-extension-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 4uUaxd0lfvVJpY7PsmKBb5 --token ${CONTENTFUL_CMA_TOKEN}",
-    "deploy-staging": "contentful-extension-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id 3AsTX1l3tZDALoNlVx8fgK --token ${TEST_CMA_TOKEN}"
+    "install-ci": "npm ci"
   },
   "dependencies": {
     "@contentful/f36-components": "^4.9.0",
