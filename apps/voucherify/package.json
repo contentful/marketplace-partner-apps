@@ -19,7 +19,7 @@
     "@emotion/css": "11.11.2",
     "@emotion/react": "11.11.3",
     "@emotion/styled": "11.11.0",
-    "axios": "1.6.2",
+    "axios": "1.6.3",
     "http-status-codes": "2.3.0",
     "lodash": "4.17.21",
     "prop-types": "15.8.1",
