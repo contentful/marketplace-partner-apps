@@ -9,6 +9,7 @@
 		"apps/shopify": {},
 		"apps/surfer": {},
 		"apps/uploadcare": {},
-		"apps/voucherify": {}
+		"apps/voucherify": {},
+		"apps/adapt-essentials-asset-fields": {}
 	}
 }
