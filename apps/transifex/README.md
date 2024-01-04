@@ -13,14 +13,14 @@ Create Contentful App uses [Create React App](https://create-react-app.dev/). Yo
 ## Deployment
 
 Local
-To upload the bundle of local app to Contnetful
+To upload the bundle of local app to Contentful
 `npm install`
 `npm run build:development`
 `npm run upload`
 
 Staging
 
-To upload the bundle of staging app to Contnetful
+To upload the bundle of staging app to Contentful
 
 `npm install`
 `npm run build:staging`
