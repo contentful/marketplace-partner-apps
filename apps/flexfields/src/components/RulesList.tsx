@@ -166,6 +166,7 @@ const RulesList = (props: any) => {
                     {/* {rule.targetEntity} */}
                     {getContentTypeName(rule.targetEntity, allContentTypes) ??
                       rule.contentType}
+                    {rule.isForSameEntity ? " (Same Entry)" : ""}
                   </span>{" "}
                   hide the{" "}
                   <span
