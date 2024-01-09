@@ -1,5 +1,5 @@
 {
-  "name": "contentful-native-app",
+  "name": "transifex-contentful-app",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
