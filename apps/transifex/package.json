@@ -1,6 +1,6 @@
 {
-  "name": "contentful-native-app",
-  "version": "0.1.0",
+  "name": "transifex-contentful-app",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "4.22.0",
