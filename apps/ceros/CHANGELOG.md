@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.0.3...ceros-contentful-app-v1.0.4) (2024-01-09)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.56.2 to 4.57.0 ([#657](https://github.com/contentful/marketplace-partner-apps/issues/657)) ([e1a2264](https://github.com/contentful/marketplace-partner-apps/commit/e1a226405fd012d9ebb5c8e94eb8cedeaae48174))
+* **deps:** bump follow-redirects from 1.15.2 to 1.15.4 ([#681](https://github.com/contentful/marketplace-partner-apps/issues/681)) ([03219b9](https://github.com/contentful/marketplace-partner-apps/commit/03219b94e98d5c183e8b5736ba23cfd5b28f4981))
+
 ## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.0.2...ceros-contentful-app-v1.0.3) (2023-12-19)
 
 

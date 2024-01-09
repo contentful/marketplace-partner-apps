@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-legacy-v1.0.2...cloudinary-assets-legacy-v1.0.3) (2024-01-09)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/dam-app-base from 2.2.1 to 2.2.2 ([#630](https://github.com/contentful/marketplace-partner-apps/issues/630)) ([2f0293b](https://github.com/contentful/marketplace-partner-apps/commit/2f0293b709785f02222d0c9d33cc0e34eec46370))
+* **deps:** bump @contentful/dam-app-base from 2.2.2 to 2.2.3 ([#649](https://github.com/contentful/marketplace-partner-apps/issues/649)) ([76d076a](https://github.com/contentful/marketplace-partner-apps/commit/76d076a1cda4c3f54943230130a08a54ff917794))
+* **deps:** bump @contentful/dam-app-base from 2.2.3 to 2.2.4 ([#656](https://github.com/contentful/marketplace-partner-apps/issues/656)) ([4a9f732](https://github.com/contentful/marketplace-partner-apps/commit/4a9f732d62c3b1681d667a05a3d3f43f0793fc1a))
+* **deps:** bump core-js from 3.34.0 to 3.35.0 ([#643](https://github.com/contentful/marketplace-partner-apps/issues/643)) ([a88ae94](https://github.com/contentful/marketplace-partner-apps/commit/a88ae946f75c45953d6b4b3d3c0de6f9ad0a6d9c))
+* **deps:** bump follow-redirects from 1.15.2 to 1.15.4 ([#681](https://github.com/contentful/marketplace-partner-apps/issues/681)) ([03219b9](https://github.com/contentful/marketplace-partner-apps/commit/03219b94e98d5c183e8b5736ba23cfd5b28f4981))
+
 ## [1.0.2](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-legacy-v1.0.1...cloudinary-assets-legacy-v1.0.2) (2023-12-13)
 
 
