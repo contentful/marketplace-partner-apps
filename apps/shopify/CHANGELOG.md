@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v1.0.4...shopify-sku-v1.1.0) (2024-01-09)
+
+
+### Features
+
+* upgrade shopify storefront API version ([#654](https://github.com/contentful/marketplace-partner-apps/issues/654)) ([7d38910](https://github.com/contentful/marketplace-partner-apps/commit/7d389101091e48cf45af4483ae9b48ac0ef345fc))
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/ecommerce-app-base from 3.4.15 to 3.4.16 ([#626](https://github.com/contentful/marketplace-partner-apps/issues/626)) ([533576d](https://github.com/contentful/marketplace-partner-apps/commit/533576d75908d86e6c72e8754d834e0396babc26))
+* **deps:** bump @contentful/ecommerce-app-base from 3.4.16 to 3.4.17 ([#634](https://github.com/contentful/marketplace-partner-apps/issues/634)) ([32d3019](https://github.com/contentful/marketplace-partner-apps/commit/32d3019581262dabae71bdc0b2e97f5278f447ae))
+* **deps:** bump @contentful/ecommerce-app-base from 3.4.17 to 3.4.18 ([#639](https://github.com/contentful/marketplace-partner-apps/issues/639)) ([95141f4](https://github.com/contentful/marketplace-partner-apps/commit/95141f462aba9e1cc7e1a15f3fb01b26720b0ee4))
+* **deps:** bump @contentful/ecommerce-app-base from 3.4.18 to 3.4.19 ([#651](https://github.com/contentful/marketplace-partner-apps/issues/651)) ([52b8b8b](https://github.com/contentful/marketplace-partner-apps/commit/52b8b8b6154ea80cf870173faa201b961aeba9d9))
+* **deps:** bump @contentful/ecommerce-app-base from 3.4.19 to 3.4.20 ([#653](https://github.com/contentful/marketplace-partner-apps/issues/653)) ([813f729](https://github.com/contentful/marketplace-partner-apps/commit/813f729dbff45480f7f0d370860c2238cc1d7441))
+* **deps:** bump @contentful/ecommerce-app-base from 3.4.20 to 3.4.21 ([#658](https://github.com/contentful/marketplace-partner-apps/issues/658)) ([c58522c](https://github.com/contentful/marketplace-partner-apps/commit/c58522cffcff4bf5cadce78aa80bed9ecb1199e3))
+* **deps:** bump @contentful/ecommerce-app-base from 3.4.21 to 3.5.0 ([#679](https://github.com/contentful/marketplace-partner-apps/issues/679)) ([aadfec9](https://github.com/contentful/marketplace-partner-apps/commit/aadfec9f34bbb7c258a034969507c0c008143f66))
+* **deps:** bump @contentful/f36-components from 4.56.2 to 4.57.0 ([#657](https://github.com/contentful/marketplace-partner-apps/issues/657)) ([e1a2264](https://github.com/contentful/marketplace-partner-apps/commit/e1a226405fd012d9ebb5c8e94eb8cedeaae48174))
+* **deps:** bump core-js from 3.34.0 to 3.35.0 ([#643](https://github.com/contentful/marketplace-partner-apps/issues/643)) ([a88ae94](https://github.com/contentful/marketplace-partner-apps/commit/a88ae946f75c45953d6b4b3d3c0de6f9ad0a6d9c))
+* **deps:** bump follow-redirects from 1.15.2 to 1.15.4 ([#681](https://github.com/contentful/marketplace-partner-apps/issues/681)) ([03219b9](https://github.com/contentful/marketplace-partner-apps/commit/03219b94e98d5c183e8b5736ba23cfd5b28f4981))
+
 ## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v1.0.3...shopify-sku-v1.0.4) (2023-12-21)
 
 

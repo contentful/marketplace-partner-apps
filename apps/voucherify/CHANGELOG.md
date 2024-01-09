@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/voucherify-contentful-app-v1.0.3...voucherify-contentful-app-v1.0.4) (2024-01-09)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.56.2 to 4.57.0 ([#657](https://github.com/contentful/marketplace-partner-apps/issues/657)) ([e1a2264](https://github.com/contentful/marketplace-partner-apps/commit/e1a226405fd012d9ebb5c8e94eb8cedeaae48174))
+* **deps:** bump @emotion/react from 11.11.1 to 11.11.3 ([#632](https://github.com/contentful/marketplace-partner-apps/issues/632)) ([4f56764](https://github.com/contentful/marketplace-partner-apps/commit/4f56764b878d7cf16fcc27ecf1e08460c9508fc5))
+* **deps:** bump axios from 1.6.2 to 1.6.3 ([#640](https://github.com/contentful/marketplace-partner-apps/issues/640)) ([8c1a0c3](https://github.com/contentful/marketplace-partner-apps/commit/8c1a0c3e626590ad4438f7ed14d6d4cc1e6ea8d9))
+* **deps:** bump axios from 1.6.3 to 1.6.4 ([#655](https://github.com/contentful/marketplace-partner-apps/issues/655)) ([0c6bc15](https://github.com/contentful/marketplace-partner-apps/commit/0c6bc15edc9a1d597de9bc1a17ce59172ec45d16))
+* **deps:** bump axios from 1.6.4 to 1.6.5 ([#664](https://github.com/contentful/marketplace-partner-apps/issues/664)) ([84f11ab](https://github.com/contentful/marketplace-partner-apps/commit/84f11ab91bcc3ff3a47ae7810827750383dd3c6e))
+* **deps:** bump react-hook-form from 7.49.1 to 7.49.3 ([#680](https://github.com/contentful/marketplace-partner-apps/issues/680)) ([2f853d7](https://github.com/contentful/marketplace-partner-apps/commit/2f853d75536f5b591e01d31f9545c1539e4f7cc6))
+* **deps:** bump react-router-dom from 6.21.0 to 6.21.1 ([#628](https://github.com/contentful/marketplace-partner-apps/issues/628)) ([b784c98](https://github.com/contentful/marketplace-partner-apps/commit/b784c98898a035483c1ab06f1a6cacbc927a263e))
+
 ## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/voucherify-contentful-app-v1.0.2...voucherify-contentful-app-v1.0.3) (2023-12-19)
 
 
