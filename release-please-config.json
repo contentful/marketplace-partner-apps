@@ -8,6 +8,7 @@
 		"apps/imageHotspotCreator": {},
 		"apps/shopify": {},
 		"apps/surfer": {},
+		"apps/transifex": {},
 		"apps/uploadcare": {},
 		"apps/voucherify": {}
 	}
