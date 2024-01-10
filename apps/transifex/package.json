@@ -20,7 +20,7 @@
   "scripts": {
     "install-ci": "npm ci",
     "start": "vite",
-    "build": "vite build",
+    "build": "vite build --mode=prod",
     "build:staging": "vite build --mode=staging",
     "build:dev": "vite build --mode=development",
     "lint": "prettier --write ./src && eslint --fix --ext js,jsx ./src",
