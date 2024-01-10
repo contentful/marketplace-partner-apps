@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.2...thrillworks-flex-fields-app-v1.1.3) (2024-01-10)
+
+
+### Bug Fixes
+
+* Field customizations and additional config scenarios ([#685](https://github.com/contentful/marketplace-partner-apps/issues/685)) ([3a7de59](https://github.com/contentful/marketplace-partner-apps/commit/3a7de593153aeac31de880058f6e216688a76e23))
+
 ## [1.1.2](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.1...thrillworks-flex-fields-app-v1.1.2) (2024-01-09)
 
 
