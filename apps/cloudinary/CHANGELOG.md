@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-legacy-v1.0.3...cloudinary-assets-legacy-v1.0.4) (2024-01-10)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/dam-app-base from 2.2.4 to 2.2.5 ([#688](https://github.com/contentful/marketplace-partner-apps/issues/688)) ([c789b1a](https://github.com/contentful/marketplace-partner-apps/commit/c789b1a609465634f6a1673020c3eed01d9cd098))
+
 ## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-legacy-v1.0.2...cloudinary-assets-legacy-v1.0.3) (2024-01-09)
 
 
