@@ -123,12 +123,18 @@ const ConfigScreen = () => {
       throw new Error("Please enter a condition value");
     }
 
+    const suffixIndex = targetEntity.indexOf("-sameEntity");
+    const isForSameEntity = suffixIndex !== -1;
+
     const newRule: Rule = {
       contentType,
       contentTypeField,
       condition,
       conditionValue,
-      targetEntity,
+      isForSameEntity,
+      targetEntity: isForSameEntity
+        ? targetEntity.substring(0, suffixIndex)
+        : targetEntity,
       targetEntityField,
     };
 
@@ -199,7 +205,7 @@ const ConfigScreen = () => {
     targetEntityField,
     conditionValue,
     parameters,
-    ruleToEditIndex
+    ruleToEditIndex,
   ]);
 
   useEffect(() => {
@@ -222,8 +228,7 @@ const ConfigScreen = () => {
         setTargetEntity(ruleToEdit.targetEntity);
         setTargetEntityField(ruleToEdit.targetEntityField);
       }, 100);
-    }    
-    
+    }
   }, [ruleToEditIndex, parameters.rules]);
 
   useEffect(() => {
@@ -298,9 +303,9 @@ const ConfigScreen = () => {
       let childrenEntities: any[] = [];
 
       children?.forEach((obj) => {
-        const linkedContentTypes = obj.items?.validations
-          ? obj.items?.validations[0]?.linkContentType
-          : [];
+        const linkedContentTypes =
+          obj.validations?.[0]?.linkContentType ||
+          obj.items?.validations?.[0]?.linkContentType;
         if (linkedContentTypes?.length) {
           childrenEntities = [...childrenEntities, ...linkedContentTypes];
         }
@@ -314,10 +319,10 @@ const ConfigScreen = () => {
 
         const targetEntities = [
           {
-            id: contentType,
+            id: `${contentType}-sameEntity`,
             name: `${
               contentTypes.find((c: Entry) => c.sys.id === contentType)?.name
-            } (Same content type)`,
+            } (Same Entry)`,
           },
           ...childrenEntities.map((contentType) => ({
             id: contentType,
@@ -336,19 +341,28 @@ const ConfigScreen = () => {
 
     if (!targetEntity) return;
 
-    cma.contentType.get({ contentTypeId: targetEntity }).then((data) => {
-      // only show fields that are not required
-      let fields = data?.fields.filter((field) => !field.required);
+    const suffixIndex = targetEntity.indexOf("-sameEntity");
+    const isForSameEntity = suffixIndex !== -1;
 
-      if (fields) {
-        // filter contentTypeField from fields
-        if (targetEntity === contentType) {
-          fields = fields.filter((field) => field.id !== contentTypeField);
+    cma.contentType
+      .get({
+        contentTypeId: isForSameEntity
+          ? targetEntity.substring(0, suffixIndex)
+          : targetEntity,
+      })
+      .then((data) => {
+        // only show fields that are not required
+        let fields = data?.fields.filter((field) => !field.required);
+
+        if (fields) {
+          // filter contentTypeField from fields
+          if (targetEntity === contentType) {
+            fields = fields.filter((field) => field.id !== contentTypeField);
+          }
+
+          setTargetEntityFields(fields);
         }
-
-        setTargetEntityFields(fields);
-      }
-    });
+      });
   }, [contentTypeField, targetEntity, cma.contentType, contentType]);
 
   const updateInput = (fieldId: string, value: string) => {
@@ -688,7 +702,12 @@ const ConfigScreen = () => {
       </Form>
 
       {!!parameters.rules && (
-        <RulesList deleteRule={deleteRule} rules={parameters.rules} setRuleToEditIndex={setRuleToEditIndex} ruleToEditIndex={ruleToEditIndex} />
+        <RulesList
+          deleteRule={deleteRule}
+          rules={parameters.rules}
+          setRuleToEditIndex={setRuleToEditIndex}
+          ruleToEditIndex={ruleToEditIndex}
+        />
       )}
 
       <Text

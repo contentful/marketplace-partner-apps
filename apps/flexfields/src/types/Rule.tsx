@@ -3,6 +3,7 @@ export type Rule = {
   contentTypeField: string;
   condition: string;
   conditionValue: string;
+  isForSameEntity: boolean;
   targetEntity: string;
   targetEntityField: string[];
   entryId?: string;

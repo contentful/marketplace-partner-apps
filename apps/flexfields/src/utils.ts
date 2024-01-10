@@ -16,10 +16,13 @@ export const getFieldExtensionSdk = (
 const isFieldHidden = (
   fieldId: string,
   contentType: string,
-  rules: Rule[]
+  rules: Rule[],
+  entryId: string
 ): boolean => {
   return !!rules.find(
     (rule) =>
+      ((rule.isForSameEntity && rule.entryId === entryId) ||
+        (!rule.isForSameEntity && rule.entryId !== entryId)) &&
       rule.targetEntity === contentType &&
       rule.targetEntityField.includes(fieldId)
   );
@@ -46,7 +49,8 @@ export const isRuleValid = (
 
   //get content type field value
   const contentTypeFieldValue =
-  entryFields[contentTypeField].value || entryFields[contentTypeField].getValue?.();
+    entryFields[contentTypeField].value ||
+    entryFields[contentTypeField].getValue?.();
 
   switch (condition) {
     case "is equal":
@@ -82,9 +86,9 @@ export const calculateEditorFields = (
     sessionStorage.getItem("filteredRules") || "[]"
   ).filter((rule: Rule) => rule.entryId !== entryId);
 
-  const rules = sdk.parameters.installation.rules as Rule[];
+  const rules = sdk.parameters.installation.rules || [] as Rule[];
   const filteredRules: Rule[] = rules
-    .filter((rule: Rule) =>
+    ?.filter((rule: Rule) =>
       isRuleValid(rule, entryFields, sdk.contentType.sys.id)
     )
     .map((rule: Rule) => ({ ...rule, entryId }));
@@ -112,7 +116,8 @@ export const calculateEditorFields = (
   }
 
   return sdk.contentType.fields.filter(
-    (field) => !isFieldHidden(field.id, sdk.contentType.sys.id, uniqueRulesList)
+    (field) =>
+      !isFieldHidden(field.id, sdk.contentType.sys.id, uniqueRulesList, entryId)
   );
 };
 

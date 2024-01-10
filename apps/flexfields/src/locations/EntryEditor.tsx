@@ -3,23 +3,50 @@ import { EditorAppSDK } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
 import { Field, FieldWrapper } from "@contentful/default-field-editors";
 import { Workbench } from "@contentful/f36-workbench";
-import { Form } from "@contentful/f36-components";
+import { Form, Text } from "@contentful/f36-components";
+import { css } from "emotion";
 import { calculateEditorFields, getFieldExtensionSdk } from "../utils";
 import { type Rule } from "../types/Rule";
+import { DefinedParameters } from "contentful-management";
 
 // Prop types for DefaultField component
 interface DefaultFieldProps {
   name: string;
   sdk: any;
   widgetId: string | null;
+  settings?: DefinedParameters;
 }
 
 // Render default contentful fields using Forma 36 Component
 const DefaultField = (props: DefaultFieldProps) => {
-  const { name, sdk, widgetId } = props;
+  const { settings, name, sdk, widgetId } = props;
   return (
-    <FieldWrapper sdk={sdk} name={name} showFocusBar={true}>
-      <Field sdk={sdk} widgetId={widgetId!} />
+    <FieldWrapper
+      name={name}
+      renderHelpText={() => (
+        <Text
+          as="div"
+          className={css({ fontStyle: "italic" })}
+          fontColor="gray500"
+          marginTop="spacingXs"
+        >
+          {settings?.helpText}
+        </Text>
+      )}
+      sdk={sdk}
+      showFocusBar={true}
+    >
+      <Field
+        sdk={sdk}
+        widgetId={widgetId!}
+        getOptions={(widgetId, _sdk) => ({
+          [widgetId]: {
+            parameters: {
+              instance: settings,
+            },
+          },
+        })}
+      />
     </FieldWrapper>
   );
 };
@@ -62,7 +89,7 @@ const EntryEditor = () => {
             // ev.target.id looks like fieldId-locale-contentTypeId
             const fieldId = id.split("-")[0];
             const entryFieldsCopy: any = { ...sdk.entry.fields };
-              entryFieldsCopy[fieldId] = { ...entryFieldsCopy[fieldId], value };
+            entryFieldsCopy[fieldId] = { ...entryFieldsCopy[fieldId], value };
 
             setEditorFields(
               calculateEditorFields(
@@ -85,6 +112,7 @@ const EntryEditor = () => {
                 name={field.name}
                 sdk={getFieldExtensionSdk(field.id, sdk)}
                 widgetId={widgetId}
+                settings={control?.settings}
               />
             );
           })}
