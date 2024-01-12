@@ -10,8 +10,6 @@ Head over to the [marketplace](https://www.contentful.com/marketplace/) and foll
 
 The Marketplace Partner Apps repo is maintained as a single repository for apps, containing several ecosystem partner apps + the tools needed to build and maintain them. The `apps` folder contains each partner app, and each sub-folder within `apps` should contain all the code necessary to build, test, and deploy your app without references to other apps or folders. All dependencies between apps are indepedent and isolated from each other.
 
-We highly encourage the use of TypeScript within your code, though this is not a requirement.
-
 ### First time setup
 
 The `marketplace-partner-apps` repo uses [Circle CI](https://circleci.com/docs/) (configured in `.circleci/config.yml`) to deploy itself, and [Lerna](https://lerna.js.org/) (configured in `lerna.json`) to manage the collection of partner apps.
@@ -56,6 +54,8 @@ If you are interested in learning how to build a simple example app, you can che
 Detailed documentation can be found in the [App SDK documentation](https://www.contentful.com/developers/docs/extensibility/ui-extensions/sdk-reference/) and the [Management HTTP API reference documentation](https://www.contentful.com/developers/docs/references/content-management-api/).
 
 Please note that each app has its individual source code license associated with it. Refer to the LICENSE file in the apps root folder.
+
+We also highly encourage the use of TypeScript within your code, though this is not a requirement.
 
 ## Resources
 
