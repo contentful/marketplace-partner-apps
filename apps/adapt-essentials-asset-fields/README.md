@@ -1,4 +1,4 @@
-![App icon](doc/app-icon.svg) [![Install to Contentful](https://www.ctfstatic.com/button/install-small.svg)](https://app.contentful.com/deeplink?link=apps&id=3Jt0c7RHcmPsB3mJAQC4iP)
+![App icon](doc/app-icon.svg) [![Install to Contentful](https://www.ctfstatic.com/button/install-small.svg)](https://app.contentful.com/deeplink?link=apps&id=6RGLVmXYrGaIIRIda1HwAC)
 
 # Adapt Essentials: Asset fields 
 

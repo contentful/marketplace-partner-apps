@@ -11,8 +11,7 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier src/**/*.{ts,tsx} --write",
     "preview": "vite preview",
-    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 3Jt0c7RHcmPsB3mJAQC4iP --token ${CONTENTFUL_CMA_TOKEN}",
-    "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id 3zzMa85tjfnkUUJgdBJco3 --token ${TEST_CMA_TOKEN}"
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 6RGLVmXYrGaIIRIda1HwAC --token ${CONTENTFUL_CMA_TOKEN}"
   },
   "dependencies": {
     "@contentful/app-sdk": "^4.19.1",
