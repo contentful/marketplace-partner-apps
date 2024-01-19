@@ -29,7 +29,7 @@
     "use-local-storage-extended": "^0.1.1"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "^1.10.2",
+    "@contentful/app-scripts": "^1.13.2",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^6.17.0",
