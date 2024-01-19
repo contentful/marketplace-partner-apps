@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.7...image-hotspot-creator-v1.0.8) (2024-01-19)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.45.0 to 4.58.0 ([#695](https://github.com/contentful/marketplace-partner-apps/issues/695)) ([c20a262](https://github.com/contentful/marketplace-partner-apps/commit/c20a262be70c10f41d8e60adbb125cd53969648c))
+* **deps:** bump @contentful/f36-components from 4.58.0 to 4.58.1 ([#706](https://github.com/contentful/marketplace-partner-apps/issues/706)) ([9f40eae](https://github.com/contentful/marketplace-partner-apps/commit/9f40eae83f94298e588cdd8f34ca9812a461672c))
+* **deps:** bump @contentful/f36-components from 4.58.1 to 4.58.3 ([#718](https://github.com/contentful/marketplace-partner-apps/issues/718)) ([dd64a06](https://github.com/contentful/marketplace-partner-apps/commit/dd64a065640b3e41539459cfd921c9de5e78c2b6))
+* **deps:** bump @contentful/f36-components from 4.58.3 to 4.58.4 ([#722](https://github.com/contentful/marketplace-partner-apps/issues/722)) ([8912c4b](https://github.com/contentful/marketplace-partner-apps/commit/8912c4bbd1f74b08619419ed72f31fe733c4a81a))
+* **deps:** bump @contentful/f36-tokens from 4.0.2 to 4.0.4 ([#711](https://github.com/contentful/marketplace-partner-apps/issues/711)) ([278430a](https://github.com/contentful/marketplace-partner-apps/commit/278430aac7def1bf0cadbfb971332366f21a9d79))
+* **deps:** bump @mui/icons-material from 5.15.3 to 5.15.4 ([#697](https://github.com/contentful/marketplace-partner-apps/issues/697)) ([e8047b7](https://github.com/contentful/marketplace-partner-apps/commit/e8047b77f3714f4fcec5933ba15d69ed797f218a))
+* **deps:** bump @mui/icons-material from 5.15.4 to 5.15.5 ([#716](https://github.com/contentful/marketplace-partner-apps/issues/716)) ([11a559f](https://github.com/contentful/marketplace-partner-apps/commit/11a559f147d376942520f9302fc777a51fd2b171))
+* **deps:** bump @mui/material from 5.15.3 to 5.15.4 ([#698](https://github.com/contentful/marketplace-partner-apps/issues/698)) ([1f1d436](https://github.com/contentful/marketplace-partner-apps/commit/1f1d436f955e40da38ab5e3a66970051210f7484))
+* **deps:** bump @mui/material from 5.15.4 to 5.15.5 ([#715](https://github.com/contentful/marketplace-partner-apps/issues/715)) ([1dea51a](https://github.com/contentful/marketplace-partner-apps/commit/1dea51a9973f91cbad69093a113e215fb20fee99))
+
 ## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.6...image-hotspot-creator-v1.0.7) (2024-01-09)
 
 
