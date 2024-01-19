@@ -10,6 +10,7 @@
 		"apps/surfer": {},
 		"apps/transifex": {},
 		"apps/uploadcare": {},
-		"apps/voucherify": {}
+		"apps/voucherify": {},
+		"apps/adapt-essentials-asset-fields": {}
 	}
 }
