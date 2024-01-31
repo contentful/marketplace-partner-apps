@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.0.9](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.8...image-hotspot-creator-v1.0.9) (2024-01-31)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.43.0 to 4.59.0 ([#774](https://github.com/contentful/marketplace-partner-apps/issues/774)) ([95e0998](https://github.com/contentful/marketplace-partner-apps/commit/95e0998ca0ec5f3013a2b947f395a27d38660bfd))
+* **deps:** bump @mui/icons-material from 5.15.5 to 5.15.6 ([#745](https://github.com/contentful/marketplace-partner-apps/issues/745)) ([54b77b8](https://github.com/contentful/marketplace-partner-apps/commit/54b77b841e719e15a9e8fc2ab7963b4b82f0e030))
+* **deps:** bump @mui/material from 5.15.5 to 5.15.6 ([#746](https://github.com/contentful/marketplace-partner-apps/issues/746)) ([cf92626](https://github.com/contentful/marketplace-partner-apps/commit/cf92626b27c3f70a5991dd8522bb082fa0518b9b))
+* **deps:** bump axios from 1.6.5 to 1.6.6 ([#758](https://github.com/contentful/marketplace-partner-apps/issues/758)) ([5aefff9](https://github.com/contentful/marketplace-partner-apps/commit/5aefff9552d21a22f7a7d5e91b18bd3326e57d69))
+* **deps:** bump axios from 1.6.6 to 1.6.7 ([#762](https://github.com/contentful/marketplace-partner-apps/issues/762)) ([0dead92](https://github.com/contentful/marketplace-partner-apps/commit/0dead92a5f6952d04a035b018bc88f3689f4c393))
+* **deps:** bump contentful from 10.6.16 to 10.6.17 ([#740](https://github.com/contentful/marketplace-partner-apps/issues/740)) ([f36c91f](https://github.com/contentful/marketplace-partner-apps/commit/f36c91fe589e7b2d71d511bb1ecef3cb5fb4fe36))
+* **deps:** bump contentful from 10.6.17 to 10.6.18 ([#753](https://github.com/contentful/marketplace-partner-apps/issues/753)) ([d96482f](https://github.com/contentful/marketplace-partner-apps/commit/d96482f902816b24c877955a0c23487ff5425a32))
+* **deps:** bump contentful from 10.6.18 to 10.6.19 ([#757](https://github.com/contentful/marketplace-partner-apps/issues/757)) ([746a93e](https://github.com/contentful/marketplace-partner-apps/commit/746a93e7e623242b1e8238e27681b3f2b2f155f8))
+* **deps:** bump contentful from 10.6.19 to 10.6.21 ([#778](https://github.com/contentful/marketplace-partner-apps/issues/778)) ([98b1933](https://github.com/contentful/marketplace-partner-apps/commit/98b1933977cc82d8976ac429c64e43aad226c371))
+
 ## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.7...image-hotspot-creator-v1.0.8) (2024-01-19)
 
 

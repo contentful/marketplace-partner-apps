@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.5](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.4...surfer-contentful-app-v1.0.5) (2024-01-31)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.43.0 to 4.59.0 ([#774](https://github.com/contentful/marketplace-partner-apps/issues/774)) ([95e0998](https://github.com/contentful/marketplace-partner-apps/commit/95e0998ca0ec5f3013a2b947f395a27d38660bfd))
+* **deps:** bump @contentful/f36-multiselect from 4.21.0 to 4.22.0 ([#766](https://github.com/contentful/marketplace-partner-apps/issues/766)) ([c051069](https://github.com/contentful/marketplace-partner-apps/commit/c051069334df44fb88de2cbad5ec2464b6a3127c))
+* **deps:** bump @contentful/rich-text-html-renderer from 16.3.0 to 16.3.3 ([#749](https://github.com/contentful/marketplace-partner-apps/issues/749)) ([fae67b2](https://github.com/contentful/marketplace-partner-apps/commit/fae67b2de24fe076004a541736ce125fc87cdbda))
+* **deps:** bump @contentful/rich-text-html-renderer from 16.3.3 to 16.3.4 ([#776](https://github.com/contentful/marketplace-partner-apps/issues/776)) ([2197458](https://github.com/contentful/marketplace-partner-apps/commit/2197458770612c617869d8f24265163662b7c9a5))
+
 ## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.3...surfer-contentful-app-v1.0.4) (2024-01-19)
 
 
