@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.5](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.4...thrillworks-flex-fields-app-v1.1.5) (2024-01-31)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/default-field-editors from 1.6.5 to 1.6.9 ([#748](https://github.com/contentful/marketplace-partner-apps/issues/748)) ([73a4eb2](https://github.com/contentful/marketplace-partner-apps/commit/73a4eb28127872d3d463c2ac4e75df4a37efd0ed))
+* **deps:** bump @contentful/f36-components from 4.43.0 to 4.59.0 ([#774](https://github.com/contentful/marketplace-partner-apps/issues/774)) ([95e0998](https://github.com/contentful/marketplace-partner-apps/commit/95e0998ca0ec5f3013a2b947f395a27d38660bfd))
+* **deps:** bump @contentful/f36-multiselect from 4.21.0 to 4.22.0 ([#766](https://github.com/contentful/marketplace-partner-apps/issues/766)) ([c051069](https://github.com/contentful/marketplace-partner-apps/commit/c051069334df44fb88de2cbad5ec2464b6a3127c))
+
 ## [1.1.4](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.3...thrillworks-flex-fields-app-v1.1.4) (2024-01-19)
 
 

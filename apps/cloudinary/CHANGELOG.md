@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.6](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-legacy-v1.0.5...cloudinary-assets-legacy-v1.0.6) (2024-01-31)
+
+
+### Bug Fixes
+
+* **deps:** bump core-js from 3.35.0 to 3.35.1 ([#734](https://github.com/contentful/marketplace-partner-apps/issues/734)) ([8f2e668](https://github.com/contentful/marketplace-partner-apps/commit/8f2e668c0e1b15c56c295db22e49e2b7b74244e5))
+
 ## [1.0.5](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-legacy-v1.0.4...cloudinary-assets-legacy-v1.0.5) (2024-01-19)
 
 

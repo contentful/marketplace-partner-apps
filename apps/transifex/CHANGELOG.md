@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.2](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.0.1...transifex-contentful-app-v1.0.2) (2024-01-31)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.43.0 to 4.59.0 ([#774](https://github.com/contentful/marketplace-partner-apps/issues/774)) ([95e0998](https://github.com/contentful/marketplace-partner-apps/commit/95e0998ca0ec5f3013a2b947f395a27d38660bfd))
+* **deps:** bump eslint from 8.43.0 to 8.56.0 ([#755](https://github.com/contentful/marketplace-partner-apps/issues/755)) ([0674445](https://github.com/contentful/marketplace-partner-apps/commit/06744455c70be2c8ea96baffd053dcf9be2a0698))
+
 ## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.0.0...transifex-contentful-app-v1.0.1) (2024-01-19)
 
 
