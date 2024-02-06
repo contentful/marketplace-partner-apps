@@ -1,0 +1,129 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Config Screen component renders correctly 1`] = `
+<div>
+  <div>
+    <div>
+      <img
+        alt="Contentful Commerce by Commerce Layer"
+        src="assets/header-light.png"
+      />
+      <div>
+        <p
+          data-test-id="cf-ui-paragraph"
+        >
+          Welcome to the Configuration page of the Contentful Commerce app, powered by Commerce Layer. This interface is designed to streamline your journey in setting up a product catalog within Contentful. Tailor your content model to fit your unique commerce needs by customizing content type labels, which will be reflected across your Contentful environment.
+        </p>
+        <p
+          data-test-id="cf-ui-paragraph"
+        >
+          Please note that while you can personalize the display labels, the underlying ID used in the API responses will remain consistent, ensuring a stable and seamless integration. Start configuring your content types below to enhance your ecommerce experience.
+        </p>
+        <hr />
+        <form
+          data-test-id="cf-ui-form-label"
+        >
+          <div
+            data-test-id="cf-ui-form-control"
+            role="group"
+          >
+            <label
+              data-test-id="cf-ui-form-label"
+            >
+              Product Label
+            </label>
+            <input
+              aria-describedby="productLabel-helptext"
+              data-test-id="cf-ui-text-input"
+              name="productLabel"
+              placeholder="e.g. Book"
+              type="text"
+              value=""
+            />
+            <p
+              data-test-id="cf-ui-help-text"
+            >
+              The label of the Product content type
+            </p>
+          </div>
+          <div
+            data-test-id="cf-ui-form-control"
+            role="group"
+          >
+            <label
+              data-test-id="cf-ui-form-label"
+            >
+              Variant Label
+            </label>
+            <input
+              aria-describedby="variantLabel-helptext"
+              data-test-id="cf-ui-text-input"
+              name="variantLabel"
+              placeholder="e.g. Book Type"
+              type="text"
+              value=""
+            />
+            <p
+              data-test-id="cf-ui-help-text"
+            >
+              The label of the Variant content type
+            </p>
+          </div>
+          <div
+            data-test-id="cf-ui-form-control"
+            role="group"
+          >
+            <label
+              data-test-id="cf-ui-form-label"
+            >
+              Taxonomy Label
+            </label>
+            <input
+              aria-describedby="taxonomyLabel-helptext"
+              data-test-id="cf-ui-text-input"
+              name="taxonomyLabel"
+              placeholder="e.g. Category System"
+              type="text"
+              value=""
+            />
+            <p
+              data-test-id="cf-ui-help-text"
+            >
+              The label of the Taxonomy content type
+            </p>
+          </div>
+          <div
+            data-test-id="cf-ui-form-control"
+            role="group"
+          >
+            <label
+              data-test-id="cf-ui-form-label"
+            >
+              Taxon Label
+            </label>
+            <input
+              aria-describedby="taxonLabel-helptext"
+              data-test-id="cf-ui-text-input"
+              name="taxonLabel"
+              placeholder="e.g. Category"
+              type="text"
+              value=""
+            />
+            <p
+              data-test-id="cf-ui-help-text"
+            >
+              The label of the Taxon content type
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div>
+      <img
+        alt="Commerce Layer logo"
+        src="assets/commercelayer-glyph-black.png"
+      />
+    </div>
+  </div>
+</div>
+`;
