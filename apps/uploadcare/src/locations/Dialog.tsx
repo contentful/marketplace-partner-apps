@@ -25,7 +25,10 @@ export default function Dialog(): ReactElement {
   const assetsRef = useRef<Asset[]>([]);
 
   useEffect(() => {
-    const handleUploadEvent = (e: CustomEvent) => {
+    const handleUploadEvent = (event: Event) => {
+      // see https://github.com/uploadcare/blocks/blob/69105e4806e9ca2d4254bce297c48e0990663212/abstract/UploaderBlock.js#L420-L435
+      const e = event as CustomEvent<{ data: Asset[] }>
+
       if (e.detail?.data) {
         assetsRef.current = e.detail.data;
       }
