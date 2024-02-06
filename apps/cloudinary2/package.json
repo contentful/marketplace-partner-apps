@@ -31,7 +31,7 @@
     "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id 3OMVIvG6YcugUajdy2s5D5 --token ${TEST_CMA_TOKEN}"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.13.4",
+    "@contentful/app-scripts": "1.14.0",
     "@testing-library/react": "14.0.0",
     "@testing-library/user-event": "14.5.2",
     "@tsconfig/vite-react": "2.0.1",
