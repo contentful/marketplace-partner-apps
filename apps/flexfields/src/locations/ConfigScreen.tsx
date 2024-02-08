@@ -356,7 +356,7 @@ const ConfigScreen = () => {
 
         if (fields) {
           // filter contentTypeField from fields
-          if (targetEntity === contentType) {
+          if (isForSameEntity && targetEntity.substring(0, suffixIndex) === contentType) {
             fields = fields.filter((field) => field.id !== contentTypeField);
           }
 
