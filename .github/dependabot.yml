@@ -14,16 +14,6 @@ updates:
       prefix: 'fix'
       prefix-development: 'chore'
       include: 'scope'
-  - package-ecosystem: npm
-    schedule:
-      interval: daily
-      time: '03:00'
-      timezone: UTC
-    open-pull-requests-limit: 3
-    commit-message:
-      prefix: 'fix'
-      prefix-development: 'chore'
-      include: 'scope'
     directory: '/'
   - package-ecosystem: npm
     schedule:
