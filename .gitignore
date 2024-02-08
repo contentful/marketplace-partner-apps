@@ -1,6 +1,5 @@
 node_modules
 .envrc
-.env**
 .DS_Store
 build
 dist
