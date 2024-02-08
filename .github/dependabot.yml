@@ -13,6 +13,5 @@ updates:
       prefix-development: 'chore'
       include: 'scope'
     ignore:
-      - dependency-name: '*'
-        update-types: ['version-update:semver-major']
+      # TODO: Remove this. Why do we ignore app-sdk updates?
       - dependency-name: '@contentful/app-sdk'
