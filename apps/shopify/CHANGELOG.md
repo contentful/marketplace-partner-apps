@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.4](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v1.1.3...shopify-sku-v1.1.4) (2024-02-08)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/ecommerce-app-base from 3.5.10 to 3.5.11 ([#779](https://github.com/contentful/marketplace-partner-apps/issues/779)) ([46a2430](https://github.com/contentful/marketplace-partner-apps/commit/46a2430ff6d3401e70b7ae982a3913417c396c47))
+* **deps:** bump @contentful/ecommerce-app-base from 3.5.11 to 3.5.13 ([#787](https://github.com/contentful/marketplace-partner-apps/issues/787)) ([bdadc20](https://github.com/contentful/marketplace-partner-apps/commit/bdadc200a99f1ea9216b8909c79c0d53cb9cb0b1))
+* **deps:** bump @contentful/ecommerce-app-base from 3.5.13 to 3.5.14 ([#794](https://github.com/contentful/marketplace-partner-apps/issues/794)) ([77b71f7](https://github.com/contentful/marketplace-partner-apps/commit/77b71f74c01ec31225d11b2f72ca12404d50ad40))
+* **deps:** bump @contentful/ecommerce-app-base from 3.5.14 to 3.5.16 ([#806](https://github.com/contentful/marketplace-partner-apps/issues/806)) ([27a5b28](https://github.com/contentful/marketplace-partner-apps/commit/27a5b28ee285e030edf826d1318d6369719b7a2d))
+* **deps:** bump @contentful/ecommerce-app-base from 3.5.16 to 3.5.18 ([#812](https://github.com/contentful/marketplace-partner-apps/issues/812)) ([8b497bf](https://github.com/contentful/marketplace-partner-apps/commit/8b497bf8c182c7b0161ca551166cde1a7d0185b8))
+* **deps:** bump @contentful/f36-components from 4.59.0 to 4.59.1 ([#781](https://github.com/contentful/marketplace-partner-apps/issues/781)) ([705579e](https://github.com/contentful/marketplace-partner-apps/commit/705579ebb5877c131fd175d0e6e88f436b341828))
+* **deps:** bump @contentful/f36-components from 4.59.1 to 4.59.2 ([#796](https://github.com/contentful/marketplace-partner-apps/issues/796)) ([da8722f](https://github.com/contentful/marketplace-partner-apps/commit/da8722f141ad36536e49c99650fa6c3dbb968e4e))
+* **deps:** bump @contentful/f36-components from 4.59.2 to 4.59.3 ([#807](https://github.com/contentful/marketplace-partner-apps/issues/807)) ([d322dca](https://github.com/contentful/marketplace-partner-apps/commit/d322dcae260d083a635da8bce357393fa9f2886a))
+
 ## [1.1.3](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v1.1.2...shopify-sku-v1.1.3) (2024-01-31)
 
 

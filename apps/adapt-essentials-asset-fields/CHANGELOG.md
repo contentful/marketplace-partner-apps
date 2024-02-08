@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.2](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.0.1...adapt-essentials-asset-fields-v1.0.2) (2024-02-08)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.59.0 to 4.59.1 ([#781](https://github.com/contentful/marketplace-partner-apps/issues/781)) ([705579e](https://github.com/contentful/marketplace-partner-apps/commit/705579ebb5877c131fd175d0e6e88f436b341828))
+* **deps:** bump @contentful/f36-components from 4.59.1 to 4.59.2 ([#796](https://github.com/contentful/marketplace-partner-apps/issues/796)) ([da8722f](https://github.com/contentful/marketplace-partner-apps/commit/da8722f141ad36536e49c99650fa6c3dbb968e4e))
+* **deps:** bump @contentful/f36-components from 4.59.2 to 4.59.3 ([#807](https://github.com/contentful/marketplace-partner-apps/issues/807)) ([d322dca](https://github.com/contentful/marketplace-partner-apps/commit/d322dcae260d083a635da8bce357393fa9f2886a))
+* **deps:** bump @contentful/f36-workbench from 4.21.0 to 4.21.1 ([#782](https://github.com/contentful/marketplace-partner-apps/issues/782)) ([c462871](https://github.com/contentful/marketplace-partner-apps/commit/c462871f4bceab529dce4d049332d6abd365cff1))
+* **deps:** bump react-router-dom from 6.21.3 to 6.22.0 ([#790](https://github.com/contentful/marketplace-partner-apps/issues/790)) ([01965ce](https://github.com/contentful/marketplace-partner-apps/commit/01965cec9826ef1fff8684ba73731a5dc299a0e4))
+
 ## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.0.0...adapt-essentials-asset-fields-v1.0.1) (2024-01-31)
 
 
