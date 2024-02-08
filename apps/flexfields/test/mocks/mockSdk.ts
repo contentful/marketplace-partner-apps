@@ -19,6 +19,10 @@ const mockSdk: any = {
   contentType: {
     fields: [],
   },
+  editor: {
+    getLocaleSettings: () => ({}),
+    onLocaleSettingsChanged: () => {},
+  },
 };
 
 export { mockSdk };
