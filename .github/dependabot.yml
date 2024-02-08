@@ -24,6 +24,8 @@ updates:
     directory: '/apps/cloudinary'
   - <<: *common_settings
     directory: '/apps/cloudinary2'
+    ignore:
+      - dependency-name: '@contentful/app-sdk'
   - <<: *common_settings
     directory: '/apps/flexfields'
   - <<: *common_settings
