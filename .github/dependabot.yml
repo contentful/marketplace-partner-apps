@@ -2,9 +2,9 @@ version: 2
 
 # note: we split each app out individually to force dependabot to open individual, separate PRs for each apps
 # so that app changes are decoupled from one another
+# yaml anchors and aliases are not support in dependabot -- so lot's of repetition here!
 updates:
-  - &common_settings
-    package-ecosystem: npm
+  - package-ecosystem: npm
     schedule:
       interval: daily
       time: '03:00'
@@ -14,31 +14,148 @@ updates:
       prefix: 'fix'
       prefix-development: 'chore'
       include: 'scope'
-  - <<: *common_settings
+  - package-ecosystem: npm
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: UTC
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
     directory: '/'
-  - <<: *common_settings
+  - package-ecosystem: npm
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: UTC
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
     directory: '/apps/adapt-essentials-asset-fields'
-  - <<: *common_settings
+  - package-ecosystem: npm
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: UTC
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
     directory: '/apps/bynder'
-  - <<: *common_settings
+  - package-ecosystem: npm
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: UTC
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
     directory: '/apps/ceros'
-  - <<: *common_settings
+  - package-ecosystem: npm
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: UTC
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
     directory: '/apps/cloudinary'
-  - <<: *common_settings
+  - package-ecosystem: npm
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: UTC
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
     directory: '/apps/cloudinary2'
     ignore:
       - dependency-name: '@contentful/app-sdk'
-  - <<: *common_settings
+  - package-ecosystem: npm
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: UTC
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
     directory: '/apps/flexfields'
-  - <<: *common_settings
+  - package-ecosystem: npm
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: UTC
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
     directory: '/apps/imageHotspotCreator'
-  - <<: *common_settings
+  - package-ecosystem: npm
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: UTC
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
     directory: '/apps/shopify'
-  - <<: *common_settings
+  - package-ecosystem: npm
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: UTC
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
     directory: '/apps/surfer'
-  - <<: *common_settings
+  - package-ecosystem: npm
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: UTC
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
     directory: '/apps/transifex'
-  - <<: *common_settings
+  - package-ecosystem: npm
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: UTC
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
     directory: '/apps/uploadcare'
-  - <<: *common_settings
+  - package-ecosystem: npm
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: UTC
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
     directory: '/apps/voucherify'
