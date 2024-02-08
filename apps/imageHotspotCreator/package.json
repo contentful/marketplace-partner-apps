@@ -61,7 +61,7 @@
     "@testing-library/react": "14.0.0",
     "@tsconfig/create-react-app": "2.0.0",
     "@types/jest": "29.5.12",
-    "@types/node": "16.18.79",
+    "@types/node": "20.11.16",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
     "better-docs": "^2.7.2",
