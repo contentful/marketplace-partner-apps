@@ -29,8 +29,9 @@ In order for your app to be deployed successfully (with the exception of the tes
   - `deploy:staging` This script is not necessary at this point in time. We are currently working to add an official Contentful staging organization to house staging marketplace partner spaces and the respective staging app definition, for which this script can eventually point to.
   - Additionally, ensure that the package version number is below 1.0.0. The version of 1.0.0 is reserved for initial release. 
 
+> [!NOTE]
 > **Please note that dependabot is enabled in this repo and will run automatically.**
-> While it will attempt to only upgrade dependencies without breaking changes, it is possible it will still introduce issues. Creating and maintaining comprehensive tests is critical to preventing code and build issues.
+> While it will attempt to only upgrade dependencies without breaking changes, it is possible it will still introduce issues. Creating and maintaining comprehensive tests is critical to preventing code and build issues. See [Keeping dependencies up to date](#keeping-dependencies-up-to-date) for more details.
 
 ### Committing and updating your repo
 
@@ -44,7 +45,24 @@ When you are ready to submit your app to the [marketplace apps repo](https://git
 - Ensure your changes are wholly contained within your app's folder, and do not make alterations to other folders or the root level. If you have need for root-level changes, please create an issue instead.
 - Prevent / reduce references to external resources and code. The `marketplace-partner-apps` is intended to be open and transparent and any external resources will be _highly_ scrutinized.
 
-> **Please note that merges to the main branch will trigger your deploy:staging script and thus deploy to staging. Merges to the production branch will trigger the deploy script and thus deploy to production.**
+### Keeping dependencies up to date
+
+It is the responsibility of all partner app developers to ensure their app is kept up to date with the latest versions of all depedencies required by their app. This is required not only to ensure their app continues to function as expected alongside the constantly evolving Contentful platform, but also to ensure that critical security updates are applied in a timely fashion and are not slowed down by out of date cross depedencies.
+
+To keep depedencies up to date, Contentful uses [Dependabot](https://docs.github.com/en/code-security/dependabot) in this repository. Dependabot will:
+
+* Open PRs to propose dependency updates for every depedency listed in your app's package.json file.
+* Automatically approve and merge PRs for patch and minor version updates.
+* Hold off on merging PRs for major version updates pending manual review by a human.
+
+> [!TIP]
+> We recommend specifying bare versions (e.g. `1.2.3`) of dependencies in your package.json file vs. a range of versions (e.g. `1.2.x` or `~1.2.3`). Dependabot will increment versions in your package.json file automatically.
+
+As an app developer, it is important to review and approve any dependency update PRs assigned to you on a frequent basis. Specifically we ask that you:
+
+* Provide a reasonably confident test suite that exercises the main functionality of your app. Test suites generally do an excellent job of catching errors caused by backward breaking compatibility changes in updated depedencies.
+* Respond to and review any dependency-related PRs that are opened against your app (whether by Dependabot or the Contentful team) in a timely fashion.
+* Talk to us if you have a specific requirement to firmly pin a dependency version. We can make custom modifications to our Dependabot configuration to support exceptions as needed.
 
 ## Building your own app
 
