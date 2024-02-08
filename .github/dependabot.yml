@@ -15,6 +15,10 @@ updates:
       prefix-development: 'chore'
       include: 'scope'
     directory: '/'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -26,6 +30,10 @@ updates:
       prefix-development: 'chore'
       include: 'scope'
     directory: '/apps/adapt-essentials-asset-fields'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -37,6 +45,10 @@ updates:
       prefix-development: 'chore'
       include: 'scope'
     directory: '/apps/bynder'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -48,6 +60,10 @@ updates:
       prefix-development: 'chore'
       include: 'scope'
     directory: '/apps/ceros'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -59,6 +75,10 @@ updates:
       prefix-development: 'chore'
       include: 'scope'
     directory: '/apps/cloudinary'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -72,6 +92,9 @@ updates:
     directory: '/apps/cloudinary2'
     ignore:
       - dependency-name: '@contentful/app-sdk'
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -83,6 +106,10 @@ updates:
       prefix-development: 'chore'
       include: 'scope'
     directory: '/apps/flexfields'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -94,6 +121,10 @@ updates:
       prefix-development: 'chore'
       include: 'scope'
     directory: '/apps/imageHotspotCreator'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -105,6 +136,10 @@ updates:
       prefix-development: 'chore'
       include: 'scope'
     directory: '/apps/shopify'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -116,6 +151,10 @@ updates:
       prefix-development: 'chore'
       include: 'scope'
     directory: '/apps/surfer'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -127,6 +166,10 @@ updates:
       prefix-development: 'chore'
       include: 'scope'
     directory: '/apps/transifex'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -138,6 +181,10 @@ updates:
       prefix-development: 'chore'
       include: 'scope'
     directory: '/apps/uploadcare'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -149,3 +196,7 @@ updates:
       prefix-development: 'chore'
       include: 'scope'
     directory: '/apps/voucherify'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
