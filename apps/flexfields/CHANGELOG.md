@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.6](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.5...thrillworks-flex-fields-app-v1.1.6) (2024-02-08)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/default-field-editors from 1.6.10 to 1.6.11 ([#800](https://github.com/contentful/marketplace-partner-apps/issues/800)) ([869c9f8](https://github.com/contentful/marketplace-partner-apps/commit/869c9f872d52d6c1b5f52e903067a55d1de16ce7))
+* **deps:** bump @contentful/default-field-editors from 1.6.9 to 1.6.10 ([#793](https://github.com/contentful/marketplace-partner-apps/issues/793)) ([1f86120](https://github.com/contentful/marketplace-partner-apps/commit/1f861200e842c643b2f9bbc476c8ae99bb879060))
+* **deps:** bump @contentful/f36-components from 4.59.0 to 4.59.1 ([#781](https://github.com/contentful/marketplace-partner-apps/issues/781)) ([705579e](https://github.com/contentful/marketplace-partner-apps/commit/705579ebb5877c131fd175d0e6e88f436b341828))
+* **deps:** bump @contentful/f36-components from 4.59.1 to 4.59.2 ([#796](https://github.com/contentful/marketplace-partner-apps/issues/796)) ([da8722f](https://github.com/contentful/marketplace-partner-apps/commit/da8722f141ad36536e49c99650fa6c3dbb968e4e))
+* **deps:** bump @contentful/f36-components from 4.59.2 to 4.59.3 ([#807](https://github.com/contentful/marketplace-partner-apps/issues/807)) ([d322dca](https://github.com/contentful/marketplace-partner-apps/commit/d322dcae260d083a635da8bce357393fa9f2886a))
+* **deps:** bump @contentful/f36-workbench from 4.21.0 to 4.21.1 ([#782](https://github.com/contentful/marketplace-partner-apps/issues/782)) ([c462871](https://github.com/contentful/marketplace-partner-apps/commit/c462871f4bceab529dce4d049332d6abd365cff1))
+
 ## [1.1.5](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.4...thrillworks-flex-fields-app-v1.1.5) (2024-01-31)
 
 
