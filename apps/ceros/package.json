@@ -42,7 +42,7 @@
     "@contentful/app-scripts": "1.14.0",
     "@testing-library/jest-dom": "6.4.2",
     "@testing-library/react": "14.0.0",
-    "@tsconfig/create-react-app": "1.0.3",
+    "@tsconfig/create-react-app": "2.0.2",
     "@types/jest": "29.5.12",
     "@types/node": "16.18.79",
     "@types/react": "18.2.7",
