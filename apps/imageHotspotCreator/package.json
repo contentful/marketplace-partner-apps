@@ -18,7 +18,7 @@
     "clone-deep": "^4.0.1",
     "contentful": "^10.3.3",
     "contentful-management": "10.46.4",
-    "emotion": "10.0.27",
+    "emotion": "11.0.0",
     "path-browserify": "^1.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",

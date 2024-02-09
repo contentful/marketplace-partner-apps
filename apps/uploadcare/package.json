@@ -14,7 +14,7 @@
     "@uploadcare/blocks": "0.32.1",
     "@uploadcare/upload-client": "6.13.0",
     "contentful-management": "10.46.4",
-    "emotion": "10.0.27",
+    "emotion": "11.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
