@@ -74,21 +74,6 @@ updates:
       prefix: 'fix'
       prefix-development: 'chore'
       include: 'scope'
-    directory: '/apps/cloudinary'
-    ignore:
-      - dependency-name: '@types/node'
-        versions:
-          - '>18.15.3'
-  - package-ecosystem: npm
-    schedule:
-      interval: daily
-      time: '03:00'
-      timezone: UTC
-    open-pull-requests-limit: 3
-    commit-message:
-      prefix: 'fix'
-      prefix-development: 'chore'
-      include: 'scope'
     directory: '/apps/cloudinary2'
     ignore:
       - dependency-name: '@contentful/app-sdk'
