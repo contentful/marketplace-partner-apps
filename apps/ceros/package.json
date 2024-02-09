@@ -3,7 +3,7 @@
   "version": "1.0.7",
   "private": true,
   "dependencies": {
-    "@contentful/app-sdk": "^4.17.2",
+    "@contentful/app-sdk": "^4.24.0",
     "@contentful/f36-components": "4.59.3",
     "@contentful/f36-tokens": "4.0.4",
     "@contentful/react-apps-toolkit": "1.2.16",
