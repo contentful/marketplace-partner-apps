@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.0.6...cloudinary-assets-v1.0.7) (2024-02-09)
+
+
+### Bug Fixes
+
+* **deps:** bump eslint-config-prettier from 8.10.0 to 9.1.0 ([#816](https://github.com/contentful/marketplace-partner-apps/issues/816)) ([24125b0](https://github.com/contentful/marketplace-partner-apps/commit/24125b00473ab227e31df0e5d2edf8368d23e2c4))
+
 ## [1.0.6](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.0.5...cloudinary-assets-v1.0.6) (2024-02-08)
 
 

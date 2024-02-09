@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.0.7...ceros-contentful-app-v1.0.8) (2024-02-09)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.19.1 to 4.24.0 in /apps/ceros ([#895](https://github.com/contentful/marketplace-partner-apps/issues/895)) ([79482ca](https://github.com/contentful/marketplace-partner-apps/commit/79482cade36212cb1e92ffa719445422838476ef))
+
 ## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.0.6...ceros-contentful-app-v1.0.7) (2024-02-08)
 
 

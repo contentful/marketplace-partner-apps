@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.7...uploadcare-contentful-app-v1.0.8) (2024-02-09)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.23.0 to 4.24.0 in /apps/uploadcare ([#879](https://github.com/contentful/marketplace-partner-apps/issues/879)) ([2122b37](https://github.com/contentful/marketplace-partner-apps/commit/2122b37311c14917c09c53febeba7ec4ec3c593b))
+* **deps:** bump eslint-config-prettier from 8.10.0 to 9.1.0 ([#816](https://github.com/contentful/marketplace-partner-apps/issues/816)) ([24125b0](https://github.com/contentful/marketplace-partner-apps/commit/24125b00473ab227e31df0e5d2edf8368d23e2c4))
+
 ## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.6...uploadcare-contentful-app-v1.0.7) (2024-02-08)
 
 

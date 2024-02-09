@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/voucherify-contentful-app-v1.0.7...voucherify-contentful-app-v1.0.8) (2024-02-09)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.17.1 to 4.24.0 in /apps/voucherify ([#837](https://github.com/contentful/marketplace-partner-apps/issues/837)) ([6891f16](https://github.com/contentful/marketplace-partner-apps/commit/6891f16499f6a445611f72f98e525a89fa534788))
+
 ## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/voucherify-contentful-app-v1.0.6...voucherify-contentful-app-v1.0.7) (2024-02-08)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.5](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v1.1.4...shopify-sku-v1.1.5) (2024-02-09)
+
+
+### Bug Fixes
+
+* **deps:** bump typescript from 4.9.5 to 5.3.3 in /apps/shopify ([#863](https://github.com/contentful/marketplace-partner-apps/issues/863)) ([c9a14af](https://github.com/contentful/marketplace-partner-apps/commit/c9a14af5364cbbe557d0eebfe1d02d671eaa0356))
+
 ## [1.1.4](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v1.1.3...shopify-sku-v1.1.4) (2024-02-08)
 
 

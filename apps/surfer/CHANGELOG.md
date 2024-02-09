@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.6...surfer-contentful-app-v1.0.7) (2024-02-09)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.22.0 to 4.24.0 in /apps/surfer ([#898](https://github.com/contentful/marketplace-partner-apps/issues/898)) ([80284f0](https://github.com/contentful/marketplace-partner-apps/commit/80284f065685793abcb0d016ef63d4647a34fa9c))
+
 ## [1.0.6](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.5...surfer-contentful-app-v1.0.6) (2024-02-08)
 
 
