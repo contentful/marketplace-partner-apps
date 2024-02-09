@@ -24,7 +24,7 @@
     "prettier": "^3.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-focus-lock": "^2.9.4",
+    "react-focus-lock": "^2.9.8",
     "react-router-dom": "^6.13.0",
     "use-local-storage-extended": "^0.1.1"
   },
