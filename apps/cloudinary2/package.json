@@ -38,7 +38,7 @@
     "@types/file-size": "1.0.3",
     "@types/lodash": "4.14.202",
     "@types/node": "16.18.79",
-    "@types/react": "18.2.16",
+    "@types/react": "18.2.55",
     "@types/react-dom": "18.2.7",
     "@typescript-eslint/eslint-plugin": "6.21.0",
     "@typescript-eslint/parser": "6.21.0",
