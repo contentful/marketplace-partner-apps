@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.7](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.6...thrillworks-flex-fields-app-v1.1.7) (2024-02-09)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.23.1 to 4.24.0 in /apps/flexfields ([#852](https://github.com/contentful/marketplace-partner-apps/issues/852)) ([4acf206](https://github.com/contentful/marketplace-partner-apps/commit/4acf206b8249cb7b7e952cfb6d28c2d33c88394c))
+* Field formatting, localization, custom widgets fallback ([#865](https://github.com/contentful/marketplace-partner-apps/issues/865)) ([3a51ca2](https://github.com/contentful/marketplace-partner-apps/commit/3a51ca20fc83520ce561896e4645bde7a8872ef7))
+
 ## [1.1.6](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.5...thrillworks-flex-fields-app-v1.1.6) (2024-02-08)
 
 

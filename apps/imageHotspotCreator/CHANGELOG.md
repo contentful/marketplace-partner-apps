@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.11](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.10...image-hotspot-creator-v1.0.11) (2024-02-09)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.23.1 to 4.24.0 in /apps/imageHotspotCreator ([#845](https://github.com/contentful/marketplace-partner-apps/issues/845)) ([1ee81e6](https://github.com/contentful/marketplace-partner-apps/commit/1ee81e6f896bd85ca78aab7705c0ae58f14d07a1))
+* **deps:** bump @mui/icons-material from 5.15.8 to 5.15.9 ([#822](https://github.com/contentful/marketplace-partner-apps/issues/822)) ([87abe79](https://github.com/contentful/marketplace-partner-apps/commit/87abe7952ec0aba74fd3bcd0dd966e32ce430ab7))
+* **deps:** bump @mui/material from 5.15.7 to 5.15.9 ([#819](https://github.com/contentful/marketplace-partner-apps/issues/819)) ([72cd815](https://github.com/contentful/marketplace-partner-apps/commit/72cd8156d2cd91ada90ac23b589bd865b6bac0bb))
+
 ## [1.0.10](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.9...image-hotspot-creator-v1.0.10) (2024-02-08)
 
 
