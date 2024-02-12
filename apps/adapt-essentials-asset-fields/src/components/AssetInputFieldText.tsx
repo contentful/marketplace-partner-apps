@@ -7,6 +7,7 @@ import { AssetProps } from 'contentful-management/dist/typings/entities/asset';
 import { extractContentfulFieldError } from './utils/entries.ts';
 import useLocales from './hooks/useLocales.tsx';
 import useAssetEntries from './hooks/useAssetEntries.tsx';
+import styles from './styles.module.css';
 
 interface AssetInputFieldTextComponentProps {
   asset: AssetProps;
@@ -15,9 +16,12 @@ interface AssetInputFieldTextComponentProps {
   rows?: number;
   as?: 'TextInput' | 'Textarea';
   showLocaleLabel?: boolean;
+  isDisabled?: boolean;
 }
 
-const AssetInputFieldTextComponent = ({ asset, field, locale, as = 'TextInput', rows = 1, showLocaleLabel = false }: AssetInputFieldTextComponentProps) => {
+const AssetInputFieldTextComponent = ({
+  asset, field, locale, as = 'TextInput', rows = 1, showLocaleLabel = false, isDisabled = false
+}: AssetInputFieldTextComponentProps) => {
   const fieldValueProp = asset.fields[field]?.[locale] ?? asset.fields.file?.[locale]?.[field] ?? '';
   const assetId = asset.sys.id;
   const { updateAssetEntry } = useAssetEntries();
@@ -82,7 +86,8 @@ const AssetInputFieldTextComponent = ({ asset, field, locale, as = 'TextInput', 
   }, [debouncedFieldValue]);
 
   const { localeNames } = useLocales();
-  const InputComponent = as === 'Textarea' ? Textarea : TextInput;
+  const isTextarea = as === 'Textarea';
+  const InputComponent = isTextarea ? Textarea : TextInput;
   const inputChangeHandler = (event) => {
     setNewFieldValue(event.target.value);
   };
@@ -90,7 +95,14 @@ const AssetInputFieldTextComponent = ({ asset, field, locale, as = 'TextInput', 
   return (
     <>
       {showLocaleLabel && <Caption>{localeNames[locale]}</Caption>}
-      <InputComponent key={`${assetId}-${locale}`} value={newFieldValue} onChange={inputChangeHandler} rows={rows} />
+      <InputComponent
+        key={`${assetId}-${locale}`}
+        value={newFieldValue}
+        onChange={inputChangeHandler}
+        rows={rows}
+        isDisabled={isDisabled}
+        className={isTextarea ? styles.textarea : styles.textInput}
+      />
       {error && <FormControl.ValidationMessage>{error}</FormControl.ValidationMessage>}
     </>
   );

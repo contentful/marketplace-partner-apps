@@ -8,6 +8,7 @@ import TableBody from './TableBody';
 import VisibleColumnsCell from './VisibleColumnsCell';
 import Paginator from './Paginator';
 import useUsers from './hooks/useUsers';
+import styles from './styles.module.css';
 
 export default function Dashboard() {
   useUsers();
@@ -16,8 +17,8 @@ export default function Dashboard() {
       <Box marginTop="spacingXl">
         <Table>
           <Table.Head>
-            <Table.Row style={{ position: 'sticky', top: '-35px', zIndex: '1' }}>
-              <Table.Cell style={{ verticalAlign: 'middle' }}>
+            <Table.Row className={styles.dashboardRow}>
+              <Table.Cell className={styles.dashboardCheckboxCell}>
                 <SelectAllCheckbox />
               </Table.Cell>
               <VisibleColumnsCell />

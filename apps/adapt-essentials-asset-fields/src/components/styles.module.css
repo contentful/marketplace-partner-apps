@@ -1,0 +1,92 @@
+.dashboardRow {
+  position: sticky;
+  top: -35px;
+  z-index: 1;
+}
+
+.settingsPopoverLabel {
+  align-self: flex-start;
+  font-weight: 600;
+}
+
+.localeSwitchWrapper {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.pageSizeInput {
+  max-width: 80px;
+  align-self: start;
+}
+
+.assetThumbnail,
+.entrySkeletonImage,
+.entrySkeletonContainer,
+.cellSkeleton,
+.cellSkeletonContainer {
+  height: 60px;
+}
+
+.entrySkeletonContainer {
+  margin-left: 6px;
+}
+
+.entrySkeletonImage {
+  width: 60px;
+}
+
+.avatar {
+  max-width: initial;
+  border-radius: 50%;
+}
+
+.statusCell {
+  width: 50px;
+  max-width: 50px;
+}
+
+.statusSkeleton {
+  width: 50px;
+  height: 20px;
+}
+
+.sortButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: currentcolor;
+}
+
+.assetThumbnailContainer {
+  cursor: pointer;
+  margin: auto;
+}
+
+.assetThumbnail {
+  outline: 1px solid #cfd9e0;
+  border-radius: 3px;
+}
+
+.assetCheckboxCell {
+  width: 120px;
+  vertical-align: middle;
+}
+
+.assetThumbnail > div > div {
+  margin-bottom: 0;
+  margin-right: -5px;
+}
+
+
+.dashboardCheckboxCell,
+.assetCheckboxCell,
+.bodyInputCellResolver {
+  vertical-align: middle !important;
+}
+
+.textarea.textarea {
+  height: 40px;
+  padding-bottom: 8px;
+}
