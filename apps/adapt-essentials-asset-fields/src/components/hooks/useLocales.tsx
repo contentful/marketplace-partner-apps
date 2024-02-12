@@ -5,12 +5,14 @@ import { useLocalStorage } from 'use-local-storage-extended';
 
 const useLocales = () => {
   const sdk = useSDK<PageAppSDK>();
+
   const [_enabledLocales, setEnabledLocales] = useLocalStorage({
-    key: 'enabledLocales',
-    defaultValue: [sdk.locales.default]
+    key: `enabledLocales-${sdk.ids.space}`,
+    defaultValue: [sdk.locales.default],
   });
   const enabledLocales = useMemo(() => {
-    const enabledLocalesParam = _enabledLocales ?? [sdk.locales.default];
+    const enabledLocalesParam = _enabledLocales.filter((enabledLocale) => sdk.locales.available.includes(enabledLocale)) ??
+      sdk.parameters?.instance?.enabledLocales ?? [sdk.locales.default];
     if (enabledLocalesParam.length < 1) {
       setEnabledLocales([sdk.locales.default]);
     }
@@ -18,11 +20,7 @@ const useLocales = () => {
       setEnabledLocales([sdk.locales.default, ...enabledLocalesParam]);
     }
     return enabledLocalesParam;
-  }, [
-    _enabledLocales,
-    sdk.locales?.default,
-    setEnabledLocales,
-  ]);
+  }, [_enabledLocales, sdk.locales?.default, sdk.parameters?.instance?.enabledLocales, setEnabledLocales]);
 
   const changeLocaleVisibility = (locale, isVisible) => {
     if (isVisible) {
