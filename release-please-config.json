@@ -10,6 +10,7 @@
 		"apps/transifex": {},
 		"apps/uploadcare": {},
 		"apps/voucherify": {},
-		"apps/adapt-essentials-asset-fields": {}
+		"apps/adapt-essentials-asset-fields": {},
+		"apps/intershop": {}
 	}
 }
