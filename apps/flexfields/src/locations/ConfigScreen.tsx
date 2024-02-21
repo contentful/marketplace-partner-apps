@@ -665,16 +665,16 @@ const ConfigScreen = () => {
                     )}
                     className={css({ width: 300 })}
                   >
-                    {targetEntityFields.map(({ id, name }: any) => {
+                    {targetEntityFields.map((tef: any) => {
                       return (
                         <Multiselect.Option
-                          key={`key-${id}}`}
-                          itemId={`space-${id}}`}
-                          value={id}
-                          label={name}
+                          key={`key-${tef.id}}`}
+                          itemId={`space-${tef.id}}`}
+                          value={tef.id}
+                          label={`${tef.name} ${tef.disabled ? '(Hidden when editing)' : ''}`}
                           onSelectItem={(ev) => {
                             setTargetEntityField((targetEntityField) => {
-                              if (targetEntityField?.includes(id)) {
+                              if (targetEntityField?.includes(tef.id)) {
                                 const targetEntityFieldCopy = [
                                   ...targetEntityField,
                                 ];
@@ -689,7 +689,7 @@ const ConfigScreen = () => {
                               return [...targetEntityField, ev.target.value];
                             });
                           }}
-                          isChecked={targetEntityField.includes(id)}
+                          isChecked={targetEntityField.includes(tef.id)}
                         />
                       );
                     })}

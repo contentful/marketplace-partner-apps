@@ -22,6 +22,7 @@ const mockSdk: any = {
   editor: {
     getLocaleSettings: () => ({}),
     onLocaleSettingsChanged: () => {},
+    onShowHiddenFieldsChanged: () => {},
   },
 };
 
