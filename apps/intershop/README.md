@@ -49,8 +49,8 @@ This project was bootstrapped with [Create Contentful App](https://github.com/co
 
 ### Available Scripts
 
-#### `yarn install-ci`
+#### `npm run install-ci`
 
-#### `yarn start`
+#### `npm run start`
 
-#### `yarn build`
+#### `npm run build`
