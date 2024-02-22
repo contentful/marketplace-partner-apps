@@ -4,9 +4,9 @@
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "4.24.0",
-    "@contentful/f36-components": "4.59.3",
+    "@contentful/f36-components": "4.60.0",
     "@contentful/f36-icons": "^4.27.0",
-    "@contentful/f36-multiselect": "^4.20.11",
+    "@contentful/f36-multiselect": "^4.23.0",
     "@contentful/f36-tokens": "^4.0.2",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@contentful/rich-text-html-renderer": "^16.1.1",
@@ -40,13 +40,13 @@
     ]
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.14.0",
+    "@contentful/app-scripts": "1.15.0",
     "@testing-library/jest-dom": "6.4.2",
     "@testing-library/react": "14.2.1",
     "@tsconfig/create-react-app": "2.0.2",
     "@types/jest": "29.5.12",
     "@types/node": "16.18.79",
-    "@types/react": "18.2.55",
+    "@types/react": "18.2.57",
     "@types/react-dom": "18.2.19",
     "cross-env": "7.0.3",
     "typescript": "5.3.3"
