@@ -15,7 +15,7 @@
     "react-scripts": "5.0.1"
   },
   "scripts": {
-    "install-ci": "yarn install --frozen-lockfile",
+    "install-ci": "npm ci",
     "start": "cross-env BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
