@@ -9,7 +9,10 @@ export const getWixInstallUrl = (connectionState: ConnectionState) => {
   const installUrl = new URL('https://www.wix.com/installer/install');
   installUrl.searchParams.set('metaSiteId', '{metaSiteId}');
   installUrl.searchParams.set('appId', '9f6d5767-4aea-4de0-93bc-ae381c513365');
-  installUrl.searchParams.set('redirectUrl', 'https://www.contentful-on-wix.com/_functions/redirectToContentful');
+  installUrl.searchParams.set(
+    'redirectUrl',
+    'https://www.contentful-on-wix.com/_functions/redirectToContentful'
+  );
   installUrl.searchParams.set(
     'state',
     JSON.stringify({

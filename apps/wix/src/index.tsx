@@ -18,6 +18,6 @@ if (import.meta.env.DEV && window.self === window.top) {
     <SDKProvider>
       <GlobalStyles />
       <App />
-    </SDKProvider>
+    </SDKProvider>,
   );
 }
