@@ -8,7 +8,7 @@
     "react-scripts": "5.0.1"
   },
   "dependencies": {
-    "@contentful/ecommerce-app-base": "^3.5.28",
+    "@contentful/ecommerce-app-base": "^3.5.30",
     "@contentful/f36-components": "^4.60.1",
     "@contentful/f36-icons": "^4.27.0",
     "@contentful/f36-tokens": "^4.0.2",
