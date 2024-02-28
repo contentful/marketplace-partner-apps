@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.1.6](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v1.1.5...shopify-sku-v1.1.6) (2024-02-28)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/ecommerce-app-base from 3.5.18 to 3.5.19 in /apps/shopify ([#916](https://github.com/contentful/marketplace-partner-apps/issues/916)) ([92e80b3](https://github.com/contentful/marketplace-partner-apps/commit/92e80b3e9a34f67b23a29029011d2d87105aaf38))
+* **deps:** bump @contentful/ecommerce-app-base from 3.5.19 to 3.5.20 in /apps/shopify ([#920](https://github.com/contentful/marketplace-partner-apps/issues/920)) ([1c663c5](https://github.com/contentful/marketplace-partner-apps/commit/1c663c5ab7bd04c5e83edac2bee03dacd436c8b7))
+* **deps:** bump @contentful/ecommerce-app-base from 3.5.20 to 3.5.22 in /apps/shopify ([#937](https://github.com/contentful/marketplace-partner-apps/issues/937)) ([d4904b3](https://github.com/contentful/marketplace-partner-apps/commit/d4904b3f009e5cb6d290800dd927ae4e3f094cc4))
+* **deps:** bump @contentful/ecommerce-app-base from 3.5.22 to 3.5.23 in /apps/shopify ([#940](https://github.com/contentful/marketplace-partner-apps/issues/940)) ([924fdd0](https://github.com/contentful/marketplace-partner-apps/commit/924fdd04412b42d6d3018c4a0b6903685d74ba5a))
+* **deps:** bump @contentful/ecommerce-app-base from 3.5.23 to 3.5.27 in /apps/shopify ([#950](https://github.com/contentful/marketplace-partner-apps/issues/950)) ([0f0b5e4](https://github.com/contentful/marketplace-partner-apps/commit/0f0b5e40cadd4990d0bd2c971778f467a1565a68))
+* **deps:** bump @contentful/ecommerce-app-base from 3.5.27 to 3.5.28 in /apps/shopify ([#957](https://github.com/contentful/marketplace-partner-apps/issues/957)) ([3a344f9](https://github.com/contentful/marketplace-partner-apps/commit/3a344f9b304dec5acbc1ee3c9e09dc866a23d739))
+* **deps:** bump @contentful/ecommerce-app-base from 3.5.28 to 3.5.30 in /apps/shopify ([#970](https://github.com/contentful/marketplace-partner-apps/issues/970)) ([6a74b7b](https://github.com/contentful/marketplace-partner-apps/commit/6a74b7b8909e772fa72229265145026d5e88f9f3))
+* **deps:** bump @contentful/f36-components from 4.59.3 to 4.60.0 in /apps/shopify ([#922](https://github.com/contentful/marketplace-partner-apps/issues/922)) ([ce1407a](https://github.com/contentful/marketplace-partner-apps/commit/ce1407abbf0877afb71461698ffad26e0963db08))
+* **deps:** bump @contentful/f36-components from 4.60.0 to 4.60.1 in /apps/shopify ([#961](https://github.com/contentful/marketplace-partner-apps/issues/961)) ([f63417e](https://github.com/contentful/marketplace-partner-apps/commit/f63417e4179c4c3d7378dc23816019f0a487de22))
+* **deps:** bump @contentful/f36-components from 4.60.1 to 4.60.2 in /apps/shopify ([#977](https://github.com/contentful/marketplace-partner-apps/issues/977)) ([d5eda47](https://github.com/contentful/marketplace-partner-apps/commit/d5eda47fb9604874df2f75056d2230b761cab148))
+* **deps:** bump core-js from 3.35.1 to 3.36.0 in /apps/shopify ([#934](https://github.com/contentful/marketplace-partner-apps/issues/934)) ([4b0ab54](https://github.com/contentful/marketplace-partner-apps/commit/4b0ab5496f5e7ecc5b4123a177c92ada7721ecab))
+
 ## [1.1.5](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v1.1.4...shopify-sku-v1.1.5) (2024-02-09)
 
 
