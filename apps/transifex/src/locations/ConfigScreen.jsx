@@ -291,13 +291,6 @@ function ConfigScreen() {
 
   // Callback triggered when user clicks install button
   const onConfigure = useCallback(async () => {
-    if (environment !== 'master') {
-      sdk.notifier.error(
-        'The Transifex app supports only the master environment.',
-      );
-      return false;
-    }
-
     if (installationId === '') {
       sdk.notifier.error('An active Transifex account is required.');
       return false;
@@ -496,17 +489,6 @@ function ConfigScreen() {
                           <Note variant="negative">{errorMessage}</Note>
                         </Box>
                       )}
-                      <Box
-                        style={{
-                          marginTop: '10px',
-                          marginBottom: '10px',
-                        }}
-                      >
-                        <Note>
-                          The Transifex app supports only the master
-                          environment.
-                        </Note>
-                      </Box>
                       <Flex
                         flexDirection="column"
                         gap="spacingS"
