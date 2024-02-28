@@ -123,10 +123,18 @@ export const calculateEditorFields = (
     sessionStorage.setItem("filteredRules", JSON.stringify(uniqueRulesList));
   }
 
-  return sdk.contentType.fields.filter(
-    (field) =>
-      !isFieldHidden(field.id, sdk.contentType.sys.id, uniqueRulesList, entryId)
-  );
+  return sdk.contentType.fields
+    // Hide if field is hidden for editing or show if `Show hidden fields` is enabled
+    .filter((field) => !field.disabled || sdk.editor.getShowHiddenFields())
+    .filter(
+      (field) =>
+        !isFieldHidden(
+          field.id,
+          sdk.contentType.sys.id,
+          uniqueRulesList,
+          entryId
+        )
+    );
 };
 
 //Get content type name from content type id
