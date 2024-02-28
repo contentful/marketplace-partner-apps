@@ -225,7 +225,8 @@ const ConfigScreen = () => {
         setContentTypeField(ruleToEdit.contentTypeField);
         setCondition(ruleToEdit.condition);
         setConditionValue(ruleToEdit.conditionValue);
-        setTargetEntity(ruleToEdit.targetEntity);
+        // If the rule is set for same entity, add `-sameEntity` to targetEntity
+        setTargetEntity(`${ruleToEdit.isForSameEntity ? `${ruleToEdit.targetEntity}-sameEntity`: ruleToEdit.targetEntity}`);
         setTargetEntityField(ruleToEdit.targetEntityField);
       }, 100);
     }
