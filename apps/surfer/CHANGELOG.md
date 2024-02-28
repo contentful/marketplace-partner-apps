@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.7...surfer-contentful-app-v1.0.8) (2024-02-28)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.59.3 to 4.60.0 in /apps/surfer ([#933](https://github.com/contentful/marketplace-partner-apps/issues/933)) ([90bd933](https://github.com/contentful/marketplace-partner-apps/commit/90bd9331fb0bd361b3e601ced3dc54cf01868360))
+* **deps:** bump @contentful/f36-components from 4.60.0 to 4.60.1 in /apps/surfer ([#958](https://github.com/contentful/marketplace-partner-apps/issues/958)) ([0846a33](https://github.com/contentful/marketplace-partner-apps/commit/0846a338c7ba6732231b929ac18520d3c75b9748))
+* **deps:** bump @contentful/f36-multiselect from 4.22.0 to 4.23.0 in /apps/surfer ([#943](https://github.com/contentful/marketplace-partner-apps/issues/943)) ([fe16ce8](https://github.com/contentful/marketplace-partner-apps/commit/fe16ce81f16456a8b55a695ffa201f7c2ed613fc))
+
 ## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.6...surfer-contentful-app-v1.0.7) (2024-02-09)
 
 

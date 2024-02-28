@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.0.3...transifex-contentful-app-v1.1.0) (2024-02-28)
+
+
+### Features
+
+* Transifex app support all environments ([#969](https://github.com/contentful/marketplace-partner-apps/issues/969)) ([f0cc3cb](https://github.com/contentful/marketplace-partner-apps/commit/f0cc3cb5043eb7f6ebf6ed68300fbf08f8cf4e2b))
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.22.0 to 4.24.0 in /apps/transifex ([#904](https://github.com/contentful/marketplace-partner-apps/issues/904)) ([26c139e](https://github.com/contentful/marketplace-partner-apps/commit/26c139eae91586ce766a4fdd8447b342723e3121))
+
 ## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.0.2...transifex-contentful-app-v1.0.3) (2024-02-08)
 
 

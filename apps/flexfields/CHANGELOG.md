@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.8](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.7...thrillworks-flex-fields-app-v1.1.8) (2024-02-28)
+
+
+### Bug Fixes
+
+* Fix edit rule for same entry ([#919](https://github.com/contentful/marketplace-partner-apps/issues/919)) ([d4fe471](https://github.com/contentful/marketplace-partner-apps/commit/d4fe47150a6e33dc6761aaa88bbeb55267557666))
+* Hide fields hidden for editing ([#949](https://github.com/contentful/marketplace-partner-apps/issues/949)) ([713885a](https://github.com/contentful/marketplace-partner-apps/commit/713885aa58c44dfd29ed3a201894042aa8554f02))
+
 ## [1.1.7](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.6...thrillworks-flex-fields-app-v1.1.7) (2024-02-09)
 
 
