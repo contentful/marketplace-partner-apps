@@ -1,7 +1,5 @@
 # Wix Integration app
 
-The app can be installed using this [link](https://app.contentful.com/deeplink?link=apps&id=5oytqBOh7xKU40F5c28zQE)
-
 This application is a Contentful app that integrates with Wix.
 It can be installed on a Contentful environment and used in order to access Contentful CMS data from a Wix site.
 
