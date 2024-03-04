@@ -367,7 +367,6 @@ const Field = () => {
           width: "fullWidth",
           minHeight: "calc(100vh - 20em)",
           parameters: {
-            instance: sdk.parameters.instance,
             data: sdk.field.getValue(),
             context: context ?? "",
           },
@@ -393,7 +392,7 @@ const Field = () => {
             loadData(products, categories, { channel, application });
           }
         }),
-    [loadData, sdk.dialogs, sdk.field, sdk.parameters.instance]
+    [loadData, sdk.dialogs, sdk.field]
   );
 
   const updatePopOverDisplay = useCallback(

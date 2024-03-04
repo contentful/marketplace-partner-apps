@@ -10,15 +10,9 @@ interface SubCategoryBranch {
   subCategories: Array<SubCategoryBranch>;
 }
 
-interface InstanceParameters {
-  apiBase: string;
-  imageBase: string;
-}
-
 interface InvocationParameters {
   context: string;
   data: FieldJson;
-  instance: InstanceParameters;
 }
 
 const Dialog = () => {
