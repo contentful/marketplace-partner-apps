@@ -35,7 +35,7 @@ If you think the application is missing any features, please open an issue here:
 
 ## How to use it?
 
-You can find the app at https://app.contentful.com/spaces/<space_id>/apps/app_installations/adapt-essentials-bulk-asset-fields/
+After successful installation you can find the app at https://app.contentful.com/spaces/<space_id>/environments/<environment_id>/apps/app_installations/adapt-essentials-bulk-asset-fields/
 
 ### Access it through **Apps** menu
 
@@ -43,24 +43,23 @@ Once app is installed it can be accessed through **Apps** menu.
 
 ![alt text](doc/apps-menu-entry.png)
 
-1. Ensure that you are in the **Main** environment.
-2. In the menu, there is a **Apps** menu entry with a dropdown.
-3. Click it.
-4. Once dropdown is open, click **Adapt Essentials Bulk Asset Fields** entry to open it.
+1. In the menu, there is a **Apps** menu entry with a dropdown.
+2. Click it.
+3. Once dropdown is open, click **Adapt Essentials Bulk Asset Fields** entry to open it.
 
-### Set is as **Home** app
+### Set it as **Home** app
 
 The app can be set as a homepage which will be displayed once you log into Contentful.
 
 1. On the right bellow the user avatar there is a **Settings** menu.
 2. Click **Settings**. Dropdown will open.
-3. Click **Home** withing dropdown.
+3. Click **Home** within dropdown.
    ![alt text](doc/home-settings-menu.png)
 4. Home appearance customizations window open.
 5. Select **Adapt Essenti...** as your homepage app.
 6. Click Save.
    ![alt text](doc/home-app-selection.png)
-7. Now you can access app at https://app.contentful.com/spaces/<space_id>/home or by clicking Home in the menu.
+7. Now you can access app at https://app.contentful.com/spaces/<space_id>/environments/<environment_id>/home or by clicking Home in the menu.
    ![alt text](doc/home-entry-in-the-menu.png)
 
 ---
