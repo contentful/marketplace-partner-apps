@@ -10,3 +10,4 @@ tags
 **/.coverage/**
 .eslintcache
 .tool-versions
+.env.local
