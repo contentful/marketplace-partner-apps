@@ -1,5 +1,5 @@
 {
-  "name": "@contentful/wix-integration",
+  "name": "wix-contentful-app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
