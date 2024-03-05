@@ -51,7 +51,7 @@ Once app is installed it can be accessed through **Apps** menu.
 
 The app can be set as a homepage which will be displayed once you log into Contentful.
 
-1. On the right bellow the user avatar there is a **Settings** menu.
+1. On the right below the user avatar there is a **Settings** menu.
 2. Click **Settings**. Dropdown will open.
 3. Click **Home** within dropdown.
    ![alt text](doc/home-settings-menu.png)

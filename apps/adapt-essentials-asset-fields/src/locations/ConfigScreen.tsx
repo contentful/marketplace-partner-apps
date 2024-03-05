@@ -19,7 +19,7 @@ const InstallationInstructions = () => (
       Installation
     </h2>
     <Text>
-      To <b>install</b> the App click install button on the right bellow the settings menu.
+      To <b>install</b> the App click install button on the right below the settings menu.
     </Text>
   </Box>
 );
