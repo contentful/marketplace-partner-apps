@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.0.3...adapt-essentials-asset-fields-v1.0.4) (2024-03-06)
+
+
+### Bug Fixes
+
+* Usage documentation for `Adapt Essentials: Asset Fields` app ([#998](https://github.com/contentful/marketplace-partner-apps/issues/998)) ([568f0fd](https://github.com/contentful/marketplace-partner-apps/commit/568f0fda9ec235918670def8b350dfb1d97213ba))
+
 ## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.0.2...adapt-essentials-asset-fields-v1.0.3) (2024-02-09)
 
 
