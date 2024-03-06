@@ -11,6 +11,7 @@
 		"apps/uploadcare": {},
 		"apps/voucherify": {},
 		"apps/wix": {},
-		"apps/adapt-essentials-asset-fields": {}
+		"apps/adapt-essentials-asset-fields": {},
+		"apps/intershop": {}
 	}
 }
