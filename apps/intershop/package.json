@@ -41,7 +41,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@contentful/app-scripts": "1.15.0",
-    "@testing-library/jest-dom": "5.17.0",
+    "@testing-library/jest-dom": "6.4.2",
     "@testing-library/react": "14.2.1",
     "@tsconfig/create-react-app": "2.0.1",
     "@types/node": "16.18.50",
