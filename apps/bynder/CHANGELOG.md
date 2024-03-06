@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.7](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.1.6...bynder-assets-v1.1.7) (2024-03-06)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/dam-app-base from 2.2.14 to 2.2.15 in /apps/bynder ([#1036](https://github.com/contentful/marketplace-partner-apps/issues/1036)) ([ac900d0](https://github.com/contentful/marketplace-partner-apps/commit/ac900d0b112d66ce5791b9a90f7a2ae0cd19b624))
+
 ## [1.1.6](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.1.5...bynder-assets-v1.1.6) (2024-03-06)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.5](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.0.4...adapt-essentials-asset-fields-v1.0.5) (2024-03-06)
+
+
+### Bug Fixes
+
+* Use relative path for documentation images in `Adapt Essentials: Asset Fields` app ([#1041](https://github.com/contentful/marketplace-partner-apps/issues/1041)) ([c278871](https://github.com/contentful/marketplace-partner-apps/commit/c2788717eba001f3ea6d0ef4104fd20c23a6f6a7))
+
 ## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.0.3...adapt-essentials-asset-fields-v1.0.4) (2024-03-06)
 
 
