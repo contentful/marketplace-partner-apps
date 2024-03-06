@@ -28,7 +28,6 @@ const MarkdownRender = ({ value }: { value: string }) => (
           {children}
         </a>
       ),
-      img: ({ src }) => <img src={`/${src}`} alt="" />,
     }}>
     {value}
   </Markdown>
