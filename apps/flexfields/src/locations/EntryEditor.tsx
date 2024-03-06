@@ -57,6 +57,16 @@ const EntryEditor = () => {
     sdk.editor.onLocaleSettingsChanged((localeSetings) =>
       setLocaleSetings(localeSetings)
     );
+    sdk.editor.onShowHiddenFieldsChanged(() =>
+      setEditorFields(
+        calculateEditorFields(
+          entryId,
+          sdk.entry.fields,
+          sdk,
+          isFirstLoad.current
+        )
+      )
+    );
     setEditorFields(
       calculateEditorFields(entryId, sdk.entry.fields, sdk, isFirstLoad.current)
     );

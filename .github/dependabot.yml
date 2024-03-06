@@ -185,3 +185,18 @@ updates:
       - dependency-name: '@types/node'
         versions:
           - '>18.15.3'
+  - package-ecosystem: npm
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: UTC
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
+    directory: '/apps/wix'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
