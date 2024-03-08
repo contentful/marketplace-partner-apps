@@ -17,7 +17,7 @@ const TableBody = () => {
   const { entriesLoading } = useEntriesLoading();
   const { selectedEntries, setSelected } = useEntriesSelection();
   const { visibleColumns } = useColumns();
-  const { enabledLocales } = useLocales();
+  const { enabledLocales, defaultLocale } = useLocales();
   const sdk = useSDK();
   const openAsset = (assetId: string) => () => {
     sdk.navigator
@@ -35,19 +35,26 @@ const TableBody = () => {
   return (
     <Table.Body>
       {assetEntries.map((asset) => {
-        const localizedThumbnails =
-          !entriesLoading &&
+        const localizedThumbnails = enabledLocales?.at(0) ? (
           enabledLocales
-            .filter((locale) => asset.fields?.file?.[locale]?.url)
-            .map((locale) => (
-              <Asset
-                key={asset.fields.file[locale].url}
-                className={styles.assetThumbnail}
-                src={`${asset.fields.file[locale].url}?w=${THUMBNAIL_SIZE}&h=${THUMBNAIL_SIZE}&fit=thumb`}
-                status={getEntryStatus(asset.sys)}
-                type={mapMimeTypeToAssetType(asset.fields.file[locale].contentType)}
-              />
-            ));
+            .filter((locale) => asset.fields?.file?.[locale]?.url || locale === defaultLocale)
+            .map((locale) => {
+              if (locale === defaultLocale && !asset.fields?.file?.[locale]?.url) {
+                return <Asset key={asset.sys.id} className={styles.assetThumbnailNoFile} status={getEntryStatus(asset.sys)} type="markup" />;
+              }
+              return (
+                <Asset
+                  key={asset.fields.file[locale].url}
+                  className={styles.assetThumbnail}
+                  src={`${asset.fields.file[locale].url}?w=${THUMBNAIL_SIZE}&h=${THUMBNAIL_SIZE}&fit=thumb`}
+                  status={getEntryStatus(asset.sys)}
+                  type={mapMimeTypeToAssetType(asset.fields.file[locale].contentType)}
+                />
+              );
+            })
+        ) : (
+          <Asset key={asset.sys.id} className={styles.assetThumbnail} status={getEntryStatus(asset.sys)} type="archive" />
+        );
 
         return (
           <Table.Row key={asset.sys.id}>
@@ -60,11 +67,7 @@ const TableBody = () => {
                       <SkeletonImage height={`${THUMBNAIL_SIZE}px`} width={`${THUMBNAIL_SIZE}px`} />
                     </SkeletonContainer>
                   )}
-                  {localizedThumbnails?.at(0) ? (
-                    localizedThumbnails
-                  ) : (
-                    <Asset key={asset.sys.id} className={styles.assetThumbnail} status={getEntryStatus(asset.sys)} type="archive" />
-                  )}
+                  {!entriesLoading && localizedThumbnails}
                 </Box>
               </Flex>
             </TableCell>

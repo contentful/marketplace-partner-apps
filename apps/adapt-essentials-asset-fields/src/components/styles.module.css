@@ -79,6 +79,25 @@
   margin-right: -5px;
 }
 
+.assetThumbnailNoFile {
+  composes: assetThumbnail;
+  position: relative;
+}
+
+.assetThumbnailNoFile svg > path:last-child {
+  display: none;
+}
+
+.assetThumbnailNoFile::after {
+  position: absolute;
+  content: 'N/A';
+  line-height: 1.2;
+  font-weight: 600;
+  font-size: 12px;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+}
 
 .dashboardCheckboxCell,
 .assetCheckboxCell,
