@@ -47,7 +47,7 @@
     "@types/jest": "29.5.12",
     "@types/node": "16.18.79",
     "@types/react": "18.2.63",
-    "@types/react-dom": "18.2.20",
+    "@types/react-dom": "18.2.21",
     "cross-env": "7.0.3",
     "typescript": "5.4.2"
   },
