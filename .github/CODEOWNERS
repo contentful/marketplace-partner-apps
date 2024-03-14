@@ -1,3 +1,17 @@
 * @contentful/team-integrations
 apps/*/src @contentful/team-integrations @contentful/team-developer-experience
 apps/*/public @contentful/team-integrations @contentful/team-developer-experience
+
+apps/adapt-essentials-asset-fields/ @zzzarius 
+apps/bynder/ @contentful/team-integrations
+apps/cloudinary/ @contentful/team-integrations
+apps/cloudinary2/ @contentful/team-integrations
+apps/flexfields/ @vipulchadda 
+apps/imageHotspotCreator/ @surya-sudoboat
+apps/intershop/ @two-point-o 
+apps/shopify/ @contentful/team-integrations
+apps/surfer/ @marcinwysocki
+apps/transifex/ @foteinigk
+apps/uploadcare/ @igoradamenko
+apps/voucherify/ @weronika-kurczyna
+apps/wix/ @carmelc
