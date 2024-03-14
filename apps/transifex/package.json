@@ -9,7 +9,7 @@
     "@contentful/f36-tokens": "4.0.4",
     "@contentful/react-apps-toolkit": "1.2.16",
     "contentful-management": "^10.46.4",
-    "emotion": "10.0.27",
+    "emotion": "11.0.0",
     "eslint": "^8.53.0",
     "prop-type": "^0.0.1",
     "react": "18.2.0",
