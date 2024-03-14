@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { AppInstallationParameters, CloudinaryAsset } from '../../types';
 import { OpenDialogButton } from './OpenDialogButton';
 import { Thumbnails } from './Thumbnails';
-import { css, Global } from '@emotion/core';
+import { css, Global } from '@emotion/react';
 
 const globalStyles = css`
   html {
