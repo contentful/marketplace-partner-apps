@@ -6,7 +6,7 @@ import { useSDK } from '@contentful/react-apps-toolkit';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Cloudinary as cloudinaryCore } from 'cloudinary-core';
-import { css } from 'emotion';
+import { css } from '@emotion/react';
 import { useMemo } from 'react';
 import logo from '../../assets/logo.svg';
 import { VALID_IMAGE_FORMATS } from '../../constants';
@@ -77,7 +77,7 @@ export function Thumbnail({ asset, isDisabled, onDelete }: Props) {
     <div ref={setNodeRef}>
       <AssetCard
         style={style}
-        dragHandleRender={() => <DragHandle as="button" className={styles.dragHandle} label="Move card" {...attributes} {...listeners} />}
+        dragHandleRender={() => <DragHandle as="button" css={styles.dragHandle} label="Move card" {...attributes} {...listeners} />}
         withDragHandle={!isDisabled}
         src={url}
         title={alt}
@@ -86,15 +86,15 @@ export function Thumbnail({ asset, isDisabled, onDelete }: Props) {
         size="small"
         actions={[
           <MenuItem key="edit" as="a" href={consoleUrl} target="_blank" onClick={() => window.open(consoleUrl, "_blank")}>
-            Edit in Cloudinary <ExternalLinkIcon className={styles.menuItemIcon} />
+            Edit in Cloudinary <ExternalLinkIcon css={styles.menuItemIcon} />
           </MenuItem>,
           <MenuItem key="remove" onClick={onDelete} isDisabled={isDisabled}>
             Remove
           </MenuItem>,
           <MenuDivider key="divider" />,
           <Menu.SectionTitle key="file-information-title">File information</Menu.SectionTitle>,
-          <MenuItem key="file-information" className={styles.fileInformation.menuItem} isDisabled>
-            <dl className={styles.fileInformation.dl}>
+          <MenuItem key="file-information" css={styles.fileInformation.menuItem} isDisabled>
+            <dl css={styles.fileInformation.dl}>
               <dt>Location:</dt>
               <dd>{asset.public_id.split('/').slice(0, -1).join('/') || 'Home'}</dd>
               {asset.format && (

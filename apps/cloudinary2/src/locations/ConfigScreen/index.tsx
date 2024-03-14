@@ -3,7 +3,7 @@ import { GlobalStyles, Heading, Paragraph } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { ContentTypeProps } from 'contentful-management';
-import { css } from 'emotion';
+import { css } from '@emotion/react';
 import { useCallback, useEffect, useState } from 'react';
 import logo from '../../assets/logo.svg';
 import { DEFAULT_APP_INSTALLATION_PARAMETERS, DEFAULT_BACKEND_PARAMETERS } from '../../constants';
@@ -129,19 +129,19 @@ const ConfigScreen = () => {
   return (
     <>
       <GlobalStyles />
-      <div className={styles.background} />
-      <div className={styles.body}>
+      <div css={styles.background} />
+      <div css={styles.body}>
         <Heading>About Cloudinary</Heading>
         <Paragraph>
           The Cloudinary app allows editors to select media from their Cloudinary account. Select the asset from Cloudinary that you want your entry to
           reference.
         </Paragraph>
-        <hr className={styles.splitter} />
+        <hr css={styles.splitter} />
         <InstallParamsConfiguration
           parameters={parameters} onParametersChange={setParameters}
           backendParameters={backendParameters} onBackendParametersChange={setBackendParameters}
         />
-        <hr className={styles.splitter} />
+        <hr css={styles.splitter} />
         <FieldSelector
           space={sdk.ids.space}
           environment={sdk.ids.environmentAlias ?? sdk.ids.environment}
@@ -150,7 +150,7 @@ const ConfigScreen = () => {
           onSelectedFieldChanged={setSelectedFields}
         />
       </div>
-      <div className={styles.icon}>
+      <div css={styles.icon}>
         <img src={logo} alt="App logo" />
       </div>
     </>
