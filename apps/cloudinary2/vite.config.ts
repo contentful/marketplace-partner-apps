@@ -9,7 +9,9 @@ export default defineConfig(() => ({
   server: {
     port: 3001,
   },
-  plugins: [react()],
+  plugins: [
+    react({ jsxImportSource: '@emotion/react' }),
+  ],
   test: {
     globals: true,
     environment: 'happy-dom',

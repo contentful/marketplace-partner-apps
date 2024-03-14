@@ -1,6 +1,7 @@
 import { DialogAppSDK } from '@contentful/app-sdk';
 import { useSDK } from '@contentful/react-apps-toolkit';
-import { css, injectGlobal } from 'emotion';
+import { injectGlobal } from '@emotion/css';
+import { css } from '@emotion/react';
 import { useCallback } from 'react';
 import { AppInstallationParameters, MediaLibraryResult } from '../types';
 import { loadScript } from '../utils';
@@ -113,7 +114,7 @@ const Dialog = () => {
     [sdk]
   );
 
-  return <div ref={init} id="container" className={styles.container} />;
+  return <div ref={init} id="container" css={styles.container} />;
 };
 
 export default Dialog;
