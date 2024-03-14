@@ -10,8 +10,7 @@ const useLocales = () => {
     defaultValue: [sdk.locales.default]
   });
   const enabledLocales = useMemo(() => {
-    const enabledLocalesParam = _enabledLocales ??
-      sdk.parameters?.instance?.enabledLocales ?? [sdk.locales.default];
+    const enabledLocalesParam = _enabledLocales ?? [sdk.locales.default];
     if (enabledLocalesParam.length < 1) {
       setEnabledLocales([sdk.locales.default]);
     }
@@ -22,7 +21,6 @@ const useLocales = () => {
   }, [
     _enabledLocales,
     sdk.locales?.default,
-    sdk.parameters?.instance?.enabledLocales,
     setEnabledLocales,
   ]);
 
