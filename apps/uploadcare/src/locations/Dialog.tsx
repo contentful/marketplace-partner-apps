@@ -1,7 +1,7 @@
 import { DialogAppSDK } from '@contentful/app-sdk';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import * as LR from '@uploadcare/blocks';
-import { css } from 'emotion';
+import { css } from '@emotion/css';
 import { ReactElement, useEffect, useRef } from 'react';
 import { Asset, InstallParams } from '../types';
 

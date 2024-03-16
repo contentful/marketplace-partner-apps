@@ -1,7 +1,7 @@
 import { AssetCard, DragHandle, MenuItem } from '@contentful/f36-components';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { css } from 'emotion';
+import { css } from '@emotion/css';
 import { useMemo } from 'react';
 import { Asset } from '../../types';
 
