@@ -45,7 +45,6 @@
   },
   "overrides": {
     "react-scripts": {
-      "nth-check": "2.0.1",
       "resolve-url-loader": "5.0.0",
       "typescript": "5.3.3"
     }
