@@ -23,27 +23,26 @@ export default function Dialog(): ReactElement {
   const sdk = useSDK<DialogAppSDK<InstallParams, InvocationParams>>();
 
   const assetsRef = useRef<Asset[]>([]);
+  const ctxProviderRef = useRef<InstanceType<LR.UploadCtxProvider>>(null);
 
   useEffect(() => {
-    const handleUploadEvent = (event: Event) => {
-      // see https://github.com/uploadcare/blocks/blob/69105e4806e9ca2d4254bce297c48e0990663212/abstract/UploaderBlock.js#L420-L435
-      const e = event as CustomEvent<{ data: Asset[] }>
+    const ctxProvider = ctxProviderRef.current;
+    if (!ctxProvider) return;
 
-      if (e.detail?.data) {
-        assetsRef.current = e.detail.data;
-      }
+    const handleChangeEvent = (e: LR.EventMap['change']) => {
+      assetsRef.current = [...e.detail.allEntries.filter(f => f.status === 'success')] as LR.OutputFileEntry<'success'>[];
     };
 
-    const handleDoneEvent = () => {
+    const handleDoneClickEvent = () => {
       sdk.close(assetsRef.current);
     };
 
-    window.addEventListener('LR_DATA_OUTPUT', handleUploadEvent);
-    window.addEventListener('LR_DONE_FLOW', handleDoneEvent);
+    ctxProvider.addEventListener('change', handleChangeEvent);
+    ctxProvider.addEventListener('done-click', handleDoneClickEvent);
 
     return () => {
-      window.removeEventListener('LR_DATA_OUTPUT', handleUploadEvent);
-      window.removeEventListener('LR_DONE_FLOW', handleDoneEvent);
+      ctxProvider.removeEventListener('change', handleChangeEvent);
+      ctxProvider.removeEventListener('done-click', handleDoneClickEvent);
     };
   }, []);
 
@@ -62,8 +61,13 @@ export default function Dialog(): ReactElement {
       />
 
       <lr-file-uploader-inline
-        css-src={`https://cdn.jsdelivr.net/npm/@uploadcare/blocks@${LR.PACKAGE_VERSION}/web/lr-file-uploader-inline.min.css`}
         ctx-name="uploadcare"
+        css-src={`https://cdn.jsdelivr.net/npm/@uploadcare/blocks@${LR.PACKAGE_VERSION}/web/lr-file-uploader-inline.min.css`}
+      />
+
+      <lr-upload-ctx-provider
+        ctx-name="uploadcare"
+        ref={ctxProviderRef}
       />
     </div>
   );
