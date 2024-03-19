@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.12](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.11...image-hotspot-creator-v1.0.12) (2024-03-19)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.19.1 to 4.25.0 ([#1043](https://github.com/contentful/marketplace-partner-apps/issues/1043)) ([3cb268f](https://github.com/contentful/marketplace-partner-apps/commit/3cb268fcfa66828f10ed5820d0096e523ccd2cf6))
+* **deps:** bump @emotion/react from 11.11.3 to 11.11.4 ([#1135](https://github.com/contentful/marketplace-partner-apps/issues/1135)) ([5bcdcb2](https://github.com/contentful/marketplace-partner-apps/commit/5bcdcb2833f8c27303ac6d770a0eaf4d1fa474b1))
+* **deps:** bump @mui/icons-material from 5.15.9 to 5.15.13 ([#1120](https://github.com/contentful/marketplace-partner-apps/issues/1120)) ([4b26b7d](https://github.com/contentful/marketplace-partner-apps/commit/4b26b7db2fc93856517dc05b55bda92ec94e9077))
+* **deps:** bump @mui/material from 5.15.9 to 5.15.13 ([#1111](https://github.com/contentful/marketplace-partner-apps/issues/1111)) ([db815fa](https://github.com/contentful/marketplace-partner-apps/commit/db815fab1c26c580545da882758252c0a045b035))
+* **deps:** bump contentful from 10.6.21 to 10.8.1 ([#1124](https://github.com/contentful/marketplace-partner-apps/issues/1124)) ([5b2d856](https://github.com/contentful/marketplace-partner-apps/commit/5b2d8563bc5790ffdcc8aa372a366387b1b06dce))
+* **deps:** bump follow-redirects from 1.15.4 to 1.15.6 in /apps/imageHotspotCreator ([#1098](https://github.com/contentful/marketplace-partner-apps/issues/1098)) ([ccfb776](https://github.com/contentful/marketplace-partner-apps/commit/ccfb776bf9ee43c0fad0e9f64dabdd5c3738022e))
+
 ## [1.0.11](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.10...image-hotspot-creator-v1.0.11) (2024-02-09)
 
 

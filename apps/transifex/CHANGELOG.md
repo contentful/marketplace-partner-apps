@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.1](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.1.0...transifex-contentful-app-v1.1.1) (2024-03-19)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.19.1 to 4.25.0 ([#1043](https://github.com/contentful/marketplace-partner-apps/issues/1043)) ([3cb268f](https://github.com/contentful/marketplace-partner-apps/commit/3cb268fcfa66828f10ed5820d0096e523ccd2cf6))
+* **deps:** bump @contentful/f36-components from 4.59.3 to 4.61.0 in /apps/transifex ([#1136](https://github.com/contentful/marketplace-partner-apps/issues/1136)) ([843f31c](https://github.com/contentful/marketplace-partner-apps/commit/843f31c406262c59002bbf08bc90d00b534efeb2))
+* **deps:** bump contentful-management from 10.46.4 to 11.23.0 in /apps/transifex ([#1064](https://github.com/contentful/marketplace-partner-apps/issues/1064)) ([be76797](https://github.com/contentful/marketplace-partner-apps/commit/be76797dc08d4c96a06bf997b4255c626c246dfe))
+* **deps:** bump contentful-management from 11.23.0 to 11.23.1 in /apps/transifex ([#1168](https://github.com/contentful/marketplace-partner-apps/issues/1168)) ([484ec29](https://github.com/contentful/marketplace-partner-apps/commit/484ec2993dcb1b14dec166fe93dd6f4ed7b42168))
+* **deps:** bump emotion from 10.0.27 to 11.0.0 in /apps/transifex ([#877](https://github.com/contentful/marketplace-partner-apps/issues/877)) ([bbec272](https://github.com/contentful/marketplace-partner-apps/commit/bbec272550407cfe5f4e96fcf0019cc6535aed96))
+* **deps:** bump eslint from 8.56.0 to 8.57.0 in /apps/transifex ([#1127](https://github.com/contentful/marketplace-partner-apps/issues/1127)) ([42cdd71](https://github.com/contentful/marketplace-partner-apps/commit/42cdd710227098f0a6d7f9e7b59690f236d70e19))
+* **deps:** bump follow-redirects from 1.15.4 to 1.15.6 in /apps/transifex ([#1097](https://github.com/contentful/marketplace-partner-apps/issues/1097)) ([eaa203b](https://github.com/contentful/marketplace-partner-apps/commit/eaa203b35d9ab3128cfc8770a3a162c1b0e48b92))
+
 ## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.0.3...transifex-contentful-app-v1.1.0) (2024-02-28)
 
 

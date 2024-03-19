@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.9](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.8...thrillworks-flex-fields-app-v1.1.9) (2024-03-19)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.19.1 to 4.25.0 ([#1043](https://github.com/contentful/marketplace-partner-apps/issues/1043)) ([3cb268f](https://github.com/contentful/marketplace-partner-apps/commit/3cb268fcfa66828f10ed5820d0096e523ccd2cf6))
+* **deps:** bump @contentful/default-field-editors from 1.6.11 to 1.6.27 ([#1139](https://github.com/contentful/marketplace-partner-apps/issues/1139)) ([bc3ecec](https://github.com/contentful/marketplace-partner-apps/commit/bc3ecece806d6adcca05853f3938e5266bb56329))
+* **deps:** bump follow-redirects from 1.15.4 to 1.15.6 in /apps/flexfields ([#1099](https://github.com/contentful/marketplace-partner-apps/issues/1099)) ([343a77b](https://github.com/contentful/marketplace-partner-apps/commit/343a77b8e3cb033e9941af4ec758c9f1f43cca58))
+
 ## [1.1.8](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.7...thrillworks-flex-fields-app-v1.1.8) (2024-02-28)
 
 

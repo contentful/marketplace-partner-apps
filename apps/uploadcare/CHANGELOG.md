@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.9](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.8...uploadcare-contentful-app-v1.0.9) (2024-03-19)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.19.1 to 4.25.0 ([#1043](https://github.com/contentful/marketplace-partner-apps/issues/1043)) ([3cb268f](https://github.com/contentful/marketplace-partner-apps/commit/3cb268fcfa66828f10ed5820d0096e523ccd2cf6))
+* **deps:** bump @uploadcare/blocks from 0.32.1 to 0.35.2 in /apps/uploadcare ([#1077](https://github.com/contentful/marketplace-partner-apps/issues/1077)) ([f937b52](https://github.com/contentful/marketplace-partner-apps/commit/f937b520681e3035e3dff34e0ccad94300b65f03))
+* **deps:** bump contentful-management from 11.23.0 to 11.23.1 in /apps/uploadcare ([#1182](https://github.com/contentful/marketplace-partner-apps/issues/1182)) ([28b26c2](https://github.com/contentful/marketplace-partner-apps/commit/28b26c22f6e0de50cda82c630665228f8b025dab))
+* **deps:** bump follow-redirects from 1.15.4 to 1.15.6 in /apps/uploadcare ([#1103](https://github.com/contentful/marketplace-partner-apps/issues/1103)) ([e9e4127](https://github.com/contentful/marketplace-partner-apps/commit/e9e412708cf58273913d5abe37a084f9c4343a76))
+* Uploadcare app ([#1133](https://github.com/contentful/marketplace-partner-apps/issues/1133)) ([29aa99b](https://github.com/contentful/marketplace-partner-apps/commit/29aa99b0c963f92fa9c43db543a43d6e6d7cf2fc))
+
 ## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.7...uploadcare-contentful-app-v1.0.8) (2024-02-09)
 
 

@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.9](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v1.1.8...shopify-sku-v1.1.9) (2024-03-19)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/ecommerce-app-base from 3.5.34 to 3.5.35 in /apps/shopify ([#1071](https://github.com/contentful/marketplace-partner-apps/issues/1071)) ([728ce5c](https://github.com/contentful/marketplace-partner-apps/commit/728ce5c4c6660168aff64eba0996c78889d84b59))
+* **deps:** bump @contentful/ecommerce-app-base from 3.5.35 to 3.5.36 in /apps/shopify ([#1085](https://github.com/contentful/marketplace-partner-apps/issues/1085)) ([da682af](https://github.com/contentful/marketplace-partner-apps/commit/da682aff983e0f0ef3a78d3a338ddfe229cb8397))
+* **deps:** bump @contentful/ecommerce-app-base from 3.5.36 to 3.5.37 ([#1143](https://github.com/contentful/marketplace-partner-apps/issues/1143)) ([763a6a7](https://github.com/contentful/marketplace-partner-apps/commit/763a6a773d1d979b5edf32312fe4757b725f7a48))
+* **deps:** bump @contentful/ecommerce-app-base from 3.5.37 to 3.5.38 in /apps/shopify ([#1170](https://github.com/contentful/marketplace-partner-apps/issues/1170)) ([fced493](https://github.com/contentful/marketplace-partner-apps/commit/fced4933c8204ba5041cb5fc4be46e642dd90b48))
+* **deps:** bump core-js from 3.36.0 to 3.36.1 in /apps/shopify ([#1169](https://github.com/contentful/marketplace-partner-apps/issues/1169)) ([63214f7](https://github.com/contentful/marketplace-partner-apps/commit/63214f74a6c304447d123cf38f3bb13079cd0d1f))
+* **deps:** bump emotion from 10.0.27 to 11.0.0 in /apps/shopify ([#861](https://github.com/contentful/marketplace-partner-apps/issues/861)) ([84de505](https://github.com/contentful/marketplace-partner-apps/commit/84de5055ec3d0b62c508b8f83c774d54f49263d3))
+* **deps:** bump follow-redirects from 1.15.4 to 1.15.6 in /apps/shopify ([#1102](https://github.com/contentful/marketplace-partner-apps/issues/1102)) ([a479206](https://github.com/contentful/marketplace-partner-apps/commit/a4792061f5ce624a302097edb00b81bf03462109))
+* **deps:** bump typescript from 5.3.3 to 5.4.2 in /apps/shopify ([#1052](https://github.com/contentful/marketplace-partner-apps/issues/1052)) ([ef38685](https://github.com/contentful/marketplace-partner-apps/commit/ef38685a692af9f366bc0955ff0be96045b4207f))
+
 ## [1.1.8](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v1.1.7...shopify-sku-v1.1.8) (2024-03-06)
 
 
