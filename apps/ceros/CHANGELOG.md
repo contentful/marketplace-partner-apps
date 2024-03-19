@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.9](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.0.8...ceros-contentful-app-v1.0.9) (2024-03-19)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.19.1 to 4.25.0 ([#1043](https://github.com/contentful/marketplace-partner-apps/issues/1043)) ([3cb268f](https://github.com/contentful/marketplace-partner-apps/commit/3cb268fcfa66828f10ed5820d0096e523ccd2cf6))
+* **deps:** bump @contentful/f36-components from 4.59.3 to 4.61.0 in /apps/ceros ([#1079](https://github.com/contentful/marketplace-partner-apps/issues/1079)) ([0b4b150](https://github.com/contentful/marketplace-partner-apps/commit/0b4b1507f712df5e9ef62aefe5a89b511110a5c2))
+* **deps:** bump @extractus/oembed-extractor from 3.2.1 to 4.0.2 ([#900](https://github.com/contentful/marketplace-partner-apps/issues/900)) ([8208181](https://github.com/contentful/marketplace-partner-apps/commit/8208181e8168fe0766492b1174e9bf23aa9c6088))
+* **deps:** bump @extractus/oembed-extractor from 3.2.1 to 4.0.2 in /apps/ceros ([#855](https://github.com/contentful/marketplace-partner-apps/issues/855)) ([db6e9b2](https://github.com/contentful/marketplace-partner-apps/commit/db6e9b2a43b938666e183a5d9e6c30235f0fa0ba))
+* **deps:** bump contentful-management from 10.46.4 to 11.23.0 in /apps/ceros ([#1131](https://github.com/contentful/marketplace-partner-apps/issues/1131)) ([3a765b4](https://github.com/contentful/marketplace-partner-apps/commit/3a765b4fae63cf2b5992710a1f67aaf553e59890))
+* **deps:** bump contentful-management from 11.23.0 to 11.23.1 in /apps/ceros ([#1151](https://github.com/contentful/marketplace-partner-apps/issues/1151)) ([39f65ab](https://github.com/contentful/marketplace-partner-apps/commit/39f65ab6f3c01b4a7df49a23c85689e283ee0a59))
+* **deps:** bump follow-redirects from 1.15.4 to 1.15.6 in /apps/ceros ([#1105](https://github.com/contentful/marketplace-partner-apps/issues/1105)) ([cd66945](https://github.com/contentful/marketplace-partner-apps/commit/cd669454ef412804437e00182fa4449cf0baaaa5))
+
 ## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.0.7...ceros-contentful-app-v1.0.8) (2024-02-09)
 
 

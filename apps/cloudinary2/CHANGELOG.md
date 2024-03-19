@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.0.7...cloudinary-assets-v1.0.8) (2024-03-19)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.19.1 to 4.25.0 ([#1043](https://github.com/contentful/marketplace-partner-apps/issues/1043)) ([3cb268f](https://github.com/contentful/marketplace-partner-apps/commit/3cb268fcfa66828f10ed5820d0096e523ccd2cf6))
+* **deps:** bump @contentful/f36-components from 4.59.3 to 4.61.0 in /apps/cloudinary2 ([#1178](https://github.com/contentful/marketplace-partner-apps/issues/1178)) ([c2784a4](https://github.com/contentful/marketplace-partner-apps/commit/c2784a43f6c86c0b7553d77117049cc2fe4b538b))
+* **deps:** bump contentful-management from 10.46.4 to 11.23.0 in /apps/cloudinary2 ([#1060](https://github.com/contentful/marketplace-partner-apps/issues/1060)) ([6263f64](https://github.com/contentful/marketplace-partner-apps/commit/6263f64e8513901f5004ca36de683b32b9c71c9a))
+* **deps:** bump follow-redirects from 1.15.4 to 1.15.6 in /apps/cloudinary2 ([#1104](https://github.com/contentful/marketplace-partner-apps/issues/1104)) ([3509d2a](https://github.com/contentful/marketplace-partner-apps/commit/3509d2ac1a2d57ac93cae6c0dc115c112e9c8bc8))
+* resolve emotion update in Cloudinary ([#1092](https://github.com/contentful/marketplace-partner-apps/issues/1092)) ([573abe8](https://github.com/contentful/marketplace-partner-apps/commit/573abe851672b2c541d511a04b9d7c6c3364034c))
+
 ## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.0.6...cloudinary-assets-v1.0.7) (2024-02-09)
 
 

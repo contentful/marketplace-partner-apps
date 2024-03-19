@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/wix-contentful-app-v1.0.0...wix-contentful-app-v1.0.1) (2024-03-19)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.24.0 to 4.25.0 in /apps/wix ([#1086](https://github.com/contentful/marketplace-partner-apps/issues/1086)) ([3e09a85](https://github.com/contentful/marketplace-partner-apps/commit/3e09a85c491f3ade73e8412ff74866c40d0bb029))
+* **deps:** bump follow-redirects from 1.15.5 to 1.15.6 in /apps/wix ([#1095](https://github.com/contentful/marketplace-partner-apps/issues/1095)) ([6786eb3](https://github.com/contentful/marketplace-partner-apps/commit/6786eb3abea34b999901abb9d7a32c54812ae561))
+* **deps:** bump react-router from 6.14.1 to 6.22.3 in /apps/wix ([#1123](https://github.com/contentful/marketplace-partner-apps/issues/1123)) ([4f9a96f](https://github.com/contentful/marketplace-partner-apps/commit/4f9a96f1c7c7d9b77489f4a50c4d9fef8d53c179))
+
 ## 1.0.0 (2024-03-06)
 
 
