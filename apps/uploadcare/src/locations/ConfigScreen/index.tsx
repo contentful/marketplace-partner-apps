@@ -3,7 +3,7 @@ import { GlobalStyles, Heading, Paragraph } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { ContentTypeProps } from 'contentful-management';
-import { css } from 'emotion';
+import { css } from '@emotion/css';
 import { ReactElement, useCallback, useEffect, useState } from 'react';
 import logo from '../../assets/logo.svg';
 import { DEFAULT_PARAMS } from '../../constants';

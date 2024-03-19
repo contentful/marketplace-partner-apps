@@ -2,7 +2,7 @@ import { FieldAppSDK } from '@contentful/app-sdk';
 import { Button } from '@contentful/f36-components';
 import { AssetIcon } from '@contentful/f36-icons';
 import { useSDK } from '@contentful/react-apps-toolkit';
-import { css } from 'emotion';
+import { css } from '@emotion/css';
 import { useCallback } from 'react';
 import logo from '../../assets/logo.svg';
 import { Asset, InstallParams } from '../../types';
