@@ -185,6 +185,9 @@ updates:
       - dependency-name: '@types/node'
         versions:
           - '>18.15.3'
+      - dependency-name: '@uploadcare/blocks'
+        versions:
+          - '>0.35.2'
   - package-ecosystem: npm
     schedule:
       interval: daily
