@@ -61,7 +61,7 @@ To keep depedencies up to date, Contentful uses [Dependabot](https://docs.github
 As an app developer, it is important to review and approve any dependency update PRs assigned to you on a frequent basis. Specifically we ask that you:
 
 * Provide a reasonably confident test suite that exercises the main functionality of your app. Test suites generally do an excellent job of catching errors caused by backward breaking compatibility changes in updated depedencies.
-* Respond to and review any dependency-related PRs that are opened against your app (whether by Dependabot or the Contentful team) in a timely fashion.
+* Respond to, review, and informally approve (adding a PR comment suffices as an approval) any dependency-related PRs that are opened against your app (whether by Dependabot or the Contentful team) in a timely fashion. If errors exist in aformentioned dependency-related PRs, please manually resolve these errors. 
 * Talk to us if you have a specific requirement to firmly pin a dependency version. We can make custom modifications to our Dependabot configuration to support exceptions as needed.
 
 ## Building your own app
