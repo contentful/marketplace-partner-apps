@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@contentful/app-scripts": "1.14.0",
-    "@testing-library/react": "14.2.1",
+    "@testing-library/react": "14.2.2",
     "@testing-library/user-event": "14.5.2",
     "@tsconfig/vite-react": "3.0.1",
     "@types/file-size": "1.0.3",
