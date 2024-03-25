@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.9](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.0.8...cloudinary-assets-v1.0.9) (2024-03-25)
+
+
+### Bug Fixes
+
+* **deps:** bump @dnd-kit/sortable from 7.0.2 to 8.0.0 in /apps/cloudinary2 ([#1185](https://github.com/contentful/marketplace-partner-apps/issues/1185)) ([89f4bd3](https://github.com/contentful/marketplace-partner-apps/commit/89f4bd31759dc73b816f928864180250a6db2375))
+
 ## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.0.7...cloudinary-assets-v1.0.8) (2024-03-19)
 
 

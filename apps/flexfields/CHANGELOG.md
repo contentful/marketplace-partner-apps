@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.10](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.9...thrillworks-flex-fields-app-v1.1.10) (2024-03-25)
+
+
+### Bug Fixes
+
+* **deps:** bump contentful-management from 10.46.4 to 11.23.1 in /apps/flexfields ([#1144](https://github.com/contentful/marketplace-partner-apps/issues/1144)) ([b10d085](https://github.com/contentful/marketplace-partner-apps/commit/b10d0852323c4f554a30c2b013480468fc461e40))
+* **deps:** bump webpack-dev-middleware from 5.3.3 to 5.3.4 in /apps/flexfields ([#1247](https://github.com/contentful/marketplace-partner-apps/issues/1247)) ([e4a47eb](https://github.com/contentful/marketplace-partner-apps/commit/e4a47eb01c6ce81c756c208cb1f191b64bbced9d))
+
 ## [1.1.9](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.8...thrillworks-flex-fields-app-v1.1.9) (2024-03-19)
 
 
