@@ -1,6 +1,6 @@
 {
   "name": "intershop-connector",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "^4.25.0",

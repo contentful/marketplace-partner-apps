@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.10](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.9...uploadcare-contentful-app-v1.0.10) (2024-03-25)
+
+
+### Bug Fixes
+
+* **deps:** bump contentful-management from 11.23.1 to 11.24.0 in /apps/uploadcare ([#1196](https://github.com/contentful/marketplace-partner-apps/issues/1196)) ([e277de1](https://github.com/contentful/marketplace-partner-apps/commit/e277de1dc012542afe2a77b9ed0a0433fb35b506))
+* **deps:** bump contentful-management from 11.24.0 to 11.24.2 in /apps/uploadcare ([#1261](https://github.com/contentful/marketplace-partner-apps/issues/1261)) ([dc494b9](https://github.com/contentful/marketplace-partner-apps/commit/dc494b96b1714502c127292496bc5b7f6dbad13b))
+
 ## [1.0.9](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.8...uploadcare-contentful-app-v1.0.9) (2024-03-19)
 
 

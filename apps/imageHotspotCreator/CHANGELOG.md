@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.13](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.12...image-hotspot-creator-v1.0.13) (2024-03-25)
+
+
+### Bug Fixes
+
+* **deps:** bump @mui/icons-material from 5.15.13 to 5.15.14 in /apps/imageHotspotCreator ([#1236](https://github.com/contentful/marketplace-partner-apps/issues/1236)) ([eedb514](https://github.com/contentful/marketplace-partner-apps/commit/eedb5141ec550b2d1c6453503f7922c418488137))
+* **deps:** bump contentful from 10.8.1 to 10.8.4 in /apps/imageHotspotCreator ([#1205](https://github.com/contentful/marketplace-partner-apps/issues/1205)) ([3b0e40b](https://github.com/contentful/marketplace-partner-apps/commit/3b0e40baa1b7f290d456c0ebd876d4de7a7e6ec3))
+* **deps:** bump contentful-management from 10.46.4 to 11.23.1 in /apps/imageHotspotCreator ([#1154](https://github.com/contentful/marketplace-partner-apps/issues/1154)) ([b515de3](https://github.com/contentful/marketplace-partner-apps/commit/b515de3abe8189b25bae270b4da788febe27221f))
+* **deps:** bump webpack-dev-middleware from 5.3.3 to 5.3.4 in /apps/imageHotspotCreator ([#1243](https://github.com/contentful/marketplace-partner-apps/issues/1243)) ([7eaaf38](https://github.com/contentful/marketplace-partner-apps/commit/7eaaf388da5e87a9f717251a80b8e9cc8e96b818))
+
 ## [1.0.12](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.11...image-hotspot-creator-v1.0.12) (2024-03-19)
 
 
