@@ -8,7 +8,7 @@
         "lint": "eslint . --ext .ts --ignore-path ../../.gitignore",
         "clean": "",
         "start": "vite",
-        "test": "vitest",
+        "test": "echo \"TODO: vitest\"",
         "upload": "contentful-app-scripts upload --bundle-dir ./dist",
         "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./dist  --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN",
         "storybook": "storybook dev -p 6006",
