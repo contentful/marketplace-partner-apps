@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.12](https://github.com/contentful/marketplace-partner-apps/compare/voucherify-contentful-app-v1.0.11...voucherify-contentful-app-v1.0.12) (2024-03-28)
+
+
+### Bug Fixes
+
+* **deps:** bump react-hook-form from 7.51.1 to 7.51.2 in /apps/voucherify ([#1306](https://github.com/contentful/marketplace-partner-apps/issues/1306)) ([183461a](https://github.com/contentful/marketplace-partner-apps/commit/183461a10e580f32046186e8ca1ca3405039a4d0))
+
 ## [1.0.11](https://github.com/contentful/marketplace-partner-apps/compare/voucherify-contentful-app-v1.0.10...voucherify-contentful-app-v1.0.11) (2024-03-19)
 
 

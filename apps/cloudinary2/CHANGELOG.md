@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.10](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.0.9...cloudinary-assets-v1.0.10) (2024-03-28)
+
+
+### Bug Fixes
+
+* **deps:** bump contentful-management from 11.23.0 to 11.24.3 in /apps/cloudinary2 ([#1298](https://github.com/contentful/marketplace-partner-apps/issues/1298)) ([bb68bf3](https://github.com/contentful/marketplace-partner-apps/commit/bb68bf307acb28074c25130a6f9746bc98dce49d))
+
 ## [1.0.9](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.0.8...cloudinary-assets-v1.0.9) (2024-03-25)
 
 

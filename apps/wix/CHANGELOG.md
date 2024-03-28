@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/wix-contentful-app-v1.0.2...wix-contentful-app-v1.0.3) (2024-03-28)
+
+
+### Bug Fixes
+
+* **deps:** bump contentful-management from 11.23.1 to 11.24.3 in /apps/wix ([#1323](https://github.com/contentful/marketplace-partner-apps/issues/1323)) ([3b73fd2](https://github.com/contentful/marketplace-partner-apps/commit/3b73fd2f7dcfab7ec8e64c47d6e9b6fc20ca6754))
+* **deps:** bump react-router-dom from 6.22.2 to 6.22.3 in /apps/wix ([#1295](https://github.com/contentful/marketplace-partner-apps/issues/1295)) ([8d513fb](https://github.com/contentful/marketplace-partner-apps/commit/8d513fb853226db7dab0ab0cbbad34295a630ddb))
+
 ## [1.0.2](https://github.com/contentful/marketplace-partner-apps/compare/wix-contentful-app-v1.0.1...wix-contentful-app-v1.0.2) (2024-03-25)
 
 
