@@ -24,7 +24,7 @@ const SelectImage = ({
 }: any) => {
   //state Declaratios
   const [imageFile, setImageFile] = useState<any>();
-  const [uploadYourImage, setUploadYourImage] = useState(true);
+  const [uploadYourImage, setUploadYourImage] = useState<any>(true);
   const [uploadAsLink, setUploadAsLink] = useState("");
   const [uploadExisting, setUploadExisting] = useState("");
 
