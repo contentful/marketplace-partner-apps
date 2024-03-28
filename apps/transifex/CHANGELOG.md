@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.1.2...transifex-contentful-app-v1.1.3) (2024-03-28)
+
+
+### Bug Fixes
+
+* **deps:** bump contentful-management from 11.24.0 to 11.24.3 in /apps/transifex ([#1293](https://github.com/contentful/marketplace-partner-apps/issues/1293)) ([0ca69cd](https://github.com/contentful/marketplace-partner-apps/commit/0ca69cdb868469332590bf00e4a9e0770d9c69a9))
+
 ## [1.1.2](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.1.1...transifex-contentful-app-v1.1.2) (2024-03-25)
 
 

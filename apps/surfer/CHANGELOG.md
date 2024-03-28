@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.12](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.11...surfer-contentful-app-v1.0.12) (2024-03-28)
+
+
+### Bug Fixes
+
+* **deps:** bump contentful-management from 11.24.2 to 11.24.3 in /apps/surfer ([#1301](https://github.com/contentful/marketplace-partner-apps/issues/1301)) ([0655c0d](https://github.com/contentful/marketplace-partner-apps/commit/0655c0d793c4474a53c6383f0e3bfb6aa583d3ad))
+* **deps:** bump express from 4.18.2 to 4.19.2 in /apps/surfer ([#1280](https://github.com/contentful/marketplace-partner-apps/issues/1280)) ([ac65768](https://github.com/contentful/marketplace-partner-apps/commit/ac65768e44e388a274c9c8bddf805ba45a488e6f))
+
 ## [1.0.11](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.10...surfer-contentful-app-v1.0.11) (2024-03-25)
 
 
