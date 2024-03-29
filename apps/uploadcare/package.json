@@ -29,7 +29,7 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.17.0",
+    "@contentful/app-scripts": "1.18.0",
     "@tsconfig/create-react-app": "2.0.4",
     "@types/node": "18.15.3",
     "@types/react": "18.2.73",
