@@ -18,7 +18,7 @@
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "11.11.2",
     "@emotion/react": "11.11.4",
-    "@emotion/styled": "11.11.0",
+    "@emotion/styled": "11.11.5",
     "axios": "1.6.8",
     "http-status-codes": "2.3.0",
     "lodash": "4.17.21",
