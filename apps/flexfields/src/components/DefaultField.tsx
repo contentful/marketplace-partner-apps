@@ -8,12 +8,12 @@ import {
   Text,
 } from "@contentful/f36-components";
 import { CombinedLinkActions } from "@contentful/field-editor-reference";
-import { type LinkActionsProps } from "@contentful/field-editor-reference/dist/types/components";
+import { type CustomActionProps } from "@contentful/field-editor-reference";
 import { Control } from "contentful-management";
-import { css } from "emotion";
+import { css } from "@emotion/css";
 import React from "react";
 import { getLocaleName } from "../utils";
-import { openMarkdownDialog } from '@contentful/field-editor-markdown';
+import { openMarkdownDialog } from "@contentful/field-editor-markdown";
 
 // Prop types for DefaultField component
 export interface DefaultFieldProps {
@@ -29,7 +29,7 @@ const DefaultField = (props: DefaultFieldProps) => {
   const { control, name, sdk, locale, widgetId } = props;
   // This is required to show the dialogs related to markdown (expanded mode and cheatsheet)
   // ref: https://github.com/contentful/field-editors/blob/master/packages/markdown/stories/MarkdownEditor.stories.tsx#L93
-  if (control?.widgetId === 'markdown') {
+  if (control?.widgetId === "markdown") {
     // @ts-expect-error
     sdk.dialogs.openCurrent = openMarkdownDialog(sdk);
   }
@@ -69,7 +69,7 @@ const DefaultField = (props: DefaultFieldProps) => {
             ...(control?.field.type === "Array" ||
             control?.field.type === "Link"
               ? {
-                  renderCustomActions: (props: LinkActionsProps) => (
+                  renderCustomActions: (props: CustomActionProps) => (
                     <CombinedLinkActions {...props} />
                   ),
                 }
