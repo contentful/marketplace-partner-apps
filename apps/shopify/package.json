@@ -11,7 +11,7 @@
     "@contentful/ecommerce-app-base": "^3.5.41",
     "@contentful/f36-components": "^4.61.0",
     "@contentful/f36-icons": "^4.27.0",
-    "@contentful/f36-tokens": "^4.0.2",
+    "@contentful/f36-tokens": "^4.0.5",
     "@contentful/react-apps-toolkit": "^1.2.16",
     "core-js": "3.36.1",
     "emotion": "^11.0.0",
