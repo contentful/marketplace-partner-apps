@@ -48,7 +48,7 @@
     "@types/react": "18.2.74",
     "@types/react-dom": "18.2.24",
     "cross-env": "7.0.3",
-    "typescript": "5.4.3"
+    "typescript": "5.4.4"
   },
   "homepage": "."
 }
