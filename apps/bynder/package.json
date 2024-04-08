@@ -8,7 +8,7 @@
     "react-scripts": "5.0.1"
   },
   "dependencies": {
-    "@contentful/dam-app-base": "^2.2.17",
+    "@contentful/dam-app-base": "^2.2.18",
     "react": "16.14.0",
     "react-dom": "16.14.0"
   },
