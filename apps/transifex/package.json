@@ -31,7 +31,7 @@
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./dist --organization-id ${DEFINITIONS_ORG_ID} --definition-id b7SVv0k1EYbQRsusviQDi --token ${CONTENTFUL_CMA_TOKEN}"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "^1.18.0",
+    "@contentful/app-scripts": "^1.19.0",
     "@testing-library/react": "14.3.0",
     "@types/node": "18.15.3",
     "@types/react": "18.2.75",
