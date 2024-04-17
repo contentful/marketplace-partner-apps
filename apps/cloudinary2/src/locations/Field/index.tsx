@@ -18,7 +18,8 @@ const Field = () => {
   const sdk = useSDK<FieldAppSDK<AppInstallationParameters>>();
   useAutoResizer({ absoluteElements: true });
 
-  const [assets = [], setAssets] = useFieldValue<CloudinaryAsset[]>(sdk.field.id, sdk.field.locale)
+  const [fieldValue = [], setAssets] = useFieldValue<CloudinaryAsset[] | null>(sdk.field.id, sdk.field.locale);
+  const assets = fieldValue || [];
 
   const [editingEnabled, setEditingEnabled] = useState(!sdk.field.getIsDisabled());
   useEffect(() => {
