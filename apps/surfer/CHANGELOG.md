@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.12](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.11...surfer-contentful-app-v1.0.12) (2024-04-18)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.61.0 to 4.62.0 in /apps/surfer ([#1396](https://github.com/contentful/marketplace-partner-apps/issues/1396)) ([a3f888c](https://github.com/contentful/marketplace-partner-apps/commit/a3f888caee96b5064c2bdf2b44285423c045655d))
+* **deps:** bump @contentful/f36-components from 4.62.0 to 4.64.0 in /apps/surfer ([#1496](https://github.com/contentful/marketplace-partner-apps/issues/1496)) ([afdeb46](https://github.com/contentful/marketplace-partner-apps/commit/afdeb46ac44135c0f1b4fe0f7a0511ac1955db6e))
+* **deps:** bump @contentful/f36-tokens from 4.0.4 to 4.0.5 in /apps/surfer ([#1390](https://github.com/contentful/marketplace-partner-apps/issues/1390)) ([9e3c5e8](https://github.com/contentful/marketplace-partner-apps/commit/9e3c5e830ae66c3e0419ffed110c7d8cbed71174))
+* **deps:** bump contentful-management from 11.24.2 to 11.24.3 in /apps/surfer ([#1301](https://github.com/contentful/marketplace-partner-apps/issues/1301)) ([0655c0d](https://github.com/contentful/marketplace-partner-apps/commit/0655c0d793c4474a53c6383f0e3bfb6aa583d3ad))
+* **deps:** bump contentful-management from 11.24.3 to 11.24.5 in /apps/surfer ([#1457](https://github.com/contentful/marketplace-partner-apps/issues/1457)) ([9518343](https://github.com/contentful/marketplace-partner-apps/commit/9518343af7f6fa4b568edc1eacf3ffec4c4b8d02))
+* **deps:** bump contentful-management from 11.24.5 to 11.25.0 in /apps/surfer ([#1535](https://github.com/contentful/marketplace-partner-apps/issues/1535)) ([446ac4e](https://github.com/contentful/marketplace-partner-apps/commit/446ac4e4a545d00e1f1865e18a1b97935ec8c3af))
+* **deps:** bump express from 4.18.2 to 4.19.2 in /apps/surfer ([#1280](https://github.com/contentful/marketplace-partner-apps/issues/1280)) ([ac65768](https://github.com/contentful/marketplace-partner-apps/commit/ac65768e44e388a274c9c8bddf805ba45a488e6f))
+
 ## [1.0.11](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.10...surfer-contentful-app-v1.0.11) (2024-03-25)
 
 
