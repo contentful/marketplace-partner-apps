@@ -8,7 +8,7 @@
     "@contentful/f36-tokens": "4.0.5",
     "@contentful/react-apps-toolkit": "1.2.16",
     "contentful-management": "11.25.0",
-    "emotion": "10.0.27",
+    "emotion": "11.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router": "6.22.3",
