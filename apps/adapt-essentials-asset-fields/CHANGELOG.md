@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.0.7...adapt-essentials-asset-fields-v1.0.8) (2024-04-18)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.61.0 to 4.64.0 in /apps/adapt-essentials-asset-fields ([#1518](https://github.com/contentful/marketplace-partner-apps/issues/1518)) ([4b24eae](https://github.com/contentful/marketplace-partner-apps/commit/4b24eae0055eae26fdbe57580901dad6310d9574))
+* **deps:** bump react-focus-lock from 2.11.2 to 2.11.3 in /apps/adapt-essentials-asset-fields ([#1530](https://github.com/contentful/marketplace-partner-apps/issues/1530)) ([ad818cf](https://github.com/contentful/marketplace-partner-apps/commit/ad818cfa9622e8869656b96c52ce0da3a1131bb7))
+
 ## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.0.6...adapt-essentials-asset-fields-v1.0.7) (2024-03-25)
 
 

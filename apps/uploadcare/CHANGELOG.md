@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.11](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.10...uploadcare-contentful-app-v1.0.11) (2024-04-18)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.61.0 to 4.62.0 in /apps/uploadcare ([#1400](https://github.com/contentful/marketplace-partner-apps/issues/1400)) ([a4b419f](https://github.com/contentful/marketplace-partner-apps/commit/a4b419f23357d01ae2fee98dbe3a5c4c92fbc10f))
+* **deps:** bump @contentful/f36-components from 4.62.0 to 4.64.0 in /apps/uploadcare ([#1489](https://github.com/contentful/marketplace-partner-apps/issues/1489)) ([ef3a96a](https://github.com/contentful/marketplace-partner-apps/commit/ef3a96af8b9cebc2cc975463614c7d86cc00478f))
+* **deps:** bump @contentful/f36-icons from 4.27.0 to 4.28.0 in /apps/uploadcare ([#1516](https://github.com/contentful/marketplace-partner-apps/issues/1516)) ([8bc3621](https://github.com/contentful/marketplace-partner-apps/commit/8bc3621c650a448925be612da97bf410655bd758))
+* **deps:** bump @contentful/f36-tokens from 4.0.4 to 4.0.5 in /apps/uploadcare ([#1394](https://github.com/contentful/marketplace-partner-apps/issues/1394)) ([1d965a9](https://github.com/contentful/marketplace-partner-apps/commit/1d965a9ba722c10533c2fa74db51130344a991bb))
+* **deps:** bump contentful-management from 11.24.2 to 11.24.3 in /apps/uploadcare ([#1272](https://github.com/contentful/marketplace-partner-apps/issues/1272)) ([a1c7718](https://github.com/contentful/marketplace-partner-apps/commit/a1c77184e04bf49238e144619834fb10b4018c7f))
+* **deps:** bump contentful-management from 11.24.3 to 11.24.5 in /apps/uploadcare ([#1459](https://github.com/contentful/marketplace-partner-apps/issues/1459)) ([79e5c20](https://github.com/contentful/marketplace-partner-apps/commit/79e5c2001a414fd5131e402dde6522221c75ba73))
+* **deps:** bump contentful-management from 11.24.5 to 11.25.0 in /apps/uploadcare ([#1539](https://github.com/contentful/marketplace-partner-apps/issues/1539)) ([fab37dc](https://github.com/contentful/marketplace-partner-apps/commit/fab37dcc99ee35cf56bd31f848b52927c1029716))
+
 ## [1.0.10](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.9...uploadcare-contentful-app-v1.0.10) (2024-03-25)
 
 

@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.10](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.0.9...cloudinary-assets-v1.0.10) (2024-04-18)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.61.0 to 4.62.0 in /apps/cloudinary2 ([#1407](https://github.com/contentful/marketplace-partner-apps/issues/1407)) ([e79158c](https://github.com/contentful/marketplace-partner-apps/commit/e79158ca987baceddc7c315376ff48093989541b))
+* **deps:** bump @contentful/f36-icons from 4.27.0 to 4.28.0 in /apps/cloudinary2 ([#1491](https://github.com/contentful/marketplace-partner-apps/issues/1491)) ([9ebbdf9](https://github.com/contentful/marketplace-partner-apps/commit/9ebbdf966f99f7e119d7f939d6751bae3059be88))
+* **deps:** bump @contentful/f36-tokens from 4.0.4 to 4.0.5 in /apps/cloudinary2 ([#1405](https://github.com/contentful/marketplace-partner-apps/issues/1405)) ([4174d16](https://github.com/contentful/marketplace-partner-apps/commit/4174d16d906d707d543234e9cba04bbe5b210d7a))
+* **deps:** bump cloudinary-core from 2.13.0 to 2.13.1 in /apps/cloudinary2 ([#1445](https://github.com/contentful/marketplace-partner-apps/issues/1445)) ([403f28c](https://github.com/contentful/marketplace-partner-apps/commit/403f28cdc8523baba27cf19ab3f6f4fc2a11d673))
+* **deps:** bump contentful-management from 11.23.0 to 11.24.3 in /apps/cloudinary2 ([#1298](https://github.com/contentful/marketplace-partner-apps/issues/1298)) ([bb68bf3](https://github.com/contentful/marketplace-partner-apps/commit/bb68bf307acb28074c25130a6f9746bc98dce49d))
+* **deps:** bump contentful-management from 11.24.3 to 11.24.5 in /apps/cloudinary2 ([#1454](https://github.com/contentful/marketplace-partner-apps/issues/1454)) ([9c409fb](https://github.com/contentful/marketplace-partner-apps/commit/9c409fbda6d91dba586f7d1f90d8bc30a9c510b7))
+* **deps:** bump contentful-management from 11.24.5 to 11.25.0 in /apps/cloudinary2 ([#1554](https://github.com/contentful/marketplace-partner-apps/issues/1554)) ([e329168](https://github.com/contentful/marketplace-partner-apps/commit/e329168468f9749e9040035c2f63eaca8dc5d2eb))
+* handle null fields in cloudinary ([#1550](https://github.com/contentful/marketplace-partner-apps/issues/1550)) ([7b6b138](https://github.com/contentful/marketplace-partner-apps/commit/7b6b13856563f1c2ed6c02bc2659c3d3dda49671))
+
 ## [1.0.9](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.0.8...cloudinary-assets-v1.0.9) (2024-03-25)
 
 

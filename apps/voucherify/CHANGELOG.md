@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.12](https://github.com/contentful/marketplace-partner-apps/compare/voucherify-contentful-app-v1.0.11...voucherify-contentful-app-v1.0.12) (2024-04-18)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.61.0 to 4.62.0 in /apps/voucherify ([#1398](https://github.com/contentful/marketplace-partner-apps/issues/1398)) ([a494d67](https://github.com/contentful/marketplace-partner-apps/commit/a494d67d6dad7cddf6663bee6fb7809e57ae230a))
+* **deps:** bump @contentful/f36-components from 4.62.0 to 4.64.0 in /apps/voucherify ([#1492](https://github.com/contentful/marketplace-partner-apps/issues/1492)) ([f561a28](https://github.com/contentful/marketplace-partner-apps/commit/f561a28c163a6fdf438fbe9d9371ea4ee5c82e53))
+* **deps:** bump @contentful/f36-icons from 4.27.0 to 4.28.0 in /apps/voucherify ([#1505](https://github.com/contentful/marketplace-partner-apps/issues/1505)) ([bb075a4](https://github.com/contentful/marketplace-partner-apps/commit/bb075a4f682b74a3890ccc6eb790a97b3bd25bc4))
+* **deps:** bump @emotion/styled from 11.11.0 to 11.11.5 in /apps/voucherify ([#1353](https://github.com/contentful/marketplace-partner-apps/issues/1353)) ([285d63f](https://github.com/contentful/marketplace-partner-apps/commit/285d63ffa0ee2fc39cb27e669801046c9e6ad685))
+* **deps:** bump react-hook-form from 7.51.1 to 7.51.2 in /apps/voucherify ([#1306](https://github.com/contentful/marketplace-partner-apps/issues/1306)) ([183461a](https://github.com/contentful/marketplace-partner-apps/commit/183461a10e580f32046186e8ca1ca3405039a4d0))
+* **deps:** bump react-hook-form from 7.51.2 to 7.51.3 in /apps/voucherify ([#1506](https://github.com/contentful/marketplace-partner-apps/issues/1506)) ([c163a7b](https://github.com/contentful/marketplace-partner-apps/commit/c163a7bbed03c713853635f1e1301696c824855f))
+
 ## [1.0.11](https://github.com/contentful/marketplace-partner-apps/compare/voucherify-contentful-app-v1.0.10...voucherify-contentful-app-v1.0.11) (2024-03-19)
 
 

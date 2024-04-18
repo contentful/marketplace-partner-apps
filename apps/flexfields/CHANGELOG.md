@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.11](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.10...thrillworks-flex-fields-app-v1.1.11) (2024-04-18)
+
+
+### Bug Fixes
+
+* **deps:** bump express from 4.18.2 to 4.19.2 in /apps/flexfields ([#1275](https://github.com/contentful/marketplace-partner-apps/issues/1275)) ([8c7514d](https://github.com/contentful/marketplace-partner-apps/commit/8c7514d788de121ccc1f8e791ce56a256bde36d7))
+
 ## [1.1.10](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.9...thrillworks-flex-fields-app-v1.1.10) (2024-03-25)
 
 
