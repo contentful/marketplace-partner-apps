@@ -17,8 +17,7 @@
     "emotion": "^11.0.0",
     "react": "16.14.0",
     "react-dom": "16.14.0",
-    "shopify-buy": "2.21.1",
-    "typescript": "5.4.5"
+    "shopify-buy": "2.21.1"
   },
   "scripts": {
     "start": "cross-env BROWSER=none react-scripts start",
