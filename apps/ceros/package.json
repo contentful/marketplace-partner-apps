@@ -8,7 +8,7 @@
     "@contentful/f36-tokens": "4.0.5",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@extractus/oembed-extractor": "^4.0.3",
-    "contentful-management": "11.25.1",
+    "contentful-management": "11.25.2",
     "@emotion/css": "11.11.2",
     "react": "18.2.0",
     "react-dom": "18.2.0"
