@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.13](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.12...surfer-contentful-app-v1.0.13) (2024-04-26)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.64.0 to 4.65.0 in /apps/surfer ([#1597](https://github.com/contentful/marketplace-partner-apps/issues/1597)) ([e27a8d9](https://github.com/contentful/marketplace-partner-apps/commit/e27a8d9c28b773b4cd0cb2da4810859830e01598))
+* **deps:** bump @contentful/f36-icons from 4.28.0 to 4.28.1 in /apps/surfer ([#1611](https://github.com/contentful/marketplace-partner-apps/issues/1611)) ([8b3a999](https://github.com/contentful/marketplace-partner-apps/commit/8b3a99965f9080f2426a7397e62e9589ec711491))
+* **deps:** bump @contentful/f36-icons from 4.28.1 to 4.28.2 in /apps/surfer ([#1628](https://github.com/contentful/marketplace-partner-apps/issues/1628)) ([f2b1f57](https://github.com/contentful/marketplace-partner-apps/commit/f2b1f57c026bf9db6b55b3844a2b936d58b3dc3c))
+* **deps:** bump contentful-management from 11.25.0 to 11.25.1 in /apps/surfer ([#1579](https://github.com/contentful/marketplace-partner-apps/issues/1579)) ([2187c51](https://github.com/contentful/marketplace-partner-apps/commit/2187c51d34919a94e6cba828dfe6e196895cdd26))
+* **deps:** bump contentful-management from 11.25.1 to 11.25.2 in /apps/surfer ([#1610](https://github.com/contentful/marketplace-partner-apps/issues/1610)) ([fff7524](https://github.com/contentful/marketplace-partner-apps/commit/fff75246179b54a387be1f3aee41e7edb41fa4dc))
+* **deps:** bump react and @types/react in /apps/surfer ([#1629](https://github.com/contentful/marketplace-partner-apps/issues/1629)) ([1eda546](https://github.com/contentful/marketplace-partner-apps/commit/1eda5464669c08e4c859c7f258efa145b664e086))
+
 ## [1.0.12](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.11...surfer-contentful-app-v1.0.12) (2024-04-18)
 
 

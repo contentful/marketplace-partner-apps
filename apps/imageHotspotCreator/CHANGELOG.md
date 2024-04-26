@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.15](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.14...image-hotspot-creator-v1.0.15) (2024-04-26)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.4.0 to 1.6.8 ([#1567](https://github.com/contentful/marketplace-partner-apps/issues/1567)) ([6614699](https://github.com/contentful/marketplace-partner-apps/commit/6614699604d81fdf70cd00d521dee2915712fd88))
+
 ## [1.0.14](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.13...image-hotspot-creator-v1.0.14) (2024-04-18)
 
 

@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.5](https://github.com/contentful/marketplace-partner-apps/compare/intershop-connector-v1.0.4...intershop-connector-v1.0.5) (2024-04-26)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.64.0 to 4.65.0 in /apps/intershop ([#1599](https://github.com/contentful/marketplace-partner-apps/issues/1599)) ([b3f69e4](https://github.com/contentful/marketplace-partner-apps/commit/b3f69e46894d0b5323063492723c5343072e9ab0))
+* **deps:** bump contentful-management from 11.24.5 to 11.25.0 in /apps/intershop ([#1561](https://github.com/contentful/marketplace-partner-apps/issues/1561)) ([55e68f7](https://github.com/contentful/marketplace-partner-apps/commit/55e68f7009f9f76b05b0fb5de581a9defd787dc2))
+* **deps:** bump contentful-management from 11.25.0 to 11.25.1 in /apps/intershop ([#1586](https://github.com/contentful/marketplace-partner-apps/issues/1586)) ([4c5dfec](https://github.com/contentful/marketplace-partner-apps/commit/4c5dfec13ac47361a180c0a78ac2191e88fda772))
+* **deps:** bump contentful-management from 11.25.1 to 11.25.2 in /apps/intershop ([#1615](https://github.com/contentful/marketplace-partner-apps/issues/1615)) ([2d27a29](https://github.com/contentful/marketplace-partner-apps/commit/2d27a2914b686cd593856c55225b2d6203e82ebf))
+* **deps:** bump react and @types/react in /apps/intershop ([#1632](https://github.com/contentful/marketplace-partner-apps/issues/1632)) ([d5928e3](https://github.com/contentful/marketplace-partner-apps/commit/d5928e3732869afbca9a458d16768f4e807b0cef))
+
 ## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/intershop-connector-v1.0.3...intershop-connector-v1.0.4) (2024-04-18)
 
 

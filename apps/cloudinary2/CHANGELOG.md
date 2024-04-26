@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.11](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.0.10...cloudinary-assets-v1.0.11) (2024-04-26)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.62.0 to 4.64.0 in /apps/cloudinary2 ([#1570](https://github.com/contentful/marketplace-partner-apps/issues/1570)) ([827b852](https://github.com/contentful/marketplace-partner-apps/commit/827b8521859f9f2b9377451864ce575b5b383991))
+* **deps:** bump @contentful/f36-icons from 4.28.0 to 4.28.2 in /apps/cloudinary2 ([#1636](https://github.com/contentful/marketplace-partner-apps/issues/1636)) ([ddee296](https://github.com/contentful/marketplace-partner-apps/commit/ddee2965bf02f432e2a60e472f3287e5fde4889c))
+* **deps:** bump contentful-management from 11.25.0 to 11.25.1 in /apps/cloudinary2 ([#1582](https://github.com/contentful/marketplace-partner-apps/issues/1582)) ([0b9eaac](https://github.com/contentful/marketplace-partner-apps/commit/0b9eaac4d64fa43cdb0aef1c5b00efc64915cc6c))
+
 ## [1.0.10](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.0.9...cloudinary-assets-v1.0.10) (2024-04-18)
 
 

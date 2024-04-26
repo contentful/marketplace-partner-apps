@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.12](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.11...uploadcare-contentful-app-v1.0.12) (2024-04-26)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.64.0 to 4.65.0 in /apps/uploadcare ([#1592](https://github.com/contentful/marketplace-partner-apps/issues/1592)) ([982b2cf](https://github.com/contentful/marketplace-partner-apps/commit/982b2cfbfa6f458d7465611cfa8594b876453e2d))
+* **deps:** bump @contentful/f36-icons from 4.28.0 to 4.28.1 in /apps/uploadcare ([#1619](https://github.com/contentful/marketplace-partner-apps/issues/1619)) ([bc20a24](https://github.com/contentful/marketplace-partner-apps/commit/bc20a241801277f806988d31b3d51491be2892be))
+* **deps:** bump @contentful/f36-icons from 4.28.1 to 4.28.2 in /apps/uploadcare ([#1622](https://github.com/contentful/marketplace-partner-apps/issues/1622)) ([c316223](https://github.com/contentful/marketplace-partner-apps/commit/c316223779c580bce2c7b13eb460e99a33835357))
+* **deps:** bump contentful-management from 11.25.0 to 11.25.1 in /apps/uploadcare ([#1580](https://github.com/contentful/marketplace-partner-apps/issues/1580)) ([12856e2](https://github.com/contentful/marketplace-partner-apps/commit/12856e2c83526c578ca5fe9da2325c3aee10b1cd))
+* **deps:** bump contentful-management from 11.25.1 to 11.25.2 in /apps/uploadcare ([#1618](https://github.com/contentful/marketplace-partner-apps/issues/1618)) ([cf752d1](https://github.com/contentful/marketplace-partner-apps/commit/cf752d119ea299b6f73993317b3cd6f4a001c641))
+* **deps:** bump react and @types/react in /apps/uploadcare ([#1621](https://github.com/contentful/marketplace-partner-apps/issues/1621)) ([1c0e1c3](https://github.com/contentful/marketplace-partner-apps/commit/1c0e1c3f9e5b936cd469bb40642fe6d8e8e999a8))
+
 ## [1.0.11](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.10...uploadcare-contentful-app-v1.0.11) (2024-04-18)
 
 
