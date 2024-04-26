@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.1.12](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v1.1.11...shopify-sku-v1.1.12) (2024-04-26)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/ecommerce-app-base from 3.5.44 to 3.6.0 in /apps/shopify ([#1566](https://github.com/contentful/marketplace-partner-apps/issues/1566)) ([086f1f9](https://github.com/contentful/marketplace-partner-apps/commit/086f1f92bf567b466c47fdbe8de2acfe6a192705))
+* **deps:** bump @contentful/f36-components from 4.64.0 to 4.65.0 in /apps/shopify ([#1603](https://github.com/contentful/marketplace-partner-apps/issues/1603)) ([c642913](https://github.com/contentful/marketplace-partner-apps/commit/c6429133dd69f1d1df95a9de80156e4bfee94234))
+* **deps:** bump @contentful/f36-icons from 4.28.0 to 4.28.1 in /apps/shopify ([#1614](https://github.com/contentful/marketplace-partner-apps/issues/1614)) ([daf3813](https://github.com/contentful/marketplace-partner-apps/commit/daf381384a601859613b75b4966908d879ce5b18))
+* **deps:** bump @contentful/f36-icons from 4.28.1 to 4.28.2 in /apps/shopify ([#1623](https://github.com/contentful/marketplace-partner-apps/issues/1623)) ([2457683](https://github.com/contentful/marketplace-partner-apps/commit/24576830f6859514baf2c2e562f8378e897887bc))
+* placeholder text for Shopify SkuPicker [INTEG-2024] ([#1607](https://github.com/contentful/marketplace-partner-apps/issues/1607)) ([76331ab](https://github.com/contentful/marketplace-partner-apps/commit/76331ab6f45f1eda3bc73df38ae45295593fc1cb))
+
 ## [1.1.11](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v1.1.10...shopify-sku-v1.1.11) (2024-04-18)
 
 
