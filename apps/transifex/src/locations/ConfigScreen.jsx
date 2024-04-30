@@ -111,6 +111,7 @@ function ConfigScreen() {
   const [projectAlreadyConnected, setProjectAlreadyConnected] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [projectType, setProjectType] = useState('');
+  const [selectOtherProject, setSelectOtherProject] = useState(false);
   const [enableFetchInterval, setEnableFetchInterval] = useState(false);
   const cma = createClient(
     { apiAdapter: sdk.cmaAdapter },
@@ -275,6 +276,12 @@ function ConfigScreen() {
       setPullContent(
         tokenData.included[1].attributes.fetch_initial_translations,
       );
+    }
+    if (tokenData && tokenData.data.attributes.reset_project) {
+      setSelectOtherProject(true);
+      setTokenExists(true);
+    } else {
+      setSelectOtherProject(false);
     }
   }, [tokenData]);
 
@@ -523,7 +530,7 @@ function ConfigScreen() {
                           <Note variant="negative">{errorMessage}</Note>
                         </Box>
                       )}
-                      {projectType !== 'file' && (
+                      {projectType !== 'file' && !selectOtherProject && (
                         <Box marginTop="spacingM" marginBottom="spacingM">
                           <Note variant="negative">
                             Contentful integration only supports file projects.
@@ -531,26 +538,40 @@ function ConfigScreen() {
                           </Note>
                         </Box>
                       )}
-                      <Heading>Connected Transifex Project</Heading>
-                      <Paragraph>
-                        Project name:&nbsp;
-                        <b>{projectName}</b>
-                      </Paragraph>
-                      <Paragraph>
-                        Source language:&nbsp;
-                        <b>{projectSourceLanguage}</b>
-                      </Paragraph>
-                      <Paragraph>Target languages:&nbsp;</Paragraph>
-                      <Box marginTop="spacingM">
-                        <Stack>
-                          {projectTargetLanguages.length > 0
-                            && projectTargetLanguages.map((targetLanguage) => (
-                              <Badge variant="secondary" key={targetLanguage}>
-                                {targetLanguage}
-                              </Badge>
-                            ))}
-                        </Stack>
-                      </Box>
+                      {!selectOtherProject && (
+                        <>
+                          <Heading>Connected Transifex Project</Heading>
+                          <Paragraph>
+                            Project name:&nbsp;
+                            <b>{projectName}</b>
+                          </Paragraph>
+                          <Paragraph>
+                            Source language:&nbsp;
+                            <b>{projectSourceLanguage}</b>
+                          </Paragraph>
+                          <Paragraph>Target languages:&nbsp;</Paragraph>
+                          <Box marginTop="spacingM">
+                            <Stack>
+                              {projectTargetLanguages.length > 0
+                                && projectTargetLanguages.map((targetLanguage) => (
+                                  <Badge variant="secondary" key={targetLanguage}>
+                                    {targetLanguage}
+                                  </Badge>
+                                ))}
+                            </Stack>
+                          </Box>
+                        </>
+                      )}
+                      {selectOtherProject && (
+                        <>
+                          <Heading>Connected Transifex Project</Heading>
+                          <Box marginTop="spacingM" marginBottom="spacingM">
+                            <Note variant="negative">
+                              Your project has not been found. Please select another project.
+                            </Note>
+                          </Box>
+                        </>
+                      )}
                       {!appIsInstalled && (
                         <Box marginTop="spacingM">
                           <Button
