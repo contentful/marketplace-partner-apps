@@ -1,4 +1,4 @@
-import { Calendar, DateTime, Popover } from "@contentful/f36-components";
+import { Calendar, Popover } from "@contentful/f36-components";
 import { CalendarFilterProps } from "./CalendarFilter.types";
 import { Filter } from "../Filter";
 import { useMemo, useState } from "react";

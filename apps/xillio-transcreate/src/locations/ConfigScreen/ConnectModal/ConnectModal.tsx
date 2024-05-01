@@ -52,8 +52,8 @@ export const ConnectModal = ({ isShown, onClose, connect }: ConnectModalProps) =
                         <Flex flexDirection="column" gap="spacingL">
                             <ControlledTextInput
                                 control={control}
-                                label={`${appConfig.name} Contentful plugin backend URL`}
-                                helpText={`Provide the URL to your ${appConfig.name} Contentful plugin backend`}
+                                label={`${appConfig.name} Contentful app backend URL`}
+                                helpText={`Provide the URL to your ${appConfig.name} Contentful app backend`}
                                 name="backendUrl"
                                 type="url"
                                 defaultValue=""

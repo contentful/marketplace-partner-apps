@@ -1,5 +1,5 @@
 export const appConfig = {
-    name: "HelloTranslate",
+    name: "Xillio Transcreate",
     locations: {
         configScreen: {
             background: "linear-gradient(#61CADB, #003040)",

@@ -6,7 +6,6 @@
 
 # production
 /dist
-!/types/dist
 
 # misc
 .DS_Store

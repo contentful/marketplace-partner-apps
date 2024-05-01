@@ -1,8 +1,8 @@
-# HelloTranslate Contentful App
+# Xillio Transcreate Contentful App
 
-The HelloTranslate Contentful App brings the power of professional translation services directly into the heart of your Contentful workflow. Translate your content efficiently and seamlessly, ensuring that your multilingual projects are delivered with quality and consistency.
+The Xillio Transcreate Contentful App brings the power of professional translation services directly into the heart of your Contentful workflow. Translate your content efficiently and seamlessly, ensuring that your multilingual projects are delivered with quality and consistency.
 
-For full information about the app, see the HelloTranslate documentation [here](https://hellotranslate.com/docs/installation)
+For full information about the app, see the Xillio Transcreate documentation [here](https://docs.xillio.com/transcreate)
 
 ## Available Scripts
 

@@ -1,9 +1,8 @@
 {
-    "name": "hellotranslate",
+    "name": "@xillio/transcreate",
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "install-ci": "npm ci",
         "build": "tsc && vite build",
         "lint": "eslint . --ext .ts --ignore-path ../../.gitignore",
         "clean": "",
@@ -11,7 +10,7 @@
         "test": "echo \"TODO: vitest\"",
         "upload": "contentful-app-scripts upload --bundle-dir ./dist",
         "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./dist  --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN",
-         "deploy": "contentful-app-scripts upload --ci --bundle-dir ./dist --organization-id ${DEFINITIONS_ORG_ID} --definition-id 5i8iZ60GpkbZQJzutNXit --token ${CONTENTFUL_CMA_TOKEN}",
+        "deploy": "contentful-app-scripts upload --ci --bundle-dir ./dist --organization-id ${DEFINITIONS_ORG_ID} --definition-id 5i8iZ60GpkbZQJzutNXit --token ${CONTENTFUL_CMA_TOKEN}",
         "storybook": "storybook dev -p 6006",
         "build-storybook": "storybook build"
     },
