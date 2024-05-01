@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
+        "install-ci": "npm ci",
         "build": "tsc && vite build",
         "lint": "eslint . --ext .ts --ignore-path ../../.gitignore",
         "clean": "",
