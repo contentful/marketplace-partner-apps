@@ -1,5 +1,5 @@
 {
     "name": "@contentful-lochub/shared",
-    "version": "0.1.0",
-    "types": "./index.d.ts"
+    "version": "0.0.0",
+    "types": "./dist/index.d.ts"
 }

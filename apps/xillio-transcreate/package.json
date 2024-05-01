@@ -1,5 +1,5 @@
 {
-    "name": "@xillio/transcreate",
+    "name": "xillio-transcreate",
     "version": "0.1.0",
     "private": true,
     "scripts": {
