@@ -103,7 +103,6 @@ function ConfigScreen() {
   const [projectTargetLanguages, setProjectTargetLanguages] = useState([]);
   const [selectedContentTypes, setSelectedContentTypes] = useState([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
-  const [defaultLocaleDoesNotMatch, setDefaultLocaleDoesNotMatch] = useState(false);
   const [installationId, setInstallationId] = useState('');
   const [appIsInstalled, setAppIsInstalled] = useState('');
   const [pushTrigger, setPushTrigger] = useState('t');
@@ -269,16 +268,6 @@ function ConfigScreen() {
       setProjectAlreadyConnected(
         tokenData.data.attributes.is_project_connected,
       );
-      if (locales && locales.length > 0) {
-        const defaultLocale = locales.filter(
-          (locale) => locale.default === true,
-        )[0];
-        if (defaultLocale.code.replace(/-/g, '_') !== key) {
-          setDefaultLocaleDoesNotMatch(true);
-        } else {
-          setDefaultLocaleDoesNotMatch(false);
-        }
-      }
       setProjectType(tokenData.included[0].attributes.project_type);
     }
     if (tokenData && tokenData.included && tokenData.included[1]) {
@@ -293,13 +282,6 @@ function ConfigScreen() {
   const onConfigure = useCallback(async () => {
     if (installationId === '') {
       sdk.notifier.error('An active Transifex account is required.');
-      return false;
-    }
-
-    if (defaultLocaleDoesNotMatch) {
-      sdk.notifier.error(
-        "This space's default locale should match Transifex project's source language.",
-      );
       return false;
     }
 
@@ -546,14 +528,6 @@ function ConfigScreen() {
                           <Note variant="negative">
                             Contentful integration only supports file projects.
                             Please select another project
-                          </Note>
-                        </Box>
-                      )}
-                      {defaultLocaleDoesNotMatch && (
-                        <Box marginTop="spacingM" marginBottom="spacingM">
-                          <Note variant="negative">
-                            This space&apos;s default locale should match
-                            Transifex project&apos;s source language
                           </Note>
                         </Box>
                       )}
