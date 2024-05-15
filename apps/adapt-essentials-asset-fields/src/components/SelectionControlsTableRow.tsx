@@ -4,7 +4,8 @@ import useEntriesSelection from './hooks/useEntriesSelection';
 import useColumns from './hooks/useColumns';
 import useAssetEntries from './hooks/useAssetEntries';
 import { EntryStatus, getEntryStatus } from './utils/entries';
-import { useCMA, useSDK } from '@contentful/react-apps-toolkit';
+import { useSDK } from '@contentful/react-apps-toolkit';
+import { useCMA } from './hooks/useCMA';
 import { AssetProps } from 'contentful-management';
 
 const SelectionControlsTableRow = () => {

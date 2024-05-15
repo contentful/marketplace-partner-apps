@@ -1,6 +1,7 @@
 import { useDebounce } from '@uidotdev/usehooks';
 import { useState, useEffect } from 'react';
-import { useCMA, useSDK } from '@contentful/react-apps-toolkit';
+import { useSDK } from '@contentful/react-apps-toolkit';
+import { useCMA } from './hooks/useCMA';
 import { PageAppSDK } from '@contentful/app-sdk';
 import { TextInput, Textarea, FormControl, Caption } from '@contentful/f36-components';
 import { AssetProps } from 'contentful-management/dist/typings/entities/asset';

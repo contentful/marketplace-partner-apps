@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useCMA } from "@contentful/react-apps-toolkit";
+import { useCMA } from "./useCMA";
 
 import { useStore } from "../context/createFastContext";
 
@@ -16,12 +16,12 @@ const useUsers = () => {
         users: users.items.reduce((acc, user) => ({
           ...acc,
           [user.sys.id]: user
-        }), {}) 
+        }), {})
       });
     };
     getUsers();
   }, [cma.user, setStore, users]);
-  
+
   return users;
 }
 

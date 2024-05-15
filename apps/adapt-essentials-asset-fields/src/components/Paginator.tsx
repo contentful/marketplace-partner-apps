@@ -1,5 +1,4 @@
 import { Pagination } from '@contentful/f36-components';
-import { useCMA } from '@contentful/react-apps-toolkit';
 import { useEffect } from 'react';
 import useEntriesSelection from './hooks/useEntriesSelection';
 import useAssetEntries from './hooks/useAssetEntries';
@@ -9,8 +8,10 @@ import useActivePage from './hooks/useActivePage';
 import useSkip from './hooks/useSkip';
 import useOrder from './hooks/useOrder';
 import useLimit from './hooks/useLimit';
+import { useCMA } from './hooks/useCMA';
 
 const Paginator = () => {
+  const cma = useCMA();
   const { setIsLoading } = useEntriesLoading();
   const { total, setTotal } = useTotal();
   const { activePage, setActivePage } = useActivePage();
@@ -20,7 +21,6 @@ const Paginator = () => {
   const { assetEntries, setAssetEntries } = useAssetEntries();
   const { setSelectedEntries } = useEntriesSelection();
   const { selectedEntries } = useEntriesSelection();
-  const cma = useCMA();
 
   useEffect(() => {
     setIsLoading(true);
