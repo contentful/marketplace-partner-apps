@@ -34,12 +34,13 @@ const SelectionControlsTableRow = () => {
 
   const republishableAssets = useMemo(() => {
     return selectedAssets.filter(
-      (assetEntry) => getEntryStatus(assetEntry.sys) === EntryStatus.CHANGED || getEntryStatus(assetEntry.sys) === EntryStatus.DRAFT,
+      (assetEntry) =>
+        getEntryStatus(assetEntry.sys) === EntryStatus.CHANGED || (getEntryStatus(assetEntry.sys) === EntryStatus.DRAFT && assetEntry.fields.file),
     );
   }, [selectedAssets]);
 
   const publishableAssets = useMemo(() => {
-    return selectedAssets.filter((assetEntry) => getEntryStatus(assetEntry.sys) === EntryStatus.DRAFT);
+    return selectedAssets.filter((assetEntry) => getEntryStatus(assetEntry.sys) === EntryStatus.DRAFT && assetEntry.fields.file);
   }, [selectedAssets]);
 
   const archivableAssets = useMemo(() => {
