@@ -1,4 +1,4 @@
-import { Button, Flex, Stack, TextInput } from '@contentful/f36-components';
+import { Button, Flex, Select, Stack, TextInput } from '@contentful/f36-components';
 import { FilterIcon, PlusIcon } from '@contentful/f36-icons';
 import { useDebounce } from '@uidotdev/usehooks';
 import { useEffect, useState } from 'react';
@@ -12,10 +12,15 @@ export const WorkbenchActions = () => {
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   const styles = {
+    searchWrapper: css({
+      border: `1px solid ${tokens.gray200}`,
+      borderRadius: '0.3rem',
+    }),
     searchInput: css({
-      borderRight: 'none',
+      border: 'none',
     }),
     searchInputFilter: css({
+      border: 'none',
       fontSize: '0.8rem',
       color: tokens.blue600,
       '&:hover': {
@@ -46,7 +51,31 @@ export const WorkbenchActions = () => {
 
   return (
     <Flex flexDirection="column">
-      <TextInput.Group>
+      <TextInput.Group className={styles.searchWrapper}>
+        <Flex gap="1rem">
+          <Flex>
+            <Flex alignItems="center">filterName</Flex>
+            <Select id="optionSelect-controlled" name="optionSelect-controlled" value={''}>
+              <Select.Option value="optionOne">Option 1</Select.Option>
+              <Select.Option value="optionTwo">Long Option 2</Select.Option>
+            </Select>
+            <Select id="optionSelect-controlled" name="optionSelect-controlled" value={''}>
+              <Select.Option value="optionOne">Option 1</Select.Option>
+              <Select.Option value="optionTwo">Long Option 2</Select.Option>
+            </Select>
+          </Flex>
+          <Flex>
+            <Flex alignItems="center">filterName</Flex>
+            <Select id="optionSelect-controlled" name="optionSelect-controlled" value={''}>
+              <Select.Option value="optionOne">Option 1</Select.Option>
+              <Select.Option value="optionTwo">Long Option 2</Select.Option>
+            </Select>
+            <Select id="optionSelect-controlled" name="optionSelect-controlled" value={''}>
+              <Select.Option value="optionOne">Option 1</Select.Option>
+              <Select.Option value="optionTwo">Long Option 2</Select.Option>
+            </Select>
+          </Flex>
+        </Flex>
         <TextInput
           id="search"
           name="search"
@@ -55,7 +84,7 @@ export const WorkbenchActions = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <Button variant="secondary" className={styles.searchInputFilter} startIcon={<FilterIcon />} onClick={() => {}} aria-label="Unlock">
+        <Button variant="secondary" className={styles.searchInputFilter} startIcon={<FilterIcon />} onClick={() => {}} aria-label="Filter">
           Filter
         </Button>
       </TextInput.Group>
