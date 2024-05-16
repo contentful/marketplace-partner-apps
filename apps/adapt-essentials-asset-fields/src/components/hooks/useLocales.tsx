@@ -11,8 +11,7 @@ const useLocales = () => {
     defaultValue: [sdk.locales.default],
   });
   const enabledLocales = useMemo(() => {
-    const enabledLocalesParam = _enabledLocales.filter((enabledLocale) => sdk.locales.available.includes(enabledLocale)) ??
-      sdk.parameters?.instance?.enabledLocales ?? [sdk.locales.default];
+    const enabledLocalesParam = _enabledLocales.filter((enabledLocale) => sdk.locales.available.includes(enabledLocale)) ?? [sdk.locales.default];
     if (enabledLocalesParam.length < 1) {
       setEnabledLocales([sdk.locales.default]);
     }
@@ -20,7 +19,7 @@ const useLocales = () => {
       setEnabledLocales([sdk.locales.default, ...enabledLocalesParam]);
     }
     return enabledLocalesParam;
-  }, [_enabledLocales, sdk.locales?.default, sdk.parameters?.instance?.enabledLocales, setEnabledLocales]);
+  }, [_enabledLocales, sdk.locales.available, sdk.locales.default, setEnabledLocales]);
 
   const changeLocaleVisibility = (locale, isVisible) => {
     if (isVisible) {
