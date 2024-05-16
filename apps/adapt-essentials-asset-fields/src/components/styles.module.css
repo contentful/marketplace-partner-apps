@@ -109,3 +109,7 @@
   height: 40px;
   padding-bottom: 8px;
 }
+
+.noEntriesRow {
+  padding: 20px;
+}

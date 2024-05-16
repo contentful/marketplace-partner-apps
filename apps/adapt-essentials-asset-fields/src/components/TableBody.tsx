@@ -34,7 +34,7 @@ const TableBody = () => {
 
   return (
     <Table.Body>
-      {assetEntries.map((asset) => {
+      {assetEntries?.map((asset) => {
         const localizedThumbnails = enabledLocales?.at(0) ? (
           enabledLocales
             .filter((locale) => asset.fields?.file?.[locale]?.url || locale === defaultLocale)
@@ -84,6 +84,13 @@ const TableBody = () => {
           </Table.Row>
         );
       })}
+      {!assetEntries?.at(0) && (
+        <Table.Row>
+          <TableCell colSpan={visibleColumns.length + 2} className={styles.noEntriesRow}>
+            No entries found
+          </TableCell>
+        </Table.Row>
+      )}
     </Table.Body>
   );
 };
