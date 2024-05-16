@@ -9,8 +9,9 @@ const Page = () => {
   return (
     <Provider>
       <Workbench>
-        <Workbench.Header title="Adapt Essentials: Asset Fields" actions={<WorkbenchActions />} />
+        <Workbench.Header title="Adapt Essentials: Asset Fields" />
         <Workbench.Content>
+          <WorkbenchActions />
           <Box marginTop="spacingXl" className="page">
             <Dashboard />
           </Box>
