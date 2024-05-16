@@ -113,3 +113,12 @@
 .noEntriesRow {
   padding: 20px;
 }
+
+.searchWrapper {
+  border: 1px solid var(--gray-200, '#E7EBEE');
+  border-radius: '0.3rem';
+}
+
+.searchInput {
+  border: 'none',
+}

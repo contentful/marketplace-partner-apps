@@ -2,23 +2,12 @@ import { Flex, TextInput } from '@contentful/f36-components';
 import { useDebounce } from '@uidotdev/usehooks';
 import { useEffect, useState } from 'react';
 import useQuery from './hooks/useQuery';
-import { css } from 'emotion';
-import tokens from '@contentful/f36-tokens';
+import styles from './styles.module.css';
 
 export const WorkbenchActions = () => {
   const { query, setQuery } = useQuery();
   const [searchTerm, setSearchTerm] = useState(query);
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
-
-  const styles = {
-    searchWrapper: css({
-      border: `1px solid ${tokens.gray200}`,
-      borderRadius: '0.3rem',
-    }),
-    searchInput: css({
-      border: 'none',
-    }),
-  };
 
   useEffect(() => {
     setQuery(debouncedSearchTerm);
