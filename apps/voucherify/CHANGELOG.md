@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.14](https://github.com/contentful/marketplace-partner-apps/compare/voucherify-contentful-app-v1.0.13...voucherify-contentful-app-v1.0.14) (2024-05-16)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.65.0 to 4.65.1 in /apps/voucherify ([#1650](https://github.com/contentful/marketplace-partner-apps/issues/1650)) ([454953e](https://github.com/contentful/marketplace-partner-apps/commit/454953ee9b63192dff4b1a917a74d5763beb0bc1))
+* **deps:** bump @contentful/f36-components from 4.65.1 to 4.65.3 in /apps/voucherify ([#1663](https://github.com/contentful/marketplace-partner-apps/issues/1663)) ([5ec04a8](https://github.com/contentful/marketplace-partner-apps/commit/5ec04a84d72d17d06298eb7c093d1fc77ae3dcfc))
+* **deps:** bump @contentful/f36-components from 4.65.3 to 4.65.4 in /apps/voucherify ([#1692](https://github.com/contentful/marketplace-partner-apps/issues/1692)) ([ad750f0](https://github.com/contentful/marketplace-partner-apps/commit/ad750f02dadd89325d416ccd59b3f73d969d0945))
+* **deps:** bump @contentful/f36-components from 4.65.4 to 4.65.5 in /apps/voucherify ([#1735](https://github.com/contentful/marketplace-partner-apps/issues/1735)) ([b76236b](https://github.com/contentful/marketplace-partner-apps/commit/b76236b3aadb712f712b3bcc4ce7237c30d19fd9))
+* **deps:** bump @contentful/f36-components from 4.65.5 to 4.65.6 in /apps/voucherify ([#1808](https://github.com/contentful/marketplace-partner-apps/issues/1808)) ([6fc8142](https://github.com/contentful/marketplace-partner-apps/commit/6fc8142539ab84a8c391f3327dbe8bc688221c7e))
+* **deps:** bump react from 18.3.0 to 18.3.1 in /apps/voucherify ([#1649](https://github.com/contentful/marketplace-partner-apps/issues/1649)) ([f19dea3](https://github.com/contentful/marketplace-partner-apps/commit/f19dea34436f7dd7d503917d17903178750ea7b3))
+* **deps:** bump react-hook-form from 7.51.3 to 7.51.4 in /apps/voucherify ([#1745](https://github.com/contentful/marketplace-partner-apps/issues/1745)) ([87d1960](https://github.com/contentful/marketplace-partner-apps/commit/87d1960949744ab53fc2fa47265d12277f990b51))
+* **deps:** bump react-router-dom from 6.23.0 to 6.23.1 in /apps/voucherify ([#1800](https://github.com/contentful/marketplace-partner-apps/issues/1800)) ([ae5af30](https://github.com/contentful/marketplace-partner-apps/commit/ae5af30bc627aa808fe6a1da4aaf786cd052cb3c))
+
 ## [1.0.13](https://github.com/contentful/marketplace-partner-apps/compare/voucherify-contentful-app-v1.0.12...voucherify-contentful-app-v1.0.13) (2024-04-26)
 
 

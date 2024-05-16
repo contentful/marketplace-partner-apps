@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.16](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.15...image-hotspot-creator-v1.0.16) (2024-05-16)
+
+
+### Bug Fixes
+
+* **deps:** bump ejs from 3.1.9 to 3.1.10 in /apps/imageHotspotCreator ([#1705](https://github.com/contentful/marketplace-partner-apps/issues/1705)) ([bd1f63d](https://github.com/contentful/marketplace-partner-apps/commit/bd1f63d048c94cfb157621abf67116a9bf1f7ec3))
+
 ## [1.0.15](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.14...image-hotspot-creator-v1.0.15) (2024-04-26)
 
 

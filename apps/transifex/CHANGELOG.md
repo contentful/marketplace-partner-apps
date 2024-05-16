@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.5](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.1.4...transifex-contentful-app-v1.1.5) (2024-05-16)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.65.0 to 4.65.5 in /apps/transifex ([#1754](https://github.com/contentful/marketplace-partner-apps/issues/1754)) ([84ff242](https://github.com/contentful/marketplace-partner-apps/commit/84ff242569314cf888089756b4c7845e798ecf99))
+* **deps:** bump @contentful/f36-components from 4.65.5 to 4.65.6 in /apps/transifex ([#1816](https://github.com/contentful/marketplace-partner-apps/issues/1816)) ([66cf005](https://github.com/contentful/marketplace-partner-apps/commit/66cf0053ca97153f136cdbd8f6bff4b145215d68))
+* **deps:** bump @contentful/f36-icons from 4.28.1 to 4.28.2 in /apps/transifex ([#1724](https://github.com/contentful/marketplace-partner-apps/issues/1724)) ([e221263](https://github.com/contentful/marketplace-partner-apps/commit/e221263fd862163a7712aa246f5f09a9ad7c43b8))
+* **deps:** bump contentful-management from 11.25.2 to 11.25.3 in /apps/transifex ([#1773](https://github.com/contentful/marketplace-partner-apps/issues/1773)) ([979696f](https://github.com/contentful/marketplace-partner-apps/commit/979696f3c1e7c33959eb746a2081db728775bebf))
+* **deps:** bump react and @types/react in /apps/transifex ([#1673](https://github.com/contentful/marketplace-partner-apps/issues/1673)) ([ee619e2](https://github.com/contentful/marketplace-partner-apps/commit/ee619e2079a4b4d1c61a382fa99ad1ad6701ace8))
+* **deps:** bump react-dom and @types/react-dom in /apps/transifex ([#1712](https://github.com/contentful/marketplace-partner-apps/issues/1712)) ([22537f0](https://github.com/contentful/marketplace-partner-apps/commit/22537f092b2999a19d374a5116a44ea2f9011dff))
+
 ## [1.1.4](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.1.3...transifex-contentful-app-v1.1.4) (2024-04-26)
 
 

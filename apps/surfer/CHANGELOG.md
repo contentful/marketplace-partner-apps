@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.0.14](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.13...surfer-contentful-app-v1.0.14) (2024-05-16)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.65.0 to 4.65.1 in /apps/surfer ([#1660](https://github.com/contentful/marketplace-partner-apps/issues/1660)) ([69a668b](https://github.com/contentful/marketplace-partner-apps/commit/69a668b82374ad90103a2e861e663c7d5f437f98))
+* **deps:** bump @contentful/f36-components from 4.65.1 to 4.65.3 in /apps/surfer ([#1669](https://github.com/contentful/marketplace-partner-apps/issues/1669)) ([1a96c95](https://github.com/contentful/marketplace-partner-apps/commit/1a96c95e2e91d0a31b73704745868cbcbb626627))
+* **deps:** bump @contentful/f36-components from 4.65.3 to 4.65.4 in /apps/surfer ([#1688](https://github.com/contentful/marketplace-partner-apps/issues/1688)) ([067ef6d](https://github.com/contentful/marketplace-partner-apps/commit/067ef6d52a98439da939435bbf9bceac41db7eb4))
+* **deps:** bump @contentful/f36-components from 4.65.4 to 4.65.5 in /apps/surfer ([#1727](https://github.com/contentful/marketplace-partner-apps/issues/1727)) ([0cf98a7](https://github.com/contentful/marketplace-partner-apps/commit/0cf98a76c28a8495cb43a406c1a79d7dc142b206))
+* **deps:** bump @contentful/f36-components from 4.65.5 to 4.65.6 in /apps/surfer ([#1811](https://github.com/contentful/marketplace-partner-apps/issues/1811)) ([f1f5680](https://github.com/contentful/marketplace-partner-apps/commit/f1f5680465c60c0afcd0347c07486094f3f89478))
+* **deps:** bump contentful-management from 11.25.2 to 11.25.3 in /apps/surfer ([#1723](https://github.com/contentful/marketplace-partner-apps/issues/1723)) ([420f317](https://github.com/contentful/marketplace-partner-apps/commit/420f3174344f4827512ccda2d2f489de8755957f))
+* **deps:** bump ejs from 3.1.9 to 3.1.10 in /apps/surfer ([#1699](https://github.com/contentful/marketplace-partner-apps/issues/1699)) ([fc2df34](https://github.com/contentful/marketplace-partner-apps/commit/fc2df3444e0c02b5f881e401e00f24973c505b7b))
+* **deps:** bump react and @types/react in /apps/surfer ([#1659](https://github.com/contentful/marketplace-partner-apps/issues/1659)) ([6f24193](https://github.com/contentful/marketplace-partner-apps/commit/6f2419334928e2027bf8ff08cdfdc0fd59633d71))
+* **deps:** bump react-dom and @types/react-dom in /apps/surfer ([#1670](https://github.com/contentful/marketplace-partner-apps/issues/1670)) ([645c302](https://github.com/contentful/marketplace-partner-apps/commit/645c3029fc885ebbbb814ca14e85fa2ac439b305))
+
 ## [1.0.13](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.12...surfer-contentful-app-v1.0.13) (2024-04-26)
 
 
