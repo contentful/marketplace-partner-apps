@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.12](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.11...thrillworks-flex-fields-app-v1.1.12) (2024-05-16)
+
+
+### Bug Fixes
+
+* **deps:** bump ejs from 3.1.8 to 3.1.10 in /apps/flexfields ([#1703](https://github.com/contentful/marketplace-partner-apps/issues/1703)) ([1e9354f](https://github.com/contentful/marketplace-partner-apps/commit/1e9354fea00477d596491be230c7809555bc05b7))
+
 ## [1.1.11](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.10...thrillworks-flex-fields-app-v1.1.11) (2024-04-18)
 
 

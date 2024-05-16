@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.13](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.12...uploadcare-contentful-app-v1.0.13) (2024-05-16)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.65.0 to 4.65.1 in /apps/uploadcare ([#1648](https://github.com/contentful/marketplace-partner-apps/issues/1648)) ([a54a6bc](https://github.com/contentful/marketplace-partner-apps/commit/a54a6bc9d3cfad8c7bcb68e3cf4f4e9de5983246))
+* **deps:** bump @contentful/f36-components from 4.65.1 to 4.65.3 in /apps/uploadcare ([#1666](https://github.com/contentful/marketplace-partner-apps/issues/1666)) ([d8bccb8](https://github.com/contentful/marketplace-partner-apps/commit/d8bccb87fb407c2ad8b48834ba672f126a2f521b))
+* **deps:** bump @contentful/f36-components from 4.65.3 to 4.65.4 in /apps/uploadcare ([#1685](https://github.com/contentful/marketplace-partner-apps/issues/1685)) ([01e4a98](https://github.com/contentful/marketplace-partner-apps/commit/01e4a98bae8d83ead0e1eec5eaa6244f93f97135))
+* **deps:** bump @contentful/f36-components from 4.65.4 to 4.65.5 in /apps/uploadcare ([#1731](https://github.com/contentful/marketplace-partner-apps/issues/1731)) ([c81d8be](https://github.com/contentful/marketplace-partner-apps/commit/c81d8be7fd662f172e84a992c2891da8f9547aee))
+* **deps:** bump @contentful/f36-components from 4.65.5 to 4.65.6 in /apps/uploadcare ([#1817](https://github.com/contentful/marketplace-partner-apps/issues/1817)) ([bde6ade](https://github.com/contentful/marketplace-partner-apps/commit/bde6ade94fc52876e974c4dcd687147d12b0c556))
+* **deps:** bump contentful-management from 11.25.2 to 11.25.3 in /apps/uploadcare ([#1715](https://github.com/contentful/marketplace-partner-apps/issues/1715)) ([79db8cd](https://github.com/contentful/marketplace-partner-apps/commit/79db8cdbf0a151807d96673d1c83acf452ff2ec6))
+* **deps:** bump react and @types/react in /apps/uploadcare ([#1647](https://github.com/contentful/marketplace-partner-apps/issues/1647)) ([24c5398](https://github.com/contentful/marketplace-partner-apps/commit/24c539843346434338f9101e439deb2db8db7e18))
+* **deps:** bump react-dom and @types/react-dom in /apps/uploadcare ([#1665](https://github.com/contentful/marketplace-partner-apps/issues/1665)) ([73d89a5](https://github.com/contentful/marketplace-partner-apps/commit/73d89a5c7871494398c731c3a25d4e414ff46c3c))
+
 ## [1.0.12](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.11...uploadcare-contentful-app-v1.0.12) (2024-04-26)
 
 
