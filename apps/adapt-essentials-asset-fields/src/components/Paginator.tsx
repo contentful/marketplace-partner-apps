@@ -9,6 +9,7 @@ import useSkip from './hooks/useSkip';
 import useOrder from './hooks/useOrder';
 import useLimit from './hooks/useLimit';
 import { useCMA } from './hooks/useCMA';
+import useQuery from './hooks/useQuery';
 
 const Paginator = () => {
   const cma = useCMA();
@@ -21,6 +22,7 @@ const Paginator = () => {
   const { assetEntries, setAssetEntries } = useAssetEntries();
   const { setSelectedEntries } = useEntriesSelection();
   const { selectedEntries } = useEntriesSelection();
+  const { query } = useQuery();
 
   useEffect(() => {
     setIsLoading(true);
@@ -36,6 +38,7 @@ const Paginator = () => {
           skip,
           limit,
           order,
+          query,
         },
       });
       setTotal(assetResponse.total);
@@ -44,7 +47,7 @@ const Paginator = () => {
     }
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cma.asset, setAssetEntries, skip, limit, order]);
+  }, [cma.asset, setAssetEntries, skip, limit, order, query]);
 
   const pageChangeHandler = (activePage) => {
     setActivePage(activePage);
@@ -54,6 +57,7 @@ const Paginator = () => {
   return (
     selectedEntries.length < 1 && (
       <Pagination
+        key={query}
         activePage={activePage}
         onPageChange={pageChangeHandler}
         isLastPage={total <= activePage * limit}
