@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.6](https://github.com/contentful/marketplace-partner-apps/compare/wix-contentful-app-v1.0.5...wix-contentful-app-v1.0.6) (2024-05-20)
+
+
+### Bug Fixes
+
+* **deps:** bump contentful-management from 11.25.3 to 11.25.5 in /apps/wix ([#1835](https://github.com/contentful/marketplace-partner-apps/issues/1835)) ([eebaaa3](https://github.com/contentful/marketplace-partner-apps/commit/eebaaa317db5ee51f11e61c76294c4083f6f949f))
+
 ## [1.0.5](https://github.com/contentful/marketplace-partner-apps/compare/wix-contentful-app-v1.0.4...wix-contentful-app-v1.0.5) (2024-05-16)
 
 

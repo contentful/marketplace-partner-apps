@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.0](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.1.5...transifex-contentful-app-v1.2.0) (2024-05-20)
+
+
+### Features
+
+* Transifex app remove the default locale restriction ([#1784](https://github.com/contentful/marketplace-partner-apps/issues/1784)) ([e438d59](https://github.com/contentful/marketplace-partner-apps/commit/e438d59babf5a22ba9a8ac00f1ce2336e543468a))
+
+
+### Bug Fixes
+
+* **deps:** bump contentful-management from 11.25.3 to 11.25.5 in /apps/transifex ([#1836](https://github.com/contentful/marketplace-partner-apps/issues/1836)) ([b8b7bc3](https://github.com/contentful/marketplace-partner-apps/commit/b8b7bc326701c3fe9b7910708d5a2fec9c74c6be))
+* Transifex app handle deleted project case ([#1679](https://github.com/contentful/marketplace-partner-apps/issues/1679)) ([82d2551](https://github.com/contentful/marketplace-partner-apps/commit/82d255173ba5563571e61c35ff02591304050cae))
+
 ## [1.1.5](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.1.4...transifex-contentful-app-v1.1.5) (2024-05-16)
 
 

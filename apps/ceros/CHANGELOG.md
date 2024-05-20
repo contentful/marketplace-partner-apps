@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.14](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.0.13...ceros-contentful-app-v1.0.14) (2024-05-20)
+
+
+### Bug Fixes
+
+* **deps:** bump contentful-management from 11.25.3 to 11.25.5 in /apps/ceros ([#1837](https://github.com/contentful/marketplace-partner-apps/issues/1837)) ([aad4270](https://github.com/contentful/marketplace-partner-apps/commit/aad42706c64edc93ffcb90b6f0a2c0f02eef4730))
+
 ## [1.0.13](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.0.12...ceros-contentful-app-v1.0.13) (2024-05-16)
 
 
