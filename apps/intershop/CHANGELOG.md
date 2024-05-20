@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/intershop-connector-v1.0.6...intershop-connector-v1.0.7) (2024-05-20)
+
+
+### Bug Fixes
+
+* **deps:** bump contentful-management from 11.25.3 to 11.25.5 in /apps/intershop ([#1833](https://github.com/contentful/marketplace-partner-apps/issues/1833)) ([ef6609d](https://github.com/contentful/marketplace-partner-apps/commit/ef6609df06c6d1f8e833b23ad9c70ad4a676bfd3))
+
 ## [1.0.6](https://github.com/contentful/marketplace-partner-apps/compare/intershop-connector-v1.0.5...intershop-connector-v1.0.6) (2024-05-16)
 
 
