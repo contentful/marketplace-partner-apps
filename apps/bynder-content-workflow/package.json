@@ -1,0 +1,46 @@
+{
+  "name": "gather-content-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@contentful/app-sdk": "4.22.0",
+    "@contentful/f36-components": "4.45.0",
+    "@contentful/f36-tokens": "4.0.2",
+    "@contentful/field-editor-rich-text": "^3.14.2",
+    "@contentful/react-apps-toolkit": "1.2.16",
+    "@contentful/rich-text-html-renderer": "^16.3.0",
+    "camelcase": "^8.0.0",
+    "constate": "^3.3.2",
+    "contentful-management": "10.38.3",
+    "contentful-rich-text-html-parser": "^1.5.4",
+    "emotion": "10.0.27",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-top-loading-bar": "^2.3.1",
+    "showdown": "^2.1.0",
+    "uuid": "^9.0.1"
+  },
+  "scripts": {
+    "install-ci": "npm ci",
+    "start": "vite",
+    "build": "tsc && vite build",
+    "test": "vitest",
+    "create-app-definition": "contentful-app-scripts create-app-definition",
+    "upload": "contentful-app-scripts upload --bundle-dir ./dist",
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./dist  --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN"
+  },
+  "devDependencies": {
+    "@contentful/app-scripts": "1.10.2",
+    "@testing-library/react": "14.0.0",
+    "@types/node": "16.18.38",
+    "@types/react": "18.2.14",
+    "@types/react-dom": "18.2.6",
+    "@types/showdown": "^2.0.3",
+    "@types/uuid": "^9.0.6",
+    "@vitejs/plugin-react": "4.0.1",
+    "happy-dom": "9.20.3",
+    "typescript": "5.1.6",
+    "vite": "4.3.9",
+    "vitest": "0.32.4"
+  }
+}
