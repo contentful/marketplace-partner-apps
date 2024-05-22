@@ -24,7 +24,6 @@
     "install-ci": "npm ci",
     "start": "vite",
     "build": "tsc && vite build",
-    "test": "vitest",
     "create-app-definition": "contentful-app-scripts create-app-definition",
     "upload": "contentful-app-scripts upload --bundle-dir ./dist",
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./dist  --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN"
