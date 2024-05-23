@@ -1,5 +1,5 @@
 {
-  "name": "gather-content-app",
+  "name": "bynder-content-workflow",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
