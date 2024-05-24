@@ -12,6 +12,7 @@
 		"apps/voucherify": {},
 		"apps/wix": {},
 		"apps/adapt-essentials-asset-fields": {},
-		"apps/intershop": {}
+		"apps/intershop": {},
+		"apps/bynder-content-workflow": {}
 	}
 }
