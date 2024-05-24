@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Flex, SectionHeading, Text } from "@contentful/f36-components";
-import { css } from "emotion";
+import { css } from "@emotion/css";
 import { useCMA } from "@contentful/react-apps-toolkit";
 
 import {
@@ -53,8 +53,8 @@ const RulesList = (props: any) => {
         <ListBulletedIcon />
         <SectionHeading
           className={css({
-            fontSize: 14,
-            margin: 0,
+            fontSize: "14px !important",
+            margin: "0 !important",
           })}
         >
           Current Rules
@@ -95,11 +95,11 @@ const RulesList = (props: any) => {
                   boxShadow: "rgba(0, 0, 0, 0.1) 0px 3px 8px;",
                   transition: "all 0.2s ease-in-out",
                 },
-                ...(
-                  index === props.ruleToEditIndex ? {
-                    backgroundColor: "#eee"
-                  } : {}
-                )
+                ...(index === props.ruleToEditIndex
+                  ? {
+                      backgroundColor: "#eee",
+                    }
+                  : {}),
               })}
             >
               <Flex alignItems="center" justifyContent="space-between">
@@ -202,15 +202,17 @@ const RulesList = (props: any) => {
                       marginLeft: "0.5rem",
                       width: "1.2rem",
                       height: "1.2rem",
-                      ...(index === props.ruleToEditIndex ? {
-                        fill: "grey",
-                      } : {
-                        cursor: "pointer",
-                        transition: "all 0.2s ease-in-out",
-                        ":hover": {
-                          transform: "scale(1.1)",
-                        },
-                      }),
+                      ...(index === props.ruleToEditIndex
+                        ? {
+                            fill: "grey",
+                          }
+                        : {
+                            cursor: "pointer",
+                            transition: "all 0.2s ease-in-out",
+                            ":hover": {
+                              transform: "scale(1.1)",
+                            },
+                          }),
                     })}
                     alt="Edit Rule"
                     aria-label="Edit Rule"
@@ -224,16 +226,18 @@ const RulesList = (props: any) => {
                       }
                     }}
                     className={css({
-                      ...(index === props.ruleToEditIndex ? {
-                        fill: "grey",
-                      } : {
-                        cursor: "pointer",
-                        transition: "all 0.2s ease-in-out",
-                        ":hover": {
-                          fill: "red",
-                          transform: "scale(1.1)",
-                        },
-                      }),
+                      ...(index === props.ruleToEditIndex
+                        ? {
+                            fill: "grey",
+                          }
+                        : {
+                            cursor: "pointer",
+                            transition: "all 0.2s ease-in-out",
+                            ":hover": {
+                              fill: "red",
+                              transform: "scale(1.1)",
+                            },
+                          }),
                       marginLeft: "0.5rem",
                       width: "1.2rem",
                       height: "1.2rem",
