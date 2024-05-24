@@ -5,6 +5,7 @@ import { useState } from 'react';
 import useLocales from './hooks/useLocales';
 import useColumns from './hooks/useColumns';
 import useLimit from './hooks/useLimit';
+import styles from './styles.module.css';
 
 export const SettingsPopover = () => {
   const [showSettingsPopup, setShowSettingsPopup] = useState(false);
@@ -13,7 +14,8 @@ export const SettingsPopover = () => {
   const { limit, setLimit } = useLimit();
 
   const handlePageSizeChange = (event) => {
-    setLimit(Number(event.target.value));
+    const value = Number(event.target.value);
+    setLimit(value);
   };
 
   return (
@@ -30,7 +32,7 @@ export const SettingsPopover = () => {
       <Popover.Content>
         <FocusLock>
           <Stack padding="spacingM" margin="none" spacing="spacingS" flexDirection="column" paddingBottom="none">
-            <Box style={{ alignSelf: 'flex-start', fontWeight: '600' }}>Columns</Box>
+            <Box className={styles.settingsPopoverLabel}>Columns</Box>
             {columns.map((column) => {
               const { label, isVisible } = columnDetails[column];
               return (
@@ -47,15 +49,9 @@ export const SettingsPopover = () => {
             })}
           </Stack>
           <Stack padding="spacingM" margin="none" spacing="spacingS" flexDirection="column">
-            <Box style={{ alignSelf: 'flex-start', fontWeight: '600' }}>Locales</Box>
+            <Box className={styles.settingsPopoverLabel}>Locales</Box>
             {locales.map((locale) => (
-              <Flex
-                key={locale}
-                fullWidth
-                style={{
-                  display: 'flex',
-                  justifyContent: 'flex-start',
-                }}>
+              <Flex key={locale} fullWidth className={styles.localeSwitchWrapper}>
                 <Switch
                   size="small"
                   isChecked={enabledLocales.includes(locale)}
@@ -65,11 +61,9 @@ export const SettingsPopover = () => {
                 </Switch>
               </Flex>
             ))}
+            <Box className={styles.settingsPopoverLabel}>Page size</Box>
+            <TextInput type="number" min={5} max={100} className={styles.pageSizeInput} value={String(limit)} onChange={handlePageSizeChange} />
           </Stack>
-          <Box padding="spacingM" margin="none" flexDirection="column">
-            <Box marginBottom="spacingS">Page size</Box>
-            <TextInput type="number" min={5} max={100} style={{ maxWidth: 'fit-content' }} value={String(limit)} onChange={handlePageSizeChange} />
-          </Box>
         </FocusLock>
       </Popover.Content>
     </Popover>

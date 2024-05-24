@@ -23,7 +23,7 @@ export const getEntryStatus = (entrySys: EntityMetaSysProps): EntryStatusValues 
 
 export const extractContentfulFieldError = (error: { message?: string }) => {
   try {
-    const errorText = JSON.parse(error?.message)?.details?.errors?.[0]?.details;
+    const errorText = JSON.parse(error?.message ?? '{}')?.details?.errors?.[0]?.details;
     return errorText;
   } catch (error) {
     return error?.message;

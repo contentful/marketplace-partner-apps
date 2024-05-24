@@ -4,7 +4,8 @@ import useEntriesSelection from './hooks/useEntriesSelection';
 import useColumns from './hooks/useColumns';
 import useAssetEntries from './hooks/useAssetEntries';
 import { EntryStatus, getEntryStatus } from './utils/entries';
-import { useCMA, useSDK } from '@contentful/react-apps-toolkit';
+import { useSDK } from '@contentful/react-apps-toolkit';
+import { useCMA } from './hooks/useCMA';
 import { AssetProps } from 'contentful-management';
 
 const SelectionControlsTableRow = () => {
@@ -33,12 +34,13 @@ const SelectionControlsTableRow = () => {
 
   const republishableAssets = useMemo(() => {
     return selectedAssets.filter(
-      (assetEntry) => getEntryStatus(assetEntry.sys) === EntryStatus.CHANGED || getEntryStatus(assetEntry.sys) === EntryStatus.DRAFT,
+      (assetEntry) =>
+        getEntryStatus(assetEntry.sys) === EntryStatus.CHANGED || (getEntryStatus(assetEntry.sys) === EntryStatus.DRAFT && assetEntry.fields.file),
     );
   }, [selectedAssets]);
 
   const publishableAssets = useMemo(() => {
-    return selectedAssets.filter((assetEntry) => getEntryStatus(assetEntry.sys) === EntryStatus.DRAFT);
+    return selectedAssets.filter((assetEntry) => getEntryStatus(assetEntry.sys) === EntryStatus.DRAFT && assetEntry.fields.file);
   }, [selectedAssets]);
 
   const archivableAssets = useMemo(() => {

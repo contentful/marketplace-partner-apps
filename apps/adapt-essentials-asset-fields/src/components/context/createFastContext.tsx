@@ -86,6 +86,7 @@ type StoreType = {
     direction: string;
   };
   limit: number;
+  query: string;
 };
 
 const contextDefaults: StoreType = {
@@ -103,6 +104,7 @@ const contextDefaults: StoreType = {
     direction: 'desc',
   },
   limit: 10,
+  query: '',
 } as const;
 
 type ContextDefaults = typeof contextDefaults;
