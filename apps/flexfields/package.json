@@ -7,7 +7,7 @@
     "@contentful/default-field-editors": "^1.5.25",
     "@contentful/f36-components": "4.59.3",
     "@contentful/f36-multiselect": "^4.21.0",
-    "@contentful/f36-tokens": "4.0.4",
+    "@contentful/f36-tokens": "4.0.5",
     "@contentful/f36-workbench": "^4.21.0",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "11.11.2",
