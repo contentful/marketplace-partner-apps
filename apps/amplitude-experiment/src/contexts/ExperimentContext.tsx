@@ -75,8 +75,14 @@ export const ExperimentProvider = ({
   const [loading, setLoading] = useState<boolean>(false);
   const amplitudeExperimentApi = useMemo(
     () =>
-      new AmplitudeExperimentApi(sdk.parameters.installation.managementApiKey),
-    [sdk.parameters.installation.managementApiKey]
+      new AmplitudeExperimentApi(
+        sdk.parameters.installation.managementApiKey,
+        sdk.parameters.installation.datacenter
+      ),
+    [
+      sdk.parameters.installation.managementApiKey,
+      sdk.parameters.installation.datacenter,
+    ]
   );
 
   useEffect(() => {

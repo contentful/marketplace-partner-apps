@@ -3,6 +3,7 @@ import { Button, Paragraph, Stack } from "@contentful/f36-components";
 import { useSDK } from "@contentful/react-apps-toolkit";
 import { Experiment } from "../contexts/ExperimentContext";
 import { useEffect, useState } from "react";
+import { Datacenter } from "../utils/amplitude";
 
 const Sidebar = () => {
   const sdk = useSDK<SidebarAppSDK>();
@@ -20,11 +21,16 @@ const Sidebar = () => {
     return detachValueChangeHandler;
   }, [sdk.entry.fields.experiment]);
 
-  const { orgId } = sdk.parameters.installation;
+  const { orgId, datacenter } = sdk.parameters.installation;
 
   const getExperimentDetailsUrl =
-    (orgId: string) => (projectId: string, flagId: string) =>
-      `https://app.amplitude.com/experiment/${orgId}/${projectId}/config/${flagId}`;
+    (orgId: string, datacenter: Datacenter) => (projectId: string, flagId: string) => {
+      const baseUrl = datacenter === "US" ?
+          'https://app.amplitude.com' :
+          'https://app.eu.amplitude.com';
+        return `${baseUrl}/experiment/${orgId}/${projectId}/config/${flagId}`;
+    }
+
 
   if (!experiment) {
     return <Paragraph>No experiment configured yet.</Paragraph>;
@@ -37,7 +43,7 @@ const Sidebar = () => {
         as="a"
         isFullWidth
         isDisabled={!orgId}
-        href={getExperimentDetailsUrl(orgId)(
+        href={getExperimentDetailsUrl(orgId, datacenter)(
           experiment.projectId,
           experiment.id
         )}

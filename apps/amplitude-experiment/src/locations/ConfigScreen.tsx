@@ -1,21 +1,40 @@
-import React, { useCallback, useState, useEffect } from "react";
-import { ConfigAppSDK } from "@contentful/app-sdk";
-import {
-  Heading,
-  Form,
-  Flex,
-  FormControl,
-  TextInput,
-  Paragraph,
-} from "@contentful/f36-components";
-import { css } from "emotion";
-import { useSDK } from "@contentful/react-apps-toolkit";
-import { VARIANT_CONTAINER } from "../utils/shared";
+import React, {useCallback, useEffect, useState} from "react";
+import {ConfigAppSDK} from "@contentful/app-sdk";
+import {Flex, Form, FormControl, Heading, Paragraph, Select, TextInput,} from "@contentful/f36-components";
+import {css} from "emotion";
+import {useSDK} from "@contentful/react-apps-toolkit";
+import {VARIANT_CONTAINER} from "../utils/shared";
+import {Datacenter} from "../utils/amplitude";
 
 export interface AppInstallationParameters {
   orgId: string;
   managementApiKey: string;
+  datacenter: Datacenter;
 }
+
+const DatacenterSelect = ({
+  datacenter,
+  setDatacenter,
+}: {
+  datacenter: Datacenter;
+  setDatacenter: (orgId: Datacenter) => void;
+}) => {
+  return (
+      <FormControl isRequired>
+        <FormControl.Label>Datacenter</FormControl.Label>
+        <Select
+            id="optionSelect-controlled"
+            name="optionSelect-controlled"
+            value={datacenter}
+            onChange={(e) => setDatacenter(e.target.value)}
+        >
+          <Select.Option value="US">US</Select.Option>
+          <Select.Option value="EU">EU</Select.Option>
+        </Select>
+        <FormControl.HelpText>Select which Amplitude datacenter to use.</FormControl.HelpText>
+      </FormControl>
+  );
+};
 
 const OrgId = ({
   orgId,
@@ -97,6 +116,7 @@ const ConfigScreen = () => {
   const [parameters, setParameters] = useState<AppInstallationParameters>({
     orgId: "",
     managementApiKey: "",
+    datacenter: "US"
   });
 
   const createVariantContainerContentType = useCallback(async () => {
@@ -224,6 +244,12 @@ const ConfigScreen = () => {
     >
       <Heading>Amplitude App Config</Heading>
       <Form>
+        <DatacenterSelect
+          datacenter={parameters.datacenter}
+          setDatacenter={(datacenter: Datacenter) => {
+            setParameters({ ...parameters, datacenter})
+          }}
+        />
         <OrgId
           orgId={parameters.orgId}
           setOrgId={(orgId: string) => setParameters({ ...parameters, orgId })}

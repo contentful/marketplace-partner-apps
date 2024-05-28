@@ -430,8 +430,6 @@ const FlagKeyField = ({
     }
   };
 
-  console.log("experiment", experiment);
-
   return (
     <Box style={{ paddingBottom: "20px" }}>
       <FormControl isRequired>

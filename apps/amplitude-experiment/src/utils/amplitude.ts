@@ -1,12 +1,18 @@
 import { Experiment } from "../contexts/ExperimentContext";
 
-const BASE_URL = "https://experiment.amplitude.com/api/1";
+const US_BASE_URL = "https://experiment.amplitude.com/api/1";
+const EU_BASE_URL = "https://experiment.eu.amplitude.com/api/1";
 const LIMIT = 1000;
+
+export type Datacenter = "US" | "EU";
+
 export class AmplitudeExperimentApi {
   token: string;
+  baseUrl: string;
 
-  constructor(token: string) {
+  constructor(token: string, datacenter: Datacenter) {
     this.token = token;
+    this.baseUrl = datacenter === "US" ? US_BASE_URL : EU_BASE_URL;
   }
   fetchWithAuth(url: string) {
     return fetch(url, {
@@ -35,14 +41,14 @@ export class AmplitudeExperimentApi {
 
   async listExperiments(cursor?: string) {
     const response = await this.fetchWithAuth(
-      `${BASE_URL}/experiments?limit=${LIMIT}${cursor ? "&cursor=" + cursor : ''}`
+      `${this.baseUrl}/experiments?limit=${LIMIT}${cursor ? "&cursor=" + cursor : ''}`
     );
     return response.json();
   }
 
   async getExperimentDetails(experimentId: string) {
     const response = await this.fetchWithAuth(
-      `${BASE_URL}/experiments/${experimentId}`
+      `${this.baseUrl}/experiments/${experimentId}`
     );
     return response.json();
   }
