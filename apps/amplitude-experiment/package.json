@@ -17,6 +17,7 @@
   },
   "proxy": "https://experiment.amplitude.com",
   "scripts": {
+    "install-ci": "npm ci",
     "start": "cross-env BROWSER=none react-scripts start",
     "build": "cross-env react-scripts build",
     "test": "react-scripts test",
