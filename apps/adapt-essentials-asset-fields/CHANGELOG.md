@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.0.11...adapt-essentials-asset-fields-v1.1.0) (2024-05-29)
+
+
+### Features
+
+* `adapt-essentials-asset-fields` search and bugfixes ([#1828](https://github.com/contentful/marketplace-partner-apps/issues/1828)) ([5d60616](https://github.com/contentful/marketplace-partner-apps/commit/5d60616f402474286499a7ca8db99d5218ceff28))
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.65.6 to 4.65.7 in /apps/adapt-essentials-asset-fields ([#1908](https://github.com/contentful/marketplace-partner-apps/issues/1908)) ([2c9a80b](https://github.com/contentful/marketplace-partner-apps/commit/2c9a80b43417f40b506e806998a7a3a531a02fe1))
+* **deps:** bump @contentful/f36-image from 4.65.7 to 4.65.8 in /apps/adapt-essentials-asset-fields ([#1942](https://github.com/contentful/marketplace-partner-apps/issues/1942)) ([1b516c9](https://github.com/contentful/marketplace-partner-apps/commit/1b516c9c8a2cefa82cab36f261fbfbb1e0567f31))
+
 ## [1.0.11](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.0.10...adapt-essentials-asset-fields-v1.0.11) (2024-05-20)
 
 

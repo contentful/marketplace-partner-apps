@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.13](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.12...thrillworks-flex-fields-app-v1.1.13) (2024-05-29)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-tokens from 4.0.2 to 4.0.5 ([#1905](https://github.com/contentful/marketplace-partner-apps/issues/1905)) ([09c9882](https://github.com/contentful/marketplace-partner-apps/commit/09c9882ecbce217e25f85065ace36d09efcb54c5))
+* Update emotion and typescript versions for FlexFields ([#1376](https://github.com/contentful/marketplace-partner-apps/issues/1376)) ([97d07dc](https://github.com/contentful/marketplace-partner-apps/commit/97d07dc27a1d9f5cfa17591bd40f0536aeeff490))
+
 ## [1.1.12](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.11...thrillworks-flex-fields-app-v1.1.12) (2024-05-16)
 
 
