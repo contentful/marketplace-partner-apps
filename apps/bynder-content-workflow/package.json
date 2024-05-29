@@ -25,7 +25,7 @@
     "start": "vite",
     "build": "tsc && vite build",
     "create-app-definition": "contentful-app-scripts create-app-definition",
-    "upload": "contentful-app-scripts upload --bundle-dir ./dist",
+    "upload": "contentful-app-scripts upload --bundle-dir ./build",
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 2POIRORfxypO5JsgvufCiZ --token ${CONTENTFUL_CMA_TOKEN}"
   },
   "devDependencies": {
