@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.0...bynder-content-workflow-v1.0.1) (2024-05-29)
+
+
+### Bug Fixes
+
+* Bynder CF build config ([#1969](https://github.com/contentful/marketplace-partner-apps/issues/1969)) ([7c13ad1](https://github.com/contentful/marketplace-partner-apps/commit/7c13ad18a236fb08014e2e29f801652a55057e41))
+
 ## 1.0.0 (2024-05-29)
 
 
