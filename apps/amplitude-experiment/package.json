@@ -20,7 +20,7 @@
     "install-ci": "npm ci",
     "start": "cross-env BROWSER=none react-scripts start",
     "build": "cross-env react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
     "create-app-definition": "contentful-app-scripts create-app-definition",
     "upload": "contentful-app-scripts upload --bundle-dir ./build",
