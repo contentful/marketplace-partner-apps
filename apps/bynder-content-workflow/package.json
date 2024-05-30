@@ -34,7 +34,7 @@
     "@types/node": "16.18.38",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
-    "@types/showdown": "^2.0.3",
+    "@types/showdown": "^2.0.6",
     "@types/uuid": "^9.0.8",
     "@vitejs/plugin-react": "4.0.1",
     "happy-dom": "9.20.3",
