@@ -1,3 +1,1 @@
-* @contentful/team-integrations
-apps/*/src @contentful/team-integrations @contentful/team-developer-experience
-apps/*/public @contentful/team-integrations @contentful/team-developer-experience
+* @contentful/team-tundra

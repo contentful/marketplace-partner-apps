@@ -13,6 +13,7 @@
 		"apps/wix": {},
 		"apps/adapt-essentials-asset-fields": {},
 		"apps/intershop": {},
+		"apps/bynder-content-workflow": {},
         "apps/xillio-transcreate": {}
 	}
 }

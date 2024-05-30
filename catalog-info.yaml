@@ -5,9 +5,9 @@ metadata:
   annotations:
     circleci.com/project-slug: github/contentful/marketplace-partner-apps
     github.com/project-slug: contentful/marketplace-partner-apps
-    contentful.com/ci-alert-slack: prd-integrations-engineering-bots
+    contentful.com/ci-alert-slack: prd-extensibility-bots
 
 spec:
   type: library
   lifecycle: production
-  owner: group:team-integrations
+  owner: group:team-tundra

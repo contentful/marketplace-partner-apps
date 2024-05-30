@@ -1,5 +1,58 @@
 # Changelog
 
+## [1.0.14](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.0.13...cloudinary-assets-v1.0.14) (2024-05-29)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.65.6 to 4.65.7 in /apps/cloudinary2 ([#1914](https://github.com/contentful/marketplace-partner-apps/issues/1914)) ([d246618](https://github.com/contentful/marketplace-partner-apps/commit/d2466188241272b7112e35c26094e02c5e1eb1a0))
+* **deps:** bump @contentful/f36-components from 4.65.7 to 4.65.8 in /apps/cloudinary2 ([#1951](https://github.com/contentful/marketplace-partner-apps/issues/1951)) ([412923c](https://github.com/contentful/marketplace-partner-apps/commit/412923ce0a3e8beced3b3fcd9b05ee6eae38b1e7))
+* **deps:** bump contentful-management from 11.25.5 to 11.25.6 in /apps/cloudinary2 ([#1851](https://github.com/contentful/marketplace-partner-apps/issues/1851)) ([0fed347](https://github.com/contentful/marketplace-partner-apps/commit/0fed347aed52f8ac896b45aefbe7c42f337a8976))
+* **deps:** bump contentful-management from 11.25.6 to 11.26.1 in /apps/cloudinary2 ([#1868](https://github.com/contentful/marketplace-partner-apps/issues/1868)) ([b57ff2b](https://github.com/contentful/marketplace-partner-apps/commit/b57ff2bc826f0c41754282a29b497734614cc296))
+* **deps:** bump contentful-management from 11.26.1 to 11.26.2 in /apps/cloudinary2 ([#1888](https://github.com/contentful/marketplace-partner-apps/issues/1888)) ([676356e](https://github.com/contentful/marketplace-partner-apps/commit/676356e14625d8366a68327c801b806a6b84b166))
+
+## [1.0.13](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.0.12...cloudinary-assets-v1.0.13) (2024-05-20)
+
+
+### Bug Fixes
+
+* **deps:** bump contentful-management from 11.25.3 to 11.25.5 in /apps/cloudinary2 ([#1832](https://github.com/contentful/marketplace-partner-apps/issues/1832)) ([84f9387](https://github.com/contentful/marketplace-partner-apps/commit/84f9387a6b758e98df5905d94fdfb9490ddf6b06))
+
+## [1.0.12](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.0.11...cloudinary-assets-v1.0.12) (2024-05-16)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.64.0 to 4.65.1 in /apps/cloudinary2 ([#1656](https://github.com/contentful/marketplace-partner-apps/issues/1656)) ([a6ce1fe](https://github.com/contentful/marketplace-partner-apps/commit/a6ce1feb25385547f6aa85a26acb462a9d1129cc))
+* **deps:** bump @contentful/f36-components from 4.65.1 to 4.65.5 in /apps/cloudinary2 ([#1733](https://github.com/contentful/marketplace-partner-apps/issues/1733)) ([d237f1e](https://github.com/contentful/marketplace-partner-apps/commit/d237f1e130a9ec05fb51aefa74eb58d2f3ccf09f))
+* **deps:** bump @contentful/f36-components from 4.65.5 to 4.65.6 in /apps/cloudinary2 ([#1804](https://github.com/contentful/marketplace-partner-apps/issues/1804)) ([327abfc](https://github.com/contentful/marketplace-partner-apps/commit/327abfc135d8ce05cf7dcec6db790a7f644f0a37))
+* **deps:** bump contentful-management from 11.25.1 to 11.25.3 in /apps/cloudinary2 ([#1783](https://github.com/contentful/marketplace-partner-apps/issues/1783)) ([051c6bd](https://github.com/contentful/marketplace-partner-apps/commit/051c6bdb10aa0ac54b88bd6738d1c1ba3a668829))
+* **deps:** bump react and @types/react in /apps/cloudinary2 ([#1667](https://github.com/contentful/marketplace-partner-apps/issues/1667)) ([54a9682](https://github.com/contentful/marketplace-partner-apps/commit/54a9682ae67e96b92708cf6430e91ce6ba158704))
+* **deps:** bump react-dom and @types/react-dom in /apps/cloudinary2 ([#1786](https://github.com/contentful/marketplace-partner-apps/issues/1786)) ([0b89f3a](https://github.com/contentful/marketplace-partner-apps/commit/0b89f3a8e34906dd7f3abb136e90da959c9812db))
+
+## [1.0.11](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.0.10...cloudinary-assets-v1.0.11) (2024-04-26)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.62.0 to 4.64.0 in /apps/cloudinary2 ([#1570](https://github.com/contentful/marketplace-partner-apps/issues/1570)) ([827b852](https://github.com/contentful/marketplace-partner-apps/commit/827b8521859f9f2b9377451864ce575b5b383991))
+* **deps:** bump @contentful/f36-icons from 4.28.0 to 4.28.2 in /apps/cloudinary2 ([#1636](https://github.com/contentful/marketplace-partner-apps/issues/1636)) ([ddee296](https://github.com/contentful/marketplace-partner-apps/commit/ddee2965bf02f432e2a60e472f3287e5fde4889c))
+* **deps:** bump contentful-management from 11.25.0 to 11.25.1 in /apps/cloudinary2 ([#1582](https://github.com/contentful/marketplace-partner-apps/issues/1582)) ([0b9eaac](https://github.com/contentful/marketplace-partner-apps/commit/0b9eaac4d64fa43cdb0aef1c5b00efc64915cc6c))
+
+## [1.0.10](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.0.9...cloudinary-assets-v1.0.10) (2024-04-18)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.61.0 to 4.62.0 in /apps/cloudinary2 ([#1407](https://github.com/contentful/marketplace-partner-apps/issues/1407)) ([e79158c](https://github.com/contentful/marketplace-partner-apps/commit/e79158ca987baceddc7c315376ff48093989541b))
+* **deps:** bump @contentful/f36-icons from 4.27.0 to 4.28.0 in /apps/cloudinary2 ([#1491](https://github.com/contentful/marketplace-partner-apps/issues/1491)) ([9ebbdf9](https://github.com/contentful/marketplace-partner-apps/commit/9ebbdf966f99f7e119d7f939d6751bae3059be88))
+* **deps:** bump @contentful/f36-tokens from 4.0.4 to 4.0.5 in /apps/cloudinary2 ([#1405](https://github.com/contentful/marketplace-partner-apps/issues/1405)) ([4174d16](https://github.com/contentful/marketplace-partner-apps/commit/4174d16d906d707d543234e9cba04bbe5b210d7a))
+* **deps:** bump cloudinary-core from 2.13.0 to 2.13.1 in /apps/cloudinary2 ([#1445](https://github.com/contentful/marketplace-partner-apps/issues/1445)) ([403f28c](https://github.com/contentful/marketplace-partner-apps/commit/403f28cdc8523baba27cf19ab3f6f4fc2a11d673))
+* **deps:** bump contentful-management from 11.23.0 to 11.24.3 in /apps/cloudinary2 ([#1298](https://github.com/contentful/marketplace-partner-apps/issues/1298)) ([bb68bf3](https://github.com/contentful/marketplace-partner-apps/commit/bb68bf307acb28074c25130a6f9746bc98dce49d))
+* **deps:** bump contentful-management from 11.24.3 to 11.24.5 in /apps/cloudinary2 ([#1454](https://github.com/contentful/marketplace-partner-apps/issues/1454)) ([9c409fb](https://github.com/contentful/marketplace-partner-apps/commit/9c409fbda6d91dba586f7d1f90d8bc30a9c510b7))
+* **deps:** bump contentful-management from 11.24.5 to 11.25.0 in /apps/cloudinary2 ([#1554](https://github.com/contentful/marketplace-partner-apps/issues/1554)) ([e329168](https://github.com/contentful/marketplace-partner-apps/commit/e329168468f9749e9040035c2f63eaca8dc5d2eb))
+* handle null fields in cloudinary ([#1550](https://github.com/contentful/marketplace-partner-apps/issues/1550)) ([7b6b138](https://github.com/contentful/marketplace-partner-apps/commit/7b6b13856563f1c2ed6c02bc2659c3d3dda49671))
+
 ## [1.0.9](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.0.8...cloudinary-assets-v1.0.9) (2024-03-25)
 
 

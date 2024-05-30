@@ -1,17 +1,17 @@
 {
   "name": "thrillworks-flex-fields-app",
-  "version": "1.1.10",
+  "version": "1.1.13",
   "license": "MIT",
   "dependencies": {
     "@contentful/app-sdk": "4.25.0",
     "@contentful/default-field-editors": "^1.5.25",
     "@contentful/f36-components": "4.59.3",
     "@contentful/f36-multiselect": "^4.21.0",
-    "@contentful/f36-tokens": "4.0.4",
+    "@contentful/f36-tokens": "4.0.5",
     "@contentful/f36-workbench": "^4.21.0",
     "@contentful/react-apps-toolkit": "1.2.16",
+    "@emotion/css": "11.11.2",
     "contentful-management": "11.23.1",
-    "emotion": "10.0.27",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-scripts": "5.0.1"
@@ -45,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@contentful/app-scripts": "1.14.0",
     "@testing-library/jest-dom": "6.4.2",
     "@testing-library/react": "12.1.5",
@@ -53,8 +54,13 @@
     "@types/node": "18.15.3",
     "@types/react": "18.0.9",
     "@types/react-dom": "18.0.3",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "cross-env": "7.0.3",
-    "typescript": "4.9.5"
+    "typescript": "5.4.3"
+  },
+  "overrides": {
+    "typescript": "5.4.3"
   },
   "homepage": "."
 }

@@ -9,7 +9,7 @@ import {
   SectionHeading,
 } from "@contentful/f36-components";
 import { Entry } from "contentful-management";
-import { css } from "emotion";
+import { css } from "@emotion/css";
 import { useCMA, useSDK } from "@contentful/react-apps-toolkit";
 import { FormControl, Select } from "@contentful/f36-components";
 import { Multiselect } from "@contentful/f36-multiselect";
@@ -226,7 +226,13 @@ const ConfigScreen = () => {
         setCondition(ruleToEdit.condition);
         setConditionValue(ruleToEdit.conditionValue);
         // If the rule is set for same entity, add `-sameEntity` to targetEntity
-        setTargetEntity(`${ruleToEdit.isForSameEntity ? `${ruleToEdit.targetEntity}-sameEntity`: ruleToEdit.targetEntity}`);
+        setTargetEntity(
+          `${
+            ruleToEdit.isForSameEntity
+              ? `${ruleToEdit.targetEntity}-sameEntity`
+              : ruleToEdit.targetEntity
+          }`
+        );
         setTargetEntityField(ruleToEdit.targetEntityField);
       }, 100);
     }
@@ -299,42 +305,44 @@ const ConfigScreen = () => {
 
   // get child entities of main content type
   useEffect(() => {
-    cma.contentType.get({ contentTypeId: contentType }).then((data) => {
-      const children = data?.fields;
-      let childrenEntities: any[] = [];
-
-      children?.forEach((obj) => {
-        const linkedContentTypes =
-          obj.validations?.[0]?.linkContentType ||
-          obj.items?.validations?.[0]?.linkContentType;
-        if (linkedContentTypes?.length) {
-          childrenEntities = [...childrenEntities, ...linkedContentTypes];
+    if (contentType) {
+      cma.contentType.get({ contentTypeId: contentType }).then((data) => {
+        const children = data?.fields;
+        let childrenEntities: any[] = [];
+  
+        children?.forEach((obj) => {
+          const linkedContentTypes =
+            obj.validations?.[0]?.linkContentType ||
+            obj.items?.validations?.[0]?.linkContentType;
+          if (linkedContentTypes?.length) {
+            childrenEntities = [...childrenEntities, ...linkedContentTypes];
+          }
+        });
+  
+        if (children) {
+          // filter fields with type reference
+          setChildEntities(
+            children?.filter((obj: any) => !obj.hasOwnProperty("items"))
+          );
+  
+          const targetEntities = [
+            {
+              id: `${contentType}-sameEntity`,
+              name: `${
+                contentTypes.find((c: Entry) => c.sys.id === contentType)?.name
+              } (Same Entry)`,
+            },
+            ...childrenEntities.map((contentType) => ({
+              id: contentType,
+              name: contentTypes.find((c: Entry) => c.sys.id === contentType)
+                ?.name,
+            })),
+          ];
+  
+          setTargetEntities(targetEntities);
         }
       });
-
-      if (children) {
-        // filter fields with type reference
-        setChildEntities(
-          children?.filter((obj: any) => !obj.hasOwnProperty("items"))
-        );
-
-        const targetEntities = [
-          {
-            id: `${contentType}-sameEntity`,
-            name: `${
-              contentTypes.find((c: Entry) => c.sys.id === contentType)?.name
-            } (Same Entry)`,
-          },
-          ...childrenEntities.map((contentType) => ({
-            id: contentType,
-            name: contentTypes.find((c: Entry) => c.sys.id === contentType)
-              ?.name,
-          })),
-        ];
-
-        setTargetEntities(targetEntities);
-      }
-    });
+    }
   }, [contentType, cma.contentType, contentTypes]);
 
   useEffect(() => {
@@ -357,7 +365,10 @@ const ConfigScreen = () => {
 
         if (fields) {
           // filter contentTypeField from fields
-          if (isForSameEntity && targetEntity.substring(0, suffixIndex) === contentType) {
+          if (
+            isForSameEntity &&
+            targetEntity.substring(0, suffixIndex) === contentType
+          ) {
             fields = fields.filter((field) => field.id !== contentTypeField);
           }
 
@@ -547,8 +558,8 @@ const ConfigScreen = () => {
               <PlusIcon />
               <SectionHeading
                 className={css({
-                  fontSize: 14,
-                  margin: 0,
+                  fontSize: "14px !important",
+                  margin: "0 !important",
                 })}
               >
                 Add new rule(s) below
@@ -591,7 +602,12 @@ const ConfigScreen = () => {
                     }
                     handleChange={updateInput}
                   />
-                  <Text className={css({ minWidth: 100, marginLeft: 40 })}>
+                  <Text
+                    className={css({
+                      minWidth: 100,
+                      marginLeft: "40px !important",
+                    })}
+                  >
                     Condition
                   </Text>
                   <CustomSelect
@@ -610,7 +626,10 @@ const ConfigScreen = () => {
                     (conditionValueOptions.length &&
                     condition !== "contains" ? (
                       <CustomSelect
-                        className={css({ width: "200px", margin: "0 1rem" })}
+                        className={css({
+                          width: "200px !important",
+                          margin: "0 1rem !important",
+                        })}
                         value={conditionValue}
                         fieldId="conditionValue"
                         options={
@@ -629,11 +648,16 @@ const ConfigScreen = () => {
                           updateInput("conditionValue", e.target.value);
                         }}
                         placeholder="Condition value"
-                        className={css({ width: "200px", margin: "0 1rem" })}
+                        className={css({
+                          width: "200px !important",
+                          margin: "0 1rem !important",
+                        })}
                       />
                     ))}
                 </Flex>
-                <SectionHeading className={css({ margin: "20px 10px 0 0" })}>
+                <SectionHeading
+                  className={css({ margin: "20px 10px 0 0 !important" })}
+                >
                   Hide field:
                 </SectionHeading>
                 <Flex
@@ -655,7 +679,12 @@ const ConfigScreen = () => {
                     }
                     handleChange={updateInput}
                   />
-                  <Text className={css({ marginLeft: 40, minWidth: 100 })}>
+                  <Text
+                    className={css({
+                      marginLeft: "40px !important",
+                      minWidth: 100,
+                    })}
+                  >
                     Hide field
                   </Text>
                   <Multiselect
@@ -664,7 +693,7 @@ const ConfigScreen = () => {
                       targetEntity,
                       contentTypes
                     )}
-                    className={css({ width: 300 })}
+                    className={css({ width: "300px !important" })}
                   >
                     {targetEntityFields.map((tef: any) => {
                       return (
@@ -672,7 +701,9 @@ const ConfigScreen = () => {
                           key={`key-${tef.id}}`}
                           itemId={`space-${tef.id}}`}
                           value={tef.id}
-                          label={`${tef.name} ${tef.disabled ? '(Hidden when editing)' : ''}`}
+                          label={`${tef.name} ${
+                            tef.disabled ? "(Hidden when editing)" : ""
+                          }`}
                           onSelectItem={(ev) => {
                             setTargetEntityField((targetEntityField) => {
                               if (targetEntityField?.includes(tef.id)) {
@@ -713,7 +744,7 @@ const ConfigScreen = () => {
 
       <Text
         className={css({
-          marginTop: "1rem",
+          marginTop: "1rem !important",
         })}
       >
         Built by{" "}

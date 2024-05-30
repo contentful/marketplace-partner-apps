@@ -5,7 +5,7 @@ import useAssetEntries from './hooks/useAssetEntries';
 const SelectAllCheckbox = () => {
   const { assetEntries } = useAssetEntries();
   const { selectedEntries, setSelectedEntries } = useEntriesSelection();
-  const selectedAll = selectedEntries.length === assetEntries.length;
+  const selectedAll = selectedEntries.length > 0 && selectedEntries.length === assetEntries.length;
   return (
     <Checkbox
       isChecked={selectedAll}

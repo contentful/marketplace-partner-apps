@@ -58,6 +58,18 @@ function makeSaveBtnText(skuType) {
   };
 }
 
+function makeSearchPlaceholderText(skuType) {
+  if (skuType === 'product') {
+    return 'Search for a product...';
+  }
+
+  if (skuType === 'collection') {
+    return 'Search for a collection...';
+  }
+
+  return 'Search for a product variant...';
+}
+
 export function validateParameters(parameters) {
   if (parameters.storefrontAccessToken.length < 1) {
     return 'Provide the storefront access token to your Shopify store.';
@@ -98,6 +110,7 @@ async function renderDialog(sdk) {
     searchDelay: 750,
     skuType,
     makeSaveBtnText: makeSaveBtnText(skuType),
+    makeSearchPlaceholderText,
   });
 
   sdk.window.startAutoResizer();

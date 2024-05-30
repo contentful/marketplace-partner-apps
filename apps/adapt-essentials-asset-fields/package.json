@@ -1,7 +1,7 @@
 {
   "name": "adapt-essentials-asset-fields",
   "private": true,
-  "version": "1.0.7",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "install-ci": "npm ci",
@@ -15,34 +15,34 @@
   },
   "dependencies": {
     "@contentful/app-sdk": "^4.25.0",
-    "@contentful/f36-components": "^4.61.0",
-    "@contentful/f36-image": "^4.0.0-alpha.0",
+    "@contentful/f36-components": "^4.65.7",
+    "@contentful/f36-image": "^4.65.8",
     "@contentful/f36-workbench": "^4.21.0",
     "@contentful/react-apps-toolkit": "^1.2.15",
     "@uidotdev/usehooks": "^2.0.1",
     "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.2.5",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-focus-lock": "^2.11.2",
+    "react-dom": "^18.3.1",
+    "react-focus-lock": "^2.12.1",
     "react-markdown": "^9.0.1",
-    "react-router-dom": "^6.22.3",
+    "react-router-dom": "^6.23.1",
     "remark-gfm": "^4.0.0",
     "use-local-storage-extended": "^0.1.1"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "^1.15.0",
-    "@types/react": "^18.2.69",
-    "@types/react-dom": "^18.2.22",
+    "@contentful/app-scripts": "^1.20.1",
+    "@types/react": "^18.2.79",
+    "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
-    "@vitejs/plugin-react-swc": "^3.0.0",
+    "@vitejs/plugin-react-swc": "^3.7.0",
     "eslint": "^8.57.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.6",
-    "happy-dom": "^14.0.0",
-    "type-fest": "^4.14.0",
-    "typescript": "^5.4.3",
-    "vite": "^5.1.6"
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.7",
+    "happy-dom": "^14.12.0",
+    "type-fest": "^4.18.2",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.11"
   }
 }

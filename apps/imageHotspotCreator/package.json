@@ -1,12 +1,12 @@
 {
   "name": "image-hotspot-creator",
-  "version": "1.0.13",
+  "version": "1.0.17",
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@contentful/app-sdk": "^4.24.0",
     "@contentful/f36-components": "4.59.3",
-    "@contentful/f36-tokens": "4.0.4",
+    "@contentful/f36-tokens": "4.0.5",
     "@contentful/forma-36-react-components": "^3.100.7",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/react": "^11.11.1",
