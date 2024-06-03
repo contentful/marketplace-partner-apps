@@ -13,7 +13,7 @@
     "constate": "^3.3.2",
     "contentful-management": "10.38.3",
     "contentful-rich-text-html-parser": "^1.5.4",
-    "emotion": "10.0.27",
+    "emotion": "11.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-top-loading-bar": "^2.3.1",
