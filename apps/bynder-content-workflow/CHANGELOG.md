@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.1...bynder-content-workflow-v1.0.2) (2024-06-03)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/field-editor-rich-text from 3.16.0 to 3.23.1 in /apps/bynder-content-workflow ([#1984](https://github.com/contentful/marketplace-partner-apps/issues/1984)) ([dfb813b](https://github.com/contentful/marketplace-partner-apps/commit/dfb813bf24a75c9f4a244537f5383020287e476b))
+
 ## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.0...bynder-content-workflow-v1.0.1) (2024-05-29)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.12](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.1.11...bynder-assets-v1.1.12) (2024-06-03)
+
+
+### Bug Fixes
+
+* bump dam-app-base for delete functionality fix [ZEND-5025] ([#1997](https://github.com/contentful/marketplace-partner-apps/issues/1997)) ([c9d1918](https://github.com/contentful/marketplace-partner-apps/commit/c9d1918b9cca5f45ec2ec7acf0eac45f6bcc7723))
+
 ## [1.1.11](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.1.10...bynder-assets-v1.1.11) (2024-05-29)
 
 
