@@ -8,15 +8,15 @@
     "react-scripts": "5.0.1"
   },
   "dependencies": {
-    "@contentful/ecommerce-app-base": "^3.6.11",
+    "@contentful/ecommerce-app-base": "^4.0.6",
     "@contentful/f36-components": "^4.65.9",
     "@contentful/f36-icons": "^4.28.2",
     "@contentful/f36-tokens": "^4.0.5",
     "@contentful/react-apps-toolkit": "^1.2.16",
     "core-js": "3.37.1",
     "emotion": "^11.0.0",
-    "react": "16.14.0",
-    "react-dom": "16.14.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "shopify-buy": "2.22.0"
   },
   "scripts": {
