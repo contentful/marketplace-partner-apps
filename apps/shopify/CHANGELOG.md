@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.0.0](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v1.1.15...shopify-sku-v2.0.0) (2024-06-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* update shopify to react v18 and @contentful/ecommerce-app-base v4 ([#2029](https://github.com/contentful/marketplace-partner-apps/issues/2029))
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.65.8 to 4.65.9 in /apps/shopify ([#2026](https://github.com/contentful/marketplace-partner-apps/issues/2026)) ([4a18662](https://github.com/contentful/marketplace-partner-apps/commit/4a18662aae497dfbf2ca678b3f47b744400c9f55))
+* **deps:** bump @contentful/f36-components from 4.65.9 to 4.66.0 in /apps/shopify ([#2043](https://github.com/contentful/marketplace-partner-apps/issues/2043)) ([0067cc1](https://github.com/contentful/marketplace-partner-apps/commit/0067cc18bff66d9e47e547ffc9651c29c4e57de7))
+* **deps:** bump react from 18.2.0 to 18.3.1 in /apps/shopify ([#2030](https://github.com/contentful/marketplace-partner-apps/issues/2030)) ([d4b9bee](https://github.com/contentful/marketplace-partner-apps/commit/d4b9bee2c9ac87d33bd80bcd636741acdf9c36a6))
+* **deps:** bump react-dom from 18.2.0 to 18.3.1 in /apps/shopify ([#2042](https://github.com/contentful/marketplace-partner-apps/issues/2042)) ([2bdaf4c](https://github.com/contentful/marketplace-partner-apps/commit/2bdaf4c71dcf4d2a8c790756d8a1ad9201185c4c))
+
+
+### Build System
+
+* update shopify to react v18 and @contentful/ecommerce-app-base v4 ([#2029](https://github.com/contentful/marketplace-partner-apps/issues/2029)) ([cb02e32](https://github.com/contentful/marketplace-partner-apps/commit/cb02e32113068ef4e2827600dd8f820271a00038))
+
 ## [1.1.15](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v1.1.14...shopify-sku-v1.1.15) (2024-05-29)
 
 
