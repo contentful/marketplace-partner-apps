@@ -1,0 +1,20 @@
+{
+	"packages": {
+		"apps/adapt-essentials-asset-fields": {},
+		"apps/amplitude-experiment": {},
+		"apps/bynder": {},
+		"apps/bynder-content-workflow": {},
+		"apps/ceros": {},
+		"apps/cloudinary2": {},
+		"apps/flexfields": {},
+		"apps/imageHotspotCreator": {},
+		"apps/intershop": {},
+		"apps/shopify": {},
+		"apps/surfer": {},
+		"apps/transifex": {},
+		"apps/uploadcare": {},
+		"apps/voucherify": {},
+		"apps/wix": {},
+		"apps/xillio-transcreate": {}
+	}
+}

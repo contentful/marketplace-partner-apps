@@ -2,7 +2,7 @@ import { Button } from '@contentful/f36-components';
 import { AssetIcon } from '@contentful/f36-icons';
 import tokens from '@contentful/f36-tokens';
 import { useSDK } from '@contentful/react-apps-toolkit';
-import { css } from 'emotion';
+import { css } from '@emotion/react';
 import { useCallback } from 'react';
 import { CloudinaryAsset, MediaLibraryResult } from '../../types';
 import { extractAsset } from '../../utils';
@@ -45,8 +45,8 @@ export function OpenDialogButton({ onNewAssetsAdded, isDisabled }: Props) {
   }, [onNewAssetsAdded, sdk.dialogs]);
 
   return (
-    <div className={styles.container}>
-      <img src={logo} alt="Logo" className={styles.logo} />
+    <div css={styles.container}>
+      <img src={logo} alt="Logo" css={styles.logo} />
       <Button startIcon={<AssetIcon />} variant="secondary" size="small" onClick={handleDialogOpenClick} isDisabled={isDisabled}>
         Select or upload an asset
       </Button>

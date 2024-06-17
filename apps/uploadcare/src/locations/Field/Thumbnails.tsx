@@ -1,6 +1,6 @@
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
-import { css } from 'emotion';
+import { css } from '@emotion/css';
 import { useCallback, useMemo } from 'react';
 import { Asset } from '../../types';
 import { Thumbnail } from './Thumbnail';

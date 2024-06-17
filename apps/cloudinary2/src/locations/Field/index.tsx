@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { AppInstallationParameters, CloudinaryAsset } from '../../types';
 import { OpenDialogButton } from './OpenDialogButton';
 import { Thumbnails } from './Thumbnails';
-import { css, Global } from '@emotion/core';
+import { css, Global } from '@emotion/react';
 
 const globalStyles = css`
   html {
@@ -18,7 +18,8 @@ const Field = () => {
   const sdk = useSDK<FieldAppSDK<AppInstallationParameters>>();
   useAutoResizer({ absoluteElements: true });
 
-  const [assets = [], setAssets] = useFieldValue<CloudinaryAsset[]>(sdk.field.id, sdk.field.locale)
+  const [fieldValue = [], setAssets] = useFieldValue<CloudinaryAsset[] | null>(sdk.field.id, sdk.field.locale);
+  const assets = fieldValue || [];
 
   const [editingEnabled, setEditingEnabled] = useState(!sdk.field.getIsDisabled());
   useEffect(() => {

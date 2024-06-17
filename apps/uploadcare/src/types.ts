@@ -21,6 +21,6 @@ export type InstallParamsValidationErrors = Record<keyof InstallParams, string>;
 export type Asset = {
   isImage: boolean;
   cdnUrl: string;
-  originalFilename: string;
+  name: string;
   uuid: string;
 };

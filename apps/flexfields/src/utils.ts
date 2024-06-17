@@ -1,25 +1,36 @@
-import { EditorExtensionSDK } from "@contentful/app-sdk";
+import { EditorAppSDK, FieldAppSDK } from "@contentful/app-sdk";
 import { KeyValueMap } from "contentful-management";
 import { type Rule } from "./types/Rule";
 
 // Converts a field into <FieldAPI> data type, which is the expected data type for many API methods
-const getFieldAPI = (fieldId: string, sdk: EditorExtensionSDK) =>
-  sdk.entry.fields[fieldId].getForLocale(sdk.locales.default);
+const getFieldAPI = (fieldId: string, sdk: EditorAppSDK, locale: string) =>
+  sdk.entry.fields[fieldId].getForLocale(locale);
 
-// Creates a <FieldExtensionSDK> type that can be passed to components from the default-field-editors package
-export const getFieldExtensionSdk = (
+// Creates a <FieldAppSDK> type that can be passed to components from the default-field-editors package
+export const getFieldAppSdk = (
   fieldId: string,
-  sdk: EditorExtensionSDK
-) => Object.assign({ field: getFieldAPI(fieldId, sdk) }, sdk);
+  sdk: EditorAppSDK,
+  locale?: string
+) => {
+  const fieldAPI = getFieldAPI(fieldId, sdk, locale || sdk.locales.default);
+  return Object.assign({ field: fieldAPI }, sdk) as FieldAppSDK;
+};
+
+// Get localization setting for a field
+export const getLocaleName = (sdk: EditorAppSDK, locale: string) =>
+  sdk.locales.names[locale];
 
 // Check if a field is meant to be displayed conditionally
 const isFieldHidden = (
   fieldId: string,
   contentType: string,
-  rules: Rule[]
+  rules: Rule[],
+  entryId: string
 ): boolean => {
   return !!rules.find(
     (rule) =>
+      ((rule.isForSameEntity && rule.entryId === entryId) ||
+        (!rule.isForSameEntity && rule.entryId !== entryId)) &&
       rule.targetEntity === contentType &&
       rule.targetEntityField.includes(fieldId)
   );
@@ -47,7 +58,7 @@ export const isRuleValid = (
   //get content type field value
   const contentTypeFieldValue =
     entryFields[contentTypeField].value ||
-    entryFields[contentTypeField].getValue();
+    entryFields[contentTypeField].getValue?.();
 
   switch (condition) {
     case "is equal":
@@ -75,7 +86,7 @@ export const isRuleValid = (
 export const calculateEditorFields = (
   entryId: string,
   entryFields: KeyValueMap,
-  sdk: EditorExtensionSDK,
+  sdk: EditorAppSDK,
   isFirstLoad: boolean
 ) => {
   // get rules from session storage & filter rules for current entryId
@@ -83,9 +94,9 @@ export const calculateEditorFields = (
     sessionStorage.getItem("filteredRules") || "[]"
   ).filter((rule: Rule) => rule.entryId !== entryId);
 
-  const rules = sdk.parameters.installation.rules as Rule[];
+  const rules = sdk.parameters.installation.rules || ([] as Rule[]);
   const filteredRules: Rule[] = rules
-    .filter((rule: Rule) =>
+    ?.filter((rule: Rule) =>
       isRuleValid(rule, entryFields, sdk.contentType.sys.id)
     )
     .map((rule: Rule) => ({ ...rule, entryId }));
@@ -112,9 +123,18 @@ export const calculateEditorFields = (
     sessionStorage.setItem("filteredRules", JSON.stringify(uniqueRulesList));
   }
 
-  return sdk.contentType.fields.filter(
-    (field) => !isFieldHidden(field.id, sdk.contentType.sys.id, uniqueRulesList)
-  );
+  return sdk.contentType.fields
+    // Hide if field is hidden for editing or show if `Show hidden fields` is enabled
+    .filter((field) => !field.disabled || sdk.editor.getShowHiddenFields())
+    .filter(
+      (field) =>
+        !isFieldHidden(
+          field.id,
+          sdk.contentType.sys.id,
+          uniqueRulesList,
+          entryId
+        )
+    );
 };
 
 //Get content type name from content type id

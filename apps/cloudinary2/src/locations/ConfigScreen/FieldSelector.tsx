@@ -1,7 +1,7 @@
 import { Checkbox, Form, Paragraph, Subheading } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
 import { ContentTypeProps } from 'contentful-management';
-import { css } from 'emotion';
+import { css } from '@emotion/react';
 import { useCallback, useMemo } from 'react';
 import { NoContentTypes } from './NoContentTypes';
 import { SelectedFields, getCompatibleFields } from './fields';
@@ -50,7 +50,7 @@ export function FieldSelector({ environment, space, contentTypes: allContentType
         This app can only be used with <strong>JSON object</strong> fields. Select which JSON fields you’d like to enable for this app.
       </Paragraph>
       {contentTypes.map((contentType) => (
-        <div key={contentType.sys.id} className={css({ marginTop: tokens.spacingL })}>
+        <div key={contentType.sys.id} css={css({ marginTop: tokens.spacingL })}>
           <Subheading>{contentType.name}</Subheading>
           <Form>
             {compatibleFields[contentType.sys.id].map((field) => (

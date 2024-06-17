@@ -1,7 +1,7 @@
 import { AssetCard, DragHandle, MenuItem } from '@contentful/f36-components';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { css } from 'emotion';
+import { css } from '@emotion/css';
 import { useMemo } from 'react';
 import { Asset } from '../../types';
 
@@ -18,7 +18,7 @@ type Props = {
 };
 
 export function Thumbnail({ asset, isDisabled, onDelete }: Props) {
-  const { cdnUrl, originalFilename, uuid, isImage } = asset;
+  const { cdnUrl, name, uuid, isImage } = asset;
 
   const url = useMemo(() => {
     return cdnUrl + '-/resize/x300/';
@@ -39,7 +39,7 @@ export function Thumbnail({ asset, isDisabled, onDelete }: Props) {
         src={url}
         type={isImage ? 'image' : 'archive'}
         size="small"
-        title={originalFilename}
+        title={name}
         actions={[
           <MenuItem key="delete" onClick={onDelete} isDisabled={isDisabled}>
             Delete

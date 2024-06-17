@@ -1,0 +1,51 @@
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+name: Release and deploy apps
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          command: manifest
+          token: ${{secrets.GITHUB_TOKEN}}
+          default-branch: main
+    outputs:
+      releases_created: ${{ steps.release.outputs.releases_created }}
+
+  build-and-deploy:
+    needs: release-please
+    runs-on: ubuntu-latest
+    env:
+      # "production" deploy secrets
+      DEFINITIONS_ORG_ID: ${{ secrets.DEFINITIONS_ORG_ID }}
+      CONTENTFUL_CMA_TOKEN: ${{ secrets.CONTENTFUL_CMA_TOKEN }}
+
+      # "staging" deploy secrets
+      TEST_ORG_ID: ${{ secrets.TEST_ORG_ID }}
+      TEST_CMA_TOKEN: ${{ secrets.TEST_CMA_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Install root-level project
+        run: npm ci
+      - name: Install apps
+        run: npm run install-apps:deploy
+      - name: Build apps
+        run: npm run build-apps:deploy
+      - name: Deploy apps (staging)
+        if: ${{ !needs.release-please.outputs.releases_created }}
+        run: npm run deploy:staging
+      - name: Deploy apps (production)
+        if: ${{ needs.release-please.outputs.releases_created }}
+        run: npm run deploy:production

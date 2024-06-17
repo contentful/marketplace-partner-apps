@@ -1,7 +1,7 @@
 import { Checkbox, Form, Paragraph, Subheading } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
 import { ContentTypeProps } from 'contentful-management';
-import { css } from 'emotion';
+import { css } from '@emotion/css';
 import { ReactElement, useCallback, useMemo } from 'react';
 import { getCompatibleFields, SelectedFields } from './fields';
 import { NoContentTypes } from './NoContentTypes';

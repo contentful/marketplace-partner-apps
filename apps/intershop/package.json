@@ -1,0 +1,54 @@
+{
+  "name": "intershop-connector",
+  "version": "1.0.9",
+  "private": true,
+  "dependencies": {
+    "@contentful/app-sdk": "^4.25.0",
+    "@contentful/f36-components": "4.66.0",
+    "@contentful/f36-image": "^4.67.0",
+    "@contentful/f36-tokens": "4.0.5",
+    "@contentful/react-apps-toolkit": "1.2.16",
+    "contentful-management": "11.27.1",
+    "emotion": "10.0.27",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-scripts": "5.0.1"
+  },
+  "scripts": {
+    "install-ci": "npm ci",
+    "start": "cross-env BROWSER=none react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --passWithNoTests",
+    "eject": "react-scripts eject",
+    "create-app-definition": "contentful-app-scripts create-app-definition",
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 5q6VO8UT97XSTix4gnRbPE --token ${CONTENTFUL_CMA_TOKEN}"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@contentful/app-scripts": "1.23.0",
+    "@testing-library/jest-dom": "6.4.6",
+    "@testing-library/react": "15.0.7",
+    "@tsconfig/create-react-app": "2.0.5",
+    "@types/node": "18.15.3",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "cross-env": "7.0.3",
+    "typescript": "5.4.5"
+  },
+  "homepage": "."
+}

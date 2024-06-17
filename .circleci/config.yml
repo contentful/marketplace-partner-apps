@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@5.0.2
+  node: circleci/node@5.1.0
 
 jobs:
   apps-checks:
@@ -24,46 +24,6 @@ jobs:
           name: Test apps
           command: npm run test-apps
 
-  deploy-staging:
-    docker:
-      - image: cimg/base:stable
-    resource_class: medium+
-    steps:
-      - checkout
-      - node/install
-      - run:
-          name: Install root dependencies
-          command: npm install
-      - run:
-          name: Install apps dependencies
-          command: npm run install-apps:deploy
-      - run:
-          name: Build apps
-          command: npm run build-apps:deploy
-      - run:
-          name: Deploy staging
-          command: npm run deploy:staging
-
-  deploy-prod:
-    docker:
-      - image: cimg/base:stable
-    resource_class: medium+
-    steps:
-      - checkout
-      - node/install
-      - run:
-          name: Install root dependencies
-          command: npm install
-      - run:
-          name: Install apps dependencies
-          command: npm run install-apps:deploy
-      - run:
-          name: Build apps
-          command: npm run build-apps:deploy
-      - run:
-          name: Deploy production
-          command: npm run deploy:production
-
 workflows:
   version: 2
   apps-ci-pipeline:
@@ -73,18 +33,3 @@ workflows:
             branches:
               ignore:
                 - main
-                - production
-      - deploy-staging:
-          context:
-            - marketplace-partner-apps-staging
-          filters:
-            branches:
-              only:
-                - main
-      - deploy-prod:
-          context:
-            - marketplace-partner-apps-production
-          filters:
-            branches:
-              only:
-                - production

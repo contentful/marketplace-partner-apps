@@ -1,0 +1,58 @@
+{
+  "name": "amplitude-contentful",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@contentful/app-sdk": "^4.24.0",
+    "@contentful/f36-components": "4.58.4",
+    "@contentful/f36-tokens": "4.0.4",
+    "@contentful/react-apps-toolkit": "1.2.16",
+    "@use-it/interval": "^1.0.0",
+    "contentful-management": "10.46.4",
+    "emotion": "10.0.27",
+    "lodash": "^4.17.21",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-scripts": "5.0.1"
+  },
+  "proxy": "https://experiment.amplitude.com",
+  "scripts": {
+    "install-ci": "npm ci",
+    "start": "cross-env BROWSER=none react-scripts start",
+    "build": "cross-env react-scripts build",
+    "test": "react-scripts test --passWithNoTests",
+    "eject": "react-scripts eject",
+    "create-app-definition": "contentful-app-scripts create-app-definition",
+    "upload": "contentful-app-scripts upload --bundle-dir ./build",
+    "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN",
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 3bzEoyxboiWITYoHDd97IE --token ${CONTENTFUL_CMA_TOKEN}"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@contentful/app-scripts": "1.13.2",
+    "@testing-library/jest-dom": "5.17.0",
+    "@testing-library/react": "14.1.2",
+    "@tsconfig/create-react-app": "2.0.2",
+    "@types/lodash": "^4.14.202",
+    "@types/node": "18.15.3",
+    "@types/react": "18.2.48",
+    "@types/react-dom": "18.2.18",
+    "cross-env": "7.0.3",
+    "typescript": "4.9.5"
+  },
+  "homepage": "."
+}

@@ -6,8 +6,24 @@ const mockSdk: any = {
     getCurrentState: jest.fn(),
   },
   ids: {
-    app: 'test-app'
-  }
+    app: "test-app",
+  },
+  entry: {
+    getSys: () => ({ id: 1 }),
+  },
+  parameters: {
+    installation: {
+      rules: [],
+    },
+  },
+  contentType: {
+    fields: [],
+  },
+  editor: {
+    getLocaleSettings: () => ({}),
+    onLocaleSettingsChanged: () => {},
+    onShowHiddenFieldsChanged: () => {},
+  },
 };
 
 export { mockSdk };

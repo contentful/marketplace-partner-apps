@@ -1,6 +1,6 @@
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, arrayMove } from '@dnd-kit/sortable';
-import { css } from 'emotion';
+import { css } from '@emotion/react';
 import { useCallback, useMemo, useRef } from 'react';
 import { CloudinaryAsset } from '../../types';
 import { Thumbnail } from './Thumbnail';
@@ -58,7 +58,7 @@ export function Thumbnails({ assets, isDisabled, onChange }: Props) {
   return (
     <DndContext onDragEnd={handleDragEnd}>
       <SortableContext items={assetsWithIds}>
-        <div className={styles.grid}>
+        <div css={styles.grid}>
           {assetsWithIds.map((asset, index) => (
             <Thumbnail key={asset.id} asset={asset} isDisabled={isDisabled} onDelete={() => handleDelete(index)} />
           ))}

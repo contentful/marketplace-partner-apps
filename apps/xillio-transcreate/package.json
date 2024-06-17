@@ -1,0 +1,55 @@
+{
+    "name": "xillio-transcreate",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "install-ci": "npm ci",
+        "build": "tsc && vite build",
+        "lint": "eslint . --ext .ts --ignore-path ../../.gitignore",
+        "clean": "",
+        "start": "vite",
+        "test": "echo \"TODO: vitest\"",
+        "upload": "contentful-app-scripts upload --bundle-dir ./dist",
+        "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./dist  --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN",
+        "deploy": "contentful-app-scripts upload --ci --bundle-dir ./dist --organization-id ${DEFINITIONS_ORG_ID} --definition-id 5i8iZ60GpkbZQJzutNXit --token ${CONTENTFUL_CMA_TOKEN}",
+        "storybook": "storybook dev -p 6006",
+        "build-storybook": "storybook build"
+    },
+    "dependencies": {
+        "@contentful-lochub/shared": "^0.0.0",
+        "@contentful/app-sdk": "4.22.0",
+        "@contentful/f36-components": "4.45.0",
+        "@contentful/f36-icons": "^4.27.0",
+        "@contentful/f36-tokens": "4.0.2",
+        "@contentful/react-apps-toolkit": "1.2.16",
+        "contentful-management": "10.38.3",
+        "emotion": "10.0.27",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "react-hook-form": "^7.48.2",
+        "zod": "^3.22.4"
+    },
+    "devDependencies": {
+        "@contentful/app-scripts": "1.10.2",
+        "@storybook/addon-essentials": "^7.5.3",
+        "@storybook/addon-interactions": "^7.5.3",
+        "@storybook/addon-links": "^7.5.3",
+        "@storybook/blocks": "^7.5.3",
+        "@storybook/react": "^7.5.3",
+        "@storybook/react-vite": "^7.5.3",
+        "@storybook/testing-library": "^0.2.2",
+        "@testing-library/react": "14.0.0",
+        "@types/node": "18.15.3",
+        "@types/react": "18.2.14",
+        "@types/react-dom": "18.2.6",
+        "@vitejs/plugin-react": "4.0.1",
+        "happy-dom": "9.20.3",
+        "storybook": "^7.5.3",
+        "typescript": "5.1.6",
+        "vite": "4.5.3",
+        "vitest": "0.32.4"
+    },
+    "workspaces": [
+        "types"
+    ]
+}

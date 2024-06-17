@@ -1,6 +1,5 @@
 node_modules
 .envrc
-.env**
 .DS_Store
 build
 dist
@@ -11,3 +10,4 @@ tags
 **/.coverage/**
 .eslintcache
 .tool-versions
+.env.local

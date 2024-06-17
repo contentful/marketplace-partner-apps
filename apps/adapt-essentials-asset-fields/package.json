@@ -1,0 +1,48 @@
+{
+  "name": "adapt-essentials-asset-fields",
+  "private": true,
+  "version": "1.1.2",
+  "type": "module",
+  "scripts": {
+    "install-ci": "npm ci",
+    "dev": "vite",
+    "build": "tsc && vite build && npx --yes ncp doc ./build/doc",
+    "test": "echo 'No tests yet'",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "format": "prettier src/**/*.{ts,tsx} --write",
+    "preview": "vite preview",
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 6RGLVmXYrGaIIRIda1HwAC --token ${CONTENTFUL_CMA_TOKEN}"
+  },
+  "dependencies": {
+    "@contentful/app-sdk": "^4.25.0",
+    "@contentful/f36-components": "^4.66.0",
+    "@contentful/f36-image": "^4.66.0",
+    "@contentful/f36-workbench": "^4.21.0",
+    "@contentful/react-apps-toolkit": "^1.2.15",
+    "@uidotdev/usehooks": "^2.0.1",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.3.1",
+    "react-focus-lock": "^2.12.1",
+    "react-markdown": "^9.0.1",
+    "react-router-dom": "^6.23.1",
+    "remark-gfm": "^4.0.0",
+    "use-local-storage-extended": "^0.1.1"
+  },
+  "devDependencies": {
+    "@contentful/app-scripts": "^1.23.0",
+    "@types/react": "^18.2.79",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "@vitejs/plugin-react-swc": "^3.7.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.7",
+    "happy-dom": "^14.12.0",
+    "type-fest": "^4.20.1",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.13"
+  }
+}
