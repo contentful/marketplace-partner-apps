@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import SelectImage from '../Image Selector/selectImage'
+import SelectImage from '../ImageSelector/selectImage'
 import CreateHotspot from '../Creator/createHotspot'
 import './home.css'
-import { Spinner, Stack } from '@contentful/f36-components'
+import { Notification, Spinner, Stack } from '@contentful/f36-components'
 // import { Spinner } from '@contentful/forma-36-react-components'
 
 /**
@@ -10,7 +10,7 @@ import { Spinner, Stack } from '@contentful/f36-components'
  * @param {sdk} sdk of the current entry.
  * @returns {HTMLDivElement} homePage where the selector page and creator page loads.
  */
-const Usi = ({ sdk }: any) => {
+const IHC = ({ sdk }: any) => {
   const [url, setUrl] = useState({
     url: '',
     contentful: true,
@@ -24,14 +24,42 @@ const Usi = ({ sdk }: any) => {
   const [imageAssets, setImageAssets] = useState<[]>()
  
 
+  function checkImageURL(url:any, callback:any) {
+    var img = new Image();
+  
+    img.onload = function() {
+      callback(true);
+    };
+  
+    img.onerror = function() {
+      callback(false);
+    };
+  
+    img.src = url;
+  }
+
   //This UseEffect is used for the first time if there is already values for that entry
   useEffect(() => {
-    if (sdk?.entry?.fields?.imageUrl?.getValue()) {
-      const url = sdk.entry.fields.imageUrl.getValue()
-      setImageUrl(url)
-      setImageName(sdk.entry.fields.title.getValue())
-      setSelectedImage(sdk.entry.fields.title.getValue())
-      setImageStatus(true)
+    const url = sdk?.entry?.fields?.imageUrl?.getValue()
+    if (url) {
+      checkImageURL(url, function(isValid:boolean) {
+        if (isValid) {
+          console.log('The image URL is valid.');
+          setImageUrl(url)
+          setImageName(sdk.entry.fields.title.getValue())
+          setSelectedImage(sdk.entry.fields.title.getValue())
+          setImageStatus(true)
+        } else {
+          console.log('The image URL is invalid.');
+          Notification.setPlacement('top');
+          Notification.warning(
+            'The "Image URL" is invalid. Please re-upload or choose the existing image.',
+            { duration: 0 },
+          )
+          
+        }
+      });
+     
     }
   }, [])
 
@@ -85,4 +113,4 @@ const Usi = ({ sdk }: any) => {
     </div>
   )
 }
-export default Usi
+export default IHC;
