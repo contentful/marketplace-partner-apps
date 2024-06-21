@@ -8,7 +8,7 @@
     "@contentful/f36-image": "^4.67.0",
     "@contentful/f36-tokens": "4.0.5",
     "@contentful/react-apps-toolkit": "1.2.16",
-    "contentful-management": "11.27.2",
+    "contentful-management": "11.27.3",
     "emotion": "10.0.27",
     "react": "18.3.1",
     "react-dom": "18.3.1",
