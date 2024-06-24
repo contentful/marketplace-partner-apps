@@ -33,7 +33,7 @@
         "@contentful/app-scripts": "1.10.2",
         "@storybook/addon-essentials": "^7.5.3",
         "@storybook/addon-interactions": "^7.5.3",
-        "@storybook/addon-links": "^7.5.3",
+        "@storybook/addon-links": "^8.1.10",
         "@storybook/blocks": "^7.5.3",
         "@storybook/react": "^7.5.3",
         "@storybook/react-vite": "^7.5.3",
