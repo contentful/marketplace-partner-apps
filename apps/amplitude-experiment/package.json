@@ -8,7 +8,7 @@
     "@contentful/f36-tokens": "4.0.4",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@use-it/interval": "^1.0.0",
-    "contentful-management": "10.46.4",
+    "contentful-management": "11.27.3",
     "emotion": "10.0.27",
     "lodash": "^4.17.21",
     "react": "18.2.0",

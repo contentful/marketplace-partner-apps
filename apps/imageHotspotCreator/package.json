@@ -17,7 +17,7 @@
     "axios": "^1.4.0",
     "clone-deep": "^4.0.1",
     "contentful": "^10.8.4",
-    "contentful-management": "11.23.1",
+    "contentful-management": "11.27.3",
     "emotion": "10.0.27",
     "path-browserify": "^1.0.1",
     "react": "18.2.0",
