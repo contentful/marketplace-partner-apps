@@ -1,0 +1,21 @@
+
+  .CountCardMAinRow {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    margin: 24px 0 0 0;
+    flex-direction: row;
+  }
+  .RetantHead{
+    width: 100%;
+    padding: 24px 24px 0 0px;
+    h3{
+      color: #000;
+      font-size: 24px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 32px; 
+      margin: 0px;
+      padding: 0px;
+    }
+  }
