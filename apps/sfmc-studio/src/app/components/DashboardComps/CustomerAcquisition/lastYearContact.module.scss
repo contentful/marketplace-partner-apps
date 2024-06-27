@@ -1,0 +1,46 @@
+
+.NewContactsMain {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 20px;
+  max-width: 100%;
+  .NewContactsInner {
+    border-radius: 6px;
+    max-width: 100%;
+    width: 100%;
+    flex-direction: column;
+    h3 {
+      color: #111b2b;
+      font-size: 20px;
+      font-style: normal;
+      line-height: 34px;
+    }
+    p {
+      color: #111b2b;
+      font-size: 16px;
+      font-style: normal;
+      line-height: 20px;
+      margin-top: 4px;
+      margin-bottom: 24px;
+    }
+    .NewContactsColInner {
+      flex-direction: column;
+      border-right: 1px solid #d5d9dd;
+      padding: 0 40px;
+      h3 {
+        color: #111b2b;
+        font-size: 20px;
+        font-style: normal;
+        line-height: 34px;
+      }
+      p {
+        color: #5a657c;
+        font-size: 14px;
+        font-style: normal;
+        line-height: 24px;
+      }
+    }
+  }
+}
+ 
