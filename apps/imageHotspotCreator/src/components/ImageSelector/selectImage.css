@@ -78,7 +78,6 @@ body {
   justify-content: center;
   flex-wrap: wrap;
    height: 100%;
-  /* width: 200px; */
 }
 
 .Dropzone-page {
@@ -349,7 +348,6 @@ body {
 }
 
 .linkUploadImage > img {
-  /* width: 100%; */
   display: block;
   height: 100%;
 }

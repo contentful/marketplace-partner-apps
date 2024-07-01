@@ -10,13 +10,13 @@ const ValidationPage = ({missedField,fieldMissing}:any) =>{
                 <img src={fieldMissing} alt="Field Missing" style={{ height: "100%" }} />
               </div>
               <div>
-                It seems you are missed some fields in this content type which is required to use this custom application.
+                It seems you have missed some fields in this content type which is required to use this custom application.
                 <div className="missedListContainer">
                   <EntryCard
                     size="small"
                     contentType="Fields Missing"
                     title={`Name of fields : ${missedField.map((x: any) => x.name)}`}
-                    description="Verify the field type should be 'Short text field' in Content model"
+                    description="Verify the field type should be 'Short text field' in the Content model"
                   />
                 </div>
               </div>
