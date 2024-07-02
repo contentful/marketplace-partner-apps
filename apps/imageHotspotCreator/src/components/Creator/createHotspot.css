@@ -41,7 +41,6 @@
     width:100%;
     padding: 10px;
     background-color: #ffffff;
-    /* border: 1px solid rgb(206, 206, 206); */
     align-items: center;
     justify-content: flex-start;
     border-radius: 4px;
@@ -59,7 +58,6 @@
     display: flex;
     color: black;
     height: 10px;
-    /* position: absolute; */
     cursor: pointer;
     align-items: center;
     right: -7px;
@@ -90,7 +88,6 @@
 
 .hotspot_image_logo{
     display: flex;
-    /* border-radius: 5px; */
     height: 15px;
     width: 15px;
     background-color: burlywood;
@@ -116,7 +113,6 @@
     max-height: 100%;
     width: 60%;
     padding: 20px;
-    /* border-right: 1px dotted black; */
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
 
@@ -125,7 +121,6 @@
     justify-content: space-between;
     height: 40px;
     align-items: center;
-    /* border: 1px solid rgb(206, 206, 206); */
     background-color: #ffffff;
     border-radius: 4px;
     padding: 10px;
@@ -142,15 +137,12 @@
     display: flex;
     color: black;
     font-weight: bold;
-    /* width: 78%; */
-    /* height: 100%; */
     align-items: center;
 }
 
 .add_hotspot_button{
     display: flex;
     align-items: center;
-    /* width: 22%; */
     color: black;
     gap: 10px;
     justify-content: center;
@@ -166,7 +158,6 @@
     height: 85%;
     align-items: center;
     justify-content: center;
-    /* width: 100%; */
 }
 
 .editable_image{
@@ -181,7 +172,6 @@
 
 .imageSection{
     width: 45%;
-    /* border: 1px solid gray; */
     display: flex;
     flex-direction: column;
     padding: 10px;
@@ -189,7 +179,6 @@
 }
 
 .imageContainer{
-    /* height: 80%; */
     height: 70%;
     width: 100%;
     display: flex;
@@ -210,7 +199,6 @@
 }
 
 .imageDetailContainer{
-    /* margin-top: 20px; */
     display: flex;
     gap: 20px;
     height: 100%;
@@ -270,7 +258,6 @@ object-fit: contain;
     width: 50%;
     height: 100%;
     border: none;
-    /* background-color: rgb(232 232 232); */
 }
 
 .buttonSection{

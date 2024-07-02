@@ -6,6 +6,8 @@ import CancelIcon from '@mui/icons-material/Cancel'
 import CropIcon from '@mui/icons-material/Crop'
 import cloneDeep from 'clone-deep'
 import { Button, Stack, Menu, Tooltip, Notification } from '@contentful/f36-components'
+import ValidationPage from '../Validation'
+import fieldMissing from "../../Assets/MissingField.svg";
 
 /**
  * CreateHotspot component.
@@ -123,7 +125,8 @@ const CreateHotspot = ({
     const scaledWidth = imageWidth * scale;
     const scaledHeight = imageHeight * scale;
 
-    canvas.width = scaledWidth;
+   if(canvas){
+     canvas.width = scaledWidth;
     canvas.height = scaledHeight;
     canvas.style.cursor = cursorStyle;
     context.drawImage(image, 0, 0, scaledWidth, scaledHeight);
@@ -131,57 +134,54 @@ const CreateHotspot = ({
 
     // Update hotspot arrays based on the new canvas size
     if (sdk.entry.fields.hotspots.getValue()?.hotspots) {
+
       setRectArray(sdk.entry.fields.hotspots.getValue().hotspots)
       setListArray(sdk.entry.fields.hotspots.getValue().hotspots)
+
     } else {
+
       sdk.entry.fields.hotspots.setValue({
         hotspots: [],
       })
+
       setRectArray(sdk?.entry?.fields?.hotspots?.getValue().hotspots)
       setListArray(sdk?.entry?.fields?.hotspots?.getValue().hotspots)
     }
+  }
+
+
   };
+
+  const [missedField, setMissedField] = useState([]);
+
+  useEffect(() => {
+
+    const requiredNames = ["Title", "Image URL", "Hotspots"];
+    const missedObject: any = cloneDeep(missedField);
+
+    // Check if required names exist and create objects accordingly
+    for (const name of requiredNames) {
+      const found = sdk.contentType.fields.find((obj: any) => obj.name === name); // Check if object with name exists
+      if (!found) {
+        missedObject.push({ name }); // Add missing object with just the name property
+      }
+    }
+    if (missedObject.length > 0) {
+      setMissedField(missedObject);
+    }
+
+  }, [])
 
   //Initial use effect for drawing the canvas and image in the image container
   useEffect(() => {
     sdk?.entry?.fields?.imageUrl?.setValue(imageUrl)
-    const container:HTMLDivElement|any = containerRef.current
-    const canvas:HTMLCanvasElement | any = canvasRef.current
-    const context = canvas?.getContext('2d')
     const image:HTMLImageElement|any = imageRef.current
-    image.onload = () => {
-      // const containerWidth = container?.offsetWidth
-      // const containerHeight = container?.offsetHeight
-
-      // const imageWidth = image?.width
-      // const imageHeight = image?.height
-
-      // const widthRatio = containerWidth / imageWidth
-      // const heightRatio = containerHeight / imageHeight
-
-      // const scale = Math.min(widthRatio, heightRatio)
-
-      // const scaledWidth = imageWidth * scale
-      // const scaledHeight = imageHeight * scale
-
-      // canvas.width = scaledWidth
-      // canvas.height = scaledHeight
-      // canvas.style.cursor = cursorStyle;
-      // context.drawImage(image, 0, 0, scaledWidth, scaledHeight)
-      // setCanvas(canvas)
-
-      // if (sdk.entry.fields.hotspots.getValue()?.hotspots) {
-      //   setRectArray(sdk.entry.fields.hotspots.getValue().hotspots)
-      //   setListArray(sdk.entry.fields.hotspots.getValue().hotspots)
-      // } else {
-      //   sdk.entry.fields.hotspots.setValue({
-      //     hotspots: [],
-      //   })
-      //   setRectArray(sdk?.entry?.fields?.hotspots?.getValue().hotspots)
-      //   setListArray(sdk?.entry?.fields?.hotspots?.getValue().hotspots)
-      // }
-      handleResize();
+    if(image){
+      image.onload = () => {
+        handleResize();
+      }
     }
+
   }, [])
 
   useEffect(() => {
@@ -194,11 +194,14 @@ const CreateHotspot = ({
 
   useEffect(()=>{
     const canvas:HTMLCanvasElement | any = canvasRef.current
-    canvas.style.cursor = cursorStyle;
-    canvas.style.border = '0px';
-    if(cursorStyle==="crosshair"){
-      canvas.style.border = '3px dotted red';
+    if(canvas){
+      canvas.style.cursor = cursorStyle;
+      canvas.style.border = '0px';
+      if(cursorStyle==="crosshair"){
+        canvas.style.border = '3px dotted #cdcdcd';
+      }
     }
+   
   },[cursorStyle])
 
   /**
@@ -368,31 +371,6 @@ const CreateHotspot = ({
    */
   const deleteBoundingBox = (index: number, e: any) => {
     e.stopPropagation()
-    // if(showDetail){
-    //   e.stopPropagation()
-    //   Notification.error('You are creating or editing a hotspot', { title: 'Oops!' ,duration:2500})
-    // }
-    // else{
-    //   setRect({
-    //     x: 0,
-    //     y: 0,
-    //     width: 0,
-    //     height: 0,
-    //     name: 'Boundingbox',
-    //     borderColor: `#ffffff`,
-    //     hotspotX: 0,
-    //     hotspotY: 0,
-    //   })
-    //   let tempArr = cloneDeep(rectArray)
-    //   tempArr.splice(index, 1)
-    //   setSelectedBoundingBoxIndex(null)
-    //   setShowDetail(false)
-    //   setEditing(false)
-    //   setRectArray(tempArr)
-    //   setListArray(tempArr)
-    //   sdk.entry.fields.imageUrl.setValue(imageUrl)
-    //   sdk.entry.fields.hotspots.setValue({ hotspots: tempArr })
-    // }
     if(index===selectedBoundingBoxIndex){
       e.stopPropagation()
       Notification.error('You are editing this hotspot', { title: 'Oops!' ,duration:2500})
@@ -523,13 +501,11 @@ const CreateHotspot = ({
       ||(data?.x < 0 || data?.x > 100 - data.width) 
       || (data.hotspotY < data.y || (data.hotspotY > data.y + data.height))
       || (data.hotspotX < data.x || (data.hotspotX > data.x + data.width))){
-        console.log("false")
         return false;
       }
       return true;
      }
      else if(data.name.length===0){
-      console.log(data.name.length,true)
       return false;
      }
      else{
@@ -642,7 +618,8 @@ const CreateHotspot = ({
   }, [selectedBoundingBoxIndex])
 
   return (
-    <div className="createContainer">
+    <>
+     {missedField.length===0 ? <div className="createContainer">
       <div className="hotspotlist_container">
         <div className="hotspotlist_title">Existing Hotspots</div>
 
@@ -910,8 +887,9 @@ const CreateHotspot = ({
           </div>
         )}
       </div>
-    </div>
+    </div> : <ValidationPage missedField={missedField} fieldMissing={fieldMissing}/>}
+    </>
+   
   )
 }
 export default CreateHotspot
-
