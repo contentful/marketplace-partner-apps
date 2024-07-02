@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.2.0](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.14...thrillworks-flex-fields-app-v1.2.0) (2024-07-02)
+
+
+### Features
+
+* Allow multi-reference field for condition and include Select all option for hide field ([#2126](https://github.com/contentful/marketplace-partner-apps/issues/2126)) ([0fc46d9](https://github.com/contentful/marketplace-partner-apps/commit/0fc46d9346a41e2bca724147071d73ada9c19dac))
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/default-field-editors from 1.6.27 to 1.6.50 in /apps/flexfields ([#2049](https://github.com/contentful/marketplace-partner-apps/issues/2049)) ([e6157b7](https://github.com/contentful/marketplace-partner-apps/commit/e6157b73b46124a452757d28ef716cecbd268002))
+* **deps:** bump @contentful/default-field-editors from 1.6.50 to 1.6.54 ([#2176](https://github.com/contentful/marketplace-partner-apps/issues/2176)) ([ae7115f](https://github.com/contentful/marketplace-partner-apps/commit/ae7115fc29477b7580db7fdef9cb8a4d05716853))
+* **deps:** bump @contentful/f36-multiselect from 4.22.0 to 4.23.1 ([#2179](https://github.com/contentful/marketplace-partner-apps/issues/2179)) ([dee1edf](https://github.com/contentful/marketplace-partner-apps/commit/dee1edf055b1d34f182a91801cab35144afcb272))
+* **deps:** bump braces from 3.0.2 to 3.0.3 in /apps/flexfields ([#2066](https://github.com/contentful/marketplace-partner-apps/issues/2066)) ([e05e873](https://github.com/contentful/marketplace-partner-apps/commit/e05e8739c4748704fedf642f52159c516e4e3b52))
+* **deps:** bump contentful-management from 11.23.1 to 11.27.0 in /apps/flexfields ([#2096](https://github.com/contentful/marketplace-partner-apps/issues/2096)) ([9b8fd5e](https://github.com/contentful/marketplace-partner-apps/commit/9b8fd5e98a176ae99a3e3402f0f5ebd0208ab4a5))
+
 ## [1.1.14](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.13...thrillworks-flex-fields-app-v1.1.14) (2024-06-07)
 
 

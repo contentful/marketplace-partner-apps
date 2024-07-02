@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.18](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.17...surfer-contentful-app-v1.0.18) (2024-07-02)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.66.0 to 4.67.0 in /apps/surfer ([#2079](https://github.com/contentful/marketplace-partner-apps/issues/2079)) ([eba0aed](https://github.com/contentful/marketplace-partner-apps/commit/eba0aed0535784cd14794dfbdd848fccc1c68c4b))
+* **deps:** Bump @contentful/f36-components from 4.67.0 to 4.67.1 in /apps/surfer ([#2210](https://github.com/contentful/marketplace-partner-apps/issues/2210)) ([3e6ac59](https://github.com/contentful/marketplace-partner-apps/commit/3e6ac592a0e125f028d74f4f9b7ed2017f2c993d))
+* **deps:** bump @contentful/rich-text-html-renderer from 16.5.2 to 16.6.1 in /apps/surfer ([#2199](https://github.com/contentful/marketplace-partner-apps/issues/2199)) ([d8f1c66](https://github.com/contentful/marketplace-partner-apps/commit/d8f1c6648034e93bdad19cef38a2f30b8187001f))
+* **deps:** bump braces from 3.0.2 to 3.0.3 in /apps/surfer ([#2059](https://github.com/contentful/marketplace-partner-apps/issues/2059)) ([7e0f154](https://github.com/contentful/marketplace-partner-apps/commit/7e0f1540d203bb259a9ed2baa4252cf7a901755f))
+* **deps:** bump contentful-management from 11.27.0 to 11.27.1 in /apps/surfer ([#2111](https://github.com/contentful/marketplace-partner-apps/issues/2111)) ([85cc481](https://github.com/contentful/marketplace-partner-apps/commit/85cc481ee7eeec6d32c1e8dfa5cbe51afe715159))
+* **deps:** bump contentful-management from 11.27.1 to 11.27.2 in /apps/surfer ([#2145](https://github.com/contentful/marketplace-partner-apps/issues/2145)) ([c2c770d](https://github.com/contentful/marketplace-partner-apps/commit/c2c770d7db1734ce96085b2b199f864dab09cc7b))
+* **deps:** bump contentful-management from 11.27.2 to 11.27.3 in /apps/surfer ([#2159](https://github.com/contentful/marketplace-partner-apps/issues/2159)) ([216675e](https://github.com/contentful/marketplace-partner-apps/commit/216675ed1c4fdcfb0f2ae31c4569f23c4c607fb2))
+* **deps:** bump contentful-management from 11.27.3 to 11.27.4 in /apps/surfer ([#2201](https://github.com/contentful/marketplace-partner-apps/issues/2201)) ([b17e69c](https://github.com/contentful/marketplace-partner-apps/commit/b17e69c2ce08380874caf32c7bb355bebfa96d92))
+
 ## [1.0.17](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.16...surfer-contentful-app-v1.0.17) (2024-06-07)
 
 

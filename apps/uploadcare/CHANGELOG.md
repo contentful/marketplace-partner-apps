@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.17](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.16...uploadcare-contentful-app-v1.0.17) (2024-07-02)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.66.0 to 4.67.0 in /apps/uploadcare ([#2058](https://github.com/contentful/marketplace-partner-apps/issues/2058)) ([be3d89a](https://github.com/contentful/marketplace-partner-apps/commit/be3d89a11e018ec94a20277419c9eadcf6ddc070))
+* **deps:** Bump @contentful/f36-components from 4.67.0 to 4.67.1 in /apps/uploadcare ([#2222](https://github.com/contentful/marketplace-partner-apps/issues/2222)) ([4d546d5](https://github.com/contentful/marketplace-partner-apps/commit/4d546d583df5feba492210c3360db029663ac4af))
+* **deps:** bump contentful-management from 11.27.0 to 11.27.1 in /apps/uploadcare ([#2112](https://github.com/contentful/marketplace-partner-apps/issues/2112)) ([5b7e20b](https://github.com/contentful/marketplace-partner-apps/commit/5b7e20bd0ecbb2f63e669c96a81841576ff8a001))
+* **deps:** bump contentful-management from 11.27.1 to 11.27.2 in /apps/uploadcare ([#2142](https://github.com/contentful/marketplace-partner-apps/issues/2142)) ([625b29f](https://github.com/contentful/marketplace-partner-apps/commit/625b29fb02c708f215dda48d025a99561e27646a))
+* **deps:** bump contentful-management from 11.27.2 to 11.27.3 in /apps/uploadcare ([#2152](https://github.com/contentful/marketplace-partner-apps/issues/2152)) ([de53987](https://github.com/contentful/marketplace-partner-apps/commit/de539873285286f8ffb78554b171598a3e399653))
+* **deps:** bump contentful-management from 11.27.3 to 11.27.4 in /apps/uploadcare ([#2205](https://github.com/contentful/marketplace-partner-apps/issues/2205)) ([729124e](https://github.com/contentful/marketplace-partner-apps/commit/729124ee635d3d65719760878655b03ee8aeb3b9))
+
 ## [1.0.16](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.15...uploadcare-contentful-app-v1.0.16) (2024-06-07)
 
 

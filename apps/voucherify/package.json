@@ -1,6 +1,6 @@
 {
   "name": "voucherify-contentful-app",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "private": true,
   "scripts": {
     "start": "cross-env BROWSER=none react-scripts start",
