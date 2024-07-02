@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.1](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.0.0...shopify-sku-v2.0.1) (2024-07-02)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/ecommerce-app-base from 4.0.6 to 4.0.7 in /apps/shopify ([#2048](https://github.com/contentful/marketplace-partner-apps/issues/2048)) ([1e638d3](https://github.com/contentful/marketplace-partner-apps/commit/1e638d3d3b358ecb1a5783c67128a181c5407e1b))
+* **deps:** bump @contentful/ecommerce-app-base from 4.0.7 to 4.0.9 in /apps/shopify ([#2087](https://github.com/contentful/marketplace-partner-apps/issues/2087)) ([e559e23](https://github.com/contentful/marketplace-partner-apps/commit/e559e239b25db4042f339ce9ef10ea17bf274900))
+* **deps:** bump @contentful/f36-components from 4.66.0 to 4.67.0 in /apps/shopify ([#2073](https://github.com/contentful/marketplace-partner-apps/issues/2073)) ([0b13865](https://github.com/contentful/marketplace-partner-apps/commit/0b13865163646f26ad20571edd562af6e401ce19))
+* **deps:** Bump @contentful/f36-components from 4.67.0 to 4.67.1 in /apps/shopify ([#2218](https://github.com/contentful/marketplace-partner-apps/issues/2218)) ([d0fc065](https://github.com/contentful/marketplace-partner-apps/commit/d0fc065570e560f0bb887f985eeb8553052c799d))
+* **deps:** bump braces from 3.0.2 to 3.0.3 in /apps/shopify ([#2060](https://github.com/contentful/marketplace-partner-apps/issues/2060)) ([44d5ba8](https://github.com/contentful/marketplace-partner-apps/commit/44d5ba88a8712022ceb7966cdf00b2a875d6110b))
+
 ## [2.0.0](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v1.1.15...shopify-sku-v2.0.0) (2024-06-07)
 
 
