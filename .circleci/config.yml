@@ -1,0 +1,35 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.1.0
+
+jobs:
+  apps-checks:
+    docker:
+      - image: cimg/base:stable
+    resource_class: medium+
+    steps:
+      - checkout
+      - node/install
+      - run:
+          name: Install root dependencies
+          command: npm install
+      - run:
+          name: Install apps dependencies
+          command: npm run install-apps
+      - run:
+          name: Build apps
+          command: npm run build-apps
+      - run:
+          name: Test apps
+          command: npm run test-apps
+
+workflows:
+  version: 2
+  apps-ci-pipeline:
+    jobs:
+      - apps-checks:
+          filters:
+            branches:
+              ignore:
+                - main
