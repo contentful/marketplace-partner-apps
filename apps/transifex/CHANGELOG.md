@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.2.3](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.2.2...transifex-contentful-app-v1.2.3) (2024-07-02)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.65.8 to 4.67.0 in /apps/transifex ([#2057](https://github.com/contentful/marketplace-partner-apps/issues/2057)) ([1efc72a](https://github.com/contentful/marketplace-partner-apps/commit/1efc72a2f93a736c2a751708575676989f7fa281))
+* **deps:** Bump @contentful/f36-components from 4.67.0 to 4.67.1 in /apps/transifex ([#2221](https://github.com/contentful/marketplace-partner-apps/issues/2221)) ([97e4e65](https://github.com/contentful/marketplace-partner-apps/commit/97e4e6520ef544ee2a096d57687c484aa0d9f243))
+* **deps:** bump contentful-management from 11.27.0 to 11.27.1 in /apps/transifex ([#2117](https://github.com/contentful/marketplace-partner-apps/issues/2117)) ([3011029](https://github.com/contentful/marketplace-partner-apps/commit/301102975d3ece11dc556cddcf4a3f6e77a0c047))
+* **deps:** bump contentful-management from 11.27.1 to 11.27.3 in /apps/transifex ([#2154](https://github.com/contentful/marketplace-partner-apps/issues/2154)) ([37cd9b3](https://github.com/contentful/marketplace-partner-apps/commit/37cd9b3dfd3f8db24738fa02cbfb3dd0854ff8b2))
+* **deps:** bump contentful-management from 11.27.3 to 11.27.4 in /apps/transifex ([#2204](https://github.com/contentful/marketplace-partner-apps/issues/2204)) ([16e5659](https://github.com/contentful/marketplace-partner-apps/commit/16e56591c66e8fa1ef68d7c1c7f916d6ee9444b1))
+
 ## [1.2.2](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.2.1...transifex-contentful-app-v1.2.2) (2024-06-07)
 
 
