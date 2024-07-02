@@ -78,7 +78,6 @@ body {
   justify-content: center;
   flex-wrap: wrap;
    height: 100%;
-  /* width: 200px; */
 }
 
 .Dropzone-page {
@@ -349,7 +348,6 @@ body {
 }
 
 .linkUploadImage > img {
-  width: 100%;
   display: block;
   height: 100%;
 }
@@ -359,5 +357,27 @@ body {
   gap: 10px;
 }
 
+.missingFieldContainer{
+  height: 100% !important;
+  width: 100%;
+  padding: 0px !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center !important;
+  justify-content: center;
+}
 
+.missingFieldImageContainer{
+  display: flex;
+  height: 50%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+.missedListContainer{
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 

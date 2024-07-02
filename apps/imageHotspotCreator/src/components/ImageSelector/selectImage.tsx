@@ -1,13 +1,12 @@
 /* eslint-disable jsx-a11y/role-supports-aria-props */
-import { useState } from "react";
-import MagicDropzone from "react-magic-dropzone";
-import "./selectImage.css";
-import { Button, Select, TextInput } from "@contentful/f36-components";
-import cloneDeep from "clone-deep";
-import { Stack } from "@mui/material";
-import { Spinner } from "@contentful/forma-36-react-components";
-import { createClient } from "contentful-management";
 import React from "react";
+import { useEffect, useState } from "react";
+import MagicDropzone from "react-magic-dropzone";
+import { Button, EntryCard, Select, TextInput } from "@contentful/f36-components";
+import cloneDeep from "clone-deep";
+import { createClient } from "contentful-management";
+import fieldMissing from "../../Assets/MissingField.svg";
+import ValidationPage from "../Validation";
 
 const SelectImage = ({
   setImageUrl,
@@ -24,7 +23,7 @@ const SelectImage = ({
 }: any) => {
   //state Declaratios
   const [imageFile, setImageFile] = useState<any>();
-  const [uploadYourImage, setUploadYourImage] = useState<any>(true);
+  const [uploadYourImage, setUploadYourImage] = useState(true);
   const [uploadAsLink, setUploadAsLink] = useState("");
   const [uploadExisting, setUploadExisting] = useState("");
 
@@ -32,6 +31,27 @@ const SelectImage = ({
 
   const [showUrlPreview, setShowUrlPreview] = useState(false);
   const [urlInput, setUrlInput] = useState("");
+  const [missedField, setMissedField] = useState([]);
+  const [defaultLocale, setDefaultLocale] = useState("en-US");
+
+  useEffect(() => {
+
+    const requiredNames = ["Title", "Image URL", "Hotspots"];
+    const missedObject: any = cloneDeep(missedField);
+
+    // Check if required names exist and create objects accordingly
+    for (const name of requiredNames) {
+      const found = sdk.contentType.fields.find((obj: any) => obj.name === name); // Check if object with name exists
+      if (!found) {
+        missedObject.push({ name }); // Add missing object with just the name property
+      }
+    }
+    if (missedObject.length > 0) {
+      setMissedField(missedObject);
+    }
+
+    setDefaultLocale(sdk?.locales?.default);
+  }, [])
 
   /**This function is for getting he url of image
    * @function getImageUrl
@@ -42,14 +62,14 @@ const SelectImage = ({
     await sdk.space.getAsset(id).then((asset: any) => {
       if (status) {
         setUrl({
-          url: "http:" + asset?.fields?.file["en-US"]?.url,
+          url: "http:" + asset?.fields?.file[defaultLocale]?.url,
           contentful: true,
         });
       } else {
-        setImageUrl("http:" + asset?.fields?.file["en-US"]?.url);
+        setImageUrl("http:" + asset?.fields?.file[defaultLocale]?.url);
         setImageStatus(true);
       }
-      setImageName(asset?.fields?.title["en-US"]);
+      setImageName(asset?.fields?.title[defaultLocale]);
     });
   };
 
@@ -98,15 +118,6 @@ const SelectImage = ({
     }
   };
 
-  const goToCreateUsiAsLink = async () => {
-    const tempUrl = cloneDeep(url);
-    if (!tempUrl.contentful) {
-      sdk.entry.fields.title.setValue("Image");
-      setImageUrl(tempUrl.url);
-      setImageStatus(true);
-    }
-  };
-
   /**
    * Uploading a new image to contentful assets
    * @function uploadImage
@@ -114,7 +125,6 @@ const SelectImage = ({
    * @param {Blob} file - The blob file of the Image
    */
   const uploadImage = async (bufferData: any, file: any) => {
-    console.log(showUrlPreview)
     const cma = createClient({ apiAdapter: sdk.cmaAdapter });
 
     const space = await cma.getSpace(sdk.ids.space);
@@ -126,13 +136,13 @@ const SelectImage = ({
         environment.createAssetFromFiles({
           fields: {
             title: {
-              "en-US": file?.name,
+              [defaultLocale]: file?.name,
             },
             description: {
-              "en-US": file?.type,
+              [defaultLocale]: file?.type,
             },
             file: {
-              "en-US": {
+              [defaultLocale]: {
                 contentType: file?.type,
                 fileName: file?.name,
                 file: bufferData,
@@ -141,21 +151,15 @@ const SelectImage = ({
           },
         })
       )
-      .then((asset: any) => asset.processForAllLocales())
+      .then((asset: any) =>  asset.processForAllLocales())
       .then((asset: any) => {
         getImageUrl(asset?.sys?.id, false);
+
         asset.publish();
       })
       .catch(console.error);
   };
 
-  // const handleRadioChange = (e) => {
-  //   setSelectedOption(e.target.value);
-  // };
-
-  const handleUrlInputChange = (e:any) => {
-    setUrlInput(e.target.value);
-  };
 
   const isValidUrl = (url: string) => {
     try {
@@ -166,23 +170,12 @@ const SelectImage = ({
     }
   };
 
-  const handleUrlProceed = async () => {
-    if (isValidUrl(urlInput)) {
-      const tempUrl = { url: urlInput, contentful: false };
-      setUrl(tempUrl);
-      setShowUrlPreview(true);
-      goToCreateUsiAsLink();
-    } else {
-      console.error("Invalid URL");
-    }
-  };
-
   return (
     <div
       className="selectContainer radioSectionContainer"
       style={{ height: !imageAssets ? "100%" : "" }}
     >
-      <div>
+      {missedField.length === 0 && <div>
         <div>
           {uploadYourImage && (
             <div className="uploadSection">
@@ -205,27 +198,27 @@ const SelectImage = ({
                 </div>
               </MagicDropzone>
               <div className="cancelProceedButtons">
-              {imageFile ? (
-                <div className="buttonContainer">
-                  <Button
-                    variant="negative"
-                    size="small"
-                    onClick={() => setImageFile(null)}
-                  >
-                    clear
-                  </Button>
-                  <Button
-                    variant="primary"
-                    testId="ProceedButton"
-                    isDisabled={url.url ? false : true}
-                    onClick={() => goToCreateUsi()}
-                  >
-                    Proceed
-                  </Button>
-                </div>
-              ) : (
-                " "
-              )}
+                {imageFile ? (
+                  <div className="buttonContainer">
+                    <Button
+                      variant="negative"
+                      size="small"
+                      onClick={() => setImageFile(null)}
+                    >
+                      clear
+                    </Button>
+                    <Button
+                      variant="primary"
+                      testId="ProceedButton"
+                      isDisabled={url.url ? false : true}
+                      onClick={() => goToCreateUsi()}
+                    >
+                      Proceed
+                    </Button>
+                  </div>
+                ) : (
+                  " "
+                )}
               </div>
             </div>
           )}
@@ -244,7 +237,7 @@ const SelectImage = ({
                       )}
                     </div>
                     <div>
-                      <span style={{fontWeight:"bold",paddingRight:"10px"}}>Image URL  </span>
+                      <span style={{ fontWeight: "bold", paddingRight: "10px" }}>Image URL  </span>
                       <TextInput
                         type="url"
                         id="homepage"
@@ -268,7 +261,7 @@ const SelectImage = ({
                       />
                     </div>
                     <div className="cancelProceedButtons">
-                    {urlInput && <div className="buttonContainer">
+                      {urlInput && <div className="buttonContainer">
                         <Button
                           variant="negative"
                           size="small"
@@ -278,7 +271,7 @@ const SelectImage = ({
                           }}
                         >
                           Clear
-                        </Button>                                         
+                        </Button>
                         <Button
                           variant="primary"
                           onClick={() => {
@@ -292,7 +285,7 @@ const SelectImage = ({
                         >
                           Proceed
                         </Button>
-                    </div>}
+                      </div>}
                     </div>
                   </div>
                 </div>
@@ -315,7 +308,7 @@ const SelectImage = ({
                       : "No Existing Images"}
                   </div>
                   <div className="existingImageContainer">
-                    {(imageAssets || []).map((image:any, index:any) => (
+                    {(imageAssets || []).map((image: any, index: any) => (
                       <div key={index} className="radio-img">
                         <input
                           type="radio"
@@ -331,7 +324,7 @@ const SelectImage = ({
                           <div
                             className="image"
                             style={{
-                              backgroundImage: `url(${image?.fields?.file["en-US"]?.url})`,
+                              backgroundImage: `url(${image?.fields?.file[defaultLocale]?.url})`,
                             }}
                             onClick={() => {
                               setSelectedImage(image?.sys?.id);
@@ -350,8 +343,8 @@ const SelectImage = ({
                     {selectedImage ? (
                       <div className="linkUploadImage">
                         <img
-                          src={imageInExisting?.fields?.file["en-US"]?.url}
-                          alt={imageInExisting?.fields?.title["en-US"]}
+                          src={imageInExisting?.fields?.file[defaultLocale]?.url}
+                          alt={imageInExisting?.fields?.title[defaultLocale]}
                         />
                       </div>
                     ) : (
@@ -359,7 +352,7 @@ const SelectImage = ({
                     )}
                   </div>
                   <div className="cancelProceedButtons">
-                  {selectedImage && <div className="buttonContainer">
+                    {selectedImage && <div className="buttonContainer">
                       <Button
                         variant="negative"
                         testId="ClearButton"
@@ -376,16 +369,16 @@ const SelectImage = ({
                       >
                         Proceed
                       </Button>
-                  </div>}
+                    </div>}
                   </div>
                 </div>
               </div>
             </div>
-          )}         
+          )}
         </div>
-      </div>
+      </div>}
 
-      <div className="radioButtonsSection">
+      {missedField.length === 0 && <div className="radioButtonsSection">
         <div className="radioButtonsAlignContainer">
           <div>
             <input
@@ -433,7 +426,9 @@ const SelectImage = ({
             <label htmlFor="javascript">Select from Existing</label>
           </div>
         </div>
-      </div>
+      </div>}
+      {missedField.length > 0 &&
+        <ValidationPage missedField={missedField} fieldMissing={fieldMissing}/>}
     </div>
   );
 };
