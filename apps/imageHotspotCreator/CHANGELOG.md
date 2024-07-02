@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.18](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.17...image-hotspot-creator-v1.0.18) (2024-07-02)
+
+
+### Bug Fixes
+
+* **deps:** bump braces from 3.0.2 to 3.0.3 in /apps/imageHotspotCreator ([#2064](https://github.com/contentful/marketplace-partner-apps/issues/2064)) ([eb083f4](https://github.com/contentful/marketplace-partner-apps/commit/eb083f4843cfe849a24722cc5fd73cbda5ef185c))
+* **deps:** bump contentful from 10.8.4 to 10.12.3 ([#2188](https://github.com/contentful/marketplace-partner-apps/issues/2188)) ([8fb2f00](https://github.com/contentful/marketplace-partner-apps/commit/8fb2f0067f8322438d105f454452e0ad90ce329f))
+* Removed Hardcoded Locales and Improved Error Handlings ([#2125](https://github.com/contentful/marketplace-partner-apps/issues/2125)) ([0c10024](https://github.com/contentful/marketplace-partner-apps/commit/0c10024d57b73548a5e6173dd205edd0485ce4f7))
+
 ## [1.0.17](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.16...image-hotspot-creator-v1.0.17) (2024-05-29)
 
 
