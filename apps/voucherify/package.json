@@ -12,7 +12,7 @@
     "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id 5kadpWSYKnUZrW8ys6uvkx --token ${TEST_CMA_TOKEN}"
   },
   "dependencies": {
-    "@contentful/app-sdk": "4.25.0",
+    "@contentful/app-sdk": "4.26.3",
     "@contentful/f36-components": "4.67.1",
     "@contentful/f36-icons": "4.28.2",
     "@contentful/react-apps-toolkit": "1.2.16",
