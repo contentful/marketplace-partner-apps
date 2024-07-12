@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary: 255 0 99;
+    --primary-dark: 210 0 70;
+    --secondary: 255 102 108;
+    --gray-200: 228 228 231;
+    --gray-300: 209 209 214;
+    --gray-600: 82 82 92;
+    --green: #088539;
+    --green-dark: #2e6b2d;
+    --tw-border-opacity: 1;
+  }
+}
+
+/* Photo Grid */
+.photos {
+  .none {
+    @apply flex flex-col items-center justify-center space-y-2 border-primary;
+    // border-color: var(--figma-color-border);
+  }
+}
+
+.image-button {
+  @apply relative inline-block border-[3px] rounded-lg transition-transform duration-300 ease-in-out hover:scale-[0.98];
+}
+
+.remove-overlay {
+  @apply font-semibold text-white flex items-center justify-center transition-opacity absolute inset-0 group-hover:opacity-100 opacity-0 bg-black/25 h-full w-full rounded;
+}
+
+.selected-container {
+  @apply w-full fixed bottom-0 right-0 h-56 flex justify-between bg-white border-t border-gray-200 transition-transform duration-300 ease-in-out transform;
+  &::active ~ .remove {
+    @apply opacity-0;
+  }
+}
+
+.checkmark {
+  @apply absolute bottom-2 right-2 bg-primary h-7 w-7 p-1 rounded-full pointer-events-none flex items-center justify-center text-white;
+}
+
+.remove {
+  @apply z-10 text-white border-[3px] border-white absolute -top-2.5 -right-2.5 h-8 w-8 flex justify-center items-center bg-primary rounded-full p-1 hover:bg-primary-dark transition-colors;
+}
+
+/* Photo Grid */
+.image-grid {
+  @apply gap-4 columns-4;
+
+  .image {
+    @apply w-full aspect-video mb-4 text-gray-500;
+
+    img {
+      /* @apply rounded-md; */
+      @apply w-screen;
+    }
+
+    .photo-name {
+      @apply pt-1 text-gray-800;
+    }
+
+    .versions {
+      @apply absolute top-2 right-2 bg-gray-900/80 px-2.5 py-1 rounded-md font-bold cursor-pointer text-gray-300 flex gap-1.5 items-center;
+      &:hover {
+        @apply bg-gray-900/90;
+      }
+    }
+  }
+}
