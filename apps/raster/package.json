@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "install-ci": "pnpm install --frozen-lockfile",
+    "install-ci": "npm ci",
     "create-app-definition": "contentful-app-scripts create-app-definition",
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./dist --organization-id ${DEFINITIONS_ORG_ID} --definition-id 41ISJmeSvLGsYT60RfIqyd --token ${CONTENTFUL_CMA_TOKEN}"
   },
