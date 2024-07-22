@@ -8,7 +8,7 @@ updates:
     schedule:
       interval: daily
       time: '03:00'
-      timezone: UTC
+      timezone: Etc/UTC
     open-pull-requests-limit: 3
     commit-message:
       prefix: 'fix'
@@ -23,7 +23,7 @@ updates:
     schedule:
       interval: daily
       time: '03:00'
-      timezone: UTC
+      timezone: Etc/UTC
     open-pull-requests-limit: 3
     commit-message:
       prefix: 'fix'
@@ -38,7 +38,7 @@ updates:
     schedule:
       interval: daily
       time: '03:00'
-      timezone: UTC
+      timezone: Etc/UTC
     open-pull-requests-limit: 3
     commit-message:
       prefix: 'fix'
@@ -53,7 +53,7 @@ updates:
     schedule:
       interval: daily
       time: '03:00'
-      timezone: UTC
+      timezone: Etc/UTC
     open-pull-requests-limit: 3
     commit-message:
       prefix: 'fix'
@@ -68,7 +68,7 @@ updates:
     schedule:
       interval: daily
       time: '03:00'
-      timezone: UTC
+      timezone: Etc/UTC
     open-pull-requests-limit: 3
     commit-message:
       prefix: 'fix'
@@ -83,7 +83,7 @@ updates:
     schedule:
       interval: daily
       time: '03:00'
-      timezone: UTC
+      timezone: Etc/UTC
     open-pull-requests-limit: 3
     commit-message:
       prefix: 'fix'
@@ -98,7 +98,7 @@ updates:
     schedule:
       interval: daily
       time: '03:00'
-      timezone: UTC
+      timezone: Etc/UTC
     open-pull-requests-limit: 3
     commit-message:
       prefix: 'fix'
@@ -114,7 +114,7 @@ updates:
     schedule:
       interval: daily
       time: '03:00'
-      timezone: UTC
+      timezone: Etc/UTC
     open-pull-requests-limit: 3
     commit-message:
       prefix: 'fix'
@@ -129,7 +129,7 @@ updates:
     schedule:
       interval: daily
       time: '03:00'
-      timezone: UTC
+      timezone: Etc/UTC
     open-pull-requests-limit: 3
     commit-message:
       prefix: 'fix'
@@ -144,7 +144,7 @@ updates:
     schedule:
       interval: daily
       time: '03:00'
-      timezone: UTC
+      timezone: Etc/UTC
     open-pull-requests-limit: 3
     commit-message:
       prefix: 'fix'
@@ -159,7 +159,7 @@ updates:
     schedule:
       interval: daily
       time: '03:00'
-      timezone: UTC
+      timezone: Etc/UTC
     open-pull-requests-limit: 3
     commit-message:
       prefix: 'fix'
@@ -174,7 +174,7 @@ updates:
     schedule:
       interval: daily
       time: '03:00'
-      timezone: UTC
+      timezone: Etc/UTC
     open-pull-requests-limit: 3
     commit-message:
       prefix: 'fix'
@@ -189,7 +189,7 @@ updates:
     schedule:
       interval: daily
       time: '03:00'
-      timezone: UTC
+      timezone: Etc/UTC
     open-pull-requests-limit: 3
     commit-message:
       prefix: 'fix'
@@ -204,7 +204,7 @@ updates:
     schedule:
       interval: daily
       time: '03:00'
-      timezone: UTC
+      timezone: Etc/UTC
     open-pull-requests-limit: 3
     commit-message:
       prefix: 'fix'
@@ -222,7 +222,7 @@ updates:
     schedule:
       interval: daily
       time: '03:00'
-      timezone: UTC
+      timezone: Etc/UTC
     open-pull-requests-limit: 3
     commit-message:
       prefix: 'fix'
@@ -237,7 +237,7 @@ updates:
     schedule:
       interval: daily
       time: '03:00'
-      timezone: UTC
+      timezone: Etc/UTC
     open-pull-requests-limit: 3
     commit-message:
       prefix: 'fix'
@@ -252,7 +252,7 @@ updates:
     schedule:
       interval: daily
       time: '03:00'
-      timezone: UTC
+      timezone: Etc/UTC
     open-pull-requests-limit: 3
     commit-message:
       prefix: 'fix'
