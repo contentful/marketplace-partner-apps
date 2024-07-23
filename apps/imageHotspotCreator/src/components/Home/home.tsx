@@ -16,7 +16,6 @@ const IHC = ({ sdk }: any) => {
     contentful: true,
   })
 
-  // const accesTokenManagement=process.env.SPACE_MANAGEMENT_TOKEN;
   const [imageUrl, setImageUrl] = useState<string>()
   const [imageStatus, setImageStatus] = useState<boolean>(false)
   const [selectedImage, setSelectedImage] = useState<string>('')
@@ -44,13 +43,11 @@ const IHC = ({ sdk }: any) => {
     if (url) {
       checkImageURL(url, function(isValid:boolean) {
         if (isValid) {
-          console.log('The image URL is valid.');
           setImageUrl(url)
           setImageName(sdk.entry.fields.title.getValue())
           setSelectedImage(sdk.entry.fields.title.getValue())
           setImageStatus(true)
         } else {
-          console.log('The image URL is invalid.');
           Notification.setPlacement('top');
           Notification.warning(
             'The "Image URL" is invalid. Please re-upload or choose the existing image.',
