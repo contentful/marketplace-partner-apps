@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.19](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.18...image-hotspot-creator-v1.0.19) (2024-07-24)
+
+
+### Bug Fixes
+
+* **deps:** Bump axios from 1.6.8 to 1.7.2 ([#2323](https://github.com/contentful/marketplace-partner-apps/issues/2323)) ([0ba5f18](https://github.com/contentful/marketplace-partner-apps/commit/0ba5f18db68defd2b073b207e56c8a13bc5b2767))
+* Handled Errors when there is a media without file ([#2344](https://github.com/contentful/marketplace-partner-apps/issues/2344)) ([63cb880](https://github.com/contentful/marketplace-partner-apps/commit/63cb880b21064ff55979506a011ca7397ceb989f))
+
 ## [1.0.18](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.17...image-hotspot-creator-v1.0.18) (2024-07-02)
 
 

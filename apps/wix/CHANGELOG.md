@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.0.10](https://github.com/contentful/marketplace-partner-apps/compare/wix-contentful-app-v1.0.9...wix-contentful-app-v1.0.10) (2024-07-24)
+
+
+### Bug Fixes
+
+* **deps:** Bump @contentful/app-sdk from 4.25.0 to 4.26.3 in /apps/wix ([#2252](https://github.com/contentful/marketplace-partner-apps/issues/2252)) ([be35b87](https://github.com/contentful/marketplace-partner-apps/commit/be35b87ef2e231b48ede5fdf00fc31a089e89e1d))
+* **deps:** Bump @contentful/app-sdk from 4.26.3 to 4.28.0 in /apps/wix ([#2278](https://github.com/contentful/marketplace-partner-apps/issues/2278)) ([b52b5ef](https://github.com/contentful/marketplace-partner-apps/commit/b52b5efe42fa5b87227c2839d5fd7548d1f1b2ae))
+* **deps:** Bump @contentful/f36-components from 4.67.0 to 4.67.1 in /apps/wix ([#2267](https://github.com/contentful/marketplace-partner-apps/issues/2267)) ([7164a91](https://github.com/contentful/marketplace-partner-apps/commit/7164a915d027bc8496da8cf1ceedede7f45f101a))
+* **deps:** Bump @contentful/f36-components from 4.67.1 to 4.67.3 in /apps/wix ([#2327](https://github.com/contentful/marketplace-partner-apps/issues/2327)) ([deaea2b](https://github.com/contentful/marketplace-partner-apps/commit/deaea2b7618374e1205640f0d08ea24bd9894873))
+* **deps:** Bump contentful-management from 11.27.4 to 11.27.6 in /apps/wix ([#2254](https://github.com/contentful/marketplace-partner-apps/issues/2254)) ([ecbddb7](https://github.com/contentful/marketplace-partner-apps/commit/ecbddb758729f74431751a9e4560248e672781fa))
+* **deps:** Bump contentful-management from 11.27.6 to 11.28.0 in /apps/wix ([#2276](https://github.com/contentful/marketplace-partner-apps/issues/2276)) ([16eca01](https://github.com/contentful/marketplace-partner-apps/commit/16eca01dd349cc1528a3a482132a000e5387fac3))
+* **deps:** Bump contentful-management from 11.28.0 to 11.29.1 in /apps/wix ([#2304](https://github.com/contentful/marketplace-partner-apps/issues/2304)) ([daf60af](https://github.com/contentful/marketplace-partner-apps/commit/daf60af5cc00dd5a1d4b3ca526266f5ee59e7874))
+* **deps:** Bump react-router from 6.23.1 to 6.24.0 in /apps/wix ([#2241](https://github.com/contentful/marketplace-partner-apps/issues/2241)) ([10c92fc](https://github.com/contentful/marketplace-partner-apps/commit/10c92fc837737b46e162def4816c7633b49b5310))
+* **deps:** Bump react-router from 6.24.0 to 6.24.1 in /apps/wix ([#2260](https://github.com/contentful/marketplace-partner-apps/issues/2260)) ([621facc](https://github.com/contentful/marketplace-partner-apps/commit/621facc3094803181bea55fdebb7469102c9b2db))
+* **deps:** Bump react-router-dom from 6.24.0 to 6.24.1 in /apps/wix ([#2275](https://github.com/contentful/marketplace-partner-apps/issues/2275)) ([be81e33](https://github.com/contentful/marketplace-partner-apps/commit/be81e33990b422353d447479333b3829d5c96b85))
+* **deps:** Bump react-router-dom from 6.24.1 to 6.25.1 in /apps/wix ([#2326](https://github.com/contentful/marketplace-partner-apps/issues/2326)) ([ea57fa9](https://github.com/contentful/marketplace-partner-apps/commit/ea57fa98e520410f5eabda90875ebd124a64f8d3))
+
 ## [1.0.9](https://github.com/contentful/marketplace-partner-apps/compare/wix-contentful-app-v1.0.8...wix-contentful-app-v1.0.9) (2024-07-02)
 
 
