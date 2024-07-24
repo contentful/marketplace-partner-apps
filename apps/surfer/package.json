@@ -9,7 +9,7 @@
     "@contentful/f36-multiselect": "^4.24.0",
     "@contentful/f36-tokens": "^4.0.5",
     "@contentful/react-apps-toolkit": "1.2.16",
-    "@contentful/rich-text-html-renderer": "^16.6.6",
+    "@contentful/rich-text-html-renderer": "^16.6.7",
     "@emotion/css": "^11.13.0",
     "contentful-management": "11.30.2",
     "react": "18.3.1",
