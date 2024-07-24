@@ -14,6 +14,7 @@ import { css } from "@emotion/css";
 import React from "react";
 import { getLocaleName } from "../utils";
 import { openMarkdownDialog } from "@contentful/field-editor-markdown";
+import { JsonEditor } from "@contentful/field-editor-json";
 
 // Prop types for DefaultField component
 export interface DefaultFieldProps {
@@ -58,25 +59,30 @@ const DefaultField = (props: DefaultFieldProps) => {
       sdk={sdk}
       showFocusBar={true}
     >
-      <Field
-        sdk={sdk}
-        widgetId={widgetId!}
-        getOptions={(widgetId, _sdk) => ({
-          [widgetId]: {
-            parameters: {
-              instance: control?.settings,
+      {control?.widgetId !== "objectEditor" && (
+        <Field
+          sdk={sdk}
+          widgetId={widgetId!}
+          getOptions={(widgetId, _sdk) => ({
+            [widgetId]: {
+              parameters: {
+                instance: control?.settings,
+              },
+              ...(control?.field.type === "Array" ||
+              control?.field.type === "Link"
+                ? {
+                    renderCustomActions: (props: CustomActionProps) => (
+                      <CombinedLinkActions {...props} />
+                    ),
+                  }
+                : {}),
             },
-            ...(control?.field.type === "Array" ||
-            control?.field.type === "Link"
-              ? {
-                  renderCustomActions: (props: CustomActionProps) => (
-                    <CombinedLinkActions {...props} />
-                  ),
-                }
-              : {}),
-          },
-        })}
-      />
+          })}
+        />
+      )}
+      {control?.widgetId === "objectEditor" && (
+        <JsonEditor field={sdk.field} isInitiallyDisabled={false} />
+      )}
       {control?.widgetNamespace !== "builtin" && (
         <Box marginTop="spacingXs">
           <Note>

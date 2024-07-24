@@ -1,6 +1,6 @@
 {
   "name": "uploadcare-contentful-app",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "private": true,
   "scripts": {
     "install-ci": "npm ci",
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@contentful/app-sdk": "4.25.0",
-    "@contentful/f36-components": "4.67.0",
+    "@contentful/f36-components": "4.67.1",
     "@contentful/f36-icons": "4.28.2",
     "@contentful/f36-tokens": "4.0.5",
     "@contentful/react-apps-toolkit": "1.2.16",
@@ -24,12 +24,12 @@
     "@emotion/css": "11.11.2",
     "@uploadcare/blocks": "0.35.2",
     "@uploadcare/upload-client": "6.14.1",
-    "contentful-management": "11.27.1",
+    "contentful-management": "11.27.4",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.23.0",
+    "@contentful/app-scripts": "1.25.0",
     "@tsconfig/create-react-app": "2.0.5",
     "@types/node": "18.15.3",
     "@types/react": "18.3.3",
@@ -38,10 +38,10 @@
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
     "prettier": "3.3.2",
-    "prettier-plugin-organize-imports": "3.2.4",
+    "prettier-plugin-organize-imports": "4.0.0",
     "react-scripts": "5.0.1",
     "ts-extras": "0.11.0",
-    "typescript": "5.4.5"
+    "typescript": "5.5.2"
   },
   "overrides": {
     "react-scripts": {

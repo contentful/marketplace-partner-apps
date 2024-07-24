@@ -1,15 +1,15 @@
 {
   "name": "@contentful/shopify-sku",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "private": true,
   "devDependencies": {
-    "@contentful/app-scripts": "1.23.0",
+    "@contentful/app-scripts": "1.25.0",
     "cross-env": "7.0.3",
     "react-scripts": "5.0.1"
   },
   "dependencies": {
     "@contentful/ecommerce-app-base": "^4.0.9",
-    "@contentful/f36-components": "^4.67.0",
+    "@contentful/f36-components": "^4.67.3",
     "@contentful/f36-icons": "^4.28.2",
     "@contentful/f36-tokens": "^4.0.5",
     "@contentful/react-apps-toolkit": "^1.2.16",

@@ -309,7 +309,7 @@ const ConfigScreen = () => {
       cma.contentType.get({ contentTypeId: contentType }).then((data) => {
         const children = data?.fields;
         let childrenEntities: any[] = [];
-  
+
         children?.forEach((obj) => {
           const linkedContentTypes =
             obj.validations?.[0]?.linkContentType ||
@@ -318,13 +318,10 @@ const ConfigScreen = () => {
             childrenEntities = [...childrenEntities, ...linkedContentTypes];
           }
         });
-  
+
         if (children) {
-          // filter fields with type reference
-          setChildEntities(
-            children?.filter((obj: any) => !obj.hasOwnProperty("items"))
-          );
-  
+          setChildEntities(children);
+
           const targetEntities = [
             {
               id: `${contentType}-sameEntity`,
@@ -338,7 +335,7 @@ const ConfigScreen = () => {
                 ?.name,
             })),
           ];
-  
+
           setTargetEntities(targetEntities);
         }
       });
@@ -446,6 +443,14 @@ const ConfigScreen = () => {
       rules: rulesCopy,
     });
     setIsRuleDeleted(true);
+  };
+
+  const toggleAll = (checked: boolean) => {
+    if (checked) {
+      setTargetEntityField(targetEntityFields.map((field) => field.id));
+    } else {
+      setTargetEntityField([]);
+    }
   };
 
   return (
@@ -695,6 +700,12 @@ const ConfigScreen = () => {
                     )}
                     className={css({ width: "300px !important" })}
                   >
+                    <Multiselect.SelectAll
+                      onSelectItem={(event) => toggleAll(event.target.checked)}
+                      isChecked={
+                        targetEntityField.length === targetEntityFields.length
+                      }
+                    />
                     {targetEntityFields.map((tef: any) => {
                       return (
                         <Multiselect.Option

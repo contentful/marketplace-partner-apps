@@ -1,6 +1,6 @@
 {
   "name": "voucherify-contentful-app",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "private": true,
   "scripts": {
     "start": "cross-env BROWSER=none react-scripts start",
@@ -12,8 +12,8 @@
     "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id 5kadpWSYKnUZrW8ys6uvkx --token ${TEST_CMA_TOKEN}"
   },
   "dependencies": {
-    "@contentful/app-sdk": "4.25.0",
-    "@contentful/f36-components": "4.67.0",
+    "@contentful/app-sdk": "4.28.0",
+    "@contentful/f36-components": "4.67.2",
     "@contentful/f36-icons": "4.28.2",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "11.11.2",
@@ -24,15 +24,15 @@
     "lodash": "4.17.21",
     "prop-types": "15.8.1",
     "react": "18.3.1",
-    "react-hook-form": "7.52.0",
-    "react-router-dom": "6.23.1"
+    "react-hook-form": "7.52.1",
+    "react-router-dom": "6.24.1"
   },
   "devDependencies": {
     "cross-env": "7.0.3",
     "eslint": "^8.57.0",
-    "eslint-plugin-react": "~7.34.2",
+    "eslint-plugin-react": "~7.34.3",
     "react-scripts": "5.0.1",
-    "@contentful/app-scripts": "1.23.0"
+    "@contentful/app-scripts": "1.25.0"
   },
   "browserslist": {
     "production": [

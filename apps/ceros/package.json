@@ -1,15 +1,15 @@
 {
   "name": "ceros-contentful-app",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "private": true,
   "dependencies": {
-    "@contentful/app-sdk": "^4.24.0",
-    "@contentful/f36-components": "4.67.0",
+    "@contentful/app-sdk": "^4.29.0",
+    "@contentful/f36-components": "4.67.3",
     "@contentful/f36-tokens": "4.0.5",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@extractus/oembed-extractor": "^4.0.5",
-    "contentful-management": "11.27.1",
-    "@emotion/css": "11.11.2",
+    "contentful-management": "11.30.2",
+    "@emotion/css": "11.13.0",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
@@ -39,9 +39,9 @@
     ]
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.23.0",
-    "@testing-library/jest-dom": "6.4.6",
-    "@testing-library/react": "15.0.7",
+    "@contentful/app-scripts": "1.25.0",
+    "@testing-library/jest-dom": "6.4.8",
+    "@testing-library/react": "16.0.0",
     "@tsconfig/create-react-app": "2.0.5",
     "@types/jest": "29.5.12",
     "@types/node": "18.15.3",
@@ -49,7 +49,7 @@
     "@types/react-dom": "18.3.0",
     "cross-env": "7.0.3",
     "react-scripts": "5.0.1",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.4"
   },
   "homepage": "."
 }
