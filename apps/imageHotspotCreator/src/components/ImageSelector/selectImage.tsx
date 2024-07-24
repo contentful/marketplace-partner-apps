@@ -332,7 +332,7 @@ const SelectImage = ({
                               setImageInExisting(image);
                             }}
                           ></div>
-                        </label
+                        </label>
                         </>
                       </div>
                     ))}
