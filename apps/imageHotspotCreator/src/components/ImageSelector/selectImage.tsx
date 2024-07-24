@@ -310,6 +310,8 @@ const SelectImage = ({
                   <div className="existingImageContainer">
                     {(imageAssets || []).map((image: any, index: any) => (
                       <div key={index} className="radio-img">
+                        {image?.fields?.file && 
+                        <>
                         <input
                           type="radio"
                           name="layout"
@@ -333,6 +335,8 @@ const SelectImage = ({
                             }}
                           ></div>
                         </label>
+                        </>
+                        }
                       </div>
                     ))}
                   </div>
