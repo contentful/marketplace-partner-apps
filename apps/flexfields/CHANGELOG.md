@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.0...thrillworks-flex-fields-app-v1.2.1) (2024-07-24)
+
+
+### Bug Fixes
+
+* Fix blank editor if Json field is present ([#2224](https://github.com/contentful/marketplace-partner-apps/issues/2224)) ([8254339](https://github.com/contentful/marketplace-partner-apps/commit/825433959df0c8ccd88105af7d1733ae5087a63b))
+
 ## [1.2.0](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.1.14...thrillworks-flex-fields-app-v1.2.0) (2024-07-02)
 
 
