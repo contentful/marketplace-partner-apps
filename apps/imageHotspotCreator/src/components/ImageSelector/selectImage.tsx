@@ -62,11 +62,11 @@ const SelectImage = ({
     await sdk.space.getAsset(id).then((asset: any) => {
       if (status) {
         setUrl({
-          url: "http:" + asset?.fields?.file[defaultLocale]?.url,
+          url: "https:" + asset?.fields?.file[defaultLocale]?.url,
           contentful: true,
         });
       } else {
-        setImageUrl("http:" + asset?.fields?.file[defaultLocale]?.url);
+        setImageUrl("https:" + asset?.fields?.file[defaultLocale]?.url);
         setImageStatus(true);
       }
       setImageName(asset?.fields?.title[defaultLocale]);
