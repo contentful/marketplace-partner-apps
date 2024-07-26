@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.20](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.19...surfer-contentful-app-v1.0.20) (2024-07-26)
+
+
+### Bug Fixes
+
+* **deps:** Bump @contentful/rich-text-html-renderer from 16.6.6 to 16.6.7 in /apps/surfer ([#2348](https://github.com/contentful/marketplace-partner-apps/issues/2348)) ([b8450ee](https://github.com/contentful/marketplace-partner-apps/commit/b8450ee6222e061100d7d943717182d5cf66fc6f))
+* **deps:** Bump contentful-management from 11.30.1 to 11.30.2 in /apps/surfer ([#2351](https://github.com/contentful/marketplace-partner-apps/issues/2351)) ([251f1ae](https://github.com/contentful/marketplace-partner-apps/commit/251f1aecb946e8f922949b5aa310a9d7b118dbf2))
+
 ## [1.0.19](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.18...surfer-contentful-app-v1.0.19) (2024-07-24)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.20](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.19...image-hotspot-creator-v1.0.20) (2024-07-26)
+
+
+### Bug Fixes
+
+* Updating the protocol of image url ([#2359](https://github.com/contentful/marketplace-partner-apps/issues/2359)) ([2c40be3](https://github.com/contentful/marketplace-partner-apps/commit/2c40be31688e51d53b070abd0ba60ca20b799648))
+
 ## [1.0.19](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.18...image-hotspot-creator-v1.0.19) (2024-07-24)
 
 
