@@ -10,7 +10,6 @@ module.exports = {
       typescript: {
         alwaysTryTypes: true,
       },
-      project: './tsconfig.json',
     },
   },
   extends: ['next/core-web-vitals', 'airbnb', 'eslint:recommended', 'plugin:@typescript-eslint/recommended', 'eslint-config-prettier'],

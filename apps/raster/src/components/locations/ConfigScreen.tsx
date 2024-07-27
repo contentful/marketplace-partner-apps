@@ -1,16 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from 'react';
 
-import type { ConfigAppSDK } from "@contentful/app-sdk";
-import {
-  Box,
-  Flex,
-  Form,
-  FormControl,
-  Heading,
-  Paragraph,
-  TextInput,
-} from "@contentful/f36-components";
-import { useSDK } from "@contentful/react-apps-toolkit";
+import type { ConfigAppSDK } from '@contentful/app-sdk';
+import { Box, Flex, Form, FormControl, Heading, Paragraph, TextInput } from '@contentful/f36-components';
+import { useSDK } from '@contentful/react-apps-toolkit';
 
 export interface AppInstallationParameters {
   orgId: string | undefined;
@@ -19,8 +11,8 @@ export interface AppInstallationParameters {
 
 function ConfigScreen() {
   const [parameters, setParameters] = useState<AppInstallationParameters>({
-    orgId: "",
-    apiKey: "",
+    orgId: '',
+    apiKey: '',
   });
 
   const sdk = useSDK<ConfigAppSDK>();
@@ -59,8 +51,7 @@ function ConfigScreen() {
     (async () => {
       // Get current parameters of the app.
       // If the app is not installed yet, `parameters` will be `null`.
-      const currentParameters: AppInstallationParameters | null =
-        await sdk.app.getParameters();
+      const currentParameters: AppInstallationParameters | null = await sdk.app.getParameters();
 
       if (currentParameters) {
         setParameters(currentParameters);
@@ -78,38 +69,21 @@ function ConfigScreen() {
         <Heading>Raster</Heading>
         <Flex flexDirection="column" className="space-y-3">
           {/* eslint-disable-next-line */}
-          <img
-            src="/raster-icon.svg"
-            alt="Raster"
-            className="w-24 h-24 mb-4 mx-auto"
-          />
+          <img src="/raster-icon.svg" alt="Raster" className="w-24 h-24 mb-4 mx-auto" />
           <Paragraph>
-            To utilize the Raster plugin, you must configure it. This requires
-            your Organization ID and Public API Key, which must be set up in
-            Raster beforehand.
+            To utilize the Raster plugin, you must configure it. This requires your Organization ID and Public API Key, which must be set up in Raster
+            beforehand.
           </Paragraph>
           <Box>
             <FormControl isRequired>
               <FormControl.Label>Organization Id</FormControl.Label>
-              <TextInput
-                value={parameters.orgId}
-                type="text"
-                onChange={(e) =>
-                  setParameters({ ...parameters, orgId: e.target.value })
-                }
-              />
+              <TextInput value={parameters.orgId} type="text" onChange={(e) => setParameters({ ...parameters, orgId: e.target.value })} />
             </FormControl>
           </Box>
           <Box>
             <FormControl isRequired>
               <FormControl.Label>API Key</FormControl.Label>
-              <TextInput
-                value={parameters.apiKey}
-                type="text"
-                onChange={(e) =>
-                  setParameters({ ...parameters, apiKey: e.target.value })
-                }
-              />
+              <TextInput value={parameters.apiKey} type="text" onChange={(e) => setParameters({ ...parameters, apiKey: e.target.value })} />
             </FormControl>
           </Box>
         </Flex>

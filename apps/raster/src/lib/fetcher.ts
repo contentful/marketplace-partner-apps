@@ -1,6 +1,4 @@
-import type { Settings } from '@lib/types/settings';
-
-import type { Fetcher, Library } from './types';
+import type { Fetcher, Library, Settings } from './types';
 
 /**
  * Main fetcher for the library and images list.

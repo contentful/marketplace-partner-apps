@@ -7,10 +7,10 @@ import { useSDK } from '@contentful/react-apps-toolkit';
 import clsx from 'clsx';
 import useSWR from 'swr';
 import type { Image, Library, Settings } from '@/lib/types';
-import { getImagesFromLibraryQuery, getLibraryListQuery } from '@/lib/graphql/queries';
-import { swrImagesFetcher, swrLibreriesFetcher } from '@/lib/fetcher';
+import { getImagesFromLibraryQuery, getLibraryListQuery } from '../../lib/graphql/queries';
+import { swrImagesFetcher, swrLibreriesFetcher } from '../../lib/fetcher';
 
-import { useImageStore } from '@/lib/store/image-store';
+import { useImageStore } from '../../lib/store/image-store';
 import RasterImagesList from '../ImageList';
 
 function Dialog() {

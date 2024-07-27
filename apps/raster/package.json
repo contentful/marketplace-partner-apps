@@ -31,8 +31,10 @@
   },
   "devDependencies": {
     "@contentful/app-scripts": "^1.22.0",
+    "@monogram/prettier-config": "^0.3.4",
     "@testing-library/jest-dom": "^6.4.5",
     "@testing-library/react": "^16.0.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/jest": "^29.5.12",
     "@types/node": "20.14.2",
     "@types/react": "18.3.3",
