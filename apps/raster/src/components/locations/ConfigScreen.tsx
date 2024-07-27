@@ -83,7 +83,7 @@ function ConfigScreen() {
           <Box>
             <FormControl isRequired>
               <FormControl.Label>API Key</FormControl.Label>
-              <TextInput value={parameters.apiKey} type="text" onChange={(e) => setParameters({ ...parameters, apiKey: e.target.value })} />
+              <TextInput value={parameters.apiKey} type="password" onChange={(e) => setParameters({ ...parameters, apiKey: e.target.value })} />
             </FormControl>
           </Box>
         </Flex>
