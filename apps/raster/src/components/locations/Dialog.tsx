@@ -1,20 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-import { swrImagesFetcher, swrLibreriesFetcher } from "@/lib/fetcher";
-import {
-  getImagesFromLibraryQuery,
-  getLibraryListQuery,
-} from "@/lib/graphql/queries";
-import type { Image, Library, Settings } from "@/lib/types";
-import type { DialogAppSDK } from "@contentful/app-sdk";
-import { Skeleton, Spinner } from "@contentful/f36-components";
-import { ErrorCircleIcon } from "@contentful/f36-icons";
-import { useSDK } from "@contentful/react-apps-toolkit";
-import clsx from "clsx";
-import useSWR from "swr";
+import type { DialogAppSDK } from '@contentful/app-sdk';
+import { Skeleton, Spinner } from '@contentful/f36-components';
+import { ErrorCircleIcon } from '@contentful/f36-icons';
+import { useSDK } from '@contentful/react-apps-toolkit';
+import clsx from 'clsx';
+import useSWR from 'swr';
+import type { Image, Library, Settings } from '@/lib/types';
+import { getImagesFromLibraryQuery, getLibraryListQuery } from '@/lib/graphql/queries';
+import { swrImagesFetcher, swrLibreriesFetcher } from '@/lib/fetcher';
 
-import { useImageStore } from "@/lib/store/image-store";
-import RasterImagesList from "../ImageList";
+import { useImageStore } from '@/lib/store/image-store';
+import RasterImagesList from '../ImageList';
 
 function Dialog() {
   const sdk = useSDK<DialogAppSDK>();
@@ -25,10 +22,7 @@ function Dialog() {
     currentValue: Image[] | undefined;
   };
 
-  const [selectedImages, setSelectedImages] = useImageStore((state) => [
-    state.selected,
-    state.setSelected,
-  ]);
+  const [selectedImages, setSelectedImages] = useImageStore((state) => [state.selected, state.setSelected]);
 
   const [selectedLibrary, setSelectedLibrary] = useState<Library | null>(null);
   const [browseVersions, setBrowseVersions] = useState(false);
@@ -51,7 +45,7 @@ function Dialog() {
       revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-    }
+    },
   );
 
   // Get the list of images from the selected library
@@ -77,7 +71,7 @@ function Dialog() {
       revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-    }
+    },
   );
 
   // Select library, and get images
@@ -120,21 +114,17 @@ function Dialog() {
           <div className="sticky top-5 space-y-2">
             {!isLoading ? (
               libraries.map((library: Library) => (
-                <div
+                <button
+                  type="button"
                   className={clsx(
-                    "flex p-2 border rounded w-60 cursor-pointer",
-                    selectedLibrary?.id === library.id
-                      ? "border-primary"
-                      : "border-gray-200 hover:border-gray-400"
+                    'flex p-2 border rounded w-60 cursor-pointer',
+                    selectedLibrary?.id === library.id ? 'border-primary' : 'border-gray-200 hover:border-gray-400',
                   )}
                   key={library.id}
-                  onClick={() => selectLibrary(library)}
-                >
+                  onClick={() => selectLibrary(library)}>
                   <div className="grow py-2 px-1">{library.name}</div>
-                  <div className="text-xs self-center text-gray-500">
-                    {library.photosCount} images
-                  </div>
-                </div>
+                  <div className="text-xs self-center text-gray-500">{library.photosCount} images</div>
+                </button>
               ))
             ) : (
               <Skeleton.Container>
@@ -149,11 +139,7 @@ function Dialog() {
         {/* Photos list */}
         <div className="relative border-gray-800 w-full px-4 mb-60">
           {images && !imagesLoading ? (
-            <RasterImagesList
-              images={images}
-              browseVersions={browseVersions}
-              setBrowseVersions={setBrowseVersions}
-            />
+            <RasterImagesList images={images} browseVersions={browseVersions} setBrowseVersions={setBrowseVersions} />
           ) : (
             /* Loading images */
             <div className="flex h-full justify-center py-12">
@@ -165,9 +151,7 @@ function Dialog() {
                   <div>Loading images</div>
                 </div>
               ) : (
-                <div className="self-center">
-                  Select a library to view 👀 images
-                </div>
+                <div className="self-center">Select a library to view 👀 images</div>
               )}
             </div>
           )}
