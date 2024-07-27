@@ -34,5 +34,6 @@ module.exports = {
     'react/require-default-props': 'off',
     'no-plusplus': [2, { allowForLoopAfterthoughts: true }], // allow ++ only in for loops
     'react/react-in-jsx-scope': 'off', // not needed in next.js
+    'import/no-extraneous-dependencies': 'off',
   },
 };

@@ -3,10 +3,7 @@ import React, { useEffect, useState } from 'react';
 import type { FieldAppSDK } from '@contentful/app-sdk';
 import { EntryCard, MenuItem, TextLink } from '@contentful/f36-components';
 import { PlusIcon } from '@contentful/f36-icons';
-import {
-  /* useCMA, */
-  useSDK,
-} from '@contentful/react-apps-toolkit';
+import { useSDK } from '@contentful/react-apps-toolkit';
 import type { Image } from '@/lib/types';
 
 function Field() {
