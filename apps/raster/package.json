@@ -1,16 +1,15 @@
 {
   "name": "raster",
   "version": "0.1.0",
-  "private": true,
   "scripts": {
     "build": "next build",
     "create-app-definition": "contentful-app-scripts create-app-definition",
     "dev": "next dev",
-    "test": "vitest",
     "install-ci": "npm ci",
     "lint": "next lint",
     "prettier": "prettier --write src/* test/*",
-    "start": "next start"
+    "start": "next start",
+    "test": "vitest"
   },
   "dependencies": {
     "@contentful/app-sdk": "^4.25.0",
@@ -31,34 +30,34 @@
     "tailwindcss": "3.4.4",
     "zustand": "^4.5.4"
   },
-  "engines": {
-    "node": ">=18.18.0"
-  },
   "devDependencies": {
     "@contentful/app-scripts": "^1.22.0",
     "@monogram/prettier-config": "^0.3.4",
+    "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.5.2",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/jest": "^29.5.12",
     "@types/node": "20.14.2",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
     "@typescript-eslint/parser": "7.17.0",
+    "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-next": "14.2.5",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
-    "prettier": "^3.2.4",
     "jsdom": "^23.2.0",
-    "@testing-library/dom": "^9.3.4",
-    "@testing-library/user-event": "^14.5.2",
-    "@vitejs/plugin-react": "^4.2.1",
+    "prettier": "^3.2.4",
     "sass": "^1.77.4",
     "typescript": "5.3.3",
     "vite-tsconfig-paths": "^4.3.1",
     "vitest": "^2.0.4"
+  },
+  "engines": {
+    "node": ">=18.18.0"
   }
 }
