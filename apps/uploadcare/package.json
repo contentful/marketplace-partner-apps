@@ -13,7 +13,7 @@
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 3Ju8DSs6cEG3TnqFa979vc --token ${CONTENTFUL_CMA_TOKEN}"
   },
   "dependencies": {
-    "@contentful/app-sdk": "4.25.0",
+    "@contentful/app-sdk": "4.29.0",
     "@contentful/f36-components": "4.67.1",
     "@contentful/f36-icons": "4.28.2",
     "@contentful/f36-tokens": "4.0.5",
