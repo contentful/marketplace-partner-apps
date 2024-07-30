@@ -1,0 +1,24 @@
+.TopSourceMain {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 20px;
+  .TopSourceInner {
+    display: inline-flex;
+    width: 100%;
+    flex-direction: column;
+    h4 {
+      color: #111b2b;
+      font-size: 20px;
+      font-style: normal;
+      line-height: 32px;
+      margin-bottom: 14px;
+    }
+    p {
+      color: #5a657c;
+      font-size: 14px;
+      font-style: normal;
+      line-height: 24px;
+    }
+  }
+}
