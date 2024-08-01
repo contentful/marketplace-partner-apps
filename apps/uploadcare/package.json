@@ -15,7 +15,7 @@
   "dependencies": {
     "@contentful/app-sdk": "4.29.0",
     "@contentful/f36-components": "4.67.1",
-    "@contentful/f36-icons": "4.28.2",
+    "@contentful/f36-icons": "4.29.0",
     "@contentful/f36-tokens": "4.0.5",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@dnd-kit/core": "6.1.0",
