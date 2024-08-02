@@ -10,7 +10,7 @@
     "@contentful/f36-tokens": "4.0.5",
     "@contentful/f36-workbench": "^4.21.0",
     "@contentful/react-apps-toolkit": "1.2.16",
-    "@emotion/css": "11.11.2",
+    "@emotion/css": "11.13.0",
     "contentful-management": "11.31.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
