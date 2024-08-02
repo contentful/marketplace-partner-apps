@@ -7,7 +7,6 @@
     "@contentful/app-sdk": "^4.24.0",
     "@contentful/f36-components": "4.59.3",
     "@contentful/f36-tokens": "4.0.5",
-    "@contentful/forma-36-react-components": "^3.100.7",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -71,5 +70,11 @@
     "jsdoc": "^4.0.2",
     "typescript": "4.9.5"
   },
-  "homepage": "."
+  "homepage": ".",
+  "overrides": {
+    "better-docs": {
+      "react": "^18.2.0",
+      "react-dom": "^18.2.0"
+    }
+  }
 }
