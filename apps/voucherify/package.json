@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "start": "cross-env BROWSER=none react-scripts start",
-    "postinstall": "npm run build",
     "build": "react-scripts build",
     "install-ci": "npm ci",
     "create-app-definition": "contentful-app-scripts create-app-definition",
