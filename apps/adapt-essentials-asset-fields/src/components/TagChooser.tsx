@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { ChevronDownIcon } from '@contentful/f36-icons';
 
 export function TagChooser({ onSelect }) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedTags, setSelectedTags] = useState([]);
   const onTagSelect = () => {
     ModalLauncher.open(({ isShown, onClose }) => {
