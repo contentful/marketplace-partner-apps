@@ -2,7 +2,7 @@ import { Button, Checkbox, Flex, IconButton, Popover, Subheading } from "@conten
 import { MultiSelectFilterProps, MultiSelectFilterSearchBarProps } from "./MultiSelectFilter.types";
 import { Filter } from "../Filter";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { css } from "emotion";
+import { css } from '@emotion/css';
 import { Divider } from "../Divider";
 import { CloseIcon, SearchIcon } from "@contentful/f36-icons";
 import tokens from "@contentful/f36-tokens";
