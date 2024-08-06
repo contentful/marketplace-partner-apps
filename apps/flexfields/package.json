@@ -3,34 +3,31 @@
   "version": "1.2.1",
   "license": "MIT",
   "dependencies": {
-    "@contentful/app-sdk": "4.25.0",
+    "@contentful/app-sdk": "^4.29.0",
     "@contentful/default-field-editors": "^1.6.50",
     "@contentful/f36-components": "4.66.0",
     "@contentful/f36-multiselect": "^4.21.0",
     "@contentful/f36-tokens": "4.0.5",
     "@contentful/f36-workbench": "^4.21.0",
+    "@contentful/field-editor-markdown": "^1.6.0",
+    "@contentful/field-editor-reference": "^5.30.1",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "11.13.0",
     "contentful-management": "11.31.1",
     "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "react-scripts": "5.0.1"
+    "react-dom": "17.0.2"
   },
   "scripts": {
     "install-ci": "npm ci",
-    "start": "cross-env BROWSER=none react-scripts start",
-    "build": "cross-env GENERATE_SOURCEMAP=false react-scripts build",
+    "start": "vite",
+    "build": "rm -rf build && tsc && vite build",
     "build:autoincrement": "npm --no-git-tag-version version patch && cross-env GENERATE_SOURCEMAP=false react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "test": "vitest run --passWithNoTests",
     "create-app-definition": "contentful-app-scripts create-app-definition",
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 7GbS2x3SdVh7D2hb1FFsS6 --token ${CONTENTFUL_CMA_TOKEN}"
   },
   "eslintConfig": {
     "extends": "react-app"
-  },
-  "jest": {
-    "transformIgnorePatterns": []
   },
   "browserslist": {
     "production": [
@@ -48,16 +45,19 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@contentful/app-scripts": "1.22.0",
     "@testing-library/jest-dom": "6.4.2",
-    "@testing-library/react": "12.1.5",
-    "@tsconfig/create-react-app": "2.0.5",
+    "@testing-library/react": "^12.1.5",
+    "@tsconfig/create-react-app": "2.0.2",
     "@types/jest": "29.5.12",
     "@types/node": "18.15.3",
     "@types/react": "18.0.9",
     "@types/react-dom": "18.0.3",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
-    "cross-env": "7.0.3",
-    "typescript": "5.4.3"
+    "@vitejs/plugin-react": "^4.3.1",
+    "happy-dom": "^14.12.3",
+    "typescript": "5.4.3",
+    "vite": "^5.3.5",
+    "vitest": "^2.0.5"
   },
   "overrides": {
     "typescript": "5.4.3"
