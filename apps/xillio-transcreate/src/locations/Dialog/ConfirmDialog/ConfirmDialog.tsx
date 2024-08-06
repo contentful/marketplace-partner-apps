@@ -1,6 +1,6 @@
 import { Flex, Paragraph, Button } from "@contentful/f36-components";
 import tokens from "@contentful/f36-tokens";
-import { css } from "emotion";
+import { css } from '@emotion/css';
 
 export type ConfirmDialogProps = {
     message: string;
