@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { SidebarComponent, SidebarComponentProps } from "./Sidebar";
 import { Box, GlobalStyles } from "@contentful/f36-components";
 import tokens from "@contentful/f36-tokens";
-import { css } from "emotion";
+import { css } from '@emotion/css';
 import { TranslationStatus } from "@contentful-lochub/shared";
 
 export default {

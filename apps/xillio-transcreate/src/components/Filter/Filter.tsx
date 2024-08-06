@@ -3,7 +3,7 @@ import { ChevronDownIcon } from "@contentful/f36-icons";
 import tokens from "@contentful/f36-tokens";
 import { FilterConditions, FilterProps } from "./Filter.types";
 import { ReactNode } from "react";
-import { css, cx } from "emotion";
+import { css, cx } from '@emotion/css';
 
 const EmptyTrigger = ({ children }: { children: ReactNode }) => <>{children}</>;
 

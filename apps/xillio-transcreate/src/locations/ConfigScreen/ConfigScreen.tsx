@@ -1,7 +1,7 @@
 import { ConfigAppSDK } from "@contentful/app-sdk";
 import { Button, Checkbox, Flex, Heading, ModalLauncher, Paragraph } from "@contentful/f36-components";
 import { useSDK } from "@contentful/react-apps-toolkit";
-import { css, cx } from "emotion";
+import { css, cx } from '@emotion/css';
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { appConfig } from "../../appConfig";
 import tokens from "@contentful/f36-tokens";

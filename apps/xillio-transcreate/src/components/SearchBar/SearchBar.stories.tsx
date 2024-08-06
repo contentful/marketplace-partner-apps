@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { SearchBar as SearchBarComponent, SearchBarProps } from ".";
 import { Box, GlobalStyles, Menu } from "@contentful/f36-components";
 import tokens from "@contentful/f36-tokens";
-import { css } from "emotion";
+import { css } from '@emotion/css';
 import { CalendarFilter, CalendarFilterCondition } from "../CalendarFilter";
 import { useState } from "react";
 import { MultiSelectFilter } from "../MultiSelectFilter";
