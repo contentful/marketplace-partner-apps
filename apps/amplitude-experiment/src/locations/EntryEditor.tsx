@@ -38,7 +38,7 @@ import {
   Experiment,
   ExperimentContext
 } from "../contexts/ExperimentContext";
-import useInterval from "@use-it/interval";
+import useInterval from '../utils/use-interval';
 
 const PopoverWrapper = ({
   children,
