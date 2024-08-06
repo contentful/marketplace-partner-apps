@@ -1,6 +1,6 @@
 import { ButtonProps, Menu, ButtonGroup, Button, IconButton, MenuProps } from "@contentful/f36-components";
 import { ChevronDownIcon } from "@contentful/f36-icons";
-import { css, cx } from "emotion";
+import { css, cx } from '@emotion/css';
 import { useState, useMemo, useEffect } from "react";
 
 export type ButtonAction<L extends string> = {
