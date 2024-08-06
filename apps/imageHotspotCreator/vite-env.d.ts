@@ -1,4 +1,4 @@
-/// <reference types="react-scripts" />
+/// <reference types='vite/client' />
 declare module '@mui/icons-material/Cancel';
 declare module 'clone-deep';
 declare module '@mui/icons-material/Crop';
