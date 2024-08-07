@@ -18,4 +18,38 @@ module.exports = async ({ github, context, core }) => {
   }
 
   console.log('New app submissions found:', uniqueNewAppDirs);
+
+  // load all validators
+  const validators = require('./app-review');
+  const failures = {};
+  for (const newAppDir of uniqueNewAppDirs) {
+    for (const [check, validator] of Object.entries(validators)) {
+      if (typeof validator.validate === 'function') {
+        const { result, message } = await validator.validate({ github, context, core }, newAppDir);
+        if (!result) {
+          failures[check] = message ?? `${check} check failed`;
+        }
+      }
+    }
+  }
+
+  if (Object.keys(failures).length > 0) {
+    const issue_number = context.payload.pull_request.number;
+    const comment_body = '😡\n' + Object.values(failures).join('\n');
+    const label_name = 'needs work';
+
+    // Add a comment to the PR
+    await github.rest.issues.createComment({
+      ...context.repo,
+      issue_number,
+      body: comment_body,
+    });
+
+    // Add a label to the PR
+    await github.rest.issues.addLabels({
+      ...context.repo,
+      issue_number,
+      labels: [label_name],
+    });
+  }
 };
