@@ -1,0 +1,22 @@
+name: 'New App Review'
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - synchronize
+    branches:
+      - 'main'
+
+jobs:
+  main:
+    name: New App Review
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const { review } = require('./.github/workflows/new-app-review')
+            await review({github, context, core})
