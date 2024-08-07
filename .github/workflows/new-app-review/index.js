@@ -1,4 +1,4 @@
-const { getPullRequestFiles, getNewAppDirectories, validateNewApps, handleValidationFailures } = require('../app-review-utils.js');
+const { getPullRequestFiles, getNewAppDirectories, validateNewApps, handleValidationFailures, handleValidationSuccess } = require('../app-review-utils.js');
 const fs = require('fs');
 const path = require('path');
 
@@ -36,6 +36,8 @@ async function review({ github, context, core }) {
   if (Object.keys(failures).length > 0) {
     await handleValidationFailures(github, context, prNumber, failures);
     core.setFailed('Validation failed');
+  } else {
+    await handleValidationSuccess(github, context, prNumber);
   }
 }
 

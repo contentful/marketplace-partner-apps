@@ -1,3 +1,6 @@
+const FAILURE_LABEL = 'Further development recommended';
+const SUCCESS_LABEL = 'Ready for review';
+
 const getPullRequestFiles = async (github, context, prNumber) => {
   const { data: files } = await github.rest.pulls.listFiles({
     owner: context.repo.owner,
@@ -33,7 +36,6 @@ const validateNewApps = async (validators, { github, context, core }, newAppDirs
 
 const handleValidationFailures = async (github, context, prNumber, failures) => {
   const comment_body = '😡\n' + Object.values(failures).join('\n');
-  const label_name = 'needs work';
 
   await github.rest.issues.createComment({
     ...context.repo,
@@ -44,7 +46,22 @@ const handleValidationFailures = async (github, context, prNumber, failures) => 
   await github.rest.issues.addLabels({
     ...context.repo,
     issue_number: prNumber,
-    labels: [label_name],
+    labels: [FAILURE_LABEL],
+  });
+};
+
+const handleValidationSuccess = async (github, context, prNumber) => {
+  try {
+    await github.rest.issues.removeLabel({
+      ...context.repo,
+      issue_number: prNumber,
+      name: [FAILURE_LABEL],
+    });
+  } catch (error) {}
+  await github.rest.issues.addLabels({
+    ...context.repo,
+    issue_number: prNumber,
+    labels: [SUCCESS_LABEL],
   });
 };
 
@@ -53,4 +70,5 @@ module.exports = {
   getNewAppDirectories,
   validateNewApps,
   handleValidationFailures,
+  handleValidationSuccess,
 };
