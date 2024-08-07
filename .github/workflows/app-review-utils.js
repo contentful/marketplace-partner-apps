@@ -96,7 +96,7 @@ const handleValidationSuccess = async (github, context, prNumber) => {
 
 const handleValidationWarnings = async (github, context, prNumber, warnings) => {
   const commentBody =
-    'Please acknowledge the following warnings: ' +
+    'Please acknowledge the following warnings:\n' +
     Object.values(warnings)
       .map((warning) => `- [ ] ${warning}`)
       .join('\n');
