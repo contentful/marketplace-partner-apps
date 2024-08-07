@@ -1,5 +1,5 @@
 module.exports = {
-  validate: async ({ github, context, core }, newAppDir) => {
+  validate: async ({ github, context, core }, newAppDir, files) => {
     const usesTypescript = false;
 
     return {

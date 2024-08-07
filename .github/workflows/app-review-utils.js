@@ -14,12 +14,12 @@ const getNewAppDirectories = (files) => {
   return [...new Set(newAppDirs)];
 };
 
-const validateNewApps = async (validators, { github, context, core }, newAppDirs) => {
+const validateNewApps = async (validators, { github, context, core }, newAppDirs, files) => {
   const failures = {};
   for (const newAppDir of newAppDirs) {
     for (const [check, validator] of Object.entries(validators)) {
       if (typeof validator.validate === 'function') {
-        const validation = await validator.validate({ github, context, core }, newAppDir);
+        const validation = await validator.validate({ github, context, core }, newAppDir, files);
         validation.message = validation.message ?? `${check} check ${validation.result ? 'passed' : 'failed'}`;
         console.log(validation.message);
         if (!validation.result) {

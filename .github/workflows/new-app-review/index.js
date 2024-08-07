@@ -31,7 +31,7 @@ async function review({ github, context, core }) {
 
   console.log('New app submissions found:', newAppDirs);
 
-  const failures = await validateNewApps(validators, { github, context, core }, newAppDirs);
+  const failures = await validateNewApps(validators, { github, context, core }, newAppDirs, files);
 
   if (Object.keys(failures).length > 0) {
     await handleValidationFailures(github, context, prNumber, failures);
