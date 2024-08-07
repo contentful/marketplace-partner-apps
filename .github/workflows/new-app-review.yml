@@ -10,9 +10,6 @@ on:
     #   - 'main'
     #   - 'feat/gha-code-review'
 
-permissions:
-  pull-requests: write
-
 jobs:
   main:
     name: New App Review
