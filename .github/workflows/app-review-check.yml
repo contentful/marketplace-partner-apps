@@ -39,7 +39,7 @@ jobs:
               console.log(`${isDirectory ? 'DIR ' : 'FILE'}: ${file}`);
             });
 
-            const script = require('../.github/workflows/app-review-script.js')
+            const script = require('./.github/workflows/app-review-script.js')
             await script({github, context, core})
 
       # - name: Check for LICENSE file in PR
