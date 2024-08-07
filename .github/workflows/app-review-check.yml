@@ -33,7 +33,7 @@ jobs:
 
             const newAppDirs = files
               .filter(file => file.status === 'added' && file.filename.startsWith('apps/'))
-              .map(file => file.filename.split('/').slice(0, 3).join('/'));
+              .map(file => file.filename.split('/').slice(0, 2).join('/'));
 
             const uniqueNewAppDirs = [...new Set(newAppDirs)];
 
