@@ -19,9 +19,11 @@ const validateNewApps = async (validators, { github, context, core }, newAppDirs
   for (const newAppDir of newAppDirs) {
     for (const [check, validator] of Object.entries(validators)) {
       if (typeof validator.validate === 'function') {
-        const { result, message } = await validator.validate({ github, context, core }, newAppDir);
-        if (!result) {
-          failures[check] = message ?? `${check} check failed`;
+        const validation = await validator.validate({ github, context, core }, newAppDir);
+        validation.message = validation.message ?? `${check} check failed`;
+        console.log(`${check} check ran for ${newAppDir} with result ${validation.result} and message "${validation.message}"`);
+        if (!validation.result) {
+          failures[check] = validation.message;
         }
       }
     }
