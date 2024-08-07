@@ -1,14 +1,14 @@
 name: 'App Review Check'
 
 on:
-  pull_request_target:
-    types:
-      - opened
-      - edited
-      - synchronize
-    branches:
-      - 'main'
-      - 'feat/gha-code-review'
+  pull_request:
+    # types:
+    #   - opened
+    #   - edited
+    #   - synchronize
+    # branches:
+    #   - 'main'
+    #   - 'feat/gha-code-review'
 
 permissions:
   pull-requests: write
