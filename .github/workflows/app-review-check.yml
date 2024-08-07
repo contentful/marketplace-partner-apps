@@ -8,6 +8,7 @@ on:
       - synchronize
     branches:
       - 'main'
+      - 'feat/gha-code-review'
 
 permissions:
   pull-requests: write
