@@ -1,3 +1,8 @@
+const { exec } = require('child_process');
+const util = require('util');
+
+const execPromise = util.promisify(exec);
+
 const FAILURE_LABEL = 'Further development recommended';
 const SUCCESS_LABEL = 'Ready for review';
 
@@ -17,9 +22,19 @@ const getNewAppDirectories = (files) => {
   return [...new Set(newAppDirs)];
 };
 
+const installAppDependencies = async (newAppDir) => {
+  try {
+    await execPromise(`(cd ${newAppDir} && npm ci)`);
+  } catch (error) {
+    console.error(`Failed to install app dependencies for ${newAppDir}: ${error}`);
+  }
+};
+
 const validateNewApps = async (validators, { github, context, core }, newAppDirs, files) => {
   const failures = {};
+  const warnings = {};
   for (const newAppDir of newAppDirs) {
+    await installAppDependencies(newAppDir);
     for (const [check, validator] of Object.entries(validators)) {
       if (typeof validator.validate === 'function') {
         const validation = await validator.validate({ github, context, core }, newAppDir, files);
@@ -28,19 +43,25 @@ const validateNewApps = async (validators, { github, context, core }, newAppDirs
         if (!validation.result) {
           failures[check] = validation.message;
         }
+        if (validation.warning) {
+          warnings[check] = validation.warning;
+        }
       }
     }
   }
-  return failures;
+  return {
+    failures,
+    warnings,
+  };
 };
 
 const handleValidationFailures = async (github, context, prNumber, failures) => {
-  const comment_body = '😡\n' + Object.values(failures).join('\n');
+  const commentBody = '😡\n' + Object.values(failures).join('\n');
 
   await github.rest.issues.createComment({
     ...context.repo,
     issue_number: prNumber,
-    body: comment_body,
+    body: commentBody,
   });
 
   try {
@@ -73,6 +94,20 @@ const handleValidationSuccess = async (github, context, prNumber) => {
   });
 };
 
+const handleValidationWarnings = async (github, context, prNumber, warnings) => {
+  const commentBody =
+    'Please acknowledge the following warnings: ' +
+    Object.values(warnings)
+      .map((warning) => `- [ ] ${warning}`)
+      .join('\n');
+
+  await github.rest.issues.createComment({
+    ...context.repo,
+    issue_number: prNumber,
+    body: commentBody,
+  });
+};
+
 const hasPackageJson = async (files, newAppDir) => !!files.find((file) => file.status === 'added' && file.filename.startsWith(`${newAppDir}/package.json`));
 
 module.exports = {
@@ -81,5 +116,6 @@ module.exports = {
   validateNewApps,
   handleValidationFailures,
   handleValidationSuccess,
+  handleValidationWarnings,
   hasPackageJson,
 };
