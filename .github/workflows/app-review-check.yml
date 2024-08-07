@@ -32,7 +32,7 @@ jobs:
             });
 
             const newAppDirs = files
-              .filter(file => file.status === 'added' && file.filename.startsWith('marketplace-partner-apps/apps/'))
+              .filter(file => file.status === 'added' && file.filename.startsWith('apps/'))
               .map(file => file.filename.split('/').slice(0, 3).join('/'));
 
             const uniqueNewAppDirs = [...new Set(newAppDirs)];
