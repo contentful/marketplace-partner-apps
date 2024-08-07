@@ -65,10 +65,13 @@ const handleValidationSuccess = async (github, context, prNumber) => {
   });
 };
 
+const hasPackageJson = async (files, newAppDir) => !!files.find((file) => file.status === 'added' && file.filename.startsWith(`${newAppDir}/package.json`));
+
 module.exports = {
   getPullRequestFiles,
   getNewAppDirectories,
   validateNewApps,
   handleValidationFailures,
   handleValidationSuccess,
+  hasPackageJson,
 };
