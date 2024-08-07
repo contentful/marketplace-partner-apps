@@ -35,6 +35,7 @@ async function review({ github, context, core }) {
 
   if (Object.keys(failures).length > 0) {
     await handleValidationFailures(github, context, prNumber, failures);
+    core.setFailed('Validation failed');
   }
 }
 
