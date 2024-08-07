@@ -1,34 +1,49 @@
-const { exec } = require('child_process');
-const util = require('util');
-
-const execPromise = util.promisify(exec);
+const { spawn } = require('child_process');
 
 module.exports = {
   validate: async ({ github, context, core }, newAppDir, files) => {
     let warning = '';
     let result = true;
     let message = 'Dependency check finished';
+
     try {
-      const { stdout, stderr } = await execPromise(`cd ${newAppDir} && npm outdated --json`);
-      console.log({ stdout, stderr });
+      const stdout = await new Promise((resolve, reject) => {
+        const command = `npm outdated --json`;
+        const child = spawn(command, { shell: true, cwd: newAppDir });
 
-      // if (stderr) {
-      //   result = false;
-      //   message = 'Unable to check for outdated dependencies';
-      //   console.error(`stderr: ${stderr}`);
-      // }
+        let output = '';
+        let errorOutput = '';
 
-      // console.log({stdout);
+        child.stdout.on('data', (data) => {
+          output += data.toString();
+        });
+
+        child.stderr.on('data', (data) => {
+          errorOutput += data.toString();
+        });
+
+        child.on('close', (code) => {
+          if (code !== 0) {
+            console.log({ output, errorOutput });
+            reject(new Error(`Child process exited with code ${code}`));
+          } else if (errorOutput) {
+            reject(new Error(errorOutput));
+          } else {
+            resolve(output);
+          }
+        });
+      });
+
       const outdatedDependencies = JSON.parse(stdout);
 
       if (Object.keys(outdatedDependencies).length > 0) {
         warning += 'The following dependencies are outdated:\n';
-        warning += outdatedDependencies;
+        warning += JSON.stringify(outdatedDependencies, null, 2);
         console.log(warning);
       }
     } catch (error) {
       message = 'Failed to check for outdated dependencies';
-      console.error(`exec error: ${error.stderr.toString()}`);
+      console.error(`exec error: ${error.message}`);
       result = false;
     }
 
