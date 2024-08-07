@@ -24,6 +24,23 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            // Get the current working directory
+            const currentWorkingDirectory = process.cwd();
+            console.log('Current working directory:', currentWorkingDirectory);
+
+            // List files and directories in the current directory
+            const files = fs.readdirSync(currentWorkingDirectory);
+
+            console.log('Files and directories in current working directory:');
+            files.forEach(file => {
+              const fullPath = path.join(currentWorkingDirectory, file);
+              const isDirectory = fs.statSync(fullPath).isDirectory();
+              console.log(`${isDirectory ? 'DIR ' : 'FILE'}: ${file}`);
+            });
+
             const script = require('../.github/workflows/app-review-script.js')
             await script({github, context, core})
 
