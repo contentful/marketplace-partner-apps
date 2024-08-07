@@ -7,7 +7,7 @@ module.exports = {
     const hasPackageJson = !!files.find((file) => file.status === 'added' && file.filename.startsWith(`${newAppDir}/package.json`));
     let dependsOnTypescript = false;
     if (hasPackageJson) {
-      const packageJson = require(`../../${newAppDir}/package.json`);
+      const packageJson = require(`../../../../${newAppDir}/package.json`);
       dependsOnTypescript = packageJson.devDependencies && packageJson.devDependencies.typescript;
     }
 
