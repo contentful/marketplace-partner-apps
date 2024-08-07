@@ -1,8 +1,22 @@
 const { getPullRequestFiles, getNewAppDirectories, validateNewApps, handleValidationFailures } = require('../app-review-utils.js');
+const fs = require('fs');
+const path = require('path');
 
-const validators = {
-  license: require('./license'),
-};
+function loadValidators(directory) {
+  const validators = {};
+  const files = fs.readdirSync(directory);
+
+  files.forEach((file) => {
+    if (file.endsWith('.js')) {
+      const validatorName = path.basename(file, '.js');
+      validators[validatorName] = require(path.join(directory, file));
+    }
+  });
+
+  return validators;
+}
+
+const validators = loadValidators(path.join(__dirname, 'validators'));
 
 async function review({ github, context, core }) {
   const prNumber = context.payload.pull_request.number;
