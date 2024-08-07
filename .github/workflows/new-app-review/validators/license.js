@@ -1,14 +1,10 @@
 module.exports = {
   validate: async ({ github, context, core }, newAppDir, files) => {
-    // validate the new app
-    console.log(`License check for ${newAppDir}...`);
+    const hasLicense = !!files.find((file) => file.status === 'added' && file.filename.startsWith(`${newAppDir}/LICENSE`));
 
-    const hasLicense = !!files.find((file) => file.status === 'added' && file.filename.startsWith(`marketplace-partner-apps/apps/${newAppDir}/LICENSE`));
-
-    //check for license
     return {
       result: hasLicense,
-      message: hasLicense ? 'License check passed' : 'License check failed',
+      message: hasLicense ? 'License check passed' : 'License check failed: please include a file named LICENSE at the root of your app directory',
     };
   },
 };
