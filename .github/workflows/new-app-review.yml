@@ -1,4 +1,4 @@
-name: 'App Review Check'
+name: 'New App Review'
 
 on:
   pull_request:
@@ -15,12 +15,12 @@ permissions:
 
 jobs:
   main:
-    name: App Review Check
+    name: New App Review
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/github-script@v7
         with:
           script: |
-            const script = require('./.github/workflows/app-review-script.js')
-            await script({github, context, core})
+            const { review } = require('./.github/workflows/new-app-review')
+            await review({github, context, core})
