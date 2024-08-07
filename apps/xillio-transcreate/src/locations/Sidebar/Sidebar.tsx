@@ -15,7 +15,7 @@ import { Flex, Note } from "@contentful/f36-components";
 import { AppInstallationParameters } from "../ConfigScreen/ConfigScreen";
 import { TranslationJobFormData, UpdateTranslationFormData } from "../Dialog";
 import { useApi, useDialog } from "../../hooks";
-import { css, cx } from "emotion";
+import { css, cx } from '@emotion/css';
 import tokens from "@contentful/f36-tokens";
 
 type SelectedLocales = {

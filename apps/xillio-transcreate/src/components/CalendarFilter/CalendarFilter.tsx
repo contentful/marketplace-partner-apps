@@ -2,7 +2,7 @@ import { Calendar, Popover } from "@contentful/f36-components";
 import { CalendarFilterProps } from "./CalendarFilter.types";
 import { Filter } from "../Filter";
 import { useMemo, useState } from "react";
-import { css } from "emotion";
+import { css } from '@emotion/css';
 import tokens from "@contentful/f36-tokens";
 
 export const CalendarFilter = ({

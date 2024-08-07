@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {ConfigAppSDK} from "@contentful/app-sdk";
 import {Flex, Form, FormControl, Heading, Paragraph, Select, TextInput,} from "@contentful/f36-components";
-import {css} from "emotion";
+import { css } from '@emotion/css';
 import {useSDK} from "@contentful/react-apps-toolkit";
 import {VARIANT_CONTAINER} from "../utils/shared";
 import {Datacenter} from "../utils/amplitude";
@@ -20,19 +20,14 @@ const DatacenterSelect = ({
   setDatacenter: (orgId: Datacenter) => void;
 }) => {
   return (
-      <FormControl isRequired>
-        <FormControl.Label>Datacenter</FormControl.Label>
-        <Select
-            id="optionSelect-controlled"
-            name="optionSelect-controlled"
-            value={datacenter}
-            onChange={(e) => setDatacenter(e.target.value)}
-        >
-          <Select.Option value="US">US</Select.Option>
-          <Select.Option value="EU">EU</Select.Option>
-        </Select>
-        <FormControl.HelpText>Select which Amplitude datacenter to use.</FormControl.HelpText>
-      </FormControl>
+    <FormControl isRequired>
+      <FormControl.Label>Datacenter</FormControl.Label>
+      <Select id="optionSelect-controlled" name="optionSelect-controlled" value={datacenter} onChange={(e) => setDatacenter(e.target.value as Datacenter)}>
+        <Select.Option value="US">US</Select.Option>
+        <Select.Option value="EU">EU</Select.Option>
+      </Select>
+      <FormControl.HelpText>Select which Amplitude datacenter to use.</FormControl.HelpText>
+    </FormControl>
   );
 };
 

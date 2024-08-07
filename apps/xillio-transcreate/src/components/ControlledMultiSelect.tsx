@@ -1,5 +1,5 @@
 import { Flex, FormControl, IconButton, Menu, Pill } from "@contentful/f36-components";
-import { css, cx } from "emotion";
+import { css, cx } from '@emotion/css';
 import { FieldValues, UseControllerProps, useController } from "react-hook-form";
 import { colorGray } from "../styles";
 import { PlusIcon } from "@contentful/f36-icons";
