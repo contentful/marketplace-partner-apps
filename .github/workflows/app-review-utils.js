@@ -43,6 +43,14 @@ const handleValidationFailures = async (github, context, prNumber, failures) => 
     body: comment_body,
   });
 
+  try {
+    await github.rest.issues.removeLabel({
+      ...context.repo,
+      issue_number: prNumber,
+      name: [SUCCESS_LABEL],
+    });
+  } catch (error) {}
+
   await github.rest.issues.addLabels({
     ...context.repo,
     issue_number: prNumber,
