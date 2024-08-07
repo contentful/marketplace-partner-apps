@@ -1,0 +1,41 @@
+name: 'App Review Check'
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - synchronize
+    branches:
+      - 'main'
+
+permissions:
+  pull-requests: write
+
+jobs:
+  main:
+    name: App Review Check
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Checking for app review"
+      - name: Add a comment and label to the PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue_number = context.payload.pull_request.number;
+            const comment_body = 'Thank you for your pull request! We will review it shortly.';
+            const label_name = 'needs review';
+
+            // Add a comment to the PR
+            await github.rest.issues.createComment({
+              ...context.repo,
+              issue_number,
+              body: comment_body,
+            });
+
+            // Add a label to the PR
+            await github.rest.issues.addLabels({
+              ...context.repo,
+              issue_number,
+              labels: [label_name],
+            });
