@@ -78,15 +78,7 @@ export const BodyInputCellResolver = ({ column, asset, loading = false, ...rest 
       return (
         <TableCell key={column} {...rest}>
           <Flex gap="spacingXs" alignItems="center">
-            {user?.avatarUrl && (
-              <Image
-                className={styles.avatar}
-                src={user.avatarUrl}
-                height="24px"
-                width="24px"
-                alt={`${user.firstName} ${user.lastName}`}
-              />
-            )}
+            {user?.avatarUrl && <Image className={styles.avatar} src={user.avatarUrl} height="24px" width="24px" alt={`${user.firstName} ${user.lastName}`} />}
             {user?.firstName && user?.lastName && (
               <Text fontColor="gray900">
                 {user.firstName} {user.lastName}
