@@ -6,11 +6,11 @@
     "install-ci": "npm ci",
     "lint": "eslint --cache src/**/*.{ts,tsx} && tsc --noEmit",
     "format": "prettier src/**/*.{ts,tsx} --write",
-    "start": "cross-env BROWSER=none react-scripts start",
-    "build": "react-scripts build",
-    "eject": "react-scripts eject",
+    "start": "vite",
+    "build": "rm -rf build && tsc && vite build",
     "create-app-definition": "contentful-app-scripts create-app-definition",
-    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 3Ju8DSs6cEG3TnqFa979vc --token ${CONTENTFUL_CMA_TOKEN}"
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 3Ju8DSs6cEG3TnqFa979vc --token ${CONTENTFUL_CMA_TOKEN}",
+    "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
     "@contentful/app-sdk": "4.29.0",
@@ -30,24 +30,20 @@
   },
   "devDependencies": {
     "@contentful/app-scripts": "1.25.0",
-    "@tsconfig/create-react-app": "2.0.5",
+    "@testing-library/react": "^16.0.0",
     "@types/node": "18.15.3",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
-    "cross-env": "7.0.3",
+    "@vitejs/plugin-react": "^4.3.1",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
+    "happy-dom": "^14.12.3",
     "prettier": "3.3.3",
     "prettier-plugin-organize-imports": "4.0.0",
-    "react-scripts": "5.0.1",
     "ts-extras": "0.11.0",
-    "typescript": "5.5.4"
-  },
-  "overrides": {
-    "react-scripts": {
-      "resolve-url-loader": "5.0.0",
-      "typescript": "5.3.3"
-    }
+    "typescript": "5.5.4",
+    "vite": "^5.3.5",
+    "vitest": "^2.0.5"
   },
   "browserslist": {
     "production": [
