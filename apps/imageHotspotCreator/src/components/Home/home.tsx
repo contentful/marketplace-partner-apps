@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import SelectImage from '../ImageSelector/selectImage'
 import CreateHotspot from '../Creator/createHotspot'
 import './home.css'
-import { Notification, Spinner, Stack } from '@contentful/f36-components'
-// import { Spinner } from '@contentful/forma-36-react-components'
+import { Notification, Spinner, Stack } from '@contentful/f36-components';
 
 /**
  * Main Component of this custom application
