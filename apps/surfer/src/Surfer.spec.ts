@@ -4,13 +4,13 @@ import { SurferGuidelines, Surfer } from './Surfer';
 import { SurferContext } from './types';
 
 const mockSurferContext: SurferContext = {
-  requestView: jest.fn(),
-  setHtml: jest.fn(),
-  refreshDraft: jest.fn(),
-  configureView: jest.fn(),
+  requestView: vi.fn(),
+  setHtml: vi.fn(),
+  refreshDraft: vi.fn(),
+  configureView: vi.fn(),
 };
 
-const setPermalink = jest.fn();
+const setPermalink = vi.fn();
 
 describe('Surfer', () => {
   let mockWindow: Partial<typeof window>;
@@ -20,19 +20,19 @@ describe('Surfer', () => {
   let iframe: HTMLIFrameElement;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     iframe = document.createElement('iframe');
     mockWindow = {
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
     };
     mockSurferGuidelines = {
-      initWithOptions: jest.fn().mockReturnValue({
+      initWithOptions: vi.fn().mockReturnValue({
         ...mockSurferContext,
         $iframe: iframe,
         setPermalink,
       }),
-      setHtml: jest.fn(),
+      setHtml: vi.fn(),
     };
 
     surfer = new Surfer(mockSurferGuidelines, mockWindow as any);
@@ -88,21 +88,21 @@ describe('Surfer', () => {
     beforeEach(() => {});
 
     it('throws an error if Surfer is not initialized', () => {
-      expect(() => surfer.subscribeToMessages(jest.fn())).toThrowError('Surfer is not initialized');
+      expect(() => surfer.subscribeToMessages(vi.fn())).toThrowError('Surfer is not initialized');
     });
 
     it('subscribes to messages', () => {
       surfer.initialize('shareToken', container);
-      surfer.subscribeToMessages(jest.fn());
+      surfer.subscribeToMessages(vi.fn());
 
       expect(mockWindow.addEventListener).toHaveBeenCalledWith('message', expect.any(Function));
     });
 
     it('keeps only one listener', () => {
       surfer.initialize('shareToken', container);
-      surfer.subscribeToMessages(jest.fn());
-      surfer.subscribeToMessages(jest.fn());
-      surfer.subscribeToMessages(jest.fn());
+      surfer.subscribeToMessages(vi.fn());
+      surfer.subscribeToMessages(vi.fn());
+      surfer.subscribeToMessages(vi.fn());
 
       expect(mockWindow.addEventListener).toHaveBeenCalledTimes(3);
       expect(mockWindow.removeEventListener).toHaveBeenCalledTimes(2);
@@ -123,7 +123,7 @@ describe('Surfer', () => {
       });
 
       it('calls the callback when a SurferRPC message is received', () => {
-        const onRpcMessage = jest.fn();
+        const onRpcMessage = vi.fn();
         const message = { command: 'foo', version: 'surfer-extension:1.2' };
 
         surfer.initialize('shareToken', container);
@@ -137,7 +137,7 @@ describe('Surfer', () => {
       });
 
       it("doesn't call the callback if other message is received", () => {
-        const onRpcMessage = jest.fn();
+        const onRpcMessage = vi.fn();
         const message = 'whatever';
 
         surfer.initialize('shareToken', container);
