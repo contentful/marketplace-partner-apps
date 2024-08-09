@@ -1,6 +1,6 @@
 import { Button, Flex, Menu } from "@contentful/f36-components";
 import { SearchBarProps } from "./SearchBar.types";
-import { css, cx } from "emotion";
+import { css, cx } from '@emotion/css';
 import tokens from "@contentful/f36-tokens";
 import { MouseEvent, useRef, useState } from "react";
 import { FilterIcon } from "@contentful/f36-icons";

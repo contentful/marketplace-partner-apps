@@ -3,7 +3,7 @@ import { Calendar } from "@contentful/f36-components";
 import { useSDK } from "@contentful/react-apps-toolkit";
 import { AppInstallationParameters } from "../ConfigScreen/ConfigScreen";
 import tokens from "@contentful/f36-tokens";
-import { css } from "emotion";
+import { css } from '@emotion/css';
 import { useEffect } from "react";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { TranslateDialog } from "./TranslateDialog";

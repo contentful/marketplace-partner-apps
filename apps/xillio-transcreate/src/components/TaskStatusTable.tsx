@@ -10,7 +10,7 @@ import {
 import { TranslationStatus } from "@contentful-lochub/shared";
 import { useMemo, useState } from "react";
 import { TableBodySkeleton } from "./TableBodySkeleton";
-import { css, cx } from "emotion";
+import { css, cx } from '@emotion/css';
 
 const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
