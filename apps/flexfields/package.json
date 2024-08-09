@@ -6,7 +6,7 @@
     "@contentful/app-sdk": "4.25.0",
     "@contentful/default-field-editors": "^1.6.50",
     "@contentful/f36-components": "4.66.0",
-    "@contentful/f36-multiselect": "^4.21.0",
+    "@contentful/f36-multiselect": "^4.24.0",
     "@contentful/f36-tokens": "4.0.5",
     "@contentful/f36-workbench": "^4.21.0",
     "@contentful/react-apps-toolkit": "1.2.16",
