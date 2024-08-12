@@ -9,7 +9,7 @@
     "@contentful/react-apps-toolkit": "1.2.16",
     "@use-it/interval": "^1.0.0",
     "contentful-management": "10.46.4",
-    "emotion": "10.0.27",
+    "emotion": "11.0.0",
     "lodash": "^4.17.21",
     "react": "18.2.0",
     "react-dom": "18.2.0",
