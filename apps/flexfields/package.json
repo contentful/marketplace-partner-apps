@@ -3,7 +3,7 @@
   "version": "1.2.1",
   "license": "MIT",
   "dependencies": {
-    "@contentful/app-sdk": "4.25.0",
+    "@contentful/app-sdk": "4.29.0",
     "@contentful/default-field-editors": "^1.6.50",
     "@contentful/f36-components": "4.66.0",
     "@contentful/f36-multiselect": "^4.24.0",
