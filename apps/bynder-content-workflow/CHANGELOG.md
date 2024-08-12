@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.2...bynder-content-workflow-v1.0.3) (2024-08-12)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/rich-text-html-renderer from 16.5.2 to 16.6.8 in /apps/bynder-content-workflow ([#2402](https://github.com/contentful/marketplace-partner-apps/issues/2402)) ([6ee1772](https://github.com/contentful/marketplace-partner-apps/commit/6ee1772236a74ed6f19fd834a29b56ec753e5f54))
+
 ## [1.0.2](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.1...bynder-content-workflow-v1.0.2) (2024-06-03)
 
 

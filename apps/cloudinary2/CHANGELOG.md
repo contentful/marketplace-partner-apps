@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.0.15...cloudinary-assets-v1.1.0) (2024-08-12)
+
+
+### Features
+
+* Added support for AVIF image thumbnails [CCS-1240] ([#2498](https://github.com/contentful/marketplace-partner-apps/issues/2498)) ([f739b4e](https://github.com/contentful/marketplace-partner-apps/commit/f739b4e1c81e723e333a7690d8175d06e971e175))
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.67.0 to 4.67.4 in /apps/cloudinary2 ([#2428](https://github.com/contentful/marketplace-partner-apps/issues/2428)) ([8d0e9ee](https://github.com/contentful/marketplace-partner-apps/commit/8d0e9eee5d3d73e680f6d5f564440f28a76efbbc))
+* **deps:** bump @emotion/css from 11.11.2 to 11.13.0 in /apps/cloudinary2 ([#2394](https://github.com/contentful/marketplace-partner-apps/issues/2394)) ([af20586](https://github.com/contentful/marketplace-partner-apps/commit/af20586f829dc9846d241b8262f3e6cc5512d3fc))
+* **deps:** bump @emotion/react from 11.11.4 to 11.13.0 in /apps/cloudinary2 ([#2393](https://github.com/contentful/marketplace-partner-apps/issues/2393)) ([8a05d6e](https://github.com/contentful/marketplace-partner-apps/commit/8a05d6e14cf051fa22f0ec40f0353bd8728d7d87))
+
 ## [1.0.15](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.0.14...cloudinary-assets-v1.0.15) (2024-07-02)
 
 
