@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.2.2](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.1...thrillworks-flex-fields-app-v1.2.2) (2024-08-12)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.25.0 to 4.29.0 in /apps/flexfields ([#2501](https://github.com/contentful/marketplace-partner-apps/issues/2501)) ([ec9d28e](https://github.com/contentful/marketplace-partner-apps/commit/ec9d28ef3511b676b891637be4efa6d9bb6ebded))
+* **deps:** bump @contentful/f36-multiselect from 4.23.1 to 4.24.0 in /apps/flexfields ([#2497](https://github.com/contentful/marketplace-partner-apps/issues/2497)) ([e2b6664](https://github.com/contentful/marketplace-partner-apps/commit/e2b66640be33efca473114dbaa0484917c0e0f65))
+* **deps:** bump @emotion/css from 11.11.2 to 11.13.0 in /apps/flexfields ([#2435](https://github.com/contentful/marketplace-partner-apps/issues/2435)) ([cf4e0ee](https://github.com/contentful/marketplace-partner-apps/commit/cf4e0ee23a1cf191f45b3d62c3002f23414a008b))
+* **deps:** bump contentful-management from 11.27.0 to 11.31.0 in /apps/flexfields ([#2409](https://github.com/contentful/marketplace-partner-apps/issues/2409)) ([edab26f](https://github.com/contentful/marketplace-partner-apps/commit/edab26f0eb43f54327cc7567479755c2839c608e))
+* **deps:** bump contentful-management from 11.31.0 to 11.31.1 in /apps/flexfields ([#2441](https://github.com/contentful/marketplace-partner-apps/issues/2441)) ([2ce8938](https://github.com/contentful/marketplace-partner-apps/commit/2ce8938031762e11575677bbff58be4c6f8339f9))
+
 ## [1.2.1](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.0...thrillworks-flex-fields-app-v1.2.1) (2024-07-24)
 
 
