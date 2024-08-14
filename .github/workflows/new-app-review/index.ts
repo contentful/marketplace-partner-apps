@@ -1,16 +1,18 @@
-const {
+import {
   getPullRequestFiles,
   getNewAppDirectories,
   validateNewApps,
   handleValidationFailures,
   handleValidationSuccess,
   handleValidationWarnings,
-} = require('../app-review-utils.js');
-const fs = require('fs');
-const path = require('path');
+} from '../app-review-utils';
+import fs from 'fs';
+import path from 'path';
+import * as core from '@actions/core';
+import type { Validator, ValidatorOptions } from '../types';
 
-function loadValidators(directory) {
-  const validators = {};
+function loadValidators(directory: string): Record<PropertyKey, Validator> {
+  const validators: Record<PropertyKey, Validator> = {};
   const files = fs.readdirSync(directory);
 
   files.forEach((file) => {
@@ -25,10 +27,15 @@ function loadValidators(directory) {
 
 const validators = loadValidators(path.join(__dirname, 'validators'));
 
-async function review({ github, context, core }) {
-  const prNumber = context.payload.pull_request.number;
+async function review({ github, ctx, ghCore }: ValidatorOptions): Promise<void> {
+  const prNumber = ctx.payload.pull_request?.number;
 
-  const files = await getPullRequestFiles(github, context, prNumber);
+  if (!prNumber) {
+    console.log('Pull request number is not found in the context payload.');
+    return;
+  }
+
+  const files = await getPullRequestFiles(github, ctx, prNumber);
   const newAppDirs = getNewAppDirectories(files);
 
   if (newAppDirs.length === 0) {
@@ -38,20 +45,18 @@ async function review({ github, context, core }) {
 
   console.log('New app submissions found:', newAppDirs);
 
-  const { failures, warnings } = await validateNewApps(validators, { github, context, core }, newAppDirs, files);
+  const { failures, warnings } = await validateNewApps(validators, { github, ctx, ghCore }, newAppDirs, files);
 
   if (Object.keys(warnings).length > 0) {
-    await handleValidationWarnings(github, context, prNumber, warnings);
+    await handleValidationWarnings(github, ctx, prNumber, warnings);
   }
 
   if (Object.keys(failures).length > 0) {
-    await handleValidationFailures(github, context, prNumber, failures);
+    await handleValidationFailures(github, ctx, prNumber, failures);
     core.setFailed('Validation failed');
   } else {
-    await handleValidationSuccess(github, context, prNumber);
+    await handleValidationSuccess(github, ctx, prNumber);
   }
 }
 
-module.exports = {
-  review,
-};
+export { review };

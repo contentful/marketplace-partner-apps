@@ -1,28 +1,29 @@
-const { exec } = require('child_process');
-const util = require('util');
+import { exec } from 'child_process';
+import { promisify } from 'util';
+import type { PullRequestFile, ValidationResult, Validator, ValidatorOptions } from './types';
 
-const execPromise = util.promisify(exec);
+const execPromise = promisify(exec);
 
 const FAILURE_LABEL = 'Further development recommended';
 const SUCCESS_LABEL = 'Ready for review';
 
-const getPullRequestFiles = async (github, context, prNumber) => {
+const getPullRequestFiles = async (github: ValidatorOptions['github'], ctx: ValidatorOptions['ctx'], prNumber: number) => {
   const { data: files } = await github.rest.pulls.listFiles({
-    owner: context.repo.owner,
-    repo: context.repo.repo,
+    owner: ctx.repo.owner,
+    repo: ctx.repo.repo,
     pull_number: prNumber,
   });
   return files;
 };
 
-const getNewAppDirectories = (files) => {
+const getNewAppDirectories = (files: PullRequestFile[]) => {
   const newAppDirs = files
     .filter((file) => file.status === 'added' && file.filename.startsWith('apps/'))
     .map((file) => file.filename.split('/').slice(0, 2).join('/'));
   return [...new Set(newAppDirs)];
 };
 
-const installAppDependencies = async (newAppDir) => {
+const installAppDependencies = async (newAppDir: string) => {
   try {
     await execPromise(`(cd ${newAppDir} && npm ci)`);
   } catch (error) {
@@ -30,14 +31,20 @@ const installAppDependencies = async (newAppDir) => {
   }
 };
 
-const validateNewApps = async (validators, { github, context, core }, newAppDirs, files) => {
-  const failures = {};
-  const warnings = {};
+const validateNewApps = async (
+  validators: Record<string, Validator>,
+  { github, ctx, ghCore }: ValidatorOptions,
+  newAppDirs: string[],
+  files: PullRequestFile[]
+): Promise<ValidationResult> => {
+  const failures: ValidationResult['failures'] = {};
+  const warnings: ValidationResult['warnings'] = {};
+
   for (const newAppDir of newAppDirs) {
     await installAppDependencies(newAppDir);
     for (const [check, validator] of Object.entries(validators)) {
       if (typeof validator.validate === 'function') {
-        const validation = await validator.validate({ github, context, core }, newAppDir, files);
+        const validation = await validator.validate({ github, ctx, ghCore }, newAppDir, files);
         validation.message = validation.message ?? `${check} check ${validation.result ? 'passed' : 'failed'}`;
         console.log(validation.message);
         if (!validation.result) {
@@ -55,46 +62,56 @@ const validateNewApps = async (validators, { github, context, core }, newAppDirs
   };
 };
 
-const handleValidationFailures = async (github, context, prNumber, failures) => {
+const handleValidationFailures = async (
+  github: ValidatorOptions['github'],
+  ctx: ValidatorOptions['ctx'],
+  prNumber: number,
+  failures: Record<string, string>
+) => {
   const commentBody = 'Your new app has a few validation issues. Please address the following failed check(s) below:\n' + Object.values(failures).join('\n');
 
   await github.rest.issues.createComment({
-    ...context.repo,
+    ...ctx.repo,
     issue_number: prNumber,
     body: commentBody,
   });
 
   try {
     await github.rest.issues.removeLabel({
-      ...context.repo,
+      ...ctx.repo,
       issue_number: prNumber,
-      name: [SUCCESS_LABEL],
+      name: SUCCESS_LABEL,
     });
   } catch (error) {}
 
   await github.rest.issues.addLabels({
-    ...context.repo,
+    ...ctx.repo,
     issue_number: prNumber,
     labels: [FAILURE_LABEL],
   });
 };
 
-const handleValidationSuccess = async (github, context, prNumber) => {
+const handleValidationSuccess = async (github: ValidatorOptions['github'], ctx: ValidatorOptions['ctx'], prNumber: number) => {
   try {
     await github.rest.issues.removeLabel({
-      ...context.repo,
+      ...ctx.repo,
       issue_number: prNumber,
-      name: [FAILURE_LABEL],
+      name: FAILURE_LABEL,
     });
   } catch (error) {}
   await github.rest.issues.addLabels({
-    ...context.repo,
+    ...ctx.repo,
     issue_number: prNumber,
     labels: [SUCCESS_LABEL],
   });
 };
 
-const handleValidationWarnings = async (github, context, prNumber, warnings) => {
+const handleValidationWarnings = async (
+  github: ValidatorOptions['github'],
+  ctx: ValidatorOptions['ctx'],
+  prNumber: number,
+  warnings: ValidationResult['warnings']
+) => {
   const commentBody =
     'Please acknowledge the following warnings:\n' +
     Object.values(warnings)
@@ -102,15 +119,16 @@ const handleValidationWarnings = async (github, context, prNumber, warnings) => 
       .join('\n');
 
   await github.rest.issues.createComment({
-    ...context.repo,
+    ...ctx.repo,
     issue_number: prNumber,
     body: commentBody,
   });
 };
 
-const hasPackageJson = async (files, newAppDir) => !!files.find((file) => file.status === 'added' && file.filename.startsWith(`${newAppDir}/package.json`));
+const hasPackageJson = async (files: PullRequestFile[], newAppDir: string): Promise<boolean> =>
+  !!files.find((file) => file.status === 'added' && file.filename.startsWith(`${newAppDir}/package.json`));
 
-module.exports = {
+export {
   getPullRequestFiles,
   getNewAppDirectories,
   validateNewApps,

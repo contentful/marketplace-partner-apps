@@ -1,5 +1,7 @@
+import type { PullRequestFile, ValidatorOptions } from '../../types';
+
 module.exports = {
-  validate: async ({ github, context, core }, newAppDir, files) => {
+  validate: async (_options: ValidatorOptions, newAppDir: string, files: PullRequestFile[]) => {
     const hasLicense = !!files.find((file) => file.status === 'added' && file.filename.startsWith(`${newAppDir}/LICENSE`));
 
     return {
