@@ -16,4 +16,4 @@ jobs:
           script: |
             const { tsImport } = await import('${{ github.workspace }}/node_modules/tsx/dist/esm/api/index.cjs');
             const { review } = await tsImport('./.github/workflows/new-app-review', '${{ github.workspace }}/');
-            await review({github, context, core})
+            await review({ github, ctx: context, ghCore: core })
