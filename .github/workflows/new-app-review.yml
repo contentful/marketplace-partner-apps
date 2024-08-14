@@ -9,11 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install tsx
+      - name: Install Dependencies
         run: npm ci
+      - name: Compile TypeScript
+        # compilation is necessary because github-script does not support ts https://github.com/actions/github-script/issues/294
+        run: npx tsc --project .github/workflows/tsconfig.json
       - uses: actions/github-script@v7
         with:
           script: |
-            const { tsImport } = await import('${{ github.workspace }}/node_modules/tsx/dist/esm/api/index.cjs');
-            const { review } = await tsImport('./.github/workflows/new-app-review', '${{ github.workspace }}/');
+            const { review } = require('./.github/workflows/dist/new-app-review');
             await review({ github, ctx: context, ghCore: core })

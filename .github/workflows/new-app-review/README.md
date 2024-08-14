@@ -11,16 +11,20 @@ To add a new check to the validation process, simply add a [validator](./validat
 that exports a validate method like the following example:
 
 ```js
-module.exports = {
-  validate: async ({ github, ctx, ghCore }, newAppDir, files) => {
-    // perform your check on the new app
-    const isValid = Math.floor(Math.random() * 2) === 1;
+export const validate = async (
+  options: ValidatorOptions,
+  newAppDir: string,
+  files: PullRequestFile[]
+): Promise<ValidatorResult> => {
+  // perform your check on the new app
+  const isValid = Math.floor(Math.random() * 2) === 1;
 
-    return {
-      result: isValid,
-      // optional message
-      message: isValid ? 'My new check passed ✨' : 'My new check failed 😢',
-    };
-  },
-};
+  return {
+    result: isValid,
+    // optional message
+    message: 'xyz check failed 😢, here is how to fix it: ...',
+    // optional warning
+    warning: 'This will create a warning checkbox to be acknowledged'
+  };
+}
 ```

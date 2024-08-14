@@ -9,17 +9,19 @@ import {
 import fs from 'fs';
 import path from 'path';
 import * as core from '@actions/core';
-import { tsImport } from 'tsx';
 import type { Validator, ValidatorOptions } from '../types';
 
 async function loadValidators(directory: string): Promise<Record<PropertyKey, Validator>> {
   const validators: Record<PropertyKey, Validator> = {};
   const files = fs.readdirSync(directory);
 
+  // validators will be compiled by the time this runs
+  const validatorExtension = '.js';
+
   for (const file of files) {
-    if (file.endsWith('.ts')) {
-      const validatorName = path.basename(file, '.ts');
-      const module = await tsImport(path.join(directory, file));
+    if (file.endsWith(validatorExtension)) {
+      const validatorName = path.basename(file, validatorExtension);
+      const module = await import(path.join(directory, file));
       validators[validatorName] = module.default;
     }
   }
