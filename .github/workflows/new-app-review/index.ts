@@ -11,23 +11,23 @@ import path from 'path';
 import * as core from '@actions/core';
 import type { Validator, ValidatorOptions } from '../types';
 
-function loadValidators(directory: string): Record<PropertyKey, Validator> {
+async function loadValidators(directory: string): Promise<Record<PropertyKey, Validator>> {
   const validators: Record<PropertyKey, Validator> = {};
   const files = fs.readdirSync(directory);
 
-  files.forEach((file) => {
-    if (file.endsWith('.js')) {
-      const validatorName = path.basename(file, '.js');
-      validators[validatorName] = require(path.join(directory, file));
+  for (const file of files) {
+    if (file.endsWith('.ts') || file.endsWith('.tsx')) {
+      const validatorName = path.basename(file, '.ts');
+      const module = await import(path.join(directory, file));
+      validators[validatorName] = module.default;
     }
-  });
+  }
 
   return validators;
 }
 
-const validators = loadValidators(path.join(__dirname, 'validators'));
-
 async function review({ github, ctx, ghCore }: ValidatorOptions): Promise<void> {
+  const validators = await loadValidators(path.join(__dirname, 'validators'));
   const prNumber = ctx.payload.pull_request?.number;
 
   if (!prNumber) {
