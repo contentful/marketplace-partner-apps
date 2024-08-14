@@ -12,6 +12,6 @@ jobs:
       - uses: actions/github-script@v7
         with:
           script: |
-            const { tsImport } = await import('${{ github.workspace }}/.github/node_modules/tsx/dist/esm/api/index.cjs');
+            const { tsImport } = await import('./node_modules/tsx/dist/esm/api/index.cjs');
             const { review } = await tsImport('./.github/workflows/new-app-review', '${{ github.workspace }}/');
             await review({github, context, core})
