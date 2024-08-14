@@ -28,6 +28,7 @@ function loadValidators(directory: string): Record<PropertyKey, Validator> {
 const validators = loadValidators(path.join(__dirname, 'validators'));
 
 async function review({ github, ctx, ghCore }: ValidatorOptions): Promise<void> {
+  console.log({ github, ctx, ghCore });
   const prNumber = ctx.payload.pull_request?.number;
 
   if (!prNumber) {
