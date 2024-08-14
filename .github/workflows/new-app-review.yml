@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Node.js dependencies
+      - name: Install tsx
         run: npm ci
       - uses: actions/github-script@v7
         with:

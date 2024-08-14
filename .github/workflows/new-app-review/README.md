@@ -12,7 +12,7 @@ that exports a validate method like the following example:
 
 ```js
 module.exports = {
-  validate: async ({ github, context, core }, newAppDir, files) => {
+  validate: async ({ github, ctx, ghCore }, newAppDir, files) => {
     // perform your check on the new app
     const isValid = Math.floor(Math.random() * 2) === 1;
 

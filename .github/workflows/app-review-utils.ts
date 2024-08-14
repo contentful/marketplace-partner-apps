@@ -32,8 +32,8 @@ const installAppDependencies = async (newAppDir: string) => {
 };
 
 const validateNewApps = async (
-  validators: Record<string, Validator>,
-  { github, ctx, ghCore }: ValidatorOptions,
+  validators: Record<PropertyKey, Validator>,
+  options: ValidatorOptions,
   newAppDirs: string[],
   files: PullRequestFile[]
 ): Promise<ValidationResult> => {
@@ -41,10 +41,11 @@ const validateNewApps = async (
   const warnings: ValidationResult['warnings'] = {};
 
   for (const newAppDir of newAppDirs) {
+    console.log('Validating new app:', newAppDir, JSON.stringify(validators));
     await installAppDependencies(newAppDir);
     for (const [check, validator] of Object.entries(validators)) {
       if (typeof validator.validate === 'function') {
-        const validation = await validator.validate({ github, ctx, ghCore }, newAppDir, files);
+        const validation = await validator.validate(options, newAppDir, files);
         validation.message = validation.message ?? `${check} check ${validation.result ? 'passed' : 'failed'}`;
         console.log(validation.message);
         if (!validation.result) {
