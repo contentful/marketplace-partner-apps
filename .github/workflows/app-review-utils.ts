@@ -5,8 +5,8 @@ import type { PullRequestFile, ValidationResult, Validator, ValidatorOptions } f
 
 const execPromise = promisify(exec);
 
-const FAILURE_LABEL = 'Further development recommended';
-const SUCCESS_LABEL = 'Ready for review';
+const FAILURE_LABEL = 'Partner Action Needed';
+const SUCCESS_LABEL = 'Pending Contentful Review';
 
 const getPullRequestFiles = async (github: ValidatorOptions['github'], ctx: ValidatorOptions['ctx'], prNumber: number) => {
   const { data: files } = await github.rest.pulls.listFiles({
