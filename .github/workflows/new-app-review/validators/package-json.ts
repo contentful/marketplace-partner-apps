@@ -2,7 +2,7 @@ import { hasPackageJson, packageJsonPath } from '../../app-review-utils';
 import type { PullRequestFile, ValidatorOptions, ValidatorResult } from '../../types';
 
 export const validate = async (_options: ValidatorOptions, newAppDir: string, files: PullRequestFile[]): Promise<ValidatorResult> => {
-  const requiredScripts = ['start', 'build', 'test', 'lint'];
+  const requiredScripts = ['start', 'build', 'test', 'lint', 'install-ci'];
   let hasScripts = false;
   let isCorrectVersion = false;
 
