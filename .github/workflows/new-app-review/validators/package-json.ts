@@ -8,8 +8,8 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, fi
   let isCorrectVersion = false;
 
   if (await hasPackageJson(files, newAppDir)) {
-    const packageJsonPath = path.join(__dirname, '../../../../', newAppDir, 'package.json');
-    const packageJson = require(packageJsonPath);
+    const packageJsonPath = path.join(__dirname, '../../../../../', newAppDir, 'package.json');
+    const packageJson = await import(packageJsonPath);
 
     hasScripts = requiredScripts.every((script) => packageJson.scripts && packageJson.scripts[script]);
     isCorrectVersion = packageJson.version.startsWith('0');

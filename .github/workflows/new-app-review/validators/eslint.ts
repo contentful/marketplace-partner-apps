@@ -9,8 +9,8 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, fi
   let dependsOnEslint = false;
 
   if (await hasPackageJson(files, newAppDir)) {
-    const packageJsonPath = path.join(__dirname, '../../../../', newAppDir, 'package.json');
-    const packageJson = require(packageJsonPath);
+    const packageJsonPath = path.join(__dirname, '../../../../../', newAppDir, 'package.json');
+    const packageJson = await import(packageJsonPath);
     dependsOnEslint = packageJson.devDependencies && packageJson.devDependencies.eslint;
     if (!hasEslintConfig) {
       hasEslintConfig = !!packageJson.eslintConfig;

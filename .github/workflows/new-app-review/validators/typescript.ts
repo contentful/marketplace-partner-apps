@@ -11,7 +11,7 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, fi
   let dependsOnTypescript = false;
 
   if (await hasPackageJson(files, newAppDir)) {
-    const packageJsonPath = path.join(__dirname, '../../../../', newAppDir, 'package.json');
+    const packageJsonPath = path.join(__dirname, '../../../../../', newAppDir, 'package.json');
     const packageJson = require(packageJsonPath);
     dependsOnTypescript = packageJson.devDependencies && packageJson.devDependencies.typescript;
   }
