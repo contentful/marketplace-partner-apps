@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "description": "",
   "main": "index.js",
-  "dependencies": {
-    
+  "devDependencies": {
+    "eslint": "^9.9.0",
+    "typescript": "^5.5.4"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "echo build",
