@@ -41,7 +41,6 @@ const validateNewApps = async (
   const warnings: ValidationResult['warnings'] = {};
 
   for (const newAppDir of newAppDirs) {
-    console.log('Validating new app:', newAppDir, JSON.stringify(validators));
     await installAppDependencies(newAppDir);
     for (const [check, validator] of Object.entries(validators)) {
       if (typeof validator.validate === 'function') {
@@ -69,7 +68,11 @@ const handleValidationFailures = async (
   prNumber: number,
   failures: Record<string, string>
 ) => {
-  const commentBody = 'Your new app has a few validation issues. Please address the following failed check(s) below:\n' + Object.values(failures).join('\n');
+  const commentBody =
+    'Your new app has a few validation issues. Please address the following failed check(s) below:\n' +
+    Object.values(failures)
+      .map((failure) => `- ${failure}`)
+      .join('\n');
 
   await github.rest.issues.createComment({
     ...ctx.repo,
@@ -114,7 +117,7 @@ const handleValidationWarnings = async (
   warnings: ValidationResult['warnings']
 ) => {
   const commentBody =
-    'Please acknowledge the following warnings:\n' +
+    'Please acknowledge the following warnings about your new app submission:\n' +
     Object.values(warnings)
       .map((warning) => `- [ ] ${warning}`)
       .join('\n');
