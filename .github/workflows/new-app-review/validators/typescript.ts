@@ -1,5 +1,4 @@
-import { hasPackageJson } from '../../app-review-utils';
-import * as path from 'path';
+import { hasPackageJson, packageJsonPath } from '../../app-review-utils';
 import type { PullRequestFile, ValidatorOptions, ValidatorResult } from '../../types';
 
 export const validate = async (_options: ValidatorOptions, newAppDir: string, files: PullRequestFile[]): Promise<ValidatorResult> => {
@@ -11,8 +10,7 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, fi
   let dependsOnTypescript = false;
 
   if (await hasPackageJson(files, newAppDir)) {
-    const packageJsonPath = path.join(__dirname, '../../../../../', newAppDir, 'package.json');
-    const packageJson = require(packageJsonPath);
+    const packageJson = require(packageJsonPath(newAppDir));
     dependsOnTypescript = packageJson.devDependencies && packageJson.devDependencies.typescript;
   }
 

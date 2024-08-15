@@ -1,5 +1,6 @@
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import path from 'path';
 import type { PullRequestFile, ValidationResult, Validator, ValidatorOptions } from './types';
 
 const execPromise = promisify(exec);
@@ -132,6 +133,10 @@ const handleValidationWarnings = async (
 const hasPackageJson = async (files: PullRequestFile[], newAppDir: string): Promise<boolean> =>
   !!files.find((file) => file.status === 'added' && file.filename.startsWith(`${newAppDir}/package.json`));
 
+const packageJsonPath = function (newAppDir: string) {
+  return path.join(__dirname, '../../../', newAppDir, 'package.json');
+};
+
 export {
   getPullRequestFiles,
   getNewAppDirectories,
@@ -140,4 +145,5 @@ export {
   handleValidationSuccess,
   handleValidationWarnings,
   hasPackageJson,
+  packageJsonPath,
 };
