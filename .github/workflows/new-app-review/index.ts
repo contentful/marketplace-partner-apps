@@ -21,9 +21,7 @@ async function loadValidators(directory: string): Promise<Record<PropertyKey, Va
   for (const file of files) {
     if (file.endsWith(validatorExtension)) {
       const validatorName = path.basename(file, validatorExtension);
-      const module = await import(path.join(directory, file));
-      console.log({ validatorName, module });
-      validators[validatorName] = module.default;
+      validators[validatorName] = await import(path.join(directory, file));
     }
   }
 
