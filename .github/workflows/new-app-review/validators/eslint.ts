@@ -1,4 +1,5 @@
 import { hasPackageJson } from '../../app-review-utils';
+import * as path from 'path';
 import type { PullRequestFile, ValidatorOptions, ValidatorResult } from '../../types';
 
 export const validate = async (_options: ValidatorOptions, newAppDir: string, files: PullRequestFile[]): Promise<ValidatorResult> => {
@@ -8,7 +9,8 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, fi
   let dependsOnEslint = false;
 
   if (await hasPackageJson(files, newAppDir)) {
-    const packageJson = require(`../../../../${newAppDir}/package.json`);
+    const packageJsonPath = path.join(__dirname, '../../../../', newAppDir, 'package.json');
+    const packageJson = require(packageJsonPath);
     dependsOnEslint = packageJson.devDependencies && packageJson.devDependencies.eslint;
     if (!hasEslintConfig) {
       hasEslintConfig = !!packageJson.eslintConfig;
