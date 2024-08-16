@@ -30,8 +30,7 @@ const DefaultField = (props: DefaultFieldProps) => {
   const { control, name, sdk, locale, widgetId } = props;
   // This is required to show the dialogs related to markdown (expanded mode and cheatsheet)
   // ref: https://github.com/contentful/field-editors/blob/master/packages/markdown/stories/MarkdownEditor.stories.tsx#L93
-  if (control?.widgetId === "markdown") {
-    // @ts-expect-error
+  if (control?.widgetId === 'markdown') {
     sdk.dialogs.openCurrent = openMarkdownDialog(sdk);
   }
   return (
