@@ -14,6 +14,7 @@ import { css } from "@emotion/css";
 import React from "react";
 import { getLocaleName } from "../utils";
 import { openMarkdownDialog } from "@contentful/field-editor-markdown";
+import { JsonEditor } from "@contentful/field-editor-json";
 
 // Prop types for DefaultField component
 export interface DefaultFieldProps {
@@ -29,8 +30,7 @@ const DefaultField = (props: DefaultFieldProps) => {
   const { control, name, sdk, locale, widgetId } = props;
   // This is required to show the dialogs related to markdown (expanded mode and cheatsheet)
   // ref: https://github.com/contentful/field-editors/blob/master/packages/markdown/stories/MarkdownEditor.stories.tsx#L93
-  if (control?.widgetId === "markdown") {
-    // @ts-expect-error
+  if (control?.widgetId === 'markdown') {
     sdk.dialogs.openCurrent = openMarkdownDialog(sdk);
   }
   return (
@@ -58,25 +58,30 @@ const DefaultField = (props: DefaultFieldProps) => {
       sdk={sdk}
       showFocusBar={true}
     >
-      <Field
-        sdk={sdk}
-        widgetId={widgetId!}
-        getOptions={(widgetId, _sdk) => ({
-          [widgetId]: {
-            parameters: {
-              instance: control?.settings,
+      {control?.widgetId !== "objectEditor" && (
+        <Field
+          sdk={sdk}
+          widgetId={widgetId!}
+          getOptions={(widgetId, _sdk) => ({
+            [widgetId]: {
+              parameters: {
+                instance: control?.settings,
+              },
+              ...(control?.field.type === "Array" ||
+              control?.field.type === "Link"
+                ? {
+                    renderCustomActions: (props: CustomActionProps) => (
+                      <CombinedLinkActions {...props} />
+                    ),
+                  }
+                : {}),
             },
-            ...(control?.field.type === "Array" ||
-            control?.field.type === "Link"
-              ? {
-                  renderCustomActions: (props: CustomActionProps) => (
-                    <CombinedLinkActions {...props} />
-                  ),
-                }
-              : {}),
-          },
-        })}
-      />
+          })}
+        />
+      )}
+      {control?.widgetId === "objectEditor" && (
+        <JsonEditor field={sdk.field} isInitiallyDisabled={false} />
+      )}
       {control?.widgetNamespace !== "builtin" && (
         <Box marginTop="spacingXs">
           <Note>

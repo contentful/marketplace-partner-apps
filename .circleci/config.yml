@@ -6,7 +6,7 @@ orbs:
 jobs:
   apps-checks:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/base:current
     resource_class: medium+
     steps:
       - checkout
