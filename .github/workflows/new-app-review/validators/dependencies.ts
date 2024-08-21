@@ -3,39 +3,73 @@ import type { ValidatorOptions, ValidatorResult, PullRequestFile } from '../../t
 
 export const validate = async (_options: ValidatorOptions, newAppDir: string, _files: PullRequestFile[]): Promise<ValidatorResult> => {
   return new Promise((resolve, reject) => {
-    const command = `npm outdated --json`;
-    const child = spawn(command, { shell: true, cwd: newAppDir });
+    const outdatedCommand = `npm outdated --json`;
+    const auditCommand = `npm audit --json`;
 
-    let output = '';
-    let errorOutput = '';
+    const outdatedChild = spawn(outdatedCommand, { shell: true, cwd: newAppDir });
 
-    child.stdout.on('data', (data) => {
-      output += data.toString();
+    let outdatedOutput = '';
+    let outdatedErrorOutput = '';
+
+    outdatedChild.stdout.on('data', (data) => {
+      outdatedOutput += data.toString();
     });
 
-    child.stderr.on('data', (data) => {
-      errorOutput += data.toString();
+    outdatedChild.stderr.on('data', (data) => {
+      outdatedErrorOutput += data.toString();
     });
 
-    child.on('close', (code) => {
-      if (code === 0) {
-        resolve({
-          result: true,
-          message: 'Dependency check finished',
-        });
-      } else if (output) {
+    outdatedChild.on('close', (outdatedCode) => {
+      if (outdatedCode === 0 || outdatedOutput) {
         let warning = '';
-        const outdatedDependencies = JSON.parse(output);
+        const outdatedDependencies = outdatedOutput ? JSON.parse(outdatedOutput) : {};
+
         if (Object.keys(outdatedDependencies).length > 0) {
           warning += 'The following dependencies are outdated:\n';
           warning += Object.keys(outdatedDependencies)
             .map((dependency) => `- ${dependency}`)
             .join('\n');
+          warning += '\n';
         }
-        resolve({
-          result: true,
-          warning,
-          message: 'Dependency check finished',
+
+        const auditChild = spawn(auditCommand, { shell: true, cwd: newAppDir });
+
+        let auditOutput = '';
+        let auditErrorOutput = '';
+
+        auditChild.stdout.on('data', (data) => {
+          auditOutput += data.toString();
+        });
+
+        auditChild.stderr.on('data', (data) => {
+          auditErrorOutput += data.toString();
+        });
+
+        auditChild.on('close', (auditCode) => {
+          if (auditCode === 0 || auditOutput) {
+            const auditResults = auditOutput ? JSON.parse(auditOutput) : {};
+            const vulnerabilities = auditResults?.advisories || {};
+
+            if (Object.keys(vulnerabilities).length > 0) {
+              warning += 'The following security vulnerabilities were found:\n';
+              warning += Object.keys(vulnerabilities)
+                .map((key) => {
+                  const advisory = vulnerabilities[key];
+                  return `- ${advisory.module_name} (${advisory.severity}): ${advisory.title}`;
+                })
+                .join('\n');
+            }
+
+            resolve({
+              result: true,
+              warning: warning.trim(),
+            });
+          } else {
+            resolve({
+              result: false,
+              message: 'Failed to check for security vulnerabilities',
+            });
+          }
         });
       } else {
         resolve({
