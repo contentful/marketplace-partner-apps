@@ -8,7 +8,7 @@ Head over to the [marketplace](https://www.contentful.com/marketplace/) and foll
 
 ## Adding and maintaining your app in this repo
 
-The Marketplace Partner Apps repo is maintained as a single repository for apps, containing several ecosystem partner apps + the tools needed to build and maintain them. The `apps` folder contains each partner app, and each sub-folder within `apps` should contain all the code necessary to build, test, and deploy your app without references to other apps or folders. All dependencies between apps are independent and isolated from each other.
+The Marketplace Partner Apps repo is maintained as a single repository for apps, containing several ecosystem partner apps + the tools needed to build and maintain them. The `apps` folder contains each partner app, and each sub-folder within `apps` should contain all the code necessary to build, test, and deploy your app without references to other apps or folders.
 
 ### First time setup
 
@@ -25,12 +25,13 @@ When a PR is opened that introduces a new app, a [GitHub action](.github/workflo
   - `build`
     - Creates a build artifact(s). `"vite build"` is common for most apps without specific needs, though whatever tool or process you prefer is fine so long as it creates artifacts that can be referenced in the deploy step.
   - `test`
-    - Once again `"vitest"` is common for many apps and should be considered if you do not have complicated tests. Having at least basic testing and coverage will ensure your app does not deploy if breaking changes are introduced by your work or dependabot (see below).
+    - Having at least basic testing and coverage is required to ensure your app does not deploy if breaking changes are introduced by your work or dependabot (see below). `"vitest"` is common for many apps and should be considered if you do not have complicated tests.
   - `lint`
     - Runs a script to lint your app's code. This is a required script to ensure code quality and consistency, and it is recommended to use [ESLlint](https://eslint.org/) in your app. See the Cloudinary app for an example [ESLint configuration](apps/cloudinary2/.eslintrc.json).
-  - Additionally, ensure that the package version number is below 1.0.0. The version of 1.0.0 is reserved for initial release.
 
-- Have a `LICENSE` file at the root of your app directory.
+- Ensure that the package version number in your `package.json` file is below 1.0.0. The version of 1.0.0 is reserved for initial release.
+
+- Have a `LICENSE` file at the root of your app directory with a valid open source license agreement.
 
 - Use [TypeScript](https://www.typescriptlang.org/). We require this to ensure code quality and maintainability for the marketplace apps.
 
@@ -40,28 +41,26 @@ When a PR is opened that introduces a new app, a [GitHub action](.github/workflo
 
 ### After a new app is introduced
 
-After a new app has been introduced into the repo, the Contentful ecosystem team will make a couple of updates:
+After a new app has been introduced into the repo, the Contentful team will make a couple of updates:
 
-- Add the `deploy` script
+- All code deployed by the `marketplace-partner-apps` repo must be hosted by Contentful. The Contentful team will add the necessary `deploy` script that will deploy your app to an app definition in our shared, official space. Please do not update it in subsequent changes/pull requests; doing so will prevent future updates from being deployed to your marketplace app definition.
 
-  - All code deployed by the `marketplace-partner-apps` repo must be hosted by Contentful. Your deploy job will look something like this:
-    `contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id APP_DEFINITION_ID --token ${CONTENTFUL_CMA_TOKEN}` - Make sure `--bundle-dir` points to the output of your build process (e.g. `./build`). - `DEFINITIONS_ORG_ID` and `CONTENTFUL_CMA_TOKEN` do not need to be changed and will be appropriately filled by the build process
-  - **The Contentful ecosystem team will update the value of `APP_DEFINITION_ID` to a shared, official space. Please do not update it in subsequent changes/pull requests.**
+- Add the new app to the repo's dependabot configuration.
 
-- Add the new app to the repo's dependabot configuration
-
-- Add the new app to the release-please-config.json file so that the release workflow will include the new app. The release workflow encapsulates versioning as well as the creation and maintenance of a changelog
+- Add the new app to the `release-please-config.json` file so that the release workflow will include the new app. The release workflow encapsulates versioning as well as the creation and maintenance of a changelog.
 
 ### Committing and updating your repo
 
-When you are ready to submit your app to the [marketplace apps repo](https://github.com/contentful/marketplace-partner-apps), clone the repo locally, create a new branch with a descriptive name for the app/changes you are introducing, and create a pull-request against the `main` branch. An ecosystem team member will review your PR soon and let you know if any changes or clarifications are needed. To ensure the fastest approval time on your PR, make sure you:
+When you are ready to submit your app to the [marketplace apps repo](https://github.com/contentful/marketplace-partner-apps), clone the repo locally, create a new branch with a name that follows Conventional Commits standards (see below) for the app/changes you are introducing, and create a pull-request against the `main` branch. A Contentful team member will review your PR soon and let you know if any changes or clarifications are needed. To ensure the fastest approval time on your PR, make sure you:
 
-- PR titles must confirm to the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) standard. (A Github Action will emit a failing status check if your PR title does not match)
+- PR titles must confirm to the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) standard. (A Github Action will emit a failing status check if your PR title does not match). If you are introducing a new app, please use the type `feat`.
 - **Commit messages are public!** We highly recommend following standards for [good commit messages](https://github.com/googleapis/release-please#how-should-i-write-my-commits). Commit messages are automatically pulled into your app's changelog for each release and should be clear and understandable to the end user.
-- Fill out the pull-request template as much as possible. Screenshots, images, and videos are often helpful for providing context and are encouraged.
+- Fill out the pull request template as much as possible. Screenshots, images, and videos are often helpful for providing context and are encouraged.
+- You should include your company, agency, or individual name in the PR description.
 - Comment your changes, either in GitHub or the code itself to provide reviewers more context than they might get otherwise.
 - Ensure your changes are wholly contained within your app's folder, and do not make alterations to other folders or the root level. If you have need for root-level changes, please create an issue instead.
 - Prevent / reduce references to external resources and code. The `marketplace-partner-apps` is intended to be open and transparent and any external resources will be _highly_ scrutinized.
+- Submit the [Contentful Marketplace Listing Questionnaire](https://contentful.typeform.com/to/fHkaviJq) if you haven't already.
 
 ### Keeping dependencies up to date
 
@@ -71,15 +70,15 @@ To keep dependencies up to date, Contentful uses [Dependabot](https://docs.githu
 
 - Open PRs to propose dependency updates for every dependency listed in your app's package.json file.
 - Automatically approve and merge PRs for patch and minor version updates.
-- Hold off on merging PRs for major version updates pending manual review by a human.
+- Hold off on merging PRs for major version updates pending manual review by the app owner, you.
 
 > [!TIP]
 > We recommend specifying bare versions (e.g. `1.2.3`) of dependencies in your package.json file vs. a range of versions (e.g. `1.2.x` or `~1.2.3`). Dependabot will increment versions in your package.json file automatically.
 
 As an app developer, it is important to review and approve any dependency update PRs assigned to you on a frequent basis. Specifically we ask that you:
 
-- Provide a reasonably confident test suite that exercises the main functionality of your app. Test suites generally do an excellent job of catching errors caused by backward breaking compatibility changes in updated dependencies.
-- Respond to, review, and informally approve (adding a PR comment suffices as an approval) any dependency-related PRs that are opened against your app (whether by Dependabot or the Contentful team) in a timely fashion. If errors exist in aforementioned dependency-related PRs, please manually resolve these errors.
+- Provide a reasonably confident test suite that exercises the main functionality of your app. Test suites generally do an excellent job of catching errors caused by breaking changes in updated dependencies.
+- Respond to, review, and approve (adding a PR comment suffices as an approval) any dependency-related PRs that are opened against your app (whether by Dependabot or the Contentful team) in a timely fashion. If errors exist in aforementioned dependency-related PRs, please resolve these errors.
 - Talk to us if you have a specific requirement to firmly pin a dependency version. We can make custom modifications to our Dependabot configuration to support exceptions as needed.
 
 ## Building your own app
