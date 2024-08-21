@@ -48,14 +48,17 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, _f
         auditChild.on('close', (auditCode) => {
           if (auditCode === 0 || auditOutput) {
             const auditResults = auditOutput ? JSON.parse(auditOutput) : {};
-            const vulnerabilities = auditResults?.advisories || {};
+            const vulnerabilities = auditResults?.vulnerabilities || {};
 
             if (Object.keys(vulnerabilities).length > 0) {
               warning += 'The following security vulnerabilities were found:\n';
               warning += Object.keys(vulnerabilities)
                 .map((key) => {
                   const advisory = vulnerabilities[key];
-                  return `- ${advisory.module_name} (${advisory.severity}): ${advisory.title}`;
+                  const via = advisory.via && advisory.via[0] ? advisory.via[0] : null;
+                  const title = via && via.title ? via.title : '';
+                  const url = via && via.url ? via.url : '';
+                  return `- ${advisory.name} (${advisory.severity}) ${title} ${url}`;
                 })
                 .join('\n');
             }
