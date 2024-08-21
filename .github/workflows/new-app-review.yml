@@ -1,0 +1,27 @@
+name: 'New App Review'
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - synchronize
+    branches:
+      - 'main'
+
+jobs:
+  main:
+    name: New App Review
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Dependencies
+        run: npm ci
+      - name: Compile TypeScript
+        # compilation is necessary because github-script does not support ts https://github.com/actions/github-script/issues/294
+        run: npx tsc --project .github/workflows/tsconfig.json
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const { review } = require('./.github/workflows/dist/new-app-review');
+            await review({ github, ctx: context, ghCore: core })
