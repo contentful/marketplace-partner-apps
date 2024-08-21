@@ -5,15 +5,17 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, fi
   const requiredScripts = ['start', 'build', 'test', 'lint', 'install-ci'];
   let hasScripts = false;
   let isCorrectVersion = false;
+  let hasDeployScript = false;
 
   if (await hasPackageJson(files, newAppDir)) {
     const packageJson = await import(packageJsonPath(newAppDir));
 
     hasScripts = requiredScripts.every((script) => packageJson.scripts && packageJson.scripts[script]);
     isCorrectVersion = packageJson.version.startsWith('0');
+    hasDeployScript = packageJson.scripts && packageJson.scripts['deploy'];
   }
 
-  const result = hasScripts && isCorrectVersion;
+  const result = hasScripts && isCorrectVersion && !hasDeployScript;
   let message = 'package.json check passed';
 
   if (!result) {
@@ -22,7 +24,10 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, fi
       failureMessage += `package.json is missing one or more of the following scripts: ${requiredScripts.join(', ')}. `;
     }
     if (!isCorrectVersion) {
-      failureMessage += 'package.json version should be less than 1.0.';
+      failureMessage += 'package.json version should be less than 1.0. ';
+    }
+    if (hasDeployScript) {
+      failureMessage += 'package.json should not contain a deploy script.';
     }
     message = failureMessage;
   }
