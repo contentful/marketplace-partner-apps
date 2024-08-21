@@ -6,7 +6,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "eslint": "^8.8.0",
+    "eslint": "^3.6.0",
     "typescript": "^5.5.4"
   }
 }
