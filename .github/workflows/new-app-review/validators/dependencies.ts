@@ -27,9 +27,9 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, _f
         if (Object.keys(outdatedDependencies).length > 0) {
           warning += 'The following dependencies are outdated:\n';
           warning += Object.keys(outdatedDependencies)
-            .map((dependency) => `- ${dependency}`)
+            .map((dependency) => `  - ${dependency}`)
             .join('\n');
-          warning += '\n';
+          warning += '\n\n';
         }
 
         const auditChild = spawn(auditCommand, { shell: true, cwd: newAppDir });
@@ -58,7 +58,7 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, _f
                   const via = advisory.via && advisory.via[0] ? advisory.via[0] : null;
                   const title = via && via.title ? via.title : '';
                   const url = via && via.url ? via.url : '';
-                  return `- ${advisory.name} (${advisory.severity}) ${title} ${url}`;
+                  return `  - ${advisory.name} (${advisory.severity}) ${title} ${url}`;
                 })
                 .join('\n');
             }
@@ -66,6 +66,7 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, _f
             resolve({
               result: true,
               warning: warning.trim(),
+              message: 'Successfully checked for outdated dependencies and security vulnerabilities',
             });
           } else {
             resolve({
