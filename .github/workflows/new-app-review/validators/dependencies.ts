@@ -46,6 +46,11 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, _f
         });
 
         auditChild.on('close', (auditCode) => {
+          console.log('finished audit check', {
+            auditCode,
+            auditOutput,
+            auditErrorOutput,
+          });
           if (auditCode === 0 || auditOutput) {
             const auditResults = auditOutput ? JSON.parse(auditOutput) : {};
             const vulnerabilities = auditResults?.vulnerabilities || {};
@@ -66,6 +71,7 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, _f
             resolve({
               result: true,
               warning: warning.trim(),
+              message: 'Successfully checked for outdated dependencies and security vulnerabilities',
             });
           } else {
             resolve({
