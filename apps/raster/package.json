@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "create-app-definition": "contentful-app-scripts create-app-definition",
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./dist --organization-id ${DEFINITIONS_ORG_ID} --definition-id 2YQkSSHsqSIwWhqzisdovW --token ${CONTENTFUL_CMA_TOKEN}",
     "dev": "next dev",
     "install-ci": "npm ci",
     "lint": "next lint",
