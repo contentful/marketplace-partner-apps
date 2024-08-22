@@ -2,9 +2,9 @@ import { act, renderHook } from '@testing-library/react';
 import { mockSdk } from '../../test/mocks';
 import { useConfigurationDialog } from './useConfigurationDialog';
 
-let mockOpenCurrenAppCallback = jest.fn();
+let mockOpenCurrenAppCallback = vi.fn();
 
-jest.mock('@contentful/react-apps-toolkit', () => ({
+vi.mock('@contentful/react-apps-toolkit', () => ({
   useSDK: () => ({
     ...mockSdk,
     dialogs: {
@@ -14,11 +14,11 @@ jest.mock('@contentful/react-apps-toolkit', () => ({
 }));
 
 describe('useConfigurationDialog', () => {
-  const requestView = jest.fn();
-  const refreshDraft = jest.fn();
+  const requestView = vi.fn();
+  const refreshDraft = vi.fn();
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
     mockOpenCurrenAppCallback.mockImplementation(() => Promise.resolve());
   });

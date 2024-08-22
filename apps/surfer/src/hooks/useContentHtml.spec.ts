@@ -4,10 +4,10 @@ import { EntryFieldAPI } from '@contentful/app-sdk';
 
 describe('useContentHtml', () => {
   const fakeFields: EntryFieldAPI[] = [
-    { id: 'field1', onValueChanged: jest.fn() },
-    { id: 'field2', onValueChanged: jest.fn() },
-    { id: 'field3', onValueChanged: jest.fn() },
-    { id: 'field4', onValueChanged: jest.fn() },
+    { id: 'field1', onValueChanged: vi.fn() },
+    { id: 'field2', onValueChanged: vi.fn() },
+    { id: 'field3', onValueChanged: vi.fn() },
+    { id: 'field4', onValueChanged: vi.fn() },
   ] as any;
 
   const fakeSelectedFields = fakeFields.slice(2).map(({ id }) => id);
@@ -30,7 +30,7 @@ describe('useContentHtml', () => {
   it('returns the html of the selected fields', () => {
     const fieldsWithValues = fakeFields.map((field) => ({
       ...field,
-      onValueChanged: jest.fn((cb) =>
+      onValueChanged: vi.fn((cb) =>
         cb({
           content: [
             {
