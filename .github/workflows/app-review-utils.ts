@@ -19,7 +19,8 @@ const getPullRequestFiles = async (github: ValidatorOptions['github'], ctx: Vali
 
 const getNewAppDirectories = (files: PullRequestFile[]) => {
   const newAppDirs = files
-    .filter((file) => file.status === 'added' && file.filename.startsWith('apps/'))
+    // Only consider an PR to contain a new app if a new package.json file was added inside an `apps/` directory
+    .filter((file) => file.status === 'added' && file.filename.startsWith('apps/') && file.filename.endsWith('package.json'))
     .map((file) => file.filename.split('/').slice(0, 2).join('/'));
   return [...new Set(newAppDirs)];
 };
