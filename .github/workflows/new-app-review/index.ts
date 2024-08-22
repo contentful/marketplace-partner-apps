@@ -29,9 +29,7 @@ async function loadValidators(directory: string): Promise<Record<PropertyKey, Va
 }
 
 async function review({ github, ctx, ghCore }: ValidatorOptions): Promise<void> {
-  const validators = await loadValidators(path.join(__dirname, 'validators'));
   const prNumber = ctx.payload.pull_request?.number;
-
   if (!prNumber) {
     console.log('Pull request number is not found in the context payload.');
     return;
@@ -47,6 +45,7 @@ async function review({ github, ctx, ghCore }: ValidatorOptions): Promise<void> 
 
   console.log('New app submissions found:', newAppDirs);
 
+  const validators = await loadValidators(path.join(__dirname, 'validators'));
   const { failures, warnings } = await validateNewApps(validators, { github, ctx, ghCore }, newAppDirs, files);
 
   if (Object.keys(warnings).length > 0) {
