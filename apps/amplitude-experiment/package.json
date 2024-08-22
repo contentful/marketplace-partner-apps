@@ -12,7 +12,7 @@
     "emotion": "10.0.27",
     "lodash": "^4.17.21",
     "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react-dom": "18.3.1",
     "react-scripts": "5.0.1"
   },
   "proxy": "https://experiment.amplitude.com",
@@ -50,7 +50,7 @@
     "@types/lodash": "^4.14.202",
     "@types/node": "18.15.3",
     "@types/react": "18.2.48",
-    "@types/react-dom": "18.2.18",
+    "@types/react-dom": "18.3.0",
     "cross-env": "7.0.3",
     "typescript": "4.9.5"
   },
