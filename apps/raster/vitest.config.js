@@ -12,7 +12,4 @@ export default defineConfig({
     mockReset: true,
     clearMocks: true,
   },
-  resolve: {
-    alias: [{ find: '@/', replacement: resolve(__dirname, '../src') }],
-  },
 });

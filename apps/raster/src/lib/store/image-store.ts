@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Image } from '@/lib/types';
+import type { Image } from '../types';
 
 interface ImageStore {
   selected?: Image[] | null;

@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 import type { DialogAppSDK } from '@contentful/app-sdk';
-import type { Image } from '@/lib/types';
+import type { Image } from '../../src/lib/types';
 
 const defaultMockSdk = {
   app: {

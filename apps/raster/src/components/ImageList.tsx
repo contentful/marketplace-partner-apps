@@ -7,7 +7,7 @@ import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } 
 import clsx from 'clsx';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import type { DialogAppSDK } from '@contentful/app-sdk';
-import type { Image } from '@/lib/types';
+import type { Image } from '../lib/types';
 import ImageVersions from './locations/ImageVersions';
 import XMark from './icons/XMark';
 import RasterImage from './Image';
