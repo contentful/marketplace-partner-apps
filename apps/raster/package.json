@@ -51,7 +51,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
-    "jsdom": "^23.2.0",
+    "jsdom": "^24.1.1",
     "prettier": "^3.2.4",
     "sass": "^1.77.4",
     "typescript": "5.3.3",
