@@ -27,7 +27,7 @@
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./dist --organization-id ${DEFINITIONS_ORG_ID} --definition-id 44A0iM4wuqcQBDfg6qrlQx --token ${CONTENTFUL_CMA_TOKEN}"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.25.0",
+    "@contentful/app-scripts": "1.26.0",
     "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/react": "16.0.0",
     "@types/node": "18.15.3",
