@@ -37,7 +37,7 @@
     "@types/showdown": "^2.0.6",
     "@types/uuid": "^9.0.8",
     "@vitejs/plugin-react": "4.0.1",
-    "happy-dom": "9.20.3",
+    "happy-dom": "15.0.0",
     "typescript": "5.4.5",
     "vite": "4.3.9",
     "vitest": "2.0.5"
