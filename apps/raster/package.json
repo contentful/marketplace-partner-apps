@@ -32,7 +32,7 @@
     "zustand": "^4.5.4"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "^1.22.0",
+    "@contentful/app-scripts": "^1.26.0",
     "@monogram/prettier-config": "^0.3.4",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.4.8",
@@ -41,21 +41,21 @@
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/jest": "^29.5.12",
     "@types/node": "20.14.2",
-    "@types/react": "18.3.3",
+    "@types/react": "18.3.4",
     "@types/react-dom": "18.3.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-next": "14.2.5",
+    "eslint-config-next": "14.2.6",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
     "jsdom": "^23.2.0",
     "prettier": "^3.2.4",
     "sass": "^1.77.4",
-    "typescript": "5.3.3",
+    "typescript": "5.5.4",
     "vite-tsconfig-paths": "^4.3.1",
-    "vitest": "^2.0.4"
+    "vitest": "^2.0.5"
   }
 }
