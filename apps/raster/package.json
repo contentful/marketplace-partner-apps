@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@contentful/app-scripts": "^1.26.0",
     "@contentful/app-sdk": "^4.29.1",
     "@contentful/f36-components": "^4.68.1",
     "@contentful/f36-icons": "^4.28.2",
@@ -19,7 +20,6 @@
     "zustand": "^4.5.5"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.26.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "6.5.0",
     "@testing-library/react": "^16.0.0",
@@ -53,6 +53,7 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "tsc": "tsc",
     "create-app-definition": "contentful-app-scripts create-app-definition",
+    "upload": "contentful-app-scripts upload --bundle-dir ./build",
     "install-ci": "npm ci"
   },
   "browserslist": {
