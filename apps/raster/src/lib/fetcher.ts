@@ -40,7 +40,7 @@ export const swrLibreriesFetcher = (key: Fetcher): Promise<Library[]> =>
     const libraryList = res.libraries.map((library: Library) => ({
       id: library.id,
       name: library.name,
-      imagesCount: library.imagesCount,
+      imagesCount: library.imagesCount || library.photosCount,
     }));
 
     return libraryList;
