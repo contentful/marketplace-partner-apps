@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import { useEffect, useState } from 'react';
 import type { DragEndEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
 import { DndContext, closestCenter, DragOverlay } from '@dnd-kit/core';
@@ -7,11 +6,12 @@ import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } 
 import clsx from 'clsx';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import type { DialogAppSDK } from '@contentful/app-sdk';
-import type { Image } from '@/lib/types';
-import ImageVersions from './locations/ImageVersions';
+import type { Image } from '../lib/types';
+
 import XMark from './icons/XMark';
 import RasterImage from './Image';
 import { useImageStore } from '../lib/store/image-store';
+import ImageVersions from '../locations/ImageVersions';
 
 interface SortableItemProps {
   id: UniqueIdentifier;

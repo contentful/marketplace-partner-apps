@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { expect, vi, beforeEach } from 'vitest';
 import Dialog from '../Dialog';
-import { mockDialog } from '../../../../test/mocks';
+import { mockDialog } from '../../../test/mocks';
 
 vi.mock('@contentful/react-apps-toolkit', () => ({
   useSDK: () => mockDialog,
