@@ -23,10 +23,10 @@ describe('Config Screen component', () => {
   });
 
   it('Organization ID Field', async () => {
-    expect(screen.getByLabelText(/^Organization Id/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Raster Organization Id/i)).toBeInTheDocument();
   });
 
   it('API Key Field', async () => {
-    expect(screen.getByLabelText(/^API Key/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Raster API Key/i)).toBeInTheDocument();
   });
 });
