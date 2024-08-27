@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { expect, vi, beforeEach } from 'vitest';
 import ConfigScreen from '../ConfigScreen';
-import { mockCma, defaultMockSdk } from '../../../../test/mocks';
+import { mockCma, defaultMockSdk } from '../../../test/mocks';
 
 vi.mock('@contentful/react-apps-toolkit', () => ({
   useSDK: () => defaultMockSdk,

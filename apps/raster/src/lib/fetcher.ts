@@ -35,12 +35,12 @@ export const fetcher = async (query: string, variables: Record<string, string>, 
  * @param key
  * @returns return library list
  */
-export const swrLibreriesFetcher = (key: Fetcher) =>
+export const swrLibreriesFetcher = (key: Fetcher): Promise<Library[]> =>
   fetcher(key.query, key.variables, key.settings).then((res) => {
     const libraryList = res.libraries.map((library: Library) => ({
       id: library.id,
       name: library.name,
-      imagesCount: library.photosCount,
+      imagesCount: library.imagesCount,
     }));
 
     return libraryList;

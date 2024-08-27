@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import type { ConfigAppSDK } from '@contentful/app-sdk';
 import { Box, Flex, Form, FormControl, Heading, Paragraph, TextInput } from '@contentful/f36-components';
@@ -68,7 +68,6 @@ function ConfigScreen() {
       <Form>
         <Heading>Raster</Heading>
         <Flex flexDirection="column" className="space-y-3">
-          {/* eslint-disable-next-line */}
           <img src="/raster-icon.svg" alt="Raster" className="w-24 h-24 mb-4 mx-auto" />
           <Paragraph>
             To utilize the Raster plugin, you must configure it. This requires your Organization ID and Public API Key, which must be set up in Raster

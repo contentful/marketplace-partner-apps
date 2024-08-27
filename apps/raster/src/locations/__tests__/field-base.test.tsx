@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { expect, vi, beforeEach } from 'vitest';
 import Field from '../Field';
-import { defaultMockSdk } from '../../../../test/mocks';
+import { defaultMockSdk } from '../../../test/mocks';
 
 vi.mock('@contentful/react-apps-toolkit', () => ({
   useSDK: () => defaultMockSdk,
