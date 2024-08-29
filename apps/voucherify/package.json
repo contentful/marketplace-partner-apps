@@ -28,12 +28,12 @@
     "react-router-dom": "6.26.1"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.26.0",
+    "@contentful/app-scripts": "1.27.0",
     "@testing-library/react": "^16.0.0",
     "@vitejs/plugin-react": "^4.3.1",
     "eslint": "^9.9.1",
     "eslint-plugin-react": "~7.35.0",
-    "happy-dom": "^15.0.0",
+    "happy-dom": "^15.3.1",
     "vite": "^5.4.2",
     "vitest": "^2.0.5"
   },
