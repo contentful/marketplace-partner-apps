@@ -32,7 +32,7 @@
     "zustand": "^4.5.5"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "^1.26.0",
+    "@contentful/app-scripts": "^1.27.0",
     "@monogram/prettier-config": "^0.3.4",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.5.0",
@@ -47,7 +47,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-next": "14.2.6",
+    "eslint-config-next": "14.2.7",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-import": "^2.29.1",
