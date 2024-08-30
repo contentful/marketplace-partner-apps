@@ -42,7 +42,7 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@contentful/app-scripts": "1.27.0",
     "@testing-library/jest-dom": "6.5.0",
-    "@testing-library/react": "16.0.0",
+    "@testing-library/react": "16.0.1",
     "@tsconfig/create-react-app": "2.0.5",
     "@types/node": "18.15.3",
     "@types/react": "18.3.4",
