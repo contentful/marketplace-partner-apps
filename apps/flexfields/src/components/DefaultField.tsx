@@ -20,14 +20,13 @@ import { JsonEditor } from "@contentful/field-editor-json";
 export interface DefaultFieldProps {
   name: string;
   sdk: FieldAppSDK;
-  widgetId: string | null;
   locale?: string;
   control?: Control & { field: FieldAPI };
 }
 
 // Render default contentful fields using Forma 36 Component
 const DefaultField = (props: DefaultFieldProps) => {
-  const { control, name, sdk, locale, widgetId } = props;
+  const { control, name, sdk, locale } = props;
   // This is required to show the dialogs related to markdown (expanded mode and cheatsheet)
   // ref: https://github.com/contentful/field-editors/blob/master/packages/markdown/stories/MarkdownEditor.stories.tsx#L93
   if (control?.widgetId === 'markdown') {
@@ -61,7 +60,7 @@ const DefaultField = (props: DefaultFieldProps) => {
       {control?.widgetId !== "objectEditor" && (
         <Field
           sdk={sdk}
-          widgetId={widgetId!}
+          widgetId={control?.widgetId}
           getOptions={(widgetId, _sdk) => ({
             [widgetId]: {
               parameters: {
