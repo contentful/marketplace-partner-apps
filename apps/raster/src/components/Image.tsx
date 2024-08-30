@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import type { Image } from '@/lib/types';
+import type { Image } from '../lib/types';
 import Check from './icons/Check';
 
 type Props = {

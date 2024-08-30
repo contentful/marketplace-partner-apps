@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react';
 import { locations } from '@contentful/app-sdk';
 import { useSDK } from '@contentful/react-apps-toolkit';
-import ConfigScreen from '../components/locations/ConfigScreen';
-import Dialog from '../components/locations/Dialog';
-import Field from '../components/locations/Field';
+import { useMemo } from 'react';
+
+import ConfigScreen from './locations/ConfigScreen';
+import Dialog from './locations/Dialog';
+import Field from './locations/Field';
 
 const ComponentLocationSettings = {
   [locations.LOCATION_APP_CONFIG]: ConfigScreen,
@@ -11,7 +12,7 @@ const ComponentLocationSettings = {
   [locations.LOCATION_ENTRY_FIELD]: Field,
 };
 
-function App() {
+const App = () => {
   const sdk = useSDK();
 
   const Component = useMemo(() => {
@@ -20,10 +21,9 @@ function App() {
         return component;
       }
     }
-    return null;
   }, [sdk.location]);
 
   return Component ? <Component /> : null;
-}
+};
 
 export default App;

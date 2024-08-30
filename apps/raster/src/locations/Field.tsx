@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { FieldAppSDK } from '@contentful/app-sdk';
 import { EntryCard, MenuItem, TextLink } from '@contentful/f36-components';
 import { PlusIcon } from '@contentful/f36-icons';
 import { useSDK } from '@contentful/react-apps-toolkit';
-import type { Image } from '@/lib/types';
+import type { Image } from '../lib/types';
 
 function Field() {
   const [fieldValue, setFieldValue] = useState<Image[] | undefined>();
@@ -81,10 +81,7 @@ function Field() {
               contentType="Image"
               title={entry.name}
               description={entry.description ? entry.description : 'Description not available, but can be generated with our AI tool in Raster.'}
-              thumbnailElement={
-                // eslint-disable-next-line @next/next/no-img-element
-                <img alt={entry.description} src={entry.thumbUrl} />
-              }
+              thumbnailElement={<img alt={entry.description} src={entry.thumbUrl} />}
               onClick={() => openDialog()}
             />
           ))}

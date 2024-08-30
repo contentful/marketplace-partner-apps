@@ -6,5 +6,6 @@ export type AppState = {
 export type Library = {
   id: string | null;
   name: string | null;
+  imagesCount: number;
   photosCount: number;
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { expect, vi, beforeEach } from 'vitest';
 import ConfigScreen from '../ConfigScreen';
-import { mockCma, defaultMockSdk } from '../../../../test/mocks';
+import { mockCma, defaultMockSdk } from '../../../test/mocks';
 
 vi.mock('@contentful/react-apps-toolkit', () => ({
   useSDK: () => defaultMockSdk,
@@ -23,10 +23,10 @@ describe('Config Screen component', () => {
   });
 
   it('Organization ID Field', async () => {
-    expect(screen.getByLabelText(/^Organization Id/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Raster Organization Id/i)).toBeInTheDocument();
   });
 
   it('API Key Field', async () => {
-    expect(screen.getByLabelText(/^API Key/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Raster API Key/i)).toBeInTheDocument();
   });
 });
