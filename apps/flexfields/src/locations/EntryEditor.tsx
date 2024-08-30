@@ -95,17 +95,17 @@ const EntryEditor = () => {
           }}
         >
           {editorFields.map((field) => {
-            const control = sdk.editor.editorInterface.controls!.find(
+            let control = sdk.editor.editorInterface.controls!.find(
               (control) => control.fieldId === field.id
             ) as DefaultFieldProps["control"];
-            let widgetId = control?.widgetId || null;
 
             // App frameworks does not have the ability to reference/pull in other apps
             // Using default widget if field is configured to use custom app
             if (control?.widgetNamespace !== "builtin") {
-              widgetId = getDefaultWidgetId(
+              const widgetId = getDefaultWidgetId(
                 getFieldAppSdk(field.id, sdk, sdk.locales.default)
               );
+              control = { ...control, widgetId };
             }
 
             // mode = 'single':
@@ -121,7 +121,6 @@ const EntryEditor = () => {
                     key={`${field.id}-${sdk.locales.default}`}
                     name={field.name}
                     sdk={getFieldAppSdk(field.id, sdk, sdk.locales.default)}
-                    widgetId={widgetId}
                     control={control}
                     locale={
                       field.localized &&
@@ -139,7 +138,6 @@ const EntryEditor = () => {
                           key={`${field.id}-${locale}`}
                           name={field.name}
                           sdk={getFieldAppSdk(field.id, sdk, locale)}
-                          widgetId={widgetId}
                           control={control}
                           locale={locale}
                         />
@@ -156,7 +154,6 @@ const EntryEditor = () => {
                   key={`${field.id}-${localeSetings.focused}`}
                   name={field.name}
                   sdk={getFieldAppSdk(field.id, sdk, localeSetings.focused)}
-                  widgetId={widgetId}
                   control={control}
                   locale={field.localized ? localeSetings.focused : undefined}
                 />
