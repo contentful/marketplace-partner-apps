@@ -60,8 +60,8 @@
     "test": "vitest",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "tsc": "tsc",
-    "create-app-definition": "contentful-app-scripts create-app-definition",
     "upload": "contentful-app-scripts upload --bundle-dir ./build",
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 2YQkSSHsqSIwWhqzisdovW --token ${CONTENTFUL_CMA_TOKEN}",
     "install-ci": "npm ci"
   },
   "browserslist": {
