@@ -9,7 +9,7 @@
     "@contentful/f36-tokens": "4.0.5",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "^11.13.0",
-    "contentful-management": "^11.31.9",
+    "contentful-management": "^11.32.0",
     "eslint": "^9.9.1",
     "nconf": "^0.12.0",
     "prop-type": "^0.0.1",
@@ -31,8 +31,8 @@
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./dist --organization-id ${DEFINITIONS_ORG_ID} --definition-id b7SVv0k1EYbQRsusviQDi --token ${CONTENTFUL_CMA_TOKEN}"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "^1.26.0",
-    "@testing-library/react": "16.0.0",
+    "@contentful/app-scripts": "^1.27.0",
+    "@testing-library/react": "16.0.1",
     "@types/node": "18.15.3",
     "@types/react": "18.3.4",
     "@types/react-dom": "18.3.0",

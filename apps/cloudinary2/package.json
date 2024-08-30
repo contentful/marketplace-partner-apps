@@ -14,7 +14,7 @@
     "@emotion/css": "^11.13.0",
     "@emotion/react": "^11.13.3",
     "cloudinary-core": "2.13.1",
-    "contentful-management": "11.31.9",
+    "contentful-management": "11.32.0",
     "file-size": "1.0.0",
     "lodash": "4.17.21",
     "react": "18.3.1",
@@ -31,7 +31,7 @@
     "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id 3OMVIvG6YcugUajdy2s5D5 --token ${TEST_CMA_TOKEN}"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.26.0",
+    "@contentful/app-scripts": "1.27.0",
     "@testing-library/react": "16.0.0",
     "@testing-library/user-event": "14.5.2",
     "@tsconfig/vite-react": "3.0.2",
@@ -40,8 +40,8 @@
     "@types/node": "18.15.3",
     "@types/react": "18.3.4",
     "@types/react-dom": "18.3.0",
-    "@typescript-eslint/eslint-plugin": "8.2.0",
-    "@typescript-eslint/parser": "8.2.0",
+    "@typescript-eslint/eslint-plugin": "8.3.0",
+    "@typescript-eslint/parser": "8.3.0",
     "@vitejs/plugin-react": "4.3.1",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",

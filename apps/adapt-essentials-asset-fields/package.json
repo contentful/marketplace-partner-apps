@@ -31,7 +31,7 @@
     "use-local-storage-extended": "^0.1.1"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "^1.26.0",
+    "@contentful/app-scripts": "^1.27.0",
     "@types/react": "^18.3.4",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^8.3.0",
@@ -40,8 +40,8 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.11",
-    "happy-dom": "^15.0.0",
-    "type-fest": "^4.25.0",
+    "happy-dom": "^15.6.0",
+    "type-fest": "^4.26.0",
     "typescript": "^5.5.4",
     "vite": "^5.4.2"
   }
