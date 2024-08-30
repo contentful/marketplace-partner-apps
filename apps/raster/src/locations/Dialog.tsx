@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { DialogAppSDK } from '@contentful/app-sdk';
 import { Skeleton, Spinner } from '@contentful/f36-components';
@@ -7,11 +7,11 @@ import { useSDK } from '@contentful/react-apps-toolkit';
 import clsx from 'clsx';
 import useSWR from 'swr';
 import type { Image, Library, Settings } from '@/lib/types';
-import { getImagesFromLibraryQuery, getLibraryListQuery } from '../../lib/graphql/queries';
-import { swrImagesFetcher, swrLibreriesFetcher } from '../../lib/fetcher';
 
-import { useImageStore } from '../../lib/store/image-store';
-import RasterImagesList from '../ImageList';
+import { useImageStore } from '../lib/store/image-store';
+import { getImagesFromLibraryQuery, getLibraryListQuery } from '../lib/graphql/queries';
+import { swrImagesFetcher, swrLibreriesFetcher } from '../lib/fetcher';
+import RasterImagesList from '../components/ImageList';
 
 function Dialog() {
   const sdk = useSDK<DialogAppSDK>();
@@ -113,7 +113,7 @@ function Dialog() {
         <div className="relative">
           <div className="sticky top-5 space-y-2">
             {!isLoading ? (
-              libraries.map((library: Library) => (
+              libraries?.map((library) => (
                 <button
                   type="button"
                   className={clsx(
@@ -123,7 +123,11 @@ function Dialog() {
                   key={library.id}
                   onClick={() => selectLibrary(library)}>
                   <div className="grow py-2 px-1">{library.name}</div>
-                  <div className="text-xs self-center text-gray-500">{library.photosCount} images</div>
+                  {library.imagesCount === 1 ? (
+                    <div className="text-xs self-center text-gray-500">{library.imagesCount} image</div>
+                  ) : (
+                    <div className="text-xs self-center text-gray-500">{library.imagesCount} images</div>
+                  )}
                 </button>
               ))
             ) : (

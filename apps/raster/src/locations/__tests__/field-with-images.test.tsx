@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { expect, vi, beforeEach } from 'vitest';
 import Field from '../Field';
-import { mockSdkWithImage } from '../../../../test/mocks';
+import { mockSdkWithImage } from '../../../test/mocks';
 
 vi.mock('@contentful/react-apps-toolkit', () => ({
   useSDK: () => mockSdkWithImage,

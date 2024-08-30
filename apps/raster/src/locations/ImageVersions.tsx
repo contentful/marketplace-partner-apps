@@ -1,8 +1,7 @@
 import { Button } from '@contentful/f36-components';
 import clsx from 'clsx';
-import type { Image } from '@/lib/types';
-
-import RasterImage from '../Image';
+import type { Image } from '../lib/types';
+import RasterImage from '../components/Image';
 
 type Props = {
   imageWithVersions: Image;
