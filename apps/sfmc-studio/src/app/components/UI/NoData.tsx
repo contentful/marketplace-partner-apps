@@ -2,7 +2,6 @@
 import Image from "next/image";
 import style from "./noData.module.scss";
 function NoData() {
-
   return (
     <div className={style.NoDataMain}>
       <div className={style.NoDataInner}>

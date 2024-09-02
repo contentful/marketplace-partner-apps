@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { mockCma, mockSdk } from '../../__tests__/mocks';
-import Home from 'src/app/components/Locations/Home';
+import Home from '@/components/Locations/Home';
 
 jest.mock('@contentful/react-apps-toolkit', () => ({
   useSDK: () => mockSdk,

@@ -11,9 +11,9 @@ import SoldProduct from "./SoldProduct";
 import TopProductRevenue from "./TopProductRevenue";
 import TopProductSku from "./TopProductSku";
 import TopProductFamily from "./TopProductFamily";
-import { useAppDispatch, useAppSelector } from "src/app/redux/hooks";
-import { dateStartEnd } from "src/app/redux/slices/dateSlice";
-import { loadingState } from "src/app/redux/slices/loadersSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { dateStartEnd } from "@/redux/slices/dateSlice";
+import { loadingState } from "@/redux/slices/loadersSlice";
 import {
   barChartColor,
   barLabelColor,
@@ -29,7 +29,7 @@ import {
   TopProductSkuType,
 } from "@/lib/types/dashboard";
 import { commonChartConfig } from "@/lib/utils/dashboards";
-import { formatInput } from "@/lib/utils/common";
+import { encryptData, formatInput } from "@/lib/utils/common";
 import { defaultSystemTZ } from "@/lib/utils/common";
 import svgIcons from "@/lib/utils/icons";
 import getSymbolFromCurrency from "currency-symbol-map";
@@ -61,7 +61,7 @@ function CustomerRetention({ order }: { order: number }) {
       toolTipText: "The average value of revenue generated per order.",
     },
     {
-      cardText: "Orders",
+      cardText: "Total Orders",
       countData: { count: 0, change: 0 },
       icon: CustomerRetentionIcon?.orders,
       toolTipText: "Total number of orders placed.",
@@ -204,11 +204,25 @@ function CustomerRetention({ order }: { order: number }) {
 
   const fetchRetentionCounts = async (dateRange: dateStartEnd) => {
     try {
-      const res = await client.post("/api/dashboard/customer-retention", {
-        licenseKey: parameters.installation.licenseKey,
-        sfscTimezone: parameters.installation.sfscTimezone,
-        ...dateRange,
-      });
+      const res = await client.post(
+        "/api/dashboard/customer-retention",
+        {
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
+          sfscTimezone: parameters.installation.sfscTimezone,
+          ...dateRange,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            ["jro34134ecr4aex"]: `${encryptData({
+              validate: Date.now(),
+              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+            })}`,
+          },
+        }
+      );
       if (res.status !== 200) {
         console.log("Error occured fetching conversion data");
       }
@@ -224,9 +238,19 @@ function CustomerRetention({ order }: { order: number }) {
       const res = await client.post(
         "api/dashboard/customer-retention/revenue-by-source",
         {
-          licenseKey: parameters.installation.licenseKey,
-          sfscTimezone: parameters.installation.sfscTimezone,
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
           ...dateRange,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            ["jro34134ecr4aex"]: `${encryptData({
+              validate: Date.now(),
+              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+            })}`,
+          },
         }
       );
 
@@ -244,9 +268,19 @@ function CustomerRetention({ order }: { order: number }) {
       const res = await client.post(
         "api/dashboard/customer-retention/order-by-status",
         {
-          licenseKey: parameters.installation.licenseKey,
-          sfscTimezone: parameters.installation.sfscTimezone,
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
           ...dateRange,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            ["jro34134ecr4aex"]: `${encryptData({
+              validate: Date.now(),
+              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+            })}`,
+          },
         }
       );
 
@@ -264,9 +298,19 @@ function CustomerRetention({ order }: { order: number }) {
       const res = await client.post(
         "api/dashboard/customer-retention/products-by-revenue",
         {
-          licenseKey: parameters.installation.licenseKey,
-          sfscTimezone: parameters.installation.sfscTimezone,
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
           ...dateRange,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            ["jro34134ecr4aex"]: `${encryptData({
+              validate: Date.now(),
+              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+            })}`,
+          },
         }
       );
 
@@ -284,9 +328,19 @@ function CustomerRetention({ order }: { order: number }) {
       const res = await client.post(
         "api/dashboard/customer-retention/top-products-sku",
         {
-          licenseKey: parameters.installation.licenseKey,
-          sfscTimezone: parameters.installation.sfscTimezone,
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
           ...dateRange,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            ["jro34134ecr4aex"]: `${encryptData({
+              validate: Date.now(),
+              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+            })}`,
+          },
         }
       );
 
@@ -304,10 +358,20 @@ function CustomerRetention({ order }: { order: number }) {
       const res = await client.post(
         "api/dashboard/customer-retention/top-sold-family",
         {
-          licenseKey: parameters.installation.licenseKey,
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
           ...dateRange,
           clientTZ: defaultSystemTZ,
-          sfscTimezone: parameters.installation.sfscTimezone,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            ["jro34134ecr4aex"]: `${encryptData({
+              validate: Date.now(),
+              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+            })}`,
+          },
         }
       );
 
@@ -366,9 +430,19 @@ function CustomerRetention({ order }: { order: number }) {
       const res = await client.post(
         "api/dashboard/customer-retention/top-sold-products",
         {
-          licenseKey: parameters.installation.licenseKey,
-          sfscTimezone: parameters.installation.sfscTimezone,
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
           ...dateRange,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            ["jro34134ecr4aex"]: `${encryptData({
+              validate: Date.now(),
+              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+            })}`,
+          },
         }
       );
 
@@ -405,9 +479,7 @@ function CustomerRetention({ order }: { order: number }) {
           />
         ))}
       </div>
-      <div className={style.RetantHead}>
-        <h3>Chart</h3>
-      </div>
+
       <div className={style.RetaionCardMAinRow}>
         <RevenueBySource revenueSource={revenueSource} />
         <OrderByStatus orderStatus={orderStatus} />

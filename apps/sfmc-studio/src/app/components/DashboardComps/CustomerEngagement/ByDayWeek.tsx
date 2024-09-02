@@ -4,10 +4,10 @@ import style from "./byDayWeek.module.scss";
 import CustomTable from "@/components/UI/CustomTable";
 import { TableColumnsType, theme } from "antd";
 import { ByDayWeekType } from "@/lib/types/dashboard";
-import { useAppSelector } from "src/app/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 
 function ByDayWeek({ dayWeekUniqueOpen }: { dayWeekUniqueOpen: any }) {
-  const theme: string = useAppSelector((state) => state.themeSlice.theme);
+  const theme: string = useAppSelector((state) => state.themeSlice?.theme);
   const columns: TableColumnsType<ByDayWeekType> = [
     {
       title: "No",
@@ -17,7 +17,7 @@ function ByDayWeek({ dayWeekUniqueOpen }: { dayWeekUniqueOpen: any }) {
       ),
     },
     {
-      title: "Campaign",
+      title: "Day",
       dataIndex: "weekday",
       key: "weekday",
       render: (value) => <span className={theme}>{value}</span>,

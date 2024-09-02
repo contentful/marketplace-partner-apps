@@ -5,7 +5,7 @@ import parse from "html-react-parser";
 import svgIcons from "@/lib/utils/icons";
 import { formatInput } from "@/lib/utils/common";
 import { ContactCounts } from "@/lib/types/dashboard";
-import { useAppSelector } from "src/app/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import { Tooltip } from "antd";
 
 function CustomerAcquisitionCounts({
@@ -19,7 +19,7 @@ function CustomerAcquisitionCounts({
   const { totalContacts, newContacts } = contactCounts;
   return (
     <div
-      className={`${style.AcquistionCustomerMainWithHead} ${themeSlice.theme} ${
+      className={`${style.AcquistionCustomerMainWithHead} ${themeSlice?.theme} ${
         themeSlice.theme == "dark" ? style.DarkTheme : ""
       }`}
     >
@@ -32,29 +32,35 @@ function CustomerAcquisitionCounts({
         <div className={style.AcquisitionFlexCol}>
           <div className={style.AcquisitionFlexColInner}>
             <div className={style.AcquisitionIcon}>
-              <span>{parse(svgIcons.TotalContactIcon)}</span>
+              <span>{parse(svgIcons.TotalContactIcon || "")}</span>
             </div>
             <div className={style.AcquisitionContentRight}>
               <p>Total Contacts</p>
               <h3>{formatInput(totalContacts)}</h3>
             </div>
             <div className={`countDark ${themeSlice.theme}`}>
-              <Tooltip title={"Total number of contacts in SFSC."} overlayClassName={themeSlice.theme}>
-                <div className="ToolTipDark">{parse(TooltipIcon)}</div>
+              <Tooltip
+                title={"Total number of contacts in SFSC."}
+                overlayClassName={themeSlice.theme}
+              >
+                <div className="ToolTipDark">{parse(TooltipIcon || "")}</div>
               </Tooltip>
             </div>
           </div>
           <div className={style.AcquisitionFlexColInner}>
             <div className={style.AcquisitionIcon}>
-              <span>{parse(svgIcons.NewContactIcon)}</span>
+              <span>{parse(svgIcons.NewContactIcon || "")}</span>
             </div>
             <div className={style.AcquisitionContentRight}>
               <p>New Contacts</p>
               <h3>{formatInput(newContacts)}</h3>
             </div>
             <div className={`countDark  ${themeSlice.theme}`}>
-              <Tooltip title={"New Contacts added to SFSC today."}  overlayClassName={themeSlice.theme}>
-                <div className="ToolTipDark">{parse(TooltipIcon)}</div>
+              <Tooltip
+                title={"New Contacts added to SFSC today."}
+                overlayClassName={themeSlice.theme}
+              >
+                <div className="ToolTipDark">{parse(TooltipIcon || "")}</div>
               </Tooltip>
             </div>
           </div>

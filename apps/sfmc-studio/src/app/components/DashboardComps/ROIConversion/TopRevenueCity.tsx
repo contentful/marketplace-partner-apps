@@ -5,11 +5,10 @@ import { formatInput } from "@/lib/utils/common";
 import NoData from "@/components/UI/NoData";
 import PieChartWithRadius from "@/components/charts/PieChart";
 import { TopRevenueCityType } from "@/lib/types/dashboard";
-import { theme } from "antd";
-import { useAppSelector } from "src/app/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 
 function TopRevenueCity({ revenueCity }: { revenueCity: any }) {
-  const theme: string = useAppSelector((state) => state.themeSlice.theme);
+  const theme: string = useAppSelector((state) => state.themeSlice?.theme);
   let label = {
     text: (string: any, i: number, arr: any) => {
       let sum = arr.reduce((a: number, b: any) => a + b.revenue, 0);
@@ -36,7 +35,7 @@ function TopRevenueCity({ revenueCity }: { revenueCity: any }) {
     <>
       <div className={style.RevenueCityMain}>
         <div className={style.RevenueCityColInner}>
-          <h3>Top Revenue By City</h3>
+          <h3>Top Revenue Generating Cities</h3>
           {!revenueCity?.length ? (
             ""
           ) : (
