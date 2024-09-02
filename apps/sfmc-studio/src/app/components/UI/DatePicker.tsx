@@ -1,18 +1,19 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
+import React, { useRef, useState } from "react";
 import type { DatePickerProps } from "antd";
 import { Button, DatePicker, Space } from "antd";
 import { RangePickerProps } from "antd/es/date-picker";
-import moment from "moment";
-import { dateRange } from "src/app/redux/slices/dateSlice";
-import { useAppDispatch, useAppSelector } from "src/app/redux/hooks";
+import { dateRange, updateTwentyFour } from "@/redux/slices/dateSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import Dropdown from "../UI/Dropdown";
 import type { MenuProps } from "antd";
 import { customDateRange, getDateRange } from "@/lib/utils/common";
-import { showError } from "src/app/redux/slices/notificationSlice";
+import { openNotification } from "@/lib/utils/dashboards";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 
+dayjs.extend(utc);
 dayjs.extend(customParseFormat);
 const { RangePicker } = DatePicker;
 const dateFormat = "DD-MM-YYYY";
@@ -43,26 +44,27 @@ const App: React.FC = () => {
     value: DatePickerProps["value"] | RangePickerProps["value"],
     dateString: [string, string] | string
   ) => {
-    let startDate = moment
+    let startDate = dayjs
       .utc(dateString[0], "DD-MM-YYYY")
       .startOf("day")
       .toDate();
-    let endDate = moment.utc(dateString[1], "DD-MM-YYYY").endOf("day").toDate();
+    let endDate = dayjs.utc(dateString[1], "DD-MM-YYYY").endOf("day").toDate();
     setCustom(true);
     setEndStartDate({ startDate: startDate, endDate: endDate });
   };
 
   const applyDateFilter = () => {
     if (endStartDate.startDate && endStartDate.endDate) {
+      if (selectedItem === customDateRange[0]) dispatch(updateTwentyFour(true));
+      else dispatch(updateTwentyFour(false));
       dispatch(dateRange(endStartDate));
     } else if (!dateSlice.dateRange.startDate && !dateSlice.dateRange.endDate) {
-      dispatch(
-        showError({
-          showAlert: true,
-          description: "Please select a date range to continue.",
-          type: "error",
-        })
-      );
+      openNotification({
+        message: "",
+        description: "Please select a date range to continue.",
+        type: "error",
+        theme: themeSlice.theme,
+      });
     }
   };
 
@@ -96,16 +98,17 @@ const App: React.FC = () => {
         handleMenuClick={handleMenuClick}
         selectedItem={
           custom
-            ? `${moment
-                .utc(endStartDate.startDate, "DD-MM-YYYY")
+            ? `${dayjs
+                .utc(endStartDate.startDate)
                 .startOf("day")
-                .format("MMM DD,YYYY")} - ${moment
-                .utc(endStartDate.endDate, "DD-MM-YYYY")
+                .format("MMM DD,YYYY")} - ${dayjs
+                .utc(endStartDate.endDate)
                 .startOf("day")
                 .format("MMM DD,YYYY")}`
             : selectedItem
         }
         items={items}
+        theme={themeSlice.theme}
       />
 
       <Space direction="vertical" size={12}>

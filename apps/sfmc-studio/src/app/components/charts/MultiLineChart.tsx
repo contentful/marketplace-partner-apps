@@ -5,8 +5,9 @@ import { commonChartConfig } from "@/lib/utils/dashboards";
 import { multiLineChart } from "@/lib/utils/getColor";
 import { Line } from "@ant-design/plots";
 import React, { FC, useMemo } from "react";
-import { useAppSelector } from "src/app/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import { themeTextColor } from "@/lib/Constants";
+import dayjs from "dayjs";
 
 const MultiLineChart: FC<MultiLineChartType> = ({
   data,
@@ -14,7 +15,7 @@ const MultiLineChart: FC<MultiLineChartType> = ({
   colorField,
   legend,
 }) => {
-  let theme: string = useAppSelector((state) => state.themeSlice.theme);
+  let theme: string = useAppSelector((state) => state.themeSlice?.theme);
   const config = useMemo(() => {
     return {
       data: data,
@@ -37,7 +38,11 @@ const MultiLineChart: FC<MultiLineChartType> = ({
           grid: false,
           style: {
             labelTransform: "rotate(-52)",
-            labelFormatter: (d: any) => commonChartConfig.dateFormatForGraph(d),
+            labelFormatter: (d: any) => {
+              let date = dayjs(d).format("DD MMM YYYY");
+
+              return commonChartConfig.dateFormatForGraph(date);
+            },
           },
           tick: false,
           labelSpacing: 10,

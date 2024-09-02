@@ -3,7 +3,7 @@ import { PieChartType } from "@/lib/types/chart";
 import { formatInput } from "@/lib/utils/common";
 import { Pie } from "@ant-design/plots";
 import React, { FC, useMemo } from "react";
-import { useAppSelector } from "src/app/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 
 const PieChart: FC<PieChartType> = ({
   data,
@@ -13,7 +13,7 @@ const PieChart: FC<PieChartType> = ({
   width,
   height,
 }) => {
-  let theme: string = useAppSelector((state) => state.themeSlice.theme);
+  let theme: string = useAppSelector((state) => state.themeSlice?.theme);
   const config = useMemo(() => {
     return {
       data: data,

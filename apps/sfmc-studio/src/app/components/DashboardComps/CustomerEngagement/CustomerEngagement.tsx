@@ -5,11 +5,11 @@ import style from "./customerEngagement.module.scss";
 import ByDayWeek from "./ByDayWeek";
 import CampaignClicksEngagement from "./CampaignClicksEngagement";
 import { ApiClient } from "@/lib/ApiClients";
-import { useAppDispatch, useAppSelector } from "src/app/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { PageAppSDK } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
-import { dateStartEnd } from "src/app/redux/slices/dateSlice";
-import { loadingState } from "src/app/redux/slices/loadersSlice";
+import { dateStartEnd } from "@/redux/slices/dateSlice";
+import { loadingState } from "@/redux/slices/loadersSlice";
 import {
   ByDayWeekType,
   CampaignClicksSentsOpensType,
@@ -17,7 +17,7 @@ import {
   CountDataType,
 } from "@/lib/types/dashboard";
 import { Weekdays, eDataExtensionKey } from "@/lib/Constants";
-import { formatInput } from "@/lib/utils/common";
+import { encryptData, formatInput } from "@/lib/utils/common";
 import { barChartColor, barLabelColor } from "@/lib/utils/getColor";
 import CampaignClicksSentsOpens from "./CampaignClicksSentsOpens";
 import svgIcons from "@/lib/utils/icons";
@@ -44,14 +44,14 @@ function CustomerEngagement({ order }: { order: number }) {
     },
     {
       count: { count: 0, change: 0 },
-      cardText: "Opens",
+      cardText: "Total Opens",
       icon: CustomerEngagementIcon?.opens,
       toolTipText:
         "Total email opens, including multiple opens by the same recipient.",
     },
     {
       count: { count: 0, change: 0 },
-      cardText: "Clicks",
+      cardText: "Total Clicks",
       icon: CustomerEngagementIcon?.clicks,
       toolTipText: "Total number of links clicked within the delivered email.",
     },
@@ -79,13 +79,13 @@ function CustomerEngagement({ order }: { order: number }) {
       },
       {
         count: { count: 0, change: 0 },
-        cardText: "Bounce",
+        cardText: "Total Bounces",
         icon: CustomerEngagementIcon?.bounce,
         toolTipText: "Undelivered emails.",
       },
       {
         count: { count: 0, change: 0 },
-        cardText: "Unsubscribe",
+        cardText: "Total Unsubscribers",
         icon: CustomerEngagementIcon?.unsubscribe,
         toolTipText: "Recipients who opted out from the email list.",
       },
@@ -105,10 +105,13 @@ function CustomerEngagement({ order }: { order: number }) {
   >([]);
 
   useEffect(() => {
-    fetchData(dateSlice.dateRange);
+    fetchData(dateSlice.dateRange, dateSlice?.isTwentyFourHr);
   }, [dateSlice.dateRange, isAuth]);
 
-  const fetchData = async (dateRange: dateStartEnd) => {
+  const fetchData = async (
+    dateRange: dateStartEnd,
+    isTwentyFourHr: boolean
+  ) => {
     if (parameters?.installation?.licenseKey && isAuth) {
       try {
         dispatch(loadingState(true));
@@ -125,17 +128,25 @@ function CustomerEngagement({ order }: { order: number }) {
           campaignClicksUniqueRes,
           campaignClicksSentsOpensRes,
         ] = await Promise.all([
-          fetchCount(eDataExtensionKey.DELIVERIES, dateRange),
-          fetchCount(eDataExtensionKey.OPENS, dateRange),
-          fetchCount(eDataExtensionKey.CLICKS, dateRange),
-          fetchCount("ctr", dateRange),
-          fetchCount(eDataExtensionKey.UNIQUE_CLICKS, dateRange),
-          fetchCount(eDataExtensionKey.UNIQUE_OPENS, dateRange),
-          fetchCount(eDataExtensionKey.BOUNCES, dateRange),
-          fetchCount(eDataExtensionKey.UNSUBSCRIBERS, dateRange),
-          fetchWeekUniqueOpen(dateRange),
-          fetchCampaignClicksUnique(dateRange),
-          fetchCampaignClicksSentsOpens(dateRange),
+          fetchCount(eDataExtensionKey.DELIVERIES, dateRange, isTwentyFourHr),
+          fetchCount(eDataExtensionKey.OPENS, dateRange, isTwentyFourHr),
+          fetchCount(eDataExtensionKey.CLICKS, dateRange, isTwentyFourHr),
+          fetchCount("ctr", dateRange, isTwentyFourHr),
+          fetchCount(
+            eDataExtensionKey.UNIQUE_CLICKS,
+            dateRange,
+            isTwentyFourHr
+          ),
+          fetchCount(eDataExtensionKey.UNIQUE_OPENS, dateRange, isTwentyFourHr),
+          fetchCount(eDataExtensionKey.BOUNCES, dateRange, isTwentyFourHr),
+          fetchCount(
+            eDataExtensionKey.UNSUBSCRIBERS,
+            dateRange,
+            isTwentyFourHr
+          ),
+          fetchWeekUniqueOpen(dateRange, isTwentyFourHr),
+          fetchCampaignClicksUnique(dateRange, isTwentyFourHr),
+          fetchCampaignClicksSentsOpens(dateRange, isTwentyFourHr),
         ]);
 
         setFirstRowCountData([
@@ -177,15 +188,31 @@ function CustomerEngagement({ order }: { order: number }) {
 
   const fetchCount = async (
     fileKey: string,
-    date: { startDate: Date; endDate: Date }
+    date: { startDate: Date; endDate: Date },
+    isTwentyFourHr: boolean
   ) => {
     try {
-      const res = await client.post("api/dashboard/customer-engagement", {
-        licenseKey: parameters.installation.licenseKey,
-        sfmcTimezone: parameters.installation.sfmcTimezone,
-        ...date,
-        dataExtensionKey: fileKey,
-      });
+      const res = await client.post(
+        "api/dashboard/customer-engagement",
+        {
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
+          sfmcTimezone: parameters.installation.sfmcTimezone,
+          ...date,
+          dataExtensionKey: fileKey,
+          isTwentyFourHr: isTwentyFourHr,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            ["jro34134ecr4aex"]: `${encryptData({
+              validate: Date.now(),
+              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+            })}`,
+          },
+        }
+      );
 
       if (res.status !== 200)
         console.log("Error occured fetching conversion data");
@@ -196,14 +223,29 @@ function CustomerEngagement({ order }: { order: number }) {
     }
   };
 
-  const fetchWeekUniqueOpen = async (dateRange: dateStartEnd) => {
+  const fetchWeekUniqueOpen = async (
+    dateRange: dateStartEnd,
+    isTwentyFourHr: boolean
+  ) => {
     try {
       const res = await client.post(
         "api/dashboard/customer-engagement/campaign-daywise-uniqueopens",
         {
-          licenseKey: parameters.installation.licenseKey,
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
           sfmcTimezone: parameters.installation.sfmcTimezone,
           ...dateRange,
+          isTwentyFourHr: isTwentyFourHr,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            ["jro34134ecr4aex"]: `${encryptData({
+              validate: Date.now(),
+              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+            })}`,
+          },
         }
       );
 
@@ -231,16 +273,29 @@ function CustomerEngagement({ order }: { order: number }) {
     }
   };
 
-  const fetchCampaignClicksUnique = async (dateRange: dateStartEnd) => {
+  const fetchCampaignClicksUnique = async (
+    dateRange: dateStartEnd,
+    isTwentyFourHr: boolean
+  ) => {
     try {
       const res = await client.post(
         "api/dashboard/customer-engagement/top-campaign-clicks",
         {
-          licenseKey: parameters.installation.licenseKey,
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
           ...dateRange,
-          campaignCount: 7,
-          getOnlyUnique: true,
           sfmcTimezone: parameters.installation.sfmcTimezone,
+          isTwentyFourHr: isTwentyFourHr,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            ["jro34134ecr4aex"]: `${encryptData({
+              validate: Date.now(),
+              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+            })}`,
+          },
         }
       );
 
@@ -253,14 +308,29 @@ function CustomerEngagement({ order }: { order: number }) {
     }
   };
 
-  const fetchCampaignClicksSentsOpens = async (dateRange: dateStartEnd) => {
+  const fetchCampaignClicksSentsOpens = async (
+    dateRange: dateStartEnd,
+    isTwentyFourHr: boolean
+  ) => {
     try {
       const res = await client.post(
         "api/dashboard/customer-engagement/top-campaign-clicks-sents-opens",
         {
-          licenseKey: parameters.installation.licenseKey,
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
           sfmcTimezone: parameters.installation.sfmcTimezone,
           ...dateRange,
+          isTwentyFourHr: isTwentyFourHr,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            ["jro34134ecr4aex"]: `${encryptData({
+              validate: Date.now(),
+              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+            })}`,
+          },
         }
       );
 

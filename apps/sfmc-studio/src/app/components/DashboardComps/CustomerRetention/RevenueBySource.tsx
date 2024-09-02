@@ -5,10 +5,10 @@ import { formatInput } from "@/lib/utils/common";
 import NoData from "@/components/UI/NoData";
 import PieChartWithRadius from "@/components/charts/PieChart";
 import { RevenueBySourceRetention } from "@/lib/types/dashboard";
-import { useAppSelector } from "src/app/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 
 function RevenueBySource({ revenueSource }: { revenueSource: any }) {
-  let theme: string = useAppSelector((state) => state.themeSlice.theme);
+  let theme: string = useAppSelector((state) => state.themeSlice?.theme);
   return (
     <div
       className={`${style.RevanueMain} ${

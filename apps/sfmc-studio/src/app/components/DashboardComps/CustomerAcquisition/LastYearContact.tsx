@@ -8,7 +8,7 @@ function LastYearContact({ lastYearContact }: { lastYearContact: any }) {
   return (
     <div className={style.NewContactsMain}>
       <div className={`CanvesData ${style.NewContactsInner}`}>
-        <h3>New Contacts In Six Months</h3>
+        <h3>New Contacts In The Last Six Months</h3>
         <p>{}</p>
         {lastYearContact?.length ? (
           <LineChart

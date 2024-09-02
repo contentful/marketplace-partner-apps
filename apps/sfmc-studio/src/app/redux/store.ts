@@ -3,7 +3,6 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import navigationSlice from "./slices/navigationSlice";
 import dateSlice from "./slices/dateSlice";
-import notificationSlice from "./slices/notificationSlice";
 import loadersSlice from "./slices/loadersSlice";
 import authSlice from "./slices/authSlice";
 import themeSlice from "./slices/themeSlice";
@@ -11,7 +10,6 @@ import themeSlice from "./slices/themeSlice";
 let rootReducer: any = {
   navigationSlice: navigationSlice,
   dateSlice: dateSlice,
-  notificationSlice: notificationSlice,
   loaderSlice: loadersSlice,
   authSlice: authSlice,
   themeSlice: themeSlice,

@@ -4,14 +4,14 @@ import style from "./campaignClicks.module.scss";
 import CustomTable from "@/components/UI/CustomTable";
 import { TableColumnsType, Tooltip } from "antd";
 import { CampaignClicksType } from "@/lib/types/dashboard";
-import { useAppSelector } from "src/app/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 
 export default function CampaignClicks({
   campaignClicks,
 }: {
   campaignClicks: any;
 }) {
-  const theme: string = useAppSelector((state) => state.themeSlice.theme);
+  const theme: string = useAppSelector((state) => state.themeSlice?.theme);
   const columns: TableColumnsType<CampaignClicksType> = [
     {
       title: "No",

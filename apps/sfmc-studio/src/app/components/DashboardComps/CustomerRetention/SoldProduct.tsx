@@ -3,10 +3,10 @@ import { Table, theme } from "antd";
 import type { TableProps } from "antd";
 import style from "./soldProduct.module.scss";
 import { SoldProductsRetention } from "@/lib/types/dashboard";
-import { useAppSelector } from "src/app/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 
 export default function SoldProduct({ soldProduct }: { soldProduct: any }) {
-  const theme: string = useAppSelector((state) => state.themeSlice.theme);
+  const theme: string = useAppSelector((state) => state.themeSlice?.theme);
   const columns: TableProps<SoldProductsRetention>["columns"] = [
     {
       title: "Product",

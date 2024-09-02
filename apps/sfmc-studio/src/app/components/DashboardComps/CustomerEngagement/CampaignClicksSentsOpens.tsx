@@ -4,14 +4,14 @@ import style from "./campaignClicks.module.scss";
 import CustomTable from "@/components/UI/CustomTable";
 import { TableColumnsType, Tooltip } from "antd";
 import { CampaignClicksSentsOpensType } from "@/lib/types/dashboard";
-import { useAppSelector } from "src/app/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 
 export default function CampaignClicksSentsOpens({
   campaignClicksSentsOpens,
 }: {
   campaignClicksSentsOpens: any;
 }) {
-  const theme: string = useAppSelector((state) => state.themeSlice.theme);
+  const theme: string = useAppSelector((state) => state.themeSlice?.theme);
   const columns: TableColumnsType<CampaignClicksSentsOpensType> = [
     {
       title: "No",
@@ -75,7 +75,7 @@ export default function CampaignClicksSentsOpens({
       }`}
     >
       <div className={`${style.CampaignClicksInner} ${theme}`}>
-        <h4>Top Campaign</h4>
+        <h4>Top Campaigns</h4>
         <CustomTable data={campaignClicksSentsOpens} columns={columns} />
       </div>
     </div>

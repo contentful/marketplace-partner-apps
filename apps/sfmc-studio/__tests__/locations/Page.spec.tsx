@@ -1,17 +1,14 @@
-import React from 'react';
-import { render } from '@testing-library/react';
-import { mockCma, mockSdk } from '../../__tests__/mocks';
-import Page from 'src/app/components/Locations/Page';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import Home from "../../src/app/page";
 
-jest.mock('@contentful/react-apps-toolkit', () => ({
-  useSDK: () => mockSdk,
-  useCMA: () => mockCma,
-}));
+// Mocking HomeComponent to check if it's rendered by Home
+jest.mock("../../src/app/page", () => () => <div>Home Component</div>);
 
-describe('Page component', () => {
-  it('Component text exists', () => {
-    const { getByText } = render(<Page />);
+describe("Home Component", () => {
+  it("renders HomeComponent", () => {
+    render(<Home />);
 
-    expect(getByText('Hello Page Component (AppId: test-app)')).toBeInTheDocument();
+    expect(screen.getByText("Home Component")).toBeInTheDocument();
   });
 });

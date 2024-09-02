@@ -10,14 +10,20 @@ import { PageAppSDK } from "@contentful/app-sdk";
 import { ApiClient } from "@/lib/ApiClients";
 import LastYearContact from "./LastYearContact";
 import LastWeekContact from "./LastWeekContact";
-import { useAppDispatch, useAppSelector } from "src/app/redux/hooks";
-import { defaultSystemTZ } from "@/lib/utils/common";
-import moment from "moment";
-import { loadingState } from "src/app/redux/slices/loadersSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { defaultSystemTZ, encryptData } from "@/lib/utils/common";
+import { loadingState } from "@/redux/slices/loadersSlice";
 import { barChartColor, barLabelColor } from "@/lib/utils/getColor";
-import { dateStartEnd } from "src/app/redux/slices/dateSlice";
+import { dateStartEnd } from "@/redux/slices/dateSlice";
 import { ContactCounts, TopCitiesType, TopOrders } from "@/lib/types/dashboard";
 import { commonChartConfig } from "@/lib/utils/dashboards";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import advancedFormat from "dayjs/plugin/advancedFormat";
+
+// Extend dayjs with the utc plugin
+dayjs.extend(utc);
+dayjs.extend(advancedFormat);
 
 function CustomerAcquisition({ order }: { order: number }) {
   const { parameters } = useSDK<PageAppSDK>();
@@ -41,8 +47,8 @@ function CustomerAcquisition({ order }: { order: number }) {
   const [totalUsers, setTotalUsers] = useState<TotalUsers[]>([]);
 
   useEffect(() => {
-    fetchData(dateSlice.dateRange);
-  }, [dateSlice.dateRange, isAuth]);
+    fetchData(dateSlice?.dateRange);
+  }, [dateSlice?.dateRange, isAuth]);
 
   const fetchData = async (dateRange: dateStartEnd) => {
     if (parameters?.installation?.licenseKey && isAuth) {
@@ -55,8 +61,8 @@ function CustomerAcquisition({ order }: { order: number }) {
           topOrdersRes,
           totalUsersRes,
         ] = await Promise.all([
-          fetchContactCounts(dateRange),
-          fetchNewContacts(dateRange),
+          fetchContactCounts(),
+          fetchNewContacts(),
           fetchTopCitiesOrder(dateRange),
           fetchTopOrdersTop(dateRange),
           fetchTotalUsers(dateRange),
@@ -69,6 +75,7 @@ function CustomerAcquisition({ order }: { order: number }) {
 
         setLastWeekContact(newContactsResponse?.data?.data?.lastWeekCounts);
         setLastYearContact(newContactsResponse?.data?.data?.lastYearCounts);
+
         setTopCities(
           topCitiesRes?.data?.data?.map((elm: TopCitiesType, i: number) => {
             return {
@@ -90,13 +97,27 @@ function CustomerAcquisition({ order }: { order: number }) {
     }
   };
 
-  const fetchContactCounts = async (dateRange: dateStartEnd) => {
+  const fetchContactCounts = async () => {
     try {
-      const res = await client.post("/api/dashboard/customer-acquisition", {
-        licenseKey: parameters.installation.licenseKey,
-        sfscTimezone: parameters.installation.sfscTimezone,
-        ...dateRange,
-      });
+      const res = await client.post(
+        "/api/dashboard/customer-acquisition",
+        {
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
+          sfscTimezone: parameters.installation.sfscTimezone,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            ["jro34134ecr4aex"]: `${encryptData({
+              validate: Date.now(),
+              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+            })}`,
+          },
+        }
+      );
+
       if (res.status !== 200)
         console.log("Error occured fetching contact counts");
 
@@ -106,30 +127,40 @@ function CustomerAcquisition({ order }: { order: number }) {
     }
   };
 
-  const fetchNewContacts = async (dateRange: dateStartEnd) => {
+  const fetchNewContacts = async () => {
     let date = {
-      weekStartDate: moment
+      weekStartDate: dayjs
         .utc()
         .subtract(6, "days")
         .startOf("day")
         .toISOString(),
-      weekEndDate: moment.utc().endOf("day").toISOString(),
-      monthStartDate: moment
+      weekEndDate: dayjs.utc().endOf("day").toISOString(),
+      monthStartDate: dayjs
         .utc()
         .subtract(6, "months")
         .startOf("day")
         .toISOString(),
-      monthEndDate: moment.utc().endOf("day").toISOString(),
+      monthEndDate: dayjs.utc().endOf("day").toISOString(),
     };
     try {
       const res = await client.post(
         "/api/dashboard/customer-acquisition/new-contacts",
         {
-          licenseKey: parameters.installation.licenseKey,
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
           sfscTimezone: parameters.installation.sfscTimezone,
-          ...dateRange,
           date,
           clientTZ: defaultSystemTZ,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            ["jro34134ecr4aex"]: `${encryptData({
+              validate: Date.now(),
+              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+            })}`,
+          },
         }
       );
       if (res.status !== 200)
@@ -146,9 +177,19 @@ function CustomerAcquisition({ order }: { order: number }) {
       const res = await client.post(
         "/api/dashboard/customer-acquisition/top-cities",
         {
-          licenseKey: parameters.installation.licenseKey,
-          sfscTimezone: parameters.installation.sfscTimezone,
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
           ...dateRange,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            ["jro34134ecr4aex"]: `${encryptData({
+              validate: Date.now(),
+              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+            })}`,
+          },
         }
       );
 
@@ -166,10 +207,20 @@ function CustomerAcquisition({ order }: { order: number }) {
       const res = await client.post(
         "/api/dashboard/customer-acquisition/total-orders",
         {
-          licenseKey: parameters.installation.licenseKey,
-          sfscTimezone: parameters.installation.sfscTimezone,
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
           ...dateRange,
           clientTZ: defaultSystemTZ,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            ["jro34134ecr4aex"]: `${encryptData({
+              validate: Date.now(),
+              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+            })}`,
+          },
         }
       );
       if (res.status !== 200)
@@ -186,10 +237,21 @@ function CustomerAcquisition({ order }: { order: number }) {
       const res = await client.post(
         "/api/dashboard/customer-acquisition/total-users",
         {
-          licenseKey: parameters.installation.licenseKey,
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
           sfscTimezone: parameters.installation.sfscTimezone,
           ...dateRange,
           clientTZ: defaultSystemTZ,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            ["jro34134ecr4aex"]: `${encryptData({
+              validate: Date.now(),
+              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+            })}`,
+          },
         }
       );
       if (res.status !== 200)

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Layout } from "antd";
 import SidebarMenuItems from "./SidebarMenuItems";
 import RightLayout from "./RightLayout";
-import { useAppSelector } from "src/app/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 const App: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { loaderSlice, themeSlice } = useAppSelector((state) => state);

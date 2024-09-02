@@ -5,7 +5,7 @@ import NoData from "@/components/UI/NoData";
 import MultiLineChart from "@/components/charts/MultiLineChart";
 import { multiLineChart } from "@/lib/utils/getColor";
 import { commonChartConfig } from "@/lib/utils/dashboards";
-import { useAppSelector } from "src/app/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import { themeTextColor } from "@/lib/Constants";
 
 export default function TopRevenueOrderType({
@@ -14,7 +14,7 @@ export default function TopRevenueOrderType({
   topRevenueOrderType: any;
 }) {
   const [textHover, setTextHover] = useState<string>("");
-  const theme: string = useAppSelector((state) => state.themeSlice.theme);
+  const theme: string = useAppSelector((state) => state.themeSlice?.theme);
 
   let legend = {
     position: "bottom",

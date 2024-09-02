@@ -2,7 +2,7 @@ import React from "react";
 import { Table, Typography } from "antd";
 import type { TableProps } from "antd";
 import { formatInput } from "@/lib/utils/common";
-import { useAppSelector } from "src/app/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 const { Text } = Typography;
 
 interface DataType {
@@ -33,7 +33,7 @@ const CustomTable = ({
     return { ...el, key: el?.id ? el?.id : `${index}` };
   });
 
-  let theme: string = useAppSelector((state) => state.themeSlice.theme);
+  let theme: string = useAppSelector((state) => state.themeSlice?.theme);
 
   return (
     <Table
