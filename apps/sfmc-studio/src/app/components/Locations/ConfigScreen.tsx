@@ -22,12 +22,13 @@ import { ApiClient } from "@/lib/ApiClients";
 import {
   clientCredsCookieName,
   CookieHelpers,
+  decryptClientData,
+  encryptData,
   saveOrValidateLicenseKey,
   timeZoneMapping,
 } from "@/lib/utils/common";
 import { AxiosInstance } from "axios";
-import moment from "moment-timezone";
-import { Input } from "antd";
+import { Input, Switch } from "antd";
 
 enum eAppParameterActions {
   UPDATED = "UPDATED",
@@ -77,17 +78,7 @@ const setClientCredsCookie = (newParams: any, sdk: ConfigAppSDK) => {
     Object.keys(sdk.parameters.installation).length <= 0;
   //If its a fresh installation, then delete if any previous installation cookie first
   if (isFreshInstallation) {
-    try {
-      CookieHelpers.deleteCookie(cookieName);
-    } catch (err) {
-      console.log(err, "==Delete cookie==");
-    }
-  }
-  //Check and get previous saved cookie
-  let deserializedLicenseKeyObj = CookieHelpers.getCookie(cookieName);
-  let prevSavedLicenseKey = null;
-  if (deserializedLicenseKeyObj) {
-    prevSavedLicenseKey = JSON.parse(deserializedLicenseKeyObj)?.licenseKey;
+    CookieHelpers.deleteCookie(cookieName);
   }
   //setting the cookie in case required params are there
   const nonMandatoryParamKeys = [
@@ -97,19 +88,38 @@ const setClientCredsCookie = (newParams: any, sdk: ConfigAppSDK) => {
   const requiredFieldsKeys = Object.keys(newParams).filter(
     (key: any) => !nonMandatoryParamKeys.includes(key)
   );
-  const isValidParams = requiredFieldsKeys.every((field) => newParams[field]);
+  // const isValidParams = requiredFieldsKeys.every((field) => newParams[field]);
+  const isValidParams = requiredFieldsKeys.every((field) => {
+    const value = newParams[field];
+    return value !== undefined && value !== null && value !== "";
+  });
+
   if (isValidParams) {
-    if (isFreshInstallation || prevSavedLicenseKey !== licenseKey) {
+    if (isFreshInstallation) {
       // if user keeps the previous license key then not updating cookie
-      const serializedValue = JSON.stringify({
-        licenseKey,
+      const serializedValue = encryptData({
+        licenseKey: licenseKey,
         isUserNotified: false,
       });
-      try {
-        CookieHelpers.setCookie(cookieName, serializedValue, 365 * 2); // 2 yrs
-      } catch (err) {
-        console.log(err, "==Set Cookie==");
+
+      CookieHelpers.setCookie(cookieName, serializedValue, 365 * 2); // 2 yrs
+    } else {
+      const deserializedCookieValue: any = CookieHelpers.getCookie(cookieName);
+
+      let serializedValue = {
+        licenseKey: licenseKey,
+        isUserNotified: true,
+      };
+
+      if (!deserializedCookieValue) {
+        serializedValue.isUserNotified = false;
       }
+
+      CookieHelpers.setCookie(
+        cookieName,
+        encryptData(serializedValue),
+        365 * 2
+      );
     }
   }
 };
@@ -159,12 +169,27 @@ const ConfigScreen = () => {
     // or "Save" in the configuration screen.
     // for more details see https://www.contentful.com/developers/docs/extensibility/ui-extensions/sdk-reference/#register-an-app-configuration-hook
 
+    if (!parameters["sfmcTimezone"])
+      parameters["sfmcTimezone"] =
+        appInstallationParameters[AppInstallationParametersKeys.SFMC_TIMEZONE];
+
+    if (!parameters["sfscTimezone"])
+      parameters["sfscTimezone"] =
+        appInstallationParameters[AppInstallationParametersKeys.SFSC_TIMEZONE];
+
+    if (!parameters["sfmcSync"])
+      parameters["sfmcSync"] =
+        appInstallationParameters[AppInstallationParametersKeys.SFMC_SYNC];
+
     // Get current the state of EditorInterface and other entities
     // related to this app installation
     const currentState = await sdk.app.getCurrentState();
+
     setClientCredsCookie(parameters, sdk);
     validateLicenseKeyForWebApp(parameters, sdk, client);
     automationConfigure(parameters);
+    userConfig(parameters);
+    clearCacheApiCall(parameters[AppInstallationParametersKeys.LICENSE_KEY]);
     return {
       // Parameters to be persisted as the app configuration.
       parameters,
@@ -205,6 +230,37 @@ const ConfigScreen = () => {
     })();
   }, [sdk]);
 
+  const clearCacheApiCall = (licenseKey: string) => {
+    try {
+      if (licenseKey) {
+        client
+          .post(
+            "/api/clearCache",
+            {
+              licenseKey: encryptData({
+                licenseKey: licenseKey,
+              }),
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+                ["jro34134ecr4aex"]: `${encryptData({
+                  validate: Date.now(),
+                  token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+                })}`,
+              },
+            }
+          )
+          .then((res) => {
+            if (res.status !== 200) console.log("Erro occured Clear cache");
+          })
+          .catch((err) => console.log(err));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const automationConfigure = (parameters: any) => {
     let {
       licenseKey,
@@ -223,14 +279,30 @@ const ConfigScreen = () => {
         sfmcclientSecret
       ) {
         client
-          .post("/api/automation", {
-            subdomain: sfmcDomain,
-            client_id: sfmcclientId,
-            client_secret: sfmcclientSecret,
-            mid: sfmcMarketingId,
-            licenseKey: licenseKey,
-            spaceId: sdk.ids.space,
-          })
+          .post(
+            "/api/automation",
+            {
+              subdomain: sfmcDomain,
+              client_id: sfmcclientId,
+              client_secret: encryptData({
+                sfmcclientSecret: sfmcclientSecret,
+              }),
+              mid: sfmcMarketingId,
+              licenseKey: encryptData({
+                licenseKey: licenseKey,
+              }),
+              spaceId: sdk.ids.space,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+                ["jro34134ecr4aex"]: `${encryptData({
+                  validate: Date.now(),
+                  token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+                })}`,
+              },
+            }
+          )
           .then((res) => {
             if (res.status !== 200)
               console.log("Error occured Automation configured");
@@ -239,10 +311,92 @@ const ConfigScreen = () => {
 
         client
           .post("/api/dashboard/dashboard-config/add-menu", {
-            licenseKey: licenseKey,
+            licenseKey: encryptData({
+              licenseKey: licenseKey,
+            }),
           })
           .then((res) => {
             if (res.status !== 200) console.log("Error occured Menu Added");
+          })
+          .catch((err) => console.log(err));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const userConfig = (parameters: any) => {
+    let {
+      licenseKey,
+      sfmcSync,
+      sfmcMarketingId,
+      sfmcDomain,
+      sfmcclientId,
+      sfmcclientSecret,
+      sfmcTimezone,
+      sfscUrl,
+      sfscclientId,
+      sfscclientSecret,
+      sfscUsername,
+      sfscPassword,
+      sfscTimezone,
+    } = parameters;
+
+    try {
+      if (
+        licenseKey &&
+        sfmcMarketingId &&
+        sfmcDomain &&
+        sfmcclientId &&
+        sfmcclientSecret &&
+        sfmcTimezone &&
+        sfscUrl &&
+        sfscclientId &&
+        sfscclientSecret &&
+        sfscUsername &&
+        sfscPassword &&
+        sfscTimezone
+      ) {
+        client
+          .post(
+            "/api/user-config",
+            {
+              automatedSync: sfmcSync,
+              licenseKey: encryptData({ licenseKey: licenseKey }),
+              spaceId: sdk.ids.space,
+              marketingCred: {
+                mId: sfmcMarketingId,
+                subdomain: sfmcDomain,
+                clientId: sfmcclientId,
+                clientSecret: encryptData({
+                  sfmcclientSecret: sfmcclientSecret,
+                }),
+                sfmcTimezone: sfmcTimezone,
+              },
+              cloudCred: {
+                sfscUrl: sfscUrl,
+                sfscClientId: sfscclientId,
+                sfscClientSecret: encryptData({
+                  sfscclientSecret: sfscclientSecret,
+                }),
+                sfscUsername: sfscUsername,
+                sfscPassword: encryptData({ sfscPassword: sfscPassword }),
+                sfscTimezone: sfscTimezone,
+              },
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+                ["jro34134ecr4aex"]: `${encryptData({
+                  validate: Date.now(),
+                  token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+                })}`,
+              },
+            }
+          )
+          .then((res) => {
+            if (res.status !== 200)
+              console.log("Error occured Automation configured");
           })
           .catch((err) => console.log(err));
       }
@@ -262,10 +416,11 @@ const ConfigScreen = () => {
           <Paragraph>Welcome to Config Page.</Paragraph>
 
           <FormControl>
-            <FormLabel>
+            <FormLabel htmlFor="app-license-key">
               App License Key <sup className="Supdata">*</sup>
             </FormLabel>
             <Input.Password
+              id="app-license-key"
               value={parameters.licenseKey}
               name={AppInstallationParametersKeys.LICENSE_KEY}
               onChange={handleConfigParamUpdate}
@@ -273,63 +428,69 @@ const ConfigScreen = () => {
           </FormControl>
 
           <FormControl>
-            <FormLabel>Company Name</FormLabel>
+            <FormLabel htmlFor="app-company-name">Company Name</FormLabel>
             <TextInput
               maxLength={100}
               value={parameters.companyName}
               name={AppInstallationParametersKeys.COMPANY_NAME}
               onChange={handleConfigParamUpdate}
+              id="app-company-name"
             />
           </FormControl>
 
           <FormControl>
-            <FormLabel>Company Logo Url</FormLabel>
+            <FormLabel htmlFor="app-company-logo">Company Logo Url</FormLabel>
             <TextInput
               type="url"
               value={parameters.companyLogoUrl}
               name={AppInstallationParametersKeys.COMPANY_LOGO_URL}
               onChange={handleConfigParamUpdate}
+              id="app-company-logo"
             />
           </FormControl>
 
           <FormControl>
-            <FormLabel>
+            <FormLabel htmlFor="sfmc-sub-domain">
               SFMC Sub-domain <sup className="Supdata">*</sup>
             </FormLabel>
             <TextInput
               value={parameters.sfmcDomain}
               name={AppInstallationParametersKeys.SFMC_DOMAIN}
               onChange={handleConfigParamUpdate}
+              id="sfmc-sub-domain"
             />
           </FormControl>
 
           <FormControl>
-            <FormLabel>
+            <FormLabel htmlFor="sfmc-mid">
               SFMC MID <sup className="Supdata">*</sup>
             </FormLabel>
             <TextInput
               value={parameters.sfmcMarketingId}
               name={AppInstallationParametersKeys.SFMC_MARKETING_ID}
               onChange={handleConfigParamUpdate}
+              id="sfmc-mid"
             />
           </FormControl>
 
           <FormControl>
-            <FormLabel>
+            <FormLabel htmlFor="sfmc-client-id">
               SFMC Client Id <sup className="Supdata">*</sup>
             </FormLabel>
             <TextInput
               value={parameters.sfmcclientId}
               name={AppInstallationParametersKeys.SFMC_CLIENT_ID}
               onChange={handleConfigParamUpdate}
+              id="sfmc-client-id"
             />
           </FormControl>
 
           <FormControl>
-            <FormLabel>
+            <FormLabel htmlFor="sfmc-client-secret">
               SFMC Client Secret <sup className="Supdata">*</sup>
             </FormLabel>
             <Input.Password
+              id="sfmc-client-secret"
               value={parameters.sfmcclientSecret}
               name={AppInstallationParametersKeys.SFMC_CLIENT_SECRET}
               onChange={handleConfigParamUpdate}
@@ -337,7 +498,7 @@ const ConfigScreen = () => {
           </FormControl>
 
           <FormControl>
-            <FormLabel>
+            <FormLabel htmlFor="sfmc-Select-controlled">
               SFMC Timezone <sup className="Supdata">*</sup>
             </FormLabel>
             <Select
@@ -358,32 +519,35 @@ const ConfigScreen = () => {
           </FormControl>
 
           <FormControl>
-            <FormLabel>
+            <FormLabel htmlFor="sfsc-url">
               SFSC URL <sup className="Supdata">*</sup>
             </FormLabel>
             <TextInput
               value={parameters.sfscUrl}
               name={AppInstallationParametersKeys.SFSC_URL}
               onChange={handleConfigParamUpdate}
+              id="sfsc-url"
             />
           </FormControl>
 
           <FormControl>
-            <FormLabel>
+            <FormLabel htmlFor="sfsc-client-id">
               SFSC Client Id <sup className="Supdata">*</sup>
             </FormLabel>
             <TextInput
               value={parameters.sfscclientId}
               name={AppInstallationParametersKeys.SFSC_CLIENT_ID}
               onChange={handleConfigParamUpdate}
+              id="sfsc-client-id"
             />
           </FormControl>
 
           <FormControl>
-            <FormLabel>
+            <FormLabel htmlFor="sfsc-client-secret">
               SFSC Client Secret <sup className="Supdata">*</sup>
             </FormLabel>
             <Input.Password
+              id="sfsc-client-secret"
               value={parameters.sfscclientSecret}
               name={AppInstallationParametersKeys.SFSC_CLIENT_SECRET}
               onChange={handleConfigParamUpdate}
@@ -391,21 +555,23 @@ const ConfigScreen = () => {
           </FormControl>
 
           <FormControl>
-            <FormLabel>
+            <FormLabel htmlFor="sfsc-username">
               SFSC Username <sup className="Supdata">*</sup>
             </FormLabel>
             <TextInput
               value={parameters.sfscUsername}
               name={AppInstallationParametersKeys.SFSC_USERNAME}
               onChange={handleConfigParamUpdate}
+              id="sfsc-username"
             />
           </FormControl>
 
           <FormControl>
-            <FormLabel>
+            <FormLabel htmlFor="sfsc-password">
               SFSC Password <sup className="Supdata">*</sup>
             </FormLabel>
             <Input.Password
+              id="sfsc-password"
               value={parameters.sfscPassword}
               type="password"
               name={AppInstallationParametersKeys.SFSC_PASSWORD}
@@ -414,7 +580,7 @@ const ConfigScreen = () => {
           </FormControl>
 
           <FormControl>
-            <FormLabel>
+            <FormLabel htmlFor="sfsc-Select-controlled">
               SFSC Timezone <sup className="Supdata">*</sup>
             </FormLabel>
             <Select
@@ -432,6 +598,23 @@ const ConfigScreen = () => {
                 </Select.Option>
               ))}
             </Select>
+          </FormControl>
+
+          <FormControl onChange={handleConfigParamUpdate}>
+            <FormLabel htmlFor='automated-sync'
+            className="switchLabel">Automated Sync</FormLabel>
+
+            <Switch
+              onChange={(value, e) => {
+                let updateEvent: any = { ...e };
+                updateEvent["target"]["name"] =
+                  AppInstallationParametersKeys.SFMC_SYNC;
+                updateEvent["target"]["value"] = value;
+                handleConfigParamUpdate(updateEvent);
+              }}
+              value={parameters.sfmcSync}
+              id="automated-sync"
+            />
           </FormControl>
         </Form>
       </Flex>

@@ -1,5 +1,12 @@
 import { AxiosInstance } from "axios";
-import moment from "moment";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import advancedFormat from "dayjs/plugin/advancedFormat";
+import CryptoJS from "crypto-js";
+
+// Extend dayjs with plugins
+dayjs.extend(utc);
+dayjs.extend(advancedFormat);
 
 export const formatInput = (input: number, currencySign?: string) => {
   if (currencySign) {
@@ -15,33 +22,6 @@ export const formatInput = (input: number, currencySign?: string) => {
       ?.replace(/\B(?=(\d{3})+(?!\d))/g, ",") ?? "0"
   );
 };
-
-export const defaultMenu = [
-  {
-    menulabel: "Customer Acquisition",
-    heading: "Customer Acquisition",
-    order: 1,
-    link: "Customer_Acquistion",
-  },
-  {
-    menulabel: "Customer Engagement",
-    heading: "Customer Engagement",
-    order: 2,
-    link: "Customer_Engagement",
-  },
-  {
-    menulabel: "Customer Retention",
-    heading: "Customer Retention",
-    order: 3,
-    link: "Customer_Retention",
-  },
-  {
-    menulabel: "ROI/Conversion",
-    heading: "ROI/Conversion",
-    order: 4,
-    link: "ROI_Conversion",
-  },
-];
 
 /**
  * This constant holds the value of default system TimeZone string
@@ -80,19 +60,24 @@ export const saveOrValidateLicenseKey = async (
   spaceId: string,
   client: AxiosInstance
 ) => {
-  return client.post(`/api/auth/validate-license`, {
-    licenseKey,
-    spaceId,
-  });
-};
-
-export const unlinkSpaceWithLicenseKey = async (
-  spaceId: string,
-  client: AxiosInstance
-) => {
-  return client.post("/api/auth/unlink-space", {
-    spaceId,
-  });
+  return client.post(
+    `/api/auth/validate-license`,
+    {
+      licenseKey: encryptData({
+        licenseKey: licenseKey,
+      }),
+      spaceId,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+        jro34134ecr4aex: `${encryptData({
+          validate: Date.now(),
+          token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+        })}`,
+      },
+    }
+  );
 };
 
 export const customDateRange = [
@@ -107,31 +92,31 @@ export const customDateRange = [
 
 export const getDateRange = (rangeOption: string) => {
   let startDate: any, endDate: any;
-  let todayEndDate = moment.utc().endOf("day").toDate();
+  let todayEndDate = dayjs.utc().endOf("day").toDate();
 
   switch (rangeOption) {
     case "0":
-      startDate = moment.utc().subtract(24, "hours").toDate();
-      endDate = moment.utc().toDate();
+      startDate = dayjs.utc().subtract(24, "hour").toDate();
+      endDate = dayjs.utc().toDate();
       break;
     case "1":
-      startDate = moment.utc().subtract(2, "days").startOf("day").toDate();
+      startDate = dayjs.utc().subtract(2, "day").startOf("day").toDate();
       endDate = todayEndDate;
       break;
     case "2":
-      startDate = moment.utc().subtract(6, "days").startOf("day").toDate();
+      startDate = dayjs.utc().subtract(6, "day").startOf("day").toDate();
       endDate = todayEndDate;
       break;
     case "3":
-      startDate = moment.utc().subtract(1, "month").startOf("day").toDate();
+      startDate = dayjs.utc().subtract(1, "month").startOf("day").toDate();
       endDate = todayEndDate;
       break;
     case "4":
-      startDate = moment.utc().subtract(3, "months").startOf("day").toDate();
+      startDate = dayjs.utc().subtract(3, "months").startOf("day").toDate();
       endDate = todayEndDate;
       break;
     case "5":
-      startDate = moment.utc().subtract(6, "months").startOf("day").toDate();
+      startDate = dayjs.utc().subtract(6, "months").startOf("day").toDate();
       endDate = todayEndDate;
       break;
     case "6":
@@ -292,3 +277,30 @@ export const timeZoneMapping = [
   { name: "(UTC-11:00) Coordinated Universal Time-11", iana: "Etc/GMT+11" },
   { name: "(UTC-12:00) International Date Line West", iana: "Etc/GMT+12" },
 ];
+
+const CRYPT_SECRET_KEY = process.env.NEXT_PUBLIC_ENCRYPTION_DATA as string;
+
+export const encryptData = (data: any) => {
+  try {
+    const dataToEncrypt = JSON.stringify(data);
+    const encrypted = CryptoJS.AES.encrypt(
+      dataToEncrypt,
+      CRYPT_SECRET_KEY
+    ).toString();
+    return encrypted;
+  } catch (e) {
+    throw new Error("unable to encrypt the data");
+  }
+};
+
+export const decryptClientData = (encryptedData: string) => {
+  try {
+    const decrypted = CryptoJS.AES.decrypt(
+      encryptedData,
+      CRYPT_SECRET_KEY
+    ).toString(CryptoJS.enc.Utf8);
+    return JSON.parse(decrypted);
+  } catch (e) {
+    throw new Error("unable to parse req");
+  }
+};

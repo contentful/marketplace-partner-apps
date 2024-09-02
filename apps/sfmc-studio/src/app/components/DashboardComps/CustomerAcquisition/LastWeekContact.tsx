@@ -3,10 +3,10 @@ import React from "react";
 import style from "./newContacts.module.scss";
 import NoData from "@/components/UI/NoData";
 import LineChart from "@/components/charts/LineChart";
-import { useAppSelector } from "src/app/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 
 function LastWeekContact({ lastWeekContact }: { lastWeekContact: any }) {
-  const theme: string = useAppSelector((state) => state.themeSlice.theme);
+  const theme: string = useAppSelector((state) => state.themeSlice?.theme);
   return (
     <>
       <div className={style.NewContactsMain}>

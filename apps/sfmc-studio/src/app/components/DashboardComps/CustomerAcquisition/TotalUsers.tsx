@@ -3,7 +3,7 @@ import React from "react";
 import style from "./TotalUsers.module.scss";
 import NoData from "@/components/UI/NoData";
 import LineChart from "@/components/charts/LineChart";
-import { useAppSelector } from "src/app/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 
 type TotalUsers = {
   Date: string;
@@ -11,7 +11,7 @@ type TotalUsers = {
 };
 
 function TotalUsers({ totalUsers }: { totalUsers: TotalUsers[] }) {
-  let theme: string = useAppSelector((state) => state.themeSlice.theme);
+  let theme: string = useAppSelector((state) => state.themeSlice?.theme);
   return (
     <div
       className={`${style.DeviceCategoryMain} ${theme} ${
@@ -19,7 +19,7 @@ function TotalUsers({ totalUsers }: { totalUsers: TotalUsers[] }) {
       }`}
     >
       <div className={`CanvesData ${style.DeviceCategoryColInner}`}>
-        <h3>Total Subscribers</h3>
+        <h3>Total Active Subscribers</h3>
         {totalUsers?.length ? (
           <LineChart
             data={totalUsers}
