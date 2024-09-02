@@ -4,7 +4,6 @@ import style from "./topCities.module.scss";
 import NoData from "@/components/UI/NoData";
 import BarChart from "@/components/charts/BarChart";
 import { TopCitiesType } from "@/lib/types/dashboard";
-import { useAppSelector } from "src/app/redux/hooks";
 
 function TopCities({ topCities }: { topCities: TopCitiesType[] }) {
   return (

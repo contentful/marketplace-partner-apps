@@ -254,7 +254,19 @@ html {
               background: #4096ff;
               border-color: #4096ff;
             }
+            &:disabled {
+              border: 1px solid #999999;
+              background-color: #cccccc;
+              color: #666666;
+              svg {
+                color: #666666;
+                path {
+                  fill: #666666;
+                }
+              }
+            }
           }
+
           a {
             border-radius: 6px;
             border: 1px solid #cfd9e0;
@@ -373,7 +385,7 @@ html {
               font-size: 14px;
             }
           }
-          button{
+          button {
             font-family: "SFProDisplay";
           }
         }
@@ -384,10 +396,10 @@ html {
             color: #fff;
           }
         }
-        .CustomerAcquisitionComponent{
-          .RetatinDateCamp{
-            .DateData{
-              border-right: 1px solid #414D63;
+        .CustomerAcquisitionComponent {
+          .RetatinDateCamp {
+            .DateData {
+              border-right: 1px solid #414d63;
             }
           }
         }
@@ -403,15 +415,15 @@ html {
           .HeaderUserInfo {
             a {
               border: 1px solid #414d63;
-              color: #111B2B;
-              background-color: #FFF;
-              &:hover{
-                background-color: #036FE3;
-                color:#fff;
-                svg{
-                  color:#fff;
-                  path{
-                    fill:#fff;
+              color: #111b2b;
+              background-color: #fff;
+              &:hover {
+                background-color: #036fe3;
+                color: #fff;
+                svg {
+                  color: #fff;
+                  path {
+                    fill: #fff;
                   }
                 }
               }
@@ -561,6 +573,11 @@ html {
             box-shadow: 0px -1px 0px 0px #e7ebee inset;
           }
         }
+        td {
+          span {
+            background-color: transparent !important;
+          }
+        }
       }
       .ant-table-summary {
         tr {
@@ -649,6 +666,9 @@ html {
           max-width: 60px;
           width: 60px;
           padding-right: 0;
+        }
+        span {
+          background-color: transparent !important;
         }
       }
     }
@@ -767,8 +787,8 @@ html {
   .DropDownButton {
     height: 40px;
     font-weight: 500;
-    color:#111B2B!important;
-    border-color: #CFD9E0!important;
+    color: #111b2b !important;
+    border-color: #cfd9e0 !important;
     .DropDownIconCustom {
       margin: 0;
       svg {
@@ -777,25 +797,25 @@ html {
     }
   }
 }
-.dark{
+.dark {
   .DropDownButton {
     font-weight: 500;
-    color:#fff!important;
-    border-color:#414D63!important;
-    background: #1B273A;
+    color: #fff !important;
+    border-color: #414d63 !important;
+    background: #1b273a;
     .DropDownIconCustom {
       margin: 0;
       svg {
         color: #fff;
-        path{
-          fill:#fff;
+        path {
+          fill: #fff;
         }
       }
     }
-    &:hover{
-      color:#fff!important;
-      border-color:#414D63!important;
-      background:#1B273A!important;
+    &:hover {
+      color: #fff !important;
+      border-color: #414d63 !important;
+      background: #1b273a !important;
     }
   }
 }
@@ -854,7 +874,7 @@ sup.Supdata {
   border-radius: 8px;
   .ant-notification-notice-with-icon {
     .ant-notification-notice-icon {
-      left:18px;
+      left: 18px;
     }
     .ant-notification-notice-message {
       color: #111b2b;
@@ -862,7 +882,7 @@ sup.Supdata {
       font-style: normal;
       font-weight: 600;
       line-height: 24px;
-      margin-left:28px!important;
+      margin-left: 28px !important;
     }
   }
   .ant-notification-notice-close {
@@ -906,7 +926,8 @@ sup.Supdata {
     border: 1px solid #98cbff;
     background: #e8f5ff;
     padding: 12px 16px !important;
-    box-shadow: 0px 0px 0px 1px rgba(25, 37, 50, 0.1),
+    box-shadow:
+      0px 0px 0px 1px rgba(25, 37, 50, 0.1),
       0px -6px 16px -6px rgba(25, 37, 50, 0.03),
       0px 8px 16px -8px rgba(25, 37, 50, 0.2),
       0px 13px 27px -5px rgba(25, 37, 50, 0.15);
@@ -1016,8 +1037,8 @@ sup.Supdata {
 .ant-notification-topRight.ant-notification-stack
   > .ant-notification-notice-wrapper {
   top: 33px;
-  .ant-notification-notice{
-    width:484px;
+  .ant-notification-notice {
+    width: 484px;
   }
   .ant-notification-notice-description {
     color: #111b2b;
@@ -1085,7 +1106,7 @@ sup.Supdata {
   align-items: center;
   display: inline-flex;
   justify-content: center;
-  background-color: #036FE3;
+  background-color: #036fe3;
   font-weight: 500;
 }
 .light {
@@ -1108,7 +1129,7 @@ sup.Supdata {
 }
 
 .countDark {
-  margin:2px 0 0;
+  margin: 2px 0 0;
 }
 .CountIcon {
   width: 30px;
@@ -1120,43 +1141,43 @@ sup.Supdata {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: #CEECFF;
-  margin-right:5px;
+  background-color: #ceecff;
+  margin-right: 5px;
 }
-.ant-tooltip-inner{
-line-height: normal;
+.ant-tooltip-inner {
+  line-height: normal;
 }
 .dark {
   p {
     color: var(--theme-light) !important;
   }
-  .ant-tooltip-arrow{
-    &:before{
+  .ant-tooltip-arrow {
+    &:before {
       background-color: #fff;
     }
   }
-    .ant-tooltip-inner{
-      background-color: #fff;
-      color: #111B2B;
-    }
-    .CountIcon {
-      width: 30px;
-      height: 30px;
-      min-width: 30px;
-      min-height: 30px;
-      border-radius: 50%;
-      text-align: center;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #414D63;
-      margin-right:5px;
-      svg{
-        path{
-          fill:#fff;
-        }
+  .ant-tooltip-inner {
+    background-color: #fff;
+    color: #111b2b;
+  }
+  .CountIcon {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    border-radius: 50%;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #414d63;
+    margin-right: 5px;
+    svg {
+      path {
+        fill: #fff;
       }
     }
+  }
 }
 .light {
   p {
@@ -1327,11 +1348,11 @@ line-height: normal;
           }
           td {
             color: #fff;
-            &.ant-picker-cell-disabled{
+            &.ant-picker-cell-disabled {
               color: #748090 !important;
-             &:before{
-              background-color: #414D63;
-             }
+              &:before {
+                background-color: #414d63;
+              }
             }
           }
           .ant-picker-cell-in-range,
@@ -1346,36 +1367,36 @@ line-height: normal;
   }
 }
 .dark.ant-notification-notice-closable {
-  background: #414D63!important;
+  background: #414d63 !important;
   &.Noti-success {
-    border-left: 3px solid #5DB057;
+    border-left: 3px solid #5db057;
     .ant-notification-notice-with-icon {
       svg {
-        color: #5DB057;
+        color: #5db057;
       }
     }
   }
   &.Noti-error {
-    border-left: 3px solid #FF707D;
+    border-left: 3px solid #ff707d;
     .ant-notification-notice-with-icon {
       svg {
-        color: #FF707D;
+        color: #ff707d;
       }
     }
   }
-  .ant-notification-notice-with-icon{
-    .ant-notification-notice-message{
+  .ant-notification-notice-with-icon {
+    .ant-notification-notice-message {
       color: #fff;
     }
-    .ant-notification-notice-description{
+    .ant-notification-notice-description {
       color: #fff;
     }
   }
-  .ant-notification-notice-close{
-    svg{
-      color:#fff;
-      path{
-        fill:#fff;
+  .ant-notification-notice-close {
+    svg {
+      color: #fff;
+      path {
+        fill: #fff;
       }
     }
   }
@@ -1386,4 +1407,57 @@ line-height: normal;
   box-shadow: inset 0px 2px 0px rgba(225, 228, 232, 0.2);
   box-sizing: border-box;
   background-color: #ffffff;
+}
+.ant-dropdown {
+  li {
+    padding-right: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .ant-dropdown-menu-title-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .date-dark {
+    background-color: #1b273a;
+    border: 1px solid #414d63;
+
+    li {
+      span {
+        color: #fff;
+
+        svg {
+          color: #fff;
+
+          path {
+            fill: #fff;
+          }
+        }
+      }
+
+      &.date-dropdown-2,
+      &.date-dropdown-5 {
+        border-bottom: 1px solid #414d63;
+      }
+
+      &:hover {
+        background-color: #414d63 !important;
+      }
+    }
+  }
+}
+
+.arrowdate {
+  margin-left: 8px;
+}
+
+.date-dropdown-2,
+.date-dropdown-5 {
+  border-bottom: 1px solid #e7ebee;
+}
+
+.switchLabel {
+  margin-right: 10px !important;
 }

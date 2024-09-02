@@ -5,7 +5,7 @@ import { formatInput } from "@/lib/utils/common";
 import { commonChartConfig } from "@/lib/utils/dashboards";
 import { Bar } from "@ant-design/plots";
 import React, { FC, useMemo } from "react";
-import { useAppSelector } from "src/app/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 
 // We dynamically calculate dx based on the digits of the number
 const getDxForOutsideLbl = (number: any) => {
@@ -22,7 +22,7 @@ const BarChart: FC<BarChartType> = ({
   axisYTitle,
   toolTipText,
 }) => {
-  let theme: string = useAppSelector((state) => state.themeSlice.theme);
+  let theme: string = useAppSelector((state) => state.themeSlice?.theme);
 
   const config = useMemo(() => {
     return {

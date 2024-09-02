@@ -13,6 +13,7 @@ export enum AppInstallationParametersKeys {
   SFSC_USERNAME = "sfscUsername",
   SFSC_PASSWORD = "sfscPassword",
   SFSC_TIMEZONE = "sfscTimezone",
+  SFMC_SYNC = "sfmcSync",
 }
 
 export const appInstallationParameters = {
@@ -30,6 +31,7 @@ export const appInstallationParameters = {
   [AppInstallationParametersKeys.SFSC_USERNAME]: "",
   [AppInstallationParametersKeys.SFSC_PASSWORD]: "",
   [AppInstallationParametersKeys.SFSC_TIMEZONE]: "America/New_York",
+  [AppInstallationParametersKeys.SFMC_SYNC]: false,
 };
 
 export enum navigationParameters {

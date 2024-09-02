@@ -8,9 +8,9 @@ import TopRevenueCity from "./TopRevenueCity";
 import { useSDK } from "@contentful/react-apps-toolkit";
 import { PageAppSDK } from "@contentful/app-sdk";
 import { ApiClient } from "@/lib/ApiClients";
-import { useAppDispatch, useAppSelector } from "src/app/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { dateStartEnd } from "src/app/redux/slices/dateSlice";
-import { loadingState } from "src/app/redux/slices/loadersSlice";
+import { loadingState } from "@/redux/slices/loadersSlice";
 import { commonChartConfig } from "@/lib/utils/dashboards";
 import {
   barChartColor,
@@ -18,7 +18,7 @@ import {
   multiLineChart,
   pieChartColor,
 } from "@/lib/utils/getColor";
-import { defaultSystemTZ } from "@/lib/utils/common";
+import { defaultSystemTZ, encryptData } from "@/lib/utils/common";
 import { formatInput } from "@/lib/utils/common";
 import {
   RoiConversionCounts,
@@ -39,7 +39,6 @@ function RoiConversion({ order }: { order: number }) {
   const {
     dateSlice,
     navigationSlice,
-    loaderSlice,
     themeSlice,
     authSlice: { isAuth },
   } = useAppSelector((state) => state);
@@ -53,7 +52,7 @@ function RoiConversion({ order }: { order: number }) {
       toolTipText: "Total number of orders successfully delivered.",
     },
     {
-      cardText: "Total Transaction",
+      cardText: "Total Transactions",
       countData: { count: 0, change: 0 },
       icon: RoiConversionIcon?.totalTransaction,
       toolTipText: "The overall count of transactions completed.",
@@ -177,11 +176,25 @@ function RoiConversion({ order }: { order: number }) {
 
   const fetchConversionCounts = async (dateRange: dateStartEnd) => {
     try {
-      const res = await client.post("/api/dashboard/roi-conversion", {
-        licenseKey: parameters.installation.licenseKey,
-        sfscTimezone: parameters.installation.sfscTimezone,
-        ...dateRange,
-      });
+      const res = await client.post(
+        "/api/dashboard/roi-conversion",
+        {
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
+          sfscTimezone: parameters.installation.sfscTimezone,
+          ...dateRange,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            ["jro34134ecr4aex"]: `${encryptData({
+              validate: Date.now(),
+              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+            })}`,
+          },
+        }
+      );
       if (res.status !== 200) {
         console.log("Error occured fetching conversion data");
       }
@@ -197,10 +210,20 @@ function RoiConversion({ order }: { order: number }) {
       const res = await client.post(
         "api/dashboard/roi-conversion/top-products",
         {
-          licenseKey: parameters.installation.licenseKey,
-          sfscTimezone: parameters.installation.sfscTimezone,
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
           ...dateRange,
           clientTZ: defaultSystemTZ,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            ["jro34134ecr4aex"]: `${encryptData({
+              validate: Date.now(),
+              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+            })}`,
+          },
         }
       );
 
@@ -230,9 +253,20 @@ function RoiConversion({ order }: { order: number }) {
       const res = await client.post(
         "api/dashboard/roi-conversion/top-source-revenue",
         {
-          licenseKey: parameters.installation.licenseKey,
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
           sfscTimezone: parameters.installation.sfscTimezone,
           ...dateRange,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            ["jro34134ecr4aex"]: `${encryptData({
+              validate: Date.now(),
+              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+            })}`,
+          },
         }
       );
 
@@ -250,9 +284,20 @@ function RoiConversion({ order }: { order: number }) {
       const res = await client.post(
         "api/dashboard/roi-conversion/top-city-revenue",
         {
-          licenseKey: parameters.installation.licenseKey,
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
           sfscTimezone: parameters.installation.sfscTimezone,
           ...dateRange,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            ["jro34134ecr4aex"]: `${encryptData({
+              validate: Date.now(),
+              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+            })}`,
+          },
         }
       );
 
@@ -268,12 +313,22 @@ function RoiConversion({ order }: { order: number }) {
   const fetchTopRevenueOrderType = async (dateRange: dateStartEnd) => {
     try {
       const res = await client.post(
-        "/api/dashboard/customer-retention/top-revenue-by-order-type",
+        "/api/dashboard/roi-conversion/top-revenue-by-order-type",
         {
-          licenseKey: parameters.installation.licenseKey,
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
           ...dateRange,
           clientTZ: defaultSystemTZ,
-          sfscTimezone: parameters.installation.sfscTimezone,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            ["jro34134ecr4aex"]: `${encryptData({
+              validate: Date.now(),
+              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+            })}`,
+          },
         }
       );
 

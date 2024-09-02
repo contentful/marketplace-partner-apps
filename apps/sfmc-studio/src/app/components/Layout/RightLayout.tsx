@@ -1,8 +1,8 @@
 "use client";
-import React, { use, useCallback, useEffect, useState, useRef } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { Layout, Button, theme } from "antd";
 const { Header, Content } = Layout;
-import { useAppSelector } from "src/app/redux/hooks";
+import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { AppInstallationParametersKeys } from "@/lib/AppConfig";
 import RoiConversion from "../DashboardComps/ROIConversion/RoiConversion";
 import CustomerRetention from "../DashboardComps/CustomerRetention/CustomerRetention";
@@ -15,22 +15,23 @@ import { useSDK } from "@contentful/react-apps-toolkit";
 import { ConfigAppSDK, PageAppSDK } from "@contentful/app-sdk";
 import DatePicker from "../UI/DatePicker";
 import { ApiClient } from "@/lib/ApiClients";
-import { useAppDispatch } from "src/app/redux/hooks";
-import { showError } from "src/app/redux/slices/notificationSlice";
 import CustomNotification from "../UI/CustomNotification";
 import Loader from "../Loader/Loader";
-import { addMenuArr, changeRoute } from "src/app/redux/slices/navigationSlice";
+import { addMenuArr, changeRoute } from "@/redux/slices/navigationSlice";
 import debounce from "lodash/debounce";
 import jsPDF from "jspdf";
 import { toCanvas } from "html-to-image";
-import { themeChange } from "src/app/redux/slices/themeSlice";
+import { themeChange } from "@/redux/slices/themeSlice";
 import { Switch } from "antd";
 import {
   clientCredsCookieName,
   CookieHelpers,
+  decryptClientData,
+  encryptData,
   saveOrValidateLicenseKey,
 } from "@/lib/utils/common";
-import { setIsAuth } from "src/app/redux/slices/authSlice";
+import { setIsAuth } from "./../../redux/slices/authSlice";
+import { openNotification } from "@/lib/utils/dashboards";
 
 const RenderSwitch = ({ order }: { order: number }) => {
   switch (order) {
@@ -73,141 +74,198 @@ export default function RightLayout({
   const [companyLogoSrc, setCompanyLogoSrc] = useState(companyLogoUrl);
   const [edit, setEdit] = useState<boolean>(false);
   const [pdfLoading, setPdfLoadings] = useState<boolean>(false);
+  const [disabled, setDisabled] = useState<boolean>(false);
 
   useEffect(() => {
-    if (
-      !parameters?.installation?.[AppInstallationParametersKeys.LICENSE_KEY] ||
-      !parameters?.installation?.[AppInstallationParametersKeys.SFMC_DOMAIN] ||
-      !parameters?.installation?.[
-        AppInstallationParametersKeys.SFMC_MARKETING_ID
-      ] ||
-      !parameters?.installation?.[
-        AppInstallationParametersKeys.SFMC_CLIENT_ID
-      ] ||
-      !parameters?.installation?.[
-        AppInstallationParametersKeys.SFMC_CLIENT_SECRET
-      ] ||
-      !parameters?.installation?.[AppInstallationParametersKeys.SFSC_URL] ||
-      !parameters?.installation?.[
-        AppInstallationParametersKeys.SFSC_CLIENT_ID
-      ] ||
-      !parameters?.installation?.[
-        AppInstallationParametersKeys.SFSC_CLIENT_SECRET
-      ] ||
-      !parameters?.installation?.[
-        AppInstallationParametersKeys.SFSC_USERNAME
-      ] ||
-      !parameters?.installation?.[
-        AppInstallationParametersKeys.SFSC_PASSWORD
-      ] ||
-      !parameters?.installation?.[
-        AppInstallationParametersKeys.SFMC_TIMEZONE
-      ] ||
-      !parameters?.installation?.[AppInstallationParametersKeys.SFSC_TIMEZONE]
-    ) {
-      dispatch(
-        showError({
-          showAlert: true,
-          message: "Configuration Incomplete",
-          description:
-            "It seems you haven't filled in all the required details in the configuration. Please ensure that all fields are properly filled before proceeding.",
-          type: "error",
-        })
-      );
-    } else {
-      authenticateUser();
-    }
-  }, [navigationSlice?.activeRoute]);
+    getUserConfig();
+  }, []);
 
-  const dataSync = async () => {
+  const getUserConfig = async () => {
     try {
-      if (parameters?.installation?.licenseKey && authSlice?.isAuth) {
-        const salesSync = await client.post("/api/sync/sales-data", {
-          baseUrl:
-            parameters?.installation?.[AppInstallationParametersKeys.SFSC_URL],
-          username:
-            parameters?.installation?.[
-              AppInstallationParametersKeys.SFSC_USERNAME
-            ],
-          password:
-            parameters?.installation?.[
-              AppInstallationParametersKeys.SFSC_PASSWORD
-            ],
-          clientId:
-            parameters?.installation?.[
-              AppInstallationParametersKeys.SFSC_CLIENT_ID
-            ],
-          clientSecret:
-            parameters?.installation?.[
-              AppInstallationParametersKeys.SFSC_CLIENT_SECRET
-            ],
-          licenseKey:
-            parameters?.installation?.[
-              AppInstallationParametersKeys.LICENSE_KEY
-            ],
-          sfscTimezone:
-            parameters?.installation?.[
-              AppInstallationParametersKeys.SFSC_TIMEZONE
-            ],
-        });
+      if (parameters?.installation?.licenseKey) {
+        const automationSyncStatus = await client.post(
+          "/api/user-config/get-config",
+          {
+            licenseKey: encryptData({
+              licenseKey: parameters?.installation?.licenseKey,
+            }),
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+              ["jro34134ecr4aex"]: `${encryptData({
+                validate: Date.now(),
+                token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              })}`,
+            },
+          }
+        );
 
-        const marketingSync = await client.post("/api/sync/marketing-data", {
-          licenseKey:
-            parameters?.installation?.[
-              AppInstallationParametersKeys.LICENSE_KEY
-            ],
-          sfmcSubdomain:
-            parameters?.installation?.[
-              AppInstallationParametersKeys.SFMC_DOMAIN
-            ],
-          sfmcclientId:
-            parameters?.installation?.[
-              AppInstallationParametersKeys.SFMC_CLIENT_ID
-            ],
-          sfmcclientSecret:
-            parameters?.installation?.[
-              AppInstallationParametersKeys.SFMC_CLIENT_SECRET
-            ],
-          sfmcTimezone:
-            parameters?.installation?.[
-              AppInstallationParametersKeys.SFMC_TIMEZONE
-            ],
-        });
-
-        if (marketingSync.status !== 200 || salesSync.status !== 200) {
-          dispatch(
-            showError({
-              showAlert: true,
-              message: "Failure",
-              description: "Error occured in  data sync",
-              type: "error",
-            })
-          );
-          console.log("Error occured in  data sync");
-        }
-
-        if (salesSync.status == 200 || marketingSync.status == 200) {
-          dispatch(
-            showError({
-              showAlert: true,
-              message: "Success",
-              description:
-                "Sync triggered successfully. Data should be updated in few mins",
+        if (automationSyncStatus?.data?.data) {
+          let { automatedSync } = automationSyncStatus?.data?.data;
+          if (automatedSync) {
+            openNotification({
+              message: "Auto-sync activated. Enjoy seamless data updates now.",
               type: "success",
-            })
-          );
+              theme: themeSlice.theme,
+            });
+          } else if (!automatedSync) {
+            openNotification({
+              message:
+                "Auto-sync disabled. Activate for continues data updates.",
+              type: "error",
+              theme: themeSlice.theme,
+            });
+          }
         }
       }
     } catch (err) {
       console.log(err);
-      dispatch(
-        showError({
-          showAlert: true,
-          message: "Failure",
-          description: "Please verify configuration details.",
-          type: "error",
-        })
-      );
+    }
+  };
+
+  const dataSync = async () => {
+    try {
+      if (parameters?.installation?.licenseKey && authSlice?.isAuth) {
+        setDisabled(true);
+        const salesSync = await client.post(
+          "/api/sync/sales-data",
+          {
+            baseUrl:
+              parameters?.installation?.[
+                AppInstallationParametersKeys.SFSC_URL
+              ],
+            username:
+              parameters?.installation?.[
+                AppInstallationParametersKeys.SFSC_USERNAME
+              ],
+            password: encryptData({
+              sfscPassword:
+                parameters?.installation?.[
+                  AppInstallationParametersKeys.SFSC_PASSWORD
+                ],
+            }),
+            clientId:
+              parameters?.installation?.[
+                AppInstallationParametersKeys.SFSC_CLIENT_ID
+              ],
+            clientSecret: encryptData({
+              sfscclientSecret:
+                parameters?.installation?.[
+                  AppInstallationParametersKeys.SFSC_CLIENT_SECRET
+                ],
+            }),
+            licenseKey: encryptData({
+              licenseKey:
+                parameters?.installation?.[
+                  AppInstallationParametersKeys.LICENSE_KEY
+                ],
+            }),
+            sfscTimezone:
+              parameters?.installation?.[
+                AppInstallationParametersKeys.SFSC_TIMEZONE
+              ],
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+              ["jro34134ecr4aex"]: `${encryptData({
+                validate: Date.now(),
+                token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              })}`,
+            },
+          }
+        );
+
+        if (salesSync.status !== 200) {
+          throw new Error("Sales data sync failed");
+        }
+        if (salesSync.status == 200) {
+          openNotification({
+            message: "Success",
+            description:
+              "Sync triggered successfully for sales cloud. Data should be updated in a few mins",
+            type: "success",
+            theme: themeSlice.theme,
+          });
+          setDisabled(false);
+        }
+      }
+    } catch (err: any) {
+      setDisabled(false);
+      openNotification({
+        message: "Failure",
+        description: "Please verify configuration details for sales cloud.",
+        type: "error",
+        theme: themeSlice.theme,
+      });
+    }
+
+    try {
+      if (parameters?.installation?.licenseKey && authSlice?.isAuth) {
+        setDisabled(true);
+        const marketingSync = await client.post(
+          "/api/sync/marketing-data",
+          {
+            licenseKey: encryptData({
+              licenseKey:
+                parameters?.installation?.[
+                  AppInstallationParametersKeys.LICENSE_KEY
+                ],
+            }),
+            sfmcSubdomain:
+              parameters?.installation?.[
+                AppInstallationParametersKeys.SFMC_DOMAIN
+              ],
+            sfmcclientId:
+              parameters?.installation?.[
+                AppInstallationParametersKeys.SFMC_CLIENT_ID
+              ],
+            sfmcclientSecret: encryptData({
+              sfmcclientSecret:
+                parameters?.installation?.[
+                  AppInstallationParametersKeys.SFMC_CLIENT_SECRET
+                ],
+            }),
+            sfmcTimezone:
+              parameters?.installation?.[
+                AppInstallationParametersKeys.SFMC_TIMEZONE
+              ],
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+              ["jro34134ecr4aex"]: `${encryptData({
+                validate: Date.now(),
+                token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              })}`,
+            },
+          }
+        );
+
+        if (marketingSync.status !== 200) {
+          throw new Error("Marketing data sync failed");
+        }
+
+        if (marketingSync.status == 200) {
+          openNotification({
+            message: "Success",
+            description:
+              "Sync triggered successfully for marketing cloud. Data should be updated in a few mins",
+            type: "success",
+            theme: themeSlice.theme,
+          });
+          setDisabled(false);
+        }
+      }
+    } catch (err: any) {
+      setDisabled(false);
+      openNotification({
+        message: "Failure",
+        description: "Please verify configuration details for marketing cloud.",
+        type: "error",
+        theme: themeSlice.theme,
+      });
     }
   };
 
@@ -217,7 +275,9 @@ export default function RightLayout({
     const res = await client.post(
       "/api/dashboard/dashboard-config/update-menu",
       {
-        licenseKey: parameters.installation.licenseKey,
+        licenseKey: encryptData({
+          licenseKey: parameters.installation.licenseKey,
+        }),
         heading: e.target.value,
         _id: navigationSlice?.activeRoute._id,
         menulable: e.target.value,
@@ -226,7 +286,11 @@ export default function RightLayout({
     if (res.status === 200) {
       const list = await client.post(
         "/api/dashboard/dashboard-config/get-menu",
-        { licenseKey: parameters.installation.licenseKey }
+        {
+          licenseKey: encryptData({
+            licenseKey: parameters.installation.licenseKey,
+          }),
+        }
       );
 
       let updatedMenu = list?.data?.data?.map((el: any) => ({
@@ -280,13 +344,12 @@ export default function RightLayout({
       })
       .catch((err) => {
         setPdfLoadings(false);
-        dispatch(
-          showError({
-            showAlert: true,
-            description: "Failed to export PDF file. Please retry.",
-            type: "error",
-          })
-        );
+        openNotification({
+          message: "",
+          description: "Failed to export PDF file. Please retry.",
+          type: "error",
+          theme: themeSlice.theme,
+        });
       });
   };
   /**
@@ -299,18 +362,23 @@ export default function RightLayout({
     let serializedCookieValue = null;
     // will only update the cookie if found on the browser
     if (deserializedCookieValue) {
-      serializedCookieValue = JSON.parse(deserializedCookieValue);
+
+      try{
+        serializedCookieValue = decryptClientData(deserializedCookieValue)
+      }catch(error) {
+       serializedCookieValue=JSON.parse(JSON.stringify(deserializedCookieValue))
+      }
+
       if (serializedCookieValue) {
         if (!serializedCookieValue.isUserNotified) {
-          dispatch(
-            showError({
-              showAlert: true,
-              message: "",
-              description: "Click the Sync button to view updated data.",
-              type: "info",
-            })
-          );
-          const cookieValue = JSON.stringify({
+          openNotification({
+            message: "",
+            description: "Click the Sync button to view updated data.",
+            type: "info",
+            theme: themeSlice.theme,
+          });
+
+          const cookieValue = encryptData({
             licenseKey: serializedCookieValue?.licenseKey,
             isUserNotified: true,
           });
@@ -324,69 +392,8 @@ export default function RightLayout({
     }
   }, [dispatch]);
 
-  const authenticateUser = useCallback(async () => {
-    try {
-      if (parameters.installation.licenseKey) {
-        const res = await saveOrValidateLicenseKey(
-          parameters.installation.licenseKey,
-          spaceId,
-          client
-        );
-        if (res?.status === 200) {
-          dispatch(setIsAuth(true));
-        }
-      }
-    } catch (error: any) {
-      switch (error?.response?.status) {
-        case 200:
-          break;
-        case 404:
-          dispatch(
-            showError({
-              showAlert: true,
-              message: "License Key",
-              description:
-                error?.response?.data?.message ?? "License Key not found",
-              type: "error",
-            })
-          );
-          dispatch(setIsAuth(false));
-          break;
-        case 400:
-          dispatch(
-            showError({
-              showAlert: true,
-              message: "License Key",
-              description:
-                error?.response?.data?.message ??
-                "License Key already exists with other space.",
-              type: "error",
-            })
-          );
-          dispatch(setIsAuth(false));
-          break;
-
-        default:
-          dispatch(
-            showError({
-              showAlert: true,
-              message: "License Key",
-              description:
-                error?.response?.data?.message ??
-                "License Key validation failed.",
-              type: "error",
-            })
-          );
-          dispatch(setIsAuth(false));
-          break;
-      }
-    }
-  }, [client, dispatch, parameters.installation.licenseKey, spaceId]);
-
   useEffect(() => {
-    if (authSlice?.isAuth) {
-      checkAndNotifySync();
-    }
+    if (authSlice?.isAuth) checkAndNotifySync();
   }, [checkAndNotifySync, authSlice?.isAuth]);
 
   return (
@@ -453,7 +460,11 @@ export default function RightLayout({
                 )
               }
             />
-            <Button className="LogoutButton" onClick={() => dataSync()}>
+            <Button
+              disabled={disabled}
+              className="LogoutButton"
+              onClick={() => dataSync()}
+            >
               {parse(svgIcons.SyncIcon)} Sync
             </Button>
             <a

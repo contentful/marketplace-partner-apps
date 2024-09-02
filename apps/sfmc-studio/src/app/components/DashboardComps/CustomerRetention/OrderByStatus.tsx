@@ -5,10 +5,10 @@ import { formatInput } from "@/lib/utils/common";
 import NoData from "@/components/UI/NoData";
 import PieChartWithRadius from "@/components/charts/PieChart";
 import { OrderByStatusRetention } from "@/lib/types/dashboard";
-import { useAppSelector } from "src/app/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 
 function OrderByStatus({ orderStatus }: { orderStatus: any }) {
-  let theme: string = useAppSelector((state) => state.themeSlice.theme);
+  let theme: string = useAppSelector((state) => state.themeSlice?.theme);
   let tooltip = (d: any, index: number, data: any[]) => ({
     color: data[index].color,
     value: `${formatInput(
@@ -25,7 +25,7 @@ function OrderByStatus({ orderStatus }: { orderStatus: any }) {
       }`}
     >
       <div className={`${style.OrderStatusInner} ${theme}`}>
-        <h4>Order By Status</h4>
+        <h4>Total Orders By Status</h4>
         <div className={style.CanvesDataGrapInner}>
           <div className={style.CanvesGrapInner}>
             {orderStatus?.length ? (

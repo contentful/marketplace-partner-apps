@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { mockCma, mockSdk } from '../../__tests__/mocks';
-import EntryEditor from 'src/app/components/Locations/EntryEditor';
+import EntryEditor from '@/components/Locations/EntryEditor';
 
 jest.mock('@contentful/react-apps-toolkit', () => ({
   useSDK: () => mockSdk,

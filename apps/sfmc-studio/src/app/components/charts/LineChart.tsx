@@ -5,7 +5,7 @@ import { formatInput } from "@/lib/utils/common";
 import { commonChartConfig } from "@/lib/utils/dashboards";
 import { Line } from "@ant-design/plots";
 import { FC, useMemo } from "react";
-import { useAppSelector } from "src/app/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 
 const LineChart: FC<LineChartType> = ({
   data,
@@ -19,7 +19,7 @@ const LineChart: FC<LineChartType> = ({
   height,
   labelFormatter,
 }) => {
-  let theme: string = useAppSelector((state) => state.themeSlice.theme);
+  let theme: string = useAppSelector((state) => state.themeSlice?.theme);
   const config = useMemo(() => {
     return {
       data: data,
