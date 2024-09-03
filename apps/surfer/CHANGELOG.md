@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.0.22](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.21...surfer-contentful-app-v1.0.22) (2024-09-03)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.29.0 to 4.29.1 in /apps/surfer ([#2540](https://github.com/contentful/marketplace-partner-apps/issues/2540)) ([e377363](https://github.com/contentful/marketplace-partner-apps/commit/e377363dece71c4e4eb68279df5c9853a5d53ce5))
+* **deps:** bump @contentful/f36-components from 4.68.1 to 4.69.0 in /apps/surfer in the production-dependencies group ([#2785](https://github.com/contentful/marketplace-partner-apps/issues/2785)) ([293b6f5](https://github.com/contentful/marketplace-partner-apps/commit/293b6f5b1b414939cb5402cac652dfd1350ddc8a))
+* **deps:** bump @contentful/rich-text-html-renderer from 16.6.8 to 16.6.9 in /apps/surfer in the production-dependencies group ([#2669](https://github.com/contentful/marketplace-partner-apps/issues/2669)) ([8aa6183](https://github.com/contentful/marketplace-partner-apps/commit/8aa6183e82c418b0939b6f6029c13ac66f3637b9))
+* **deps:** bump contentful-management from 11.31.1 to 11.31.4 in /apps/surfer ([#2541](https://github.com/contentful/marketplace-partner-apps/issues/2541)) ([36cd7d3](https://github.com/contentful/marketplace-partner-apps/commit/36cd7d3fd32b9e36ce31fe60b1286267591010d4))
+* **deps:** bump contentful-management from 11.31.4 to 11.31.6 in /apps/surfer ([#2554](https://github.com/contentful/marketplace-partner-apps/issues/2554)) ([e026280](https://github.com/contentful/marketplace-partner-apps/commit/e026280f3b2af9395004074ef95eb5dc224198da))
+* **deps:** bump contentful-management from 11.31.6 to 11.31.7 in /apps/surfer ([#2591](https://github.com/contentful/marketplace-partner-apps/issues/2591)) ([19f6761](https://github.com/contentful/marketplace-partner-apps/commit/19f6761d2e93913d0532d0bed258d898232ada17))
+* **deps:** bump contentful-management from 11.31.7 to 11.31.8 in /apps/surfer in the production-dependencies group ([#2609](https://github.com/contentful/marketplace-partner-apps/issues/2609)) ([3ea251e](https://github.com/contentful/marketplace-partner-apps/commit/3ea251e246a49c6ee7978932a824782b6f469ada))
+* **deps:** bump contentful-management from 11.31.8 to 11.31.9 in /apps/surfer in the production-dependencies group ([#2689](https://github.com/contentful/marketplace-partner-apps/issues/2689)) ([874a55a](https://github.com/contentful/marketplace-partner-apps/commit/874a55a6250f2aa3a7c408ccf08b3d4c4e28a86c))
+* **deps:** bump contentful-management from 11.31.9 to 11.32.0 in /apps/surfer in the production-dependencies group ([#2730](https://github.com/contentful/marketplace-partner-apps/issues/2730)) ([13a81ae](https://github.com/contentful/marketplace-partner-apps/commit/13a81aee5949285c440c16165144f4739cdaabcb))
+* **deps:** bump contentful-management from 11.32.0 to 11.33.0 in /apps/surfer in the production-dependencies group ([#2757](https://github.com/contentful/marketplace-partner-apps/issues/2757)) ([9631b45](https://github.com/contentful/marketplace-partner-apps/commit/9631b45ec131b0c2001d270b34b6f06bb7cf3410))
+
 ## [1.0.21](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.20...surfer-contentful-app-v1.0.21) (2024-08-12)
 
 

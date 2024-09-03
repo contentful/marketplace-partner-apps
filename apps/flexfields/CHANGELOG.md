@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.2.3](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.2...thrillworks-flex-fields-app-v1.2.3) (2024-09-03)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.29.0 to 4.29.1 in /apps/flexfields ([#2552](https://github.com/contentful/marketplace-partner-apps/issues/2552)) ([3fb7a9e](https://github.com/contentful/marketplace-partner-apps/commit/3fb7a9ec1c9d36773bdae754f6ae74120e614ac1))
+* **deps:** bump @contentful/default-field-editors from 1.6.54 to 1.7.5 in /apps/flexfields ([#2508](https://github.com/contentful/marketplace-partner-apps/issues/2508)) ([cd97e07](https://github.com/contentful/marketplace-partner-apps/commit/cd97e073cd1ad98178ec5aed7b9f7bad4d83def3))
+* **deps:** bump @contentful/default-field-editors from 1.7.5 to 1.7.6 in /apps/flexfields ([#2517](https://github.com/contentful/marketplace-partner-apps/issues/2517)) ([f06ca0d](https://github.com/contentful/marketplace-partner-apps/commit/f06ca0d4c195d5a7935b0cc012c1f9dafa2a1d8c))
+* **deps:** bump @contentful/default-field-editors from 1.7.6 to 1.7.8 in /apps/flexfields ([#2560](https://github.com/contentful/marketplace-partner-apps/issues/2560)) ([348b70d](https://github.com/contentful/marketplace-partner-apps/commit/348b70d1b27decc7ddabb9e373a2b28e2caa1030))
+* **deps:** bump @contentful/default-field-editors from 1.7.8 to 1.7.9 in /apps/flexfields ([#2569](https://github.com/contentful/marketplace-partner-apps/issues/2569)) ([f114894](https://github.com/contentful/marketplace-partner-apps/commit/f1148944dd1d61c7dbdcfdfe543f6cb73a2af3bd))
+* **deps:** bump @contentful/default-field-editors from 1.7.9 to 1.7.10 in /apps/flexfields ([#2580](https://github.com/contentful/marketplace-partner-apps/issues/2580)) ([fa82cb3](https://github.com/contentful/marketplace-partner-apps/commit/fa82cb36d08e4f40e0403ddd433060fddf3693a7))
+* **deps:** bump @contentful/f36-components from 4.66.0 to 4.68.1 in /apps/flexfields ([#2488](https://github.com/contentful/marketplace-partner-apps/issues/2488)) ([ce62fe4](https://github.com/contentful/marketplace-partner-apps/commit/ce62fe46fc12adffbf62cba32f779e944103d7c8))
+* **deps:** bump contentful-management from 11.31.1 to 11.31.4 in /apps/flexfields ([#2533](https://github.com/contentful/marketplace-partner-apps/issues/2533)) ([800a49a](https://github.com/contentful/marketplace-partner-apps/commit/800a49a418f5379252a99f55765dc7e45ff7ef65))
+* **deps:** bump contentful-management from 11.31.4 to 11.31.8 in /apps/flexfields in the production-dependencies group ([#2610](https://github.com/contentful/marketplace-partner-apps/issues/2610)) ([89b70c2](https://github.com/contentful/marketplace-partner-apps/commit/89b70c2fdf052012222746da809cc21a64b70659))
+* **deps:** bump contentful-management from 11.31.8 to 11.31.9 in /apps/flexfields in the production-dependencies group ([#2685](https://github.com/contentful/marketplace-partner-apps/issues/2685)) ([f9bddf5](https://github.com/contentful/marketplace-partner-apps/commit/f9bddf5e36c86845ee60124a2e2b3bfbc66107a2))
+* **deps:** bump contentful-management from 11.31.9 to 11.32.0 in /apps/flexfields in the production-dependencies group ([#2740](https://github.com/contentful/marketplace-partner-apps/issues/2740)) ([92d467a](https://github.com/contentful/marketplace-partner-apps/commit/92d467a4606ffcc67774a283cb51bb7a58d80f28))
+* **deps:** bump contentful-management from 11.32.0 to 11.33.0 in /apps/flexfields in the production-dependencies group ([#2781](https://github.com/contentful/marketplace-partner-apps/issues/2781)) ([99ade7b](https://github.com/contentful/marketplace-partner-apps/commit/99ade7b0b25febf84b23f871c8d2160596b91bc5))
+* **deps:** bump the production-dependencies group in /apps/flexfields with 2 updates ([#2798](https://github.com/contentful/marketplace-partner-apps/issues/2798)) ([8fd7034](https://github.com/contentful/marketplace-partner-apps/commit/8fd703496202f5194e51952c6c5fe9653e1b9add))
+* **FlexFields:** fallback to the default JSON editor for entry fields that use other apps ([#2752](https://github.com/contentful/marketplace-partner-apps/issues/2752)) ([928d305](https://github.com/contentful/marketplace-partner-apps/commit/928d305cc14f9f3b07234bb4bab4298bb7bdd979))
+
 ## [1.2.2](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.1...thrillworks-flex-fields-app-v1.2.2) (2024-08-12)
 
 

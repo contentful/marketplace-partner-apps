@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.15](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.1.14...bynder-assets-v1.1.15) (2024-09-03)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group in /apps/bynder with 2 updates ([#2605](https://github.com/contentful/marketplace-partner-apps/issues/2605)) ([5dbcb75](https://github.com/contentful/marketplace-partner-apps/commit/5dbcb75f0a1f520670cdc91676114f7a04d1c90c))
+
 ## [1.1.14](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.1.13...bynder-assets-v1.1.14) (2024-07-02)
 
 
