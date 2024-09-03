@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.19](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.18...uploadcare-contentful-app-v1.0.19) (2024-09-03)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.29.0 to 4.29.1 in /apps/uploadcare ([#2525](https://github.com/contentful/marketplace-partner-apps/issues/2525)) ([e8d44f2](https://github.com/contentful/marketplace-partner-apps/commit/e8d44f263c6b72120019ba26743ebecffa7daf1e))
+* **deps:** bump @contentful/f36-components from 4.68.1 to 4.69.0 in /apps/uploadcare in the production-dependencies group ([#2790](https://github.com/contentful/marketplace-partner-apps/issues/2790)) ([30fea20](https://github.com/contentful/marketplace-partner-apps/commit/30fea20cc913326c7d8858dd7c250860b7270a91))
+* **deps:** bump contentful-management from 11.31.1 to 11.31.6 in /apps/uploadcare ([#2551](https://github.com/contentful/marketplace-partner-apps/issues/2551)) ([b59e130](https://github.com/contentful/marketplace-partner-apps/commit/b59e13085a081cb6f528db16582912d9d91b0dad))
+* **deps:** bump contentful-management from 11.31.6 to 11.31.7 in /apps/uploadcare ([#2601](https://github.com/contentful/marketplace-partner-apps/issues/2601)) ([b9b22ed](https://github.com/contentful/marketplace-partner-apps/commit/b9b22edede94632799922dd1287cb9f395d55aae))
+* **deps:** bump contentful-management from 11.31.7 to 11.31.8 in /apps/uploadcare in the production-dependencies group ([#2616](https://github.com/contentful/marketplace-partner-apps/issues/2616)) ([2b54a20](https://github.com/contentful/marketplace-partner-apps/commit/2b54a20edfe1e8f539a5557ca95d504b819448be))
+* **deps:** bump contentful-management from 11.31.8 to 11.31.9 in /apps/uploadcare in the production-dependencies group ([#2683](https://github.com/contentful/marketplace-partner-apps/issues/2683)) ([4558bf1](https://github.com/contentful/marketplace-partner-apps/commit/4558bf187a7da08e09a4df22f8ad57be1d6261c4))
+* **deps:** bump contentful-management from 11.31.9 to 11.32.0 in /apps/uploadcare in the production-dependencies group ([#2728](https://github.com/contentful/marketplace-partner-apps/issues/2728)) ([1c31c3e](https://github.com/contentful/marketplace-partner-apps/commit/1c31c3eb6411382ae2e506b677ac73d67bacd39f))
+* **deps:** bump contentful-management from 11.32.0 to 11.33.0 in /apps/uploadcare in the production-dependencies group ([#2775](https://github.com/contentful/marketplace-partner-apps/issues/2775)) ([7d3d110](https://github.com/contentful/marketplace-partner-apps/commit/7d3d1105f1e2988fd07e3015e86a34257129b80e))
+
 ## [1.0.18](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.17...uploadcare-contentful-app-v1.0.18) (2024-08-12)
 
 

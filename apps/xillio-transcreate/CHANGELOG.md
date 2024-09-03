@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/contentful/marketplace-partner-apps/compare/xillio-transcreate-v1.0.1...xillio-transcreate-v1.0.2) (2024-09-03)
+
+
+### Bug Fixes
+
+* **deps:** bump react-hook-form from 7.52.0 to 7.52.2 ([#2617](https://github.com/contentful/marketplace-partner-apps/issues/2617)) ([35fb795](https://github.com/contentful/marketplace-partner-apps/commit/35fb79503eeae20e557c7490f598c3422f29574f))
+
 ## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/xillio-transcreate-v1.0.0...xillio-transcreate-v1.0.1) (2024-07-02)
 
 
