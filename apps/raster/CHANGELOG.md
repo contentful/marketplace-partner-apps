@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/raster-v1.0.0...raster-v1.0.1) (2024-09-04)
+
+
+### Bug Fixes
+
+* adding the public folder back in ([#2820](https://github.com/contentful/marketplace-partner-apps/issues/2820)) ([1e17c41](https://github.com/contentful/marketplace-partner-apps/commit/1e17c4105ecb1be56e3de9194d522a3192cb536e))
+
 ## 1.0.0 (2024-09-03)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.4](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.3...thrillworks-flex-fields-app-v1.2.4) (2024-09-04)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/default-field-editors from 1.7.11 to 1.7.12 in /apps/flexfields in the production-dependencies group ([#2807](https://github.com/contentful/marketplace-partner-apps/issues/2807)) ([35129ed](https://github.com/contentful/marketplace-partner-apps/commit/35129eda47603f22213e10f0040626590c6d572b))
+
 ## [1.2.3](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.2...thrillworks-flex-fields-app-v1.2.3) (2024-09-03)
 
 
