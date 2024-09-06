@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.2](https://github.com/contentful/marketplace-partner-apps/compare/raster-v1.0.1...raster-v1.0.2) (2024-09-06)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group in /apps/raster with 2 updates ([#2821](https://github.com/contentful/marketplace-partner-apps/issues/2821)) ([f0338bc](https://github.com/contentful/marketplace-partner-apps/commit/f0338bcea64ce3bfb0fe32d153777b84343a385e))
+* update path for raster icon [EXT-5671] ([#2828](https://github.com/contentful/marketplace-partner-apps/issues/2828)) ([4ec372b](https://github.com/contentful/marketplace-partner-apps/commit/4ec372b0d9eca4f030ee52213d88cec224144571))
+
 ## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/raster-v1.0.0...raster-v1.0.1) (2024-09-04)
 
 
