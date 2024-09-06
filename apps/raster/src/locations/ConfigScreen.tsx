@@ -68,7 +68,7 @@ function ConfigScreen() {
       <Form>
         <Heading>Raster</Heading>
         <Flex flexDirection="column" className="space-y-3">
-          <img src="/raster-icon.svg" alt="Raster" className="w-24 h-24 mb-4 mx-auto" />
+          <img src="./raster-icon.svg" alt="Raster" className="w-24 h-24 mb-4 mx-auto" />
           <Paragraph>
             To utilize the Raster plugin, you must configure it. This requires your Organization ID and Public API Key, which must be set up in Raster
             beforehand. These values can be found on your Raster organization settings page.
