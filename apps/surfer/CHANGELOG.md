@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.23](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.22...surfer-contentful-app-v1.0.23) (2024-09-06)
+
+
+### Bug Fixes
+
+* Prefix env variable with 'VITE' to be injected ([#2827](https://github.com/contentful/marketplace-partner-apps/issues/2827)) ([a129c6b](https://github.com/contentful/marketplace-partner-apps/commit/a129c6bd945d3a6e345f9c32b8c674b6950b6570))
+
 ## [1.0.22](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.21...surfer-contentful-app-v1.0.22) (2024-09-03)
 
 
