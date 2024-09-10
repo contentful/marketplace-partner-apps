@@ -5,7 +5,7 @@
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@contentful/app-sdk": "^4.29.1",
-    "@contentful/f36-components": "4.69.0",
+    "@contentful/f36-components": "4.69.1",
     "@contentful/f36-tokens": "4.0.5",
     "@contentful/forma-36-react-components": "^3.100.7",
     "@contentful/react-apps-toolkit": "1.2.16",
@@ -22,7 +22,7 @@
     "path-browserify": "^1.0.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "react-image-crop": "^11.0.6",
+    "react-image-crop": "^11.0.7",
     "react-magic-dropzone": "^1.0.1",
     "react-scripts": "5.0.1",
     "styled-components": "5.3.11"
