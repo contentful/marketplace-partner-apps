@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {ConfigAppSDK} from "@contentful/app-sdk";
 import {Flex, Form, FormControl, Heading, Paragraph, Select, TextInput,} from "@contentful/f36-components";
-import {css} from "emotion";
+import {css} from "@emotion/css";
 import {useSDK} from "@contentful/react-apps-toolkit";
 import {VARIANT_CONTAINER} from "../utils/shared";
 import {Datacenter} from "../utils/amplitude";
@@ -26,7 +26,7 @@ const DatacenterSelect = ({
             id="optionSelect-controlled"
             name="optionSelect-controlled"
             value={datacenter}
-            onChange={(e) => setDatacenter(e.target.value)}
+            onChange={(e) => setDatacenter(e.target.value as Datacenter)}
         >
           <Select.Option value="US">US</Select.Option>
           <Select.Option value="EU">EU</Select.Option>
