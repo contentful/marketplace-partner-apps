@@ -5,7 +5,7 @@
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@contentful/app-sdk": "^4.29.1",
-    "@contentful/f36-components": "4.69.2",
+    "@contentful/f36-components": "4.70.0",
     "@contentful/f36-tokens": "4.0.5",
     "@contentful/forma-36-react-components": "^3.100.7",
     "@contentful/react-apps-toolkit": "1.2.16",
