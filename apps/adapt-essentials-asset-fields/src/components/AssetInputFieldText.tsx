@@ -21,7 +21,13 @@ interface AssetInputFieldTextComponentProps {
 }
 
 const AssetInputFieldTextComponent = ({
-  asset, field, locale, as = 'TextInput', rows = 1, showLocaleLabel = false, isDisabled = false
+  asset,
+  field,
+  locale,
+  as = 'TextInput',
+  rows = 1,
+  showLocaleLabel = false,
+  isDisabled = false,
 }: AssetInputFieldTextComponentProps) => {
   const fieldValueProp = asset.fields[field]?.[locale] ?? asset.fields.file?.[locale]?.[field] ?? '';
   const assetId = asset.sys.id;

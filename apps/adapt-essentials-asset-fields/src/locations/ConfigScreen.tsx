@@ -8,8 +8,6 @@ import { css } from 'emotion';
 
 import originalReadme from '../../README.md?raw';
 
-export interface AppInstallationParameters {}
-
 const InstallationInstructions = () => (
   <Box>
     <h2
@@ -33,7 +31,7 @@ const ConfigScreen = () => {
   const cutStart = '<!--- App part -->';
   const appPart = readme.substring(readme.indexOf(cutStart) + cutStart.length);
 
-  const [parameters, setParameters] = useState<AppInstallationParameters>({});
+  const [parameters, setParameters] = useState({});
 
   const onConfigure = useCallback(async () => {
     const currentState = await sdk.app.getCurrentState();
@@ -71,7 +69,7 @@ const ConfigScreen = () => {
 
   useEffect(() => {
     (async () => {
-      const currentParameters: AppInstallationParameters | null = await sdk.app.getParameters();
+      const currentParameters: null = await sdk.app.getParameters();
 
       if (currentParameters) {
         setParameters(currentParameters);
