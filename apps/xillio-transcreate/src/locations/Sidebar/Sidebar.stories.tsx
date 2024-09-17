@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { SidebarComponent, SidebarComponentProps } from "./Sidebar";
 import { Box, GlobalStyles } from "@contentful/f36-components";
 import tokens from "@contentful/f36-tokens";
-import { css } from "emotion";
+import { css } from '@emotion/react';
 import { TranslationStatus } from "@contentful-lochub/shared";
 
 export default {
@@ -30,7 +30,7 @@ export default {
                 <GlobalStyles />
                 <Box
                     padding="spacingL"
-                    className={css({ backgroundColor: tokens.gray100, width: "21.5rem", padding: "1rem" })}
+                    css={css({ backgroundColor: tokens.gray100, width: "21.5rem", padding: "1rem" })}
                 >
                     <Story />
                 </Box>

@@ -1,6 +1,6 @@
 import { ButtonProps, Menu, ButtonGroup, Button, IconButton, MenuProps } from "@contentful/f36-components";
 import { ChevronDownIcon } from "@contentful/f36-icons";
-import { css, cx } from "emotion";
+import { css } from '@emotion/react';
 import { useState, useMemo, useEffect } from "react";
 
 export type ButtonAction<L extends string> = {
@@ -54,7 +54,7 @@ export function ActionsButton<L extends string = string>({
                     <Button
                         variant={action.variant}
                         isDisabled={isDisabled}
-                        className={cx({ [fullWidth]: isFullWidth })}
+                        css={[isFullWidth && fullWidth]}
                         onClick={() => {
                             setIsOpen(false);
                             action.onClick();

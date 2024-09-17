@@ -1,6 +1,6 @@
 import { Flex, Paragraph, Button } from "@contentful/f36-components";
 import tokens from "@contentful/f36-tokens";
-import { css } from "emotion";
+import { css } from '@emotion/react';
 
 export type ConfirmDialogProps = {
     message: string;
@@ -11,7 +11,7 @@ export const ConfirmDialog = ({ message, onClose }: ConfirmDialogProps) => {
     return (
         <Flex flexDirection="column">
             <Paragraph
-                className={css({
+                css={css({
                     padding: tokens.spacingM,
                     paddingLeft: tokens.spacingL,
                 })}
@@ -22,7 +22,7 @@ export const ConfirmDialog = ({ message, onClose }: ConfirmDialogProps) => {
 
             <Flex
                 justifyContent="flex-end"
-                className={css({
+                css={css({
                     gap: tokens.spacingS,
                     padding: `${tokens.spacingS} ${tokens.spacingM}`,
                 })}

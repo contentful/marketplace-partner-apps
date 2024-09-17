@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { SelectFilter as SelectFilterComponent, SelectFilterProps } from ".";
 import { Box, GlobalStyles } from "@contentful/f36-components";
 import tokens from "@contentful/f36-tokens";
-import { css } from "emotion";
+import { css } from '@emotion/react';
 import { useState } from "react";
 
 export default {
@@ -15,7 +15,7 @@ export default {
                 <GlobalStyles />
                 <Box
                     padding="spacingL"
-                    className={css({
+                    css={css({
                         backgroundColor: tokens.gray100,
                         position: "fixed",
                         inset: 0,

@@ -1,5 +1,4 @@
 import { FormControl, Textarea } from "@contentful/f36-components";
-import { cx } from "emotion";
 import { FieldValues, UseControllerProps, useController } from "react-hook-form";
 import { colorGray } from "../styles";
 import { HTMLInputTypeAttribute, useMemo } from "react";
@@ -31,7 +30,7 @@ export const ControlledTextArea = <T extends FieldValues>({
 
     return (
         <FormControl isInvalid={Boolean(error)} marginBottom="none">
-            <FormControl.Label isRequired={isRequired} className={cx({ [colorGray]: inputProps.disabled })}>
+            <FormControl.Label isRequired={isRequired} css={[inputProps.disabled && colorGray]}>
                 {label}
             </FormControl.Label>
 

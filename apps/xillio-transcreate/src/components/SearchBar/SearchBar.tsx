@@ -1,6 +1,6 @@
 import { Button, Flex, Menu } from "@contentful/f36-components";
 import { SearchBarProps } from "./SearchBar.types";
-import { css, cx } from "emotion";
+import { css } from '@emotion/react';
 import tokens from "@contentful/f36-tokens";
 import { MouseEvent, useRef, useState } from "react";
 import { FilterIcon } from "@contentful/f36-icons";
@@ -31,7 +31,7 @@ export const SearchBar = ({
     return (
         <Flex
             justifyContent="space-between"
-            className={cx(
+            css={[
                 css({
                     padding: 3,
                     borderRadius: 10,
@@ -41,11 +41,9 @@ export const SearchBar = ({
                     color: tokens.gray700,
                     cursor: "text",
                 }),
-                {
-                    [focusClass]: inputHasFocus,
-                    [notAllowedClass]: isDisabled,
-                },
-            )}
+                inputHasFocus && focusClass,
+                isDisabled && notAllowedClass
+            ]}
             onClick={handleFocus}
         >
             <Flex gap="3px" flexWrap="wrap">
@@ -60,7 +58,7 @@ export const SearchBar = ({
                     value={search}
                     onChange={(e) => onSearch(e.target.value)}
                     placeholder="Type to search for entries"
-                    className={cx(
+                    css={[
                         css({
                             backgroundColor: tokens.colorWhite,
                             outline: "none",
@@ -69,10 +67,8 @@ export const SearchBar = ({
                             flexGrow: 1,
                             minWidth: 300,
                         }),
-                        {
-                            [notAllowedClass]: isDisabled,
-                        },
-                    )}
+                        isDisabled && notAllowedClass
+                    ]}
                     onFocus={() => setInputHasFocus(true)}
                     onBlur={() => setInputHasFocus(false)}
                 />
@@ -84,8 +80,8 @@ export const SearchBar = ({
                         isDisabled={isDisabled}
                         variant="transparent"
                         size="small"
-                        startIcon={<FilterIcon className={css({ fill: tokens.colorPrimary })} />}
-                        className={css({
+                        startIcon={<FilterIcon css={css({ fill: tokens.colorPrimary })} />}
+                        css={css({
                             color: tokens.colorPrimary,
                         })}
                         onClick={(e: MouseEvent<HTMLButtonElement>) => e.stopPropagation()}

@@ -1,7 +1,7 @@
 import { ConfigAppSDK } from "@contentful/app-sdk";
 import { Button, Checkbox, Flex, Heading, ModalLauncher, Paragraph } from "@contentful/f36-components";
 import { useSDK } from "@contentful/react-apps-toolkit";
-import { css, cx } from "emotion";
+import { css } from '@emotion/react';
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { appConfig } from "../../appConfig";
 import tokens from "@contentful/f36-tokens";
@@ -33,10 +33,10 @@ const Section = ({ children, title, subtitle, isDisabled }: SectionProps) => {
     return (
         <>
             <Flex flexDirection="column" gap="spacingXs">
-                <Heading marginBottom="none" className={cx({ [colorGray]: isDisabled })}>
+                <Heading marginBottom="none" css={[isDisabled && colorGray]}>
                     {title}
                 </Heading>
-                <Paragraph marginBottom="none" className={cx({ [colorGray]: isDisabled })}>
+                <Paragraph marginBottom="none" css={[isDisabled && colorGray]}>
                     {subtitle}
                 </Paragraph>
             </Flex>
@@ -87,18 +87,18 @@ export const ConfigScreenComponent = ({
     };
 
     return (
-        <div className={css({ background, position: "fixed", inset: 0, overflow: "auto" })}>
+        <div css={css({ background, position: "fixed", inset: 0, overflow: "auto" })}>
             <Flex
                 justifyContent="center"
                 alignItems="flex-start"
                 padding="spacingXl"
-                className={css({ minHeight: "100%" })}
+                css={css({ minHeight: "100%" })}
             >
                 <Flex
                     flexDirection="column"
                     padding="spacingXl"
                     gap="spacingL"
-                    className={css({
+                    css={css({
                         backgroundColor: surface,
                         boxShadow: tokens.boxShadowHeavy,
                         borderRadius: tokens.spacingXs,
@@ -112,14 +112,14 @@ export const ConfigScreenComponent = ({
                             flexDirection="column"
                             gap="spacingS"
                             alignSelf="center"
-                            className={css({ width: "fit-content" })}
+                            css={css({ width: "fit-content" })}
                         >
                             <Button variant="primary" onClick={handleConnectPress} isFullWidth>
                                 Connect account
                             </Button>
                             <Paragraph
                                 marginBottom="none"
-                                className={cx(
+                                css={[
                                     colorGray,
                                     css({
                                         padding: `0 ${tokens.spacingXs}`,
@@ -127,7 +127,7 @@ export const ConfigScreenComponent = ({
                                         alignItems: "center",
                                         gap: tokens.spacing2Xs,
                                     }),
-                                )}
+                                ]}
                             >
                                 {connected ? (
                                     <CheckCircleIcon variant="muted" />

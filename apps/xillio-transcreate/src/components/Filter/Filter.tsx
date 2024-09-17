@@ -3,7 +3,7 @@ import { ChevronDownIcon } from "@contentful/f36-icons";
 import tokens from "@contentful/f36-tokens";
 import { FilterConditions, FilterProps } from "./Filter.types";
 import { ReactNode } from "react";
-import { css, cx } from "emotion";
+import { css } from '@emotion/react';
 
 const EmptyTrigger = ({ children }: { children: ReactNode }) => <>{children}</>;
 
@@ -16,7 +16,7 @@ export function Filter<ConditionValue extends string = string>({
     isDisabled = false,
 }: FilterProps<ConditionValue>) {
     return (
-        <ButtonGroup className={css({ position: "relative" })}>
+        <ButtonGroup css={css({ position: "relative" })}>
             <Button
                 isDisabled={isDisabled}
                 size="small"
@@ -28,10 +28,7 @@ export function Filter<ConditionValue extends string = string>({
                     backgroundColor: tokens.gray200,
                     zIndex: "auto",
                 }}
-                className={cx({
-                    [css({ cursor: "default" })]: !isDisabled,
-                    [css({ cursor: "not-allowed" })]: isDisabled,
-                })}
+                css={[isDisabled ? css({ cursor: "not-allowed" }) : css({ cursor: "default" })]}
             >
                 {name}
             </Button>
@@ -67,9 +64,9 @@ function ConditionSelect<ConditionValue extends string>({
     return (
         <Menu>
             <Menu.Trigger>
-                <Flex alignItems="center" className={css({ position: "relative" })}>
+                <Flex alignItems="center" css={css({ position: "relative" })}>
                     <div
-                        className={css({
+                        css={css({
                             backgroundColor: tokens.gray200,
                             position: "absolute",
                             top: 0,
@@ -84,7 +81,7 @@ function ConditionSelect<ConditionValue extends string>({
                         fontSize="fontSizeS"
                         lineHeight="lineHeightS"
                         fontWeight="fontWeightMedium"
-                        className={css({
+                        css={css({
                             backgroundColor: tokens.colorWhite,
                             cursor: "pointer",
                             position: "relative",
@@ -97,7 +94,7 @@ function ConditionSelect<ConditionValue extends string>({
                         {selected}
                     </Text>
                     <div
-                        className={css({
+                        css={css({
                             backgroundColor: tokens.colorPrimary,
                             position: "absolute",
                             top: 0,

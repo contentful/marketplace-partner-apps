@@ -15,7 +15,7 @@ import { Flex, Note } from "@contentful/f36-components";
 import { AppInstallationParameters } from "../ConfigScreen/ConfigScreen";
 import { TranslationJobFormData, UpdateTranslationFormData } from "../Dialog";
 import { useApi, useDialog } from "../../hooks";
-import { css, cx } from "emotion";
+import { css } from '@emotion/react';
 import tokens from "@contentful/f36-tokens";
 
 type SelectedLocales = {
@@ -176,10 +176,10 @@ export const SidebarComponent = ({
             flexDirection="column"
             gap="spacingM"
             justifyContent="space-between"
-            className={cx({ [menuOpenClass]: isActionMenuOpen })}
+            css={[isActionMenuOpen && menuOpenClass]}
         >
             <div
-                className={css({
+                css={css({
                     maxWidth: "100%",
                     padding: 1,
                     paddingBottom: 4,

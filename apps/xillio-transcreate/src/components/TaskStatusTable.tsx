@@ -10,7 +10,7 @@ import {
 import { TranslationStatus } from "@contentful-lochub/shared";
 import { useMemo, useState } from "react";
 import { TableBodySkeleton } from "./TableBodySkeleton";
-import { css, cx } from "emotion";
+import { css } from '@emotion/react';
 
 const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
@@ -185,10 +185,7 @@ export const TaskStatusTable = ({
                             <Table.Row
                                 key={task.targetLanguage}
                                 onClick={() => handleSelect(task)}
-                                className={cx({
-                                    [notSelectableClass]: !isTaskSelectable,
-                                    [selectableClass]: isTaskSelectable,
-                                })}
+                                css={[isTaskSelectable ? selectableClass : notSelectableClass]}
                             >
                                 {hasCheckbox && (
                                     <Table.Cell>
