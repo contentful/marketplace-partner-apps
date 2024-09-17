@@ -1,5 +1,5 @@
 import { FormControl, TextInput, IconButton } from "@contentful/f36-components";
-import { css, cx } from '@emotion/css';
+import { css } from '@emotion/react';
 import { FieldValues, UseControllerProps, useController } from "react-hook-form";
 import { colorGray } from "../styles";
 import tokens from "@contentful/f36-tokens";
@@ -62,25 +62,25 @@ export const ControlledDatepicker = <T extends FieldValues>({
 
     return (
         <FormControl isInvalid={isInvalid} isDisabled={isDisabled} marginBottom="none">
-            <FormControl.Label isRequired={isRequired} className={cx({ [colorGray]: isDisabled })}>
+            <FormControl.Label isRequired={isRequired} css={[isDisabled && colorGray]}>
                 {label}
             </FormControl.Label>
 
             <TextInput.Group>
                 <TextInput
-                    className={cx(
+                    css={[
                         hideCursorStyle,
                         borderStyle,
                         isDisabled ? disabledStyle : enabledStyle,
                         isInvalid && invalidStyle,
-                    )}
+                    ]}
                     value={inputValue}
                     onClick={handleOpen}
                     aria-label="Choose date"
                     isDisabled={isDisabled}
                 />
                 <IconButton
-                    className={cx(borderStyle, isInvalid && invalidStyle)}
+                    css={[borderStyle, isInvalid && invalidStyle]}
                     variant="secondary"
                     icon={<CalendarIcon />}
                     onClick={handleOpen}

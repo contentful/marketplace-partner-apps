@@ -1,5 +1,5 @@
 import { Flex, FormControl, IconButton, Menu, Pill } from "@contentful/f36-components";
-import { css, cx } from '@emotion/css';
+import { css } from '@emotion/react';
 import { FieldValues, UseControllerProps, useController } from "react-hook-form";
 import { colorGray } from "../styles";
 import { PlusIcon } from "@contentful/f36-icons";
@@ -67,9 +67,9 @@ export const ControlledMultiSelect = <T extends FieldValues>({
 
     return (
         <FormControl isRequired isInvalid={Boolean(error)} marginBottom="none">
-            <FormControl.Label className={cx({ [colorGray]: disabled })}>{label}</FormControl.Label>
+            <FormControl.Label css={[disabled && colorGray]}>{label}</FormControl.Label>
 
-            <Flex flexWrap="wrap" gap="spacingXs" className={css({ minHeight: 40 })}>
+            <Flex flexWrap="wrap" gap="spacingXs" css={css({ minHeight: 40 })}>
                 {Boolean(unselected.length) && (
                     <Menu isAutoalignmentEnabled={false} placement="top-start">
                         <Menu.Trigger>
