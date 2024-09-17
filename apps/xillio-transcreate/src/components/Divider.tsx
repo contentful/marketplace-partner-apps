@@ -1,10 +1,10 @@
-import { css } from '@emotion/css';
+import { css } from '@emotion/react';
 import tokens from '@contentful/f36-tokens';
 
 export const Divider = () => {
   return (
     <hr
-      className={css({
+      css={css({
         width: '100%',
         margin: 'auto',
         border: 'none',

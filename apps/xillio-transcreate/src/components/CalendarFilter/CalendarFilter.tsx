@@ -2,7 +2,7 @@ import { Calendar, Popover } from "@contentful/f36-components";
 import { CalendarFilterProps } from "./CalendarFilter.types";
 import { Filter } from "../Filter";
 import { useMemo, useState } from "react";
-import { css } from '@emotion/css';
+import { css } from '@emotion/react';
 import tokens from "@contentful/f36-tokens";
 
 export const CalendarFilter = ({
@@ -48,7 +48,7 @@ export const CalendarFilter = ({
             <Popover.Content>
                 <Calendar
                     captionLayout="dropdown-buttons"
-                    className={css({ padding: tokens.spacingXs })}
+                    css={css({ padding: tokens.spacingXs })}
                     mode="single"
                     fromDate={new Date(Date.now() - 100 * 365 * 24 * 60 * 60 * 1000)}
                     toDate={new Date(Date.now() + 100 * 365 * 24 * 60 * 60 * 1000)}

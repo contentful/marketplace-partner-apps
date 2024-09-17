@@ -2,7 +2,7 @@ import { Button, Checkbox, Flex, IconButton, Popover, Subheading } from "@conten
 import { MultiSelectFilterProps, MultiSelectFilterSearchBarProps } from "./MultiSelectFilter.types";
 import { Filter } from "../Filter";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { css } from '@emotion/css';
+import { css } from '@emotion/react';
 import { Divider } from "../Divider";
 import { CloseIcon, SearchIcon } from "@contentful/f36-icons";
 import tokens from "@contentful/f36-tokens";
@@ -77,13 +77,13 @@ export const MultiSelectFilter = <MultiSelectFilterValue extends string>({
                 onClick={() => setIsOpen(!isOpen)}
                 isDisabled={isDisabled}
             />
-            <Popover.Content className={css({ overflow: "hidden" })}>
+            <Popover.Content css={css({ overflow: "hidden" })}>
                 <MultiSelectFilterSearchBar search={search} onSearch={setSearch} />
                 <Divider />
                 {hasSelectedOptions || hasUnselectedOptions ? (
                     <>
                         <div
-                            className={css({
+                            css={css({
                                 maxHeight: "min(40vh, 450px)",
                                 overflowY: "auto",
                                 overflowX: "hidden",
@@ -110,7 +110,7 @@ export const MultiSelectFilter = <MultiSelectFilterValue extends string>({
                         <Flex padding="spacingXs" gap="spacingXs">
                             <Button
                                 variant="primary"
-                                className={css({ flexGrow: 1 })}
+                                css={css({ flexGrow: 1 })}
                                 isDisabled={!hasChanges}
                                 onClick={handleApply}
                             >
@@ -118,7 +118,7 @@ export const MultiSelectFilter = <MultiSelectFilterValue extends string>({
                             </Button>
                             <Button
                                 variant="transparent"
-                                className={css({ flexGrow: 1 })}
+                                css={css({ flexGrow: 1 })}
                                 isDisabled={!currentSelected.size}
                                 onClick={handleReset}
                             >
@@ -144,7 +144,7 @@ export const MultiSelectFilterSearchBar = ({ search, onSearch }: MultiSelectFilt
                 value={search}
                 onChange={(e) => onSearch(e.target.value)}
                 placeholder="Search..."
-                className={css({
+                css={css({
                     outline: "none",
                     border: "none",
                     padding: tokens.spacingXs,
@@ -153,7 +153,7 @@ export const MultiSelectFilterSearchBar = ({ search, onSearch }: MultiSelectFilt
                 })}
             />
             <IconButton
-                className={css({ margin: tokens.spacing2Xs })}
+                css={css({ margin: tokens.spacing2Xs })}
                 size="small"
                 variant="transparent"
                 aria-label="Search"
@@ -202,7 +202,7 @@ export const MultiSelectFilterOptionList = <MultiSelectFilterValue extends strin
 
 export const MultiSelectFilterNoMatch = () => (
     <Subheading
-        className={css({
+        css={css({
             margin: tokens.spacingM,
             textAlign: "center",
             color: tokens.gray600,

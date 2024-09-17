@@ -1,5 +1,4 @@
 import { FormControl, Select } from "@contentful/f36-components";
-import { cx } from '@emotion/css';
 import { FieldValues, UseControllerProps, useController } from "react-hook-form";
 import { colorGray } from "../styles";
 
@@ -27,7 +26,7 @@ export const ControlledSelect = <T extends FieldValues>({
 
     return (
         <FormControl isInvalid={Boolean(error)} marginBottom="none">
-            <FormControl.Label isRequired className={cx({ [colorGray]: inputProps.disabled })}>
+            <FormControl.Label isRequired css={[inputProps.disabled && colorGray]}>
                 {label}
             </FormControl.Label>
 
