@@ -43,7 +43,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-import": "^2.30.0",
-    "jsdom": "^23.2.0",
+    "jsdom": "^25.0.0",
     "postcss": "^8.4.45",
     "prettier": "^3.2.4",
     "sass": "^1.78.0",
