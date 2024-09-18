@@ -8,14 +8,15 @@ import {
     ActionsButton,
     ButtonAction,
     TaskStatus,
+    DocsLink,
 } from "../../components";
 import { appConfig } from "../../appConfig";
-import { TranslationDto } from "@contentful-lochub/shared";
+import { TranslationDto } from "../../types";
 import { Flex, Note } from "@contentful/f36-components";
 import { AppInstallationParameters } from "../ConfigScreen/ConfigScreen";
 import { TranslationJobFormData, UpdateTranslationFormData } from "../Dialog";
 import { useApi, useDialog } from "../../hooks";
-import { css } from '@emotion/react';
+import { css } from "@emotion/react";
 import tokens from "@contentful/f36-tokens";
 
 type SelectedLocales = {
@@ -67,9 +68,18 @@ export const SidebarComponent = ({
     };
 
     const handleUpdate = async () => {
+        const dueTimes = [...selected]
+            .map((locale) => {
+                const dueDate = tasks.find((task) => task.targetLanguage === locale)?.dueDate;
+                if (dueDate) return new Date(dueDate).getTime();
+            })
+            .filter((dueTime) => dueTime !== undefined && dueTime > Date.now() + 86400000) as number[];
+        let earliestDueTime: number | undefined;
+        if (dueTimes.length)
+            earliestDueTime = dueTimes.reduce((prevTime, nextTime) => Math.min(prevTime, nextTime));
         const data: UpdateTranslationFormData | undefined = await open({
             type: "update",
-            dueDate: new Date().toISOString(), // TODO: current due date?
+            dueDate: new Date(earliestDueTime ?? Date.now() + 86400000).toISOString(),
         });
         if (!data) return;
         setSelected(new Set());
@@ -172,55 +182,59 @@ export const SidebarComponent = ({
         );
 
     return (
-        <Flex
-            flexDirection="column"
-            gap="spacingM"
-            justifyContent="space-between"
-            css={[isActionMenuOpen && menuOpenClass]}
-        >
-            <div
-                css={css({
-                    maxWidth: "100%",
-                    padding: 1,
-                    paddingBottom: 4,
-                    overflowY: "auto",
-                    "&::-webkit-scrollbar": {
-                        height: 4,
-                    },
-
-                    "&::-webkit-scrollbar-track": {
-                        borderRadius: 2,
-                        backgroundColor: tokens.gray200,
-                    },
-                    "&::-webkit-scrollbar-thumb": {
-                        borderRadius: 2,
-                        backgroundColor: tokens.gray300,
-                    },
-                    "&::-webkit-scrollbar-thumb:hover": {
-                        backgroundColor: tokens.gray400,
-                    },
-                })}
+        <>
+            <Flex
+                flexDirection="column"
+                gap="spacingM"
+                justifyContent="space-between"
+                css={[isActionMenuOpen && menuOpenClass]}
             >
-                <TaskStatusTable
-                    tasks={tasks}
-                    isLoading={isLoading}
-                    selected={selected}
-                    onSelect={setSelected}
-                    isSelectable={isSelectable}
-                    isSortable
+                <div
+                    css={css({
+                        maxWidth: "100%",
+                        padding: 1,
+                        paddingBottom: 4,
+                        overflowY: "auto",
+                        "&::-webkit-scrollbar": {
+                            height: 4,
+                        },
+
+                        "&::-webkit-scrollbar-track": {
+                            borderRadius: 2,
+                            backgroundColor: tokens.gray200,
+                        },
+                        "&::-webkit-scrollbar-thumb": {
+                            borderRadius: 2,
+                            backgroundColor: tokens.gray300,
+                        },
+                        "&::-webkit-scrollbar-thumb:hover": {
+                            backgroundColor: tokens.gray400,
+                        },
+                    })}
+                >
+                    <TaskStatusTable
+                        tasks={tasks}
+                        isLoading={isLoading}
+                        selected={selected}
+                        onSelect={setSelected}
+                        isSelectable={isSelectable}
+                    />
+                </div>
+                <ActionsButton
+                    isFullWidth
+                    isDisabled={selected.size === 0}
+                    onSelect={handleSelectAction}
+                    onToggleOpen={setIsActionMenuOpen}
+                    actions={actions}
+                    placement="top-end"
+                    offset={[-1, 4]}
+                    delayOpen={100}
                 />
-            </div>
-            <ActionsButton
-                isFullWidth
-                isDisabled={selected.size === 0}
-                onSelect={handleSelectAction}
-                onToggle={setIsActionMenuOpen}
-                actions={actions}
-                placement="top-end"
-                offset={[-1, 4]}
-                delayOpen={100}
-            />
-        </Flex>
+            </Flex>
+            <DocsLink path="/sidebar" style={{ marginTop: tokens.spacingM }}>
+                Learn how to use the sidebar widget
+            </DocsLink>
+        </>
     );
 };
 

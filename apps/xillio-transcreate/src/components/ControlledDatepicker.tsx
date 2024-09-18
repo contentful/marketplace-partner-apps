@@ -1,5 +1,5 @@
 import { FormControl, TextInput, IconButton } from "@contentful/f36-components";
-import { css } from '@emotion/react';
+import { css } from "@emotion/react";
 import { FieldValues, UseControllerProps, useController } from "react-hook-form";
 import { colorGray } from "../styles";
 import tokens from "@contentful/f36-tokens";

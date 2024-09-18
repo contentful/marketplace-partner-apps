@@ -6,13 +6,12 @@ export default defineConfig(() => ({
     server: {
         port: 3000,
     },
-    plugins: [react({
-        jsxImportSource: "@emotion/react",
-        babel: {
-            plugins: ["@emotion/babel-plugin"],
-        },
-    })],
-    test: {
-        environment: "happy-dom",
-    },
+    plugins: [
+        react({
+            jsxImportSource: "@emotion/react",
+            babel: {
+                plugins: ["@emotion/babel-plugin"],
+            },
+        }),
+    ],
 }));

@@ -1,4 +1,4 @@
-import { AuthenticatedDto, ProjectDto } from "@contentful-lochub/shared";
+import { AuthenticatedDto, ProjectDto } from "../types";
 import { CollectionController } from "./CollectionController";
 
 export class ProjectsController extends CollectionController {

@@ -1,4 +1,4 @@
-import { ConfigDto } from "@contentful-lochub/shared";
+import { ConfigDto } from "../types";
 import { CollectionController } from "./CollectionController";
 
 export class ConfigsController extends CollectionController {

@@ -1,7 +1,15 @@
 import { ConfigAppSDK } from "@contentful/app-sdk";
-import { Button, Checkbox, Flex, Heading, ModalLauncher, Paragraph } from "@contentful/f36-components";
+import {
+    Button,
+    Checkbox,
+    Flex,
+    Heading,
+    ModalLauncher,
+    Paragraph,
+    TextLink,
+} from "@contentful/f36-components";
 import { useSDK } from "@contentful/react-apps-toolkit";
-import { css } from '@emotion/react';
+import { css } from "@emotion/react";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { appConfig } from "../../appConfig";
 import tokens from "@contentful/f36-tokens";
@@ -14,10 +22,12 @@ import {
     ControlledTextInput,
     SelectOption,
     Divider,
+    DocsLink,
 } from "../../components";
 import { ConnectModal, ConnectModalData, ConnectModalProps } from "./ConnectModal";
 import { ContentTypeProps, SidebarItem } from "contentful-management";
 import { useApi, useCollection, useSelected } from "../../hooks";
+import { APIController } from "../../api";
 
 const { background, surface } = appConfig.locations.configScreen;
 
@@ -53,7 +63,7 @@ export type AppInstallationParameters = {
     sendRecursively: boolean;
 };
 
-export type ConfigScreenComponentProps = Pick<ConnectModalProps, "connect"> & {
+export type ConfigScreenComponentProps = Pick<ConnectModalProps, "onConnect"> & {
     form: UseFormReturn<AppInstallationParameters>;
     connected: boolean;
     projectOptions?: SelectOption[];
@@ -64,7 +74,7 @@ export type ConfigScreenComponentProps = Pick<ConnectModalProps, "connect"> & {
 };
 
 export const ConfigScreenComponent = ({
-    connect,
+    onConnect,
     form,
     connected,
     projectOptions,
@@ -73,17 +83,12 @@ export const ConfigScreenComponent = ({
     toggleSelectedContentTypes,
     toggleAllSelectedContentTypes,
 }: ConfigScreenComponentProps) => {
-    const { control, setValue } = form;
+    const { control } = form;
 
     const isDisabled = !connected;
 
     const handleConnectPress = () => {
-        ModalLauncher.open((props) => <ConnectModal {...props} connect={connect} />).then(
-            (token?: string) => {
-                if (!token) return;
-                setValue("token", token);
-            },
-        );
+        ModalLauncher.open((props) => <ConnectModal {...props} onConnect={onConnect} />);
     };
 
     return (
@@ -111,6 +116,8 @@ export const ConfigScreenComponent = ({
                         <Flex
                             flexDirection="column"
                             gap="spacingS"
+                            paddingTop="spacingL"
+                            paddingBottom="spacingL"
                             alignSelf="center"
                             css={css({ width: "fit-content" })}
                         >
@@ -134,13 +141,28 @@ export const ConfigScreenComponent = ({
                                 ) : (
                                     <LockIcon variant="muted" />
                                 )}
-                                {connected
-                                    ? "Succesfully connected to account"
-                                    : "Connect account to make changes"}
+                                {connected ? (
+                                    "Succesfully connected to account"
+                                ) : (
+                                    <span>
+                                        Don't have an account?{" "}
+                                        <TextLink
+                                            href="https://www.xillio.com/transcreate#form"
+                                            target="_blank"
+                                        >
+                                            Contact us.
+                                        </TextLink>
+                                    </span>
+                                )}
                             </Paragraph>
                         </Flex>
                     </Section>
-                    <Divider />
+                    <Flex flexDirection="column" gap="spacing2Xs">
+                        <DocsLink path="/configuration" style={{ alignSelf: "flex-end" }}>
+                            Learn more about configuring the {appConfig.name} app
+                        </DocsLink>
+                        <Divider />
+                    </Flex>
                     <Section
                         title="Configure defaults"
                         subtitle={`Requires a ${appConfig.name} account`}
@@ -218,6 +240,7 @@ export const ConfigScreen = () => {
         defaultValues: {
             backendUrl: "",
             token: "",
+            defaultProject: "",
             defaultTranslationJobName: "",
             sendRecursively: false,
         },
@@ -314,19 +337,21 @@ export const ConfigScreen = () => {
         } catch {
             sdk.notifier.warning("Failed to update the sidebar of the selected content types");
         }
-    }, [sdk, selected]);
+    }, [sdk, selected, editorInterfaces]); // TODO: move both onConfigure and onConfigurationCompleted inside separate useEffect hooks
 
-    const connect = async (data: ConnectModalData) => {
-        api.backendUrl = data.backendUrl;
-        const token = await api.configs.create({
+    const handleConnect = async (data: ConnectModalData) => {
+        // create one-off API controller to validate the user configured backend URL
+        const apiController = new APIController(data.backendUrl);
+        const token = await apiController.configs.create({
             appInstallationId: sdk.ids.app,
             locHubUrl: data.lochubUrl,
             locHubUsername: data.username,
             locHubPassword: data.password,
         });
+        setValue("token", token);
         setValue("backendUrl", data.backendUrl);
+        setValue("defaultProject", ""); // reset default project
         sdk.notifier.success(`Successfully connected to your ${appConfig.name} account.`);
-        return token;
     };
 
     useEffect(() => {
@@ -351,9 +376,8 @@ export const ConfigScreen = () => {
         if (!editorInterfaces) return;
         // All content types that already have the sidebar widget
         const contentTypeIds = editorInterfaces
-            .filter(
-                (editorInterface) =>
-                    editorInterface.sidebar?.find((sidebarItem) => sidebarItem.widgetId === sdk.ids.app),
+            .filter((editorInterface) =>
+                editorInterface.sidebar?.find((sidebarItem) => sidebarItem.widgetId === sdk.ids.app),
             )
             .map((editorInterface) => editorInterface.sys.contentType.sys.id);
 
@@ -393,7 +417,7 @@ export const ConfigScreen = () => {
 
     return (
         <ConfigScreenComponent
-            connect={connect}
+            onConnect={handleConnect}
             form={form}
             connected={Boolean(token)}
             projectOptions={projectOptions}

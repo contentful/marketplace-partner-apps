@@ -1,10 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { SidebarComponent, SidebarComponentProps } from "./Sidebar";
-import { Box, GlobalStyles } from "@contentful/f36-components";
-import tokens from "@contentful/f36-tokens";
-import { css } from '@emotion/react';
-import { TranslationStatus } from "@contentful-lochub/shared";
+
+import { TranslationStatus } from "../../types";
 
 export default {
     title: "Locations/Sidebar",
@@ -12,28 +10,12 @@ export default {
     parameters: {
         layout: "centered",
     },
-    // argTypes: {
-    //     onSubmit: {
-    //         table: {
-    //             disable: true,
-    //         },
-    //     },
-    //     projectOptions: {
-    //         table: {
-    //             disable: true,
-    //         },
-    //     },
-    // },
     decorators: [
         (Story) => (
             <>
-                <GlobalStyles />
-                <Box
-                    padding="spacingL"
-                    css={css({ backgroundColor: tokens.gray100, width: "21.5rem", padding: "1rem" })}
-                >
+                <div style={{ width: "21.5rem", padding: "1rem", border: "1px solid black" }}>
                     <Story />
-                </Box>
+                </div>
             </>
         ),
     ],

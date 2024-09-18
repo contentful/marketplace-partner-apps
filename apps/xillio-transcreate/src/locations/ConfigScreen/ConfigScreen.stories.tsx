@@ -1,11 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { ConfigScreenComponent, ConfigScreenComponentProps, AppInstallationParameters } from "./ConfigScreen";
-import { GlobalStyles } from "@contentful/f36-components";
 import { useForm } from "react-hook-form";
 
 export default {
-    title: "Locations/ConfigScreen",
+    title: "Locations/ConfigScreen/ConfigScreen",
     component: ConfigScreenComponent,
     parameters: {
         layout: "fullscreen",
@@ -22,22 +21,14 @@ export default {
             },
         },
     },
-    decorators: [
-        (Story) => (
-            <>
-                <GlobalStyles />
-                <Story />
-            </>
-        ),
-    ],
 } satisfies Meta<typeof ConfigScreenComponent>;
 
 type Story = StoryObj<ConfigScreenComponentProps>;
 
 // TODO: update stories
-export const ConfigScreen: Story = {
+export const Success: Story = {
     args: {
-        connect: () => Promise.resolve("api-token"),
+        onConnect: () => Promise.resolve(),
         connected: false,
         projectOptions: [
             {

@@ -5,5 +5,6 @@ export type SearchBarProps = {
     filterMenuItems: ReactNode[];
     search: string;
     onSearch: (search: string) => void;
+    onBackSpace: () => void;
     isDisabled?: boolean;
 };

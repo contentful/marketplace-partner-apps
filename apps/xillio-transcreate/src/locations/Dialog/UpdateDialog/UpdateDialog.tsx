@@ -18,7 +18,13 @@ export const UpdateDialog = ({ defaultValues, onClose }: UpdateDialogProps) => {
 
     return (
         <Flex flexDirection="column" gap="spacingM" padding="spacingM">
-            <ControlledDatepicker control={control} label="Due date" name="dueDate" isRequired />
+            <ControlledDatepicker
+                control={control}
+                label="Due date"
+                name="dueDate"
+                isRequired
+                helpText="Select the due date for the translation job"
+            />
 
             <Flex justifyContent="flex-end" gap="spacingS">
                 <Button size="small" onClick={() => onClose()}>

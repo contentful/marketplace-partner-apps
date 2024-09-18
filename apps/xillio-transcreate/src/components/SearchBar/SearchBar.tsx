@@ -1,8 +1,8 @@
 import { Button, Flex, Menu } from "@contentful/f36-components";
 import { SearchBarProps } from "./SearchBar.types";
-import { css } from '@emotion/react';
+import { css } from "@emotion/react";
 import tokens from "@contentful/f36-tokens";
-import { MouseEvent, useRef, useState } from "react";
+import { MouseEvent, useEffect, useRef, useState } from "react";
 import { FilterIcon } from "@contentful/f36-icons";
 
 const focusClass = css({
@@ -19,6 +19,7 @@ export const SearchBar = ({
     filterMenuItems,
     search,
     onSearch,
+    onBackSpace,
     isDisabled = false,
 }: SearchBarProps) => {
     const inputRef = useRef<HTMLInputElement | null>(null);
@@ -27,6 +28,20 @@ export const SearchBar = ({
     const handleFocus = () => {
         inputRef.current?.focus();
     };
+
+    useEffect(() => {
+        const handleKeyPress = (e: KeyboardEvent) => {
+            if (e.key !== "Backspace") return;
+            if (document.activeElement === null || document.activeElement !== inputRef.current) return;
+            if (search.length > 0) return;
+            if (filters.length === 0) return;
+            onBackSpace();
+        };
+        window.addEventListener("keydown", handleKeyPress);
+        return () => {
+            window.removeEventListener("keydown", handleKeyPress);
+        };
+    }, [filters.length, onBackSpace, search]);
 
     return (
         <Flex
@@ -42,7 +57,7 @@ export const SearchBar = ({
                     cursor: "text",
                 }),
                 inputHasFocus && focusClass,
-                isDisabled && notAllowedClass
+                isDisabled && notAllowedClass,
             ]}
             onClick={handleFocus}
         >
@@ -67,7 +82,7 @@ export const SearchBar = ({
                             flexGrow: 1,
                             minWidth: 300,
                         }),
-                        isDisabled && notAllowedClass
+                        isDisabled && notAllowedClass,
                     ]}
                     onFocus={() => setInputHasFocus(true)}
                     onBlur={() => setInputHasFocus(false)}

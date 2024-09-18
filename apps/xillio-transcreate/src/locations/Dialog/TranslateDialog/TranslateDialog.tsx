@@ -104,6 +104,9 @@ export const TranslateDialog = ({
                     }}
                     options={localeOptions}
                     disabled={isDisabled}
+                    helpText="Select the locales to translate to"
+                    isAutoalignmentEnabled={false}
+                    placement="top-start"
                 />
             )}
 
@@ -113,6 +116,7 @@ export const TranslateDialog = ({
                 name="dueDate"
                 isRequired
                 disabled={isDisabled}
+                helpText="Select the due date for the translation job"
             />
 
             <ControlledTextInput
@@ -121,6 +125,7 @@ export const TranslateDialog = ({
                 name="submitter"
                 isRequired
                 disabled={isDisabled}
+                helpText="Provide the name of the submitter of the translation job"
             />
 
             <Flex justifyContent="flex-end" gap="spacingS">

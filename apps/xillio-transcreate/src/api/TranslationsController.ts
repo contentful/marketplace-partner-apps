@@ -4,7 +4,7 @@ import {
     TranslationStatusDto,
     TranslationUpdateDto,
     TranslationTransitionDto,
-} from "@contentful-lochub/shared";
+} from "../types";
 import { Task, TaskStatus } from "../components";
 import { CollectionController } from "./CollectionController";
 

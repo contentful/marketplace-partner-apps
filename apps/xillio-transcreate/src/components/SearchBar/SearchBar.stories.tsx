@@ -1,9 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { SearchBar as SearchBarComponent, SearchBarProps } from ".";
-import { Box, GlobalStyles, Menu } from "@contentful/f36-components";
-import tokens from "@contentful/f36-tokens";
-import { css } from '@emotion/react';
+import { Menu } from "@contentful/f36-components";
 import { CalendarFilter, CalendarFilterCondition } from "../CalendarFilter";
 import { useState } from "react";
 import { MultiSelectFilter } from "../MultiSelectFilter";
@@ -11,24 +9,6 @@ import { MultiSelectFilter } from "../MultiSelectFilter";
 export default {
     title: "Components/SearchBar",
     component: SearchBarComponent,
-    decorators: [
-        (Story) => (
-            <>
-                <GlobalStyles />
-                <Box
-                    padding="spacingL"
-                    css={css({
-                        backgroundColor: tokens.gray100,
-                        position: "fixed",
-                        inset: 0,
-                        padding: "1rem",
-                    })}
-                >
-                    <Story />
-                </Box>
-            </>
-        ),
-    ],
 } satisfies Meta<typeof SearchBarComponent>;
 
 type Story = StoryObj<SearchBarProps>;
@@ -64,6 +44,7 @@ export const SearchBar: Story = {
                         onCondition={setCondition}
                     />,
                 ]}
+                onBackSpace={() => {}}
             />
         );
     },

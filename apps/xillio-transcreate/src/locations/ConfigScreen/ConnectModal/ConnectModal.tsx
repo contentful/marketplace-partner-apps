@@ -13,11 +13,11 @@ export type ConnectModalData = {
 
 export type ConnectModalProps = {
     isShown: boolean;
-    onClose: (token?: string) => void;
-    connect: (data: ConnectModalData) => Promise<string>;
+    onClose: () => void;
+    onConnect: (data: ConnectModalData) => Promise<void>;
 };
 
-export const ConnectModal = ({ isShown, onClose, connect }: ConnectModalProps) => {
+export const ConnectModal = ({ isShown, onClose, onConnect }: ConnectModalProps) => {
     const {
         handleSubmit,
         control,
@@ -35,8 +35,8 @@ export const ConnectModal = ({ isShown, onClose, connect }: ConnectModalProps) =
 
     const onSubmit = async (data: ConnectModalData) => {
         try {
-            const token = await connect(data);
-            onClose(token);
+            await onConnect(data);
+            onClose();
         } catch {
             setNote(`Failed to connect to ${appConfig.name}. Please review the provided URL and
             credentials.`);
@@ -44,10 +44,10 @@ export const ConnectModal = ({ isShown, onClose, connect }: ConnectModalProps) =
     };
 
     return (
-        <Modal onClose={() => onClose()} isShown={isShown}>
+        <Modal onClose={onClose} isShown={isShown}>
             {() => (
                 <>
-                    <Modal.Header title={`Connect ${appConfig.name}`} onClose={() => onClose()} />
+                    <Modal.Header title={`Connect ${appConfig.name}`} onClose={onClose} />
                     <Modal.Content>
                         <Flex flexDirection="column" gap="spacingL">
                             <ControlledTextInput
@@ -91,7 +91,7 @@ export const ConnectModal = ({ isShown, onClose, connect }: ConnectModalProps) =
                         </Flex>
                     </Modal.Content>
                     <Modal.Controls>
-                        <Button size="small" variant="transparent" onClick={() => onClose()}>
+                        <Button size="small" variant="transparent" onClick={onClose}>
                             Cancel
                         </Button>
                         <Button

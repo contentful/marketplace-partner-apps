@@ -5,7 +5,9 @@ import { SDKProvider } from "@contentful/react-apps-toolkit";
 import App from "./App";
 import { OpenDialogProvider } from "./providers";
 
-createRoot(document.getElementById("root")!).render(
+const root = createRoot(document.getElementById("root")!);
+
+root.render(
     <SDKProvider>
         <OpenDialogProvider>
             <GlobalStyles />

@@ -3,10 +3,11 @@
 
 # testing
 /coverage
+/storybook-static
 
 # production
 /dist
-!/types/dist
+.env
 
 # misc
 .DS_Store

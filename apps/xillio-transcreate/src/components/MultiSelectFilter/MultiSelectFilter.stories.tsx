@@ -1,32 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { MultiSelectFilter as MultiSelectFilterComponent, MultiSelectFilterProps } from ".";
-import { Box, GlobalStyles } from "@contentful/f36-components";
-import tokens from "@contentful/f36-tokens";
-import { css } from '@emotion/react';
+
 import { useState } from "react";
 
 export default {
-    title: "Components/MultiSelectFilter",
+    title: "Components/Filters/MultiSelectFilter",
     component: MultiSelectFilterComponent,
-    decorators: [
-        (Story) => (
-            <>
-                <GlobalStyles />
-                <Box
-                    padding="spacingL"
-                    css={css({
-                        backgroundColor: tokens.gray100,
-                        position: "fixed",
-                        inset: 0,
-                        padding: "1rem",
-                    })}
-                >
-                    <Story />
-                </Box>
-            </>
-        ),
-    ],
 } satisfies Meta<typeof MultiSelectFilterComponent>;
 
 type MultiSelectFilterValue =

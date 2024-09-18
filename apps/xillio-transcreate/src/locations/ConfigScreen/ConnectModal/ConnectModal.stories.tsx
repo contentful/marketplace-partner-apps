@@ -1,10 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { ConnectModal as ConnectModalComponent, ConnectModalProps } from "./ConnectModal";
-import { GlobalStyles } from "@contentful/f36-components";
 
 export default {
-    title: "Locations/ConnectModal",
+    title: "Locations/ConfigScreen/ConnectModal",
     component: ConnectModalComponent,
     parameters: {
         layout: "centered",
@@ -15,36 +14,28 @@ export default {
                 disable: true,
             },
         },
-        connect: {
+        onConnect: {
             table: {
                 disable: true,
             },
         },
     },
-    decorators: [
-        (Story) => (
-            <>
-                <GlobalStyles />
-                <Story />
-            </>
-        ),
-    ],
 } satisfies Meta<typeof ConnectModalComponent>;
 
 type Story = StoryObj<ConnectModalProps>;
 
-export const ConnectModalSuccess: Story = {
+export const Success: Story = {
     args: {
         isShown: true,
-        connect: () => Promise.resolve("api-token"),
-        onClose: (token) => console.log(token),
+        onConnect: () => Promise.resolve(),
+        onClose: () => console.log("close"),
     },
 };
 
-export const ConnectModalFail: Story = {
+export const Fail: Story = {
     args: {
         isShown: true,
-        connect: () => Promise.reject(),
-        onClose: (token) => console.log(token),
+        onConnect: () => Promise.reject(),
+        onClose: () => console.log("close"),
     },
 };

@@ -3,7 +3,7 @@ import { Calendar } from "@contentful/f36-components";
 import { useSDK } from "@contentful/react-apps-toolkit";
 import { AppInstallationParameters } from "../ConfigScreen/ConfigScreen";
 import tokens from "@contentful/f36-tokens";
-import { css } from '@emotion/react';
+import { css } from "@emotion/react";
 import { useEffect } from "react";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { TranslateDialog } from "./TranslateDialog";
@@ -110,7 +110,7 @@ export const openDialog = (sdk: BaseAppSDK, parameters: DialogInvocationParamete
             case "confirm":
                 return { title: parameters.title, width: "medium" };
             case "translate":
-                return { title: "Translate", width: "medium" };
+                return { title: "Translate", width: "large" };
             case "update":
                 return { title: "Update", width: "medium" };
         }
