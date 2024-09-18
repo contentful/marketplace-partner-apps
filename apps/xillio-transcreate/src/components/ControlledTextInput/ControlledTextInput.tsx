@@ -11,7 +11,7 @@ const isValidURL = (value: string) => {
       return true;
     }
     return "URL must have a protocol of 'https://' or 'http://' with 'localhost' hostname.";
-  } catch (error) {
+  } catch {
     return 'Invalid URL format. Please provide a valid URL.';
   }
 };

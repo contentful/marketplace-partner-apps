@@ -492,7 +492,7 @@ export const BulkEditor = () => {
       } else {
         sdk.notifier.warning(`Could not apply the bulk ${name} action to any of the selected entries.`);
       }
-    } catch (error) {
+    } catch {
       sdk.notifier.error(`Failed to send the bulk ${name} action to your ${appConfig.name} account. Please check the app configuration.`);
     }
   }

@@ -287,7 +287,7 @@ export const Sidebar = () => {
         };
       }
       setTasksByLocale(newTasksByLocale);
-    } catch (error) {
+    } catch {
       sdk.notifier.error(`Failed to send the ${name} action to your ${appConfig.name} account. Please check the app configuration.`);
     }
   };

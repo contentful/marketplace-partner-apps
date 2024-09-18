@@ -1,6 +1,5 @@
 import { ReactNode, createContext } from 'react';
 import { DialogInvocationParameters, openDialog } from '../locations';
-import { BaseAppSDK } from '@contentful/app-sdk';
 import { useSDK } from '@contentful/react-apps-toolkit';
 
 export type OpenDialogContextType = (parameters: DialogInvocationParameters) => Promise<any>;
