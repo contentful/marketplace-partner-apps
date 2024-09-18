@@ -7,6 +7,7 @@
     "build": "tsc && vite build",
     "start": "vite",
     "prettier": "prettier --write .",
+    "lint": "eslint .",
     "upload": "contentful-app-scripts upload --bundle-dir ./dist",
     "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./dist  --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN",
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./dist --organization-id ${DEFINITIONS_ORG_ID} --definition-id 5i8iZ60GpkbZQJzutNXit --token ${CONTENTFUL_CMA_TOKEN}",
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@contentful/app-scripts": "1.10.2",
+    "@eslint/js": "^9.9.0",
     "@storybook/addon-essentials": "^8.3.1",
     "@storybook/addon-interactions": "^8.3.1",
     "@storybook/addon-links": "^8.3.1",
@@ -42,9 +44,13 @@
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
     "@vitejs/plugin-react": "4.0.1",
+    "eslint": "^9.9.0",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "globals": "^15.9.0",
     "prettier": "^3.3.3",
     "storybook": "^8.3.1",
     "typescript": "5.1.6",
+    "typescript-eslint": "^8.0.1",
     "vite": "4.3.9"
   }
 }
