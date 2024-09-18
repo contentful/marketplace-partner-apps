@@ -1,5 +1,5 @@
-import { VersionDto } from "./VersionDto";
+import { VersionDto } from './VersionDto';
 
 export type AuthenticatedDto = VersionDto & {
-    generatedToken: string;
+  generatedToken: string;
 };

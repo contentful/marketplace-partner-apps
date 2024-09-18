@@ -1,2 +1,2 @@
-export * from "./ControlledTextInput";
-export * from "./ControlledTextInput.types";
+export * from './ControlledTextInput';
+export * from './ControlledTextInput.types';

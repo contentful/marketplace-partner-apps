@@ -1,2 +1,2 @@
-export * from "./TaskStatusTable";
-export * from "./TaskStatusTable.types";
+export * from './TaskStatusTable';
+export * from './TaskStatusTable.types';

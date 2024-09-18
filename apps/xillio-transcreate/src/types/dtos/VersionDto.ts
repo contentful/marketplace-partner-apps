@@ -1,3 +1,3 @@
 export type VersionDto = {
-    apiVersion?: string;
+  apiVersion?: string;
 };

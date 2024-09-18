@@ -1,5 +1,5 @@
-import { TextLinkProps } from "@contentful/f36-components";
+import { TextLinkProps } from '@contentful/f36-components';
 
-export type DocsLinkProps = Omit<TextLinkProps, "target" | "href"> & {
-    path: string;
+export type DocsLinkProps = Omit<TextLinkProps, 'target' | 'href'> & {
+  path: string;
 };

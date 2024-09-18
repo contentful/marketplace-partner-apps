@@ -1,2 +1,2 @@
-export * from "./SearchBar";
-export * from "./SearchBar.types";
+export * from './SearchBar';
+export * from './SearchBar.types';

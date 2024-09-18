@@ -1,2 +1,2 @@
-export * from "./TableBodySkeleton";
-export * from "./TableBodySkeleton.types";
+export * from './TableBodySkeleton';
+export * from './TableBodySkeleton.types';

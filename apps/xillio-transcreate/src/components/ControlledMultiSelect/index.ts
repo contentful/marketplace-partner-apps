@@ -1,2 +1,2 @@
-export * from "./ControlledMultiSelect";
-export * from "./ControlledMultiSelect.types";
+export * from './ControlledMultiSelect';
+export * from './ControlledMultiSelect.types';

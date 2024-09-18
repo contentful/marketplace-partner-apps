@@ -1,2 +1,2 @@
-export * from "./ControlledCheckbox";
-export * from "./ControlledCheckbox.types";
+export * from './ControlledCheckbox';
+export * from './ControlledCheckbox.types';

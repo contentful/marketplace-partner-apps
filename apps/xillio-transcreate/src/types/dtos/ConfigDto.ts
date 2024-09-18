@@ -1,8 +1,8 @@
-import { VersionDto } from "./VersionDto";
+import { VersionDto } from './VersionDto';
 
 export type ConfigDto = VersionDto & {
-    appInstallationId: string;
-    locHubUrl: string;
-    locHubUsername: string;
-    locHubPassword: string;
+  appInstallationId: string;
+  locHubUrl: string;
+  locHubUsername: string;
+  locHubPassword: string;
 };

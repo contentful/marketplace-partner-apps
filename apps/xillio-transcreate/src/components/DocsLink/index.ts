@@ -1,2 +1,2 @@
-export * from "./DocsLink.types";
-export * from "./DocsLink";
+export * from './DocsLink.types';
+export * from './DocsLink';

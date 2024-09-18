@@ -1,2 +1,2 @@
-export * from "./TaskStatusBadge.types";
-export * from "./TaskStatusBadge";
+export * from './TaskStatusBadge.types';
+export * from './TaskStatusBadge';

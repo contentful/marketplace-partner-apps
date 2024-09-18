@@ -1,7 +1,7 @@
-import { AuthenticatedDto } from "./AuthenticatedDto";
+import { AuthenticatedDto } from './AuthenticatedDto';
 
 export type TranslationStatusDto = AuthenticatedDto & {
-    spaceId: string;
-    environmentId: string;
-    entryIds: string[];
+  spaceId: string;
+  environmentId: string;
+  entryIds: string[];
 };

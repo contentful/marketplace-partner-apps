@@ -1,2 +1,2 @@
-export * from "./EntryStatusBadge";
-export * from "./EntryStatusBadge.types";
+export * from './EntryStatusBadge';
+export * from './EntryStatusBadge.types';

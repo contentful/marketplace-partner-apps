@@ -38,9 +38,9 @@ the upload command to your CI pipeline.
 
 For this command to work, the following environment variables must be set:
 
--   `CONTENTFUL_ORG_ID` - The ID of your organization
--   `CONTENTFUL_APP_DEF_ID` - The ID of the app to which to add the bundle
--   `CONTENTFUL_ACCESS_TOKEN` - A personal [access token](https://www.contentful.com/developers/docs/references/content-management-api/#/reference/personal-access-tokens)
+- `CONTENTFUL_ORG_ID` - The ID of your organization
+- `CONTENTFUL_APP_DEF_ID` - The ID of the app to which to add the bundle
+- `CONTENTFUL_ACCESS_TOKEN` - A personal [access token](https://www.contentful.com/developers/docs/references/content-management-api/#/reference/personal-access-tokens)
 
 #### `npm run storybook`
 
@@ -54,8 +54,8 @@ Before running the tests, make sure to run `npm run storybook` and have an activ
 
 #### `npm run test`
 
-This command is used to run the tests for the Xillio Transcreate app. 
+This command is used to run the tests for the Xillio Transcreate app.
 
-It can be ran locally, but is intented to be used on a CI server to automate the testing process. 
+It can be ran locally, but is intented to be used on a CI server to automate the testing process.
 
 The command makes a static build of Storybook and runs these headless using Playwright.

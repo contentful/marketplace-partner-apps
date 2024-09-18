@@ -1,39 +1,33 @@
-import { Flex, Button } from "@contentful/f36-components";
-import { useForm } from "react-hook-form";
-import { ControlledDatepicker } from "../../../components";
+import { Flex, Button } from '@contentful/f36-components';
+import { useForm } from 'react-hook-form';
+import { ControlledDatepicker } from '../../../components';
 
 export type UpdateTranslationFormData = {
-    dueDate: Date;
+  dueDate: Date;
 };
 
 export type UpdateDialogProps = {
-    defaultValues: UpdateTranslationFormData;
-    onClose: (data?: any) => void;
+  defaultValues: UpdateTranslationFormData;
+  onClose: (data?: any) => void;
 };
 
 export const UpdateDialog = ({ defaultValues, onClose }: UpdateDialogProps) => {
-    const { control, handleSubmit } = useForm<UpdateTranslationFormData>({
-        defaultValues,
-    });
+  const { control, handleSubmit } = useForm<UpdateTranslationFormData>({
+    defaultValues,
+  });
 
-    return (
-        <Flex flexDirection="column" gap="spacingM" padding="spacingM">
-            <ControlledDatepicker
-                control={control}
-                label="Due date"
-                name="dueDate"
-                isRequired
-                helpText="Select the due date for the translation job"
-            />
+  return (
+    <Flex flexDirection="column" gap="spacingM" padding="spacingM">
+      <ControlledDatepicker control={control} label="Due date" name="dueDate" isRequired helpText="Select the due date for the translation job" />
 
-            <Flex justifyContent="flex-end" gap="spacingS">
-                <Button size="small" onClick={() => onClose()}>
-                    Cancel
-                </Button>
-                <Button variant="primary" size="small" onClick={handleSubmit(onClose)}>
-                    Update
-                </Button>
-            </Flex>
-        </Flex>
-    );
+      <Flex justifyContent="flex-end" gap="spacingS">
+        <Button size="small" onClick={() => onClose()}>
+          Cancel
+        </Button>
+        <Button variant="primary" size="small" onClick={handleSubmit(onClose)}>
+          Update
+        </Button>
+      </Flex>
+    </Flex>
+  );
 };

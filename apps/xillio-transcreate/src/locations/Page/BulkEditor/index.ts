@@ -1,1 +1,1 @@
-export * from "./BulkEditor";
+export * from './BulkEditor';

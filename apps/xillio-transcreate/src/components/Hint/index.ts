@@ -1,2 +1,2 @@
-export * from "./Hint";
-export * from "./Hint.types";
+export * from './Hint';
+export * from './Hint.types';
