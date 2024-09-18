@@ -41,7 +41,7 @@
     "@testing-library/jest-dom": "6.5.0",
     "@testing-library/react": "^16.0.1",
     "@types/node": "18.15.3",
-    "@types/react": "18.3.6",
+    "@types/react": "18.3.7",
     "@types/react-dom": "18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "happy-dom": "^14.12.3",
