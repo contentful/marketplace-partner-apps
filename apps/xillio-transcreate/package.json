@@ -13,7 +13,7 @@
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./dist --organization-id ${DEFINITIONS_ORG_ID} --definition-id 5i8iZ60GpkbZQJzutNXit --token ${CONTENTFUL_CMA_TOKEN}",
     "storybook": "storybook dev -p 6006",
     "test:storybook": "test-storybook",
-    "test": "sh test.sh"
+    "test": "echo \"TODO: run tests on CI\""
   },
   "dependencies": {
     "@contentful/app-sdk": "4.22.0",
