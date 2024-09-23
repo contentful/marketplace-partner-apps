@@ -11,7 +11,7 @@
     "@contentful/react-apps-toolkit": "1.2.16",
     "@contentful/rich-text-html-renderer": "^16.6.10",
     "@emotion/css": "^11.13.0",
-    "contentful-management": "11.34.0",
+    "contentful-management": "11.35.0",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
@@ -44,12 +44,12 @@
     "@testing-library/react": "^16.0.1",
     "@types/jest": "29.5.13",
     "@types/node": "18.15.3",
-    "@types/react": "18.3.7",
+    "@types/react": "18.3.8",
     "@types/react-dom": "18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "happy-dom": "^15.7.4",
     "typescript": "5.6.2",
-    "vite": "^5.4.6",
+    "vite": "^5.4.7",
     "vitest": "^2.1.1"
   },
   "homepage": "."
