@@ -314,7 +314,7 @@ export const BulkEditorComponent = ({
         onPageChange={onPageChange}
         totalItems={totalEntries}
         showViewPerPage
-        viewPerPageOptions={[20, 50, 100]}
+        viewPerPageOptions={[20, 50, 100, 200, 500, 1000]}
         itemsPerPage={itemsPerPage}
         onViewPerPageChange={handleViewPerPageChange}
       />
