@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.14](https://github.com/contentful/marketplace-partner-apps/compare/wix-contentful-app-v1.0.13...wix-contentful-app-v1.0.14) (2024-09-24)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.69.1 to 4.69.2 in /apps/wix in the production-dependencies group ([#2899](https://github.com/contentful/marketplace-partner-apps/issues/2899)) ([f7a3981](https://github.com/contentful/marketplace-partner-apps/commit/f7a3981de8cd71de4ca0d6144afa8b6f1707cbd3))
+* **deps:** bump @contentful/f36-components from 4.69.2 to 4.70.0 in /apps/wix in the production-dependencies group ([#2935](https://github.com/contentful/marketplace-partner-apps/issues/2935)) ([7b49a15](https://github.com/contentful/marketplace-partner-apps/commit/7b49a1500737d286157d9333ece2b5ec1ac685a7))
+* **deps:** bump contentful-management from 11.33.0 to 11.34.0 in /apps/wix in the production-dependencies group ([#2969](https://github.com/contentful/marketplace-partner-apps/issues/2969)) ([dfd3e3d](https://github.com/contentful/marketplace-partner-apps/commit/dfd3e3d82e9d3989f758b538bd770de7da3bfd1c))
+* **deps:** bump contentful-management from 11.34.0 to 11.35.0 in /apps/wix in the production-dependencies group ([#2999](https://github.com/contentful/marketplace-partner-apps/issues/2999)) ([cb64115](https://github.com/contentful/marketplace-partner-apps/commit/cb64115907c92fcfa49b8e72fde52a3c5228d74f))
+* **deps:** bump rollup from 4.21.0 to 4.22.4 in /apps/wix ([#3042](https://github.com/contentful/marketplace-partner-apps/issues/3042)) ([f9609f8](https://github.com/contentful/marketplace-partner-apps/commit/f9609f8a6e0be1f631d687f05a2669368431b46c))
+* **deps:** bump the production-dependencies group in /apps/wix with 3 updates ([#2859](https://github.com/contentful/marketplace-partner-apps/issues/2859)) ([1c17547](https://github.com/contentful/marketplace-partner-apps/commit/1c17547f36d37b856b0ab1296eaf0c634ba21f83))
+
 ## [1.0.13](https://github.com/contentful/marketplace-partner-apps/compare/wix-contentful-app-v1.0.12...wix-contentful-app-v1.0.13) (2024-09-03)
 
 

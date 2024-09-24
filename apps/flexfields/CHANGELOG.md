@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.2.5](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.4...thrillworks-flex-fields-app-v1.2.5) (2024-09-24)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.69.0 to 4.69.1 in /apps/flexfields in the production-dependencies group ([#2844](https://github.com/contentful/marketplace-partner-apps/issues/2844)) ([57b5113](https://github.com/contentful/marketplace-partner-apps/commit/57b51135ab46a1114e8f0a9e71d76ff216e92f18))
+* **deps:** bump @contentful/f36-components from 4.69.1 to 4.69.2 in /apps/flexfields in the production-dependencies group ([#2903](https://github.com/contentful/marketplace-partner-apps/issues/2903)) ([2c77c67](https://github.com/contentful/marketplace-partner-apps/commit/2c77c67aa7287c24fd8d2f8dac8968dbe169d081))
+* **deps:** bump @contentful/f36-components from 4.69.2 to 4.70.0 in /apps/flexfields in the production-dependencies group ([#2931](https://github.com/contentful/marketplace-partner-apps/issues/2931)) ([16d64ed](https://github.com/contentful/marketplace-partner-apps/commit/16d64ed627ee87e852344fe29c7b1b1fdef4f249))
+* **deps:** bump contentful-management from 11.33.0 to 11.34.0 in /apps/flexfields in the production-dependencies group ([#2960](https://github.com/contentful/marketplace-partner-apps/issues/2960)) ([9062c98](https://github.com/contentful/marketplace-partner-apps/commit/9062c9858fbd1b5d8a3e4d66cdae4a5d2748d128))
+* **deps:** bump contentful-management from 11.34.0 to 11.35.0 in /apps/flexfields in the production-dependencies group ([#3000](https://github.com/contentful/marketplace-partner-apps/issues/3000)) ([ea42eea](https://github.com/contentful/marketplace-partner-apps/commit/ea42eeac7526437c5638b0302328275d978dabd2))
+
 ## [1.2.4](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.3...thrillworks-flex-fields-app-v1.2.4) (2024-09-04)
 
 

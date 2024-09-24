@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.0.20](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.19...uploadcare-contentful-app-v1.0.20) (2024-09-24)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.69.0 to 4.69.1 in /apps/uploadcare in the production-dependencies group ([#2851](https://github.com/contentful/marketplace-partner-apps/issues/2851)) ([875c480](https://github.com/contentful/marketplace-partner-apps/commit/875c480fdcd4ee2b926c64ecbc6bdaf4da6e5724))
+* **deps:** bump @contentful/f36-components from 4.69.1 to 4.69.2 in /apps/uploadcare in the production-dependencies group ([#2912](https://github.com/contentful/marketplace-partner-apps/issues/2912)) ([dfd23f0](https://github.com/contentful/marketplace-partner-apps/commit/dfd23f0766960844fd40116d18a5591098ffd745))
+* **deps:** bump @contentful/f36-components from 4.69.2 to 4.70.0 in /apps/uploadcare in the production-dependencies group ([#2928](https://github.com/contentful/marketplace-partner-apps/issues/2928)) ([e7aed17](https://github.com/contentful/marketplace-partner-apps/commit/e7aed17ea39b40e777a9555f247fba429a227069))
+* **deps:** bump axios and @contentful/app-scripts in /apps/uploadcare ([#2920](https://github.com/contentful/marketplace-partner-apps/issues/2920)) ([861e1fd](https://github.com/contentful/marketplace-partner-apps/commit/861e1fd6d91a7e03c1b4ecd64d8f8fb54f32b14e))
+* **deps:** bump body-parser and express in /apps/uploadcare ([#2865](https://github.com/contentful/marketplace-partner-apps/issues/2865)) ([86bc960](https://github.com/contentful/marketplace-partner-apps/commit/86bc960ab2d62cac9e4ca125dec65b13c532cbbf))
+* **deps:** bump contentful-management from 11.33.0 to 11.34.0 in /apps/uploadcare in the production-dependencies group ([#2958](https://github.com/contentful/marketplace-partner-apps/issues/2958)) ([85cb8d3](https://github.com/contentful/marketplace-partner-apps/commit/85cb8d312760692b755eccc6380383379535f162))
+* **deps:** bump contentful-management from 11.34.0 to 11.35.0 in /apps/uploadcare in the production-dependencies group ([#3004](https://github.com/contentful/marketplace-partner-apps/issues/3004)) ([6e7e0b0](https://github.com/contentful/marketplace-partner-apps/commit/6e7e0b09bf088dff972c9fa66ff54b8d2f3b80be))
+* **deps:** bump send and express in /apps/uploadcare ([#2866](https://github.com/contentful/marketplace-partner-apps/issues/2866)) ([d3876d1](https://github.com/contentful/marketplace-partner-apps/commit/d3876d1bd6d766f8251ffb2e118292c069ad9f47))
+* **deps:** bump serve-static and express in /apps/uploadcare ([#2867](https://github.com/contentful/marketplace-partner-apps/issues/2867)) ([ba81e2d](https://github.com/contentful/marketplace-partner-apps/commit/ba81e2d0df12a085471c38102800bf8461f686a8))
+
 ## [1.0.19](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.18...uploadcare-contentful-app-v1.0.19) (2024-09-03)
 
 

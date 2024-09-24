@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.21](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.0.20...ceros-contentful-app-v1.0.21) (2024-09-24)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.69.0 to 4.69.1 in /apps/ceros in the production-dependencies group ([#2843](https://github.com/contentful/marketplace-partner-apps/issues/2843)) ([10e86ac](https://github.com/contentful/marketplace-partner-apps/commit/10e86aca5077d9c042bc45586edc3aa5a3fe94ae))
+* **deps:** bump @contentful/f36-components from 4.69.1 to 4.69.2 in /apps/ceros in the production-dependencies group ([#2914](https://github.com/contentful/marketplace-partner-apps/issues/2914)) ([b517c6e](https://github.com/contentful/marketplace-partner-apps/commit/b517c6ec7466e3bbb4fe3e1a5708a0b225786972))
+* **deps:** bump @contentful/f36-components from 4.69.2 to 4.70.0 in /apps/ceros in the production-dependencies group ([#2939](https://github.com/contentful/marketplace-partner-apps/issues/2939)) ([fb61381](https://github.com/contentful/marketplace-partner-apps/commit/fb61381713f30b8b5219e6e191a801fe6aedf798))
+* **deps:** bump contentful-management from 11.33.0 to 11.34.0 in /apps/ceros in the production-dependencies group ([#2972](https://github.com/contentful/marketplace-partner-apps/issues/2972)) ([db6e5ee](https://github.com/contentful/marketplace-partner-apps/commit/db6e5eeadbb230f8222b5282f1ac6c0d4d25501c))
+* **deps:** bump contentful-management from 11.34.0 to 11.35.0 in /apps/ceros in the production-dependencies group ([#2998](https://github.com/contentful/marketplace-partner-apps/issues/2998)) ([5e6d9b3](https://github.com/contentful/marketplace-partner-apps/commit/5e6d9b3403794ee2eb766f7f06c12206d15191d9))
+* **deps:** bump rollup from 4.20.0 to 4.22.4 in /apps/ceros ([#3050](https://github.com/contentful/marketplace-partner-apps/issues/3050)) ([6b79b64](https://github.com/contentful/marketplace-partner-apps/commit/6b79b648af7d52a433f88d675b84f249fa4ec94a))
+
 ## [1.0.20](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.0.19...ceros-contentful-app-v1.0.20) (2024-09-03)
 
 

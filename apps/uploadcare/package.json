@@ -1,6 +1,6 @@
 {
   "name": "uploadcare-contentful-app",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "private": true,
   "scripts": {
     "install-ci": "npm ci",
