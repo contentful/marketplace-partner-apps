@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/raster-v1.0.2...raster-v1.0.3) (2024-09-24)
+
+
+### Bug Fixes
+
+* **deps:** bump next from 14.2.8 to 14.2.10 in /apps/raster ([#2986](https://github.com/contentful/marketplace-partner-apps/issues/2986)) ([c434b3d](https://github.com/contentful/marketplace-partner-apps/commit/c434b3d04c638f7d7cb486503d244dd450477916))
+
 ## [1.0.2](https://github.com/contentful/marketplace-partner-apps/compare/raster-v1.0.1...raster-v1.0.2) (2024-09-06)
 
 

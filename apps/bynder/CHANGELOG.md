@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.16](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.1.15...bynder-assets-v1.1.16) (2024-09-24)
+
+
+### Bug Fixes
+
+* **deps:** bump rollup from 4.20.0 to 4.22.4 in /apps/bynder ([#3051](https://github.com/contentful/marketplace-partner-apps/issues/3051)) ([dfc256b](https://github.com/contentful/marketplace-partner-apps/commit/dfc256b627f647632e5031f4e2c77c9551d11d5e))
+
 ## [1.1.15](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.1.14...bynder-assets-v1.1.15) (2024-09-03)
 
 
