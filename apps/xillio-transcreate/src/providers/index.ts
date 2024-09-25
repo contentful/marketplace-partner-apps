@@ -1,1 +1,1 @@
-export * from "./DialogProvider";
+export * from './DialogProvider';
