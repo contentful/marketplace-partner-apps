@@ -90,7 +90,6 @@ const IHC = ({ sdk }: { sdk: EditorAppSDK }) => {
             imageName={imageName}
             setImageUrl={setImageUrl}
             setImageStatus={setImageStatus}
-            imageUrl={imageUrl}
             selectedImage={selectedImage}
             setImageName={setImageName}
             setSelectedImage={setSelectedImage}
