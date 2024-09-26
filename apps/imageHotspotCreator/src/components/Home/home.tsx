@@ -3,13 +3,15 @@ import SelectImage from '../ImageSelector/selectImage'
 import CreateHotspot from '../Creator/createHotspot'
 import './home.css'
 import { Notification, Spinner, Stack } from '@contentful/f36-components';
+import { EditorAppSDK } from '@contentful/app-sdk';
+import { AssetProps, CollectionProp } from 'contentful-management';
 
 /**
  * Main Component of this custom application
  * @param {sdk} sdk of the current entry.
  * @returns {HTMLDivElement} homePage where the selector page and creator page loads.
  */
-const IHC = ({ sdk }: any) => {
+const IHC = ({ sdk }: { sdk: EditorAppSDK }) => {
   const [url, setUrl] = useState({
     url: '',
     contentful: true,
@@ -19,7 +21,7 @@ const IHC = ({ sdk }: any) => {
   const [imageStatus, setImageStatus] = useState<boolean>(false)
   const [selectedImage, setSelectedImage] = useState<string>('')
   const [imageName, setImageName] = useState<string>()
-  const [imageAssets, setImageAssets] = useState<[]>()
+  const [imageAssets, setImageAssets] = useState<AssetProps[]>()
  
 
   function checkImageURL(url:any, callback:any) {
@@ -64,8 +66,12 @@ const IHC = ({ sdk }: any) => {
    * @function getAssets
    */
   const getAssets = async () => {
-    await sdk.space.getAssets().then((response:any)=>{setImageAssets(response.items)})
-      .catch(console.error)
+    await sdk.cma.asset
+      .getMany({})
+      .then((response: CollectionProp<AssetProps>) => {
+        setImageAssets(response.items);
+      })
+      .catch(console.error);
   }
 
   //This useEffect is used to call getAssets function for the first time after render
