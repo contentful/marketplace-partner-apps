@@ -2,11 +2,26 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import MagicDropzone from "react-magic-dropzone";
-import { Button, EntryCard, Select, TextInput } from "@contentful/f36-components";
+import { Button, TextInput } from "@contentful/f36-components";
 import cloneDeep from "clone-deep";
-import { createClient } from "contentful-management";
+import { AssetProps, createClient } from "contentful-management";
 import fieldMissing from "../../Assets/MissingField.svg";
 import ValidationPage from "../Validation";
+import { EditorAppSDK } from "@contentful/app-sdk";
+
+interface SelectImageProps {
+  setImageUrl: any;
+  setImageStatus: any;
+  imageName: any;
+  sdk: EditorAppSDK;
+  setSelectedImage: any;
+  selectedImage: any;
+  setImageName: any;
+  imageAssets: any;
+  url: any;
+  setUrl: any;
+  setImageAssets: any;
+}
 
 const SelectImage = ({
   setImageUrl,
@@ -20,12 +35,12 @@ const SelectImage = ({
   url,
   setUrl,
   setImageAssets,
-}: any) => {
+}: SelectImageProps) => {
   //state Declaratios
   const [imageFile, setImageFile] = useState<any>();
   const [uploadYourImage, setUploadYourImage] = useState(true);
-  const [uploadAsLink, setUploadAsLink] = useState("");
-  const [uploadExisting, setUploadExisting] = useState("");
+  const [uploadAsLink, setUploadAsLink] = useState(false);
+  const [uploadExisting, setUploadExisting] = useState(false);
 
   const [imageInExisting, setImageInExisting] = useState<any>(null);
 
@@ -59,7 +74,7 @@ const SelectImage = ({
    * @param {boolean} status - url is present or not
    */
   const getImageUrl = async (id: string, status: any) => {
-    await sdk.space.getAsset(id).then((asset: any) => {
+    await sdk.cma.asset.get({ assetId: id }).then((asset: AssetProps) => {
       if (status) {
         setUrl({
           url: "https:" + asset?.fields?.file[defaultLocale]?.url,
@@ -151,7 +166,7 @@ const SelectImage = ({
           },
         })
       )
-      .then((asset: any) =>  asset.processForAllLocales())
+      .then((asset: any) => asset.processForAllLocales())
       .then((asset: any) => {
         getImageUrl(asset?.sys?.id, false);
 
@@ -159,7 +174,6 @@ const SelectImage = ({
       })
       .catch(console.error);
   };
-
 
   const isValidUrl = (url: string) => {
     try {
@@ -389,7 +403,7 @@ const SelectImage = ({
               type="radio"
               id="html"
               name="fav_language"
-              value={uploadYourImage}
+              checked={uploadYourImage}
               defaultChecked={uploadYourImage} // Set to true to check it by default
               onChange={(e) => {
                 setUploadYourImage(true);
@@ -407,7 +421,7 @@ const SelectImage = ({
               value="CSS"
               checked={uploadAsLink}
               onChange={(e) => {
-                setUploadAsLink(e.target.value);
+                setUploadAsLink(e.target.checked);
                 setUploadExisting(false);
                 setUploadYourImage(false);
               }}
@@ -422,7 +436,7 @@ const SelectImage = ({
               value="JavaScript"
               checked={uploadExisting}
               onChange={(e) => {
-                setUploadExisting(e.target.value);
+                setUploadExisting(e.target.checked);
                 setUploadAsLink(false);
                 setUploadYourImage(false);
               }}
