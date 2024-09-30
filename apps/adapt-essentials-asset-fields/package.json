@@ -32,11 +32,11 @@
   },
   "devDependencies": {
     "@contentful/app-scripts": "^1.27.0",
-    "@types/react": "^18.3.9",
+    "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^8.7.0",
     "@typescript-eslint/parser": "^8.7.0",
-    "@vitejs/plugin-react-swc": "^3.7.0",
+    "@vitejs/plugin-react-swc": "^3.7.1",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.12",
