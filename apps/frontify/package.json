@@ -12,7 +12,9 @@
     "@frontify/frontify-finder": "^2.0.3"
   },
   "scripts": {
+    "start": "vite",
     "build": "vite build",
+    "install-ci": "npm ci",
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 5wHGALSJtz7y2EQOLfGhKH --token ${CONTENTFUL_CMA_TOKEN}",
     "deploy:test": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id ${TEST_APP_ID} --token ${CONTENTFUL_CMA_TOKEN}"
   },
