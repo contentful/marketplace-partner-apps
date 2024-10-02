@@ -1,2 +1,2 @@
-export { MultiSelectFilter } from "./MultiSelectFilter";
-export * from "./MultiSelectFilter.types";
+export { MultiSelectFilter } from './MultiSelectFilter';
+export * from './MultiSelectFilter.types';

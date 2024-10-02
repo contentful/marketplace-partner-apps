@@ -1,6 +1,6 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState } from 'react';
 
-import type { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from 'react';
 
 /**
  * Custom hook for managing a boolean toggle state in React components.
@@ -16,11 +16,11 @@ import type { Dispatch, SetStateAction } from "react";
  * // Use isToggled in your component, toggle to switch the state, setToggle to set the state explicitly.
  */
 export function useToggle(defaultValue?: boolean): [boolean, () => void, Dispatch<SetStateAction<boolean>>] {
-    const [value, setValue] = useState(!!defaultValue);
+  const [value, setValue] = useState(!!defaultValue);
 
-    const toggle = useCallback(() => {
-        setValue((x) => !x);
-    }, []);
+  const toggle = useCallback(() => {
+    setValue((x) => !x);
+  }, []);
 
-    return [value, toggle, setValue];
+  return [value, toggle, setValue];
 }

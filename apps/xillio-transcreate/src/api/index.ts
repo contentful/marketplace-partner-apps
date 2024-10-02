@@ -1,1 +1,1 @@
-export * from "./APIController";
+export * from './APIController';

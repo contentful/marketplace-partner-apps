@@ -1,1 +1,1 @@
-export * from "./TranslateDialog";
+export * from './TranslateDialog';

@@ -16,7 +16,7 @@
     "@contentful/f36-components": "4.70.0",
     "@contentful/f36-icons": "4.29.0",
     "@contentful/react-apps-toolkit": "1.2.16",
-    "@emotion/css": "11.13.0",
+    "@emotion/css": "11.13.4",
     "@emotion/react": "11.13.3",
     "@emotion/styled": "11.13.0",
     "axios": "1.7.7",
@@ -30,11 +30,11 @@
   "devDependencies": {
     "@contentful/app-scripts": "1.27.0",
     "@testing-library/react": "^16.0.1",
-    "@vitejs/plugin-react": "^4.3.1",
+    "@vitejs/plugin-react": "^4.3.2",
     "eslint": "^9.11.1",
-    "eslint-plugin-react": "~7.36.1",
+    "eslint-plugin-react": "~7.37.1",
     "happy-dom": "^15.7.4",
-    "vite": "^5.4.7",
+    "vite": "^5.4.8",
     "vitest": "^2.1.1"
   },
   "browserslist": {

@@ -1,1 +1,1 @@
-export * from "./ConfigScreen";
+export * from './ConfigScreen';
