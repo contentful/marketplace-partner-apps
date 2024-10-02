@@ -16,7 +16,7 @@
     "@contentful/f36-icons": "^4.28.2",
     "@contentful/f36-tokens": "^4.0.5",
     "@contentful/react-apps-toolkit": "^1.2.16",
-    "@emotion/css": "^11.13.0",
+    "@emotion/css": "^11.13.4",
     "core-js": "3.38.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
