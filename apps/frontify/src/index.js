@@ -82,7 +82,6 @@ async function openDialog(sdk) {
   if (!Array.isArray(result)) {
     return [];
   }
-  console.log(result);
 
   return result.map((item) => ({
     id: item.id,
