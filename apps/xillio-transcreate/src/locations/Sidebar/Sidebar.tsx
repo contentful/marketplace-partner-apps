@@ -1,7 +1,7 @@
 import { SidebarAppSDK } from '@contentful/app-sdk';
 import { useSDK } from '@contentful/react-apps-toolkit';
-import { useCallback, useEffect, useState } from 'react';
-import { SelectOption, Task, TaskStatusTable, ActionsButton, ButtonAction, TaskStatus, DocsLink } from '../../components';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { SelectOption, Task, TaskStatusTable, ActionsButton, ButtonAction, TaskStatus, DocsLink, ControlledSelect } from '../../components';
 import { appConfig } from '../../appConfig';
 import { TranslationDto } from '../../types';
 import { Flex, Note } from '@contentful/f36-components';
@@ -10,6 +10,11 @@ import { TranslationJobFormData, UpdateTranslationFormData } from '../Dialog';
 import { useApi, useDialog } from '../../hooks';
 import { css } from '@emotion/react';
 import tokens from '@contentful/f36-tokens';
+import { useForm, useWatch } from 'react-hook-form';
+
+type SidebarFormData = {
+  sourceLanguage: string;
+};
 
 type SelectedLocales = {
   selectedLocales: string[];
@@ -19,9 +24,10 @@ type RunningTaskActions = 'Translate' | 'Update' | 'Pause' | 'Resume' | 'Cancel'
 
 export type SidebarComponentProps = {
   projectOptions?: SelectOption[];
+  defaultLocale: string;
   tasks: Task[];
   isLoading: boolean;
-  onTranslate: (data: TranslationJobFormData) => Promise<void>;
+  onTranslate: (data: TranslationJobFormData & SidebarFormData) => Promise<void>;
   onUpdate: (data: UpdateTranslationFormData & SelectedLocales) => Promise<void>;
   onCancel: (data: SelectedLocales) => Promise<void>;
   onPause: (data: SelectedLocales) => Promise<void>;
@@ -32,22 +38,37 @@ const menuOpenClass = css({
   minHeight: 275,
 });
 
-export const SidebarComponent = ({ projectOptions, tasks, isLoading, onTranslate, onUpdate, onCancel, onPause, onResume }: SidebarComponentProps) => {
+export const SidebarComponent = ({
+  projectOptions,
+  defaultLocale,
+  tasks: _tasks,
+  isLoading,
+  onTranslate,
+  onUpdate,
+  onCancel,
+  onPause,
+  onResume,
+}: SidebarComponentProps) => {
   const { open } = useDialog();
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [isSelectable, setIsSelectable] = useState<(task: Task) => boolean>(() => () => true);
   const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
+  const { control, handleSubmit } = useForm<SidebarFormData>({ defaultValues: { sourceLanguage: defaultLocale } });
 
-  const handleTranslate = async () => {
+  const sourceLanguage = useWatch({ control, name: 'sourceLanguage' });
+  const sourceLanguageOptions = useMemo(() => _tasks.map((task) => ({ label: task.displayName, value: task.targetLanguage })), [_tasks]);
+  const tasks = useMemo(() => _tasks.filter((task) => task.targetLanguage !== sourceLanguage), [_tasks, sourceLanguage]);
+
+  const handleTranslate = async (sidebarFormData: SidebarFormData) => {
     if (!projectOptions) return;
-    const data: TranslationJobFormData | undefined = await open({
+    const translationJobFormData: TranslationJobFormData | undefined = await open({
       type: 'translate',
       projectOptions: projectOptions,
       selectedLocales: [...selected],
     });
-    if (!data) return;
+    if (!translationJobFormData) return;
     setSelected(new Set());
-    await onTranslate(data);
+    await onTranslate({ ...translationJobFormData, ...sidebarFormData });
   };
 
   const handleUpdate = async () => {
@@ -111,7 +132,7 @@ export const SidebarComponent = ({ projectOptions, tasks, isLoading, onTranslate
     {
       variant: 'primary',
       label: 'Translate',
-      onClick: handleTranslate,
+      onClick: handleSubmit(handleTranslate),
     },
     {
       variant: 'secondary',
@@ -153,6 +174,14 @@ export const SidebarComponent = ({ projectOptions, tasks, isLoading, onTranslate
   return (
     <>
       <Flex flexDirection="column" gap="spacingM" justifyContent="space-between" css={[isActionMenuOpen && menuOpenClass]}>
+        <ControlledSelect
+          options={sourceLanguageOptions}
+          label="Source locale"
+          helpText="Select the locale to translate from"
+          name="sourceLanguage"
+          control={control}
+        />
+
         <div
           css={css({
             maxWidth: '100%',
@@ -206,7 +235,6 @@ export const Sidebar = () => {
   const setJob = useCallback(
     (job?: TranslationDto) => {
       const tasksByLocale = sdk.locales.available.reduce((acc: Record<string, Task>, locale) => {
-        if (locale === sdk.locales.default) return acc;
         const lochubTask = job?.tasks.find((task) => task.targetLanguage === locale);
         let task: Task;
         if (lochubTask) task = { ...lochubTask, displayName: sdk.locales.names[locale] };
@@ -292,13 +320,13 @@ export const Sidebar = () => {
     }
   };
 
-  const handleTranslate = async (data: TranslationJobFormData) => {
+  const handleTranslate = async (data: TranslationJobFormData & SidebarFormData) => {
     const send = () =>
       api.translations.create({
         generatedToken: token,
         recursive: data.sendRecursively,
         dueDate: data.dueDate.toISOString(),
-        sourceLanguage: sdk.locales.default,
+        sourceLanguage: data.sourceLanguage,
         projectId: data.projectName,
         jobName: data.translationJobName,
         jobDescription: data.description,
@@ -373,6 +401,7 @@ export const Sidebar = () => {
   return (
     <SidebarComponent
       projectOptions={projectOptions}
+      defaultLocale={sdk.locales.default}
       tasks={Object.values(tasksByLocale)}
       isLoading={isLoading}
       onTranslate={handleTranslate}

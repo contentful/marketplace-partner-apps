@@ -43,7 +43,6 @@ const taskStatuses: TranslationStatus[] = [
   'completed-with-warnings',
   'rejected',
 ];
-
 export const Sidebar: Story = {
   args: {
     projectOptions: [
@@ -60,11 +59,12 @@ export const Sidebar: Story = {
         value: 'Project 3',
       },
     ],
+    defaultLocale: 'nl',
     tasks: Object.keys(localeOptions).map((targetLanguage, index) => ({
       status: taskStatuses[index],
       targetLanguage,
       dueDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-      displayName: 'Test',
+      displayName: localeOptions[targetLanguage as keyof typeof localeOptions],
     })),
     isLoading: false,
     onTranslate: async (data) => console.log(data),
