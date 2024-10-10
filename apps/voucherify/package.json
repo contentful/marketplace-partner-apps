@@ -28,7 +28,7 @@
     "react-router-dom": "6.26.2"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.27.0",
+    "@contentful/app-scripts": "1.29.0",
     "@testing-library/react": "^16.0.1",
     "@vitejs/plugin-react": "^4.3.2",
     "eslint": "^9.12.0",
