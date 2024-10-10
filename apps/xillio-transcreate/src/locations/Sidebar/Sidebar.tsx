@@ -180,6 +180,7 @@ export const SidebarComponent = ({
           helpText="Select the locale to translate from"
           name="sourceLanguage"
           control={control}
+          disabled={isLoading}
         />
 
         <div
@@ -208,7 +209,7 @@ export const SidebarComponent = ({
         </div>
         <ActionsButton
           isFullWidth
-          isDisabled={selected.size === 0}
+          isDisabled={isLoading || selected.size === 0}
           onSelect={handleSelectAction}
           onToggleOpen={setIsActionMenuOpen}
           actions={actions}
