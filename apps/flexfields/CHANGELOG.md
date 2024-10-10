@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.6](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.5...thrillworks-flex-fields-app-v1.2.6) (2024-10-10)
+
+
+### Bug Fixes
+
+* **deps:** bump @emotion/css from 11.13.0 to 11.13.4 in /apps/flexfields in the production-dependencies group ([#3127](https://github.com/contentful/marketplace-partner-apps/issues/3127)) ([67ac0cd](https://github.com/contentful/marketplace-partner-apps/commit/67ac0cdb44da1237c23f50d6415cc3fa86abe20f))
+* **deps:** bump contentful-management from 11.35.0 to 11.35.1 in /apps/flexfields in the production-dependencies group ([#3090](https://github.com/contentful/marketplace-partner-apps/issues/3090)) ([e0f766f](https://github.com/contentful/marketplace-partner-apps/commit/e0f766f80abf32b1740e61a7d3857e4d9ebc8a23))
+* **deps:** bump the production-dependencies group in /apps/flexfields with 5 updates ([#3180](https://github.com/contentful/marketplace-partner-apps/issues/3180)) ([5e4225d](https://github.com/contentful/marketplace-partner-apps/commit/5e4225dde89c26fa54228aa711cdccc9946c70ed))
+
 ## [1.2.5](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.4...thrillworks-flex-fields-app-v1.2.5) (2024-09-24)
 
 

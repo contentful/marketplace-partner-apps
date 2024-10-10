@@ -1,6 +1,6 @@
 {
   "name": "ceros-contentful-app",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "^4.29.1",
@@ -38,7 +38,7 @@
     ]
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.29.0",
+    "@contentful/app-scripts": "1.27.0",
     "@testing-library/jest-dom": "6.5.0",
     "@testing-library/react": "^16.0.1",
     "@tsconfig/create-react-app": "2.0.5",
