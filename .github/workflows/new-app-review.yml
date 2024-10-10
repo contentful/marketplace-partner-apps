@@ -25,4 +25,6 @@ jobs:
         with:
           script: |
             const { review } = require('./.github/workflows/dist/new-app-review');
+            const { chdir, cwd } = require('node:process');
+            chdir(cwd())
             await review({ github, ctx: context, ghCore: core })
