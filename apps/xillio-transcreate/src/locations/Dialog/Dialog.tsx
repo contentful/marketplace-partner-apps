@@ -57,7 +57,6 @@ export const Dialog = () => {
 
   if (sdk.parameters.invocation.type === 'translate') {
     const localeOptions: MultiSelectOptions = { ...sdk.locales.names };
-    delete localeOptions[sdk.locales.default];
 
     return (
       <TranslateDialog
@@ -67,6 +66,7 @@ export const Dialog = () => {
           submitter: sdk.user.email,
           translationJobName: defaultTranslationJobName,
           locales: sdk.parameters.invocation.selectedLocales ?? [],
+          sourceLanguage: sdk.locales.default,
         }}
         projectOptions={sdk.parameters.invocation.projectOptions}
         localeOptions={sdk.parameters.invocation.selectedLocales ? undefined : localeOptions}
