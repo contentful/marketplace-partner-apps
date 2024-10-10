@@ -4,9 +4,9 @@
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "4.29.1",
-    "@contentful/f36-components": "4.70.0",
-    "@contentful/f36-tokens": "4.0.5",
-    "@contentful/field-editor-rich-text": "^3.27.1",
+    "@contentful/f36-components": "4.73.0",
+    "@contentful/f36-tokens": "4.1.0",
+    "@contentful/field-editor-rich-text": "^3.27.9",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@contentful/rich-text-html-renderer": "^16.6.8",
     "@emotion/css": "^11.13.4",
