@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.25](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.24...surfer-contentful-app-v1.0.25) (2024-10-10)
+
+
+### Bug Fixes
+
+* **deps:** bump @emotion/css from 11.13.0 to 11.13.4 in /apps/surfer in the production-dependencies group ([#3126](https://github.com/contentful/marketplace-partner-apps/issues/3126)) ([62cf6a8](https://github.com/contentful/marketplace-partner-apps/commit/62cf6a8b0ce5721364c37b8a622699ecee13590d))
+* **deps:** bump contentful-management from 11.35.0 to 11.35.1 in /apps/surfer in the production-dependencies group ([#3089](https://github.com/contentful/marketplace-partner-apps/issues/3089)) ([35ad3d9](https://github.com/contentful/marketplace-partner-apps/commit/35ad3d95dc7936137d6ffe8d4d508f0d0cca01b8))
+* **deps:** bump the production-dependencies group in /apps/surfer with 2 updates ([#3177](https://github.com/contentful/marketplace-partner-apps/issues/3177)) ([3471479](https://github.com/contentful/marketplace-partner-apps/commit/34714792382b2f979c6b4a78add2ada3eb257be8))
+
 ## [1.0.24](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.23...surfer-contentful-app-v1.0.24) (2024-09-24)
 
 

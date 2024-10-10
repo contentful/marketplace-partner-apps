@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.23](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.22...image-hotspot-creator-v1.0.23) (2024-10-10)
+
+
+### Bug Fixes
+
+* **deps:** bump rollup from 2.79.1 to 2.79.2 in /apps/imageHotspotCreator ([#3095](https://github.com/contentful/marketplace-partner-apps/issues/3095)) ([ee2e640](https://github.com/contentful/marketplace-partner-apps/commit/ee2e6406eb464d47625bb3888cae3c3833816ec7))
+
 ## [1.0.22](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.21...image-hotspot-creator-v1.0.22) (2024-09-24)
 
 

@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.6](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.5...bynder-content-workflow-v1.0.6) (2024-10-10)
+
+
+### Bug Fixes
+
+* **deps:** bump @emotion/css from 11.13.0 to 11.13.4 in /apps/bynder-content-workflow in the production-dependencies group ([#3129](https://github.com/contentful/marketplace-partner-apps/issues/3129)) ([50ee3a2](https://github.com/contentful/marketplace-partner-apps/commit/50ee3a2d11c4038767578c892d77a549b378e7c1))
+* **deps:** bump contentful-management from 11.35.0 to 11.35.1 in /apps/bynder-content-workflow in the production-dependencies group ([#3098](https://github.com/contentful/marketplace-partner-apps/issues/3098)) ([0ff31ea](https://github.com/contentful/marketplace-partner-apps/commit/0ff31eaaf66764033b85e12cdb5220623ba18eaf))
+* **deps:** bump the production-dependencies group in /apps/bynder-content-workflow with 3 updates ([#3171](https://github.com/contentful/marketplace-partner-apps/issues/3171)) ([f7cb0a6](https://github.com/contentful/marketplace-partner-apps/commit/f7cb0a63d6a8c8250b3b615706c4e206975576a0))
+
 ## [1.0.5](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.4...bynder-content-workflow-v1.0.5) (2024-09-24)
 
 

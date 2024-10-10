@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.16](https://github.com/contentful/marketplace-partner-apps/compare/intershop-connector-v1.0.15...intershop-connector-v1.0.16) (2024-10-10)
+
+
+### Bug Fixes
+
+* **deps:** bump @emotion/css from 11.13.0 to 11.13.4 in /apps/intershop in the production-dependencies group ([#3123](https://github.com/contentful/marketplace-partner-apps/issues/3123)) ([f29136c](https://github.com/contentful/marketplace-partner-apps/commit/f29136c2abe1c464e2284c8ab17f96a4331f5008))
+* **deps:** bump contentful-management from 11.35.0 to 11.35.1 in /apps/intershop in the production-dependencies group ([#3101](https://github.com/contentful/marketplace-partner-apps/issues/3101)) ([f838a11](https://github.com/contentful/marketplace-partner-apps/commit/f838a113043a9a21efa3be9c1deacbd074104c0b))
+* **deps:** bump the production-dependencies group in /apps/intershop with 3 updates ([#3173](https://github.com/contentful/marketplace-partner-apps/issues/3173)) ([71ec17f](https://github.com/contentful/marketplace-partner-apps/commit/71ec17f5cf7f462b0bf53a0981c04b1358ff9ecf))
+
 ## [1.0.15](https://github.com/contentful/marketplace-partner-apps/compare/intershop-connector-v1.0.14...intershop-connector-v1.0.15) (2024-09-24)
 
 
