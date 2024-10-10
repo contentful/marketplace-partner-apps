@@ -43,7 +43,7 @@ async function review({ github, ctx, ghCore }: ValidatorOptions): Promise<void> 
     return;
   }
 
-  console.log('New app submissions found:', newAppDirs);
+  console.log('! New app submissions found:', newAppDirs, process.cwd());
 
   const validators = await loadValidators(path.join(__dirname, 'validators'));
   const { failures, warnings } = await validateNewApps(validators, { github, ctx, ghCore }, newAppDirs, files);
