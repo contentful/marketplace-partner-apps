@@ -27,7 +27,6 @@ const getNewAppDirectories = (files: PullRequestFile[]) => {
 
 const installAppDependencies = async (newAppDir: string) => {
   try {
-    console.log(process.cwd());
     await execPromise(`(cd ${newAppDir} && npm ci)`);
   } catch (error) {
     console.error(`Failed to install app dependencies for ${newAppDir}: ${error}`);
