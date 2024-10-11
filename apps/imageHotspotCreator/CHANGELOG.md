@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.22](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.21...image-hotspot-creator-v1.0.22) (2024-09-24)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.69.1 to 4.69.2 in /apps/imageHotspotCreator in the production-dependencies group ([#2895](https://github.com/contentful/marketplace-partner-apps/issues/2895)) ([9a49e1d](https://github.com/contentful/marketplace-partner-apps/commit/9a49e1d2bab7ecdfcfc70f1a14b492b821a42086))
+* **deps:** bump @contentful/f36-components from 4.69.2 to 4.70.0 in /apps/imageHotspotCreator in the production-dependencies group ([#2930](https://github.com/contentful/marketplace-partner-apps/issues/2930)) ([6102367](https://github.com/contentful/marketplace-partner-apps/commit/6102367078121af400902d2338e3f339a2ca288a))
+* **deps:** bump contentful from 10.15.0 to 10.15.1 in /apps/imageHotspotCreator in the production-dependencies group ([#2862](https://github.com/contentful/marketplace-partner-apps/issues/2862)) ([4ddd7f8](https://github.com/contentful/marketplace-partner-apps/commit/4ddd7f86c8f1145b7901afa0798fe9056cb95a4f))
+* **deps:** bump contentful-management from 11.33.0 to 11.34.0 in /apps/imageHotspotCreator in the production-dependencies group ([#2964](https://github.com/contentful/marketplace-partner-apps/issues/2964)) ([e3a4d5b](https://github.com/contentful/marketplace-partner-apps/commit/e3a4d5b1927bb1d5a3c0e972fc01338756dbebff))
+* **deps:** bump contentful-management from 11.34.0 to 11.35.0 in /apps/imageHotspotCreator in the production-dependencies group ([#3005](https://github.com/contentful/marketplace-partner-apps/issues/3005)) ([166181d](https://github.com/contentful/marketplace-partner-apps/commit/166181d644d9fb4a06ad5ccc01604796568cdba5))
+* **deps:** bump path-to-regexp and express in /apps/imageHotspotCreator ([#2841](https://github.com/contentful/marketplace-partner-apps/issues/2841)) ([98dc034](https://github.com/contentful/marketplace-partner-apps/commit/98dc034d03c87af6b4336146fec102b670bb6b41))
+* **deps:** bump the production-dependencies group in /apps/imageHotspotCreator with 2 updates ([#2842](https://github.com/contentful/marketplace-partner-apps/issues/2842)) ([11fb9ef](https://github.com/contentful/marketplace-partner-apps/commit/11fb9ef4b60077b1e7827c8a5ba7e8f9e6f0497d))
+
 ## [1.0.21](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.20...image-hotspot-creator-v1.0.21) (2024-09-03)
 
 

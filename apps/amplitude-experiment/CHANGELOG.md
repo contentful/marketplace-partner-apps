@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/amplitude-contentful-v1.0.3...amplitude-contentful-v1.0.4) (2024-09-24)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.69.0 to 4.69.1 in /apps/amplitude-experiment in the production-dependencies group ([#2871](https://github.com/contentful/marketplace-partner-apps/issues/2871)) ([306a7ab](https://github.com/contentful/marketplace-partner-apps/commit/306a7ab17a976000b33d2c73de8f5db19cf75b89))
+* **deps:** bump @contentful/f36-components from 4.69.1 to 4.69.2 in /apps/amplitude-experiment in the production-dependencies group ([#2896](https://github.com/contentful/marketplace-partner-apps/issues/2896)) ([c073be1](https://github.com/contentful/marketplace-partner-apps/commit/c073be179a2c53cdf2c77ec725eeafad35ccc09d))
+* **deps:** bump @contentful/f36-components from 4.69.2 to 4.70.0 in /apps/amplitude-experiment in the production-dependencies group ([#2941](https://github.com/contentful/marketplace-partner-apps/issues/2941)) ([f8ba558](https://github.com/contentful/marketplace-partner-apps/commit/f8ba5586045fc8212e6e08947cbad79fcd9c6986))
+* **deps:** bump contentful-management from 11.33.0 to 11.34.0 in /apps/amplitude-experiment in the production-dependencies group ([#2979](https://github.com/contentful/marketplace-partner-apps/issues/2979)) ([de0a417](https://github.com/contentful/marketplace-partner-apps/commit/de0a41792be602f8311537f360390fd7788c40aa))
+* **deps:** bump contentful-management from 11.34.0 to 11.35.0 in /apps/amplitude-experiment in the production-dependencies group ([#3001](https://github.com/contentful/marketplace-partner-apps/issues/3001)) ([753fb01](https://github.com/contentful/marketplace-partner-apps/commit/753fb0147e0f3df03c12b1f9b5bdd96df77ad9c8))
+* **deps:** bump path-to-regexp and express in /apps/amplitude-experiment ([#2839](https://github.com/contentful/marketplace-partner-apps/issues/2839)) ([a615d3c](https://github.com/contentful/marketplace-partner-apps/commit/a615d3ca7b0a044f11c0f84307cd641050a2480f))
+* **deps:** bump rollup from 4.21.2 to 4.22.4 in /apps/amplitude-experiment ([#3053](https://github.com/contentful/marketplace-partner-apps/issues/3053)) ([f455a43](https://github.com/contentful/marketplace-partner-apps/commit/f455a434429de942811f15cb12b24e38e90fc7e6))
+
 ## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/amplitude-contentful-v1.0.2...amplitude-contentful-v1.0.3) (2024-09-03)
 
 

@@ -1,18 +1,18 @@
 {
   "name": "bynder-content-workflow",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "4.29.1",
-    "@contentful/f36-components": "4.70.0",
-    "@contentful/f36-tokens": "4.0.5",
-    "@contentful/field-editor-rich-text": "^3.27.1",
+    "@contentful/f36-components": "4.74.0",
+    "@contentful/f36-tokens": "4.1.0",
+    "@contentful/field-editor-rich-text": "^3.27.13",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@contentful/rich-text-html-renderer": "^16.6.8",
-    "@emotion/css": "^11.13.0",
+    "@emotion/css": "^11.13.4",
     "camelcase": "^8.0.0",
     "constate": "^3.3.2",
-    "contentful-management": "11.35.0",
+    "contentful-management": "11.35.1",
     "contentful-rich-text-html-parser": "^1.5.10",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -29,17 +29,17 @@
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 2POIRORfxypO5JsgvufCiZ --token ${CONTENTFUL_CMA_TOKEN}"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.27.0",
+    "@contentful/app-scripts": "1.29.0",
     "@testing-library/react": "16.0.1",
     "@types/node": "18.15.3",
-    "@types/react": "18.3.8",
+    "@types/react": "18.3.11",
     "@types/react-dom": "18.3.0",
     "@types/showdown": "^2.0.6",
     "@types/uuid": "^9.0.8",
-    "@vitejs/plugin-react": "4.3.1",
+    "@vitejs/plugin-react": "4.3.2",
     "happy-dom": "15.7.4",
-    "typescript": "5.6.2",
-    "vite": "5.4.7",
-    "vitest": "2.1.1"
+    "typescript": "5.6.3",
+    "vite": "5.4.8",
+    "vitest": "2.1.2"
   }
 }
