@@ -4,8 +4,8 @@
   "license": "MIT",
   "dependencies": {
     "@contentful/app-sdk": "4.29.1",
-    "@contentful/default-field-editors": "^1.7.19",
-    "@contentful/f36-components": "4.73.0",
+    "@contentful/default-field-editors": "^1.7.23",
+    "@contentful/f36-components": "4.74.0",
     "@contentful/f36-multiselect": "^4.24.0",
     "@contentful/f36-tokens": "4.1.0",
     "@contentful/f36-workbench": "^4.21.0",
