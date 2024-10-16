@@ -1,0 +1,74 @@
+.RevanueMain {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 20px;
+  @media screen and (max-width: 1299px) {
+    max-width: 42%;
+  }
+  .RevanueInner {
+    border-radius: 6px;
+    background: #fff;
+    box-shadow: 0px 3px 7px -3px rgba(25, 37, 50, 0.1),
+      0px 0px 0px 1px rgba(25, 37, 50, 0.1);
+    padding: 24px;
+    margin: 0 0 0px;
+    max-width: 100%;
+    width: 100%;
+    flex-direction: column;
+    h4 {
+      color: #111b2b;
+      font-size: 20px;
+      font-style: normal;
+      line-height: 32px;
+    }
+    p {
+      color: #5a657c;
+      font-size: 14px;
+      font-style: normal;
+      line-height: 24px;
+    }
+    .CanvesDataGrapInner {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      @media screen and (max-width: 1499px) {
+        flex-wrap: wrap;
+      }
+      .CanvesGrapInner {
+        display: inline-flex;
+      }
+      .CanvesDataTable {
+        width: 100%;
+        .CanvesMarkerTable {
+          width: 100%;
+          td {
+            font-size: 16px;
+            padding: 5px;
+            font-weight: 500;
+            &.CanvesMarkerInner {
+              max-width: 20px;
+              width: 20px;
+              .MarkerCanves {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background-color: #111b2b;
+                display: inline-block;
+              }
+            }
+            &:nth-last-child(1) {
+              text-align: right;
+            }
+          }
+        }
+      }
+    }
+  }
+  &.DarkTheme {
+    .RevanueInner {
+      border: 1px solid #414d63 !important;
+    }
+  }
+}
