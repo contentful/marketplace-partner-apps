@@ -1,0 +1,56 @@
+{
+  "name": "ls-contentful-app",
+  "version": "0.2.0",
+  "private": true,
+  "dependencies": {
+    "@contentful/app-sdk": "^4.17.2",
+    "@contentful/f36-components": "4.41.1",
+    "@contentful/f36-tokens": "4.0.1",
+    "@contentful/react-apps-toolkit": "1.2.15",
+    "@emotion/css": "11.11.0",
+    "contentful-management": "10.35.6",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-scripts": "5.0.1",
+    "superagent": "^9.0.2"
+  },
+  "scripts": {
+    "start": "vite",
+    "build": "rm -rf build && tsc && vite build",
+    "test": "vitest run --passWithNoTests",
+    "create-app-definition": "contentful-app-scripts create-app-definition",
+    "install-ci": "npm ci"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@contentful/app-scripts": "1.10.2",
+    "@testing-library/jest-dom": "5.16.5",
+    "@testing-library/react": "14.0.0",
+    "@tsconfig/create-react-app": "1.0.3",
+    "@types/jest": "29.5.2",
+    "@types/node": "20.2.5",
+    "@types/react": "18.2.7",
+    "@types/react-dom": "18.2.4",
+    "@types/superagent": "^8.1.8",
+    "@vitejs/plugin-react": "^4.3.2",
+    "cross-env": "7.0.3",
+    "typescript": "5.0.4",
+    "vite": "^5.4.9",
+    "vitest": "^2.1.3"
+  },
+  "homepage": "."
+}
