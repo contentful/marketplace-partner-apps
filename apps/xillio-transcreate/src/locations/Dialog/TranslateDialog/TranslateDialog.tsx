@@ -9,14 +9,15 @@ import {
   MultiSelectOptions,
   SelectOption,
 } from '../../../components';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { appConfig } from '../../../appConfig';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 export type TranslationJobFormData = {
   submitter: string;
   projectName: string;
   translationJobName: string;
+  sourceLanguage: string;
   locales: string[];
   sendRecursively: boolean;
   dueDate: Date;
@@ -24,26 +25,44 @@ export type TranslationJobFormData = {
 };
 
 export type TranslateDialogProps = {
-  defaultValues: Pick<TranslationJobFormData, 'submitter' | 'projectName' | 'translationJobName' | 'sendRecursively' | 'locales'>;
+  defaultValues: Pick<TranslationJobFormData, 'submitter' | 'projectName' | 'translationJobName' | 'sendRecursively' | 'locales' | 'sourceLanguage'>;
   projectOptions: SelectOption[];
   localeOptions?: MultiSelectOptions;
   onClose: (data?: any) => void;
 };
 
 export const TranslateDialog = ({ defaultValues, projectOptions, localeOptions, onClose }: TranslateDialogProps) => {
-  const { control, handleSubmit } = useForm<TranslationJobFormData>({
+  const { control, handleSubmit, setValue, getValues } = useForm<TranslationJobFormData>({
     defaultValues: {
       ...defaultValues,
       description: '',
     },
   });
 
+  const sourceLanguage = useWatch({ control, name: 'sourceLanguage' });
+
+  const sourceLocaleOptions = useMemo(() => Object.entries(localeOptions ?? {}).map(([value, label]) => ({ label, value })), [localeOptions]);
+
+  const targetLocaleOptions = useMemo(() => {
+    const options = { ...localeOptions };
+    delete options[sourceLanguage];
+    return options;
+  }, [localeOptions, sourceLanguage]);
+
+  // On `sourceLanguage` change, remove it from the selected `locales` list
+  useEffect(() => {
+    setValue(
+      'locales',
+      getValues('locales').filter((locale) => locale !== sourceLanguage),
+    );
+  }, [sourceLanguage, setValue, getValues]);
+
   const note = useMemo(() => {
     if (!projectOptions.length) return `No projects found. Please configure at least one project in ${appConfig.name}`;
     if (localeOptions && !Object.keys(localeOptions).length)
       return 'No locales found. Please configure at least one additional locale in your environment settings.';
     if (!localeOptions && !defaultValues.locales.length) return 'No locales selected. Please select at least one locale.';
-  }, [projectOptions, localeOptions]);
+  }, [projectOptions, localeOptions, defaultValues.locales.length]);
 
   const isDisabled = Boolean(note);
 
@@ -79,20 +98,30 @@ export const TranslateDialog = ({ defaultValues, projectOptions, localeOptions, 
       <ControlledCheckbox control={control} label="Send all references recursively with entry" name="sendRecursively" disabled={isDisabled} />
 
       {localeOptions && (
-        <ControlledMultiSelect
-          control={control}
-          label="Locales"
-          name="locales"
-          minSelect={{
-            value: 1,
-            message: 'Select at least one locale',
-          }}
-          options={localeOptions}
-          disabled={isDisabled}
-          helpText="Select the locales to translate to"
-          isAutoalignmentEnabled={false}
-          placement="top-start"
-        />
+        <>
+          <ControlledSelect
+            options={sourceLocaleOptions}
+            label="Source locale"
+            helpText="Select the locale to translate from"
+            name="sourceLanguage"
+            control={control}
+          />
+
+          <ControlledMultiSelect
+            control={control}
+            label="Locales"
+            name="locales"
+            minSelect={{
+              value: 1,
+              message: 'Select at least one locale',
+            }}
+            options={targetLocaleOptions}
+            disabled={isDisabled}
+            helpText="Select the locales to translate to"
+            isAutoalignmentEnabled={false}
+            placement="top-start"
+          />
+        </>
       )}
 
       <ControlledDatepicker

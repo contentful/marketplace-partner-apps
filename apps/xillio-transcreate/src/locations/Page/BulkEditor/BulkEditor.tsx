@@ -519,7 +519,7 @@ export const BulkEditor = () => {
             generatedToken: token,
             recursive: data.sendRecursively,
             dueDate: data.dueDate.toISOString(),
-            sourceLanguage: sdk.locales.default,
+            sourceLanguage: data.sourceLanguage,
             projectId: data.projectName,
             jobName: data.translationJobName,
             jobDescription: data.description,
