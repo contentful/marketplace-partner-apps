@@ -38,7 +38,7 @@
     "@types/file-size": "1.0.3",
     "@types/lodash": "4.17.12",
     "@types/node": "18.15.3",
-    "@types/react": "18.3.11",
+    "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "@typescript-eslint/eslint-plugin": "8.11.0",
     "@typescript-eslint/parser": "8.11.0",
@@ -46,12 +46,12 @@
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.2.1",
-    "eslint-plugin-react": "7.37.1",
+    "eslint-plugin-react": "7.37.2",
     "eslint-plugin-react-hooks": "4.6.2",
     "happy-dom": "15.7.4",
     "prettier": "3.3.3",
     "typescript": "5.6.3",
-    "vite": "5.4.9",
+    "vite": "5.4.10",
     "vitest": "2.1.3"
   }
 }
