@@ -1,6 +1,6 @@
-import tmdbJson from './entities/tmdb.json';
-import movieJson from './entities/movie.json';
-import personJson from './entities/person.json';
+import tmdbJson from './entities/shoopify.json';
+import movieJson from './entities/product.json';
+import personJson from './entities/collection.json';
 import manifest from '../../contentful-app-manifest.json';
 import assert from 'assert';
 import type { ResourceProvider, ResourceType } from './types';

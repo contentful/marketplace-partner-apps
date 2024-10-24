@@ -1,5 +1,5 @@
 {
-  "sys": { "id": "TMDB:Movie" },
+  "sys": { "id": "Shoopify:collection" },
   "name": "Movie",
   "defaultFieldMapping": {
     "title": "{ /name }",

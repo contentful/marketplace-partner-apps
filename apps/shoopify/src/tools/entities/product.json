@@ -1,0 +1,13 @@
+{
+  "sys": { "id": "Shoopify:product" },
+  "name": "product",
+  "defaultFieldMapping": {
+    "title": "{ /product }",
+    "subtitle": "Product ID: { /urn }",
+    "externalUrl": "{ /externalUrl }",
+    "image": {
+      "url": "{ /image/url }",
+      "altText": "{ /product }"
+    }
+  }
+}
