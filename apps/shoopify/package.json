@@ -1,0 +1,46 @@
+{
+  "name": "@contentful/shopify-sku",
+  "version": "2.0.4",
+  "private": true,
+  "devDependencies": {
+    "@contentful/app-scripts": "1.27.0",
+    "@testing-library/react": "^16.0.1",
+    "@vitejs/plugin-react": "^4.3.1",
+    "happy-dom": "^15.7.3",
+    "vite": "^5.4.3",
+    "vitest": "^2.0.5"
+  },
+  "dependencies": {
+    "@contentful/ecommerce-app-base": "^4.0.9",
+    "@contentful/f36-components": "^4.69.0",
+    "@contentful/f36-icons": "^4.28.2",
+    "@contentful/f36-tokens": "^4.0.5",
+    "@contentful/react-apps-toolkit": "^1.2.16",
+    "@emotion/css": "^11.13.0",
+    "contentful-management": "^11.35.1",
+    "core-js": "3.38.1",
+    "dotenv": "^16.4.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "shopify-buy": "2.22.0",
+    "ts-node": "^10.9.2"
+  },
+  "scripts": {
+    "start": "vite",
+    "prestart": "rm -rf node_modules/.cache/",
+    "build": "rm -rf build && tsc && vite build",
+    "install-ci": "npm ci",
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id 6xdLsz6lCsk0yPOccSsDK7 --definition-id 5R2JmSq3GSEfC0COWFHklr --token",
+    "test": "vitest run --passWithNoTests",
+    "create-resource-entities": "ts-node -T -r dotenv/config ./src/tools/create-resource-entities.ts"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    "last 5 Chrome version",
+    "> 1%",
+    "not ie <= 11"
+  ],
+  "homepage": "."
+}
