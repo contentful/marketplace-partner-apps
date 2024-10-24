@@ -1,6 +1,6 @@
 {
   "name": "image-hotspot-creator",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
