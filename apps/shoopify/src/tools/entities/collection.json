@@ -1,6 +1,6 @@
 {
-  "sys": { "id": "Shoopify:collection" },
-  "name": "Movie",
+  "sys": { "id": "Shoopify:Collection" },
+  "name": "Collection",
   "defaultFieldMapping": {
     "title": "{ /name }",
     "subtitle": "Movie ID: { /urn }",

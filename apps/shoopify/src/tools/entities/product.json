@@ -1,6 +1,6 @@
 {
-  "sys": { "id": "Shoopify:product" },
-  "name": "product",
+  "sys": { "id": "Shoopify:Product" },
+  "name": "Product",
   "defaultFieldMapping": {
     "title": "{ /product }",
     "subtitle": "Product ID: { /urn }",
