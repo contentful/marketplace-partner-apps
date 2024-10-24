@@ -6,7 +6,7 @@
       "description": "This is an example to help you learn how functions work.",
       "path": "functions/index.js",
       "entryFile": "functions/index.ts",
-      "allowNetworks": ["api.themoviedb.org"],
+      "allowNetworks": ["contentful-test-app.myshopify.com"],
       "accepts": ["resources.search", "resources.lookup"]
     }
   ]
