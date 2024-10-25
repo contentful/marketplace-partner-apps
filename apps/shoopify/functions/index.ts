@@ -17,8 +17,39 @@ const extractNodes = (payload: any) => {
 };
 
 async function handleLookup(event, context) {
+    const query = `query ($ids: [ID!]!) {
+                nodes(ids: $ids) {
+                    ... on Product {
+                    id
+                    urn:id
+                handle
+                description
+                title
+                image:featuredImage {
+                    altText
+                        url
+                    }
+                }
+            }
+        }`;
+
+    const { apiEndpoint, storefrontAccessToken } = context.appInstallationParameters;
+    const url = `https://${removeHttpsAndTrailingSlash(apiEndpoint)}/api/2024-10/graphql`;
+
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-shopify-storefront-access-token': storefrontAccessToken
+        },
+        body: JSON.stringify({ query, variables: { ids: event.lookupBy.urns ?? [] } })
+    });
+    let data = await response.json();
+
+    console.log(data);
   return {
-    items: [],
+    items: data.data.nodes,
     pages: {}
   };
 }
