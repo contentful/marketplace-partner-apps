@@ -61,7 +61,7 @@ async function handleSearch(event, context) {
 
   const query = `
   query searchProducts($query: String!, $nextCursor: String) {
-    search(query: $query, after: $nextCursor, types: PRODUCT) {
+    search(query: $query, after: $nextCursor, first: 2, types: PRODUCT) {
       edges {
         node {
           ... on Product {
@@ -96,11 +96,11 @@ async function handleSearch(event, context) {
   });
 
   let data = await response.json();
-
-  if (data.pageInfo.hasNextPage) {
-    nextCursor = data.pageInfo.endCursor;
+  console.log({data})
+  if (data.data.search.pageInfo.hasNextPage) {
+    nextCursor = data.data.search.pageInfo.endCursor;
   } else {
-    nextCursor = null;
+    nextCursor = undefined;
   }
 
   return {

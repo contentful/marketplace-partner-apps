@@ -36,7 +36,7 @@
     "build": "rm -rf build && tsc && vite build && npm run build:functions",
     "build:functions": "node build-functions.js",
     "install-ci": "npm ci",
-    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id 6xdLsz6lCsk0yPOccSsDK7 --definition-id 5R2JmSq3GSEfC0COWFHklr --token $CTF_MGMT_TOKEN",
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id 6xdLsz6lCsk0yPOccSsDK7 --definition-id 5R2JmSq3GSEfC0COWFHklr --token",
     "test": "vitest run --passWithNoTests",
     "create-resource-entities": "tsx -r dotenv/config ./src/tools/create-resource-entities.ts"
   },
