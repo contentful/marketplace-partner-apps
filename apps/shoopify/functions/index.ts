@@ -1,3 +1,5 @@
+import { FunctionEvent, FunctionEventContext, FunctionEventHandler } from '@contentful/node-apps-toolkit';
+
 const removeHttpsAndTrailingSlash = (url) => {
   const protocol = /^https?:\/\/(www\.)?/;
   const trailingSlash = /\/$/;
@@ -5,20 +7,40 @@ const removeHttpsAndTrailingSlash = (url) => {
   return url.replace(protocol, '').replace(trailingSlash, '');
 };
 
-export async function handler(event: any, context: any) {
+const extractNodes = (payload: any) => {
+  return payload.data?.search?.edges?.map(({ node }) => ({
+    name: node.title,
+    urn: node.id,
+    externalUrl: null,
+    image: node.featuredImage
+  })) ?? [];
+};
+
+async function handleLookup(event, context) {
+  return {
+    items: [],
+    pages: {}
+  };
+}
+
+async function handleSearch(event, context) {
   const query = `
   query searchProducts($query: String!) {
     search(query: $query, first: 10, types: PRODUCT) {
-        edges {
+      edges {
         node {
-            ... on Product {
+          ... on Product {
             id
             title
+            featuredImage {
+              url
+              altText
             }
+          }
         }
-        }
+      }
     }
-    }
+  }
   `;
 
   const { apiEndpoint, storefrontAccessToken } = context.appInstallationParameters;
@@ -29,17 +51,28 @@ export async function handler(event: any, context: any) {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'x-shopify-storefront-access-token': storefrontAccessToken,
+      'x-shopify-storefront-access-token': storefrontAccessToken
     },
-    body: JSON.stringify({ query, variables: { query: '' } }),
+    body: JSON.stringify({ query, variables: { query: event.query ?? '' } })
   });
 
   let data = await response.json();
 
-  console.log(data);
-
   return {
-    items: data,
-    pages: {},
+    items: extractNodes(data),
+    pages: {}
   };
 }
+
+const handler: FunctionEventHandler = async (event, context) => {
+  switch (event.type) {
+    case 'resources.search': {
+      return handleSearch(event, context);
+    }
+    case 'resources.lookup': {
+      return handleLookup(event, context)
+    }
+  }
+};
+
+export { handler };
