@@ -4,7 +4,6 @@
   "defaultFieldMapping": {
     "title": "{ /title }",
     "subtitle": "Product ID: { /urn }",
-    "externalUrl": "{ /externalUrl }",
     "image": {
       "url": "{ /image/url }",
       "altText": "{ /product }"

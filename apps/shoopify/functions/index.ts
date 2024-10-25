@@ -8,16 +8,18 @@ const removeHttpsAndTrailingSlash = (url) => {
 };
 
 const extractNodes = (payload: any) => {
-  return payload.data?.search?.edges?.map(({ node }) => ({
-    name: node.title,
-    urn: node.id,
-    externalUrl: null,
-    image: node.featuredImage
-  })) ?? [];
+  return (
+    payload.data?.search?.edges?.map(({ node }) => ({
+      name: node.title,
+      urn: node.id,
+      externalUrl: null,
+      image: node.featuredImage,
+    })) ?? []
+  );
 };
 
 async function handleLookup(event, context) {
-    const query = `query ($ids: [ID!]!) {
+  const query = `query ($ids: [ID!]!) {
                 nodes(ids: $ids) {
                     ... on Product {
                     id
@@ -33,31 +35,33 @@ async function handleLookup(event, context) {
             }
         }`;
 
-    const { apiEndpoint, storefrontAccessToken } = context.appInstallationParameters;
-    const url = `https://${removeHttpsAndTrailingSlash(apiEndpoint)}/api/2024-10/graphql`;
+  const { apiEndpoint, storefrontAccessToken } = context.appInstallationParameters;
+  const url = `https://${removeHttpsAndTrailingSlash(apiEndpoint)}/api/2024-10/graphql`;
 
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'x-shopify-storefront-access-token': storefrontAccessToken
-        },
-        body: JSON.stringify({ query, variables: { ids: event.lookupBy.urns ?? [] } })
-    });
-    let data = await response.json();
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'x-shopify-storefront-access-token': storefrontAccessToken,
+    },
+    body: JSON.stringify({ query, variables: { ids: event.lookupBy.urns ?? [] } }),
+  });
+  let data = await response.json();
 
-    console.log(data);
+  console.log(data);
   return {
     items: data.data.nodes,
-    pages: {}
+    pages: {},
   };
 }
 
 async function handleSearch(event, context) {
+  let nextCursor = event.pages?.nextCursor ?? null;
+
   const query = `
-  query searchProducts($query: String!) {
-    search(query: $query, first: 10, types: PRODUCT) {
+  query searchProducts($query: String!, $nextCursor: String) {
+    search(query: $query, after: $nextCursor, types: PRODUCT) {
       edges {
         node {
           ... on Product {
@@ -69,6 +73,10 @@ async function handleSearch(event, context) {
             }
           }
         }
+      }
+      pageInfo{
+        hasNextPage
+        endCursor
       }
     }
   }
@@ -82,16 +90,24 @@ async function handleSearch(event, context) {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'x-shopify-storefront-access-token': storefrontAccessToken
+      'x-shopify-storefront-access-token': storefrontAccessToken,
     },
-    body: JSON.stringify({ query, variables: { query: event.query ?? '' } })
+    body: JSON.stringify({ query, variables: { query: event.query ?? '', nextCursor } }),
   });
 
   let data = await response.json();
 
+  if (data.pageInfo.hasNextPage) {
+    nextCursor = data.pageInfo.endCursor;
+  } else {
+    nextCursor = null;
+  }
+
   return {
     items: extractNodes(data),
-    pages: {}
+    pages: {
+      nextCursor,
+    },
   };
 }
 
@@ -101,7 +117,7 @@ const handler: FunctionEventHandler = async (event, context) => {
       return handleSearch(event, context);
     }
     case 'resources.lookup': {
-      return handleLookup(event, context)
+      return handleLookup(event, context);
     }
   }
 };
