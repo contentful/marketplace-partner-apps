@@ -1,0 +1,56 @@
+{
+    "data": {
+        "search": {
+            "edges": [
+                {
+                    "node": {
+                        "id": "gid://shopify/Product/8191006998814",
+                        "title": "The Hidden Snowboard"
+                    }
+                },
+                {
+                    "node": {
+                        "id": "gid://shopify/Product/8191006867742",
+                        "title": "The 3p Fulfilled Snowboard"
+                    }
+                },
+                {
+                    "node": {
+                        "id": "gid://shopify/Product/8191006834974",
+                        "title": "The Multi-location Snowboard"
+                    }
+                },
+                {
+                    "node": {
+                        "id": "gid://shopify/Product/8191006769438",
+                        "title": "The Complete Snowboard"
+                    }
+                },
+                {
+                    "node": {
+                        "id": "gid://shopify/Product/8191006736670",
+                        "title": "The Collection Snowboard: Hydrogen"
+                    }
+                },
+                {
+                    "node": {
+                        "id": "gid://shopify/Product/8191006703902",
+                        "title": "The Collection Snowboard: Liquid"
+                    }
+                },
+                {
+                    "node": {
+                        "id": "gid://shopify/Product/8191006671134",
+                        "title": "The Multi-managed Snowboard"
+                    }
+                },
+                {
+                    "node": {
+                        "id": "gid://shopify/Product/8191006638366",
+                        "title": "The Collection Snowboard: Oxygen"
+                    }
+                }
+            ]
+        }
+    }
+}
