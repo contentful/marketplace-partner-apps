@@ -7,6 +7,7 @@
     "build": "react-scripts build",
     "test": "jest",
     "ci": "lint tsc test",
+    "install-ci": "npm ci",
     "eject": "react-scripts eject",
     "create-app-definition": "contentful-app-scripts create-app-definition",
     "upload": "contentful-app-scripts upload --bundle-dir ./build",
