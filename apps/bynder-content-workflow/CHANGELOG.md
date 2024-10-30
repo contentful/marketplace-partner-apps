@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.0.6](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.5...bynder-content-workflow-v1.0.6) (2024-10-30)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.74.0 to 4.74.1 in /apps/bynder-content-workflow in the production-dependencies group ([#3258](https://github.com/contentful/marketplace-partner-apps/issues/3258)) ([7f3d7a7](https://github.com/contentful/marketplace-partner-apps/commit/7f3d7a75e4464e96e3b8c45b9bb426a05b734981))
+* **deps:** bump @contentful/field-editor-rich-text from 3.27.13 to 3.28.0 in /apps/bynder-content-workflow in the production-dependencies group ([#3223](https://github.com/contentful/marketplace-partner-apps/issues/3223)) ([9d8615e](https://github.com/contentful/marketplace-partner-apps/commit/9d8615e420f10a38581754aa4efe2fa5a05f469b))
+* **deps:** bump @contentful/field-editor-rich-text from 3.28.0 to 3.28.2 in /apps/bynder-content-workflow in the production-dependencies group ([#3241](https://github.com/contentful/marketplace-partner-apps/issues/3241)) ([2dc4c95](https://github.com/contentful/marketplace-partner-apps/commit/2dc4c959fba3a5aec08266ccb7379c34d9d9907b))
+* **deps:** bump @contentful/field-editor-rich-text from 3.28.2 to 3.29.0 in /apps/bynder-content-workflow in the production-dependencies group ([#3271](https://github.com/contentful/marketplace-partner-apps/issues/3271)) ([14cdc99](https://github.com/contentful/marketplace-partner-apps/commit/14cdc994dffd3dbe3d0776c76d5b64287b23460b))
+* **deps:** bump @contentful/field-editor-rich-text from 3.29.0 to 3.30.0 in /apps/bynder-content-workflow in the production-dependencies group ([#3349](https://github.com/contentful/marketplace-partner-apps/issues/3349)) ([2ddedd0](https://github.com/contentful/marketplace-partner-apps/commit/2ddedd02c549b38d59aff16039d6a6020a9dc32e))
+* **deps:** bump @emotion/css from 11.13.0 to 11.13.4 in /apps/bynder-content-workflow in the production-dependencies group ([#3129](https://github.com/contentful/marketplace-partner-apps/issues/3129)) ([50ee3a2](https://github.com/contentful/marketplace-partner-apps/commit/50ee3a2d11c4038767578c892d77a549b378e7c1))
+* **deps:** bump contentful-management from 11.35.0 to 11.35.1 in /apps/bynder-content-workflow in the production-dependencies group ([#3098](https://github.com/contentful/marketplace-partner-apps/issues/3098)) ([0ff31ea](https://github.com/contentful/marketplace-partner-apps/commit/0ff31eaaf66764033b85e12cdb5220623ba18eaf))
+* **deps:** bump contentful-rich-text-html-parser from 1.5.12 to 1.5.13 in /apps/bynder-content-workflow in the production-dependencies group ([#3243](https://github.com/contentful/marketplace-partner-apps/issues/3243)) ([85efdc8](https://github.com/contentful/marketplace-partner-apps/commit/85efdc8975e09a04ecc7d5e71baf0e4bb5bdf9d6))
+* **deps:** bump the production-dependencies group in /apps/bynder-content-workflow with 2 updates ([#3207](https://github.com/contentful/marketplace-partner-apps/issues/3207)) ([ac70942](https://github.com/contentful/marketplace-partner-apps/commit/ac7094261b1fa8b2d4f70dffa64dad8a6b86534d))
+* **deps:** bump the production-dependencies group in /apps/bynder-content-workflow with 3 updates ([#3171](https://github.com/contentful/marketplace-partner-apps/issues/3171)) ([f7cb0a6](https://github.com/contentful/marketplace-partner-apps/commit/f7cb0a63d6a8c8250b3b615706c4e206975576a0))
+
 ## [1.0.5](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.4...bynder-content-workflow-v1.0.5) (2024-09-24)
 
 

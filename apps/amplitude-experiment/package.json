@@ -1,6 +1,6 @@
 {
   "name": "amplitude-contentful",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "^4.29.1",

@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.1.3](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.1.2...cloudinary-assets-v1.1.3) (2024-10-30)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.73.0 to 4.74.0 in /apps/cloudinary2 in the production-dependencies group ([#3200](https://github.com/contentful/marketplace-partner-apps/issues/3200)) ([e7cbf0f](https://github.com/contentful/marketplace-partner-apps/commit/e7cbf0f5b0541d35719e2463b93ced544b8ebe91))
+* **deps:** bump @contentful/f36-components from 4.74.0 to 4.74.1 in /apps/cloudinary2 in the production-dependencies group ([#3261](https://github.com/contentful/marketplace-partner-apps/issues/3261)) ([baa66df](https://github.com/contentful/marketplace-partner-apps/commit/baa66dfac22489c92f1195973652049674ac484c))
+* **deps:** bump @emotion/css from 11.13.0 to 11.13.4 in /apps/cloudinary2 in the production-dependencies group ([#3124](https://github.com/contentful/marketplace-partner-apps/issues/3124)) ([b044b48](https://github.com/contentful/marketplace-partner-apps/commit/b044b485453316ffc424ad18c03cd18ad33740b1))
+* **deps:** bump contentful-management from 11.35.0 to 11.35.1 in /apps/cloudinary2 in the production-dependencies group ([#3102](https://github.com/contentful/marketplace-partner-apps/issues/3102)) ([3f399de](https://github.com/contentful/marketplace-partner-apps/commit/3f399de80eb2c610d669baa28d67709be78a06fe))
+* **deps:** bump the production-dependencies group in /apps/cloudinary2 with 2 updates ([#3181](https://github.com/contentful/marketplace-partner-apps/issues/3181)) ([db970a5](https://github.com/contentful/marketplace-partner-apps/commit/db970a55bde77adcc8612014f1d4b75c4c64bba0))
+
 ## [1.1.2](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.1.1...cloudinary-assets-v1.1.2) (2024-09-24)
 
 
