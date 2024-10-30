@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.23](https://github.com/contentful/marketplace-partner-apps/compare/voucherify-contentful-app-v1.0.22...voucherify-contentful-app-v1.0.23) (2024-10-30)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.70.0 to 4.73.0 in /apps/voucherify in the production-dependencies group ([#3185](https://github.com/contentful/marketplace-partner-apps/issues/3185)) ([e3c0388](https://github.com/contentful/marketplace-partner-apps/commit/e3c038862837a538ae8f69baae002c817fc3d612))
+* **deps:** bump @contentful/f36-components from 4.73.0 to 4.74.0 in /apps/voucherify in the production-dependencies group ([#3205](https://github.com/contentful/marketplace-partner-apps/issues/3205)) ([4037647](https://github.com/contentful/marketplace-partner-apps/commit/4037647856e5b84bf1086a0f056cc8edd6654ad9))
+* **deps:** bump @contentful/f36-components from 4.74.0 to 4.74.1 in /apps/voucherify in the production-dependencies group ([#3253](https://github.com/contentful/marketplace-partner-apps/issues/3253)) ([d0202c2](https://github.com/contentful/marketplace-partner-apps/commit/d0202c2769f00a0d17df2ed1b457c966d29ef863))
+* **deps:** bump @emotion/css from 11.13.0 to 11.13.4 in /apps/voucherify in the production-dependencies group ([#3133](https://github.com/contentful/marketplace-partner-apps/issues/3133)) ([891648a](https://github.com/contentful/marketplace-partner-apps/commit/891648acd969a6aa28c3cf9788ec5105b163539a))
+* **deps:** bump react-hook-form from 7.53.0 to 7.53.1 in /apps/voucherify in the production-dependencies group ([#3282](https://github.com/contentful/marketplace-partner-apps/issues/3282)) ([2a87922](https://github.com/contentful/marketplace-partner-apps/commit/2a879223df4802fe384aa6309d94f66a12f79e3a))
+* **deps:** bump react-router-dom from 6.26.2 to 6.27.0 in /apps/voucherify in the production-dependencies group ([#3216](https://github.com/contentful/marketplace-partner-apps/issues/3216)) ([850ac68](https://github.com/contentful/marketplace-partner-apps/commit/850ac686aad676bdead90ddac2c12b5126b78705))
+
 ## [1.0.22](https://github.com/contentful/marketplace-partner-apps/compare/voucherify-contentful-app-v1.0.21...voucherify-contentful-app-v1.0.22) (2024-09-24)
 
 
