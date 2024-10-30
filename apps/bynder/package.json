@@ -3,7 +3,7 @@
   "version": "1.1.16",
   "private": true,
   "devDependencies": {
-    "@contentful/app-scripts": "1.29.0",
+    "@contentful/app-scripts": "1.30.0",
     "@vitejs/plugin-react": "^4.3.3",
     "happy-dom": "^15.7.4",
     "vite": "^5.4.10",
