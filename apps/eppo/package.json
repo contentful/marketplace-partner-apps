@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "cross-env BROWSER=none NODE_ENV=development PORT=3001 react-scripts start",
-    "build": "react-scripts build",
+    "build": "rm -rf build && vite build",
     "test": "jest",
     "ci": "lint tsc test",
     "eject": "react-scripts eject",
