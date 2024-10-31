@@ -3,7 +3,7 @@
   "version": "1.0.6",
   "private": true,
   "dependencies": {
-    "@contentful/app-sdk": "4.29.1",
+    "@contentful/app-sdk": "4.29.2",
     "@contentful/f36-components": "4.74.1",
     "@contentful/f36-tokens": "4.1.0",
     "@contentful/field-editor-rich-text": "^3.30.0",
