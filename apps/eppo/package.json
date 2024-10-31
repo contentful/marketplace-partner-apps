@@ -29,7 +29,7 @@
     ]
   },
   "dependencies": {
-    "@contentful/app-sdk": "^4.29.1",
+    "@contentful/app-sdk": "^4.29.2",
     "@contentful/f36-components": "^4.74.1",
     "@contentful/f36-core": "^4.68.1",
     "@contentful/f36-icons": "^4.28.2",
