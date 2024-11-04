@@ -6,7 +6,7 @@
     "@contentful/app-scripts": "1.30.0",
     "@testing-library/react": "^16.0.1",
     "@vitejs/plugin-react": "^4.3.3",
-    "happy-dom": "^15.7.4",
+    "happy-dom": "^15.8.3",
     "vite": "^5.4.10",
     "vitest": "^2.1.4"
   },
