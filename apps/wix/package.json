@@ -7,12 +7,12 @@
     "@contentful/f36-components": "4.74.1",
     "@contentful/f36-tokens": "4.1.0",
     "@contentful/react-apps-toolkit": "1.2.16",
-    "contentful-management": "11.36.0",
+    "contentful-management": "11.36.1",
     "emotion": "10.0.27",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "react-router": "6.27.0",
-    "react-router-dom": "6.27.0"
+    "react-router": "6.28.0",
+    "react-router-dom": "6.28.0"
   },
   "scripts": {
     "install-ci": "npm ci",
