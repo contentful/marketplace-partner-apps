@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.7](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.0.6...shopify-sku-v2.0.7) (2024-11-08)
+
+
+### Bug Fixes
+
+* **deps:** bump core-js from 3.38.1 to 3.39.0 in /apps/shopify in the production-dependencies group ([#3379](https://github.com/contentful/marketplace-partner-apps/issues/3379)) ([47942d9](https://github.com/contentful/marketplace-partner-apps/commit/47942d9cc7353b1c5ac82367f4c4679d1e98288d))
+
 ## [2.0.6](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.0.5...shopify-sku-v2.0.6) (2024-10-30)
 
 

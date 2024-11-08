@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.4](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.1.3...cloudinary-assets-v1.1.4) (2024-11-08)
+
+
+### Bug Fixes
+
+* **deps:** bump contentful-management from 11.35.1 to 11.36.0 in /apps/cloudinary2 in the production-dependencies group ([#3424](https://github.com/contentful/marketplace-partner-apps/issues/3424)) ([efe84d5](https://github.com/contentful/marketplace-partner-apps/commit/efe84d5967aa825255e56f31e601b3b78c73f027))
+* **deps:** bump contentful-management from 11.36.0 to 11.36.1 in /apps/cloudinary2 in the production-dependencies group ([#3472](https://github.com/contentful/marketplace-partner-apps/issues/3472)) ([a414a8e](https://github.com/contentful/marketplace-partner-apps/commit/a414a8ead014c2d08625bc73085b8d29c70b2c85))
+* **deps:** bump contentful-management from 11.36.1 to 11.36.2 in /apps/cloudinary2 in the production-dependencies group ([#3512](https://github.com/contentful/marketplace-partner-apps/issues/3512)) ([a9de5b2](https://github.com/contentful/marketplace-partner-apps/commit/a9de5b2f6e1ac720eeadd4066fb4be8371503d25))
+
 ## [1.1.3](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.1.2...cloudinary-assets-v1.1.3) (2024-10-30)
 
 

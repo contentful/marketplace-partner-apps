@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.6...bynder-content-workflow-v1.0.7) (2024-11-08)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.29.1 to 4.29.2 in /apps/bynder-content-workflow in the production-dependencies group ([#3382](https://github.com/contentful/marketplace-partner-apps/issues/3382)) ([cfeadbf](https://github.com/contentful/marketplace-partner-apps/commit/cfeadbf541c8d77d0a3f17983403f1a450104f75))
+
 ## [1.0.6](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.5...bynder-content-workflow-v1.0.6) (2024-10-30)
 
 
