@@ -9,7 +9,7 @@
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "11.13.4",
     "@extractus/oembed-extractor": "^4.0.5",
-    "contentful-management": "11.36.1",
+    "contentful-management": "11.36.2",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
