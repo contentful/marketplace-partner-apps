@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.8](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.1.7...adapt-essentials-asset-fields-v1.1.8) (2024-11-08)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.29.1 to 4.29.2 in /apps/adapt-essentials-asset-fields in the production-dependencies group ([#3373](https://github.com/contentful/marketplace-partner-apps/issues/3373)) ([cc2ce4e](https://github.com/contentful/marketplace-partner-apps/commit/cc2ce4edac18cd34e7ea91252e3f6a4dd4746e27))
+* **deps:** bump @contentful/app-sdk from 4.29.2 to 4.29.3 in /apps/adapt-essentials-asset-fields in the production-dependencies group ([#3443](https://github.com/contentful/marketplace-partner-apps/issues/3443)) ([8322d18](https://github.com/contentful/marketplace-partner-apps/commit/8322d1810a5bb6ac8fb0fde8ff083c10672e3d98))
+* **deps:** bump react-router-dom from 6.27.0 to 6.28.0 in /apps/adapt-essentials-asset-fields in the production-dependencies group ([#3479](https://github.com/contentful/marketplace-partner-apps/issues/3479)) ([01968df](https://github.com/contentful/marketplace-partner-apps/commit/01968dffcf1530fe8b1d22b11621483f0c4d68a5))
+
 ## [1.1.7](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.1.6...adapt-essentials-asset-fields-v1.1.7) (2024-10-30)
 
 

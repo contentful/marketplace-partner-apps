@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.26](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.25...surfer-contentful-app-v1.0.26) (2024-11-08)
+
+
+### Bug Fixes
+
+* **deps:** Bump @contentful/app-sdk from 4.29.1 to 4.29.2 in /apps/surfer in the production-dependencies group ([#3368](https://github.com/contentful/marketplace-partner-apps/issues/3368)) ([809d98a](https://github.com/contentful/marketplace-partner-apps/commit/809d98a85436dd9753d85ce84d1f4f8f3ef89d3c))
+* **deps:** bump @contentful/app-sdk from 4.29.2 to 4.29.3 in /apps/surfer in the production-dependencies group ([#3433](https://github.com/contentful/marketplace-partner-apps/issues/3433)) ([48926d0](https://github.com/contentful/marketplace-partner-apps/commit/48926d0c89822dad3906e06575664ff5fb125941))
+* **deps:** bump contentful-management from 11.35.1 to 11.36.0 in /apps/surfer in the production-dependencies group ([#3425](https://github.com/contentful/marketplace-partner-apps/issues/3425)) ([f81110f](https://github.com/contentful/marketplace-partner-apps/commit/f81110fb4fa5667295616f00579c89c46e82eea2))
+* **deps:** Bump contentful-management from 11.36.1 to 11.36.2 in /apps/surfer in the production-dependencies group ([#3520](https://github.com/contentful/marketplace-partner-apps/issues/3520)) ([4a52b78](https://github.com/contentful/marketplace-partner-apps/commit/4a52b78c46514e25bf0bbbe2da7d63db3f20fb4b))
+* **deps:** bump the production-dependencies group in /apps/surfer with 2 updates ([#3487](https://github.com/contentful/marketplace-partner-apps/issues/3487)) ([e4f71d7](https://github.com/contentful/marketplace-partner-apps/commit/e4f71d758983f627a9f6f7ce767033f0a1e0b232))
+
 ## [1.0.25](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.24...surfer-contentful-app-v1.0.25) (2024-10-30)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/eppo-contentful-app-v1.0.0...eppo-contentful-app-v1.0.1) (2024-11-08)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.29.1 to 4.29.2 in /apps/eppo in the production-dependencies group ([#3376](https://github.com/contentful/marketplace-partner-apps/issues/3376)) ([9e07ee6](https://github.com/contentful/marketplace-partner-apps/commit/9e07ee6808478eb1485da966fd909f86cb24ad92))
+
 ## 1.0.0 (2024-10-30)
 
 
