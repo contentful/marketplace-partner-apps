@@ -1,0 +1,11 @@
+{
+  "sys": { "id": "Shoopify" },
+  "type": "function",
+  "function": {
+    "sys": {
+      "type": "Link",
+      "linkType": "Function",
+      "id": "<overwritten-by-script>"
+    }
+  }
+}
