@@ -18,23 +18,35 @@ const Field = () => {
   const sdk = useSDK<FieldAppSDK<AppInstallationParameters>>();
   useAutoResizer({ absoluteElements: true });
 
-  const [fieldValue = [], setAssets] = useFieldValue<CloudinaryAsset[] | null>(sdk.field.id, sdk.field.locale);
-  const assets = fieldValue || [];
+  const [assets, setAssets] = useFieldValue<CloudinaryAsset[] | null>(sdk.field.id, sdk.field.locale);
 
   const [editingEnabled, setEditingEnabled] = useState(!sdk.field.getIsDisabled());
   useEffect(() => {
     sdk.field.onIsDisabledChanged((disabled) => setEditingEnabled(!disabled));
   }, [sdk.field]);
 
-  const canAddAssets = assets.length < sdk.parameters.installation.maxFiles && editingEnabled;
+  const canAddAssets = assets && assets.length < sdk.parameters.installation.maxFiles && editingEnabled;
+  const assetsArray = assets || [];
 
   return (
     <>
       <Global styles={globalStyles} />
       <GlobalStyles />
       <Stack spacing="spacingM" flexDirection="column" alignItems="flex-start">
-        {assets.length > 0 && <Thumbnails assets={assets} onChange={setAssets} isDisabled={!editingEnabled} />}
-        <OpenDialogButton isDisabled={!canAddAssets} onNewAssetsAdded={(newAssets) => setAssets([...assets, ...newAssets])} />
+        {assets && assets.length > 0 && <Thumbnails assets={assets} onChange={(asset) => {
+          if (asset.length === 0) {
+            return setAssets(null);
+          } else {
+            return setAssets(asset)
+          }
+        }} isDisabled={!editingEnabled} />}
+        <OpenDialogButton isDisabled={!canAddAssets} onNewAssetsAdded={(newAssets) => {
+          if (newAssets.length === 0) {
+            setAssets(null);
+          } else {
+            setAssets([...assetsArray, ...newAssets])
+          }
+        }} />
       </Stack>
     </>
   );
