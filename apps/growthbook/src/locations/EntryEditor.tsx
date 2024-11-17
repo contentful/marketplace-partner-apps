@@ -1,4 +1,4 @@
-import { EditorAppSDK, Link } from "@contentful/app-sdk";
+import { EditorAppSDK, Link } from '@contentful/app-sdk';
 import {
   Autocomplete,
   Box,
@@ -14,34 +14,16 @@ import {
   SectionHeading,
   Stack,
   TextInput,
-} from "@contentful/f36-components";
-import { useFieldValue, useSDK } from "@contentful/react-apps-toolkit";
-import {
-  ContentTypeProps,
-  EntryProps,
-  MetaSysProps,
-} from "contentful-management";
-import { cloneDeep, set } from "lodash";
-import get from "lodash/get";
-import React, {
-  CSSProperties,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import { ContentTypesContext } from "../contexts/ContentTypesContext";
-import { ExperimentAPIResponse } from "types/experiment";
+} from '@contentful/f36-components';
+import { useFieldValue, useSDK } from '@contentful/react-apps-toolkit';
+import { ContentTypeProps, EntryProps, MetaSysProps } from 'contentful-management';
+import { cloneDeep, set } from 'lodash';
+import get from 'lodash/get';
+import React, { CSSProperties, useCallback, useContext, useEffect, useState } from 'react';
+import { ContentTypesContext } from '../contexts/ContentTypesContext';
+import { ExperimentAPIResponse } from 'types/experiment';
 
-const PopoverWrapper = ({
-  children,
-  buttonText,
-  buttonProps,
-}: {
-  children: JSX.Element;
-  buttonText: string;
-  buttonProps?: { [key: string]: string };
-}) => {
+const PopoverWrapper = ({ children, buttonText, buttonProps }: { children: JSX.Element; buttonText: string; buttonProps?: { [key: string]: string } }) => {
   const [modalShown, setModalShown] = useState(false);
 
   return (
@@ -78,9 +60,7 @@ const ContentTypeField = ({
   const [filteredItems, setFilteredItems] = useState(contentTypes);
 
   const handleInputValueChange = (value: string) => {
-    const newFilteredItems = contentTypes.filter((item) =>
-      item.name.toLowerCase().includes(value.toLowerCase())
-    );
+    const newFilteredItems = contentTypes.filter((item) => item.name.toLowerCase().includes(value.toLowerCase()));
     setFilteredItems(newFilteredItems);
   };
 
@@ -88,15 +68,15 @@ const ContentTypeField = ({
     const index = variationNames.indexOf(variationName);
 
     if (!metaSysPropsId) {
-      throw new Error("Missing prop id");
+      throw new Error('Missing prop id');
     }
 
     const newVariations = variations ? [...variations] : [];
     newVariations[index] = {
       sys: {
-        type: "Link",
+        type: 'Link',
         id: metaSysPropsId,
-        linkType: "Entry",
+        linkType: 'Entry',
       },
     };
     setVariations(newVariations);
@@ -113,7 +93,7 @@ const ContentTypeField = ({
         setFetchTrigger(fetchTrigger + 1);
       }, 500);
     } catch (error) {
-      sdk.notifier.error("Failed to create new entry");
+      sdk.notifier.error('Failed to create new entry');
     }
   };
 
@@ -130,7 +110,7 @@ const ContentTypeField = ({
 
       handleChangeVariations(data.sys.id);
     } catch (error) {
-      sdk.notifier.error("Failed to link existing entry");
+      sdk.notifier.error('Failed to link existing entry');
     }
   };
 
@@ -159,16 +139,16 @@ const ContentTypeField = ({
 };
 
 const removeButtonStyle: CSSProperties = {
-  position: "absolute",
-  top: "10px",
-  right: "10px",
-  padding: "0",
-  width: "25px",
-  height: "25px",
-  lineHeight: "30px",
-  textAlign: "center",
-  color: "gray",
-  minHeight: "25px",
+  position: 'absolute',
+  top: '10px',
+  right: '10px',
+  padding: '0',
+  width: '25px',
+  height: '25px',
+  lineHeight: '30px',
+  textAlign: 'center',
+  color: 'gray',
+  minHeight: '25px',
 };
 
 const VariationPlaceholder = ({
@@ -189,25 +169,17 @@ const VariationPlaceholder = ({
   setFetchTrigger: (trigger: number) => void;
 }) => {
   const handleRemoveVariation = () => {
-    const updatedVariationNames = variationNames.filter(
-      (name) => name !== variationName
-    );
+    const updatedVariationNames = variationNames.filter((name) => name !== variationName);
     setVariationNames(updatedVariationNames);
   };
 
   return (
-    <Card style={{ position: "relative" }}>
-      <Button
-        onClick={handleRemoveVariation}
-        variant="negative"
-        style={removeButtonStyle}
-      >
+    <Card style={{ position: 'relative' }}>
+      <Button onClick={handleRemoveVariation} variant="negative" style={removeButtonStyle}>
         X
       </Button>
       <Stack flexDirection="column" fullWidth alignItems="flex-start">
-        <SectionHeading className="no-text-transform">
-          {variationName}
-        </SectionHeading>
+        <SectionHeading className="no-text-transform">{variationName}</SectionHeading>
         <ContentTypeField
           variationName={variationName}
           variationNames={variationNames}
@@ -256,9 +228,7 @@ const EntryCardWrapper = ({
 }): JSX.Element => {
   const sdk = useSDK<EditorAppSDK>();
   const { contentTypes } = useContext(ContentTypesContext);
-  const [entryData, setEntryData] = useState<
-    EntryProps<VariationEntity> | undefined
-  >(undefined);
+  const [entryData, setEntryData] = useState<EntryProps<VariationEntity> | undefined>(undefined);
 
   const fetchEntry = useCallback(
     async (id: string, contentTypes: ContentTypeProps[]) => {
@@ -267,31 +237,17 @@ const EntryCardWrapper = ({
       }
       try {
         const entry = await sdk.cma.entry.get({ entryId: id });
-        const contentTypeId = get(entry, ["sys", "contentType", "sys", "id"]);
-        const contentType = contentTypes.find(
-          (contentType) => contentType.sys.id === contentTypeId
-        );
+        const contentTypeId = get(entry, ['sys', 'contentType', 'sys', 'id']);
+        const contentType = contentTypes.find((contentType) => contentType.sys.id === contentTypeId);
         if (!contentType) {
           return undefined;
         }
 
         const displayField = contentType.displayField;
-        const descriptionFieldType = contentType.fields
-          .filter((field) => field.id !== displayField)
-          .find((field) => field.type === "Text");
+        const descriptionFieldType = contentType.fields.filter((field) => field.id !== displayField).find((field) => field.type === 'Text');
 
-        const description = descriptionFieldType
-          ? get(
-              entry,
-              ["fields", descriptionFieldType.id, sdk.locales.default],
-              ""
-            )
-          : "";
-        const title = get(
-          entry,
-          ["fields", displayField, sdk.locales.default],
-          "Untitled"
-        );
+        const description = descriptionFieldType ? get(entry, ['fields', descriptionFieldType.id, sdk.locales.default], '') : '';
+        const title = get(entry, ['fields', displayField, sdk.locales.default], 'Untitled');
 
         const status = getEntryStatus(entry.sys);
         return {
@@ -305,26 +261,26 @@ const EntryCardWrapper = ({
           },
         };
       } catch (error) {
-        sdk.notifier.error("Failed to fetch entry");
+        sdk.notifier.error('Failed to fetch entry');
         return undefined;
       }
     },
-    [sdk.cma.entry, sdk.locales.default, variation.sys.id, fetchTrigger]
+    [sdk.cma.entry, sdk.locales.default, sdk.notifier, variationName]
   );
 
   const fetchData = useCallback(async () => {
     const entry = await fetchEntry(variation.sys.id, contentTypes);
     return entry;
-  }, [contentTypes, fetchEntry, variation.sys.id, fetchTrigger]);
+  }, [contentTypes, fetchEntry, variation.sys.id]);
 
   useEffect(() => {
     fetchData().then((data) => setEntryData(data));
   }, [variation, fetchEntry, contentTypes, fetchData, fetchTrigger]);
 
   const maybeShowWarning = () => {
-    if (!seenWarning && experiment?.status === "running") {
+    if (!seenWarning && experiment?.status === 'running') {
       sdk.notifier.warning(
-        "The experiment has already started. Updating the content may invalidate the experiment results.  If you would like to continue, view the Experiment on Growthbook and start a new phase."
+        'The experiment has already started. Updating the content may invalidate the experiment results.  If you would like to continue, view the Experiment on Growthbook and start a new phase.'
       );
       setSeenWarning(true);
     }
@@ -339,9 +295,7 @@ const EntryCardWrapper = ({
     }
     setVariations(newVariations);
 
-    const newVariationNames = variationNames.filter(
-      (name) => name !== variationName
-    );
+    const newVariationNames = variationNames.filter((name) => name !== variationName);
     setVariationNames(newVariationNames);
   };
 
@@ -356,42 +310,31 @@ const EntryCardWrapper = ({
         setFetchTrigger(fetchTrigger + 1);
       }, 500);
     } catch (error) {
-      sdk.notifier.error("Failed to open entry");
+      sdk.notifier.error('Failed to open entry');
     }
   };
 
   const getEntryStatus = (sys: MetaSysProps) => {
     if (sys.archivedVersion) {
-      return "archived";
+      return 'archived';
     } else if (sys.publishedVersion) {
       if (sys.version > sys.publishedVersion + 1) {
-        return "changed";
+        return 'changed';
       } else {
-        return "published";
+        return 'published';
       }
     } else {
-      return "draft";
+      return 'draft';
     }
   };
 
   return (
     <Card>
-      <Button
-        onClick={handleRemoveVariation}
-        variant="negative"
-        style={removeButtonStyle}
-      >
+      <Button onClick={handleRemoveVariation} variant="negative" style={removeButtonStyle}>
         X
       </Button>
-      <SectionHeading className="no-text-transform">
-        {entryData?.fields?.variationName}
-      </SectionHeading>
-      <Stack
-        spacing="spacingM"
-        flexDirection="column"
-        fullWidth
-        alignItems="flex-start"
-      >
+      <SectionHeading className="no-text-transform">{entryData?.fields?.variationName}</SectionHeading>
+      <Stack spacing="spacingM" flexDirection="column" fullWidth alignItems="flex-start">
         <EntryCard
           contentType={entryData?.fields?.contentType}
           actions={[
@@ -431,9 +374,9 @@ const VariationsField = ({
   const sdk = useSDK<EditorAppSDK>();
 
   const maybeShowWarning = () => {
-    if (!seenWarning && experiment?.status === "running") {
+    if (!seenWarning && experiment?.status === 'running') {
       sdk.notifier.warning(
-        "The experiment has already started. Updating the content may invalidate the experiment results.  If you would like to continue, view the Experiment on Growthbook and start a new phase."
+        'The experiment has already started. Updating the content may invalidate the experiment results.  If you would like to continue, view the Experiment on Growthbook and start a new phase.'
       );
       setSeenWarning(true);
     }
@@ -443,12 +386,12 @@ const VariationsField = ({
     maybeShowWarning();
     const newVariationNames = [...(variationNames || [])];
 
-    if (!newVariationNames.includes("Control")) {
-      newVariationNames.push("Control");
+    if (!newVariationNames.includes('Control')) {
+      newVariationNames.push('Control');
     } else {
       let i = 0;
       while (true) {
-        const variationName = "Variation " + String.fromCharCode(65 + i); // 65 is the ASCII code for 'A'
+        const variationName = 'Variation ' + String.fromCharCode(65 + i); // 65 is the ASCII code for 'A'
         if (!newVariationNames.includes(variationName)) {
           newVariationNames.push(variationName);
           break;
@@ -463,13 +406,11 @@ const VariationsField = ({
 
   return (
     <>
-      <Heading style={{ marginTop: "20px" }}>Variations</Heading>
+      <Heading style={{ marginTop: '20px' }}>Variations</Heading>
 
       <Stack spacing="spacingS" flexDirection="column" alignItems="flex-start">
         {variationNames?.map((variationName, index) => {
-          const variation = variationEntries
-            ? variationEntries[index]
-            : undefined;
+          const variation = variationEntries ? variationEntries[index] : undefined;
           if (variation) {
             return (
               <EntryCardWrapper
@@ -501,10 +442,7 @@ const VariationsField = ({
             />
           );
         })}
-        <Button
-          onClick={addVariation}
-          isDisabled={variationEntries?.length !== variationNames?.length}
-        >
+        <Button onClick={addVariation} isDisabled={variationEntries?.length !== variationNames?.length}>
           Add Variation
         </Button>
       </Stack>
@@ -516,39 +454,28 @@ const Entry = () => {
   const sdk = useSDK<EditorAppSDK>();
   const [seenWarning, setSeenWarning] = useState(false);
 
-  const [formExperiment] = useFieldValue<ExperimentAPIResponse>(
-    sdk.entry.fields.experiment.id
-  );
+  const [formExperiment] = useFieldValue<ExperimentAPIResponse>(sdk.entry.fields.experiment.id);
 
-  const [formExperimentName, setFormExperimentName] = useFieldValue<string>(
-    sdk.entry.fields.experimentName.id
-  );
+  const [formExperimentName, setFormExperimentName] = useFieldValue<string>(sdk.entry.fields.experimentName.id);
 
-  const [variationNames, setVariationNames] = useFieldValue<Array<string>>(
-    sdk.entry.fields.variationNames.id
-  );
+  const [variationNames, setVariationNames] = useFieldValue<Array<string>>(sdk.entry.fields.variationNames.id);
 
-  const [variations, setVariations] = useFieldValue<Link[]>(
-    sdk.entry.fields.variations.id
-  );
+  const [variations, setVariations] = useFieldValue<Link[]>(sdk.entry.fields.variations.id);
 
   if (formExperimentName === undefined) {
-    setFormExperimentName("");
+    setFormExperimentName('');
   }
 
   return (
-    <Box style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+    <Box style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
       <Box
         style={{
-          margin: "50px",
-          width: "768px",
-        }}
-      >
+          margin: '50px',
+          width: '768px',
+        }}>
         <Form>
           <FormControl>
-            <FormControl.Label htmlFor="experiment-name">
-              Experiment Name (required):
-            </FormControl.Label>
+            <FormControl.Label htmlFor="experiment-name">Experiment Name (required):</FormControl.Label>
             <TextInput
               id="experiment-name"
               value={formExperimentName}
