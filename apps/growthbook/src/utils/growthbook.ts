@@ -1,5 +1,5 @@
-import { CreateFeatureAPIRequest, UpdateFeatureAPIRequest } from 'types/feature';
-import { ExperimentAPIResponse, UpdateExperimentAPIRequest, CreateExperimentAPIRequest } from 'types/experiment';
+import { CreateFeatureAPIRequest, UpdateFeatureAPIRequest } from '../../types/feature';
+import { ExperimentAPIResponse, UpdateExperimentAPIRequest, CreateExperimentAPIRequest } from '../../types/experiment';
 
 const LIMIT = 100;
 
