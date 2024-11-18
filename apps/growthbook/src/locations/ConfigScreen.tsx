@@ -17,6 +17,12 @@ const ConfigScreen = () => {
     growthbookAPIKey: '',
     datasourceId: '',
   });
+
+  const obfuscateApiKey = useCallback((key: string) => {
+    return key.replace(/./g, '*');
+  }, []);
+
+  const [shownApiKey, setShownApiKey] = useState<string>(obfuscateApiKey(parameters.growthbookAPIKey));
   const sdk = useSDK<ConfigAppSDK>();
 
   const createGrowthbookExperimentContentType = useCallback(async () => {
@@ -147,6 +153,7 @@ const ConfigScreen = () => {
 
       if (currentParameters) {
         setParameters(currentParameters);
+        setShownApiKey(obfuscateApiKey(currentParameters.growthbookAPIKey));
       }
 
       sdk.app.setReady();
@@ -179,9 +186,18 @@ const ConfigScreen = () => {
           <TextInput
             id="api-key"
             name="api-key"
-            value={parameters.growthbookAPIKey || ''}
+            value={shownApiKey}
             style={{ marginBottom: '20px' }}
-            onChange={(e) => setParameters({ ...parameters, growthbookAPIKey: e.target.value })}
+            onChange={(e) => {
+              const { value } = e.target;
+              setParameters((prevParameters) => ({
+                ...prevParameters,
+                growthbookAPIKey: value,
+              }));
+              setShownApiKey(value);
+            }}
+            onBlur={() => setShownApiKey(obfuscateApiKey(parameters.growthbookAPIKey))}
+            onFocus={() => setShownApiKey('')}
           />
           <FormControl.Label htmlFor="datastore-id">Datasource Id (The datasource that tracking data gets sent to)</FormControl.Label>
           <TextInput
