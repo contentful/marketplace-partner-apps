@@ -21,7 +21,7 @@ import { cloneDeep, set } from 'lodash';
 import get from 'lodash/get';
 import React, { CSSProperties, useCallback, useContext, useEffect, useState } from 'react';
 import { ContentTypesContext } from '../contexts/ContentTypesContext';
-import { ExperimentAPIResponse } from 'types/experiment';
+import { ExperimentAPIResponse } from '../../types/experiment';
 
 const PopoverWrapper = ({ children, buttonText, buttonProps }: { children: JSX.Element; buttonText: string; buttonProps?: { [key: string]: string } }) => {
   const [modalShown, setModalShown] = useState(false);
