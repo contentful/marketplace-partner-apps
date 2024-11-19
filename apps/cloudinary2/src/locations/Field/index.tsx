@@ -35,10 +35,11 @@ const Field = () => {
       <Stack spacing="spacingM" flexDirection="column" alignItems="flex-start">
         {assets.length > 0 && <Thumbnails assets={assets} onChange={(asset) => {
           if (asset.length === 0) {
-            return setAssets(null);
+            return sdk.field.removeValue()
           } else {
             return setAssets(asset)
           }
+          
         }} isDisabled={!editingEnabled} />}
         <OpenDialogButton isDisabled={!canAddAssets} onNewAssetsAdded={(newAssets) => setAssets([...assets, ...newAssets])} />
       </Stack>
