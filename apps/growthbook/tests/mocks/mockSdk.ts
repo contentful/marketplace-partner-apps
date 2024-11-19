@@ -5,6 +5,7 @@ const mockSdk: any = {
     installation: {
       serverUrl: 'https://api.growthbook.io',
       apiKey: 'mock-api-key',
+      growthbookAPIKey: 'secret_key_123',
     },
   },
   app: {

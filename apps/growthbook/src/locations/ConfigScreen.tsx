@@ -19,6 +19,9 @@ const ConfigScreen = () => {
   });
 
   const obfuscateApiKey = useCallback((key: string) => {
+    if (!key) {
+      return '';
+    }
     return key.replace(/./g, '*');
   }, []);
 
