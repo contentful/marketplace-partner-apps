@@ -27,7 +27,7 @@
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./dist --organization-id ${DEFINITIONS_ORG_ID} --definition-id 44A0iM4wuqcQBDfg6qrlQx --token ${CONTENTFUL_CMA_TOKEN}"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.30.2",
+    "@contentful/app-scripts": "1.31.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "16.0.1",
     "@types/node": "18.15.3",
@@ -37,7 +37,7 @@
     "happy-dom": "15.11.6",
     "jsdom": "^24.1.1",
     "prettier": "3.3.3",
-    "typescript": "5.6.3",
+    "typescript": "5.7.2",
     "vite": "5.4.11",
     "vite-plugin-mkcert": "^1.17.6",
     "vitest": "2.1.5"
