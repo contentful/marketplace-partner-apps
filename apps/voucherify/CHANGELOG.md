@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.25](https://github.com/contentful/marketplace-partner-apps/compare/voucherify-contentful-app-v1.0.24...voucherify-contentful-app-v1.0.25) (2024-11-26)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.74.1 to 4.74.2 in /apps/voucherify in the production-dependencies group ([#3629](https://github.com/contentful/marketplace-partner-apps/issues/3629)) ([549de73](https://github.com/contentful/marketplace-partner-apps/commit/549de73f77761eeaeaeeea6585fac39a56afaab9))
+* **deps:** bump axios from 1.7.7 to 1.7.8 in /apps/voucherify in the production-dependencies group ([#3697](https://github.com/contentful/marketplace-partner-apps/issues/3697)) ([aea6942](https://github.com/contentful/marketplace-partner-apps/commit/aea6942acfa34de78b6b2feb4ef78115701c8013))
+* **deps:** bump react-hook-form from 7.53.1 to 7.53.2 in /apps/voucherify in the production-dependencies group ([#3550](https://github.com/contentful/marketplace-partner-apps/issues/3550)) ([bd680c2](https://github.com/contentful/marketplace-partner-apps/commit/bd680c2583d2c21098f9493cbf88ff52f56724c8))
+* **deps:** bump the production-dependencies group in /apps/voucherify with 3 updates ([#3659](https://github.com/contentful/marketplace-partner-apps/issues/3659)) ([f14b795](https://github.com/contentful/marketplace-partner-apps/commit/f14b7956aff10cf4bb1ed165f541cf0f29c28b84))
+
 ## [1.0.24](https://github.com/contentful/marketplace-partner-apps/compare/voucherify-contentful-app-v1.0.23...voucherify-contentful-app-v1.0.24) (2024-11-08)
 
 
