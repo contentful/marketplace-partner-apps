@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.5](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.1.4...cloudinary-assets-v1.1.5) (2024-11-26)
+
+
+### Bug Fixes
+
+* cloudinary required field ([#3613](https://github.com/contentful/marketplace-partner-apps/issues/3613)) ([e556c10](https://github.com/contentful/marketplace-partner-apps/commit/e556c106dfad48fbe1e94a003df22e288e5e1aa3))
+* **deps:** bump @contentful/f36-components from 4.74.1 to 4.74.2 in /apps/cloudinary2 in the production-dependencies group ([#3634](https://github.com/contentful/marketplace-partner-apps/issues/3634)) ([2e1850a](https://github.com/contentful/marketplace-partner-apps/commit/2e1850a6c6bec45d10c3c0f827585e2536137b58))
+* **deps:** bump @dnd-kit/core from 6.1.0 to 6.2.0 in /apps/cloudinary2 in the production-dependencies group ([#3677](https://github.com/contentful/marketplace-partner-apps/issues/3677)) ([6a4e5c9](https://github.com/contentful/marketplace-partner-apps/commit/6a4e5c951c1394f7923617a8a77b3a36b14542e5))
+* **deps:** bump contentful-management from 11.36.2 to 11.37.0 in /apps/cloudinary2 in the production-dependencies group ([#3582](https://github.com/contentful/marketplace-partner-apps/issues/3582)) ([311a19b](https://github.com/contentful/marketplace-partner-apps/commit/311a19bc38c5f585404802b330e5b996a7dbb140))
+* **deps:** bump contentful-management from 11.37.0 to 11.38.0 in /apps/cloudinary2 in the production-dependencies group ([#3605](https://github.com/contentful/marketplace-partner-apps/issues/3605)) ([dee83c3](https://github.com/contentful/marketplace-partner-apps/commit/dee83c361fd6994735f4dc4f97b521507b4abb91))
+* **deps:** bump contentful-management from 11.38.0 to 11.39.1 in /apps/cloudinary2 in the production-dependencies group ([#3672](https://github.com/contentful/marketplace-partner-apps/issues/3672)) ([52fe286](https://github.com/contentful/marketplace-partner-apps/commit/52fe28679a05e80c958fe337364753ced7b55894))
+* **deps:** bump contentful-management from 11.39.1 to 11.39.2 in /apps/cloudinary2 in the production-dependencies group ([#3701](https://github.com/contentful/marketplace-partner-apps/issues/3701)) ([fc5801f](https://github.com/contentful/marketplace-partner-apps/commit/fc5801f7bcb1f4f6c29d710bac1059e23f8d4b73))
+* **deps:** bump the production-dependencies group in /apps/cloudinary2 with 2 updates ([#3649](https://github.com/contentful/marketplace-partner-apps/issues/3649)) ([8a44eb5](https://github.com/contentful/marketplace-partner-apps/commit/8a44eb5f8c4e8ec0f3a7579e919b5de9a7f3d974))
+
 ## [1.1.4](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.1.3...cloudinary-assets-v1.1.4) (2024-11-08)
 
 
