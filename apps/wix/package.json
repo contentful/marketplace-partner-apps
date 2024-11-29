@@ -33,13 +33,13 @@
     "@types/node": "18.15.3",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
-    "@vitejs/plugin-react": "4.3.3",
-    "happy-dom": "15.11.6",
+    "@vitejs/plugin-react": "4.3.4",
+    "happy-dom": "15.11.7",
     "jsdom": "^24.1.1",
-    "prettier": "3.3.3",
+    "prettier": "3.4.1",
     "typescript": "5.7.2",
     "vite": "5.4.11",
     "vite-plugin-mkcert": "^1.17.6",
-    "vitest": "2.1.5"
+    "vitest": "2.1.6"
   }
 }
