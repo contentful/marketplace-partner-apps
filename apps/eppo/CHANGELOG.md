@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/contentful/marketplace-partner-apps/compare/eppo-contentful-app-v1.0.1...eppo-contentful-app-v1.0.2) (2024-11-26)
+
+
+### Bug Fixes
+
+* **deps:** bump cross-spawn from 7.0.3 to 7.0.5 in /apps/eppo ([#3621](https://github.com/contentful/marketplace-partner-apps/issues/3621)) ([ae601b3](https://github.com/contentful/marketplace-partner-apps/commit/ae601b3d60914f701c869adf0104f3d56865f2ba))
+
 ## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/eppo-contentful-app-v1.0.0...eppo-contentful-app-v1.0.1) (2024-11-08)
 
 

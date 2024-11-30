@@ -1,15 +1,15 @@
 {
   "name": "ceros-contentful-app",
-  "version": "1.0.23",
+  "version": "1.0.24",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "^4.29.3",
-    "@contentful/f36-components": "4.74.2",
+    "@contentful/f36-components": "4.74.3",
     "@contentful/f36-tokens": "4.1.0",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "11.13.5",
     "@extractus/oembed-extractor": "^4.0.5",
-    "contentful-management": "11.39.1",
+    "contentful-management": "11.40.0",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
@@ -46,11 +46,11 @@
     "@types/node": "18.15.3",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
-    "@vitejs/plugin-react": "^4.3.3",
-    "happy-dom": "^15.11.6",
+    "@vitejs/plugin-react": "^4.3.4",
+    "happy-dom": "^15.11.7",
     "typescript": "^5.7.2",
     "vite": "^5.4.11",
-    "vitest": "^2.1.5"
+    "vitest": "^2.1.6"
   },
   "homepage": "."
 }

@@ -1,6 +1,6 @@
 {
   "name": "uploadcare-contentful-app",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "private": true,
   "scripts": {
     "install-ci": "npm ci",
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@contentful/app-sdk": "4.29.3",
-    "@contentful/f36-components": "4.74.2",
+    "@contentful/f36-components": "4.74.3",
     "@contentful/f36-icons": "4.29.0",
     "@contentful/f36-tokens": "4.1.0",
     "@contentful/react-apps-toolkit": "1.2.16",
@@ -24,7 +24,7 @@
     "@emotion/css": "11.13.5",
     "@uploadcare/blocks": "0.35.2",
     "@uploadcare/upload-client": "6.14.2",
-    "contentful-management": "11.39.1",
+    "contentful-management": "11.40.0",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },

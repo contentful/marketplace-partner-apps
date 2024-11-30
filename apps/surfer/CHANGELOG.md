@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.27](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.26...surfer-contentful-app-v1.0.27) (2024-11-26)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.74.1 to 4.74.2 in /apps/surfer in the production-dependencies group ([#3630](https://github.com/contentful/marketplace-partner-apps/issues/3630)) ([2d0f55f](https://github.com/contentful/marketplace-partner-apps/commit/2d0f55f01fc32a13bb4c716e64ee653067f1479f))
+* **deps:** bump @emotion/css from 11.13.4 to 11.13.5 in /apps/surfer in the production-dependencies group ([#3650](https://github.com/contentful/marketplace-partner-apps/issues/3650)) ([0a4a814](https://github.com/contentful/marketplace-partner-apps/commit/0a4a8149e86a98f8f8ea3cb035810a6d41d6d37f))
+* **deps:** bump contentful-management from 11.36.2 to 11.37.0 in /apps/surfer in the production-dependencies group ([#3568](https://github.com/contentful/marketplace-partner-apps/issues/3568)) ([ae66c08](https://github.com/contentful/marketplace-partner-apps/commit/ae66c0832550eb49472b401eb0bd4bad6e7bc51e))
+* **deps:** bump contentful-management from 11.37.0 to 11.38.0 in /apps/surfer in the production-dependencies group ([#3608](https://github.com/contentful/marketplace-partner-apps/issues/3608)) ([3b2daa2](https://github.com/contentful/marketplace-partner-apps/commit/3b2daa2c2a5609ff0e1d0952b884e86865aaa7c0))
+* **deps:** bump contentful-management from 11.38.0 to 11.39.1 in /apps/surfer in the production-dependencies group ([#3668](https://github.com/contentful/marketplace-partner-apps/issues/3668)) ([abedb77](https://github.com/contentful/marketplace-partner-apps/commit/abedb7754a5fe8a7b5f292e97e06ffb6fd3c323c))
+* **deps:** bump contentful-management from 11.39.1 to 11.39.2 in /apps/surfer in the production-dependencies group ([#3699](https://github.com/contentful/marketplace-partner-apps/issues/3699)) ([892f24d](https://github.com/contentful/marketplace-partner-apps/commit/892f24df91f9be1b72b965b477584c986301b053))
+
 ## [1.0.26](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.25...surfer-contentful-app-v1.0.26) (2024-11-08)
 
 

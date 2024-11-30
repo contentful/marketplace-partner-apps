@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.9](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.1.8...adapt-essentials-asset-fields-v1.1.9) (2024-11-26)
+
+
+### Bug Fixes
+
+* **deps:** bump cross-spawn from 7.0.3 to 7.0.5 in /apps/adapt-essentials-asset-fields ([#3619](https://github.com/contentful/marketplace-partner-apps/issues/3619)) ([fbb756f](https://github.com/contentful/marketplace-partner-apps/commit/fbb756fa554afd79748111d7c5d227fd926750ba))
+* **deps:** bump the production-dependencies group in /apps/adapt-essentials-asset-fields with 2 updates ([#3635](https://github.com/contentful/marketplace-partner-apps/issues/3635)) ([6b7e50d](https://github.com/contentful/marketplace-partner-apps/commit/6b7e50deea053fd4e5732cde3d2711435cf1d85d))
+
 ## [1.1.8](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.1.7...adapt-essentials-asset-fields-v1.1.8) (2024-11-08)
 
 

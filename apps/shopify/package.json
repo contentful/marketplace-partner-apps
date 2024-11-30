@@ -1,18 +1,18 @@
 {
   "name": "@contentful/shopify-sku",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "private": true,
   "devDependencies": {
     "@contentful/app-scripts": "1.31.0",
     "@testing-library/react": "^16.0.1",
-    "@vitejs/plugin-react": "^4.3.3",
-    "happy-dom": "^15.11.6",
+    "@vitejs/plugin-react": "^4.3.4",
+    "happy-dom": "^15.11.7",
     "vite": "^5.4.11",
-    "vitest": "^2.1.5"
+    "vitest": "^2.1.6"
   },
   "dependencies": {
     "@contentful/ecommerce-app-base": "^4.0.9",
-    "@contentful/f36-components": "^4.74.2",
+    "@contentful/f36-components": "^4.74.3",
     "@contentful/f36-icons": "^4.28.2",
     "@contentful/f36-tokens": "^4.0.5",
     "@contentful/react-apps-toolkit": "^1.2.16",

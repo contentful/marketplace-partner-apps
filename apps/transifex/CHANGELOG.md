@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.2.9](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.2.8...transifex-contentful-app-v1.2.9) (2024-11-26)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.74.1 to 4.74.2 in /apps/transifex in the production-dependencies group ([#3639](https://github.com/contentful/marketplace-partner-apps/issues/3639)) ([ba671e7](https://github.com/contentful/marketplace-partner-apps/commit/ba671e77bae5eb76f259f39f624859bb07e237aa))
+* **deps:** bump @emotion/css from 11.13.4 to 11.13.5 in /apps/transifex in the production-dependencies group ([#3663](https://github.com/contentful/marketplace-partner-apps/issues/3663)) ([66fe113](https://github.com/contentful/marketplace-partner-apps/commit/66fe1136a93c3696a3b9c816183b5a640b8dee1a))
+* **deps:** bump @eslint/plugin-kit from 0.2.0 to 0.2.3 in /apps/transifex ([#3614](https://github.com/contentful/marketplace-partner-apps/issues/3614)) ([95f7e2c](https://github.com/contentful/marketplace-partner-apps/commit/95f7e2c16d82acd706472c19de4632a592bdad16))
+* **deps:** bump contentful-management from 11.36.2 to 11.37.0 in /apps/transifex in the production-dependencies group ([#3579](https://github.com/contentful/marketplace-partner-apps/issues/3579)) ([33b3413](https://github.com/contentful/marketplace-partner-apps/commit/33b3413482851841f6cfb3341c3ac5ad888dd754))
+* **deps:** bump contentful-management from 11.37.0 to 11.38.0 in /apps/transifex in the production-dependencies group ([#3609](https://github.com/contentful/marketplace-partner-apps/issues/3609)) ([e4b9901](https://github.com/contentful/marketplace-partner-apps/commit/e4b9901fa5b44c2b4966c538bf60e5b2c93b8542))
+* **deps:** bump contentful-management from 11.38.0 to 11.39.1 in /apps/transifex in the production-dependencies group ([#3669](https://github.com/contentful/marketplace-partner-apps/issues/3669)) ([2c2848b](https://github.com/contentful/marketplace-partner-apps/commit/2c2848bd482c3be07fe4ceaf27c758512cc720c4))
+* **deps:** bump contentful-management from 11.39.1 to 11.39.2 in /apps/transifex in the production-dependencies group ([#3707](https://github.com/contentful/marketplace-partner-apps/issues/3707)) ([b6ff488](https://github.com/contentful/marketplace-partner-apps/commit/b6ff488707ecd2b035c4964ca17618150a7b0f71))
+* **deps:** bump cross-spawn from 7.0.3 to 7.0.5 in /apps/transifex ([#3620](https://github.com/contentful/marketplace-partner-apps/issues/3620)) ([ed67d2b](https://github.com/contentful/marketplace-partner-apps/commit/ed67d2b595e2b708b881a394e4d7473baf9ac0fe))
+* **deps:** bump eslint from 9.14.0 to 9.15.0 in /apps/transifex in the production-dependencies group ([#3626](https://github.com/contentful/marketplace-partner-apps/issues/3626)) ([dfadb9e](https://github.com/contentful/marketplace-partner-apps/commit/dfadb9e41d47e23b308f01d8216a1d72960ce7fa))
+
 ## [1.2.8](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.2.7...transifex-contentful-app-v1.2.8) (2024-11-08)
 
 

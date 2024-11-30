@@ -1,6 +1,6 @@
 {
   "name": "voucherify-contentful-app",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "private": true,
   "scripts": {
     "start": "vite",
@@ -13,13 +13,13 @@
   },
   "dependencies": {
     "@contentful/app-sdk": "4.29.3",
-    "@contentful/f36-components": "4.74.2",
+    "@contentful/f36-components": "4.74.3",
     "@contentful/f36-icons": "4.29.0",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "11.13.5",
     "@emotion/react": "11.13.5",
     "@emotion/styled": "11.13.5",
-    "axios": "1.7.7",
+    "axios": "1.7.8",
     "http-status-codes": "2.3.0",
     "lodash": "4.17.21",
     "prop-types": "15.8.1",
@@ -30,12 +30,12 @@
   "devDependencies": {
     "@contentful/app-scripts": "1.31.0",
     "@testing-library/react": "^16.0.1",
-    "@vitejs/plugin-react": "^4.3.3",
+    "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.15.0",
     "eslint-plugin-react": "~7.37.2",
-    "happy-dom": "^15.11.6",
+    "happy-dom": "^15.11.7",
     "vite": "^5.4.11",
-    "vitest": "^2.1.5"
+    "vitest": "^2.1.6"
   },
   "browserslist": {
     "production": [
