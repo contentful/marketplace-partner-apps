@@ -161,7 +161,7 @@ const ConfigScreen = () => {
 
       sdk.app.setReady();
     })();
-  }, [sdk]);
+  }, [sdk, obfuscateApiKey]);
 
   return (
     <Flex flexDirection="column" className={css({ margin: '80px', maxWidth: '800px' })}>
