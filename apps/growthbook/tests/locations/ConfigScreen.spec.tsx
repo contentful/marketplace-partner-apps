@@ -39,7 +39,7 @@ describe('ConfigScreen component', () => {
     await act(async () => {
       ({ getByLabelText } = render(<ConfigScreen />));
     });
-    const input = getByLabelText('Growthbook API Server URL (defaults to Growthbook Cloud api.growthbook.io)', { selector: 'input' }) as HTMLInputElement;
+    const input = getByLabelText('Growthbook API Server URL (defaults to Growthbook Cloud api.growthbook.io)') as HTMLInputElement;
     fireEvent.change(input, { target: { value: 'https://new-url.com' } });
     expect(input.value).toBe('https://new-url.com');
   });
