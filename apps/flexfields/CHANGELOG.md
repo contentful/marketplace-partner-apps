@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.7](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.6...thrillworks-flex-fields-app-v1.2.7) (2024-12-06)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group across 1 directory with 7 updates ([#3814](https://github.com/contentful/marketplace-partner-apps/issues/3814)) ([c1cd62e](https://github.com/contentful/marketplace-partner-apps/commit/c1cd62ed7ffa651921fea3171619003e62e8f1d0))
+
 ## [1.2.6](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.5...thrillworks-flex-fields-app-v1.2.6) (2024-10-30)
 
 

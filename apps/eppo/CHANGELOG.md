@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/eppo-contentful-app-v1.0.2...eppo-contentful-app-v1.0.3) (2024-12-06)
+
+
+### Bug Fixes
+
+* **deps:** bump path-to-regexp and express in /apps/eppo ([#3826](https://github.com/contentful/marketplace-partner-apps/issues/3826)) ([d11d3e2](https://github.com/contentful/marketplace-partner-apps/commit/d11d3e2ae4c3f42489edc09fe43aea8c2643c463))
+
 ## [1.0.2](https://github.com/contentful/marketplace-partner-apps/compare/eppo-contentful-app-v1.0.1...eppo-contentful-app-v1.0.2) (2024-11-26)
 
 
