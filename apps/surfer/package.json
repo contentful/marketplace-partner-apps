@@ -39,9 +39,9 @@
     ]
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.31.0",
+    "@contentful/app-scripts": "1.31.1",
     "@testing-library/jest-dom": "6.6.3",
-    "@testing-library/react": "^16.0.1",
+    "@testing-library/react": "^16.1.0",
     "@types/jest": "29.5.14",
     "@types/node": "18.15.3",
     "@types/react": "18.3.12",
