@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/ls-contentful-app-v1.0.0...ls-contentful-app-v1.0.1) (2024-12-10)
+
+
+### Bug Fixes
+
+* **deps:** bump axios and contentful-management in /apps/livestory ([#3850](https://github.com/contentful/marketplace-partner-apps/issues/3850)) ([f1a501d](https://github.com/contentful/marketplace-partner-apps/commit/f1a501dfb1c86f5e74cecf69dd73d5abebb3fbf8))
+
 ## 1.0.0 (2024-11-08)
 
 
