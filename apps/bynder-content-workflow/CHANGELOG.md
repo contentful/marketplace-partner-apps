@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.7...bynder-content-workflow-v1.0.8) (2024-12-10)
+
+
+### Bug Fixes
+
+* **deps:** bump nanoid from 3.3.7 to 3.3.8 in /apps/bynder-content-workflow ([#3859](https://github.com/contentful/marketplace-partner-apps/issues/3859)) ([9351b4d](https://github.com/contentful/marketplace-partner-apps/commit/9351b4d9d1503c8f6b65af0303ddcc654f4d4cdf))
+
 ## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.6...bynder-content-workflow-v1.0.7) (2024-11-08)
 
 
