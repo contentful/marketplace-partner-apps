@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/raster-v1.0.3...raster-v1.0.4) (2024-12-10)
+
+
+### Bug Fixes
+
+* **deps:** bump nanoid from 3.3.7 to 3.3.8 in /apps/raster ([#3858](https://github.com/contentful/marketplace-partner-apps/issues/3858)) ([9527bb5](https://github.com/contentful/marketplace-partner-apps/commit/9527bb5812fa86319eb9b6cf586270dbf9e75db4))
+
 ## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/raster-v1.0.2...raster-v1.0.3) (2024-09-24)
 
 

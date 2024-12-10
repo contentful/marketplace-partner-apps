@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.7](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.6...thrillworks-flex-fields-app-v1.2.7) (2024-12-10)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/default-field-editors from 1.7.46 to 1.7.47 in /apps/flexfields in the production-dependencies group ([#3846](https://github.com/contentful/marketplace-partner-apps/issues/3846)) ([86aedd5](https://github.com/contentful/marketplace-partner-apps/commit/86aedd5d44ae21ead82dfc2018cec46239f9b91c))
+* **deps:** bump nanoid from 3.3.7 to 3.3.8 in /apps/flexfields ([#3861](https://github.com/contentful/marketplace-partner-apps/issues/3861)) ([50512f4](https://github.com/contentful/marketplace-partner-apps/commit/50512f4ce1dcaf576ffe7c938ebe638fa53c3178))
+* **deps:** bump the production-dependencies group across 1 directory with 7 updates ([#3814](https://github.com/contentful/marketplace-partner-apps/issues/3814)) ([c1cd62e](https://github.com/contentful/marketplace-partner-apps/commit/c1cd62ed7ffa651921fea3171619003e62e8f1d0))
+* **deps:** bump the production-dependencies group in /apps/flexfields with 2 updates ([#3857](https://github.com/contentful/marketplace-partner-apps/issues/3857)) ([4110b4e](https://github.com/contentful/marketplace-partner-apps/commit/4110b4ee61a9c157db52572c48f1154540a02fab))
+
 ## [1.2.6](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.5...thrillworks-flex-fields-app-v1.2.6) (2024-10-30)
 
 
