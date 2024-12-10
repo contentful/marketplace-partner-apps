@@ -10,8 +10,8 @@
     "@emotion/css": "11.13.5",
     "@extractus/oembed-extractor": "^4.0.5",
     "contentful-management": "11.40.2",
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
   },
   "scripts": {
     "start": "vite",
@@ -44,7 +44,7 @@
     "@tsconfig/create-react-app": "2.0.5",
     "@types/jest": "29.5.14",
     "@types/node": "18.15.3",
-    "@types/react": "18.3.13",
+    "@types/react": "19.0.1",
     "@types/react-dom": "18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
     "happy-dom": "^15.11.7",
