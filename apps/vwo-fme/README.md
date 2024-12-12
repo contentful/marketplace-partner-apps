@@ -1,6 +1,6 @@
-# VWO Feature Management & Experimentation (FME) 
+# VWO Feature Management & Experimentation
 
-This repository contains the source code for the VWO Feature Management & Experimentation (FME)  app.
+This repository contains the source code for the VWO Feature Management & Experimentation app.
 
 Refer the article: (https://help.vwo.com/hc/en-us/articles/40825355345177-Integrating-VWO-Feature-Flags-with-Contentful-CMS).
 
