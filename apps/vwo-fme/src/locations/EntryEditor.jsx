@@ -1,6 +1,5 @@
-import React, {useEffect, useCallback} from 'react';
+import React, {useEffect, useCallback, useReducer} from 'react';
 import { Skeleton, Modal, Paragraph, Button, Heading, Flex } from '@contentful/f36-components';
-import useMethods from 'use-methods';
 import { css } from 'emotion';
 import CreateFeatureFlag from '../components/CreateFeatureFlag';
 import tokens from '@contentful/f36-tokens';
@@ -18,44 +17,51 @@ const styles = {
   })
 };
 
-const methods = state => {
-  return {
-    setInitialData({featureFlag, contentTypes, entries, error }){
-      state.featureFlag = featureFlag;
-      state.contentTypes = contentTypes;
-      state.entries = entries;
-      state.error = error;
-    },
-    setLoading(loadingState){
-      state.loading = loadingState;
-    },
-    setCurrentStep(step){
-      state.currentStep = step;
-    },
-    setFeatureFlag(featureFlag){
-      state.featureFlag = featureFlag;
-    },
-    setEntries(entries){
-      state.entries = entries;
-    },
-    setError(message){
-      state.error = message;
-    },
-    setMeta(meta) {
-      state.meta = meta;
-    }
-  }
-}
-
-const getInitialValues = sdk => ({
+// Initial state
+const initialState = (sdk) => ({
   loading: true,
-  error: '',
+  error: "",
   currentStep: 1,
   contentTypes: [],
   meta: sdk.entry.fields.meta?.getValue() || {},
   featureFlag: sdk.entry.fields.featureFlag.getValue() || {},
-  entries: {}
-})
+  entries: {},
+});
+
+const actionTypes = {
+  SET_INITIAL_DATA: 'SET_INITIAL_DATA',
+  SET_LOADING: 'SET_LOADING',
+  SET_FEATURE_FLAG: 'SET_FEATURE_FLAG',
+  SET_ENTRIES: 'SET_ENTRIES',
+  SET_ERROR: 'SET_ERROR',
+  SET_META: 'SET_META',
+};
+
+// Reducer function
+const reducer = (state, action) => {
+  switch (action.type) {
+    case actionTypes.SET_INITIAL_DATA:
+      return {
+        ...state,
+        featureFlag: action.payload.featureFlag,
+        contentTypes: action.payload.contentTypes,
+        entries: action.payload.entries,
+        error: action.payload.error,
+      };
+    case actionTypes.SET_LOADING:
+      return { ...state, loading: action.payload };
+    case actionTypes.SET_FEATURE_FLAG:
+      return { ...state, featureFlag: action.payload };
+    case actionTypes.SET_ENTRIES:
+      return { ...state, entries: action.payload };
+    case actionTypes.SET_ERROR:
+      return { ...state, error: action.payload };
+    case actionTypes.SET_META:
+      return { ...state, meta: action.payload };
+    default:
+      return state;
+  }
+};
 
 const fetchInitialData = async (props) => {
   const { space } = props.sdk;
@@ -77,7 +83,7 @@ const fetchInitialData = async (props) => {
         throw new Error(message);
       }
     } catch (err) {
-      error = err;
+      error = err.message;
       props.sdk.notifier.error(err);
     }
   }
@@ -86,7 +92,7 @@ const fetchInitialData = async (props) => {
     featureFlag: featureFlag,
     contentTypes: contentTypes.items,
     entries: entries.items,
-    error
+    error: error
   }
 }
 
@@ -101,8 +107,7 @@ const getNewVariation = (variationName, vwoVariationsLength) => {
 }
 
 const EntryEditor = (props) => {
-  const globalState = useMethods(methods, getInitialValues(props.sdk));
-  const [state, actions] = globalState;
+  const [state, dispatch] = useReducer(reducer, props.sdk, initialState);
 
   const updateVariationsInVwo = async (vwoVariations) => {
     return new Promise(async (resolve, reject) => {
@@ -113,7 +118,7 @@ const EntryEditor = (props) => {
         }
         else if(response && response._errors?.length){
           if(response._errors[0].code === 404){
-            actions.setError(response._errors[0].message);
+            dispatch({ type: actionTypes.SET_ERROR, payload: response._errors[0].message });
           }
           reject(response._errors[0].message);
         }
@@ -132,13 +137,13 @@ const EntryEditor = (props) => {
         const response = await props.client.updateFeatureFlag(updatedFeatureFlag);
         if(response && response._data){
           props.sdk.entry.fields.featureFlag.setValue(response._data);
-          actions.setFeatureFlag(response._data);
-          actions.setError('');
+          dispatch({ type: actionTypes.SET_FEATURE_FLAG, payload: response._data });
+          dispatch({ type: actionTypes.SET_ERROR, payload: '' });
           resolve(response._data);
         }
         else if(response && response._errors?.length){
           if(response._errors[0].code === 404){
-            actions.setError(response._errors[0].message);
+            dispatch({ type: actionTypes.SET_ERROR, payload: response._errors[0].message });
           }
           reject(response._errors[0].message);
         }
@@ -149,7 +154,7 @@ const EntryEditor = (props) => {
         reject(err.message)
       }
     });
-  }, [props.client, actions, props.sdk.entry.fields.featureFlag]);
+  }, [props.client, props.sdk.entry.fields.featureFlag]);
 
   const updateVwoVariationName = async (vwoVariation, variationName) => {
     const updatedVwoVariations = state.featureFlag.variations.map(variation => {
@@ -162,7 +167,7 @@ const EntryEditor = (props) => {
     return updateVariationsInVwo(updatedVwoVariations)
     .then(variations => {
       variations.sort((a,b) => b.id-a.id);
-      actions.setVwoVariations(variations);
+      dispatch({ type: actionTypes.SET_ENTRIES, payload: variations });
       props.sdk.notifier.success('VWO Variation name updated successfully');
       return true;
     })
@@ -181,7 +186,7 @@ const EntryEditor = (props) => {
       variations.sort((a,b) => b.id-a.id);
       let featureFlag = state.featureFlag;
       featureFlag.variations = variations;
-      actions.setFeatureFlag(featureFlag);
+      dispatch({ type: actionTypes.SET_FEATURE_FLAG, payload: featureFlag });
       props.sdk.entry.fields.featureFlag.setValue(featureFlag);
       props.sdk.notifier.success('VWO Variation added successfully');
       return true;
@@ -201,12 +206,12 @@ const EntryEditor = (props) => {
             }
             return entry;
           });
-          actions.setEntries(entries);
+          dispatch({ type: actionTypes.SET_ENTRIES, payload: entries });
       });
     } else {
-      props.sdk.space.getEntries({ skip: 0, limit: 1000}).then(resp => actions.setEntries(resp.items));
+      props.sdk.space.getEntries({ skip: 0, limit: 1000}).then(resp => dispatch({ type: actionTypes.SET_ENTRIES, payload: resp.items }));
     }
-  }, [props.sdk.space, actions]);
+  }, [props.sdk.space]);
 
   const updateVwoVariationContent = async (variation, contentId, updateEntries) => {
     // Default variation cannot be edited directly. Update variable instead and default variations will be updated
@@ -221,7 +226,7 @@ const EntryEditor = (props) => {
       updateFeatureFlagDetails(featureFlag)
       .then(updatedFeatureFlag => {
         updatedFeatureFlag.variations.sort((a,b) => b.id-a.id);
-        actions.setFeatureFlag(updatedFeatureFlag);
+        dispatch({ type: actionTypes.SET_FEATURE_FLAG, payload: updatedFeatureFlag });
         props.sdk.entry.fields.featureFlag.setValue(updatedFeatureFlag);
         if(updateEntries){
           updateContentfulEntries();
@@ -245,7 +250,7 @@ const EntryEditor = (props) => {
         variations.sort((a,b) => b.id-a.id);
         let featureFlag = state.featureFlag;
         featureFlag.variations = variations;
-        actions.setFeatureFlag(featureFlag);
+        dispatch({ type: actionTypes.SET_FEATURE_FLAG, payload: featureFlag });
         props.sdk.entry.fields.featureFlag.setValue(featureFlag);
         if(updateEntries){
           updateContentfulEntries();
@@ -266,14 +271,14 @@ const EntryEditor = (props) => {
           featureFlag.variations = [resp._data.variations];
           props.sdk.entry.fields.title.setValue(featureFlag.name);
           props.sdk.entry.fields.featureFlag.setValue(featureFlag);
-          actions.setFeatureFlag(featureFlag);
-          actions.setCurrentStep(3);
-          actions.setError('');
+          dispatch({ type: actionTypes.SET_FEATURE_FLAG, payload: featureFlag });
+          dispatch({ type: actionTypes.SET_CURRENT_STEP, payload: 3 });
+          dispatch({ type: actionTypes.SET_ERROR, payload: '' });
           props.sdk.notifier.success('Feature flag created successfully');
         }
         else if(resp && resp._errors?.length){
           if(resp._errors[0].code === 404){
-            actions.setError(resp._errors[0].message);
+            dispatch({ type: actionTypes.SET_ERROR, payload: resp._errors[0].message });
           }
           props.sdk.notifier.error(resp._errors[0].message);
         }
@@ -331,27 +336,26 @@ const EntryEditor = (props) => {
   useEffect( () => {
     fetchInitialData(props)
       .then(data => {
-        actions.setInitialData(data);
+        dispatch({ type: actionTypes.SET_INITIAL_DATA, payload: data });
         return data;
       })
       .catch(() => {
         props.sdk.notifier.error('Unable to load initial data');
       })
       .finally(() => {
-        actions.setLoading(false);
+        dispatch({ type: actionTypes.SET_LOADING, payload: false });
       });
-  }, [props.client, actions, props]);
+  }, [props.client, props]);
 
   useEffect(() => {
     const unsubscribeMetaChange = props.sdk.entry.fields.meta.onValueChanged(data => {
-      actions.setMeta(data || {});
+      dispatch({ type: actionTypes.SET_META, payload: data || {} });
     });
 
     return () => {
       unsubscribeMetaChange();
     }
   },[
-    actions,
     props.sdk.entry.fields.meta
   ]);
 
@@ -378,7 +382,7 @@ const EntryEditor = (props) => {
             updateVwoVariationContent={updateVwoVariationContent}
             entries = {state.entries}/>
         }
-        <Modal onClose={() => actions.setError('')} isShown={!!state.error && !state.loading}>
+        <Modal onClose={() => dispatch({ type: actionTypes.SET_ERROR, payload: '' })} isShown={!!state.error && !state.loading}>
           {() => (
             <>
               <Flex alignItems='center' justifyContent='center' flexDirection='column' padding='spacingL'>
