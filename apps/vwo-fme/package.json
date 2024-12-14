@@ -12,8 +12,7 @@
     "lodash": "^4.17.21",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "react-scripts": "5.0.1",
-    "use-methods": "^0.5.1"
+    "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "cross-env BROWSER=none react-scripts start",
@@ -22,6 +21,7 @@
     "eject": "react-scripts eject",
     "create-app-definition": "contentful-app-scripts create-app-definition",
     "upload": "contentful-app-scripts upload --bundle-dir ./build",
+    "install-ci": "npm install --legacy-peer-deps",
     "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN"
   },
   "eslintConfig": {
