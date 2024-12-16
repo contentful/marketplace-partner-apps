@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@contentful/app-sdk": "4.29.3",
-    "@contentful/f36-components": "4.75.0",
+    "@contentful/f36-components": "4.75.1",
     "@contentful/f36-icons": "4.29.0",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "11.13.5",
@@ -24,14 +24,14 @@
     "lodash": "4.17.21",
     "prop-types": "15.8.1",
     "react": "18.3.1",
-    "react-hook-form": "7.54.0",
+    "react-hook-form": "7.54.1",
     "react-router-dom": "6.28.0"
   },
   "devDependencies": {
     "@contentful/app-scripts": "1.31.1",
     "@testing-library/react": "^16.1.0",
     "@vitejs/plugin-react": "^4.3.4",
-    "eslint": "^9.16.0",
+    "eslint": "^9.17.0",
     "eslint-plugin-react": "~7.37.2",
     "happy-dom": "^15.11.7",
     "vite": "^5.4.11",

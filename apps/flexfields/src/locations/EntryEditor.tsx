@@ -10,6 +10,7 @@ import { type Rule } from "../types/Rule";
 import "codemirror/lib/codemirror.css";
 import DefaultField, { DefaultFieldProps } from "../components/DefaultField";
 import type { ContentFields, KeyValueMap } from "contentful-management/types";
+import { css } from "@emotion/css";
 
 const NoLocalizedFields = (props: { localeName: string }) => (
   <Stack flexDirection="column" alignItems="center" alignContent="center">
@@ -75,8 +76,14 @@ const EntryEditor = () => {
   let hasLocailizedFields = false;
   return (
     <Workbench>
-      <Workbench.Content type="text" style={{ paddingBottom: "200px" }}>
+      <Workbench.Content type="text" style={{ padding: '1.5rem 0px 200px' }}>
         <Form
+          className={css`
+            div {
+              margin-left: 0;
+              margin-right: 0;
+            }
+          `}
           onChange={(ev: any) => {
             const { id, value } = ev.target;
             // ev.target.id looks like fieldId-locale-contentTypeId
