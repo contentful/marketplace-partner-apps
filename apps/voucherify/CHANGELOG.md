@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.27](https://github.com/contentful/marketplace-partner-apps/compare/voucherify-contentful-app-v1.0.26...voucherify-contentful-app-v1.0.27) (2024-12-19)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.74.3 to 4.75.0 in /apps/voucherify in the production-dependencies group ([#3880](https://github.com/contentful/marketplace-partner-apps/issues/3880)) ([db35039](https://github.com/contentful/marketplace-partner-apps/commit/db350390a54eeba46027bddf7aa318c6acaea9d7))
+* **deps:** bump @contentful/f36-components from 4.75.1 to 4.75.2 in /apps/voucherify in the production-dependencies group ([#3898](https://github.com/contentful/marketplace-partner-apps/issues/3898)) ([420a23b](https://github.com/contentful/marketplace-partner-apps/commit/420a23b6deee2d82f15a30570bc4f71231f18ce9))
+* **deps:** bump the production-dependencies group in /apps/voucherify with 2 updates ([#3885](https://github.com/contentful/marketplace-partner-apps/issues/3885)) ([230d61b](https://github.com/contentful/marketplace-partner-apps/commit/230d61bd489cd3cfa6c5b0d4f4302916966ce2f6))
+
 ## [1.0.26](https://github.com/contentful/marketplace-partner-apps/compare/voucherify-contentful-app-v1.0.25...voucherify-contentful-app-v1.0.26) (2024-12-10)
 
 
