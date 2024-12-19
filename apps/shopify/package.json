@@ -11,7 +11,7 @@
     "vitest": "^2.1.8"
   },
   "dependencies": {
-    "@contentful/ecommerce-app-base": "^4.0.9",
+    "@contentful/ecommerce-app-base": "^4.0.32",
     "@contentful/f36-components": "^4.75.2",
     "@contentful/f36-icons": "^4.28.2",
     "@contentful/f36-tokens": "^4.0.5",
