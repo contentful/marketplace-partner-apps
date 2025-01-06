@@ -8,7 +8,7 @@
     "vite": "^3.2.11"
   },
   "dependencies": {
-    "@contentful/dam-app-base": "^2.0.55",
+    "@contentful/dam-app-base": "^3.0.9",
     "@frontify/frontify-finder": "^2.2.0"
   },
   "scripts": {
