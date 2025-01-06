@@ -114,7 +114,6 @@ const EntryEditor = () => {
               );
               control = { ...control, widgetId };
             }
-
             // mode = 'single':
             //    use `focused`
             //    no default locale
