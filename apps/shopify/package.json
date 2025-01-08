@@ -12,12 +12,12 @@
   },
   "dependencies": {
     "@contentful/ecommerce-app-base": "^4.0.32",
-    "@contentful/f36-components": "^4.75.3",
+    "@contentful/f36-components": "^4.75.4",
     "@contentful/f36-icons": "^4.28.2",
     "@contentful/f36-tokens": "^4.0.5",
     "@contentful/react-apps-toolkit": "^1.2.16",
     "@emotion/css": "^11.13.5",
-    "core-js": "3.39.0",
+    "core-js": "3.40.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "shopify-buy": "2.22.0"
