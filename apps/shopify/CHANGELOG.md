@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.0.10](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.0.9...shopify-sku-v2.0.10) (2025-01-08)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/ecommerce-app-base from 4.0.9 to 4.0.32 in /apps/shopify in the production-dependencies group ([#3911](https://github.com/contentful/marketplace-partner-apps/issues/3911)) ([24c10a3](https://github.com/contentful/marketplace-partner-apps/commit/24c10a31d01c9c8b77e13ab5734af8d5d87eeb6e))
+* **deps:** bump @contentful/f36-components from 4.74.3 to 4.75.0 in /apps/shopify in the production-dependencies group ([#3878](https://github.com/contentful/marketplace-partner-apps/issues/3878)) ([f29fb5a](https://github.com/contentful/marketplace-partner-apps/commit/f29fb5ac294d7dc2099360c84d4d5e74b7a03956))
+* **deps:** bump @contentful/f36-components from 4.75.0 to 4.75.1 in /apps/shopify in the production-dependencies group ([#3882](https://github.com/contentful/marketplace-partner-apps/issues/3882)) ([17cf559](https://github.com/contentful/marketplace-partner-apps/commit/17cf5590883bd06c3fb850488ec543429ea013ce))
+* **deps:** bump @contentful/f36-components from 4.75.1 to 4.75.2 in /apps/shopify in the production-dependencies group ([#3896](https://github.com/contentful/marketplace-partner-apps/issues/3896)) ([b4532b4](https://github.com/contentful/marketplace-partner-apps/commit/b4532b4f4117e026d11509c49a8b7de7f961ba17))
+* **deps:** bump @contentful/f36-components from 4.75.2 to 4.75.3 in /apps/shopify in the production-dependencies group ([#4023](https://github.com/contentful/marketplace-partner-apps/issues/4023)) ([89468cd](https://github.com/contentful/marketplace-partner-apps/commit/89468cd6d42659f7fff32a07288f352a8e26e9c7))
+* **deps:** bump the production-dependencies group in /apps/shopify with 2 updates ([#4032](https://github.com/contentful/marketplace-partner-apps/issues/4032)) ([7a5a04b](https://github.com/contentful/marketplace-partner-apps/commit/7a5a04be04032a3ed4bb6f3b8a739a1d5db235f1))
+
 ## [2.0.9](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.0.8...shopify-sku-v2.0.9) (2024-12-10)
 
 

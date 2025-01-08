@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.8](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.7...thrillworks-flex-fields-app-v1.2.8) (2025-01-08)
+
+
+### Bug Fixes
+
+* styling in flexfields: wrapper-width ([#3862](https://github.com/contentful/marketplace-partner-apps/issues/3862)) ([0796c87](https://github.com/contentful/marketplace-partner-apps/commit/0796c875d95dd3c4daa19ea5d4543856df36b3a6))
+
 ## [1.2.7](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.6...thrillworks-flex-fields-app-v1.2.7) (2024-12-10)
 
 

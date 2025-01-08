@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.6](https://github.com/contentful/marketplace-partner-apps/compare/amplitude-contentful-v1.0.5...amplitude-contentful-v1.0.6) (2025-01-08)
+
+
+### Bug Fixes
+
+* **deps:** bump nanoid from 3.3.7 to 3.3.8 in /apps/amplitude-experiment ([#3888](https://github.com/contentful/marketplace-partner-apps/issues/3888)) ([432e95c](https://github.com/contentful/marketplace-partner-apps/commit/432e95ca6247b6c95f7d459c03323c46c2d54168))
+
 ## [1.0.5](https://github.com/contentful/marketplace-partner-apps/compare/amplitude-contentful-v1.0.4...amplitude-contentful-v1.0.5) (2024-10-30)
 
 
