@@ -36,6 +36,7 @@ const generateFlagKey = (entryName: string) => {
   const lowerSnakeCaseEntryName = entryName
     .replace(/\s+/g, '-')
     .replace(/[^a-zA-Z0-9-]/g, '')
+    .replace(/-+/g, '-')
     .toLowerCase();
   return `${lowerSnakeCaseEntryName}-${Date.now()}`;
 };
