@@ -114,7 +114,6 @@ const EntryEditor = () => {
               );
               control = { ...control, widgetId };
             }
-
             // mode = 'single':
             //    use `focused`
             //    no default locale
@@ -124,6 +123,7 @@ const EntryEditor = () => {
             if (localeSetings.mode === "multi") {
               return (
                 <>
+                  <div data-field-id={entryId} data-field-api-name={field.id}>
                   <DefaultField
                     key={`${field.id}-${sdk.locales.default}`}
                     name={field.name}
@@ -149,6 +149,7 @@ const EntryEditor = () => {
                           locale={locale}
                         />
                       ))}
+               </div>
                 </>
               );
             } else if (
@@ -157,6 +158,7 @@ const EntryEditor = () => {
             ) {
               hasLocailizedFields = true;
               return (
+              <div data-field-id={entryId} data-field-api-name={field.id}>
                 <DefaultField
                   key={`${field.id}-${localeSetings.focused}`}
                   name={field.name}
@@ -164,6 +166,7 @@ const EntryEditor = () => {
                   control={control}
                   locale={field.localized ? localeSetings.focused : undefined}
                 />
+                </div>
               );
             }
             return null;
