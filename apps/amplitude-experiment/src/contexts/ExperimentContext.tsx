@@ -1,6 +1,6 @@
-import { createContext, useEffect, useMemo, useState } from "react";
-import { AmplitudeExperimentApi } from "../utils/amplitude";
-import { useSDK } from "@contentful/react-apps-toolkit";
+import { createContext, useEffect, useMemo, useState } from 'react';
+import { AmplitudeExperimentApi } from '../utils/amplitude';
+import { useSDK } from '@contentful/react-apps-toolkit';
 
 export interface Variant {
   [key: string]: string;
@@ -15,6 +15,7 @@ export interface TargetSegmentCondition {
   type: string;
   values: Array<string>;
 }
+
 export interface TargetSegment {
   bucketingKey: string;
   conditions: Array<TargetSegmentCondition>;
@@ -24,9 +25,9 @@ export interface TargetSegment {
 }
 
 export declare enum ExperimentDecision {
-  ROLLOUT = "rollout",
-  ROLLBACK = "rollback",
-  CONTINUE_RUNNING = "continue-running",
+  ROLLOUT = 'rollout',
+  ROLLBACK = 'rollback',
+  CONTINUE_RUNNING = 'continue-running',
 }
 
 export interface Experiment {
@@ -53,8 +54,31 @@ export interface Experiment {
   rolloutWeights: RolloutWeights;
 }
 
+export interface Flag {
+  bucketingKey: string;
+  bucketingSalt: string;
+  bucketingUnit: string;
+  decision: ExperimentDecision | null;
+  deleted: boolean;
+  description: string;
+  evaluationMode: string;
+  enabled: boolean;
+  id: string;
+  projectId: string;
+  deployments: Array<string>;
+  key: string;
+  name: string;
+  variants: Array<Variant>;
+  targetSegments: Array<TargetSegment>;
+  rolloutPercentage: number;
+  stickyBucketing: boolean;
+  tags: Array<string>;
+  rolledOutVariant: string | null; // variant key
+  rolloutWeights: RolloutWeights;
+}
+
 interface ExperimentContextProps {
-  experiments: Array<Experiment>;
+  experiments: Array<Experiment | Flag>;
   loading: boolean;
   amplitudeExperimentApi: AmplitudeExperimentApi | null;
 }
@@ -65,40 +89,26 @@ export const ExperimentContext = createContext<ExperimentContextProps>({
   amplitudeExperimentApi: null,
 });
 
-export const ExperimentProvider = ({
-  children,
-}: {
-  children: React.ReactElement;
-}) => {
+export const ExperimentProvider = ({ children }: { children: React.ReactElement }) => {
   const sdk = useSDK();
-  const [experiments, setExperiments] = useState<Experiment[]>([]);
+  const [experiments, setExperiments] = useState<(Experiment | Flag)[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const amplitudeExperimentApi = useMemo(
-    () =>
-      new AmplitudeExperimentApi(
-        sdk.parameters.installation.managementApiKey,
-        sdk.parameters.installation.datacenter
-      ),
-    [
-      sdk.parameters.installation.managementApiKey,
-      sdk.parameters.installation.datacenter,
-    ]
+    () => new AmplitudeExperimentApi(sdk.parameters.installation.managementApiKey, sdk.parameters.installation.datacenter),
+    [sdk.parameters.installation.managementApiKey, sdk.parameters.installation.datacenter]
   );
 
   useEffect(() => {
     const fetchExperiments = async () => {
       setLoading(true);
-      const experiments = await amplitudeExperimentApi.listAllExperiments();
-      return experiments;
+      const experiments = await amplitudeExperimentApi.listAllResources(true);
+      const flags = await amplitudeExperimentApi.listAllResources();
+      return [...experiments, ...flags];
     };
     fetchExperiments().then((experiments) => {
       setExperiments(experiments);
       setLoading(false);
     });
   }, [amplitudeExperimentApi]);
-  return (
-    <ExperimentContext.Provider value={{ experiments, loading, amplitudeExperimentApi }}>
-      {children}
-    </ExperimentContext.Provider>
-  );
+  return <ExperimentContext.Provider value={{ experiments, loading, amplitudeExperimentApi }}>{children}</ExperimentContext.Provider>;
 };

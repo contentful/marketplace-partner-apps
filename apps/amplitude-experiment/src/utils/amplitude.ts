@@ -1,10 +1,10 @@
-import { Experiment } from "../contexts/ExperimentContext";
+import { Experiment, Flag } from '../contexts/ExperimentContext';
 
-const US_BASE_URL = "https://experiment.amplitude.com/api/1";
-const EU_BASE_URL = "https://experiment.eu.amplitude.com/api/1";
+const US_BASE_URL = 'https://experiment.amplitude.com/api/1';
+const EU_BASE_URL = 'https://experiment.eu.amplitude.com/api/1';
 const LIMIT = 1000;
 
-export type Datacenter = "US" | "EU";
+export type Datacenter = 'US' | 'EU';
 
 export class AmplitudeExperimentApi {
   token: string;
@@ -12,7 +12,7 @@ export class AmplitudeExperimentApi {
 
   constructor(token: string, datacenter: Datacenter) {
     this.token = token;
-    this.baseUrl = datacenter === "US" ? US_BASE_URL : EU_BASE_URL;
+    this.baseUrl = datacenter === 'US' ? US_BASE_URL : EU_BASE_URL;
   }
   fetchWithAuth(url: string) {
     return fetch(url, {
@@ -22,34 +22,27 @@ export class AmplitudeExperimentApi {
     });
   }
 
-  async listAllExperiments() {
+  async listAllResources(isExperiment?: boolean) {
     let cursor;
-    const allExperiments: Array<Experiment> = [];
+    const allResources: Array<Experiment | Flag> = [];
 
-    const { experiments, nextCursor } = await this.listExperiments();
-    cursor = nextCursor;
-    allExperiments.push(...experiments);
+    do {
+      const { experiments, flags, nextCursor } = await this.listResources(cursor, isExperiment);
+      const resources = isExperiment ? experiments : flags;
+      allResources.push(...resources);
+      cursor = nextCursor;
+    } while (cursor);
 
-    while (cursor) {
-      const res = await this.listExperiments(cursor);
-      let nCursor = res.nextCursor, nExperiments = res.experiments;
-      allExperiments.push(...nExperiments);
-      cursor = nCursor;
-    }
-    return allExperiments;
+    return allResources;
   }
 
-  async listExperiments(cursor?: string) {
-    const response = await this.fetchWithAuth(
-      `${this.baseUrl}/experiments?limit=${LIMIT}${cursor ? "&cursor=" + cursor : ''}`
-    );
+  async listResources(cursor?: string, isExperiment?: boolean) {
+    const response = await this.fetchWithAuth(`${this.baseUrl}/${isExperiment ? 'experiments' : 'flags'}?limit=${LIMIT}${cursor ? '&cursor=' + cursor : ''}`);
     return response.json();
   }
 
-  async getExperimentDetails(experimentId: string) {
-    const response = await this.fetchWithAuth(
-      `${this.baseUrl}/experiments/${experimentId}`
-    );
+  async getResourceDetails(id: string, isExperiment?: boolean) {
+    const response = await this.fetchWithAuth(`${this.baseUrl}/${isExperiment ? 'experiments' : 'flags'}/${id}`);
     return response.json();
   }
 }

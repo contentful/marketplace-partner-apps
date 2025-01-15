@@ -12,7 +12,7 @@ Run
 yarn install && yarn start
 ```
 
-To test locally, create an app definition that points to `localhost:3000` for the App URL and register the `App configuration screen`, `Entry sidebar`, and `Entry editor` locations.
+To test locally, create an app definition that points to `localhost:5173` for the App URL and register the `App configuration screen`, `Entry sidebar`, and `Entry editor` locations.
 
 ## [Privacy Policy](https://amplitude.com/privacy)
 

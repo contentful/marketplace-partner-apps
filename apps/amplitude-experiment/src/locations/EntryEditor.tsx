@@ -1,4 +1,4 @@
-import { EditorAppSDK } from "@contentful/app-sdk";
+import { EditorAppSDK } from '@contentful/app-sdk';
 
 import {
   Autocomplete,
@@ -13,42 +13,21 @@ import {
   FormControl,
   Heading,
   MenuItem,
-  Note, Popover,
+  Note,
+  Popover,
   SectionHeading,
-  Stack
-} from "@contentful/f36-components";
-import { useSDK } from "@contentful/react-apps-toolkit";
-import {
-  ContentTypeProps,
-  EntryProps,
-  KeyValueMap,
-  MetaSysProps,
-} from "contentful-management";
-import { cloneDeep } from "lodash";
-import get from "lodash/get";
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { ContentTypesContext } from "../contexts/ContentTypesContext";
-import {
-  Experiment,
-  ExperimentContext
-} from "../contexts/ExperimentContext";
+  Stack,
+} from '@contentful/f36-components';
+import { useSDK } from '@contentful/react-apps-toolkit';
+import { ContentTypeProps, EntryProps, KeyValueMap, MetaSysProps } from 'contentful-management';
+import { cloneDeep } from 'lodash';
+import get from 'lodash/get';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { ContentTypesContext } from '../contexts/ContentTypesContext';
+import { Experiment, ExperimentContext, Flag } from '../contexts/ExperimentContext';
 import useInterval from '../utils/use-interval';
 
-const PopoverWrapper = ({
-  children,
-  buttonText,
-  buttonProps,
-}: {
-  children: JSX.Element;
-  buttonText: string;
-  buttonProps?: { [key: string]: string };
-}) => {
+const PopoverWrapper = ({ children, buttonText, buttonProps }: { children: JSX.Element; buttonText: string; buttonProps?: { [key: string]: string } }) => {
   const [modalShown, setModalShown] = useState(false);
 
   return (
@@ -65,30 +44,19 @@ const PopoverWrapper = ({
   );
 };
 
-const ContentTypeField = ({
-  variantName,
-  setVariants,
-}: {
-  variantName: string;
-  setVariants: (variants: EntryProps[] | undefined) => void;
-}) => {
+const ContentTypeField = ({ variantName, setVariants }: { variantName: string; setVariants: (variants: EntryProps[] | undefined) => void }) => {
   const sdk = useSDK<EditorAppSDK>();
   const { contentTypes } = useContext(ContentTypesContext);
   const [filteredItems, setFilteredItems] = React.useState(contentTypes);
 
   const handleInputValueChange = (value: string) => {
-    const newFilteredItems = contentTypes.filter((item) =>
-      item.name.toLowerCase().includes(value.toLowerCase())
-    );
+    const newFilteredItems = contentTypes.filter((item) => item.name.toLowerCase().includes(value.toLowerCase()));
     setFilteredItems(newFilteredItems);
   };
 
-  const handleChangeVariant = (
-    variantName: string,
-    metaSysPropsId?: string
-  ) => {
+  const handleChangeVariant = (variantName: string, metaSysPropsId?: string) => {
     if (!metaSysPropsId) {
-      throw new Error("Missing prop id");
+      throw new Error('Missing prop id');
     }
     const values = sdk.entry.fields.variants.getValue() ?? [];
     const meta = sdk.entry.fields.meta.getValue() ?? {};
@@ -102,9 +70,9 @@ const ContentTypeField = ({
       ...values,
       {
         sys: {
-          type: "Link",
+          type: 'Link',
           id: metaSysPropsId,
-          linkType: "Entry",
+          linkType: 'Entry',
         },
       },
     ];
@@ -113,10 +81,7 @@ const ContentTypeField = ({
     sdk.entry.fields.variants.setValue(newVariants);
   };
 
-  const handleSelectItem = async (
-    item: ContentTypeProps,
-    variantName: string
-  ) => {
+  const handleSelectItem = async (item: ContentTypeProps, variantName: string) => {
     const data = await sdk.navigator.openNewEntry(item.sys.id, {
       slideIn: true,
     });
@@ -145,37 +110,24 @@ const ContentTypeField = ({
     <Stack>
       <PopoverWrapper buttonText="Create new content type">
         <>
-          <FormControl.Label isRequired>
-            Contently Content Type
-          </FormControl.Label>
+          <FormControl.Label isRequired>Contently Content Type</FormControl.Label>
           <Autocomplete
             items={filteredItems}
             onInputValueChange={handleInputValueChange}
-            onSelectItem={(item: ContentTypeProps) =>
-              handleSelectItem(item, variantName)
-            }
+            onSelectItem={(item: ContentTypeProps) => handleSelectItem(item, variantName)}
             itemToString={(item) => item.name}
             renderItem={(item) => `${item.name} (${item.sys.id})`}
           />
         </>
       </PopoverWrapper>
-      <Button
-        variant="positive"
-        onClick={() => handleLinkExistingClick(variantName)}
-      >
+      <Button variant="positive" onClick={() => handleLinkExistingClick(variantName)}>
         Link an existing entry
       </Button>
     </Stack>
   );
 };
 
-const VariantPlaceholder = ({
-  variantName,
-  setVariants,
-}: {
-  variantName: string;
-  setVariants: (variants: EntryProps[] | undefined) => void;
-}) => {
+const VariantPlaceholder = ({ variantName, setVariants }: { variantName: string; setVariants: (variants: EntryProps[] | undefined) => void }) => {
   return (
     <Card>
       <Stack flexDirection="column" fullWidth alignItems="flex-start">
@@ -187,11 +139,11 @@ const VariantPlaceholder = ({
 };
 
 const VariantsField = ({
-  variantNames,
-  variantEntries,
-  setVariantEntries,
-  flagKey,
-}: {
+                         variantNames,
+                         variantEntries,
+                         setVariantEntries,
+                         flagKey,
+                       }: {
   variantNames?: Array<string>;
   variantEntries: EntryProps[] | undefined;
   setVariantEntries: (variants: EntryProps[] | undefined) => void;
@@ -204,39 +156,20 @@ const VariantsField = ({
     <>
       <Heading>Variants</Heading>
       {flagKey && (
-        <Stack
-          spacing="spacingS"
-          flexDirection="column"
-          alignItems="flex-start"
-        >
+        <Stack spacing="spacingS" flexDirection="column" alignItems="flex-start">
           {variantNames?.map((variantName) => {
             const variant = variantEntries?.find((entry) => {
               const entryId = meta[variantName];
               return entry.sys.id === entryId;
             });
             if (variant) {
-              return (
-                <EntryCardWrapper
-                  variant={variant}
-                  setVariants={setVariantEntries}
-                  meta={meta}
-                />
-              );
+              return <EntryCardWrapper variant={variant} setVariants={setVariantEntries} meta={meta} />;
             }
-            return (
-              <VariantPlaceholder
-                variantName={variantName}
-                setVariants={setVariantEntries}
-              />
-            );
+            return <VariantPlaceholder variantName={variantName} setVariants={setVariantEntries} />;
           })}
         </Stack>
       )}
-      {!flagKey && (
-        <FormControl.HelpText>
-          Select a flag key to add variants
-        </FormControl.HelpText>
-      )}
+      {!flagKey && <FormControl.HelpText>Select a flag key to add variants</FormControl.HelpText>}
     </>
   );
 };
@@ -250,19 +183,17 @@ interface VariantEntity {
 }
 
 const EntryCardWrapper = ({
-  variant,
-  setVariants,
-  meta,
-}: {
+                            variant,
+                            setVariants,
+                            meta,
+                          }: {
   variant: EntryProps;
   setVariants: (variants: EntryProps[] | undefined) => void;
   meta: KeyValueMap;
 }): JSX.Element => {
   const sdk = useSDK<EditorAppSDK>();
   const { contentTypes } = useContext(ContentTypesContext);
-  const [entryData, setEntryData] = useState<
-    EntryProps<VariantEntity> | undefined
-  >(undefined);
+  const [entryData, setEntryData] = useState<EntryProps<VariantEntity> | undefined>(undefined);
 
   const fetchEntry = useCallback(
     async (id: string, contentTypes: ContentTypeProps[]) => {
@@ -270,32 +201,18 @@ const EntryCardWrapper = ({
         return undefined;
       }
       const entry = await sdk.cma.entry.get({ entryId: id });
-      const contentTypeId = get(entry, ["sys", "contentType", "sys", "id"]);
-      const contentType = contentTypes.find(
-        (contentType) => contentType.sys.id === contentTypeId
-      );
+      const contentTypeId = get(entry, ['sys', 'contentType', 'sys', 'id']);
+      const contentType = contentTypes.find((contentType) => contentType.sys.id === contentTypeId);
       if (!contentType) {
         // things are still loading
         return undefined;
       }
 
       const displayField = contentType.displayField;
-      const descriptionFieldType = contentType.fields
-        .filter((field) => field.id !== displayField)
-        .find((field) => field.type === "Text");
+      const descriptionFieldType = contentType.fields.filter((field) => field.id !== displayField).find((field) => field.type === 'Text');
 
-      const description = descriptionFieldType
-        ? get(
-            entry,
-            ["fields", descriptionFieldType.id, sdk.locales.default],
-            ""
-          )
-        : "";
-      const title = get(
-        entry,
-        ["fields", displayField, sdk.locales.default],
-        "Untitled"
-      );
+      const description = descriptionFieldType ? get(entry, ['fields', descriptionFieldType.id, sdk.locales.default], '') : '';
+      const title = get(entry, ['fields', displayField, sdk.locales.default], 'Untitled');
       const status = getEntryStatus(entry.sys);
       const variantEntry = Object.entries(meta ?? {}).find(([_, value]) => {
         return value === variant.sys.id;
@@ -332,9 +249,7 @@ const EntryCardWrapper = ({
     }
     sdk.entry.fields.meta.setValue(newMeta);
 
-    const filteredVariants = values.filter(
-      (v: EntryProps) => v.sys.id !== variant.sys.id
-    );
+    const filteredVariants = values.filter((v: EntryProps) => v.sys.id !== variant.sys.id);
     setVariants(filteredVariants);
     sdk.entry.fields.variants.setValue(filteredVariants);
   };
@@ -345,27 +260,22 @@ const EntryCardWrapper = ({
 
   const getEntryStatus = (sys: MetaSysProps) => {
     if (sys.archivedVersion) {
-      return "archived";
+      return 'archived';
     } else if (sys.publishedVersion) {
       if (sys.version > sys.publishedVersion + 1) {
-        return "changed";
+        return 'changed';
       } else {
-        return "published";
+        return 'published';
       }
     } else {
-      return "draft";
+      return 'draft';
     }
   };
 
   return (
     <Card>
       <SectionHeading>{entryData?.fields?.variantName}</SectionHeading>
-      <Stack
-        spacing="spacingM"
-        flexDirection="column"
-        fullWidth
-        alignItems="flex-start"
-      >
+      <Stack spacing="spacingM" flexDirection="column" fullWidth alignItems="flex-start">
         <EntryCard
           contentType={entryData?.fields?.contentType}
           actions={[
@@ -386,21 +296,21 @@ const EntryCardWrapper = ({
 };
 
 const FlagKeyField = ({
-  setVariants,
-  setExperiment,
-  experiment,
-  experiments,
-}: {
+                        setVariants,
+                        setExperiment,
+                        experiment,
+                        experiments,
+                      }: {
   setVariants: (variants: EntryProps[] | undefined) => void;
-  setExperiment: (experiment?: Experiment) => void;
-  experiment?: Experiment;
-  experiments: Experiment[];
+  setExperiment: (experiment?: Experiment | Flag) => void;
+  experiment?: Experiment | Flag;
+  experiments: (Experiment | Flag)[];
 }) => {
   const sdk = useSDK<EditorAppSDK>();
   const { loading } = useContext(ExperimentContext);
-  const [filteredItems, setFilteredItems] = useState<Experiment[]>(experiments);
+  const [filteredItems, setFilteredItems] = useState<(Experiment | Flag)[]>(experiments);
 
-  const handleSelectItem = (experiment: Experiment) => {
+  const handleSelectItem = (experiment: Experiment | Flag) => {
     resetFields();
     const { key } = experiment;
     sdk.entry.fields.experimentId.setValue(key);
@@ -421,19 +331,17 @@ const FlagKeyField = ({
 
   const handleInputValueChange = (value: string) => {
     // This time, we tell the component to compare the property "name" to the inputValue
-    const newFilteredItems = experiments.filter((item) =>
-      item.name.toLowerCase().includes(value.toLowerCase())
-    );
+    const newFilteredItems = experiments.filter((item) => item.name.toLowerCase().includes(value.toLowerCase()));
     setFilteredItems(newFilteredItems);
-    if (value === "") {
+    if (value === '') {
       resetFields();
     }
   };
 
   return (
-    <Box style={{ paddingBottom: "20px" }}>
+    <Box style={{ paddingBottom: '20px' }}>
       <FormControl isRequired>
-        <FormControl.Label>Flag Key</FormControl.Label>
+        <FormControl.Label>Flag/Experiment Name</FormControl.Label>
         <Autocomplete
           items={filteredItems}
           onInputValueChange={handleInputValueChange}
@@ -442,10 +350,7 @@ const FlagKeyField = ({
           renderItem={(item) => `${item.name} (${item.id})`}
           isLoading={loading}
         />
-        <FormControl.HelpText>
-          This is in the overview card or defined at the top of the
-          experiment/flag.
-        </FormControl.HelpText>
+        <FormControl.HelpText>This is in the overview card or defined at the top of the flag/experiment.</FormControl.HelpText>
       </FormControl>
       {experiment && (
         <Note
@@ -453,20 +358,14 @@ const FlagKeyField = ({
           title={
             <Flex flexDirection="row" alignContent="center">
               {experiment.name}
-              <Badge
-                variant={experiment.enabled ? "primary" : "warning"}
-                style={{ marginTop: 5, marginLeft: 10 }}
-              >
-                {experiment.enabled ? "Active" : "Inactive"}
+              <Badge variant={experiment.enabled ? 'primary' : 'warning'} style={{ marginTop: 5, marginLeft: 10 }}>
+                {experiment.enabled ? 'Active' : 'Inactive'}
               </Badge>
             </Flex>
-          }
-        >
+          }>
           Flag key: <code>{experiment.key}</code>
-          {experiment.description && (
-            <Box>Description: {experiment.description}</Box>
-          )}
-          <Box>Variants: {experiment.variants.map((v) => v.key).join(", ")}</Box>
+          {experiment.description && <Box>Description: {experiment.description}</Box>}
+          <Box>Variants: {experiment.variants.map((v) => v.key).join(', ')}</Box>
           <Box>Evaluation mode: {experiment.evaluationMode}</Box>
         </Note>
       )}
@@ -476,33 +375,38 @@ const FlagKeyField = ({
 
 const Entry = () => {
   const sdk = useSDK<EditorAppSDK>();
-  const [experiment, setExperiment] = useState<Experiment | undefined>(
-    sdk.entry.fields.experiment.getValue()
-  );
+  const [experiment, setExperiment] = useState<Experiment | Flag | undefined>(sdk.entry.fields.experiment.getValue());
   const { amplitudeExperimentApi } = useContext(ExperimentContext);
 
-  const variantNames = useMemo(
-    () => experiment?.variants.map((variant) => variant.key),
-    [experiment]
-  );
+  const variantNames = useMemo(() => experiment?.variants.map((variant) => variant.key), [experiment]);
 
   // Update experiment if there is an experiment update on Amplitude side
   useInterval(() => {
     if (experiment && amplitudeExperimentApi) {
-      amplitudeExperimentApi
-        .getExperimentDetails(experiment.id)
-        .then((experiment) => {
-          setExperiment(experiment);
-          sdk.entry.fields.experimentId.setValue(experiment.key);
-          sdk.entry.fields.experiment.setValue(experiment);
-        })
-        .catch(() => {});
+      // Check if it's an experiment or a flag
+      if ('experimentType' in experiment) {
+        amplitudeExperimentApi
+          .getResourceDetails(experiment.id, true)
+          .then((experiment) => {
+            setExperiment(experiment);
+            sdk.entry.fields.experimentId.setValue(experiment.key);
+            sdk.entry.fields.experiment.setValue(experiment);
+          })
+          .catch(() => {});
+      } else {
+        amplitudeExperimentApi
+          .getResourceDetails(experiment.id)
+          .then((flag) => {
+            setExperiment(flag);
+            sdk.entry.fields.experimentId.setValue(flag.key);
+            sdk.entry.fields.experiment.setValue(flag);
+          })
+          .catch(() => {});
+      }
     }
   }, 5000);
 
-  const [variants, setVariants] = React.useState<EntryProps[] | undefined>(
-    sdk.entry.fields.variants.getValue()
-  );
+  const [variants, setVariants] = React.useState<EntryProps[] | undefined>(sdk.entry.fields.variants.getValue());
 
   const { experiments } = useContext(ExperimentContext);
 
@@ -510,8 +414,7 @@ const Entry = () => {
     const valueChangeHandler = (experiment?: Experiment) => {
       setExperiment(experiment);
     };
-    const detachValueChangeHandler =
-      sdk.entry.fields.experiment.onValueChanged(valueChangeHandler);
+    const detachValueChangeHandler = sdk.entry.fields.experiment.onValueChanged(valueChangeHandler);
 
     return detachValueChangeHandler;
   }, [sdk.entry.fields.experiment]);
@@ -519,22 +422,11 @@ const Entry = () => {
   return (
     <Box
       style={{
-        margin: "50px",
-      }}
-    >
+        margin: '50px',
+      }}>
       <Form>
-        <FlagKeyField
-          experiment={experiment}
-          setExperiment={setExperiment}
-          setVariants={setVariants}
-          experiments={experiments}
-        />
-        <VariantsField
-          variantNames={variantNames}
-          variantEntries={variants}
-          setVariantEntries={setVariants}
-          flagKey={experiment?.key}
-        />
+        <FlagKeyField experiment={experiment} setExperiment={setExperiment} setVariants={setVariants} experiments={experiments} />
+        <VariantsField variantNames={variantNames} variantEntries={variants} setVariantEntries={setVariants} flagKey={experiment?.key} />
       </Form>
     </Box>
   );
