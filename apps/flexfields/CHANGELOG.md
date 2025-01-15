@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.9](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.8...thrillworks-flex-fields-app-v1.2.9) (2025-01-15)
+
+
+### Bug Fixes
+
+* Update EntryEditor.tsx adds attributes attributes data-field-id={entr… ([#4022](https://github.com/contentful/marketplace-partner-apps/issues/4022)) ([5725a90](https://github.com/contentful/marketplace-partner-apps/commit/5725a90db4ae5f66c04ce5e09c0054967fb2fef6))
+
 ## [1.2.8](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.7...thrillworks-flex-fields-app-v1.2.8) (2025-01-08)
 
 
