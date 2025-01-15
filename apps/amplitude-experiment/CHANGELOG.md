@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/amplitude-contentful-v1.0.6...amplitude-contentful-v1.1.0) (2025-01-15)
+
+
+### Features
+
+* Amplitude Experiment - add support for feature flags ([#4078](https://github.com/contentful/marketplace-partner-apps/issues/4078)) ([17a3ba8](https://github.com/contentful/marketplace-partner-apps/commit/17a3ba8b41fc6833a039692d3fe6f3bd825910fd))
+
 ## [1.0.6](https://github.com/contentful/marketplace-partner-apps/compare/amplitude-contentful-v1.0.5...amplitude-contentful-v1.0.6) (2025-01-08)
 
 
