@@ -9,7 +9,7 @@
     "start": "next start",
     "export": "npx serve out -p 3005",
     "lint": "next lint",
-    "test": "jest --watch",
+    "test": "jest --ci",
     "test:ci": "jest --ci",
     "jest": {
       "setupFiles": [
