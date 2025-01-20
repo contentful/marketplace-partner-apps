@@ -29,6 +29,7 @@ import {
 } from "@/lib/utils/common";
 import { AxiosInstance } from "axios";
 import { Input, Switch } from "antd";
+import { environment } from "@/lib/Constants";
 
 enum eAppParameterActions {
   UPDATED = "UPDATED",
@@ -243,10 +244,10 @@ const ConfigScreen = () => {
             },
             {
               headers: {
-                Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+                Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
                 ["jro34134ecr4aex"]: `${encryptData({
                   validate: Date.now(),
-                  token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+                  token: environment?.NEXT_PUBLIC_JWT_TOKEN,
                 })}`,
               },
             }
@@ -295,10 +296,10 @@ const ConfigScreen = () => {
             },
             {
               headers: {
-                Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+                Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
                 ["jro34134ecr4aex"]: `${encryptData({
                   validate: Date.now(),
-                  token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+                  token: environment?.NEXT_PUBLIC_JWT_TOKEN,
                 })}`,
               },
             }
@@ -386,10 +387,10 @@ const ConfigScreen = () => {
             },
             {
               headers: {
-                Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+                Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
                 ["jro34134ecr4aex"]: `${encryptData({
                   validate: Date.now(),
-                  token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+                  token: environment?.NEXT_PUBLIC_JWT_TOKEN,
                 })}`,
               },
             }
@@ -602,7 +603,7 @@ const ConfigScreen = () => {
 
           <FormControl onChange={handleConfigParamUpdate}>
             <FormLabel htmlFor='automated-sync'
-            className="switchLabel">Automated Sync</FormLabel>
+              className="switchLabel">Automated Sync</FormLabel>
 
             <Switch
               onChange={(value, e) => {

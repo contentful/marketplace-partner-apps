@@ -16,7 +16,7 @@ import {
   CampaignClicksUniqueType,
   CountDataType,
 } from "@/lib/types/dashboard";
-import { Weekdays, eDataExtensionKey } from "@/lib/Constants";
+import { Weekdays, eDataExtensionKey, environment } from "@/lib/Constants";
 import { encryptData, formatInput } from "@/lib/utils/common";
 import { barChartColor, barLabelColor } from "@/lib/utils/getColor";
 import CampaignClicksSentsOpens from "./CampaignClicksSentsOpens";
@@ -205,10 +205,10 @@ function CustomerEngagement({ order }: { order: number }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
             ["jro34134ecr4aex"]: `${encryptData({
               validate: Date.now(),
-              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
         }
@@ -240,10 +240,10 @@ function CustomerEngagement({ order }: { order: number }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
             ["jro34134ecr4aex"]: `${encryptData({
               validate: Date.now(),
-              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
         }
@@ -290,10 +290,10 @@ function CustomerEngagement({ order }: { order: number }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
             ["jro34134ecr4aex"]: `${encryptData({
               validate: Date.now(),
-              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
         }
@@ -325,10 +325,10 @@ function CustomerEngagement({ order }: { order: number }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
             ["jro34134ecr4aex"]: `${encryptData({
               validate: Date.now(),
-              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
         }

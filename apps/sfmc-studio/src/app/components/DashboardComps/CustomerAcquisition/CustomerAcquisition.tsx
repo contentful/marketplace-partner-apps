@@ -20,6 +20,7 @@ import { commonChartConfig } from "@/lib/utils/dashboards";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import advancedFormat from "dayjs/plugin/advancedFormat";
+import { environment } from "@/lib/Constants";
 
 // Extend dayjs with the utc plugin
 dayjs.extend(utc);
@@ -109,10 +110,10 @@ function CustomerAcquisition({ order }: { order: number }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
             ["jro34134ecr4aex"]: `${encryptData({
               validate: Date.now(),
-              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
         }
@@ -155,10 +156,10 @@ function CustomerAcquisition({ order }: { order: number }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
             ["jro34134ecr4aex"]: `${encryptData({
               validate: Date.now(),
-              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
         }
@@ -184,10 +185,10 @@ function CustomerAcquisition({ order }: { order: number }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
             ["jro34134ecr4aex"]: `${encryptData({
               validate: Date.now(),
-              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
         }
@@ -215,10 +216,10 @@ function CustomerAcquisition({ order }: { order: number }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
             ["jro34134ecr4aex"]: `${encryptData({
               validate: Date.now(),
-              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
         }
@@ -246,10 +247,10 @@ function CustomerAcquisition({ order }: { order: number }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
             ["jro34134ecr4aex"]: `${encryptData({
               validate: Date.now(),
-              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
         }
@@ -267,9 +268,8 @@ function CustomerAcquisition({ order }: { order: number }) {
     <>
       <CustomerAcquisitionCounts contactCounts={counts} />
       <div
-        className={`${style.CountsMainContain} ${
-          themeSlice.theme == "dark" ? style.DarkTheme : ""
-        }`}
+        className={`${style.CountsMainContain} ${themeSlice.theme == "dark" ? style.DarkTheme : ""
+          }`}
       >
         <div
           className={`${style.CountsMainContainInnerCont} ${themeSlice.theme}`}
@@ -283,9 +283,8 @@ function CustomerAcquisition({ order }: { order: number }) {
         </div>
       </div>
       <div
-        className={`${style.DeviceCityMainContain} ${
-          themeSlice.theme == "dark" ? style.DarkTheme : ""
-        }`}
+        className={`${style.DeviceCityMainContain} ${themeSlice.theme == "dark" ? style.DarkTheme : ""
+          }`}
       >
         <div className={`${style.DeviceCategoryData} ${themeSlice.theme}`}>
           <TopCities topCities={topCities} />

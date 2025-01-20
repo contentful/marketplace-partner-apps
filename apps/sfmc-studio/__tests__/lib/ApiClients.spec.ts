@@ -1,11 +1,12 @@
 import axios from "axios";
 import { ApiClient } from "@/lib/ApiClients";
+import { environment } from "@/lib/Constants";
 
 jest.mock("axios");
 
 describe("ApiClient", () => {
   it("should create an Axios instance with the default URL", () => {
-    process.env.NEXT_PUBLIC_API_ENDPOINT = "https://default-api.example.com";
+    environment.NEXT_PUBLIC_API_ENDPOINT = "https://default-api.example.com";
 
     const axiosCreateMock = jest.spyOn(axios, "create");
     ApiClient();
@@ -32,7 +33,7 @@ describe("ApiClient", () => {
 
   it("should handle cases where the environment variable is not set", () => {
     // Clear the environment variable
-    delete process.env.NEXT_PUBLIC_API_ENDPOINT;
+    delete environment?.NEXT_PUBLIC_API_ENDPOINT;
 
     const axiosCreateMock = jest.spyOn(axios, "create");
 
@@ -42,7 +43,7 @@ describe("ApiClient", () => {
       baseURL: undefined,
     });
 
-    process.env.NEXT_PUBLIC_API_ENDPOINT = "https://default-api.example.com";
+    environment.NEXT_PUBLIC_API_ENDPOINT = "https://default-api.example.com";
 
     axiosCreateMock.mockRestore();
   });
