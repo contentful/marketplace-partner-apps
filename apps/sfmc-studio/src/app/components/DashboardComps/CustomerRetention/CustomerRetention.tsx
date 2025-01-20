@@ -33,6 +33,7 @@ import { encryptData, formatInput } from "@/lib/utils/common";
 import { defaultSystemTZ } from "@/lib/utils/common";
 import svgIcons from "@/lib/utils/icons";
 import getSymbolFromCurrency from "currency-symbol-map";
+import { environment } from "@/lib/Constants";
 
 function CustomerRetention({ order }: { order: number }) {
   const { parameters } = useSDK<PageAppSDK>();
@@ -215,10 +216,10 @@ function CustomerRetention({ order }: { order: number }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
             ["jro34134ecr4aex"]: `${encryptData({
               validate: Date.now(),
-              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
         }
@@ -245,10 +246,10 @@ function CustomerRetention({ order }: { order: number }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
             ["jro34134ecr4aex"]: `${encryptData({
               validate: Date.now(),
-              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
         }
@@ -275,10 +276,10 @@ function CustomerRetention({ order }: { order: number }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
             ["jro34134ecr4aex"]: `${encryptData({
               validate: Date.now(),
-              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
         }
@@ -305,10 +306,10 @@ function CustomerRetention({ order }: { order: number }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
             ["jro34134ecr4aex"]: `${encryptData({
               validate: Date.now(),
-              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
         }
@@ -335,10 +336,10 @@ function CustomerRetention({ order }: { order: number }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
             ["jro34134ecr4aex"]: `${encryptData({
               validate: Date.now(),
-              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
         }
@@ -366,10 +367,10 @@ function CustomerRetention({ order }: { order: number }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
             ["jro34134ecr4aex"]: `${encryptData({
               validate: Date.now(),
-              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
         }
@@ -410,7 +411,7 @@ function CustomerRetention({ order }: { order: number }) {
               revenue,
               color:
                 multiLineChart[
-                  uniqueFamilies.findIndex((val) => val == family)
+                uniqueFamilies.findIndex((val) => val == family)
                 ],
               CurrencyIsoCode: getSymbolFromCurrency(CurrencyIsoCode),
             };
@@ -437,10 +438,10 @@ function CustomerRetention({ order }: { order: number }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
             ["jro34134ecr4aex"]: `${encryptData({
               validate: Date.now(),
-              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
         }

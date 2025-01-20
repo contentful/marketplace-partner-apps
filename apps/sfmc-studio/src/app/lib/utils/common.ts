@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import CryptoJS from "crypto-js";
+import { environment } from "../Constants";
 
 // Extend dayjs with plugins
 dayjs.extend(utc);
@@ -10,11 +11,10 @@ dayjs.extend(advancedFormat);
 
 export const formatInput = (input: number, currencySign?: string) => {
   if (currencySign) {
-    return `${currencySign}${
-      Number(input)
-        ?.toString()
-        ?.replace(/\B(?=(\d{3})+(?!\d))/g, ",") ?? "0"
-    }`;
+    return `${currencySign}${Number(input)
+      ?.toString()
+      ?.replace(/\B(?=(\d{3})+(?!\d))/g, ",") ?? "0"
+      }`;
   }
   return (
     Number(input)
@@ -70,10 +70,10 @@ export const saveOrValidateLicenseKey = async (
     },
     {
       headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+        Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
         jro34134ecr4aex: `${encryptData({
           validate: Date.now(),
-          token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+          token: environment?.NEXT_PUBLIC_JWT_TOKEN,
         })}`,
       },
     }
@@ -278,7 +278,7 @@ export const timeZoneMapping = [
   { name: "(UTC-12:00) International Date Line West", iana: "Etc/GMT+12" },
 ];
 
-const CRYPT_SECRET_KEY = process.env.NEXT_PUBLIC_ENCRYPTION_DATA as string;
+const CRYPT_SECRET_KEY = environment?.NEXT_PUBLIC_ENCRYPTION_DATA as string;
 
 export const encryptData = (data: any) => {
   try {

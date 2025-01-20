@@ -30,6 +30,7 @@ import {
 import TopRevenueOrderType from "./TopRevenueOrderType";
 import svgIcons from "@/lib/utils/icons";
 import getSymbolFromCurrency from "currency-symbol-map";
+import { environment } from "@/lib/Constants";
 
 function RoiConversion({ order }: { order: number }) {
   const { parameters } = useSDK<PageAppSDK>();
@@ -187,10 +188,10 @@ function RoiConversion({ order }: { order: number }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
             ["jro34134ecr4aex"]: `${encryptData({
               validate: Date.now(),
-              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
         }
@@ -218,10 +219,10 @@ function RoiConversion({ order }: { order: number }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
             ["jro34134ecr4aex"]: `${encryptData({
               validate: Date.now(),
-              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
         }
@@ -261,10 +262,10 @@ function RoiConversion({ order }: { order: number }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
             ["jro34134ecr4aex"]: `${encryptData({
               validate: Date.now(),
-              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
         }
@@ -292,10 +293,10 @@ function RoiConversion({ order }: { order: number }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
             ["jro34134ecr4aex"]: `${encryptData({
               validate: Date.now(),
-              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
         }
@@ -323,10 +324,10 @@ function RoiConversion({ order }: { order: number }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+            Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
             ["jro34134ecr4aex"]: `${encryptData({
               validate: Date.now(),
-              token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+              token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
         }
@@ -356,9 +357,8 @@ function RoiConversion({ order }: { order: number }) {
         ))}
       </div>
       <div
-        className={`${style.CountCardMAinRow} ${
-          themeSlice.theme == "dark" ? style.DarkTheme : ""
-        }`}
+        className={`${style.CountCardMAinRow} ${themeSlice.theme == "dark" ? style.DarkTheme : ""
+          }`}
       >
         <div className={`${style.CountCardInnerProd} ${themeSlice.theme}`}>
           <TopSoldProducts soldProduct={soldProduct} />
@@ -368,9 +368,8 @@ function RoiConversion({ order }: { order: number }) {
         </div>
       </div>
       <div
-        className={`${style.CountCardMAinRow} ${
-          themeSlice.theme == "dark" ? style.DarkTheme : ""
-        }`}
+        className={`${style.CountCardMAinRow} ${themeSlice.theme == "dark" ? style.DarkTheme : ""
+          }`}
       >
         <div className={`${style.CountCardInnerProd} ${themeSlice.theme} `}>
           <TopRevenueCity revenueCity={revenueCity} />

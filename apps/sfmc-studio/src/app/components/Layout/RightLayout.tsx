@@ -32,6 +32,7 @@ import {
 } from "@/lib/utils/common";
 import { setIsAuth } from "./../../redux/slices/authSlice";
 import { openNotification } from "@/lib/utils/dashboards";
+import { environment } from "@/lib/Constants";
 
 const RenderSwitch = ({ order }: { order: number }) => {
   switch (order) {
@@ -92,10 +93,10 @@ export default function RightLayout({
           },
           {
             headers: {
-              Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+              Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
               ["jro34134ecr4aex"]: `${encryptData({
                 validate: Date.now(),
-                token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+                token: environment?.NEXT_PUBLIC_JWT_TOKEN,
               })}`,
             },
           }
@@ -133,45 +134,45 @@ export default function RightLayout({
           {
             baseUrl:
               parameters?.installation?.[
-                AppInstallationParametersKeys.SFSC_URL
+              AppInstallationParametersKeys.SFSC_URL
               ],
             username:
               parameters?.installation?.[
-                AppInstallationParametersKeys.SFSC_USERNAME
+              AppInstallationParametersKeys.SFSC_USERNAME
               ],
             password: encryptData({
               sfscPassword:
                 parameters?.installation?.[
-                  AppInstallationParametersKeys.SFSC_PASSWORD
+                AppInstallationParametersKeys.SFSC_PASSWORD
                 ],
             }),
             clientId:
               parameters?.installation?.[
-                AppInstallationParametersKeys.SFSC_CLIENT_ID
+              AppInstallationParametersKeys.SFSC_CLIENT_ID
               ],
             clientSecret: encryptData({
               sfscclientSecret:
                 parameters?.installation?.[
-                  AppInstallationParametersKeys.SFSC_CLIENT_SECRET
+                AppInstallationParametersKeys.SFSC_CLIENT_SECRET
                 ],
             }),
             licenseKey: encryptData({
               licenseKey:
                 parameters?.installation?.[
-                  AppInstallationParametersKeys.LICENSE_KEY
+                AppInstallationParametersKeys.LICENSE_KEY
                 ],
             }),
             sfscTimezone:
               parameters?.installation?.[
-                AppInstallationParametersKeys.SFSC_TIMEZONE
+              AppInstallationParametersKeys.SFSC_TIMEZONE
               ],
           },
           {
             headers: {
-              Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+              Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
               ["jro34134ecr4aex"]: `${encryptData({
                 validate: Date.now(),
-                token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+                token: environment?.NEXT_PUBLIC_JWT_TOKEN,
               })}`,
             },
           }
@@ -210,34 +211,34 @@ export default function RightLayout({
             licenseKey: encryptData({
               licenseKey:
                 parameters?.installation?.[
-                  AppInstallationParametersKeys.LICENSE_KEY
+                AppInstallationParametersKeys.LICENSE_KEY
                 ],
             }),
             sfmcSubdomain:
               parameters?.installation?.[
-                AppInstallationParametersKeys.SFMC_DOMAIN
+              AppInstallationParametersKeys.SFMC_DOMAIN
               ],
             sfmcclientId:
               parameters?.installation?.[
-                AppInstallationParametersKeys.SFMC_CLIENT_ID
+              AppInstallationParametersKeys.SFMC_CLIENT_ID
               ],
             sfmcclientSecret: encryptData({
               sfmcclientSecret:
                 parameters?.installation?.[
-                  AppInstallationParametersKeys.SFMC_CLIENT_SECRET
+                AppInstallationParametersKeys.SFMC_CLIENT_SECRET
                 ],
             }),
             sfmcTimezone:
               parameters?.installation?.[
-                AppInstallationParametersKeys.SFMC_TIMEZONE
+              AppInstallationParametersKeys.SFMC_TIMEZONE
               ],
           },
           {
             headers: {
-              Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
+              Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
               ["jro34134ecr4aex"]: `${encryptData({
                 validate: Date.now(),
-                token: process.env.NEXT_PUBLIC_JWT_TOKEN,
+                token: environment?.NEXT_PUBLIC_JWT_TOKEN,
               })}`,
             },
           }
@@ -363,10 +364,10 @@ export default function RightLayout({
     // will only update the cookie if found on the browser
     if (deserializedCookieValue) {
 
-      try{
+      try {
         serializedCookieValue = decryptClientData(deserializedCookieValue)
-      }catch(error) {
-       serializedCookieValue=JSON.parse(JSON.stringify(deserializedCookieValue))
+      } catch (error) {
+        serializedCookieValue = JSON.parse(JSON.stringify(deserializedCookieValue))
       }
 
       if (serializedCookieValue) {
@@ -444,11 +445,10 @@ export default function RightLayout({
 
           <div className="HeaderUserInfo">
             <span
-              className={`${
-                themeSlice?.theme == "dark"
-                  ? "dark-theme-text"
-                  : "light-theme-text"
-              }`}
+              className={`${themeSlice?.theme == "dark"
+                ? "dark-theme-text"
+                : "light-theme-text"
+                }`}
             >
               Enable {themeSlice?.theme == "light" ? "Dark" : "Light"} Mode{" "}
             </span>
@@ -468,7 +468,7 @@ export default function RightLayout({
               {parse(svgIcons.SyncIcon)} Sync
             </Button>
             <a
-              href={`${process.env.NEXT_PUBLIC_CTF_MARKETING_WEBSITE_URL}/contact-us`}
+              href={`${environment?.NEXT_PUBLIC_CTF_MARKETING_WEBSITE_URL}/contact-us`}
               target="_blank"
               className="HelpButton"
             >
