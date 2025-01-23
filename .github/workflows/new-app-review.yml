@@ -20,6 +20,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: 'npm'
       - name: Compile TypeScript
         # compilation is necessary because github-script does not support ts https://github.com/actions/github-script/issues/294
         run: npx tsc --project .github/workflows/tsconfig.json
