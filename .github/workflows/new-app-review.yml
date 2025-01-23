@@ -15,8 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
         with:
+          # Fetch all history for all branches and tags
+          fetch-depth: 0
+          # Ensure the workflow can access the forked repository's contents
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+      - uses: actions/setup-node@v4
           node-version: 18
           cache: 'npm'
       - name: Install Dependencies
