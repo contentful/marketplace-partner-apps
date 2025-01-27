@@ -21,7 +21,8 @@ jobs:
           # Ensure the workflow can access the forked repository's contents
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v3
+        with:
           node-version: 18
           cache: 'npm'
       - name: Install Dependencies
