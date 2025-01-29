@@ -20,8 +20,8 @@
 		"apps/transifex": {},
 		"apps/uploadcare": {},
 		"apps/voucherify": {},
+		"apps/vwo-fme": {},
 		"apps/wix": {},
-		"apps/xillio-transcreate": {},
-		"apps/vwo-fme": {}
+		"apps/xillio-transcreate": {}
 	}
 }
