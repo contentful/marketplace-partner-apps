@@ -25,7 +25,7 @@
     "@contentful/react-apps-toolkit": "^1.2.16",
     "@reduxjs/toolkit": "^2.2.7",
     "antd": "^5.19.3",
-    "axios": "^1.6.8",
+    "axios": "^1.7.9",
     "crypto-js": "^4.2.0",
     "currency-symbol-map": "^5.1.0",
     "dayjs": "^1.11.12",
