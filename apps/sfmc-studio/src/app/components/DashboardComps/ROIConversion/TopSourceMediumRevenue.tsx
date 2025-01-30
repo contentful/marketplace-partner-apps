@@ -1,8 +1,8 @@
-"use client";
-import React from "react";
-import style from "./topSourceMediumRevenue.module.scss";
-import NoData from "@/components/UI/NoData";
-import BarChart from "@/components/charts/BarChart";
+'use client';
+import React from 'react';
+import style from './topSourceMediumRevenue.module.scss';
+import NoData from '@/components/UI/NoData';
+import BarChart from '@/components/charts/BarChart';
 
 function TopSourceMediumRevenue({ sourceRevenue }: { sourceRevenue: any }) {
   return (
@@ -22,11 +22,11 @@ function TopSourceMediumRevenue({ sourceRevenue }: { sourceRevenue: any }) {
               axisYTitle=""
             />
           ) : (
-            ""
+            ''
           )}
         </div>
       </div>
-      {!sourceRevenue?.length ? <NoData /> : ""}
+      {!sourceRevenue?.length ? <NoData /> : ''}
     </>
   );
 }

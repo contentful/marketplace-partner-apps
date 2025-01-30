@@ -1,4 +1,4 @@
-import "@testing-library/jest-dom/extend-expect";
+import '@testing-library/jest-dom/extend-expect';
 
 global.matchMedia =
   global.matchMedia ||
@@ -12,7 +12,7 @@ global.matchMedia =
 
 global.HTMLCanvasElement.prototype.getContext = () => null;
 
-jest.mock("jspdf", () => {
+jest.mock('jspdf', () => {
   return {
     jsPDF: jest.fn().mockImplementation(() => ({
       addImage: jest.fn(),

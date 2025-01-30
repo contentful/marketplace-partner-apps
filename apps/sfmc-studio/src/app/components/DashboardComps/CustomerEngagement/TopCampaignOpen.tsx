@@ -1,27 +1,23 @@
-"use client";
-import React from "react";
-import style from "./campaignClicks.module.scss";
-import CustomTable from "@/components/UI/CustomTable";
-import { TableColumnsType, Tooltip } from "antd";
-import { CampaignOpenType } from "@/lib/types/dashboard";
+'use client';
+import React from 'react';
+import style from './campaignClicks.module.scss';
+import CustomTable from '@/components/UI/CustomTable';
+import { TableColumnsType, Tooltip } from 'antd';
+import { CampaignOpenType } from '@/lib/types/dashboard';
 
-export default function TopCampaignOpen({
-  campaignOpens,
-}: {
-  campaignOpens: any;
-}) {
+export default function TopCampaignOpen({ campaignOpens }: { campaignOpens: any }) {
   const columns: TableColumnsType<CampaignOpenType> = [
     {
-      title: "No",
-      key: "no",
+      title: 'No',
+      key: 'no',
       render: (value, record, index) => {
         return index + 1;
       },
     },
     {
-      title: "Campaign",
-      dataIndex: "name",
-      key: "name",
+      title: 'Campaign',
+      dataIndex: 'name',
+      key: 'name',
       ellipsis: {
         showTitle: false,
       },
@@ -32,12 +28,11 @@ export default function TopCampaignOpen({
       ),
     },
     {
-      title: "Opens",
-      dataIndex: "displayOpens",
-      key: "displayOpens",
+      title: 'Opens',
+      dataIndex: 'displayOpens',
+      key: 'displayOpens',
       sorter: {
-        compare: (a: CampaignOpenType, b: CampaignOpenType) =>
-          a.opens - b.opens,
+        compare: (a: CampaignOpenType, b: CampaignOpenType) => a.opens - b.opens,
         multiple: 2,
       },
     },

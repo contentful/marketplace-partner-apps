@@ -1,6 +1,6 @@
-"use client";
-import Image from "next/image";
-import style from "./noData.module.scss";
+'use client';
+import Image from 'next/image';
+import style from './noData.module.scss';
 function NoData() {
   return (
     <div className={style.NoDataMain}>

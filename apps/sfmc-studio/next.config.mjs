@@ -1,19 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
+  output: 'export',
   reactStrictMode: false,
   swcMinify: true,
   images: {
-    unoptimized:true,
-    domains: ["*"],
+    unoptimized: true,
+    domains: ['*'],
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "**",
+        protocol: 'https',
+        hostname: '**',
       },
       {
-        protocol: "http",
-        hostname: "**",
+        protocol: 'http',
+        hostname: '**',
       },
     ],
   },

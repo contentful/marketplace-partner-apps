@@ -1,11 +1,11 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import navigationSlice from "./slices/navigationSlice";
-import dateSlice from "./slices/dateSlice";
-import loadersSlice from "./slices/loadersSlice";
-import authSlice from "./slices/authSlice";
-import themeSlice from "./slices/themeSlice";
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import navigationSlice from './slices/navigationSlice';
+import dateSlice from './slices/dateSlice';
+import loadersSlice from './slices/loadersSlice';
+import authSlice from './slices/authSlice';
+import themeSlice from './slices/themeSlice';
 
 let rootReducer: any = {
   navigationSlice: navigationSlice,
@@ -16,15 +16,12 @@ let rootReducer: any = {
 };
 
 const persistConfig = {
-  key: "root",
+  key: 'root',
   storage,
-  whitelist: ["themeSlice"],
+  whitelist: ['themeSlice'],
 };
 
-const persistedReducer = persistReducer(
-  persistConfig,
-  combineReducers(rootReducer)
-);
+const persistedReducer = persistReducer(persistConfig, combineReducers(rootReducer));
 
 export const setupStore = () => {
   return configureStore({

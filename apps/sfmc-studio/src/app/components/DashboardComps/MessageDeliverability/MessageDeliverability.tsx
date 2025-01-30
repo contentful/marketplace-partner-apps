@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 function MessageDeliverability() {
-  return (
-    <div>MessageDeliverability</div>
-  )
+  return <div>MessageDeliverability</div>;
 }
 
-export default MessageDeliverability
+export default MessageDeliverability;

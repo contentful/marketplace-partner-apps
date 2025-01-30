@@ -1,4 +1,4 @@
-@import "./fonts.scss";
+@import './fonts.scss';
 :root {
   --theme-dark: #1b273a;
   --theme-light: #ffffff;
@@ -7,9 +7,9 @@
 
 html {
   body {
-    font-family: "SFProDisplay";
+    font-family: 'SFProDisplay';
     .ant-layout {
-      font-family: "SFProDisplay";
+      font-family: 'SFProDisplay';
     }
   }
 }
@@ -248,7 +248,7 @@ html {
             padding-right: 8px;
             min-width: 76px;
             height: 34px;
-            font-family: "SFProDisplay";
+            font-family: 'SFProDisplay';
             &:hover {
               color: #fff;
               background: #4096ff;
@@ -386,7 +386,7 @@ html {
             }
           }
           button {
-            font-family: "SFProDisplay";
+            font-family: 'SFProDisplay';
           }
         }
       }
@@ -497,7 +497,7 @@ html {
         font-style: normal;
         font-weight: 700;
         line-height: 20px;
-        font-family: "SFProDisplay";
+        font-family: 'SFProDisplay';
         &.ant-table-column-sort {
           background-color: #036fe3;
         }
@@ -526,7 +526,7 @@ html {
     tr {
       td {
         color: #111b2b;
-        font-family: "SFProDisplay";
+        font-family: 'SFProDisplay';
         font-size: 16px;
         font-style: normal;
         font-weight: 400;
@@ -585,7 +585,7 @@ html {
             background: #f7f9fa !important;
             box-shadow: 0px -1px 0px 0px #e7ebee inset;
             font-weight: 700;
-            font-family: "SFProDisplay";
+            font-family: 'SFProDisplay';
           }
         }
       }
@@ -720,7 +720,7 @@ html {
       }
     }
     &::before {
-      content: "";
+      content: '';
       position: absolute;
       width: 1px;
       height: 38px;
@@ -764,7 +764,7 @@ html {
 }
 
 .g2-tooltip {
-  font-family: "SFProDisplay" !important;
+  font-family: 'SFProDisplay' !important;
 }
 .DateOuterTop {
   gap: 10px;
@@ -993,7 +993,7 @@ sup.Supdata {
   top: 50%;
   inset-inline-start: 0%;
   margin: 0px;
-  background-image: url("../../../public/images/Loader.gif");
+  background-image: url('../../../public/images/Loader.gif');
   width: 100%;
   background-size: 100px;
   background-position: center;
@@ -1034,15 +1034,14 @@ sup.Supdata {
     }
   }
 }
-.ant-notification-topRight.ant-notification-stack
-  > .ant-notification-notice-wrapper {
+.ant-notification-topRight.ant-notification-stack > .ant-notification-notice-wrapper {
   top: 33px;
   .ant-notification-notice {
     width: 484px;
   }
   .ant-notification-notice-description {
     color: #111b2b;
-    font-family: "SFProDisplay";
+    font-family: 'SFProDisplay';
     font-size: 16px;
     margin-left: 30px;
     font-weight: 400;

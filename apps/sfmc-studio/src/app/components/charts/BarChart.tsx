@@ -1,27 +1,18 @@
-"use client";
-import { themeTextColor } from "@/lib/Constants";
-import { BarChartType } from "@/lib/types/chart";
-import { formatInput } from "@/lib/utils/common";
-import { commonChartConfig } from "@/lib/utils/dashboards";
-import { Bar } from "@ant-design/plots";
-import React, { FC, useMemo } from "react";
-import { useAppSelector } from "@/redux/hooks";
+'use client';
+import { themeTextColor } from '@/lib/Constants';
+import { BarChartType } from '@/lib/types/chart';
+import { formatInput } from '@/lib/utils/common';
+import { commonChartConfig } from '@/lib/utils/dashboards';
+import { Bar } from '@ant-design/plots';
+import React, { FC, useMemo } from 'react';
+import { useAppSelector } from '@/redux/hooks';
 
 // We dynamically calculate dx based on the digits of the number
 const getDxForOutsideLbl = (number: any) => {
   const multiplierValue = 10;
   return String(number).length * multiplierValue;
 };
-const BarChart: FC<BarChartType> = ({
-  data,
-  xField,
-  yField,
-  labelText,
-  maxWidth,
-  height,
-  axisYTitle,
-  toolTipText,
-}) => {
+const BarChart: FC<BarChartType> = ({ data, xField, yField, labelText, maxWidth, height, axisYTitle, toolTipText }) => {
   let theme: string = useAppSelector((state) => state.themeSlice?.theme);
 
   const config = useMemo(() => {
@@ -32,21 +23,13 @@ const BarChart: FC<BarChartType> = ({
       label: {
         text: labelText,
         style: {
-          textAnchor: (d: any, index: number, data: any) =>
-            +d[yField] >= +data[0][yField] / 2 ? "right" : "start",
+          textAnchor: (d: any, index: number, data: any) => (+d[yField] >= +data[0][yField] / 2 ? 'right' : 'start'),
           fill: (d: any, index: number, data: any) => {
             let color;
-            +d[yField] >= +data[0][yField] / 2
-              ? (color = d.labelColor)
-              : theme === "light"
-              ? (color = "black")
-              : (color = "white");
+            +d[yField] >= +data[0][yField] / 2 ? (color = d.labelColor) : theme === 'light' ? (color = 'black') : (color = 'white');
             return color;
           },
-          dx: (d: any, index: number, data: any) =>
-            +d[yField] >= +data[0][yField] / 2
-              ? -10
-              : getDxForOutsideLbl(+d[yField]),
+          dx: (d: any, index: number, data: any) => (+d[yField] >= +data[0][yField] / 2 ? -10 : getDxForOutsideLbl(+d[yField])),
           fontWeight: 900,
           fontSize: 12,
           fillOpacity: 1,
@@ -68,14 +51,14 @@ const BarChart: FC<BarChartType> = ({
           titleFill: themeTextColor[theme as keyof typeof themeTextColor],
           titleStroke: themeTextColor[theme as keyof typeof themeTextColor],
           style: {
-            labelTransform: "rotate(0)",
+            labelTransform: 'rotate(0)',
           },
           grid: false,
           labelFontSize: 14,
           labelFontWeight: 500,
           labelFill: themeTextColor[theme as keyof typeof themeTextColor],
           labelOpacity: 1,
-          labelFontFamily: "SFProDisplay",
+          labelFontFamily: 'SFProDisplay',
           tick: false,
           labelFormatter: (value: any) => {
             if (value >= 1000000) {
@@ -89,13 +72,12 @@ const BarChart: FC<BarChartType> = ({
         },
         x: {
           labelSpacing: 20,
-          labelFormatter: (d: string) =>
-            commonChartConfig.transformLegendText(d, 15),
+          labelFormatter: (d: string) => commonChartConfig.transformLegendText(d, 15),
           labelFontSize: 14,
           labelFontWeight: 500,
           labelFill: themeTextColor[theme as keyof typeof themeTextColor],
           labelOpacity: 1,
-          labelFontFamily: "SFProDisplay",
+          labelFontFamily: 'SFProDisplay',
           grid: false,
           tick: false,
         },
@@ -103,14 +85,11 @@ const BarChart: FC<BarChartType> = ({
       height: height,
       tooltip: (d: any, index: number, data: any[]) => ({
         color: data[index].color,
-        value: `${formatInput(
-          data[index][yField],
-          data?.[index]?.CurrencyIsoCode
-        )}`,
+        value: `${formatInput(data[index][yField], data?.[index]?.CurrencyIsoCode)}`,
         name: toolTipText,
       }),
       animate: {
-        enter: { type: "growInY" },
+        enter: { type: 'growInY' },
       },
     };
   }, [data, theme]);

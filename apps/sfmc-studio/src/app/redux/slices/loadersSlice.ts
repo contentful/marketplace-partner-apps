@@ -1,8 +1,8 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 const initialState = { loading: false };
 export const loadingSlice = createSlice({
-  name: "loader",
+  name: 'loader',
   initialState,
   reducers: {
     loadingState(state, action: PayloadAction<boolean>) {

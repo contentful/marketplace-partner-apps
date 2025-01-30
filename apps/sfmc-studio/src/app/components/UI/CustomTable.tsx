@@ -1,8 +1,8 @@
-import React from "react";
-import { Table, Typography } from "antd";
-import type { TableProps } from "antd";
-import { formatInput } from "@/lib/utils/common";
-import { useAppSelector } from "@/redux/hooks";
+import React from 'react';
+import { Table, Typography } from 'antd';
+import type { TableProps } from 'antd';
+import { formatInput } from '@/lib/utils/common';
+import { useAppSelector } from '@/redux/hooks';
 const { Text } = Typography;
 
 interface DataType {
@@ -13,22 +13,9 @@ interface DataType {
   sents: number;
 }
 
-const onChange: TableProps<DataType>["onChange"] = (
-  pagination,
-  filters,
-  sorter,
-  extra
-) => {};
+const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {};
 
-const CustomTable = ({
-  data,
-  columns,
-  showTotal,
-}: {
-  data: any;
-  columns: any;
-  showTotal?: boolean;
-}) => {
+const CustomTable = ({ data, columns, showTotal }: { data: any; columns: any; showTotal?: boolean }) => {
   let dataWithKey = data?.map((el: any, index: number) => {
     return { ...el, key: el?.id ? el?.id : `${index}` };
   });
@@ -38,7 +25,7 @@ const CustomTable = ({
   return (
     <Table
       className={`EngageTable ${theme}-table`}
-      rowClassName={theme == "dark" ? "table-row-dark" : "table-row-light"}
+      rowClassName={theme == 'dark' ? 'table-row-dark' : 'table-row-light'}
       columns={columns}
       pagination={false}
       dataSource={dataWithKey}
@@ -63,7 +50,7 @@ const CustomTable = ({
                 </Table.Summary.Cell>
               </Table.Summary.Row>
             ) : (
-              ""
+              ''
             )}
           </>
         );
