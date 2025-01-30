@@ -7,6 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 4kk0CWKMz2hDS2amuVelsV --token ${CONTENTFUL_CMA_TOKEN}",
     "export": "npx serve out -p 3005",
     "lint": "next lint",
     "test": "jest --ci",
