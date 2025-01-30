@@ -78,13 +78,12 @@ describe('CustomerAcquisition', () => {
     render(
       <Provider store={store}>
         <CustomerAcquisition order={1} />
-      </Provider>
+      </Provider>,
     );
 
     await waitFor(() => {
       expect(mockPost).toHaveBeenCalledTimes(5);
     });
-
   });
 
   it('handles API errors gracefully', async () => {
@@ -93,12 +92,11 @@ describe('CustomerAcquisition', () => {
     render(
       <Provider store={store}>
         <CustomerAcquisition order={1} />
-      </Provider>
+      </Provider>,
     );
 
     await waitFor(() => {});
 
     expect(screen.getByText('Customer Acquisition')).toBeInTheDocument();
   });
-
 });

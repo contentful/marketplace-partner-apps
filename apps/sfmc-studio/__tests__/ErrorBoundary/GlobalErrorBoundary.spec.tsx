@@ -14,9 +14,7 @@ describe('GlobalErrorBoundary', () => {
     render(<GlobalErrorBoundary reset={resetMock} />);
 
     expect(screen.getByText("Something's Gone Wrong!")).toBeInTheDocument();
-    expect(
-      screen.getByText("We're sorry for the inconvenience. Please try again later.")
-    ).toBeInTheDocument();
+    expect(screen.getByText("We're sorry for the inconvenience. Please try again later.")).toBeInTheDocument();
     expect(screen.getByRole('img', { name: /error/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /retry/i })).toBeInTheDocument();
   });

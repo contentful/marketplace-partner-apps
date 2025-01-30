@@ -84,12 +84,11 @@ describe('CustomerRetention', () => {
     render(
       <Provider store={store}>
         <CustomerRetention order={1} />
-      </Provider>
+      </Provider>,
     );
 
     await waitFor(() => {
-      expect(mockPost).toHaveBeenCalledTimes(7); 
+      expect(mockPost).toHaveBeenCalledTimes(7);
     });
   });
-
 });

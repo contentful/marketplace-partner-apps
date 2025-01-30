@@ -1,9 +1,9 @@
-"use client";
-import React from "react";
-import style from "./newContacts.module.scss";
-import NoData from "@/components/UI/NoData";
-import LineChart from "@/components/charts/LineChart";
-import { useAppSelector } from "@/redux/hooks";
+'use client';
+import React from 'react';
+import style from './newContacts.module.scss';
+import NoData from '@/components/UI/NoData';
+import LineChart from '@/components/charts/LineChart';
+import { useAppSelector } from '@/redux/hooks';
 
 function LastWeekContact({ lastWeekContact }: { lastWeekContact: any }) {
   const theme: string = useAppSelector((state) => state.themeSlice?.theme);
@@ -27,11 +27,11 @@ function LastWeekContact({ lastWeekContact }: { lastWeekContact: any }) {
               labelFormatter={true}
             />
           ) : (
-            ""
+            ''
           )}
         </div>
       </div>
-      {!lastWeekContact?.length ? <NoData /> : ""}
+      {!lastWeekContact?.length ? <NoData /> : ''}
     </>
   );
 }

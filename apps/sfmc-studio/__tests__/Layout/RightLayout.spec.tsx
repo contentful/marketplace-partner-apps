@@ -49,7 +49,7 @@ describe('RightLayout', () => {
     render(
       <Provider store={store}>
         <RightLayout collapsed={false} setCollapsed={jest.fn()} />
-      </Provider>
+      </Provider>,
     );
 
     screen.debug();
@@ -58,6 +58,5 @@ describe('RightLayout', () => {
     expect(screen.getByRole('button', { name: /Sync/i })).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: /Sync/i }));
-
   });
 });

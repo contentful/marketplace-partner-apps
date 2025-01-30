@@ -1,9 +1,9 @@
-"use client";
-import React from "react";
-import style from "./totalOrders.module.scss";
-import NoData from "@/components/UI/NoData";
-import LineChart from "@/components/charts/LineChart";
-import { TopOrders } from "@/lib/types/dashboard";
+'use client';
+import React from 'react';
+import style from './totalOrders.module.scss';
+import NoData from '@/components/UI/NoData';
+import LineChart from '@/components/charts/LineChart';
+import { TopOrders } from '@/lib/types/dashboard';
 
 function TotalOrders({ topOrders }: { topOrders: TopOrders[] }) {
   return (
@@ -25,11 +25,11 @@ function TotalOrders({ topOrders }: { topOrders: TopOrders[] }) {
               labelFormatter={false}
             />
           ) : (
-            ""
+            ''
           )}
         </div>
       </div>
-      {!topOrders?.length ? <NoData /> : ""}
+      {!topOrders?.length ? <NoData /> : ''}
     </>
   );
 }
