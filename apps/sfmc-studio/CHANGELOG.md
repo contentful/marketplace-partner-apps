@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/contentful-marketing-app-client-v1.0.0...contentful-marketing-app-client-v1.0.1) (2025-01-30)
+
+
+### Bug Fixes
+
+* sfmc-studio prettier ([#4228](https://github.com/contentful/marketplace-partner-apps/issues/4228)) ([2b8bbb1](https://github.com/contentful/marketplace-partner-apps/commit/2b8bbb156d733cc0cb075cf4a5bc7ac7623d6e16))
+
 ## 1.0.0 (2025-01-30)
 
 
