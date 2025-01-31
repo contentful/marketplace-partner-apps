@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/contentful/marketplace-partner-apps/compare/contentful-marketing-app-client-v1.0.1...contentful-marketing-app-client-v1.0.2) (2025-01-31)
+
+
+### Bug Fixes
+
+* sfmc studio deploy script ([#4230](https://github.com/contentful/marketplace-partner-apps/issues/4230)) ([cb783b2](https://github.com/contentful/marketplace-partner-apps/commit/cb783b254c12028f8c57cc2c05298f5e52e904c2))
+
 ## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/contentful-marketing-app-client-v1.0.0...contentful-marketing-app-client-v1.0.1) (2025-01-30)
 
 
