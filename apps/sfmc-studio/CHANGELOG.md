@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/contentful-marketing-app-client-v1.0.2...contentful-marketing-app-client-v1.0.3) (2025-01-31)
+
+
+### Bug Fixes
+
+* sfmc studio add app scripts ([#4232](https://github.com/contentful/marketplace-partner-apps/issues/4232)) ([572e0ed](https://github.com/contentful/marketplace-partner-apps/commit/572e0edb04bd6f8406b0f2d8052b6d36df70a34f))
+
 ## [1.0.2](https://github.com/contentful/marketplace-partner-apps/compare/contentful-marketing-app-client-v1.0.1...contentful-marketing-app-client-v1.0.2) (2025-01-31)
 
 
