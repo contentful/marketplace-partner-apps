@@ -72,7 +72,7 @@ describe('CustomerEngagement', () => {
     render(
       <Provider store={store}>
         <CustomerEngagement order={1} />
-      </Provider>
+      </Provider>,
     );
 
     await waitFor(() => {
@@ -90,7 +90,7 @@ describe('CustomerEngagement', () => {
     render(
       <Provider store={store}>
         <CustomerEngagement order={1} />
-      </Provider>
+      </Provider>,
     );
 
     await waitFor(() => {});

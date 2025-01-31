@@ -1,26 +1,26 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import CustomerAcquisitionCounts from "./CustomerAcquisitionCounts";
-import TopCities from "./TopCities";
-import TotalOrders from "./TotalOrders";
-import TotalUsers from "./TotalUsers";
-import style from "./customerAcquisition.module.scss";
-import { useSDK } from "@contentful/react-apps-toolkit";
-import { PageAppSDK } from "@contentful/app-sdk";
-import { ApiClient } from "@/lib/ApiClients";
-import LastYearContact from "./LastYearContact";
-import LastWeekContact from "./LastWeekContact";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { defaultSystemTZ, encryptData } from "@/lib/utils/common";
-import { loadingState } from "@/redux/slices/loadersSlice";
-import { barChartColor, barLabelColor } from "@/lib/utils/getColor";
-import { dateStartEnd } from "@/redux/slices/dateSlice";
-import { ContactCounts, TopCitiesType, TopOrders } from "@/lib/types/dashboard";
-import { commonChartConfig } from "@/lib/utils/dashboards";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import advancedFormat from "dayjs/plugin/advancedFormat";
-import { environment } from "@/lib/Constants";
+'use client';
+import React, { useEffect, useState } from 'react';
+import CustomerAcquisitionCounts from './CustomerAcquisitionCounts';
+import TopCities from './TopCities';
+import TotalOrders from './TotalOrders';
+import TotalUsers from './TotalUsers';
+import style from './customerAcquisition.module.scss';
+import { useSDK } from '@contentful/react-apps-toolkit';
+import { PageAppSDK } from '@contentful/app-sdk';
+import { ApiClient } from '@/lib/ApiClients';
+import LastYearContact from './LastYearContact';
+import LastWeekContact from './LastWeekContact';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { defaultSystemTZ, encryptData } from '@/lib/utils/common';
+import { loadingState } from '@/redux/slices/loadersSlice';
+import { barChartColor, barLabelColor } from '@/lib/utils/getColor';
+import { dateStartEnd } from '@/redux/slices/dateSlice';
+import { ContactCounts, TopCitiesType, TopOrders } from '@/lib/types/dashboard';
+import { commonChartConfig } from '@/lib/utils/dashboards';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
+import { environment } from '@/lib/Constants';
 
 // Extend dayjs with the utc plugin
 dayjs.extend(utc);
@@ -55,13 +55,7 @@ function CustomerAcquisition({ order }: { order: number }) {
     if (parameters?.installation?.licenseKey && isAuth) {
       try {
         dispatch(loadingState(true));
-        const [
-          contactCountsResponse,
-          newContactsResponse,
-          topCitiesRes,
-          topOrdersRes,
-          totalUsersRes,
-        ] = await Promise.all([
+        const [contactCountsResponse, newContactsResponse, topCitiesRes, topOrdersRes, totalUsersRes] = await Promise.all([
           fetchContactCounts(),
           fetchNewContacts(),
           fetchTopCitiesOrder(dateRange),
@@ -83,17 +77,16 @@ function CustomerAcquisition({ order }: { order: number }) {
               ...elm,
               color: barChartColor[i],
               labelColor: barLabelColor[i],
-              name: commonChartConfig.capitalizeLabel(elm, "name"),
+              name: commonChartConfig.capitalizeLabel(elm, 'name'),
             };
-          })
+          }),
         );
         setTopOrders(topOrdersRes?.data?.data);
         setTotalUsers(totalUsersRes?.data?.data);
       } catch (e) {
-        console.log("Error occurred during data fetching:", e);
+        console.log('Error occurred during data fetching:', e);
       } finally {
-        if (navigationSlice.activeRoute.order === order)
-          dispatch(loadingState(false));
+        if (navigationSlice.activeRoute.order === order) dispatch(loadingState(false));
       }
     }
   };
@@ -101,7 +94,7 @@ function CustomerAcquisition({ order }: { order: number }) {
   const fetchContactCounts = async () => {
     try {
       const res = await client.post(
-        "/api/dashboard/customer-acquisition",
+        '/api/dashboard/customer-acquisition',
         {
           licenseKey: encryptData({
             licenseKey: parameters.installation.licenseKey,
@@ -111,41 +104,32 @@ function CustomerAcquisition({ order }: { order: number }) {
         {
           headers: {
             Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
-            ["jro34134ecr4aex"]: `${encryptData({
+            ['jro34134ecr4aex']: `${encryptData({
               validate: Date.now(),
               token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
-        }
+        },
       );
 
-      if (res.status !== 200)
-        console.log("Error occured fetching contact counts");
+      if (res.status !== 200) console.log('Error occured fetching contact counts');
 
       return res;
     } catch (err) {
-      console.log("Error occured fetching contact counts");
+      console.log('Error occured fetching contact counts');
     }
   };
 
   const fetchNewContacts = async () => {
     let date = {
-      weekStartDate: dayjs
-        .utc()
-        .subtract(6, "days")
-        .startOf("day")
-        .toISOString(),
-      weekEndDate: dayjs.utc().endOf("day").toISOString(),
-      monthStartDate: dayjs
-        .utc()
-        .subtract(6, "months")
-        .startOf("day")
-        .toISOString(),
-      monthEndDate: dayjs.utc().endOf("day").toISOString(),
+      weekStartDate: dayjs.utc().subtract(6, 'days').startOf('day').toISOString(),
+      weekEndDate: dayjs.utc().endOf('day').toISOString(),
+      monthStartDate: dayjs.utc().subtract(6, 'months').startOf('day').toISOString(),
+      monthEndDate: dayjs.utc().endOf('day').toISOString(),
     };
     try {
       const res = await client.post(
-        "/api/dashboard/customer-acquisition/new-contacts",
+        '/api/dashboard/customer-acquisition/new-contacts',
         {
           licenseKey: encryptData({
             licenseKey: parameters.installation.licenseKey,
@@ -157,26 +141,25 @@ function CustomerAcquisition({ order }: { order: number }) {
         {
           headers: {
             Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
-            ["jro34134ecr4aex"]: `${encryptData({
+            ['jro34134ecr4aex']: `${encryptData({
               validate: Date.now(),
               token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
-        }
+        },
       );
-      if (res.status !== 200)
-        console.log("Error occured fetching contact counts");
+      if (res.status !== 200) console.log('Error occured fetching contact counts');
 
       return res;
     } catch (err) {
-      console.log("Error occured fetching contact counts");
+      console.log('Error occured fetching contact counts');
     }
   };
 
   const fetchTopCitiesOrder = async (dateRange: dateStartEnd) => {
     try {
       const res = await client.post(
-        "/api/dashboard/customer-acquisition/top-cities",
+        '/api/dashboard/customer-acquisition/top-cities',
         {
           licenseKey: encryptData({
             licenseKey: parameters.installation.licenseKey,
@@ -186,27 +169,26 @@ function CustomerAcquisition({ order }: { order: number }) {
         {
           headers: {
             Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
-            ["jro34134ecr4aex"]: `${encryptData({
+            ['jro34134ecr4aex']: `${encryptData({
               validate: Date.now(),
               token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
-        }
+        },
       );
 
-      if (res.status !== 200)
-        console.log("Error occured fetching top-cities data");
+      if (res.status !== 200) console.log('Error occured fetching top-cities data');
 
       return res;
     } catch (err) {
-      console.log("Error occured fetching top revenue");
+      console.log('Error occured fetching top revenue');
     }
   };
 
   const fetchTopOrdersTop = async (dateRange: dateStartEnd) => {
     try {
       const res = await client.post(
-        "/api/dashboard/customer-acquisition/total-orders",
+        '/api/dashboard/customer-acquisition/total-orders',
         {
           licenseKey: encryptData({
             licenseKey: parameters.installation.licenseKey,
@@ -217,26 +199,25 @@ function CustomerAcquisition({ order }: { order: number }) {
         {
           headers: {
             Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
-            ["jro34134ecr4aex"]: `${encryptData({
+            ['jro34134ecr4aex']: `${encryptData({
               validate: Date.now(),
               token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
-        }
+        },
       );
-      if (res.status !== 200)
-        console.log("Error occured fetching conversion data");
+      if (res.status !== 200) console.log('Error occured fetching conversion data');
 
       return res;
     } catch (err) {
-      console.log("Error occured fetching top revenue");
+      console.log('Error occured fetching top revenue');
     }
   };
 
   const fetchTotalUsers = async (dateRange: dateStartEnd) => {
     try {
       const res = await client.post(
-        "/api/dashboard/customer-acquisition/total-users",
+        '/api/dashboard/customer-acquisition/total-users',
         {
           licenseKey: encryptData({
             licenseKey: parameters.installation.licenseKey,
@@ -248,44 +229,33 @@ function CustomerAcquisition({ order }: { order: number }) {
         {
           headers: {
             Authorization: `Bearer ${environment?.NEXT_PUBLIC_JWT_TOKEN}`,
-            ["jro34134ecr4aex"]: `${encryptData({
+            ['jro34134ecr4aex']: `${encryptData({
               validate: Date.now(),
               token: environment?.NEXT_PUBLIC_JWT_TOKEN,
             })}`,
           },
-        }
+        },
       );
-      if (res.status !== 200)
-        console.log("Error occured fetching conversion data");
+      if (res.status !== 200) console.log('Error occured fetching conversion data');
 
       return res;
     } catch (err) {
-      console.log("Error occured fetching top revenue");
+      console.log('Error occured fetching top revenue');
     }
   };
 
   return (
     <>
       <CustomerAcquisitionCounts contactCounts={counts} />
-      <div
-        className={`${style.CountsMainContain} ${themeSlice.theme == "dark" ? style.DarkTheme : ""
-          }`}
-      >
-        <div
-          className={`${style.CountsMainContainInnerCont} ${themeSlice.theme}`}
-        >
+      <div className={`${style.CountsMainContain} ${themeSlice.theme == 'dark' ? style.DarkTheme : ''}`}>
+        <div className={`${style.CountsMainContainInnerCont} ${themeSlice.theme}`}>
           <LastWeekContact lastWeekContact={lastWeekContact} />
         </div>
-        <div
-          className={`${style.CountsMainContainInnerCont} ${themeSlice.theme}`}
-        >
+        <div className={`${style.CountsMainContainInnerCont} ${themeSlice.theme}`}>
           <LastYearContact lastYearContact={lastYearContact} />
         </div>
       </div>
-      <div
-        className={`${style.DeviceCityMainContain} ${themeSlice.theme == "dark" ? style.DarkTheme : ""
-          }`}
-      >
+      <div className={`${style.DeviceCityMainContain} ${themeSlice.theme == 'dark' ? style.DarkTheme : ''}`}>
         <div className={`${style.DeviceCategoryData} ${themeSlice.theme}`}>
           <TopCities topCities={topCities} />
         </div>

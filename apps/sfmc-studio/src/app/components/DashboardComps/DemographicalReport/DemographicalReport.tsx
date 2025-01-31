@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 function DemographicalReport() {
-  return (
-    <div>DemographicalReport</div>
-  )
+  return <div>DemographicalReport</div>;
 }
 
-export default DemographicalReport
+export default DemographicalReport;

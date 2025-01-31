@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export type activeRouteType = {
   _id: string;
@@ -9,9 +9,9 @@ export type activeRouteType = {
 
 const initialState = {
   activeRoute: {
-    _id: "",
-    heading: "",
-    menulabel: "",
+    _id: '',
+    heading: '',
+    menulabel: '',
     order: 0,
   },
   update: false,
@@ -19,7 +19,7 @@ const initialState = {
 };
 
 export const navigationSlice = createSlice({
-  name: "navigation",
+  name: 'navigation',
   initialState,
   reducers: {
     changeRoute(state, action: PayloadAction<activeRouteType>) {
@@ -34,7 +34,6 @@ export const navigationSlice = createSlice({
   },
 });
 
-export const { changeRoute, fetchUpdated, addMenuArr } =
-  navigationSlice.actions;
+export const { changeRoute, fetchUpdated, addMenuArr } = navigationSlice.actions;
 
 export default navigationSlice.reducer;

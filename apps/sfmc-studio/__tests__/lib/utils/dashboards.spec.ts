@@ -1,6 +1,5 @@
-import { commonChartConfig, } from '@/lib/utils/dashboards';
+import { commonChartConfig } from '@/lib/utils/dashboards';
 import dayjs from 'dayjs';
-
 
 describe('commonChartConfig', () => {
   describe('dateFormatForGraph', () => {
@@ -25,7 +24,7 @@ describe('commonChartConfig', () => {
     });
   });
 
-   describe('handleMouseEnter', () => {
+  describe('handleMouseEnter', () => {
     it('should return id if labelText length is greater than sliceLength', () => {
       const event = { attributes: { labelText: 'VeryLongLabelText' }, __data__: { id: '123' } };
       const id = commonChartConfig.handleMouseEnter(event, 10);
@@ -41,10 +40,10 @@ describe('commonChartConfig', () => {
 
   describe('transformLegendText', () => {
     it('should truncate legend text if longer than sliceLength', () => {
-    const longLabel = 'ThisIsAVeryLongLabel';
-    const shortLabel = commonChartConfig.transformLegendText(longLabel, 4);
-    expect(shortLabel).toBe('This...');
-  });
+      const longLabel = 'ThisIsAVeryLongLabel';
+      const shortLabel = commonChartConfig.transformLegendText(longLabel, 4);
+      expect(shortLabel).toBe('This...');
+    });
 
     it('should return the label as is if it is shorter than sliceLength', () => {
       const shortLabel = 'Short';
@@ -52,7 +51,6 @@ describe('commonChartConfig', () => {
       expect(transformedLabel).toBe('Short');
     });
   });
- 
 
   describe('axisYLableFormatingBarChart', () => {
     it('should format large values with M suffix', () => {
@@ -68,5 +66,3 @@ describe('commonChartConfig', () => {
     });
   });
 });
-
-

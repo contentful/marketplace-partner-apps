@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import NoData from '@/components/UI/NoData'; 
+import NoData from '@/components/UI/NoData';
 import '@testing-library/jest-dom/extend-expect';
 
 describe('NoData component', () => {

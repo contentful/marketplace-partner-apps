@@ -1,18 +1,11 @@
-"use client";
-import { PieChartType } from "@/lib/types/chart";
-import { formatInput } from "@/lib/utils/common";
-import { Pie } from "@ant-design/plots";
-import React, { FC, useMemo } from "react";
-import { useAppSelector } from "@/redux/hooks";
+'use client';
+import { PieChartType } from '@/lib/types/chart';
+import { formatInput } from '@/lib/utils/common';
+import { Pie } from '@ant-design/plots';
+import React, { FC, useMemo } from 'react';
+import { useAppSelector } from '@/redux/hooks';
 
-const PieChart: FC<PieChartType> = ({
-  data,
-  angleField,
-  colorField,
-  innerRadius,
-  width,
-  height,
-}) => {
+const PieChart: FC<PieChartType> = ({ data, angleField, colorField, innerRadius, width, height }) => {
   let theme: string = useAppSelector((state) => state.themeSlice?.theme);
   const config = useMemo(() => {
     return {

@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import React from 'react';
 import { Paragraph } from '@contentful/f36-components';
 import { EditorAppSDK } from '@contentful/app-sdk';

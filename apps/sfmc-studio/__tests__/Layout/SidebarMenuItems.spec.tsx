@@ -23,14 +23,14 @@ const mockStore = configureStore([]);
 const initialState = {
   loaderSlice: { loading: false },
   themeSlice: { theme: 'light' },
-  navigationSlice: { 
+  navigationSlice: {
     menu: [
       { key: '1', label: 'Item 1', icon: JSON.stringify('icon1') },
       { key: '2', label: 'Item 2', icon: JSON.stringify('icon2') },
-      { key: '3', label: 'Item 3', icon: JSON.stringify('icon3') }
+      { key: '3', label: 'Item 3', icon: JSON.stringify('icon3') },
     ],
-    activeRoute: {}
-  }
+    activeRoute: {},
+  },
 };
 const store = mockStore(initialState);
 
@@ -39,7 +39,7 @@ describe('SidebarMenuItems', () => {
     render(
       <Provider store={store}>
         <SidebarMenuItems collapsed={false} />
-      </Provider>
+      </Provider>,
     );
 
     expect(screen.getByTestId('sidebar-menu-items')).toBeInTheDocument();

@@ -78,14 +78,11 @@ describe('RoiConversion', () => {
     render(
       <Provider store={store}>
         <RoiConversion order={1} />
-      </Provider>
+      </Provider>,
     );
 
     await waitFor(() => {
       expect(mockPost).toHaveBeenCalledTimes(5);
     });
-
   });
-
-
 });

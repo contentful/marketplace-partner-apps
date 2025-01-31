@@ -1,11 +1,11 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  theme: "light",
+  theme: 'light',
 };
 
 const themeSlice = createSlice({
-  name: "themeSlice",
+  name: 'themeSlice',
   initialState,
   reducers: {
     themeChange(state, action: PayloadAction<string>) {
