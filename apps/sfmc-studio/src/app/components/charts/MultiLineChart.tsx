@@ -50,7 +50,7 @@ const MultiLineChart: FC<MultiLineChartType> = ({
           labelFontWeight: 500,
           labelFill: themeTextColor[theme as keyof typeof themeTextColor],
           labelOpacity: 1,
-          labelFontFamily: "SFProDisplay",
+          labelFontFamily: "var(--primary-font), sans-serif",
         },
         y: {
           line: true,
@@ -64,7 +64,7 @@ const MultiLineChart: FC<MultiLineChartType> = ({
           labelFontWeight: 500,
           labelFill: themeTextColor[theme as keyof typeof themeTextColor],
           labelOpacity: 1,
-          labelFontFamily: "SFProDisplay",
+          labelFontFamily: "var(--primary-font), sans-serif",
         },
       },
       tooltip: (d: any, index: number, data: any[]) => ({

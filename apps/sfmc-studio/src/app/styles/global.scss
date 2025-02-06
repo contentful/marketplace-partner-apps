@@ -1,17 +1,24 @@
-@import "./fonts.scss";
+// @import "./fonts.scss";
 :root {
   --theme-dark: #1b273a;
   --theme-light: #ffffff;
   --right-layout-dark: #111b2b;
+  font-family: var(--primary-font), sans-serif;
 }
 
-html {
-  body {
-    font-family: "SFProDisplay";
-    .ant-layout {
-      font-family: "SFProDisplay";
-    }
-  }
+// html {
+//   body {
+//     font-family:var(--primary-font);
+//     .ant-layout {
+//       font-family: var(--primary-font);
+//     }
+//   }
+// }
+:where(.css-dev-only-do-not-override-1c0na6j).ant-layout{
+  font-family:var(--primary-font);
+}
+body{
+  font-family:var(--primary-font) !important;
 }
 .MainLayout {
   height: 100%;
@@ -248,7 +255,7 @@ html {
             padding-right: 8px;
             min-width: 76px;
             height: 34px;
-            font-family: "SFProDisplay";
+            font-family:var(--primary-font) !important;
             &:hover {
               color: #fff;
               background: #4096ff;
@@ -386,7 +393,7 @@ html {
             }
           }
           button {
-            font-family: "SFProDisplay";
+            font-family: var(--primary-font) !important;
           }
         }
       }
@@ -469,6 +476,7 @@ html {
       width: 100%;
       padding: 0px 10px;
       height: 40px;
+      
       .ant-space {
         width: 100%;
         .ant-space-item {
@@ -497,7 +505,7 @@ html {
         font-style: normal;
         font-weight: 700;
         line-height: 20px;
-        font-family: "SFProDisplay";
+        font-family: var(--primary-font) !important;
         &.ant-table-column-sort {
           background-color: #036fe3;
         }
@@ -526,7 +534,7 @@ html {
     tr {
       td {
         color: #111b2b;
-        font-family: "SFProDisplay";
+        font-family: var(--primary-font) !important;
         font-size: 16px;
         font-style: normal;
         font-weight: 400;
@@ -585,7 +593,7 @@ html {
             background: #f7f9fa !important;
             box-shadow: 0px -1px 0px 0px #e7ebee inset;
             font-weight: 700;
-            font-family: "SFProDisplay";
+            font-family:var(--primary-font);
           }
         }
       }
@@ -764,7 +772,7 @@ html {
 }
 
 .g2-tooltip {
-  font-family: "SFProDisplay" !important;
+  font-family: var(--primary-font) !important;
 }
 .DateOuterTop {
   gap: 10px;
@@ -783,12 +791,16 @@ html {
     height: 40px;
     background-color: #036fe3;
     font-weight: 500;
+    font-family:var(--primary-font) !important;
+
   }
   .DropDownButton {
     height: 40px;
     font-weight: 500;
     color: #111b2b !important;
     border-color: #cfd9e0 !important;
+    font-family:var(--primary-font) !important;
+
     .DropDownIconCustom {
       margin: 0;
       svg {
@@ -1042,7 +1054,7 @@ sup.Supdata {
   }
   .ant-notification-notice-description {
     color: #111b2b;
-    font-family: "SFProDisplay";
+    font-family: var(--primary-font);
     font-size: 16px;
     margin-left: 30px;
     font-weight: 400;
@@ -1108,6 +1120,7 @@ sup.Supdata {
   justify-content: center;
   background-color: #036fe3;
   font-weight: 500;
+  font-family:var(--primary-font) !important;
 }
 .light {
   background-color: var(--theme-light) !important;
@@ -1418,6 +1431,7 @@ sup.Supdata {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    font-family:var(--primary-font);
   }
 
   .date-dark {

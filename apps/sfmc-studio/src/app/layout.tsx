@@ -3,6 +3,7 @@ import Providers from "@/components/Providers/Providers";
 import "@/styles/global.scss";
 import { ReduxProviders } from "./redux/provider";
 import { environment } from "./lib/Constants";
+import { poppins } from "./lib/font";
 
 export const metadata = {
   title: "Next.js",
@@ -31,7 +32,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
 
-      <body>
+      <body className={`${poppins.className} ${poppins.variable}`}>
         {
           environment?.NEXT_PUBLIC_GTM_ID &&
           environment?.NEXT_PUBLIC_ENABLE_GTM && (

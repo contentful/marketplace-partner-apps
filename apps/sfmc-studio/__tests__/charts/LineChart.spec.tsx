@@ -213,7 +213,7 @@ describe("LineChart Component", () => {
       labelFontWeight: 500,
       labelFill: themeTextColor["light"],
       labelOpacity: 1,
-      labelFontFamily: "SFProDisplay",
+      labelFontFamily: "var(--primary-font), sans-serif",
       tick: false,
       labelSpacing: 10,
     });
@@ -235,7 +235,7 @@ describe("LineChart Component", () => {
       labelFontWeight: 500,
       labelFill: themeTextColor["light"],
       labelOpacity: 1,
-      labelFontFamily: "SFProDisplay",
+      labelFontFamily: "var(--primary-font), sans-serif",
       style: {
         labelTransform: "rotate(-50)",
         labelFormatter: expect.any(Function),

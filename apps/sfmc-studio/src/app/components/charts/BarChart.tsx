@@ -75,7 +75,7 @@ const BarChart: FC<BarChartType> = ({
           labelFontWeight: 500,
           labelFill: themeTextColor[theme as keyof typeof themeTextColor],
           labelOpacity: 1,
-          labelFontFamily: "SFProDisplay",
+          labelFontFamily: "var(--primary-font), sans-serif",
           tick: false,
           labelFormatter: (value: any) => {
             if (value >= 1000000) {
@@ -95,7 +95,7 @@ const BarChart: FC<BarChartType> = ({
           labelFontWeight: 500,
           labelFill: themeTextColor[theme as keyof typeof themeTextColor],
           labelOpacity: 1,
-          labelFontFamily: "SFProDisplay",
+          labelFontFamily: "var(--primary-font), sans-serif",
           grid: false,
           tick: false,
         },

@@ -93,7 +93,7 @@ describe("MultiLineChart", () => {
             labelFontWeight: 500,
             labelFill: themeTextColor["light"],
             labelOpacity: 1,
-            labelFontFamily: "SFProDisplay",
+            labelFontFamily: "var(--primary-font), sans-serif",
           }),
           y: expect.objectContaining({
             line: true,
@@ -107,7 +107,7 @@ describe("MultiLineChart", () => {
             labelFontWeight: 500,
             labelFill: themeTextColor["light"],
             labelOpacity: 1,
-            labelFontFamily: "SFProDisplay",
+            labelFontFamily: "var(--primary-font), sans-serif",
           }),
         },
         tooltip: expect.any(Function),
