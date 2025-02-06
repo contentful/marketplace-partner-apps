@@ -54,7 +54,7 @@ const LineChart: FC<LineChartType> = ({ data, xField, yField, dateShow, axisYTit
           labelFontWeight: 500,
           labelFill: themeTextColor[theme as keyof typeof themeTextColor],
           labelOpacity: 1,
-          labelFontFamily: 'SFProDisplay',
+          labelFontFamily: 'var(--primary-font), sans-serif',
           tick: false,
           labelSpacing: 10,
         },
@@ -74,7 +74,7 @@ const LineChart: FC<LineChartType> = ({ data, xField, yField, dateShow, axisYTit
           labelFontWeight: 500,
           labelFill: themeTextColor[theme as keyof typeof themeTextColor],
           labelOpacity: 1,
-          labelFontFamily: 'SFProDisplay',
+          labelFontFamily: 'var(--primary-font), sans-serif',
           style: {
             labelTransform: commonChartConfig.dateFieldLabelTransform,
             labelFormatter: labelFormatter

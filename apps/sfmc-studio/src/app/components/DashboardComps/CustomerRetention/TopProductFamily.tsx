@@ -15,7 +15,7 @@ export default function TopProductFamily({ topProductFamily }: { topProductFamil
   let legend = {
     position: 'bottom',
     itemLabelFontSize: 13,
-    itemLabelFontFamily: 'SFProDisplay',
+    itemLabelFontFamily: 'var(--primary-font), sans-serif',
     itemLabelFontWeight: 400,
     itemLabelFill: themeTextColor[theme as keyof typeof themeTextColor],
     itemLabelStroke: themeTextColor[theme as keyof typeof themeTextColor],
