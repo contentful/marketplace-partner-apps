@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.0...vwo-fme-v1.0.1) (2025-02-10)
+
+
+### Bug Fixes
+
+* new app vwo fme: update kb link ([#4293](https://github.com/contentful/marketplace-partner-apps/issues/4293)) ([34ef2ee](https://github.com/contentful/marketplace-partner-apps/commit/34ef2ee3ff896236e1aeba759e121fe311af855e))
+
 ## 1.0.0 (2025-01-29)
 
 
