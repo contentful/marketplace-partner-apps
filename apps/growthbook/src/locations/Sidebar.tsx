@@ -8,23 +8,8 @@ import { ExperimentAPIResponse } from '../../types/experiment';
 import Link from 'next/link';
 import { ContentTypesContext } from '../contexts/ContentTypesContext';
 
-const Sidebar = () => {
+const SidebarContent = () => {
   const sdk = useSDK<SidebarAppSDK>();
-
-  const contentTypeId = sdk.contentType.sys.id;
-  const contentType = sdk.contentType.name;
-  if (contentTypeId !== 'growthbookExperiment') {
-    return (
-      <>
-        The Growthbook sidebar widget only works on the "Growthbook Experiment" content type. You can remove this widget from the sidebar of {contentType}{' '}
-        content model{' '}
-        <a href={`https://app.contentful.com/spaces/${sdk.ids.space}/content_types/${contentTypeId}/sidebar_configuration`} target="_blank">
-          here
-        </a>
-        .
-      </>
-    );
-  }
 
   const { growthbookAPI: growthbookExperimentApi } = useContext(GrowthbookAPIContext);
 
@@ -350,6 +335,27 @@ ${entries
       {error && <Note variant="negative">{error}</Note>}
     </Stack>
   );
+};
+
+const Sidebar = () => {
+  const sdk = useSDK<SidebarAppSDK>();
+  const contentTypeId = sdk.contentType.sys.id;
+  const contentType = sdk.contentType.name;
+
+  if (contentTypeId !== 'growthbookExperiment') {
+    return (
+      <>
+        The Growthbook sidebar widget only works on the &quot;Growthbook Experiment&quot; content type. You can remove this widget from the sidebar of{' '}
+        {contentType} content model{' '}
+        <a href={`https://app.contentful.com/spaces/${sdk.ids.space}/content_types/${contentTypeId}/sidebar_configuration`} target="_blank">
+          here
+        </a>
+        .
+      </>
+    );
+  }
+
+  return <SidebarContent />;
 };
 
 export default Sidebar;
