@@ -11,6 +11,21 @@ import { ContentTypesContext } from '../contexts/ContentTypesContext';
 const Sidebar = () => {
   const sdk = useSDK<SidebarAppSDK>();
 
+  const contentTypeId = sdk.contentType.sys.id;
+  const contentType = sdk.contentType.name;
+  if (contentTypeId !== 'growthbookExperiment') {
+    return (
+      <>
+        The Growthbook sidebar widget only works on the "Growthbook Experiment" content type. You can remove this widget from the sidebar of {contentType}{' '}
+        content model{' '}
+        <a href={`https://app.contentful.com/spaces/${sdk.ids.space}/content_types/${contentTypeId}/sidebar_configuration`} target="_blank">
+          here
+        </a>
+        .
+      </>
+    );
+  }
+
   const { growthbookAPI: growthbookExperimentApi } = useContext(GrowthbookAPIContext);
 
   const [formExperimentName, setFormExperimentName] = useFieldValue<string>(sdk.entry.fields.experimentName.id);
