@@ -36,7 +36,18 @@ const Sidebar = () => {
   const displayError = useCallback(
     (error: string) => {
       const configUrl = `https://app.contentful.com/spaces/${sdk.ids.space}/apps/${sdk.ids.app}`;
-      if (error.includes('Invalid data source')) {
+      if (error.includes('is not valid JSON')) {
+        setError(
+          <>
+            The server {sdk.parameters.installation.growthbookServerUrl} did not return valid JSON. It is possible that the server is not set correctly
+            (api.growthbook.io for Growthbook Cloud). Go to the{' '}
+            <a href={configUrl} target="_blank">
+              Configuration page
+            </a>{' '}
+            to edit.
+          </>
+        );
+      } else if (error.includes('Invalid data source')) {
         setError(
           <>
             Datasource {sdk.parameters.installation.datasourceId} is invalid. Go to the{' '}
