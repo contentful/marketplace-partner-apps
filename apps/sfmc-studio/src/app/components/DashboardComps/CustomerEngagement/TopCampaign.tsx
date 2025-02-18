@@ -1,9 +1,9 @@
 'use client';
 import React from 'react';
 import style from './topCampaign.module.scss';
-import CustomTable from '@/components/UI/CustomTable';
+import CustomTable from '../../../components/UI/CustomTable';
 import { TableColumnsType, Tooltip } from 'antd';
-import { CampaignSentsType } from '@/lib/types/dashboard';
+import { CampaignSentsType } from '../../../lib/types/dashboard';
 
 function TopCampaign({ campaignSents }: { campaignSents: any }) {
   const columns: TableColumnsType<CampaignSentsType> = [

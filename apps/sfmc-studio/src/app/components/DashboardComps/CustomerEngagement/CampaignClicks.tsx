@@ -1,10 +1,10 @@
 'use client';
 import React from 'react';
 import style from './campaignClicks.module.scss';
-import CustomTable from '@/components/UI/CustomTable';
+import CustomTable from '../../../components/UI/CustomTable';
 import { TableColumnsType, Tooltip } from 'antd';
-import { CampaignClicksType } from '@/lib/types/dashboard';
-import { useAppSelector } from '@/redux/hooks';
+import { CampaignClicksType } from '../../../lib/types/dashboard';
+import { useAppSelector } from '../../../redux/hooks';
 
 export default function CampaignClicks({ campaignClicks }: { campaignClicks: any }) {
   const theme: string = useAppSelector((state) => state.themeSlice?.theme);

@@ -1,9 +1,9 @@
 'use client';
 import React from 'react';
 import style from './totalOrders.module.scss';
-import NoData from '@/components/UI/NoData';
-import LineChart from '@/components/charts/LineChart';
-import { TopOrders } from '@/lib/types/dashboard';
+import NoData from '../../../components/UI/NoData';
+import LineChart from '../../../components/charts/LineChart';
+import { TopOrders } from '../../../lib/types/dashboard';
 
 function TotalOrders({ topOrders }: { topOrders: TopOrders[] }) {
   return (

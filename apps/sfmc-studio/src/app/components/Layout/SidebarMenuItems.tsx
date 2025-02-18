@@ -4,17 +4,17 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Layout, Menu } from 'antd';
 const { Sider } = Layout;
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { addMenuArr, changeRoute } from '@/redux/slices/navigationSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { addMenuArr, changeRoute } from '../../redux/slices/navigationSlice';
 import parse from 'html-react-parser';
-import svgIcons from '@/lib/utils/icons';
-import { ApiClient } from '@/lib/ApiClients';
+import svgIcons from '../../lib/utils/icons';
+import { ApiClient } from '../../lib/ApiClients';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { PageAppSDK } from '@contentful/app-sdk';
-import { encryptData, saveOrValidateLicenseKey } from '@/lib/utils/common';
-import { setIsAuth } from '@/redux/slices/authSlice';
-import { openNotification } from '@/lib/utils/dashboards';
-import { AppInstallationParametersKeys } from '@/lib/AppConfig';
+import { encryptData, saveOrValidateLicenseKey } from '../../lib/utils/common';
+import { setIsAuth } from '../../redux/slices/authSlice';
+import { openNotification } from '../../lib/utils/dashboards';
+import { AppInstallationParametersKeys } from '../../lib/AppConfig';
 
 function SidebarMenuItems({ collapsed }: { collapsed: boolean }) {
   const dispatch = useAppDispatch();

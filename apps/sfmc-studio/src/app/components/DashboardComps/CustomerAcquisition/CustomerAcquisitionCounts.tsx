@@ -2,10 +2,10 @@
 import React from 'react';
 import style from './customerAcquisitionCounts.module.scss';
 import parse from 'html-react-parser';
-import svgIcons from '@/lib/utils/icons';
-import { formatInput } from '@/lib/utils/common';
-import { ContactCounts } from '@/lib/types/dashboard';
-import { useAppSelector } from '@/redux/hooks';
+import svgIcons from '../../../lib/utils/icons';
+import { formatInput } from '../../../lib/utils/common';
+import { ContactCounts } from '../../../lib/types/dashboard';
+import { useAppSelector } from '../../../redux/hooks';
 import { Tooltip } from 'antd';
 
 function CustomerAcquisitionCounts({ contactCounts }: { contactCounts: ContactCounts }) {

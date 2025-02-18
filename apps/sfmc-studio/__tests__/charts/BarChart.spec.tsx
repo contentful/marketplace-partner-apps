@@ -122,7 +122,7 @@ describe('BarChart', () => {
           labelFontWeight: 500,
           labelFill: themeTextColor[initialState.themeSlice.theme as keyof typeof themeTextColor],
           labelOpacity: 1,
-          labelFontFamily: 'SFProDisplay',
+          labelFontFamily: 'var(--primary-font), sans-serif',
           tick: false,
           labelFormatter: expect.any(Function),
         }),
@@ -229,7 +229,7 @@ describe('BarChart', () => {
     expect(axis.y.labelFontWeight).toBe(500);
     expect(axis.y.labelFill).toBe(themeTextColor[initialState.themeSlice.theme as keyof typeof themeTextColor]);
     expect(axis.y.labelOpacity).toBe(1);
-    expect(axis.y.labelFontFamily).toBe('SFProDisplay');
+    expect(axis.y.labelFontFamily).toBe('var(--primary-font), sans-serif');
     expect(axis.y.tick).toBe(false);
     expect(axis.x.labelSpacing).toBe(20);
     expect(axis.x.labelFormatter).toBeInstanceOf(Function);

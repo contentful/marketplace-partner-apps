@@ -1,9 +1,9 @@
 'use client';
 import React from 'react';
 import style from './campaignClicksEngagement.module.scss';
-import NoData from '@/components/UI/NoData';
-import BarChart from '@/components/charts/BarChart';
-import { useAppSelector } from '@/redux/hooks';
+import NoData from '../../../components/UI/NoData';
+import BarChart from '../../../components/charts/BarChart';
+import { useAppSelector } from '../../../redux/hooks';
 
 export default function CampaignClicksEngagement({ campaignClickUnique }: { campaignClickUnique: any }) {
   const theme: string = useAppSelector((state) => state.themeSlice?.theme);

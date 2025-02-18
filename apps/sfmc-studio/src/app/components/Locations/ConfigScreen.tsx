@@ -4,12 +4,12 @@ import { ConfigAppSDK } from '@contentful/app-sdk';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { Box, Flex, Form, FormControl, FormLabel, Heading, Paragraph, TextInput, Select } from '@contentful/f36-components';
 import { css } from 'emotion';
-import { AppInstallationParametersKeys, appInstallationParameters } from '@/lib/AppConfig';
-import { ApiClient } from '@/lib/ApiClients';
-import { clientCredsCookieName, CookieHelpers, decryptClientData, encryptData, saveOrValidateLicenseKey, timeZoneMapping } from '@/lib/utils/common';
+import { AppInstallationParametersKeys, appInstallationParameters } from '../../lib/AppConfig';
+import { ApiClient } from '../../lib/ApiClients';
+import { clientCredsCookieName, CookieHelpers, decryptClientData, encryptData, saveOrValidateLicenseKey, timeZoneMapping } from '../../lib/utils/common';
 import { AxiosInstance } from 'axios';
 import { Input, Switch } from 'antd';
-import { environment } from '@/lib/Constants';
+import { environment } from '../../lib/Constants';
 
 enum eAppParameterActions {
   UPDATED = 'UPDATED',

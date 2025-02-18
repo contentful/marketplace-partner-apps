@@ -1,20 +1,20 @@
 'use client';
-import CountCard from '@/components/UI/CountCard';
+import CountCard from '../../../components/UI/CountCard';
 import React, { useEffect, useState } from 'react';
 import style from './customerRetention.module.scss';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { PageAppSDK } from '@contentful/app-sdk';
-import { ApiClient } from '@/lib/ApiClients';
+import { ApiClient } from '../../../lib/ApiClients';
 import RevenueBySource from './RevenueBySource';
 import OrderByStatus from './OrderByStatus';
 import SoldProduct from './SoldProduct';
 import TopProductRevenue from './TopProductRevenue';
 import TopProductSku from './TopProductSku';
 import TopProductFamily from './TopProductFamily';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { dateStartEnd } from '@/redux/slices/dateSlice';
-import { loadingState } from '@/redux/slices/loadersSlice';
-import { barChartColor, barLabelColor, multiLineChart, pieChartColorDiff } from '@/lib/utils/getColor';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { dateStartEnd } from '../../../redux/slices/dateSlice';
+import { loadingState } from '../../../redux/slices/loadersSlice';
+import { barChartColor, barLabelColor, multiLineChart, pieChartColorDiff } from '../../../lib/utils/getColor';
 import {
   OrderByStatusRetention,
   RetentionCounts,
@@ -22,13 +22,13 @@ import {
   SoldProductsRetention,
   TopProductRevenueRetention,
   TopProductSkuType,
-} from '@/lib/types/dashboard';
-import { commonChartConfig } from '@/lib/utils/dashboards';
-import { encryptData, formatInput } from '@/lib/utils/common';
-import { defaultSystemTZ } from '@/lib/utils/common';
-import svgIcons from '@/lib/utils/icons';
+} from '../../../lib/types/dashboard';
+import { commonChartConfig } from '../../../lib/utils/dashboards';
+import { encryptData, formatInput } from '../../../lib/utils/common';
+import { defaultSystemTZ } from '../../../lib/utils/common';
+import svgIcons from '../../../lib/utils/icons';
 import getSymbolFromCurrency from 'currency-symbol-map';
-import { environment } from '@/lib/Constants';
+import { environment } from '../../../lib/Constants';
 
 function CustomerRetention({ order }: { order: number }) {
   const { parameters } = useSDK<PageAppSDK>();

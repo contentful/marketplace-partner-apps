@@ -1,8 +1,8 @@
 'use client';
 import React from 'react';
 import style from './topSourceMediumRevenue.module.scss';
-import NoData from '@/components/UI/NoData';
-import BarChart from '@/components/charts/BarChart';
+import NoData from '../../../components/UI/NoData';
+import BarChart from '../../../components/charts/BarChart';
 
 function TopSourceMediumRevenue({ sourceRevenue }: { sourceRevenue: any }) {
   return (

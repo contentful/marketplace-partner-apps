@@ -1,8 +1,8 @@
 import React from 'react';
 import { Table, Typography } from 'antd';
 import type { TableProps } from 'antd';
-import { formatInput } from '@/lib/utils/common';
-import { useAppSelector } from '@/redux/hooks';
+import { formatInput } from '../../lib/utils/common';
+import { useAppSelector } from '../../redux/hooks';
 const { Text } = Typography;
 
 interface DataType {

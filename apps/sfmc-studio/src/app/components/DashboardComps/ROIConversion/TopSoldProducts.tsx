@@ -1,12 +1,12 @@
 'use client';
 import React, { useState } from 'react';
 import style from './topSoldProducts.module.scss';
-import NoData from '@/components/UI/NoData';
-import MultiLineChart from '@/components/charts/MultiLineChart';
-import { multiLineChart } from '@/lib/utils/getColor';
-import { commonChartConfig } from '@/lib/utils/dashboards';
-import { useAppSelector } from '@/redux/hooks';
-import { themeTextColor } from '@/lib/Constants';
+import NoData from '../../../components/UI/NoData';
+import MultiLineChart from '../../../components/charts/MultiLineChart';
+import { multiLineChart } from '../../../lib/utils/getColor';
+import { commonChartConfig } from '../../../lib/utils/dashboards';
+import { useAppSelector } from '../../../redux/hooks';
+import { themeTextColor } from '../../../lib/Constants';
 
 function TopSoldProducts({ soldProduct }: { soldProduct: any }) {
   const [textHover, setTextHover] = useState<string>('');
@@ -15,7 +15,7 @@ function TopSoldProducts({ soldProduct }: { soldProduct: any }) {
   let legend = {
     position: 'bottom',
     itemLabelFontSize: 13,
-    itemLabelFontFamily: 'SFProDisplay',
+    itemLabelFontFamily: 'var(--primary-font), sans-serif',
     itemLabelFontWeight: 400,
     itemLabelFill: themeTextColor[theme as keyof typeof themeTextColor],
     itemLabelStroke: themeTextColor[theme as keyof typeof themeTextColor],

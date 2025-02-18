@@ -1,12 +1,12 @@
 'use client';
-import { MultiLineChartType } from '@/lib/types/chart';
-import { formatInput } from '@/lib/utils/common';
-import { commonChartConfig } from '@/lib/utils/dashboards';
-import { multiLineChart } from '@/lib/utils/getColor';
+import { MultiLineChartType } from '../../lib/types/chart';
+import { formatInput } from '../../lib/utils/common';
+import { commonChartConfig } from '../../lib/utils/dashboards';
+import { multiLineChart } from '../../lib/utils/getColor';
 import { Line } from '@ant-design/plots';
 import React, { FC, useMemo } from 'react';
-import { useAppSelector } from '@/redux/hooks';
-import { themeTextColor } from '@/lib/Constants';
+import { useAppSelector } from '../../redux/hooks';
+import { themeTextColor } from '../../lib/Constants';
 import dayjs from 'dayjs';
 
 const MultiLineChart: FC<MultiLineChartType> = ({ data, yField, colorField, legend }) => {
@@ -45,7 +45,7 @@ const MultiLineChart: FC<MultiLineChartType> = ({ data, yField, colorField, lege
           labelFontWeight: 500,
           labelFill: themeTextColor[theme as keyof typeof themeTextColor],
           labelOpacity: 1,
-          labelFontFamily: 'SFProDisplay',
+          labelFontFamily: 'var(--primary-font), sans-serif',
         },
         y: {
           line: true,
@@ -59,7 +59,7 @@ const MultiLineChart: FC<MultiLineChartType> = ({ data, yField, colorField, lege
           labelFontWeight: 500,
           labelFill: themeTextColor[theme as keyof typeof themeTextColor],
           labelOpacity: 1,
-          labelFontFamily: 'SFProDisplay',
+          labelFontFamily: 'var(--primary-font), sans-serif',
         },
       },
       tooltip: (d: any, index: number, data: any[]) => ({

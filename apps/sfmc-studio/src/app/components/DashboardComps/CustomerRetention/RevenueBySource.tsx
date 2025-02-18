@@ -1,11 +1,11 @@
 'use client';
 import React from 'react';
 import style from './revenueBySource.module.scss';
-import { formatInput } from '@/lib/utils/common';
-import NoData from '@/components/UI/NoData';
-import PieChartWithRadius from '@/components/charts/PieChart';
-import { RevenueBySourceRetention } from '@/lib/types/dashboard';
-import { useAppSelector } from '@/redux/hooks';
+import { formatInput } from '../../../lib/utils/common';
+import NoData from '../../../components/UI/NoData';
+import PieChartWithRadius from '../../../components/charts/PieChart';
+import { RevenueBySourceRetention } from '../../../lib/types/dashboard';
+import { useAppSelector } from '../../../redux/hooks';
 
 function RevenueBySource({ revenueSource }: { revenueSource: any }) {
   let theme: string = useAppSelector((state) => state.themeSlice?.theme);
