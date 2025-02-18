@@ -2,31 +2,30 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { Layout, Button, theme } from 'antd';
 const { Header, Content } = Layout;
-import { useAppSelector, useAppDispatch } from '@/redux/hooks';
-import { AppInstallationParametersKeys } from '@/lib/AppConfig';
+import { useAppSelector, useAppDispatch } from '../../redux/hooks';
+import { AppInstallationParametersKeys } from '../../lib/AppConfig';
 import RoiConversion from '../DashboardComps/ROIConversion/RoiConversion';
 import CustomerRetention from '../DashboardComps/CustomerRetention/CustomerRetention';
 import CustomerAcquisition from '../DashboardComps/CustomerAcquisition/CustomerAcquisition';
 import CustomerEngagement from '../DashboardComps/CustomerEngagement/CustomerEngagement';
 import Image from 'next/image';
 import parse from 'html-react-parser';
-import svgIcons from '@/lib/utils/icons';
+import svgIcons from '../../lib/utils/icons';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { ConfigAppSDK, PageAppSDK } from '@contentful/app-sdk';
 import DatePicker from '../UI/DatePicker';
-import { ApiClient } from '@/lib/ApiClients';
+import { ApiClient } from '../../lib/ApiClients';
 import CustomNotification from '../UI/CustomNotification';
 import Loader from '../Loader/Loader';
-import { addMenuArr, changeRoute } from '@/redux/slices/navigationSlice';
+import { addMenuArr, changeRoute } from '../../redux/slices/navigationSlice';
 import debounce from 'lodash/debounce';
 import jsPDF from 'jspdf';
 import { toCanvas } from 'html-to-image';
-import { themeChange } from '@/redux/slices/themeSlice';
+import { themeChange } from '../../redux/slices/themeSlice';
 import { Switch } from 'antd';
-import { clientCredsCookieName, CookieHelpers, decryptClientData, encryptData, saveOrValidateLicenseKey } from '@/lib/utils/common';
-import { setIsAuth } from './../../redux/slices/authSlice';
-import { openNotification } from '@/lib/utils/dashboards';
-import { environment } from '@/lib/Constants';
+import { clientCredsCookieName, CookieHelpers, decryptClientData, encryptData, saveOrValidateLicenseKey } from '../../lib/utils/common';
+import { openNotification } from '../../lib/utils/dashboards';
+import { environment } from '../../lib/Constants';
 
 const RenderSwitch = ({ order }: { order: number }) => {
   switch (order) {

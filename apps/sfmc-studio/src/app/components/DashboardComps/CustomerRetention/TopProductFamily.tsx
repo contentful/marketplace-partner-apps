@@ -1,12 +1,12 @@
 'use client';
 import React, { useState } from 'react';
 import style from './topProductFamily.module.scss';
-import NoData from '@/components/UI/NoData';
-import MultiLineChart from '@/components/charts/MultiLineChart';
-import { multiLineChart } from '@/lib/utils/getColor';
-import { commonChartConfig } from '@/lib/utils/dashboards';
-import { useAppSelector } from '@/redux/hooks';
-import { themeTextColor } from '@/lib/Constants';
+import NoData from '../../../components/UI/NoData';
+import MultiLineChart from '../../../components/charts/MultiLineChart';
+import { multiLineChart } from '../../../lib/utils/getColor';
+import { commonChartConfig } from '../../../lib/utils/dashboards';
+import { useAppSelector } from '../../../redux/hooks';
+import { themeTextColor } from '../../../lib/Constants';
 
 export default function TopProductFamily({ topProductFamily }: { topProductFamily: any }) {
   let theme: string = useAppSelector((state) => state.themeSlice?.theme);

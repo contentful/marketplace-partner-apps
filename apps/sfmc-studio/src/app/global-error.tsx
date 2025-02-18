@@ -1,5 +1,5 @@
 'use client';
-import GlobalErrorBoundary from '@/components/ErrorBoundary/GlobalErrorBoundary';
+import GlobalErrorBoundary from './components/ErrorBoundary/GlobalErrorBoundary';
 import { useEffect } from 'react';
 
 export default function GlobalError({ error, reset }: { error: Error; reset: () => void }) {

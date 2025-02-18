@@ -1,9 +1,9 @@
 'use client';
 import React from 'react';
 import style from './topCities.module.scss';
-import NoData from '@/components/UI/NoData';
-import BarChart from '@/components/charts/BarChart';
-import { TopCitiesType } from '@/lib/types/dashboard';
+import NoData from '../../../components/UI/NoData';
+import BarChart from '../../../components/charts/BarChart';
+import { TopCitiesType } from '../../../lib/types/dashboard';
 
 function TopCities({ topCities }: { topCities: TopCitiesType[] }) {
   return (

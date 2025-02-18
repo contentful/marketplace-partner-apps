@@ -2,8 +2,8 @@
 import { Table, theme } from 'antd';
 import type { TableProps } from 'antd';
 import style from './soldProduct.module.scss';
-import { SoldProductsRetention } from '@/lib/types/dashboard';
-import { useAppSelector } from '@/redux/hooks';
+import { SoldProductsRetention } from '../../../lib/types/dashboard';
+import { useAppSelector } from '../../../redux/hooks';
 
 export default function SoldProduct({ soldProduct }: { soldProduct: any }) {
   const theme: string = useAppSelector((state) => state.themeSlice?.theme);

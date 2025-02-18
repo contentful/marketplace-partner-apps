@@ -1,6 +1,6 @@
-import CustomGlobalStyles from '@/components/GlobalStyles/GlobalStyles';
-import Providers from '@/components/Providers/Providers';
-import '@/styles/global.scss';
+import CustomGlobalStyles from './components/GlobalStyles/GlobalStyles';
+import Providers from './components/Providers/Providers';
+import './styles/global.scss';
 import { ReduxProviders } from './redux/provider';
 import { environment } from './lib/Constants';
 import { poppins } from './lib/font';

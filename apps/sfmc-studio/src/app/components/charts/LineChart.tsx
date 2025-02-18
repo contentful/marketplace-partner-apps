@@ -1,11 +1,11 @@
 'use client';
-import { themeTextColor } from '@/lib/Constants';
-import { LineChartType } from '@/lib/types/chart';
-import { formatInput } from '@/lib/utils/common';
-import { commonChartConfig } from '@/lib/utils/dashboards';
+import { themeTextColor } from '../../lib/Constants';
+import { LineChartType } from '../../lib/types/chart';
+import { formatInput } from '../../lib/utils/common';
+import { commonChartConfig } from '../../lib/utils/dashboards';
 import { Line } from '@ant-design/plots';
 import { FC, useMemo } from 'react';
-import { useAppSelector } from '@/redux/hooks';
+import { useAppSelector } from '../../redux/hooks';
 
 const LineChart: FC<LineChartType> = ({ data, xField, yField, dateShow, axisYTitle, axisXTitle, toolTipText, showAnnotations, height, labelFormatter }) => {
   let theme: string = useAppSelector((state) => state.themeSlice?.theme);

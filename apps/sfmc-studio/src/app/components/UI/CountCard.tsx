@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import style from './countCard.module.scss';
 import parse from 'html-react-parser';
-import svgIcons from '@/lib/utils/icons';
-import { formatInput } from '@/lib/utils/common';
+import svgIcons from '../../lib/utils/icons';
+import { formatInput } from '../../lib/utils/common';
 import { Tooltip } from 'antd';
-import { useAppSelector } from '@/redux/hooks';
+import { useAppSelector } from '../../redux/hooks';
 
 function CountCard({
   cardText,

@@ -1,10 +1,10 @@
 'use client';
 import React from 'react';
 import style from './byDayWeek.module.scss';
-import CustomTable from '@/components/UI/CustomTable';
+import CustomTable from '../../../components/UI/CustomTable';
 import { TableColumnsType, theme } from 'antd';
-import { ByDayWeekType } from '@/lib/types/dashboard';
-import { useAppSelector } from '@/redux/hooks';
+import { ByDayWeekType } from '../../../lib/types/dashboard';
+import { useAppSelector } from '../../../redux/hooks';
 
 function ByDayWeek({ dayWeekUniqueOpen }: { dayWeekUniqueOpen: any }) {
   const theme: string = useAppSelector((state) => state.themeSlice?.theme);
