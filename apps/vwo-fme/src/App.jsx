@@ -133,7 +133,7 @@ const App = (props) => {
               value={state.accessToken}
               onChange={(e) => updateAuthToken(e.target.value)}/>
         </FormControl>
-        <Paragraph>You can find the auth token in Integrations &gt; Contentful &gt; Config section in VWO app. For more details, <TextLink href='https://help.vwo.com/hc/en-us/articles/4404205211929-Integrating-VWO-With-Contentful' target='_blank' rel="noopener noreferrer">click here.</TextLink></Paragraph>
+        <Paragraph>You can find the auth token in Integrations &gt; Contentful &gt; Config section in VWO app. For more details, <TextLink href='https://help.vwo.com/hc/en-us/articles/40825355345177-Integrating-VWO-Feature-Flags-with-Contentful-CMS' target='_blank' rel="noopener noreferrer">click here.</TextLink></Paragraph>
         <Paragraph>Please note that this token would have read-only(browse) level permissions to your organization level information stored in VWO, which can be accessed via API calls by any user in the current Contentful space.</Paragraph>
         <Flex alignItems='center' justifyContent='center'>
           <Button variant='primary' className={styles.connectButton} onClick={connectToVwo} isLoading={loading}>Connect with VWO</Button>
