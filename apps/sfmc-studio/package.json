@@ -5,8 +5,9 @@
   "scripts": {
     "install-ci": "npm ci",
     "dev": "next dev",
-    "build": "npm run build-app && npm run clean-paths",
+    "build": "npm run build-app && npm run fix-paths",
     "build-app": "next build",
+    "fix-paths": "node fix-paths.js",
     "clean-paths": "LC_ALL=C.UTF-8 find out -type f -exec sed -i '' -e 's|/_next|./_next|g' {} +",
     "start": "next start",
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./next --organization-id ${DEFINITIONS_ORG_ID} --definition-id 4kk0CWKMz2hDS2amuVelsV --token ${CONTENTFUL_CMA_TOKEN}",
