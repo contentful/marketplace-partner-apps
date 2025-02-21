@@ -178,6 +178,7 @@ const createVariantContainerContentType = async (sdk: ConfigAppSDK) => {
         id: 'experimentId',
         name: 'Statsig Experiment Id',
         type: 'Symbol',
+        disabled: true,
         required: false,
         localized: false,
         omitted: true,

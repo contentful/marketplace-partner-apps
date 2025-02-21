@@ -68,7 +68,7 @@ const EntryEditor: React.FC<{ sdk: EditorAppSDK }> = ({ sdk }) => {
         createContentfulExperiment(sdk, entryName)
           .then((data) => {
             setExperimentData(data);
-            return saveExperimentData(data);
+            saveExperimentData(data);
           })
           .catch((err) => {
             console.error(err);
@@ -83,6 +83,7 @@ const EntryEditor: React.FC<{ sdk: EditorAppSDK }> = ({ sdk }) => {
       const entry = sdk.entry;
       await entry.fields['experimentId'].setValue(data.id);
       await entry.save();
+      await entry.publish();
     },
     [sdk.entry],
   );
