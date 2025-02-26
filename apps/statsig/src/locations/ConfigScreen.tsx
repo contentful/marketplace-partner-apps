@@ -51,10 +51,7 @@ const ConfigScreen = () => {
   }, []);
 
   const onConfigure = useCallback(async () => {
-    const { items = [] } = await sdk.space.getContentTypes({
-      order: 'name',
-      limit: 1000,
-    });
+    const { items = [] } = await sdk.cma.contentType.getMany({});
     const allContentTypes = items as ContentTypeProps[];
     const variantContainerContentType = allContentTypes.find(
       (ct: ContentTypeProps) => ct.sys.id === VARIANT_CONTAINER_ID,
@@ -70,7 +67,6 @@ const ConfigScreen = () => {
     const currentState = await sdk.app.getCurrentState();
 
     return {
-      // TODO @nocommit: make this parameter a secret
       parameters: {
         statsigConsoleApiKey: apiKey,
         statsigProjectId: projectId,
@@ -181,60 +177,60 @@ const ConfigScreen = () => {
 
 
 const createVariantContainerContentType = async (sdk: ConfigAppSDK) => {
-  // noinspection JSDeprecatedSymbols
-  const variantContainer = await sdk.space.createContentType({
-    sys: {
-      id: VARIANT_CONTAINER_ID,
+  const variantContainer = await sdk.cma.contentType.createWithId(
+    {
+      contentTypeId: VARIANT_CONTAINER_ID,
     },
-    name: 'Statsig variant container',
-    description: 'Statsig variant container',
-    displayField: 'entryName',
-    fields: [
-      {
-        id: 'experimentId',
-        name: 'Statsig Experiment Id',
-        type: 'Symbol',
-        disabled: true,
-        required: false,
-        localized: false,
-        omitted: true,
-      },
-      {
-        id: 'entryName',
-        name: 'Entry Name',
-        type: 'Symbol',
-        required: true,
-        localized: false,
-      },
-      {
-        id: 'controlVariation',
-        name: 'Default Variation (control)',
-        type: 'Link',
-        localized: false,
-        required: true,
-        validations: [],
-        disabled: false,
-        omitted: false,
-        linkType: 'Entry',
-      },
-      {
-        id: 'treatmentVariations',
-        name: 'Treatment Variations',
-        type: 'Array',
-        localized: false,
-        required: true,
-        validations: [{ size: { min: 1, max: 10 } }],
-        disabled: false,
-        omitted: false,
-        items: {
+    {
+      name: 'Statsig variant container',
+      description: 'Statsig variant container',
+      displayField: 'entryName',
+      fields: [
+        {
+          id: 'experimentId',
+          name: 'Statsig Experiment Id',
+          type: 'Symbol',
+          disabled: true,
+          required: false,
+          localized: false,
+          omitted: true,
+        },
+        {
+          id: 'entryName',
+          name: 'Entry Name',
+          type: 'Symbol',
+          required: true,
+          localized: false,
+        },
+        {
+          id: 'controlVariation',
+          name: 'Default Variation (control)',
           type: 'Link',
+          localized: false,
+          required: true,
+          validations: [],
+          disabled: false,
+          omitted: false,
           linkType: 'Entry',
         },
-      },
-    ],
-  });
-  // noinspection JSDeprecatedSymbols
-  await sdk.space.updateContentType(variantContainer);
+        {
+          id: 'treatmentVariations',
+          name: 'Treatment Variations',
+          type: 'Array',
+          localized: false,
+          required: true,
+          validations: [{ size: { min: 1, max: 10 } }],
+          disabled: false,
+          omitted: false,
+          items: {
+            type: 'Link',
+            linkType: 'Entry',
+          },
+        },
+      ],
+    },
+  );
+  await sdk.cma.contentType.publish({contentTypeId: VARIANT_CONTAINER_ID}, variantContainer);
 };
 
 export default ConfigScreen;
