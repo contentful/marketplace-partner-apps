@@ -1,9 +1,10 @@
 import { ApiRequestProps, apiRequest, unsignedApiRequest } from '../helpers/api-request';
+import { Box, FormControl, Heading, Stack, Text, TextInput } from '@contentful/f36-components';
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import { FormControl, Heading, Stack, TextInput } from '@contentful/f36-components';
 
 import { ConfigAppSDK } from '@contentful/app-sdk';
 import { ContentTypeProps } from 'contentful-management';
+import { ExternalStatsigLink } from '../components/ExternalStatsigLink';
 import { VARIANT_CONTAINER_ID } from '../constants';
 import { useSDK } from '@contentful/react-apps-toolkit';
 
@@ -143,9 +144,24 @@ const ConfigScreen = () => {
   }, [apiKey, apiKeyErrorMessage, makeStatsigApiRequest]);
 
   return (
-    <Stack flexDirection="column" alignItems="start" margin="spacing2Xl">
+    <Stack flexDirection="column" alignItems="start" margin="spacing2Xl" style={{width: '700px'}}>
       <Heading>Statsig App Configuration</Heading>
-      <FormControl>
+      <Text>
+        The Statsig app provides a new Content Type (Statsig variant container) that allows
+        for automatic creation of experiments with different treaments directly in Statsig.
+        Results for these experiments can be found in the link under the Statsig tab of the
+        respective Statsig variant container.
+      </Text>
+      <Box style={{width: '100%'}}>
+        <ExternalStatsigLink
+          variant='neutral'
+          url='https://docs.statsig.com/guides/contentful'
+          linkLabel='Go to Statsig Docs'
+        >
+          Learn more about how to setup and use this app by heading to the link below.
+        </ExternalStatsigLink>
+      </Box>
+      <FormControl style={{width: '100%'}}>
         <FormControl.Label isRequired>Statsig Console API Key</FormControl.Label>
         <TextInput
           data-testid="api-key"

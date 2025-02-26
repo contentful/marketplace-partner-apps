@@ -4,9 +4,9 @@ import { ExternalLinkIcon } from '@contentful/f36-icons';
 import React from 'react';
 
 interface ExternalStatsigLinkProps {
-  variant: 'primary' | 'negative';
-  projectId: string;
-  experimentId: string;
+  variant: 'primary' | 'neutral' | 'positive';
+  url: string;
+  linkLabel: string;
   children: React.ReactNode;
 }
 
@@ -18,11 +18,11 @@ export const ExternalStatsigLink: React.FunctionComponent<ExternalStatsigLinkPro
         <TextLink
           icon={<ExternalLinkIcon />}
           alignIcon="start"
-          href={`https://console.statsig.com/${props.projectId}/experiments/${props.experimentId}`}
+          href={props.url}
           target="_blank"
           rel="noopener noreferrer"
         >
-          Go to Statsig experiment
+          {props.linkLabel}
         </TextLink>
       </Stack>
     </Note>

@@ -3,9 +3,7 @@ import { HttpError } from './http-error';
 
 type HTTPMethod = 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH' | 'HEAD';
 
-// TODO: switch this
-// const BASE_SERVER_URL = 'https://statsigapi.net';
-const BASE_LOCAL_SERVER_URL = 'http://127.0.0.1:3006';
+const BASE_SERVER_URL = 'https://statsigapi.net';
 
 export type ApiRequestProps = {
   method: HTTPMethod;
@@ -25,7 +23,7 @@ export const unsignedApiRequest = async <T>(statsigApiKey: string, req: ApiReque
   if (!statsigApiKey.trim()) {
     throw new Error('Statsig API Key required');
   }
-  const url = `${BASE_LOCAL_SERVER_URL}${req.endpoint}`;
+  const url = `${BASE_SERVER_URL}${req.endpoint}`;
   const payload: RequestInit = {
     method: req.method,
     headers: {
@@ -46,7 +44,7 @@ export const apiRequest = async <T>(sdk: BaseAppSDK, req: ApiRequestProps) => {
   if (!appId) {
     throw new Error('Missing app id');
   }
-  const url = `${BASE_LOCAL_SERVER_URL}${req.endpoint}`;
+  const url = `${BASE_SERVER_URL}${req.endpoint}`;
   const appSignedRequestProps: AppSignedRequestProps = {
     method: req.method,
     path: new URL(url).pathname,
