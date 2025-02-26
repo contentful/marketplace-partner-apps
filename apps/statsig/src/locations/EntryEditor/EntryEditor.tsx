@@ -159,37 +159,39 @@ const EntryEditor: React.FC<{ sdk: EditorAppSDK }> = ({ sdk }) => {
     }
   }, []);
 
-  const { statsigProjectId } = sdk.parameters.installation;
   const hasRunningExperiment = isPublished && !!experimentData && experimentData.status !== 'setup';
+  const { statsigProjectId } = sdk.parameters.installation;
+  const url = `https://console.statsig.com/${statsigProjectId}/experiments/${experimentData?.id ?? ''}`;
 
   return (
     <Box
-      padding="spacingL"
-      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      paddingTop='spacingL'
+      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}
     >
       {isLoading ? (
         <Spinner />
       ) : (
-        <Box style={{ maxWidth: '500px', flex: 1 }}>
+        <Box style={{ width: '100%', flex: 1 }}>
           <Form>
             {isPublished && !!experimentData && (
               <FormControl>
                 {experimentData.status === 'setup' ? (
                   <ExternalStatsigLink
-                    variant="negative"
-                    projectId={statsigProjectId}
-                    experimentId={experimentData.id}
+                    variant="neutral"
+                    url={url}
+                    linkLabel='Go to Statsig Experiment'
                   >
                     Your Statsig experiment has been automatically
                     generated. Head to the below link to start the experiment.
                   </ExternalStatsigLink>
                 ) : (
                   <ExternalStatsigLink
-                    variant="primary"
-                    projectId={statsigProjectId}
-                    experimentId={experimentData.id}
+                    variant="positive"
+                    url={url}
+                    linkLabel='Go to Statsig Experiment'
                   >
                     Content cannot be edited because the experiment is currently running.
+                    Head to the below link to see your experiment's results.
                   </ExternalStatsigLink>
                 )}
               </FormControl>
