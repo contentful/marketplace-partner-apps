@@ -100,6 +100,8 @@ updates:
           - patch
         patterns:
           - '*'
+    labels:
+      - 'contentful-owned'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -197,6 +199,8 @@ updates:
           - patch
         patterns:
           - '*'
+    labels:
+      - 'contentful-owned'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -550,6 +554,8 @@ updates:
           - patch
         patterns:
           - '*'
+    labels:
+      - 'contentful-owned'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -648,7 +654,7 @@ updates:
           - minor
           - patch
         patterns:
-          - '*'          
+          - '*'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -680,7 +686,7 @@ updates:
           - minor
           - patch
         patterns:
-          - '*'  
+          - '*'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -712,7 +718,7 @@ updates:
           - minor
           - patch
         patterns:
-          - '*'         
+          - '*'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -744,7 +750,7 @@ updates:
           - minor
           - patch
         patterns:
-          - '*'          
+          - '*'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -776,4 +782,4 @@ updates:
           - minor
           - patch
         patterns:
-          - '*'          
+          - '*'
