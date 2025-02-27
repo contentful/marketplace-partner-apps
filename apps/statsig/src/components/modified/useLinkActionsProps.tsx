@@ -138,7 +138,6 @@ export function useLinkActionsProps(props: LinkEntityActionsProps): LinkActionsP
     entityType,
     canLinkMultiple,
     isDisabled,
-    actionLabels,
     itemsLength,
   } = props;
 
