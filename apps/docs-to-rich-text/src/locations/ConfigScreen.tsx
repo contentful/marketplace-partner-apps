@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState, useEffect, useMemo } from 'react';
 import { ConfigAppSDK } from '@contentful/app-sdk';
 import {
   Heading,
@@ -16,15 +16,18 @@ import {
   List,
   Image,
   Text,
-  SectionHeading,
   TextLink,
   Accordion,
+  Switch,
+  Spinner,
+  Notification,
 } from '@contentful/f36-components';
 import { HelpCircleIcon } from '@contentful/f36-icons';
 import { useSDK } from '@contentful/react-apps-toolkit';
-import { getEditorUsages, IsSpaceLicensed } from '../api/licensing';
-import appearanceImage from '../assets/img/appearance.png';
+import { IsSpaceLicensed } from '../api/licensing';
 import importImage from '../assets/img/import.png';
+import { RtfField } from '../types';
+import { getRichTextFields, setAppRichTextEditor, setDefaultRichTextEditor } from '../utils/editorInterfaceUtil';
 
 export interface AppInstallationParameters {
   useImageWrapper?: boolean;
@@ -45,8 +48,10 @@ const ConfigScreen = () => {
   });
   const [selectedWrapperModelId, setSelectedWrapperModelId] = useState(parameters.imageWrapperTypeId);
   const [contentModels, setContentModels] = useState<{ label: string; value: string }[]>([]);
-  const [usages, setUsages] = useState<{ contentModel: string; field: string }[]>([]);
+  const [richTextFields, setRichTextFields] = useState<RtfField[]>([]);
+  const [richTextFieldsLoaded, setRichTextFieldsLoaded] = useState<boolean>(false);
   const [isLicensed, setIsLicensed] = useState(false);
+
   const sdk = useSDK<ConfigAppSDK>();
 
   const onConfigure = useCallback(async () => {
@@ -96,15 +101,59 @@ const ConfigScreen = () => {
 
       const models = await getContentModels(sdk);
       setContentModels(models);
-      const usages = await getEditorUsages(sdk.cma, sdk.ids.app).then();
-      setUsages(usages);
       const licensed = await IsSpaceLicensed(sdk.ids.space);
       setIsLicensed(licensed);
+
+      const fields = await getRichTextFields(sdk.cma, sdk.ids.app);
+      setRichTextFields(fields);
+      setRichTextFieldsLoaded(true);
     })();
   }, [sdk]);
 
+  async function enableEditorForAllRichTextFields() {
+    if (!isLicensed && richTextFields.length > 5) {
+      Notification.warning('The free plan is limited to 5 fields. Upgrade to remove limits');
+    }
+
+    let remainingLimit = 0;
+    // if license limit, calc how many are left and only enable that many
+    if (!isLicensed) {
+      remainingLimit = 5 - richTextFields.filter((f) => f.isEnabled).length;
+    }
+
+    for (const field of richTextFields.filter((f) => !f.isEnabled)) {
+      if (remainingLimit <= 0 && !isLicensed) {
+        return;
+      }
+      updateRichTextField(field.contentTypeId, field.fieldId, { isEnabled: true });
+      await setAppRichTextEditor(sdk, field.contentTypeId, field.fieldId);
+      remainingLimit--;
+    }
+  }
+
+  async function toggleRichTextFieldEditor(field: RtfField) {
+    const isEnabled = !field.isEnabled;
+    updateRichTextField(field.contentTypeId, field.fieldId, { isEnabled });
+
+    if (isEnabled) {
+      await setAppRichTextEditor(sdk, field.contentTypeId, field.fieldId);
+    } else {
+      await setDefaultRichTextEditor(sdk, field.contentTypeId, field.fieldId);
+    }
+  }
+
+  function updateRichTextField(targetContentTypeId: string, targetFieldId: string, updatedProperties: Partial<RtfField>) {
+    setRichTextFields((prevFields) =>
+      prevFields.map((field) => (field.contentTypeId === targetContentTypeId && field.fieldId === targetFieldId ? { ...field, ...updatedProperties } : field)),
+    );
+  }
+
+  const isLicenseLimitReached = useMemo(() => {
+    return !isLicensed && richTextFields.filter((f) => f.isEnabled).length >= 5;
+  }, [richTextFields, isLicensed]);
+
   const wrapperSelect = (
-    <FormControl>
+    <FormControl style={{ maxWidth: '350px' }}>
       <FormControl.Label>Image Wrapper Content Model:</FormControl.Label>
       <Select
         id="optionSelect-controlled"
@@ -129,56 +178,124 @@ const ConfigScreen = () => {
   const planType = isLicensed ? <Badge variant="positive">Premium Plan</Badge> : <Badge variant="warning">Free Plan</Badge>;
 
   const upgrade = (
-    <Button as="a" href="https://ellavationlabs.com/docs-to-rich-text" target="_blank" variant="primary">
+    <Button as="a" href="https://ellavationlabs.com/docs-to-rich-text/#pricing" target="_blank" variant="primary">
       Upgrade Plan
     </Button>
   );
 
-  const usagesTable = (
-    <Table>
-      <Table.Head>
-        <Table.Row>
-          <Table.Cell>Content Model</Table.Cell>
-          <Table.Cell>Field</Table.Cell>
-        </Table.Row>
-      </Table.Head>
-      <Table.Body>
-        {usages.map((item) => {
-          return (
-            <Table.Row key={`${item.contentModel}${item.field}`}>
-              <Table.Cell>{item.contentModel}</Table.Cell>
-              <Table.Cell>{item.field}</Table.Cell>
-            </Table.Row>
-          );
-        })}
-      </Table.Body>
-    </Table>
+  const fieldsTable = (
+    <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+      <Table>
+        <Table.Head
+          style={{
+            position: 'sticky',
+            top: 0,
+            background: '#fff',
+            zIndex: 1,
+          }}>
+          <Table.Row>
+            <Table.Cell>Content Model</Table.Cell>
+            <Table.Cell>Field</Table.Cell>
+            <Table.Cell>Enabled</Table.Cell>
+          </Table.Row>
+        </Table.Head>
+        <Table.Body>
+          {richTextFields.map((field) => {
+            return (
+              <Table.Row key={`${field.contentTypeId}${field.fieldId}`}>
+                <Table.Cell>{field.contentTypeName}</Table.Cell>
+                <Table.Cell>{field.fieldName}</Table.Cell>
+                <Table.Cell>
+                  {!field.isEnabled && isLicenseLimitReached ? (
+                    <Tooltip content="Free plan limit reached. Disable another field or upgrade to remove limits" placement="top">
+                      <Switch
+                        name="toggle-rte"
+                        id="toggle-rte"
+                        isChecked={field.isEnabled}
+                        onChange={async () => await toggleRichTextFieldEditor(field)}
+                        isDisabled={true}></Switch>
+                    </Tooltip>
+                  ) : (
+                    <Switch
+                      name="toggle-rte"
+                      id="toggle-rte"
+                      isChecked={field.isEnabled}
+                      onChange={async () => await toggleRichTextFieldEditor(field)}
+                      isDisabled={false}></Switch>
+                  )}
+                </Table.Cell>
+              </Table.Row>
+            );
+          })}
+        </Table.Body>
+      </Table>
+    </div>
   );
 
-  const freePlanDetails = (
-    <Card>
-      <Heading>Plan Details</Heading>
-      <Text>Plan Type: Free</Text>
-      <br></br>
-      <Text>Plan Limits: 5 fields</Text>
-
-      <Paragraph marginTop="spacingM">
-        <TextLink href="https://ellavationlabs.com/docs-to-rich-text" target="_blank" variant="premium">
-          Upgrade now
-        </TextLink>{' '}
-        to remove limits
-      </Paragraph>
-
-      <SectionHeading marginTop="spacingL">Usage</SectionHeading>
-      {usagesTable}
-    </Card>
+  const planDetails = (
+    <div>
+      {isLicensed && (
+        <div>
+          <p>Plan Type: {planType}</p>
+          <p>Plan Limits: None</p>
+        </div>
+      )}
+      {!isLicensed && (
+        <div>
+          <p>Plan Type: {planType}</p>
+          <p>Plan Limits: 5 field editors</p>
+          <Paragraph marginTop="spacingM">
+            <TextLink href="https://ellavationlabs.com/docs-to-rich-text/#pricing" target="_blank" variant="premium">
+              Upgrade now
+            </TextLink>{' '}
+            to remove limits
+          </Paragraph>
+        </div>
+      )}
+    </div>
   );
-  const paidPlanDetails = (
+
+  const fieldsCard = (
     <Card>
-      <Heading>Plan Details</Heading>
-      <Text>Plan Type: Premium</Text>
-      <SectionHeading marginTop="spacingL">Usage</SectionHeading>
-      {usagesTable}
+      <Heading>Configure Rich Text Fields</Heading>
+      <p>Select which rich text fields should have Docs to Rich Text enabled</p>
+      <br />
+
+      {!richTextFieldsLoaded && (
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Spinner variant="default" />
+        </div>
+      )}
+      {richTextFieldsLoaded && (
+        <div>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              marginBottom: '20px',
+            }}>
+            {isLicenseLimitReached ? (
+              <Tooltip content="Free plan limit reached. Disable another field or upgrade to remove limits" placement="top">
+                <Button variant="primary" size="small" style={{ marginRight: '20px' }} isDisabled={true}>
+                  Enable All
+                </Button>
+              </Tooltip>
+            ) : (
+              <Button
+                variant="primary"
+                size="small"
+                style={{ marginRight: '20px' }}
+                onClick={async () => {
+                  await enableEditorForAllRichTextFields();
+                }}
+                isDisabled={false}>
+                Enable All
+              </Button>
+            )}
+          </div>
+          {fieldsTable}
+        </div>
+      )}
     </Card>
   );
 
@@ -195,11 +312,19 @@ const ConfigScreen = () => {
     <Card>
       <Heading>Getting Started</Heading>
       <Accordion>
-        <Accordion.Item title="Configuration">
-          Set Docs to Rich Text as the appearance editor for the desired rich text field in its content model
-          <Image alt="Screenshot of configuring the Docs to Rich Text appearance editor" height="250px" width="auto" src={appearanceImage} />
+        <Accordion.Item title="Configuration">Enable Docs to Rich Text in the "Configure Rich Text Fields" section above</Accordion.Item>
+        <Accordion.Item title="Import Google Document with Document Picker">
+          <List as="ol">
+            <List.Item>Navigate to the desired content entry and field</List.Item>
+            <List.Item>
+              Press "Import" then "Choose from Drive"
+              <Image alt="Import content from Google Docs or HTML" height="250px" width="auto" src={importImage} />
+            </List.Item>
+            <List.Item>Select a document</List.Item>
+            <List.Item>Review your imported content</List.Item>
+          </List>
         </Accordion.Item>
-        <Accordion.Item title="Import">
+        <Accordion.Item title="Import HTML or Google Document with Copy/Paste">
           <List as="ol">
             <List.Item>Copy the contents of any Google Document or any HTML to your clipboard (Ctrl+C / ⌘C or right click & copy)</List.Item>
             <List.Item>Navigate to the desired content entry and field</List.Item>
@@ -226,31 +351,41 @@ const ConfigScreen = () => {
       <TextLink href="https://ellavationlabs.com" target="_blank">
         See our other work
       </TextLink>
+      <Paragraph marginTop="spacingS">
+        <TextLink href="https://ellavationlabs.com/solutions" target="_blank">
+          Custom Solutions
+        </TextLink>
+      </Paragraph>
+    </Card>
+  );
+
+  const configurationCard = (
+    <Card>
+      <Heading>Settings</Heading>
+      {planDetails}
+      <br></br>
+      <Checkbox
+        name="use-image-wrapper"
+        id="use-image-wrapper"
+        isChecked={parameters.useImageWrapper ?? false}
+        onChange={(e) =>
+          setParameters({
+            ...parameters,
+            useImageWrapper: e.target.checked,
+          })
+        }>
+        Use Image Wrapper {imageWrapperTooltip}
+      </Checkbox>
+      <br />
+      {parameters.useImageWrapper && wrapperSelect}
     </Card>
   );
 
   const settingsForm = (
     <Form>
       <Flex flexDirection="row" gap="spacingS">
-        <Card>
-          <Heading>Image Upload Settings</Heading>
-          <Checkbox
-            name="use-image-wrapper"
-            id="use-image-wrapper"
-            isChecked={parameters.useImageWrapper ?? false}
-            onChange={(e) =>
-              setParameters({
-                ...parameters,
-                useImageWrapper: e.target.checked,
-              })
-            }>
-            Use Image Wrapper {imageWrapperTooltip}
-          </Checkbox>
-          <br />
-          {parameters.useImageWrapper && wrapperSelect}
-        </Card>
-
-        {isLicensed ? paidPlanDetails : freePlanDetails}
+        {fieldsCard}
+        {configurationCard}
       </Flex>
     </Form>
   );

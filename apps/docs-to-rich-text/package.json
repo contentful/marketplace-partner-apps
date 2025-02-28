@@ -1,6 +1,6 @@
 {
   "name": "docs-to-rich-text",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "^4.29.3",
@@ -9,6 +9,8 @@
     "@contentful/field-editor-rich-text": "^4.1.2",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "^11.13.4",
+    "@types/async-lock": "^1.4.2",
+    "async-lock": "^1.4.1",
     "axios": "^1.7.7",
     "contentful-management": "^11.38.0",
     "file-type": "^19.6.0",

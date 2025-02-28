@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Tabs, GlobalStyles, Button, Popover, Box, TextInput, Skeleton, Card, Heading, Notification, Modal, Flex, Tooltip } from '@contentful/f36-components';
-import { HelpCircleIcon } from '@contentful/f36-icons';
+import { HelpCircleIcon, WarningIcon } from '@contentful/f36-icons';
 import { FieldAppSDK } from '@contentful/app-sdk';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { RichTextEditor } from '@contentful/field-editor-rich-text';
@@ -93,6 +93,7 @@ const Field = () => {
   const [isImporting, setIsImporting] = useState(false);
   const [isModalShown, setModalShown] = useState(false);
   const [importState, setImportState] = useState<ImportState | null>(null);
+  const [showValidationWarning, setShowValidationWarning] = useState(false);
 
   sdk.window.startAutoResizer();
 
@@ -153,6 +154,9 @@ const Field = () => {
     IsWithinLicenseLimits(sdk.cma, sdk.ids.app!, sdk.ids.space).then((isWithinLimits) => {
       setLicenseLimitBreached(!isWithinLimits);
     });
+    if (hasCustomValidations()) {
+      setShowValidationWarning(true);
+    }
   }, [sdk]);
 
   function initGoogleDrivePicker() {
@@ -265,6 +269,38 @@ const Field = () => {
     handleImageFailure();
   }
 
+  function hasCustomValidations() {
+    // Default RTF validations configuration in Contentful
+    const defaultValidation = {
+      enabledMarksCount: 7,
+      enabledNodeTypesCount: 17,
+    };
+
+    // Check if any validation differs from default
+    return sdk.field.validations.some((validation) => {
+      if (!validation.enabledMarks && !validation.enabledNodeTypes && !validation.nodes) {
+        return true;
+      }
+
+      // Check if marks differ from default
+      if (validation.enabledMarks && validation.enabledMarks.length !== defaultValidation.enabledMarksCount) {
+        return true;
+      }
+
+      // Check if enabledNodeTypes differ from default
+      if (validation.enabledNodeTypes && validation.enabledNodeTypes.length !== defaultValidation.enabledNodeTypesCount) {
+        return true;
+      }
+
+      // Check if node types differ from default
+      if (validation.nodes && Object.keys(validation.nodes).length > 0) {
+        return true;
+      }
+
+      return false;
+    });
+  }
+
   const richTextEditor = <RichTextEditor sdk={sdk as FieldAppSDK} isInitiallyDisabled />;
 
   const googleImportButton = (
@@ -317,9 +353,21 @@ const Field = () => {
     </Skeleton.Container>
   );
 
+  const validationWarning = (
+    <Flex flexDirection="row" gap="spacingS" justifyContent="center" alignItems="center" paddingRight="spacingS">
+      <Tooltip
+        placement="bottom"
+        id="tooltip-warning"
+        content="Configured field restrictions may cause validation errors. Review field restrictions in the content model to learn more">
+        <WarningIcon variant="warning"></WarningIcon>
+      </Tooltip>
+    </Flex>
+  );
+
   const tabs = (
     <Tabs defaultTab="editor">
       <Tabs.List variant="vertical-divider" className={styles.tabs}>
+        {showValidationWarning && validationWarning}
         {importPopover}
       </Tabs.List>
       <Tabs.Panel id="editor">{isImporting ? skeleton : richTextEditor}</Tabs.Panel>
