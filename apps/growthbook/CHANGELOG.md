@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/growthbook-contentful-app-v1.0.1...growthbook-contentful-app-v1.1.0) (2025-02-28)
+
+
+### Features
+
+* Better error message when server does not return JSON [] ([#4365](https://github.com/contentful/marketplace-partner-apps/issues/4365)) ([e873dab](https://github.com/contentful/marketplace-partner-apps/commit/e873dabcd4148f98418b4b9f7f58b27c04ecc1d9))
+* Show warning when Growthbook sidebar is used in other content models [] ([#4366](https://github.com/contentful/marketplace-partner-apps/issues/4366)) ([3fb8021](https://github.com/contentful/marketplace-partner-apps/commit/3fb8021bbd1bf7c2087c99471de7654c3589af5a))
+
 ## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/growthbook-contentful-app-v1.0.0...growthbook-contentful-app-v1.0.1) (2025-01-08)
 
 
