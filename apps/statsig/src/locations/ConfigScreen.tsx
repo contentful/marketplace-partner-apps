@@ -92,11 +92,7 @@ const ConfigScreen = () => {
         },
         body: {},
       };
-      try {
-        await apiRequest<ProjectData>(sdk, requestProps);
-      } catch(e) {
-        // TODO notify with error
-      }
+      await apiRequest<ProjectData>(sdk, requestProps);
     }
   }, [apiKey, sdk]);
 

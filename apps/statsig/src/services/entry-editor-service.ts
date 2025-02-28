@@ -28,7 +28,7 @@ export const fetchContentfulExperiment = async (
 ): Promise<ExperimentData> => {
   const requestProps: ApiRequestProps = {
     method: 'GET',
-    endpoint: `/console/v1/experiments/${experimentId}`,
+    endpoint: `/contentful/v1/experiments/${experimentId}`,
     headers: {},
   };
   return await apiRequest<ExperimentData>(sdk, requestProps);
@@ -50,7 +50,7 @@ export const createContentfulExperiment = async (sdk: EditorAppSDK, entryName: s
 
   const requestProps: ApiRequestProps = {
     method: 'POST',
-    endpoint: '/console/v1/experiments',
+    endpoint: '/contentful/v1/experiments',
     headers: {},
     body: {
       name: `Contentful Experiment ${entryName}`,
