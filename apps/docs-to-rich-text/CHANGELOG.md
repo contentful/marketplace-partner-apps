@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/docs-to-rich-text-v1.0.0...docs-to-rich-text-v1.1.0) (2025-02-28)
+
+
+### Features
+
+* Enhance app configuration page [] ([#4372](https://github.com/contentful/marketplace-partner-apps/issues/4372)) ([a12da84](https://github.com/contentful/marketplace-partner-apps/commit/a12da841ce09e31e6436a0109e8bea75a13683c6))
+
 ## 1.0.0 (2025-01-08)
 
 
