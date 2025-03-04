@@ -3,16 +3,16 @@
   "version": "1.1.16",
   "private": true,
   "devDependencies": {
-    "@contentful/app-scripts": "1.32.0",
     "@vitejs/plugin-react": "^4.3.4",
     "happy-dom": "^15.11.7",
-    "vite": "^5.4.11",
-    "vitest": "^2.1.8"
+    "vite": "^6.2.0",
+    "vitest": "^3.0.7"
   },
   "dependencies": {
+    "@contentful/app-scripts": "^2.1.0",
     "@contentful/dam-app-base": "^3.0.9",
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
   "scripts": {
     "start": "vite",
