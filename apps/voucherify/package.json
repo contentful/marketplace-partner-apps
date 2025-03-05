@@ -35,7 +35,7 @@
     "eslint-plugin-react": "~7.37.3",
     "happy-dom": "^17.2.2",
     "vite": "^6.2.0",
-    "vitest": "^2.1.8"
+    "vitest": "^2.1.9"
   },
   "browserslist": {
     "production": [
