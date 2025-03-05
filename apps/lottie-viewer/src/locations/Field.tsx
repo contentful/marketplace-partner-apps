@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { FieldAppSDK } from "@contentful/app-sdk";
-import { Paragraph } from "@contentful/f36-components";
-import { useSDK } from "@contentful/react-apps-toolkit";
-import { JsonEditor } from "@contentful/field-editor-json";
-import Lottie from "react-lottie-player";
-import { Flex, Button, Collapse } from "@contentful/f36-components";
+import React, { useEffect, useState } from 'react';
+import { FieldAppSDK } from '@contentful/app-sdk';
+import { Paragraph } from '@contentful/f36-components';
+import { useSDK } from '@contentful/react-apps-toolkit';
+import { JsonEditor } from '@contentful/field-editor-json';
+import Lottie from 'react-lottie-player';
+import { Flex, Button, Collapse } from '@contentful/f36-components';
 
 const Field = () => {
-  const [lottieJson, setLottieJson] = useState("");
+  const [lottieJson, setLottieJson] = useState('');
   const [isExpanded, setIsExpanded] = useState(false);
 
   const sdk = useSDK();
@@ -24,29 +24,24 @@ const Field = () => {
     sdk.window.startAutoResizer();
 
     sdk.field.onValueChanged((value) => {
-      setLottieJson(value ? value : "");
+      setLottieJson(value ? value : '');
     });
   }, [sdk.field, sdk.window]);
 
   return (
-    <>
-      <Flex justifyContent="flex-end">
+    <Flex flexDirection="column">
+      <Flex>
         <Button variant="primary" onClick={() => setIsExpanded(!isExpanded)}>
-          {isExpanded ? "Hide" : "Show"} JSON
+          {isExpanded ? 'Hide' : 'Show/Edit'} JSON
         </Button>
       </Flex>
-      <Flex flexDirection="row">
-        <Lottie
-          loop
-          animationData={lottieJson}
-          play
-          style={{ width: 250, height: 250 }}
-        />
+      <Flex flexDirection="column" alignItems="center">
+        <Lottie loop animationData={lottieJson} play style={{ width: 250, height: 250 }} />
         <Collapse isExpanded={isExpanded}>
           <JsonEditor field={sdk.field}></JsonEditor>
         </Collapse>
       </Flex>
-    </>
+    </Flex>
   );
 };
 
