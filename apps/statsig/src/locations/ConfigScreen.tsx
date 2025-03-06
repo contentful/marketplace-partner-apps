@@ -189,7 +189,7 @@ const createVariantContainerContentType = async (sdk: ConfigAppSDK) => {
           disabled: true,
           required: false,
           localized: false,
-          omitted: true,
+          omitted: false,
         },
         {
           id: 'entryName',
