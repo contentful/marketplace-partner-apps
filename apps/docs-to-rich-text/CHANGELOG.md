@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/contentful/marketplace-partner-apps/compare/docs-to-rich-text-v1.1.0...docs-to-rich-text-v1.1.1) (2025-03-06)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group across 1 directory with 7 updates ([#4546](https://github.com/contentful/marketplace-partner-apps/issues/4546)) ([6323f8f](https://github.com/contentful/marketplace-partner-apps/commit/6323f8f63f4cbf6de3632b64ea9e3960d43ca7ad))
+
 ## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/docs-to-rich-text-v1.0.0...docs-to-rich-text-v1.1.0) (2025-02-28)
 
 

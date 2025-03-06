@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.27](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.0.26...ceros-contentful-app-v1.0.27) (2025-03-06)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group in /apps/ceros with 5 updates ([#4541](https://github.com/contentful/marketplace-partner-apps/issues/4541)) ([7db0f0a](https://github.com/contentful/marketplace-partner-apps/commit/7db0f0a2e809630d3d2f7769c79bdfe9a248d78b))
+
 ## [1.0.26](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.0.25...ceros-contentful-app-v1.0.26) (2025-01-08)
 
 
