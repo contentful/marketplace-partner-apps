@@ -1,9 +1,9 @@
 'use client';
 import React from 'react';
 import style from './campaignClicks.module.scss';
-import CustomTable from '@/components/UI/CustomTable';
+import CustomTable from '../../../components/UI/CustomTable';
 import { TableColumnsType, Tooltip } from 'antd';
-import { CampaignOpenType } from '@/lib/types/dashboard';
+import { CampaignOpenType } from '../../../lib/types/dashboard';
 
 export default function TopCampaignOpen({ campaignOpens }: { campaignOpens: any }) {
   const columns: TableColumnsType<CampaignOpenType> = [

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Dropdown, Menu, Space } from 'antd'; // Import Dropdown, Menu, and Button from Ant Design
 import parse from 'html-react-parser';
-import svgIcons from '@/lib/utils/icons'; // Assuming you have svgIcons imported correctly
+import svgIcons from '../../lib/utils/icons'; // Assuming you have svgIcons imported correctly
 
 const App = ({
   handleMenuClick,

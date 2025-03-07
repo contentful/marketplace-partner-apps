@@ -36,6 +36,7 @@ describe('Field', () => {
       getIsDisabled: vi.fn(),
       setInvalid: vi.fn(),
       locale: 'en-US',
+      validations: [],
     },
     locales: {
       default: 'en-US',

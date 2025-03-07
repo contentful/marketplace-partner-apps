@@ -1,5 +1,5 @@
 'use client';
-import CountCard from '@/components/UI/CountCard';
+import CountCard from '../../../components/UI/CountCard';
 import React, { useEffect, useState } from 'react';
 import style from './roiConversion.module.scss';
 import TopSoldProducts from './TopSoldProducts';
@@ -7,19 +7,19 @@ import TopSourceMediumRevenue from './TopSourceMediumRevenue';
 import TopRevenueCity from './TopRevenueCity';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { PageAppSDK } from '@contentful/app-sdk';
-import { ApiClient } from '@/lib/ApiClients';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { dateStartEnd } from 'src/app/redux/slices/dateSlice';
-import { loadingState } from '@/redux/slices/loadersSlice';
-import { commonChartConfig } from '@/lib/utils/dashboards';
-import { barChartColor, barLabelColor, multiLineChart, pieChartColor } from '@/lib/utils/getColor';
-import { defaultSystemTZ, encryptData } from '@/lib/utils/common';
-import { formatInput } from '@/lib/utils/common';
-import { RoiConversionCounts, TopRevenueCityType, TopRevenueOrderT, TopSoldProductsType, TopSourceMediumRevenueType } from '@/lib/types/dashboard';
+import { ApiClient } from '../../../lib/ApiClients';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { dateStartEnd } from '../../../redux/slices/dateSlice';
+import { loadingState } from '../../../redux/slices/loadersSlice';
+import { commonChartConfig } from '../../../lib/utils/dashboards';
+import { barChartColor, barLabelColor, multiLineChart, pieChartColor } from '../../../lib/utils/getColor';
+import { defaultSystemTZ, encryptData } from '../../../lib/utils/common';
+import { formatInput } from '../../../lib/utils/common';
+import { RoiConversionCounts, TopRevenueCityType, TopRevenueOrderT, TopSoldProductsType, TopSourceMediumRevenueType } from '../../../lib/types/dashboard';
 import TopRevenueOrderType from './TopRevenueOrderType';
-import svgIcons from '@/lib/utils/icons';
+import svgIcons from '../../../lib/utils/icons';
 import getSymbolFromCurrency from 'currency-symbol-map';
-import { environment } from '@/lib/Constants';
+import { environment } from '../../../lib/Constants';
 
 function RoiConversion({ order }: { order: number }) {
   const { parameters } = useSDK<PageAppSDK>();

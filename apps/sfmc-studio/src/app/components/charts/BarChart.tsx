@@ -1,11 +1,11 @@
 'use client';
-import { themeTextColor } from '@/lib/Constants';
-import { BarChartType } from '@/lib/types/chart';
-import { formatInput } from '@/lib/utils/common';
-import { commonChartConfig } from '@/lib/utils/dashboards';
+import { themeTextColor } from '../../lib/Constants';
+import { BarChartType } from '../../lib/types/chart';
+import { formatInput } from '../../lib/utils/common';
+import { commonChartConfig } from '../../lib/utils/dashboards';
 import { Bar } from '@ant-design/plots';
 import React, { FC, useMemo } from 'react';
-import { useAppSelector } from '@/redux/hooks';
+import { useAppSelector } from '../../redux/hooks';
 
 // We dynamically calculate dx based on the digits of the number
 const getDxForOutsideLbl = (number: any) => {
@@ -58,7 +58,7 @@ const BarChart: FC<BarChartType> = ({ data, xField, yField, labelText, maxWidth,
           labelFontWeight: 500,
           labelFill: themeTextColor[theme as keyof typeof themeTextColor],
           labelOpacity: 1,
-          labelFontFamily: 'SFProDisplay',
+          labelFontFamily: 'var(--primary-font), sans-serif',
           tick: false,
           labelFormatter: (value: any) => {
             if (value >= 1000000) {
@@ -77,7 +77,7 @@ const BarChart: FC<BarChartType> = ({ data, xField, yField, labelText, maxWidth,
           labelFontWeight: 500,
           labelFill: themeTextColor[theme as keyof typeof themeTextColor],
           labelOpacity: 1,
-          labelFontFamily: 'SFProDisplay',
+          labelFontFamily: 'var(--primary-font), sans-serif',
           grid: false,
           tick: false,
         },

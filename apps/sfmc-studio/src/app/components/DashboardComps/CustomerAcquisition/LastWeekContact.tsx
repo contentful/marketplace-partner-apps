@@ -1,9 +1,9 @@
 'use client';
 import React from 'react';
 import style from './newContacts.module.scss';
-import NoData from '@/components/UI/NoData';
-import LineChart from '@/components/charts/LineChart';
-import { useAppSelector } from '@/redux/hooks';
+import NoData from '../../../components/UI/NoData';
+import LineChart from '../../../components/charts/LineChart';
+import { useAppSelector } from '../../../redux/hooks';
 
 function LastWeekContact({ lastWeekContact }: { lastWeekContact: any }) {
   const theme: string = useAppSelector((state) => state.themeSlice?.theme);

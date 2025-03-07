@@ -1,8 +1,8 @@
 'use client';
 import React from 'react';
 import style from './newContacts.module.scss';
-import NoData from '@/components/UI/NoData';
-import LineChart from '@/components/charts/LineChart';
+import NoData from '../../../components/UI/NoData';
+import LineChart from '../../../components/charts/LineChart';
 
 function LastYearContact({ lastYearContact }: { lastYearContact: any }) {
   return (

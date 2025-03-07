@@ -18,7 +18,6 @@ export async function processImages(sdk: BaseAppSDK, assets: EmbeddedAsset[]): P
   );
 
   const uploadResults = await Promise.allSettled(uploadPromises);
-
   result.success = !uploadResults.some((result) => result.status === 'rejected');
   result.failedImages = uploadResults.filter((result) => result.status === 'rejected').map((result) => result.reason.image);
 
@@ -39,7 +38,7 @@ export async function processImagesFromGoogleDrive(sdk: BaseAppSDK, assets: Embe
     const uploadPromises = assets.map(async (asset, i) => {
       asset.assetBase64 = base64Images[i];
       return uploadImage(sdk, asset).catch((error) => {
-        error.asset = asset;
+        error.image = asset;
         throw error;
       });
     });

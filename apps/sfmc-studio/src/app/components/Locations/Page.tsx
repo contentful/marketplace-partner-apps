@@ -2,7 +2,7 @@
 import React from 'react';
 import { PageAppSDK } from '@contentful/app-sdk';
 import { /* useCMA, */ useSDK } from '@contentful/react-apps-toolkit';
-import AppLayout from '@/components/Layout/AppLayout';
+import AppLayout from '../../components/Layout/AppLayout';
 
 const Page = () => {
   const sdk = useSDK<PageAppSDK>();

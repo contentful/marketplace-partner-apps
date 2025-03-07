@@ -1,11 +1,11 @@
 'use client';
-import { themeTextColor } from '@/lib/Constants';
-import { LineChartType } from '@/lib/types/chart';
-import { formatInput } from '@/lib/utils/common';
-import { commonChartConfig } from '@/lib/utils/dashboards';
+import { themeTextColor } from '../../lib/Constants';
+import { LineChartType } from '../../lib/types/chart';
+import { formatInput } from '../../lib/utils/common';
+import { commonChartConfig } from '../../lib/utils/dashboards';
 import { Line } from '@ant-design/plots';
 import { FC, useMemo } from 'react';
-import { useAppSelector } from '@/redux/hooks';
+import { useAppSelector } from '../../redux/hooks';
 
 const LineChart: FC<LineChartType> = ({ data, xField, yField, dateShow, axisYTitle, axisXTitle, toolTipText, showAnnotations, height, labelFormatter }) => {
   let theme: string = useAppSelector((state) => state.themeSlice?.theme);
@@ -54,7 +54,7 @@ const LineChart: FC<LineChartType> = ({ data, xField, yField, dateShow, axisYTit
           labelFontWeight: 500,
           labelFill: themeTextColor[theme as keyof typeof themeTextColor],
           labelOpacity: 1,
-          labelFontFamily: 'SFProDisplay',
+          labelFontFamily: 'var(--primary-font), sans-serif',
           tick: false,
           labelSpacing: 10,
         },
@@ -74,7 +74,7 @@ const LineChart: FC<LineChartType> = ({ data, xField, yField, dateShow, axisYTit
           labelFontWeight: 500,
           labelFill: themeTextColor[theme as keyof typeof themeTextColor],
           labelOpacity: 1,
-          labelFontFamily: 'SFProDisplay',
+          labelFontFamily: 'var(--primary-font), sans-serif',
           style: {
             labelTransform: commonChartConfig.dateFieldLabelTransform,
             labelFormatter: labelFormatter

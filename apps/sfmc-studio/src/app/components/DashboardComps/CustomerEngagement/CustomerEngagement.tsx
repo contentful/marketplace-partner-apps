@@ -4,18 +4,18 @@ import CustomerEngagementCounts from './CustomerEngagementCounts';
 import style from './customerEngagement.module.scss';
 import ByDayWeek from './ByDayWeek';
 import CampaignClicksEngagement from './CampaignClicksEngagement';
-import { ApiClient } from '@/lib/ApiClients';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { ApiClient } from '../../../lib/ApiClients';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { PageAppSDK } from '@contentful/app-sdk';
 import { useSDK } from '@contentful/react-apps-toolkit';
-import { dateStartEnd } from '@/redux/slices/dateSlice';
-import { loadingState } from '@/redux/slices/loadersSlice';
-import { ByDayWeekType, CampaignClicksSentsOpensType, CampaignClicksUniqueType, CountDataType } from '@/lib/types/dashboard';
-import { Weekdays, eDataExtensionKey, environment } from '@/lib/Constants';
-import { encryptData, formatInput } from '@/lib/utils/common';
-import { barChartColor, barLabelColor } from '@/lib/utils/getColor';
+import { dateStartEnd } from '../../../redux/slices/dateSlice';
+import { loadingState } from '../../../redux/slices/loadersSlice';
+import { ByDayWeekType, CampaignClicksSentsOpensType, CampaignClicksUniqueType, CountDataType } from '../../../lib/types/dashboard';
+import { Weekdays, eDataExtensionKey, environment } from '../../../lib/Constants';
+import { encryptData, formatInput } from '../../../lib/utils/common';
+import { barChartColor, barLabelColor } from '../../../lib/utils/getColor';
 import CampaignClicksSentsOpens from './CampaignClicksSentsOpens';
-import svgIcons from '@/lib/utils/icons';
+import svgIcons from '../../../lib/utils/icons';
 
 function CustomerEngagement({ order }: { order: number }) {
   const { parameters } = useSDK<PageAppSDK>();

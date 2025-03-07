@@ -1,9 +1,9 @@
 'use client';
 import React from 'react';
 import style from './TotalUsers.module.scss';
-import NoData from '@/components/UI/NoData';
-import LineChart from '@/components/charts/LineChart';
-import { useAppSelector } from '@/redux/hooks';
+import NoData from '../../../components/UI/NoData';
+import LineChart from '../../../components/charts/LineChart';
+import { useAppSelector } from '../../../redux/hooks';
 
 type TotalUsers = {
   Date: string;

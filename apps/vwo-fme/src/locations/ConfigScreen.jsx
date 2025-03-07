@@ -375,7 +375,7 @@ export default class ConfigScreen extends React.Component {
                   <TextInput
                     value={this.state.config.accountId}
                     onChange={(e) => this.onAccountIdChange(e.target.value)}/>
-                  <Paragraph marginTop='spacingS'>Locate account ID in settings page. See <TextLink href='https://help.vwo.com/hc/en-us/articles/4404205211929-Integrating-VWO-With-Contentful' target='_blank' rel="noopener noreferrer">knowledge base</TextLink> for more details.</Paragraph>
+                  <Paragraph marginTop='spacingS'>Locate account ID in settings page. See <TextLink href='https://help.vwo.com/hc/en-us/articles/40825355345177-Integrating-VWO-Feature-Flags-with-Contentful-CMS' target='_blank' rel="noopener noreferrer">knowledge base</TextLink> for more details.</Paragraph>
               </FormControl>
               <FormControl className={styles.formItem}>
                   <FormControl.Label isRequired>API Key</FormControl.Label>
@@ -383,7 +383,7 @@ export default class ConfigScreen extends React.Component {
                     type='password'
                     value={this.state.config.accessToken}
                     onChange={(e) => this.onApiKeyChange(e.target.value)}/>
-                  <Paragraph marginTop='spacingS'>View the auth token in Integrations &gt; Contentful &gt; Config section. See <TextLink href='https://help.vwo.com/hc/en-us/articles/4404205211929-Integrating-VWO-With-Contentful' target='_blank' rel="noopener noreferrer">knowledge base</TextLink> for more details.</Paragraph>
+                  <Paragraph marginTop='spacingS'>View the auth token in Integrations &gt; Contentful &gt; Config section. See <TextLink href='https://help.vwo.com/hc/en-us/articles/40825355345177-Integrating-VWO-Feature-Flags-with-Contentful-CMS' target='_blank' rel="noopener noreferrer">knowledge base</TextLink> for more details.</Paragraph>
               </FormControl>
               <Note marginBottom='spacingXl'>This token grants read-only access to organization-level information stored in VWO. It is accessible via API by any users within the current Contentful space.</Note>
               <Button variant='primary' onClick={this.connectToVwo} isLoading={this.state.loading}>Connect with VWO</Button>

@@ -1,8 +1,8 @@
 'use client';
-import CountCard from '@/components/UI/CountCard';
+import CountCard from '../../../components/UI/CountCard';
 import React from 'react';
 import style from './customerEngagementCounts.module.scss';
-import { CountDataType } from '@/lib/types/dashboard';
+import { CountDataType } from '../../../lib/types/dashboard';
 
 function CustomerEngagementCounts({ firstRowCountData, secondRowCountData }: { firstRowCountData: any; secondRowCountData: any }) {
   return (
