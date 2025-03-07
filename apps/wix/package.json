@@ -1,6 +1,6 @@
 {
   "name": "wix-contentful-app",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "4.29.3",
