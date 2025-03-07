@@ -17,9 +17,10 @@ jobs:
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
       - name: Auto-merge dependabot PRs
-        if: ${{ steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major' }}
+        if: ${{ steps.dependabot-metadata.outputs.update-type
+          != 'version-update:semver-major' }}
         uses: contentful/github-auto-merge@v2
-        # Logic to delete branch from github-auto-merge causes merge to fail due to merge queue
+        # Fails due to branch deletion logic conflicts with merge queue
         # We will handle branch deletion in a separate workflow
         with:
           delete-branch: false
