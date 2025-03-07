@@ -39,15 +39,15 @@
   "devDependencies": {
     "@contentful/app-scripts": "1.31.0",
     "@testing-library/jest-dom": "6.6.3",
-    "@testing-library/react": "^16.0.1",
+    "@testing-library/react": "^16.2.0",
     "@types/node": "18.15.3",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
-    "happy-dom": "^17.2.2",
-    "typescript": "5.7.2",
+    "happy-dom": "^17.3.0",
+    "typescript": "5.8.2",
     "vite": "^5.4.11",
-    "vitest": "^3.0.7"
+    "vitest": "^3.0.8"
   },
   "homepage": "."
 }
