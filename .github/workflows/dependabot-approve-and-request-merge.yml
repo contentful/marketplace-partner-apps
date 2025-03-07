@@ -19,9 +19,96 @@ jobs:
       - name: Auto-merge dependabot PRs
         if: ${{ steps.dependabot-metadata.outputs.update-type
           != 'version-update:semver-major' }}
-        uses: contentful/github-auto-merge@v2
-        # Fails due to branch deletion logic conflicts with merge queue
-        # We will handle branch deletion in a separate workflow
-        with:
-          delete-branch: false
-          VAULT_URL: ${{ secrets.VAULT_URL }}
+        runs:
+          using: 'composite'
+          steps:
+            - name: Check if PR is from fork
+              shell: bash
+              run: |
+                if [ "${{ github.event.pull_request.head.repo.fork }}" == "true" ]; then
+                  echo "Skipping action on fork PR"
+                  exit 1
+                fi
+            - name: Retrieve Github Token
+              id: vault
+              uses: hashicorp/vault-action@v2.4.3
+              with:
+                url: ${{ secrets.VAULT_URL }}
+                role: ${{ github.event.repository.name }}-github-action
+                method: jwt
+                path: github-actions
+                exportEnv: false
+                secrets: |
+                  github/token/${{ github.event.repository.name }}-dependabot token | GITHUB_MERGE_TOKEN ;
+            - name: approve PR
+              uses: actions/github-script@v6.3.3
+              with:
+                github-token: ${{ steps.vault.outputs.GITHUB_MERGE_TOKEN }}
+                script: |
+                  const opts = github.rest.pulls.listReviews.endpoint.merge({
+                    pull_number: context.payload.pull_request.number,
+                    owner: context.payload.repository.owner.login,
+                    repo: context.payload.repository.name,
+                  });
+
+                  const reviews = await github.paginate(opts);
+
+                  const ourReview = reviews.find(
+                    (review) =>
+                      review.state === "APPROVED" && review.user && review.user.login === "contentful-automation[bot]"
+                  );
+
+                  if (ourReview) {
+                    console.log(
+                      `The user "${ourReview.user.login}" has already approved and requested this PR is merged, exiting`
+                    );
+                  } else {
+                    github.rest.pulls.createReview({
+                      owner: context.payload.repository.owner.login,
+                      repo: context.payload.repository.name,
+                      pull_number: context.payload.pull_request.number,
+                      event: 'APPROVE',
+                      body: ''
+                    })
+                  }
+            - name: Get merge type
+              id: merge-type
+              uses: actions/github-script@v6.3.3
+              with:
+                github-token: ${{ steps.vault.outputs.GITHUB_MERGE_TOKEN }}
+                script: |
+                  const repo = await github.rest.repos.get({
+                    owner: context.payload.repository.owner.login,
+                    repo: context.payload.repository.name,
+                  });
+
+                  const methods = new Map([
+                    ['squash', repo.data.allow_squash_merge],
+                    ['merge', repo.data.allow_merge_commit],
+                    ['rebase', repo.data.allow_rebase_merge],
+                  ]);
+
+                  console.log(methods)
+
+                  const allowedMethods = [...methods.entries()]
+                    .filter(([_, allowed]) => allowed)
+                    .map(([method]) => method);
+
+                  // just pick the first one
+                  const mergeMethod = allowedMethods[0];
+
+                  if (!mergeMethod) {
+                    throw new Error("No allowed merge method found");
+                  }
+
+                  return mergeMethod;
+            - name: Enable auto merge
+              shell: bash
+              run: |
+                merge_method="$(echo ${{ steps.merge-type.outputs.result }} | tr -d '"')"
+                echo "Auto merging PR using method $merge_method"
+                gh pr merge "--$merge_method" --auto ${{ github.event.pull_request.html_url }}
+              env:
+                # Note: The GH_TOKEN env var is required for now, even though it contradicts GH's documentation. If not present we
+                # were seeing an error message like this one: https://github.com/github/docs/issues/21930#issuecomment-1310122605
+                GH_TOKEN: ${{ github.token }}
