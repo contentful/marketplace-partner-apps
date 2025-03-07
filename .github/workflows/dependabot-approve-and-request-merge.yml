@@ -1,4 +1,4 @@
-name: "dependabot approve-and-request-merge"
+name: 'dependabot approve-and-request-merge'
 
 on: pull_request_target
 
@@ -17,12 +17,10 @@ jobs:
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
       - name: Auto-merge dependabot PRs
+        if: ${{ steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major' }}
         uses: contentful/github-auto-merge@v2
         # Logic to delete branch from github-auto-merge causes merge to fail due to merge queue
         # We will handle branch deletion in a separate workflow
         with:
           delete-branch: false
-        # Don't auto-merge major version upgrades, we'll handle these manually
-        if: ${{steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major'}}
-        with:
           VAULT_URL: ${{ secrets.VAULT_URL }}
