@@ -12,10 +12,6 @@ export async function getRichTextFields(cma: CMAClient, appDefinitionId: string)
   // Get all content types
   const contentTypes = await cma.contentType.getMany({});
 
-  // Get our widgetId
-  const def = await cma.appDefinition.get({ appDefinitionId: appDefinitionId });
-  const appWidgetId = def.sys.id;
-
   const richTextFields: RtfField[] = [];
   for (const contentType of contentTypes.items) {
     const editorInterface = await cma.editorInterface.get({ contentTypeId: contentType.sys.id });
@@ -27,7 +23,7 @@ export async function getRichTextFields(cma: CMAClient, appDefinitionId: string)
         contentTypeName: contentType.name,
         fieldId: rtfField.id,
         fieldName: rtfField.name,
-        isEnabled: control!.widgetId === appWidgetId,
+        isEnabled: control!.widgetId === appDefinitionId,
       });
     }
   }
@@ -48,8 +44,7 @@ export async function getRichTextFields(cma: CMAClient, appDefinitionId: string)
 
 export async function setAppRichTextEditor(sdk: ConfigAppSDK, contentTypeId: string, fieldId: string) {
   lock.acquire(contentTypeId, async function () {
-    const def = await sdk.cma.appDefinition.get({ appDefinitionId: sdk.ids.app });
-    const appWidgetId = def.sys.id;
+    const appWidgetId = sdk.ids.app;
 
     const editorInterface = await sdk.cma.editorInterface.get({ contentTypeId: contentTypeId });
     const control = editorInterface.controls!.find((w) => w.fieldId === fieldId)!;
