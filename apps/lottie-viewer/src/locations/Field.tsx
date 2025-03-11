@@ -1,29 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { FieldExtensionSDK } from '@contentful/app-sdk';
+import { FieldAppSDK } from '@contentful/app-sdk';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { JsonEditor } from '@contentful/field-editor-json';
 import Lottie from 'react-lottie-player';
 import { Flex, Button, Collapse, Paragraph } from '@contentful/f36-components';
 
 const Field = () => {
-  const [lottieJson, setLottieJson] = useState<object | null>(null);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [lottieJson, setLottieJson] = useState<any>(null);
+  const [isExpanded, setIsExpanded] = useState(true);
 
-  const sdk = useSDK<FieldExtensionSDK>();
+  const sdk = useSDK<FieldAppSDK>();
 
   useEffect(() => {
     // This ensures our app has enough space to render
     sdk.window.startAutoResizer();
 
     // Get current value of the field so we can display it
-    setLottieJson(sdk.field.getValue() || {});
-  }, [sdk.field, sdk.window]);
+    const value = sdk.field.getValue();
 
-  useEffect(() => {
-    sdk.window.startAutoResizer();
+    setLottieJson(value);
 
-    sdk.field.onValueChanged((value) => {
-      setLottieJson(value ? value : {});
+    // Subscribe to field value changes
+    sdk.field.onValueChanged((newValue) => {
+      setLottieJson(newValue);
     });
   }, [sdk.field, sdk.window]);
 
@@ -35,7 +34,7 @@ const Field = () => {
         </Button>
       </Flex>
       <Flex flexDirection="column" alignItems="center">
-        <Lottie loop animationData={lottieJson || {}} play style={{ width: 250, height: 250 }} />
+        <Lottie loop animationData={lottieJson} play style={{ width: 250, height: 250 }} />
         <Collapse isExpanded={isExpanded}>
           <JsonEditor field={sdk.field} isInitiallyDisabled={false}></JsonEditor>
         </Collapse>
