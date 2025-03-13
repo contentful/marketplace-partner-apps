@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.28](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.0.27...ceros-contentful-app-v1.0.28) (2025-03-13)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.8.1 to 1.8.2 in /apps/ceros ([#4628](https://github.com/contentful/marketplace-partner-apps/issues/4628)) ([878d94e](https://github.com/contentful/marketplace-partner-apps/commit/878d94e6217ce90a50d7c9fa9a36caa321dfe33e))
+
 ## [1.0.27](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.0.26...ceros-contentful-app-v1.0.27) (2025-03-06)
 
 

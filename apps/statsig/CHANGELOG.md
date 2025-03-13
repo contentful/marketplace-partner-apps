@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/contentful/marketplace-partner-apps/compare/statsig-v1.1.1...statsig-v1.1.2) (2025-03-13)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.7.9 to 1.8.2 in /apps/statsig ([#4608](https://github.com/contentful/marketplace-partner-apps/issues/4608)) ([cbd0775](https://github.com/contentful/marketplace-partner-apps/commit/cbd0775b3d80fa277a4e7118edf6dba7ab7b4a32))
+
 ## [1.1.1](https://github.com/contentful/marketplace-partner-apps/compare/statsig-v1.1.0...statsig-v1.1.1) (2025-03-06)
 
 

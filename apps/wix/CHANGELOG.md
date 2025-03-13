@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.19](https://github.com/contentful/marketplace-partner-apps/compare/wix-contentful-app-v1.0.18...wix-contentful-app-v1.0.19) (2025-03-13)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.7.5 to 1.8.2 in /apps/wix ([#4604](https://github.com/contentful/marketplace-partner-apps/issues/4604)) ([8215379](https://github.com/contentful/marketplace-partner-apps/commit/8215379bc1240b1005cb0557bd9fcf476159ae58))
+
 ## [1.0.18](https://github.com/contentful/marketplace-partner-apps/compare/wix-contentful-app-v1.0.17...wix-contentful-app-v1.0.18) (2024-12-10)
 
 

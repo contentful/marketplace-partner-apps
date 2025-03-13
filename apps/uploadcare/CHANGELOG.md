@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.25](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.24...uploadcare-contentful-app-v1.0.25) (2025-03-13)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.7.4 to 1.8.2 in /apps/uploadcare ([#4607](https://github.com/contentful/marketplace-partner-apps/issues/4607)) ([65baa6e](https://github.com/contentful/marketplace-partner-apps/commit/65baa6e033eb0dc67bed7fd79a4548af0ee989a6))
+
 ## [1.0.24](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.23...uploadcare-contentful-app-v1.0.24) (2024-12-10)
 
 
