@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FieldAppSDK } from '@contentful/app-sdk';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { JsonEditor } from '@contentful/field-editor-json';
-import Lottie from 'react-lottie-player';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { Flex, Button, Collapse, Paragraph } from '@contentful/f36-components';
 
 const Field = () => {
@@ -17,11 +17,11 @@ const Field = () => {
 
     // Get current value of the field so we can display it
     const value = sdk.field.getValue();
-
     setLottieJson(value);
 
     // Subscribe to field value changes
     sdk.field.onValueChanged((newValue) => {
+      console.log('Seting new lottie value to ==>', newValue);
       setLottieJson(newValue);
     });
   }, [sdk.field, sdk.window]);
@@ -34,7 +34,7 @@ const Field = () => {
         </Button>
       </Flex>
       <Flex flexDirection="column" alignItems="center">
-        <Lottie loop animationData={lottieJson} play style={{ width: 250, height: 250 }} />
+        <DotLottieReact data={lottieJson} loop autoplay></DotLottieReact>
         <Collapse isExpanded={isExpanded}>
           <JsonEditor field={sdk.field} isInitiallyDisabled={false}></JsonEditor>
         </Collapse>
