@@ -7,7 +7,7 @@ import { Flex, Button, Collapse, Paragraph } from '@contentful/f36-components';
 
 const Field = () => {
   const [lottieJson, setLottieJson] = useState<any>(null);
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const sdk = useSDK<FieldAppSDK>();
 
@@ -21,7 +21,6 @@ const Field = () => {
 
     // Subscribe to field value changes
     sdk.field.onValueChanged((newValue) => {
-      console.log('Seting new lottie value to ==>', newValue);
       setLottieJson(newValue);
     });
   }, [sdk.field, sdk.window]);
@@ -34,7 +33,7 @@ const Field = () => {
         </Button>
       </Flex>
       <Flex flexDirection="column" alignItems="center">
-        <DotLottieReact data={lottieJson} loop autoplay></DotLottieReact>
+        {lottieJson && <DotLottieReact data={lottieJson} loop autoplay></DotLottieReact>}
         <Collapse isExpanded={isExpanded}>
           <JsonEditor field={sdk.field} isInitiallyDisabled={false}></JsonEditor>
         </Collapse>
