@@ -1,6 +1,6 @@
 {
   "name": "ceros-contentful-app",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "^4.29.5",

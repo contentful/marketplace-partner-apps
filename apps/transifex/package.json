@@ -1,6 +1,6 @@
 {
   "name": "transifex-contentful-app",
-  "version": "1.2.10",
+  "version": "1.2.11",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "4.29.3",
