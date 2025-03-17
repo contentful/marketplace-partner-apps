@@ -1,13 +1,473 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: marketplace-partner-apps
+  name: adapt-essentials-asset-fields
   annotations:
-    circleci.com/project-slug: github/contentful/marketplace-partner-apps
-    github.com/project-slug: contentful/marketplace-partner-apps
+    github.com/project-slug: contentful/marketplace-partner-apps/adapt-essentials-asset-fields
+    contentful.com/service-tier: '2'
     contentful.com/ci-alert-slack: prd-marketplace-bots
-
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
 spec:
-  type: library
+  type: service
   lifecycle: production
-  owner: group:team-tundra
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: amplitude-experiment
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/amplitude-experiment
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: bynder
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/bynder
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: bynder-content-workflow
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/bynder-content-workflow
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ceros
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/ceros
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: cloudinary2
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/cloudinary2
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: docs-to-rich-text
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/docs-to-rich-text
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: eppo
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/eppo
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: flexfields
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/flexfields
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: frontify
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/frontify
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: growthbook
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/growthbook
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: imageHotspotCreator
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/imageHotspotCreator
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: intershop
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/intershop
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: livestory
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/livestory
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: raster
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/raster
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: sfmc-studio
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/sfmc-studio
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: shopify
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/shopify
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: statsig
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/statsig
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: surfer
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/surfer
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: transifex
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/transifex
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: uploadcare
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/uploadcare
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: voucherify
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/voucherify
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: vwo-fme
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/vwo-fme
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: wix
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/wix
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: xillio-transcreate
+  annotations:
+    github.com/project-slug: contentful/marketplace-partner-apps/xillio-transcreate
+    contentful.com/service-tier: '2'
+    contentful.com/ci-alert-slack: prd-marketplace-bots
+  tags:
+    - node
+    - service
+    - sast-enabled
+    - tier-2
+spec:
+  type: service
+  lifecycle: production
+  owner: group:team-marketplace
