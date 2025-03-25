@@ -2,10 +2,11 @@ import { hasPackageJson, packageJsonPath } from '../../app-review-utils';
 import type { PullRequestFile, ValidatorOptions, ValidatorResult } from '../../types';
 
 export const validate = async (_options: ValidatorOptions, newAppDir: string, files: PullRequestFile[]): Promise<ValidatorResult> => {
-  const requiredScripts = ['start', 'build', 'test', 'lint', 'install-ci'];
+  const requiredScripts = ['start', 'build', 'test', 'lint'];
   let hasScripts = false;
   let isCorrectVersion = false;
   let hasDeployScript = false;
+  let hasPassWithNoTests = false;
 
   if (await hasPackageJson(files, newAppDir)) {
     const packageJson = await import(packageJsonPath(newAppDir));
@@ -13,6 +14,7 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, fi
     hasScripts = requiredScripts.every((script) => packageJson.scripts && packageJson.scripts[script]);
     isCorrectVersion = packageJson.version.startsWith('0');
     hasDeployScript = packageJson.scripts && packageJson.scripts['deploy'];
+    hasPassWithNoTests = packageJson.scripts && packageJson.scripts['test'].includes('--passWithNoTests');
   }
 
   const result = hasScripts && isCorrectVersion && !hasDeployScript;
@@ -28,6 +30,9 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, fi
     }
     if (hasDeployScript) {
       failureMessage += 'package.json should not contain a deploy script.';
+    }
+    if (hasPassWithNoTests) {
+      failureMessage += 'package.json should not contain a test script with the --passWithNoTests flag'
     }
     message = failureMessage;
   }
