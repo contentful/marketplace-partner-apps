@@ -7,7 +7,7 @@ on:
       - edited
       - synchronize
     branches:
-      - 'David-J-Shibley:main'
+      - 'main'
 
 jobs:
   main:
