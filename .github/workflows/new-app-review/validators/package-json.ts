@@ -14,7 +14,7 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, fi
     hasScripts = requiredScripts.every((script) => packageJson.scripts && packageJson.scripts[script]);
     isCorrectVersion = packageJson.version.startsWith('0');
     hasDeployScript = packageJson.scripts && packageJson.scripts['deploy'];
-    hasPassWithNoTests = packageJson.scripts && packageJson.scripts['test'].includes('--passWithNoTests');
+    hasPassWithNoTests = packageJson.scripts && packageJson.scripts['test'] && packageJson.scripts['test'].includes('--passWithNoTests');
   }
 
   const result = hasScripts && isCorrectVersion && !hasDeployScript;
