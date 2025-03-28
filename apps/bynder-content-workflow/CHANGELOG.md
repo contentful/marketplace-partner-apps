@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.9](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.8...bynder-content-workflow-v1.0.9) (2025-03-28)
+
+
+### Bug Fixes
+
+* Italics in content causes a validation error when importing [INTEG-2515] ([#4746](https://github.com/contentful/marketplace-partner-apps/issues/4746)) ([0f6a976](https://github.com/contentful/marketplace-partner-apps/commit/0f6a976befdfd8c73c0f7d929cfabecf20765a87))
+
 ## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.7...bynder-content-workflow-v1.0.8) (2024-12-10)
 
 
