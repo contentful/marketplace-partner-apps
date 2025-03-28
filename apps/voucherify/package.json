@@ -12,14 +12,14 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@contentful/app-sdk": "4.29.3",
-    "@contentful/f36-components": "4.75.2",
+    "@contentful/app-sdk": "4.29.5",
+    "@contentful/f36-components": "4.79.1",
     "@contentful/f36-icons": "4.29.0",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "11.13.5",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.0",
-    "axios": "1.8.2",
+    "axios": "1.8.4",
     "http-status-codes": "2.3.0",
     "lodash": "4.17.21",
     "prop-types": "15.8.1",
