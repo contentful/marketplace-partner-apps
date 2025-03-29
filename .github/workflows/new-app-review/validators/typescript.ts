@@ -20,8 +20,11 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, fi
       ? 'TypeScript check passed'
       : 'TypeScript check failed: please include a tsconfig.json file, install typescript as a dev dependency, and include TypeScript files in your app directory';
 
+      // currently only warning about typescript validation
+      // update this when we want to enforce typescript
   return {
-    result,
+    result: true,
+    warning: message,
     message,
   };
 };
