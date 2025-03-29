@@ -1,5 +1,20 @@
 import { useEffect, useRef } from 'react';
-import { Tabs, GlobalStyles, Button, Popover, Box, TextInput, Skeleton, Card, Heading, Notification, Modal, Flex, Tooltip } from '@contentful/f36-components';
+import {
+  Tabs,
+  GlobalStyles,
+  Button,
+  Popover,
+  Box,
+  TextInput,
+  Skeleton,
+  Card,
+  Heading,
+  Notification,
+  Modal,
+  Flex,
+  Tooltip,
+  Image,
+} from '@contentful/f36-components';
 import { HelpCircleIcon, WarningIcon } from '@contentful/f36-icons';
 import { FieldAppSDK } from '@contentful/app-sdk';
 import { useSDK } from '@contentful/react-apps-toolkit';
@@ -16,6 +31,10 @@ import { removeImagesFromDocument } from '../utils/imageRemoverUtils';
 import { launchGoogleDrivePicker } from '../utils/googleDrivePicker';
 import googleDriveLogo from '../assets/img/drive.png';
 import { isOffice365Html } from '../utils/officeDocUtil';
+import urlImage from '../assets/img/paste_url.png';
+import contentImage from '../assets/img/paste_content.png';
+import greenCheckImage from '../assets/img/green_check.png';
+import redXImage from '../assets/img/red_x.png';
 
 const styles = {
   popover: css({
@@ -84,6 +103,15 @@ const styles = {
   modalDriveButton: css({
     width: '200px',
   }),
+  hintRow: css({
+    marginTop: '25px',
+  }),
+  hintSecondRow: css({
+    marginTop: '60px',
+  }),
+  hintIcon: css({
+    marginRight: '30px',
+  }),
 };
 
 const Field = () => {
@@ -95,6 +123,7 @@ const Field = () => {
   const [isGoogleAuthModalShown, setIsGoogleAuthModalShown] = useState(false);
   const [importState, setImportState] = useState<ImportState | null>(null);
   const [showValidationWarning, setShowValidationWarning] = useState(false);
+  const [isPasteInputErrorShown, setIsPasteInputErrorShown] = useState(false);
 
   sdk.window.startAutoResizer();
 
@@ -130,7 +159,7 @@ const Field = () => {
       }
 
       if (isUrl(pastedText)) {
-        Notification.error('Document import by url is not supported. Please paste the contents of a Google, Word, or HTML document to import.');
+        setIsPasteInputErrorShown(true);
         clearImportingState();
         return;
       }
@@ -403,11 +432,38 @@ const Field = () => {
     </Modal>
   );
 
+  const pasteInputErrorModal = (
+    <Modal onClose={() => setIsPasteInputErrorShown(false)} isShown={isPasteInputErrorShown} size={'fullscreen'}>
+      {() => (
+        <>
+          <Modal.Header title="It Looks Like You Pasted a Link" onClose={() => setIsPasteInputErrorShown(false)} />
+          <Modal.Content>
+            Oops! It looks like you pasted a link instead of the document content. Please copy and paste the actual content from your Google, Word, or HTML
+            document.
+            <Flex justifyContent="center" alignItems="center" className={styles.hintRow}>
+              <Image alt="Green checkmark" height="50px" width="auto" src={greenCheckImage} className={styles.hintIcon} />
+              <Image alt="Selected content from Google Doc" height="auto" width="400px" src={contentImage} />
+            </Flex>
+            <Flex justifyContent="center" alignItems="center" className={styles.hintSecondRow}>
+              <Image alt="Red X" height="50px" width="auto" src={redXImage} className={styles.hintIcon} />
+              <Image alt="Import by Url is not supported" height="auto" width="400px" src={urlImage} />
+            </Flex>
+          </Modal.Content>
+          <Modal.Controls>
+            <Button size="small" variant="transparent" onClick={() => setIsPasteInputErrorShown(false)}>
+              Close
+            </Button>
+          </Modal.Controls>
+        </>
+      )}
+    </Modal>
+  );
   return (
     <div className={styles.layoutStyle}>
       <GlobalStyles />
       {isLicenseLimitBreached ? licenseLimitBreached : tabs}
       {authPromptModal}
+      {pasteInputErrorModal}
     </div>
   );
 };
