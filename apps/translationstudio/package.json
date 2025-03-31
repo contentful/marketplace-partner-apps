@@ -1,0 +1,43 @@
+{
+  "name": "translationstudio",
+  "version": "25.02.13",
+  "author": {
+    "name": "I-D Media GmbH",
+    "url": "https://translationstudio.tech"
+  },
+  "homepage": "https://translationstudio.tech",
+  "license": "GPL-2.0-only",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "jest --watch",
+    "test:ci": "jest --ci",
+    "create-app-definition": "contentful-app-scripts create-app-definition"
+  },
+  "dependencies": {
+    "@contentful/app-sdk": "4.22.0",
+    "@contentful/f36-components": "4.45.0",
+    "@contentful/f36-tokens": "4.0.2",
+    "@contentful/react-apps-toolkit": "1.2.16",
+    "next": "^14.2.21",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "jose": "^5.4.0"
+  },
+  "devDependencies": {
+    "@contentful/app-scripts": "1.15.0",
+    "@testing-library/jest-dom": "5.16.5",
+    "@testing-library/react": "14.0.0",
+    "@types/node": "16.18.38",
+    "@types/react": "18.2.14",
+    "@types/react-dom": "18.2.6",
+    "eslint": "8.44.0",
+    "eslint-config-next": "13.4.8",
+    "jest": "29.5.0",
+    "jest-environment-jsdom": "29.5.0",
+    "typescript": "5.1.6"
+  }
+}
