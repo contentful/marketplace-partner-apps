@@ -35,6 +35,7 @@ import type { LanguageMapping, TranslationRequest } from "../../interfaces/trans
 import { SidebarAppSDK } from "@contentful/app-sdk";
 import DateInput from "../../components/DateInput";
 import { LOGO } from "utils/logo";
+import Image from "next/image";
 
 const getEntryHistory = async (space: string, entry: string) => {
 	try {
@@ -214,7 +215,7 @@ const Sidebar = () => {
 	{
 		return <>
 			<div style={{ textAlign: "right"}}>
-				<img src={LOGO} alt="" style={{ height: "50px", display: "inline-block" }} />
+				<Image src={LOGO} alt="" style={{ height: "50px", display: "inline-block" }} />
 			</div>
 			<Paragraph>You do not yet have any translation settings configured.</Paragraph>
 			<Paragraph><a rel="nofollow" href="https://account.translationstudio.tech" target="_blank">translationstudio needs to be configured.</a></Paragraph>

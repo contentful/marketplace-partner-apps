@@ -22,6 +22,7 @@ import { css } from "emotion";
 import { useSDK } from "@contentful/react-apps-toolkit";
 import { validateLicense } from "../../utils/translationstudio";
 import { LOGO } from "../../utils/logo";
+import Image from "next/image";
 
 export interface AppInstallationParameters {
 	translationStudioKey?: string;
@@ -100,7 +101,7 @@ const ConfigScreen = () =>
 	return (
 		<Flex flexDirection="column" className={css({ margin: "80px" })}>
 			<div className={css({ textAlign: "center", marginBottom: "20px" })}>
-				<img src={LOGO} alt="" className={css({ height: "100px", width: "227px", display: "inline-block" })} />
+				<Image src={LOGO} alt="" className={css({ height: "100px", width: "227px", display: "inline-block" })} />
 			</div>
 			<Form>
 				<Heading>translationstudio license</Heading>

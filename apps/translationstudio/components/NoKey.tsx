@@ -19,13 +19,14 @@ import { Paragraph } from "@contentful/f36-components";
 import React from "react";
 import { LOGO } from "utils/logo";
 import { css } from "emotion";
+import Image from "next/image";
 
 export default function noKey()
 {
 
     return <>
         <div style={{ textAlign: "center"}}>
-            <img src={LOGO} alt="" className={css({ height: "100px", width: "227px", display: "inline-block" })} />
+            <Image src={LOGO} alt="" className={css({ height: "100px", width: "227px", display: "inline-block" })} />
         </div>
         <Paragraph>Please go to the App configuration and enter a valid translationstudio license</Paragraph>;
     </>
