@@ -29,9 +29,9 @@ const isSessionRoute = function (uri: string) {
         && !uri.startsWith("/api/authenticate");
 }
 
-const verifyApiRoutePreconditions = function()
+const verifyApiRoutePreconditions = async function()
 {
-    const head = headers();
+    const head = await headers();
     if (head.get("X-translationstudio") !== "translationstudio")
     {
         console.warn("X-translationstudio attribute is invalid");
@@ -48,13 +48,13 @@ export async function middleware(request: NextRequest) {
     if (!isSecuredRoute(uri))
         return NextResponse.next();
 
-    if (!verifyApiRoutePreconditions())
+    if (!await verifyApiRoutePreconditions())
         return NextResponse.json({ message: "Cannot grant access to api"}, { status: 401 });
         
     if (!isSessionRoute(uri))
         return NextResponse.next();
 
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const data = await getSessionCookieData(cookieStore);
     if (data === null)
     {

@@ -108,7 +108,7 @@ export async function POST(request: Request)
         });
     }
 
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     if (await hasValidSession(cookieStore, clientid, json.space))
         return new Response(null, { status: 204 });
 

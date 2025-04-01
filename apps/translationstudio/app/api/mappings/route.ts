@@ -24,7 +24,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET()
 {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const data = await getAlreadyValidatedSessionCookieData(cookieStore);
     if (data === null || !data.token)
     {
