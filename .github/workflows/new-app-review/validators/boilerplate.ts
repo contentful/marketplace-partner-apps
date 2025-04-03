@@ -16,7 +16,9 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, fi
           const helloBoilerplateRegex = /^Hello.*\bComponent\b/i;
           const welcomeBoilerplateRegex = /^Welcome.*\bcontentful\b/i;
           
-          return (helloBoilerplateRegex.test(innerContent) || welcomeBoilerplateRegex.test(innerContent))
+          if (helloBoilerplateRegex.test(innerContent) || welcomeBoilerplateRegex.test(innerContent)) {
+            return true 
+          }
         }
       }
       return false;
