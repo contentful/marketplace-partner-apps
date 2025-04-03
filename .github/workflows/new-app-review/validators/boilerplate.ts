@@ -22,7 +22,7 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, fi
       return false;
     });
 
-  const result = !hasInvalidBoilerPlate;
+  const result = hasInvalidBoilerPlate;
   const message = result
     ? 'All location components are valid.'
     : 'Unused locations found: Please remove all unused location components and their respective tests.';
