@@ -2,7 +2,7 @@ import type { PullRequestFile, ValidatorOptions, ValidatorResult } from '../../t
 
 
 export const validate = async (_options: ValidatorOptions, newAppDir: string, files: PullRequestFile[]): Promise<ValidatorResult> => {
-  const invalidBoilerPlate = files
+  const hasInvalidBoilerPlate = files
     .filter((file) => file.status === 'added' && (file.filename.endsWith('.ts') || file.filename.endsWith('.tsx')))
     .some((file) => {
 
@@ -15,14 +15,15 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, fi
           const helloRegex = /Hello/i;
           return helloRegex.test(innerContent);
         }
+        return false
       }
       return false;
     });
 
-  const result = !invalidBoilerPlate;
+  const result = hasInvalidBoilerPlate;
   const message = result
     ? 'Boilerplate check passed'
-    : 'Boilerplate check failed: Found components in the locations folder with unused boilerplate code. Please removes these components and their respective tests and try again.';
+    : 'Boilerplate check failed: Found components in the locations folder with invalid boilerplate code. Please remove these components and their respective test files and try again.';
 
   return {
     result,
