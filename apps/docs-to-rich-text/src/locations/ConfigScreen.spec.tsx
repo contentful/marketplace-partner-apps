@@ -8,6 +8,10 @@ vi.mock('@contentful/react-apps-toolkit', () => ({
   useCMA: () => mockCma,
 }));
 
+vi.mock('../utils/editorInterfaceUtil', () => ({
+  getRichTextFields: vi.fn(),
+}));
+
 describe('Config Screen component', () => {
   it('Component text exists', async () => {
     const { getByText } = render(<ConfigScreen />);

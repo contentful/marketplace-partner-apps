@@ -100,6 +100,8 @@ updates:
           - patch
         patterns:
           - '*'
+    labels:
+      - 'contentful-owned'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -197,6 +199,8 @@ updates:
           - patch
         patterns:
           - '*'
+    labels:
+      - 'contentful-owned'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -496,7 +500,73 @@ updates:
       prefix: 'fix'
       prefix-development: 'chore'
       include: 'scope'
+    directory: '/apps/sfmc-studio'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
+    groups:
+      production-dependencies:
+        applies-to: version-updates
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
+      dev-dependencies:
+        applies-to: version-updates
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
+  - package-ecosystem: npm
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: Etc/UTC
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
     directory: '/apps/shopify'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
+    groups:
+      production-dependencies:
+        applies-to: version-updates
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
+      dev-dependencies:
+        applies-to: version-updates
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
+    labels:
+      - 'contentful-owned'
+  - package-ecosystem: npm
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: Etc/UTC
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
+    directory: '/apps/statsig'
     ignore:
       - dependency-name: '@types/node'
         versions:
@@ -616,7 +686,7 @@ updates:
           - minor
           - patch
         patterns:
-          - '*'          
+          - '*'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -648,7 +718,39 @@ updates:
           - minor
           - patch
         patterns:
-          - '*'          
+          - '*'
+  - package-ecosystem: npm
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: Etc/UTC
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
+    directory: '/apps/vwo-fme'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
+    groups:
+      production-dependencies:
+        applies-to: version-updates
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
+      dev-dependencies:
+        applies-to: version-updates
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -680,7 +782,7 @@ updates:
           - minor
           - patch
         patterns:
-          - '*'          
+          - '*'
   - package-ecosystem: npm
     schedule:
       interval: daily
@@ -712,4 +814,4 @@ updates:
           - minor
           - patch
         patterns:
-          - '*'          
+          - '*'

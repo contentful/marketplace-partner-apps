@@ -15,13 +15,15 @@
 		"apps/intershop": {},
 		"apps/livestory": {},
 		"apps/raster": {},
+		"apps/sfmc-studio": {},
 		"apps/shopify": {},
+		"apps/statsig": {},
 		"apps/surfer": {},
 		"apps/transifex": {},
 		"apps/uploadcare": {},
 		"apps/voucherify": {},
+		"apps/vwo-fme": {},
 		"apps/wix": {},
-		"apps/xillio-transcreate": {},
-		"apps/vwo-fme": {}
+		"apps/xillio-transcreate": {}
 	}
 }

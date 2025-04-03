@@ -1,10 +1,10 @@
 {
   "name": "vwo-fme",
-  "version": "0.1.0",
+  "version": "1.0.3",
   "private": true,
   "dependencies": {
-    "@contentful/app-sdk": "^4.29.1",
-    "@contentful/f36-components": "4.70.0",
+    "@contentful/app-sdk": "^4.29.5",
+    "@contentful/f36-components": "4.78.0",
     "@contentful/f36-tokens": "^4.0.5",
     "@contentful/react-apps-toolkit": "1.2.16",
     "contentful-management": "10.46.4",
@@ -22,7 +22,8 @@
     "create-app-definition": "contentful-app-scripts create-app-definition",
     "upload": "contentful-app-scripts upload --bundle-dir ./build",
     "install-ci": "npm install --legacy-peer-deps",
-    "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN"
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 71oYmQJFCIWn9pxizjN8dZ --token ${CONTENTFUL_CMA_TOKEN}",
+    "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id 1Ruf35Q3xWxPZhedm8ygEx --token ${TEST_CMA_TOKEN}"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -42,7 +43,7 @@
   "devDependencies": {
     "@contentful/app-scripts": "1.27.0",
     "@testing-library/jest-dom": "5.17.0",
-    "@testing-library/react": "14.3.1",
+    "@testing-library/react": "16.2.0",
     "cross-env": "^7.0.3"
   },
   "homepage": "."

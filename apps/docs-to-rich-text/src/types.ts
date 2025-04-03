@@ -43,3 +43,11 @@ export interface GoogleDrivePickerResult {
   html: string;
   markdown: string;
 }
+
+export interface RtfField {
+  contentTypeId: string;
+  contentTypeName: string;
+  fieldId: string;
+  fieldName: string;
+  isEnabled: boolean;
+}

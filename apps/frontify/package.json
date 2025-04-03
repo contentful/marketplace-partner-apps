@@ -1,9 +1,9 @@
 {
   "name": "@contentful/frontify-assets",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "devDependencies": {
-    "@contentful/app-scripts": "1.32.2",
+    "@contentful/app-scripts": "2.1.2",
     "cross-env": "7.0.3",
     "vite": "^3.2.11"
   },

@@ -1,0 +1,91 @@
+.AcquistionCustomerMainWithHead {
+  border-radius: 6px;
+  background: #fff;
+  box-shadow:
+    0px 3px 7px -3px rgba(25, 37, 50, 0.1),
+    0px 0px 0px 1px rgba(25, 37, 50, 0.1);
+  padding: 24px;
+  margin: 24px 0 24px;
+
+  .AcquisitionHead {
+    font-size: 20px;
+    margin-bottom: 15px;
+    line-height: 32px;
+  }
+  .CustomerAcquisitionMain {
+    border-radius: 6px;
+    background: #fff;
+    box-shadow:
+      0px 3px 7px -3px rgba(25, 37, 50, 0.1),
+      0px 0px 0px 1px rgba(25, 37, 50, 0.1);
+    padding: 24px;
+    margin: 0 0 0px;
+
+    .AcquisitionFlexCol {
+      margin: 0;
+      padding: 0px 0 0;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      .AcquisitionFlexColInner {
+        flex-direction: row;
+        border-right: 1px solid #d5d9dd;
+        padding: 0 40px;
+        display: flex;
+        gap: 4px;
+        &:nth-child(1) {
+          padding-left: 0;
+        }
+        .AcquisitionIcon {
+          display: inline-flex;
+          margin-right: 10px;
+        }
+        .AcquisitionContentRight {
+          display: inline-flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: flex-start;
+          margin-left: 5px;
+        }
+        p {
+          color: #111b2b;
+          font-size: 16px;
+          font-weight: 500;
+          font-style: normal;
+          line-height: 24px;
+          margin-bottom: 5px;
+          font-weight: 500;
+        }
+        h3 {
+          color: #111b2b;
+          font-size: 24px;
+          font-style: normal;
+          line-height: 34px;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+  &.DarkTheme {
+    border: 1px solid #414d63 !important;
+    .CustomerAcquisitionMain {
+      border: 1px solid #414d63 !important;
+      .AcquisitionFlexCol {
+        .AcquisitionFlexColInner {
+          border-right: 1px solid #414d63;
+        }
+      }
+    }
+  }
+  &.DarkTheme {
+    border: 1px solid #414d63 !important;
+    .CustomerAcquisitionMain {
+      border: 1px solid #414d63 !important;
+      .AcquisitionFlexCol {
+        .AcquisitionFlexColInner {
+          border-right: 1px solid #414d63;
+        }
+      }
+    }
+  }
+}

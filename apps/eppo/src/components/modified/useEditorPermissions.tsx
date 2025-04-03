@@ -16,6 +16,9 @@ export type EditorPermissionsProps = {
     };
   };
   allContentTypes: ContentType[];
+  validations: {
+    contentTypes?: string[];
+  };
 };
 
 export function useEditorPermissions(props: EditorPermissionsProps) {
@@ -24,10 +27,8 @@ export function useEditorPermissions(props: EditorPermissionsProps) {
   const { showCreateEntityAction } = instance;
   const [canCreateEntity, setCanCreateEntity] = useState(true);
   const [canLinkEntity, setCanLinkEntity] = useState(true);
-  const validations = {};
   const { creatableContentTypes, availableContentTypes } = useContentTypePermissions({
     ...props,
-    validations,
   });
   const { canPerformAction } = useAccessApi(access);
 
@@ -87,7 +88,7 @@ export function useEditorPermissions(props: EditorPermissionsProps) {
     canLinkEntity,
     creatableContentTypes,
     availableContentTypes,
-    validations,
+    validations: props.validations,
   };
 }
 

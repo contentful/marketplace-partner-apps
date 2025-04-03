@@ -1,0 +1,37 @@
+.TopProductMain {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 20px;
+  max-width: 50%;
+  .TopProductInner {
+    border-radius: 6px;
+    background: #fff;
+    box-shadow:
+      0px 3px 7px -3px rgba(25, 37, 50, 0.1),
+      0px 0px 0px 1px rgba(25, 37, 50, 0.1);
+    padding: 24px;
+    margin: 0 0 0px;
+    max-width: 100%;
+    width: 100%;
+    flex-direction: column;
+    h4 {
+      color: #111b2b;
+      font-size: 20px;
+      font-style: normal;
+      line-height: 32px;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #5a657c;
+      font-size: 14px;
+      font-style: normal;
+      line-height: 24px;
+    }
+  }
+  &.DarkTheme {
+    .TopProductInner {
+      border: 1px solid #414d63 !important;
+    }
+  }
+}

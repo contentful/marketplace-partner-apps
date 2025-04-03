@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.0.12](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.0.11...shopify-sku-v2.0.12) (2025-03-13)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.7.9 to 1.8.2 in /apps/shopify ([#4612](https://github.com/contentful/marketplace-partner-apps/issues/4612)) ([59010cb](https://github.com/contentful/marketplace-partner-apps/commit/59010cb295ef1a4909362f9a5e24dc7f4fb08342))
+
+## [2.0.11](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.0.10...shopify-sku-v2.0.11) (2025-03-06)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group across 1 directory with 4 updates [] ([#4513](https://github.com/contentful/marketplace-partner-apps/issues/4513)) ([1db43b2](https://github.com/contentful/marketplace-partner-apps/commit/1db43b2505a7ee1a6ff0b6b4fdb2325fb9098e6d))
+
 ## [2.0.10](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.0.9...shopify-sku-v2.0.10) (2025-01-08)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.28](https://github.com/contentful/marketplace-partner-apps/compare/voucherify-contentful-app-v1.0.27...voucherify-contentful-app-v1.0.28) (2025-03-13)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.7.9 to 1.8.2 in /apps/voucherify ([#4609](https://github.com/contentful/marketplace-partner-apps/issues/4609)) ([fa95b7a](https://github.com/contentful/marketplace-partner-apps/commit/fa95b7acdd03c2d5e615bb73c5ff449a1652ca5f))
+
 ## [1.0.27](https://github.com/contentful/marketplace-partner-apps/compare/voucherify-contentful-app-v1.0.26...voucherify-contentful-app-v1.0.27) (2025-01-08)
 
 

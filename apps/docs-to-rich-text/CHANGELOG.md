@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.1.2](https://github.com/contentful/marketplace-partner-apps/compare/docs-to-rich-text-v1.1.1...docs-to-rich-text-v1.1.2) (2025-03-13)
+
+
+### Bug Fixes
+
+* Docs to Rich Text - Resolves bugs on configuration screen [] ([#4632](https://github.com/contentful/marketplace-partner-apps/issues/4632)) ([15b3a49](https://github.com/contentful/marketplace-partner-apps/commit/15b3a49e5d93adf76ebc801260a683cdb4e0f5df))
+
+## [1.1.1](https://github.com/contentful/marketplace-partner-apps/compare/docs-to-rich-text-v1.1.0...docs-to-rich-text-v1.1.1) (2025-03-06)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group across 1 directory with 7 updates ([#4546](https://github.com/contentful/marketplace-partner-apps/issues/4546)) ([6323f8f](https://github.com/contentful/marketplace-partner-apps/commit/6323f8f63f4cbf6de3632b64ea9e3960d43ca7ad))
+
+## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/docs-to-rich-text-v1.0.0...docs-to-rich-text-v1.1.0) (2025-02-28)
+
+
+### Features
+
+* Enhance app configuration page [] ([#4372](https://github.com/contentful/marketplace-partner-apps/issues/4372)) ([a12da84](https://github.com/contentful/marketplace-partner-apps/commit/a12da841ce09e31e6436a0109e8bea75a13683c6))
+
 ## 1.0.0 (2025-01-08)
 
 

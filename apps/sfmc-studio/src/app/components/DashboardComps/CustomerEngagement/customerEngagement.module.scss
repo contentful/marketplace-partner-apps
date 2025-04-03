@@ -1,0 +1,53 @@
+.CustomerEngagementMAinRow {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  margin: 24px 0 0 0;
+  .CustomerEngagementMainCol {
+    display: inline-flex;
+    width: 100%;
+    max-width: 33%;
+    @media screen and (max-width: 1499px) {
+      max-width: 32.2333%;
+    }
+    @media screen and (max-width: 1399px) {
+      max-width: 32%;
+    }
+    @media screen and (max-width: 1299px) {
+      max-width: 31.86666%;
+    }
+  }
+}
+.CustomerEngagementBottomRow {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  margin: 24px 0 0 0;
+  .CustomerEngagementBottomCol {
+    display: inline-flex;
+    width: 100%;
+    max-width: 50%;
+  }
+  &.CustomerEngagementSevenThree {
+    padding: 0;
+    .CustomerEngagementBottomCol {
+      &:nth-child(1) {
+        max-width: 32.5%;
+        width: 100%;
+        @media screen and (max-width: 1699px) {
+          max-width: 32.3%;
+        }
+        @media screen and (max-width: 1539px) {
+          max-width: 32.2%;
+        }
+        @media screen and (max-width: 1399px) {
+          max-width: 32%;
+        }
+      }
+      &:nth-child(2) {
+        width: 100%;
+        max-width: 67.5%;
+      }
+    }
+  }
+}

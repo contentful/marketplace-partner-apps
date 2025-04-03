@@ -1,0 +1,89 @@
+.RevenueCityMain {
+  .RevenueCityColInner {
+    h3 {
+      color: #111b2b;
+      font-size: 20px;
+      font-style: normal;
+      line-height: 32px;
+      margin-bottom: 14px;
+    }
+    p {
+      color: #5a657c;
+      font-size: 14px;
+      font-style: normal;
+      line-height: 24px;
+    }
+    .CanvesDataGrapInner {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      @media screen and (max-width: 1499px) {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .CanvesGrapInner {
+        display: inline-flex;
+        max-width: 30%;
+        width: 100%;
+        justify-content: flex-start;
+        @media screen and (max-width: 1499px) {
+          max-width: 100%;
+          justify-content: center;
+        }
+      }
+      .CanvesDataTable {
+        max-width: 64%;
+        width: 100%;
+        @media screen and (max-width: 1499px) {
+          max-width: 100%;
+        }
+        .CanvesMarkerTable {
+          width: 100%;
+          td {
+            font-size: 16px;
+            padding: 5px;
+            font-weight: 500;
+            &.CanvesMarkerInner {
+              max-width: 20px;
+              width: 20px;
+              .MarkerCanves {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background-color: #111b2b;
+                display: inline-block;
+              }
+            }
+            &:nth-last-child(1) {
+              text-align: right;
+            }
+          }
+        }
+        &.CanvesDataTableWithOddEven {
+          .CanvesMarkerTable {
+            border-spacing: 0;
+            tr {
+              td {
+                font-size: 16px;
+              }
+              border-radius: 8px;
+              &:nth-child(odd) {
+                td {
+                  background: #f7f9fa;
+                }
+              }
+              &.dark {
+                td {
+                  background: var(--dark-theme);
+                  color: #ffff;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
