@@ -25,9 +25,18 @@ import {
 import { HelpCircleIcon } from '@contentful/f36-icons';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { IsSpaceLicensed } from '../api/licensing';
-import importImage from '../assets/img/import.png';
+import importCopyPaste from '../assets/img/import_copypaste.png';
+import importGoogle from '../assets/img/import_googledrive.png';
 import { RtfField } from '../types';
 import { getRichTextFields, setAppRichTextEditor, setDefaultRichTextEditor } from '../utils/editorInterfaceUtil';
+import { css } from '@emotion/css';
+
+const styles = {
+  importOption: css({
+    paddingTop: '35px',
+    display: 'flex',
+  }),
+};
 
 export interface AppInstallationParameters {
   useImageWrapper?: boolean;
@@ -110,14 +119,17 @@ const ConfigScreen = () => {
       setRichTextFieldsLoaded(true);
     })();
   }, [sdk]);
+
   useEffect(() => {
     let intervalId: any;
+
     (async () => {
       // Initial check
       const installed = await checkInstallationStatus();
       if (installed) {
         return;
       }
+
       // Polling
       intervalId = setInterval(async () => {
         if (await checkInstallationStatus()) {
@@ -125,10 +137,12 @@ const ConfigScreen = () => {
         }
       }, 2000);
     })();
+
     return () => {
       clearInterval(intervalId);
     };
   }, [sdk.app]);
+
   async function checkInstallationStatus(): Promise<boolean> {
     const installed = await sdk.app.isInstalled();
     setIsInstalled(installed);
@@ -283,6 +297,7 @@ const ConfigScreen = () => {
   const fieldsCard = (
     <Card>
       <Heading>Configure Rich Text Fields</Heading>
+
       {!isInstalled ? (
         <p>Install to begin</p>
       ) : (
@@ -344,26 +359,58 @@ const ConfigScreen = () => {
       <Heading>Getting Started</Heading>
       <Accordion>
         <Accordion.Item title="Configuration">Enable Docs to Rich Text in the "Configure Rich Text Fields" section above</Accordion.Item>
-        <Accordion.Item title="Import Google Document with Document Picker">
+        <Accordion.Item title="Import Google Documents">
+          <Text>
+            <b>Using the File Picker</b>
+          </Text>
           <List as="ol">
             <List.Item>Navigate to the desired content entry and field</List.Item>
             <List.Item>
-              Press "Import" then "Choose from Drive"
-              <Image alt="Import content from Google Docs or HTML" height="250px" width="auto" src={importImage} />
+              Press "Import" then press "Choose from Google Drive"
+              <Image alt="Import content from Google Docs or HTML" height="250px" width="auto" src={importGoogle} />
             </List.Item>
             <List.Item>Select a document</List.Item>
-            <List.Item>Review your imported content</List.Item>
+            <List.Item>Review imported content</List.Item>
+          </List>
+
+          <Text className={styles.importOption}>
+            <b>Using Copy/Paste</b>
+          </Text>
+          <List as="ol">
+            <List.Item>Copy the document content to your clipboard (Ctrl+C / ⌘C or right click & copy)</List.Item>
+            <List.Item>Navigate to the desired content entry and field</List.Item>
+            <List.Item>Press the "Import" button</List.Item>
+            <List.Item>
+              Paste into the text box
+              <Image alt="Copy Paste Import" height="250px" width="auto" src={importCopyPaste} />
+            </List.Item>
+            <List.Item>Review imported content</List.Item>
           </List>
         </Accordion.Item>
-        <Accordion.Item title="Import HTML or Google Document with Copy/Paste">
+
+        <Accordion.Item title="Import Office 365 / OneDrive Word Documents">
           <List as="ol">
-            <List.Item>Copy the contents of any Google Document or any HTML to your clipboard (Ctrl+C / ⌘C or right click & copy)</List.Item>
+            <List.Item>Copy the document content to your clipboard (Ctrl+C / ⌘C or right click & copy)</List.Item>
             <List.Item>Navigate to the desired content entry and field</List.Item>
+            <List.Item>Press the "Import" button</List.Item>
             <List.Item>
-              Paste into the Import field
-              <Image alt="Import content from Google Docs or HTML" height="250px" width="auto" src={importImage} />
+              Paste into the text box
+              <Image alt="Copy Paste Import" height="250px" width="auto" src={importCopyPaste} />
             </List.Item>
-            <List.Item>Review your imported content</List.Item>
+            <List.Item>Review imported content</List.Item>
+          </List>
+        </Accordion.Item>
+
+        <Accordion.Item title="Import HTML">
+          <List as="ol">
+            <List.Item>Copy the HTML to your clipboard (Ctrl+C / ⌘C or right click & copy)</List.Item>
+            <List.Item>Navigate to the desired content entry and field</List.Item>
+            <List.Item>Press the "Import" button</List.Item>
+            <List.Item>
+              Paste into the text box
+              <Image alt="Copy Paste Import" height="250px" width="auto" src={importCopyPaste} />
+            </List.Item>
+            <List.Item>Review imported content</List.Item>
           </List>
         </Accordion.Item>
       </Accordion>
@@ -422,7 +469,7 @@ const ConfigScreen = () => {
   );
 
   const header = (
-    <Flex flexDirection="column" marginBottom="spacingL">
+    <Flex flexDirection="column" marginBottom="spacingM">
       <Flex alignItems="center" justifyContent="space-between">
         <Heading marginBottom="none">Docs to Rich Text {planType}</Heading>
         {!isLicensed && upgrade}
@@ -437,12 +484,10 @@ const ConfigScreen = () => {
   );
 
   return (
-    <Flex flexDirection="column" margin="spacingL">
+    <Flex flexDirection="column" margin="spacingL" gap="spacingS">
       {header}
       {settingsForm}
-      <br />
       {howTo}
-      <br />
       {support}
     </Flex>
   );
