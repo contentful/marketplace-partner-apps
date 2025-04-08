@@ -3,7 +3,10 @@ import type { PullRequestFile, ValidatorOptions, ValidatorResult } from '../../t
 
 export const validate = async (_options: ValidatorOptions, newAppDir: string, files: PullRequestFile[]): Promise<ValidatorResult> => {
   const requiredScripts = ['start', 'build', 'test', 'lint'];
-  let hasScripts, isCorrectVersion, hasDeployScript, hasPassWithNoTests = false;
+  let hasScripts,
+    isCorrectVersion,
+    hasDeployScript,
+    hasPassWithNoTests = false;
   let missingScripts: string[] = [];
 
   if (await hasPackageJson(files, newAppDir)) {
@@ -13,8 +16,6 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, fi
     hasScripts = missingScripts.length === 0;
     isCorrectVersion = packageJson.version.startsWith('0');
     hasDeployScript = packageJson.scripts && packageJson.scripts['deploy'];
-    hasPassWithNoTests = packageJson.scripts && packageJson.scripts['test'] && packageJson.scripts['test'].includes('--passWithNoTests');
-
   }
 
   const result = hasScripts && isCorrectVersion && !hasDeployScript;
@@ -30,9 +31,6 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, fi
     }
     if (hasDeployScript) {
       failureMessage += 'package.json should not contain a deploy script.';
-    }
-    if (hasPassWithNoTests) {
-      failureMessage += 'package.json should not contain a test script with the --passWithNoTests flag'
     }
     message = failureMessage;
   }
