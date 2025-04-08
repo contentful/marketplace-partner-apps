@@ -1,36 +1,37 @@
 {
   "name": "lottie-viewer",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@contentful/app-sdk": "4.25.0",
-    "@contentful/f36-components": "^4.65.4",
-    "@contentful/f36-tokens": "4.0.2",
-    "@contentful/field-editor-json": "^3.3.36",
-    "@contentful/react-apps-toolkit": "1.2.16",
-    "@lottiefiles/dotlottie-react": "^0.13.2",
-    "contentful-management": "10.46.4",
-    "emotion": "10.0.27",
+    "@contentful/app-sdk": "^4.29.5",
+    "@contentful/f36-components": "^4.79.1",
+    "@contentful/f36-tokens": "^4.2.0",
+    "@contentful/field-editor-json": "^3.3.38",
+    "@contentful/field-editor-rich-text": "^4.3.0",
+    "@contentful/react-apps-toolkit": "^1.2.16",
+    "@lottiefiles/dotlottie-react": "^0.13.3",
+    "contentful-management": "^11.52.0",
+    "emotion": "^11.0.0",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
   "scripts": {
     "start": "vite",
-    "build": "tsc && vite build",
-    "test": "vitest",
+    "build": "rm -rf build && tsc && vite build",
+    "test": "vitest run --passWithNoTests",
     "create-app-definition": "contentful-app-scripts create-app-definition",
-    "upload": "contentful-app-scripts upload --bundle-dir ./dist",
-    "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./dist  --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN"
+    "install-ci": "npm ci",
+    "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id 4zHLWlbaJEuEXYcwBvw5P2 --token ${TEST_CMA_TOKEN}"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.19.1",
-    "@testing-library/react": "14.0.0",
-    "@types/node": "16.18.38",
+    "@contentful/app-scripts": "2.5.1",
+    "@testing-library/react": "16.3.0",
+    "@types/node": "22.14.0",
     "@types/react": "18.3.1",
     "@types/react-dom": "18.3.0",
-    "@vitejs/plugin-react": "4.2.1",
-    "typescript": "5.1.6",
-    "vite": "4.5.5",
-    "vitest": "0.32.4"
+    "@vitejs/plugin-react": "4.3.4",
+    "typescript": "5.8.3",
+    "vite": "6.2.5",
+    "vitest": "3.1.1"
   }
 }

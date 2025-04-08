@@ -3,7 +3,7 @@ import { FieldAppSDK } from '@contentful/app-sdk';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { JsonEditor } from '@contentful/field-editor-json';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import { Flex, Button, Collapse, Paragraph } from '@contentful/f36-components';
+import { Flex, Button, Collapse } from '@contentful/f36-components';
 
 const Field = () => {
   const [lottieJson, setLottieJson] = useState<any>(null);
