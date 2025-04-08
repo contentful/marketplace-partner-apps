@@ -3,8 +3,7 @@ import { ContentTypeProps } from "contentful-management";
 
 function targetStateToSelectedContentTypes(targetState: AppState) {
     return Object.entries(targetState?.EditorInterface || {})
-        // eslint-disable-next-line
-        .filter(([_, config]) => config.sidebar?.position != null)
+        .filter(([, config]) => config.sidebar?.position != null)
         .map(([contentTypeId]) => contentTypeId);
 }
 
@@ -19,8 +18,5 @@ function selectedContentTypesToTargetState(contentTypes: ContentTypeProps[], sel
         };
       }, {})
 }
-
-
-
 
 export {selectedContentTypesToTargetState, targetStateToSelectedContentTypes};
