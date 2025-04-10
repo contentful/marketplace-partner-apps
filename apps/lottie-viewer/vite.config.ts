@@ -4,8 +4,8 @@ import svgr from '@svgr/rollup';
 import path from 'path';
 
 export default defineConfig(() => ({
-base: '', // relative paths
-server: {
+  base: '', // relative paths
+  server: {
     port: 3000,
   },
   plugins: [react(), svgr()],
@@ -13,5 +13,9 @@ server: {
     alias: {
       '@src': path.resolve(__dirname, 'src'), // Absolute path to src
     },
+  },
+  test: {
+    environment: 'jsdom',
+    globals: true,
   },
 }));
