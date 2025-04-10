@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { FieldAppSDK } from '@contentful/app-sdk';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import { Box, Flex, Collapse, Button, Icon, IconButton } from '@contentful/f36-components';
+import { Box, Flex, Button, IconButton } from '@contentful/f36-components';
 import Editor from '@monaco-editor/react';
 import * as monaco from 'monaco-editor';
 import { ArrowsOutThinIcon } from '@src/assets';
@@ -16,6 +16,7 @@ const Field = () => {
   const [editorValue, setEditorValue] = useState<string>('{}');
   const sdk = useSDK<FieldAppSDK>();
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const isUserTyping = useRef<boolean>(false);
 
   const handleEditorWillMount = (monacoInstance: typeof monaco) => {
     monacoInstance.editor.defineTheme('lightGrayEditor', {
@@ -36,21 +37,21 @@ const Field = () => {
     }
 
     sdk.field.onValueChanged((newValue) => {
-      setLottieJson(newValue ?? {});
-      setEditorValue(JSON.stringify(newValue ?? {}, null, 2));
+      if (!isUserTyping.current) {
+        setLottieJson(newValue ?? {});
+        setEditorValue(JSON.stringify(newValue ?? {}, null, 2));
+      }
     });
   }, [sdk]);
 
   const handleClear = () => {
-    // Define the cleared JSON string and get the current editor instance
     const cleared = '{}';
     const editor = editorRef.current;
 
-    // Get the entire range of the current editor content and clear it
     if (editor) {
       const fullRange = editor.getModel()!.getFullModelRange();
 
-      editor.executeEdits('', [
+      editor.executeEdits('clear', [
         {
           range: fullRange,
           text: cleared,
@@ -58,13 +59,13 @@ const Field = () => {
         },
       ]);
 
-      // Create an undo stop so the clear action can be undone in one step
       editor.pushUndoStop();
     }
 
     setEditorValue(cleared);
+    setLottieJson({});
+    sdk.field.setValue({});
   };
-
 
   const handleUndo = () => {
     editorRef.current?.trigger('keyboard', 'undo', null);
@@ -74,26 +75,11 @@ const Field = () => {
     editorRef.current?.trigger('keyboard', 'redo', null);
   };
 
-  const handleSave = () => {
-    const value = editorRef.current?.getValue();
-    try {
-      if (value) {
-        const parsed = JSON.parse(value);
-        setLottieJson(parsed);
-        sdk.field.setValue(parsed);
-      }
-    } catch (e) {
-      alert('Invalid JSON');
-    }
-  };
-
   return (
     <Flex flexDirection="row" className={css({ height: '500px' })}>
-      <Flex flexDirection="column">
+      <Flex flexDirection="column" className={css({ flex: 1, minHeight: 0 })}>
         <LottieEditorHeader>
-          <Box>
-            JSON editor
-          </Box>
+          <Box>JSON editor</Box>
           <Flex gap="spacingXs">
             <Button size="small" variant="secondary" onClick={handleClear} style={{ color: tokens.red600 }}>
               Clear
@@ -104,9 +90,6 @@ const Field = () => {
             <Button size="small" variant="secondary" onClick={handleRedo}>
               Redo
             </Button>
-            <Button size="small" variant="positive" onClick={handleSave}>
-              Save
-            </Button>
             <IconButton
               variant="secondary"
               aria-label="preview-lottie-json"
@@ -114,7 +97,7 @@ const Field = () => {
             />
           </Flex>
         </LottieEditorHeader>
-        <Box className={css({ height: '100%' })}>
+        <Box className={css({ flex: 1, minHeight: 0 })}>
           <Editor
             beforeMount={handleEditorWillMount}
             onMount={(editor) => {
@@ -124,21 +107,31 @@ const Field = () => {
             defaultLanguage="json"
             value={editorValue}
             theme="lightGrayEditor"
-            onChange={(value) => {
+            onChange={(value, ev) => {
               if (value !== undefined) {
+                isUserTyping.current = true;
                 setEditorValue(value);
+
+                try {
+                  const parsed = JSON.parse(value);
+                  setLottieJson(parsed);
+                  sdk.field.setValue(parsed);
+                } catch {
+                  // Do nothing on invalid JSON
+                } finally {
+                  isUserTyping.current = false;
+                }
               }
             }}
             options={styles.monaco.options}
-          /></Box>
+          />
+        </Box>
       </Flex>
 
       <Flex flex="1">
         <Flex flexDirection="column" alignItems="center" className={css({ height: '100%' })}>
           <LottieEditorHeader additionalStyles={{ borderLeft: `1px solid ${tokens.gray500}` }}>
-            <Box>
-              Preview
-            </Box>
+            <Box>Preview</Box>
             <IconButton
               variant="secondary"
               aria-label="preview-animated-lottie-json"
