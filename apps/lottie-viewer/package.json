@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "@contentful/app-scripts": "1.19.1",
+    "@svgr/rollup": "^8.1.0",
     "@testing-library/react": "14.0.0",
     "@types/node": "16.18.38",
     "@types/prismjs": "^1.26.5",
