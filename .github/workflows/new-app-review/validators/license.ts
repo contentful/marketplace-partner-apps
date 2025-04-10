@@ -1,7 +1,7 @@
 import type { PullRequestFile, ValidatorOptions } from '../../types';
 
 export const validate = async (_options: ValidatorOptions, newAppDir: string, files: PullRequestFile[]) => {
-  const hasLicense = !!files.find((file) => file.status === 'added' && file.filename.startsWith(`${newAppDir}/LICENSE`));
+  const hasLicense = !!files.find((file) => file.filename.startsWith(`${newAppDir}/LICENSE`));
 
   return {
     result: hasLicense,

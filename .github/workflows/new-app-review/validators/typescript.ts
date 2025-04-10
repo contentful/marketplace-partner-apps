@@ -11,9 +11,14 @@ export const validate = async (_options: ValidatorOptions, newAppDir: string, fi
 
   if (await hasPackageJson(files, newAppDir)) {
     const packageJson = require(packageJsonPath(newAppDir));
+    console.log("packageJson", packageJson);
     dependsOnTypescript = packageJson.devDependencies && packageJson.devDependencies.typescript;
   }
 
+  console.log("hasTsConfig", hasTsConfig);
+  console.log("hasTsFiles", hasTsFiles);
+  console.log("dependsOnTypescript", dependsOnTypescript);
+  
   const result = hasTsConfig && hasTsFiles;
   const message =
     result && dependsOnTypescript
