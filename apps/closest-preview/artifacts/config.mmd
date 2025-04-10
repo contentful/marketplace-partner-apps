@@ -1,0 +1,35 @@
+```mermaid
+sequenceDiagram
+    participant User
+    participant ConfigScreen as Component
+    participant ContentfulSDK as Contentful SDK
+    
+    ConfigScreen->>ConfigScreen: useState initializes parameters & isValid
+    ConfigScreen->>ConfigScreen: Initial render
+    Note over ConfigScreen: Empty form displayed
+    
+    ConfigScreen->>ContentfulSDK: useEffect runs: sdk.app.getParameters()
+    ContentfulSDK-->>ConfigScreen: Returns current parameters (if any)
+    ConfigScreen->>ConfigScreen: setParameters with current values
+    ConfigScreen->>ConfigScreen: setIsValid if parameters exist
+    ConfigScreen->>ContentfulSDK: sdk.app.setReady()
+    Note over ConfigScreen: Loading state ends
+    
+    ConfigScreen->>ContentfulSDK: useEffect runs: sdk.app.onConfigure()
+    Note over ContentfulSDK: Registers onConfigure callback
+    
+    User->>ConfigScreen: Types in API key field
+    ConfigScreen->>ConfigScreen: onChange updates parameters state
+    ConfigScreen->>ConfigScreen: Validation useEffect runs
+    ConfigScreen->>ConfigScreen: setIsValid(true) if API key exists
+    
+    User->>ConfigScreen: Clicks Save button
+    ConfigScreen->>ConfigScreen: handleSave() called
+    ConfigScreen->>ContentfulSDK: sdk.app.onConfigure(onConfigure)
+    ContentfulSDK->>ConfigScreen: Executes onConfigure callback
+    ConfigScreen->>ContentfulSDK: Get current state
+    ContentfulSDK-->>ConfigScreen: Returns current state
+    ConfigScreen->>ContentfulSDK: Return {parameters, targetState}
+    ConfigScreen->>ContentfulSDK: sdk.notifier.success()
+    Note over User: Sees success notification
+    ```
