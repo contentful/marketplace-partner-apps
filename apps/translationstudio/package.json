@@ -23,7 +23,7 @@
     "@contentful/f36-components": "^4.79.1",
     "@contentful/f36-tokens": "^4.2.0",
     "@contentful/react-apps-toolkit": "^1.2.16",
-    "next": ">=15.2.4",
+    "next": ">=15.3.0",
     "react": ">=18.3.1",
     "jose": "6.0.10"
   },
