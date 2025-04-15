@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as monaco from 'monaco-editor';
 import { Button, Modal, Box } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
-import { styles } from '@src/locations/Field.styles';
+import { styles } from '@src/components/field/LottiePreviewField.styles';
 import { css } from 'emotion';
 import Editor from '@monaco-editor/react';
 import { LottieJSON } from '@src/locations/Field';
@@ -30,10 +30,10 @@ export default function JsonEditorModal(props: Props) {
   const [canRedo, setCanRedo] = useState<boolean>(false);
 
   const updateUndoRedo = () => {
-    const model = editorRef.current?.getModel() as any;
-    if (model) {
-      setCanUndo(model.canUndo());
-      setCanRedo(model.canRedo());
+    const editorModel = editorRef.current?.getModel() as any;
+    if (editorModel) {
+      setCanUndo(editorModel.canUndo());
+      setCanRedo(editorModel.canRedo());
     }
   };
 
@@ -55,10 +55,10 @@ export default function JsonEditorModal(props: Props) {
 
       // Reset undo/redo stack on actual Monaco model if already mounted
       setTimeout(() => {
-        const model = editorRef.current?.getModel();
-        if (model) {
-          model.setValue(initial);
-          model.pushStackElement(); // Mark as baseline
+        const editorModel = editorRef.current?.getModel();
+        if (editorModel) {
+          editorModel.setValue(initial);
+          editorModel.pushStackElement(); // Mark as baseline
         }
         updateUndoRedo();
       }, 0);
