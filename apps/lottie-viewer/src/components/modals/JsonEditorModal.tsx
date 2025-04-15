@@ -9,11 +9,7 @@ import Editor from '@monaco-editor/react';
 type Props = {
   showJsonModal: boolean;
   onShowJsonModalChange: (show: boolean) => void;
-  onUndo: () => void;
-  onRedo: () => void;
   onSave: (value: string) => void;
-  canUndo: boolean;
-  canRedo: boolean;
   onEditorWillMount: (monaco: any) => void;
   updateUndoRedoState: () => void;
   lottieJson: any;
@@ -23,11 +19,7 @@ export default function JsonEditorModal(props: Props) {
   const {
     showJsonModal,
     onShowJsonModalChange,
-    onUndo,
-    onRedo,
     onSave,
-    canUndo,
-    canRedo,
     onEditorWillMount,
     updateUndoRedoState,
     lottieJson,
@@ -35,11 +27,43 @@ export default function JsonEditorModal(props: Props) {
 
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [editorValue, setEditorValue] = useState<string>('');
+  const [canUndo, setCanUndo] = useState<boolean>(false);
+  const [canRedo, setCanRedo] = useState<boolean>(false);
 
-  // Initialize local state only when modal is shown
+  const updateUndoRedo = () => {
+    const model = editorRef.current?.getModel() as any;
+    if (model) {
+      setCanUndo(model.canUndo());
+      setCanRedo(model.canRedo());
+    }
+  };
+
+  const handleUndo = () => {
+    editorRef.current?.trigger('source', 'undo', null);
+    setTimeout(updateUndoRedo, 50);
+  };
+
+  const handleRedo = () => {
+    editorRef.current?.trigger('source', 'redo', null);
+    setTimeout(updateUndoRedo, 50);
+  };
+
+  // Reset content & undo/redo history when modal opens
   useEffect(() => {
     if (showJsonModal) {
-      setEditorValue(JSON.stringify(lottieJson, null, 2));
+      const initial = JSON.stringify(lottieJson, null, 2);
+      setEditorValue(initial);
+
+      // Reset undo/redo stack on actual Monaco model if already mounted
+      setTimeout(() => {
+        const model = editorRef.current?.getModel();
+        if (model) {
+          model.setValue(initial);
+          model.pushStackElement(); // Mark as baseline
+          model.clearUndoStack();   // Reset undo/redo
+        }
+        updateUndoRedo();
+      }, 0);
     }
   }, [showJsonModal, lottieJson]);
 
@@ -60,18 +84,16 @@ export default function JsonEditorModal(props: Props) {
                 gap: `${tokens.spacingXs}`,
               })}
             >
-              <Button size="small" variant="secondary" onClick={onUndo} isDisabled={!canUndo}>
+              <Button size="small" variant="secondary" onClick={handleUndo} isDisabled={!canUndo}>
                 Undo
               </Button>
-              <Button size="small" variant="secondary" onClick={onRedo} isDisabled={!canRedo}>
+              <Button size="small" variant="secondary" onClick={handleRedo} isDisabled={!canRedo}>
                 Redo
               </Button>
               <Button
                 size="small"
                 variant="positive"
-                onClick={() => {
-                  onSave(editorValue); // ✅ Send final string to Field
-                }}
+                onClick={() => onSave(editorValue)}
               >
                 Save
               </Button>
@@ -83,19 +105,15 @@ export default function JsonEditorModal(props: Props) {
                 beforeMount={onEditorWillMount}
                 onMount={(editor) => {
                   editorRef.current = editor;
-                  editor.onDidChangeModelContent(() => {
-                    updateUndoRedoState();
-                  });
-                  updateUndoRedoState();
+                  editor.onDidChangeModelContent(updateUndoRedo);
+                  updateUndoRedo();
                 }}
                 height="100%"
                 defaultLanguage="json"
                 theme="lightGrayEditor"
-                value={editorValue} // ✅ use local state
+                value={editorValue}
                 options={styles.monaco.options}
-                onChange={(val) => {
-                  setEditorValue(val || '');
-                }}
+                onChange={(val) => setEditorValue(val || '')}
               />
             </Box>
           </Modal.Content>

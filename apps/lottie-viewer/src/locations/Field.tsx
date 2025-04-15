@@ -238,10 +238,6 @@ const Field = () => {
       <JsonEditorModal
         showJsonModal={showJsonModal}
         onShowJsonModalChange={handleShowJsonModalChange}
-        onUndo={handleUndo}
-        onRedo={handleRedo}
-        canUndo={canUndo}
-        canRedo={canRedo}
         onEditorWillMount={handleEditorWillMount}
         updateUndoRedoState={updateUndoRedoState}
         lottieJson={lottieJson}
