@@ -12,6 +12,7 @@ type Props = {
   onClear: () => void;
   onUndo: () => void;
   onRedo: () => void;
+  onSave: () => void;
   canUndo: boolean;
   canRedo: boolean;
   onEditorWillMount: (monaco: any) => void;
@@ -21,7 +22,7 @@ type Props = {
 }
 
 export default function JsonEditorModal(props: Props) {
-  const { showJsonModal, onShowJsonModalChange, onClear, onRedo, onUndo, canRedo, canUndo, onEditorWillMount, updateUndoRedoState, lottieJson, onJsonEditorChange } = props;
+  const { showJsonModal, onShowJsonModalChange, onClear, onRedo, onUndo, canRedo, canUndo, onSave, onEditorWillMount, updateUndoRedoState, lottieJson, onJsonEditorChange } = props;
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 
   return (
@@ -43,6 +44,9 @@ export default function JsonEditorModal(props: Props) {
                 </Button>
                 <Button size="small" variant="secondary" onClick={onRedo} isDisabled={!canRedo}>
                   Redo
+                </Button>
+                <Button size="small" variant="positive" onClick={onSave}>
+                  Save
                 </Button>
               </Box>
             </Modal.Header>

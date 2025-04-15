@@ -119,6 +119,26 @@ const Field = () => {
       }
     }
   }
+  const [pendingLottieJson, setPendingLottieJson] = useState<any>(null);
+
+  const handleModalJsonChange = (value?: string) => {
+    if (value === undefined) return;
+    try {
+      const parsed = JSON.parse(value);
+      setHasError(false);
+      setPendingLottieJson(parsed);
+    } catch {
+      setHasError(true);
+    }
+  };
+
+  const handleModalSave = () => {
+    if (pendingLottieJson) {
+      setLottieJson(pendingLottieJson);
+      sdk.field.setValue(pendingLottieJson);
+    }
+    setShowJsonModal(false);
+  };
 
   return (
     <Box
@@ -200,7 +220,7 @@ const Field = () => {
           </Text>
         </Box>
       )}
-  
+
       <JsonEditorModal
         showJsonModal={showJsonModal}
         onShowJsonModalChange={handleShowJsonModalChange}
@@ -211,8 +231,9 @@ const Field = () => {
         canRedo={canRedo}
         onEditorWillMount={handleEditorWillMount}
         updateUndoRedoState={updateUndoRedoState}
-        onJsonEditorChange={handleJsonEditorChange}
+        onJsonEditorChange={handleModalJsonChange}
         lottieJson={lottieJson}
+        onSave={handleModalSave}
       />
       <LottiePreviewModal
         showLottiePreviewModal={showLottiePreviewModal}
