@@ -30,6 +30,6 @@
     ]
   },
   "dependencies": {
-    "lerna": "^7.0.2"
+    "lerna": "^8.2.1"
   }
 }
