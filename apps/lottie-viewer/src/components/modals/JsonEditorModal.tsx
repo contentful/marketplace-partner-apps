@@ -5,14 +5,14 @@ import tokens from '@contentful/f36-tokens';
 import { styles } from '@src/locations/Field.styles';
 import { css } from 'emotion';
 import Editor from '@monaco-editor/react';
+import { LottieJSON } from '@src/locations/Field';
 
 type Props = {
   showJsonModal: boolean;
   onShowJsonModalChange: (show: boolean) => void;
   onSave: (value: string) => void;
   onEditorWillMount: (monaco: any) => void;
-  updateUndoRedoState: () => void;
-  lottieJson: any;
+  lottieJson: LottieJSON | Record<string, unknown>;
 };
 
 export default function JsonEditorModal(props: Props) {
@@ -21,7 +21,6 @@ export default function JsonEditorModal(props: Props) {
     onShowJsonModalChange,
     onSave,
     onEditorWillMount,
-    updateUndoRedoState,
     lottieJson,
   } = props;
 

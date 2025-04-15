@@ -13,8 +13,22 @@ import { css, cx } from 'emotion';
 import JsonEditorModal from '@src/components/modals/JsonEditorModal';
 import LottiePreviewModal from '@src/components/modals/LottiePreviewModal';
 
+export type LottieJSON = {
+  v: string;         // version
+  fr: number;        // frame rate
+  ip: number;        // in point
+  op: number;        // out point
+  w?: number;        // width
+  h?: number;        // height
+  nm?: string;       // name
+  ddd?: number;      // 3d layer
+  assets?: any[];    // array of assets
+  layers?: any[];    // array of layers
+  [key: string]: any; // fallback for unknown props
+};
+
 const Field = () => {
-  const [lottieJson, setLottieJson] = useState<any>({});
+  const [lottieJson, setLottieJson] = useState<LottieJSON | Record<string, unknown>>({});
   const [hasError, setHasError] = useState<boolean>(false);
   const [canUndo, setCanUndo] = useState<boolean>(false);
   const [canRedo, setCanRedo] = useState<boolean>(false);
@@ -61,7 +75,7 @@ const Field = () => {
     const editor = editorRef.current;
     if (!editor) return;
 
-    const model = editor.getModel() as any;
+    const model = editor.getModel() as any
     if (!model) return;
 
     // Use the undo/redo stack length to determine availability
@@ -237,7 +251,6 @@ const Field = () => {
         showJsonModal={showJsonModal}
         onShowJsonModalChange={handleShowJsonModalChange}
         onEditorWillMount={handleEditorWillMount}
-        updateUndoRedoState={updateUndoRedoState}
         lottieJson={lottieJson}
         onSave={handleModalSave}
       />
