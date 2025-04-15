@@ -60,7 +60,6 @@ export default function JsonEditorModal(props: Props) {
         if (model) {
           model.setValue(initial);
           model.pushStackElement(); // Mark as baseline
-          model.clearUndoStack();   // Reset undo/redo
         }
         updateUndoRedo();
       }, 0);

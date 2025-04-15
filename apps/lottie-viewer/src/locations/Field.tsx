@@ -178,8 +178,6 @@ const Field = () => {
           </LottieEditorHeader>
           <Box className={css({ flex: 1, minHeight: 0 })}>
             <Editor
-              // key={JSON.stringify(lottieJson)}
-              // defaultValue={JSON.stringify(lottieJson, null, 2)}
               beforeMount={handleEditorWillMount}
               onMount={(editor) => {
                 editorRef.current = editor;
