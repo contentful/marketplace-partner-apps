@@ -10,15 +10,42 @@ import tokens from '@contentful/f36-tokens';
 import LottieEditorHeader from '@src/components/content-entry/LottieEditorHeader';
 import { styles } from './Field.styles';
 import { css, cx } from 'emotion';
+import JsonEditorModal from '@src/components/modals/JsonEditorModal';
+import LottiePreviewModal from '@src/components/modals/LottiePreviewModal';
+
+export type LottieJSON = {
+  v: string;         // version
+  fr: number;        // frame rate
+  ip: number;        // in point
+  op: number;        // out point
+  w?: number;        // width
+  h?: number;        // height
+  nm?: string;       // name
+  ddd?: number;      // 3d layer
+  assets?: any[];    // array of assets
+  layers?: any[];    // array of layers
+  [key: string]: any; // fallback for unknown props
+};
 
 const Field = () => {
-  const [lottieJson, setLottieJson] = useState<any>({});
+  const [lottieJson, setLottieJson] = useState<LottieJSON | Record<string, unknown>>({});
   const [hasError, setHasError] = useState<boolean>(false);
   const [canUndo, setCanUndo] = useState<boolean>(false);
   const [canRedo, setCanRedo] = useState<boolean>(false);
+  const [showJsonModal, setShowJsonModal] = useState(false);
+  const [showLottiePreviewModal, setShowLottiePreviewModal] = useState(false);
+
   const sdk = useSDK<FieldAppSDK>();
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const isUserTyping = useRef<boolean>(false);
+
+  const handleShowJsonModalChange = (_showJsonModal: boolean) => {
+    setShowJsonModal(_showJsonModal);
+  }
+
+  const handleShowLottiePreviewModalChange = (_showLottiePreviewModal: boolean) => {
+    setShowLottiePreviewModal(_showLottiePreviewModal);
+  }
 
   const handleEditorWillMount = (monacoInstance: typeof monaco) => {
     monacoInstance.editor.defineTheme('lightGrayEditor', {
@@ -48,12 +75,12 @@ const Field = () => {
     const editor = editorRef.current;
     if (!editor) return;
 
-    const model = editor.getModel() as any;
-    if (!model) return;
+    const editorModel = editor.getModel() as any
+    if (!editorModel) return;
 
     // Use the undo/redo stack length to determine availability
-    setCanUndo(model.canUndo());
-    setCanRedo(model.canRedo());
+    setCanUndo(editorModel.canUndo());
+    setCanRedo(editorModel.canRedo());
   };
 
   const handleClear = () => {
@@ -107,6 +134,33 @@ const Field = () => {
     }
   }
 
+  const handleModalSave = (jsonString: string) => {
+    try {
+      const parsed = JSON.parse(jsonString);
+      setLottieJson(parsed);
+      sdk.field.setValue(parsed);
+
+      const editor = editorRef.current;
+      const editorModel = editor?.getModel();
+      if (editor && editorModel) {
+        editor.pushUndoStop();
+        const fullRange = editorModel.getFullModelRange();
+        editor.executeEdits('modal-save', [
+          {
+            range: fullRange,
+            text: JSON.stringify(parsed, null, 2),
+            forceMoveMarkers: true,
+          },
+        ]);
+        editor.pushUndoStop();
+      }
+
+      setShowJsonModal(false);
+    } catch {
+      setHasError(true);
+    }
+  };
+
   return (
     <Box
       className={cx(
@@ -132,6 +186,7 @@ const Field = () => {
                 variant="secondary"
                 aria-label="preview-lottie-json"
                 icon={<ArrowsOutThinIcon width={20} height={20} />}
+                onClick={() => handleShowJsonModalChange(true)}
               />
             </Flex>
           </LottieEditorHeader>
@@ -143,12 +198,17 @@ const Field = () => {
                 editor.onDidChangeModelContent(() => {
                   updateUndoRedoState();
                 });
-                updateUndoRedoState(); // run once on load
+                updateUndoRedoState();
+
+                // Inject initial value on mount
+                const editorModel = editor.getModel();
+                if (editorModel) {
+                  editorModel.setValue(JSON.stringify(lottieJson, null, 2));
+                }
               }}
               height="100%"
               defaultLanguage="json"
               theme="lightGrayEditor"
-              defaultValue={JSON.stringify(lottieJson, null, 2)}
               options={styles.monaco.options}
               onChange={handleJsonEditorChange}
             />
@@ -163,6 +223,7 @@ const Field = () => {
                 variant="secondary"
                 aria-label="preview-animated-lottie-json"
                 icon={<ArrowsOutThinIcon width={20} height={20} />}
+                onClick={() => handleShowLottiePreviewModalChange(true)}
               />
             </LottieEditorHeader>
             <Box className={styles.lottieAnimatorContainer}>
@@ -185,6 +246,19 @@ const Field = () => {
           </Text>
         </Box>
       )}
+
+      <JsonEditorModal
+        showJsonModal={showJsonModal}
+        onShowJsonModalChange={handleShowJsonModalChange}
+        onEditorWillMount={handleEditorWillMount}
+        lottieJson={lottieJson}
+        onSave={handleModalSave}
+      />
+      <LottiePreviewModal
+        showLottiePreviewModal={showLottiePreviewModal}
+        onShowLottiePreviewModalChange={handleShowLottiePreviewModalChange}
+        lottieJson={lottieJson}
+      />
     </Box>
   );
 };
