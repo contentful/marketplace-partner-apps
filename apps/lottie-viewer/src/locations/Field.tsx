@@ -75,12 +75,12 @@ const Field = () => {
     const editor = editorRef.current;
     if (!editor) return;
 
-    const model = editor.getModel() as any
-    if (!model) return;
+    const editorModel = editor.getModel() as any
+    if (!editorModel) return;
 
     // Use the undo/redo stack length to determine availability
-    setCanUndo(model.canUndo());
-    setCanRedo(model.canRedo());
+    setCanUndo(editorModel.canUndo());
+    setCanRedo(editorModel.canRedo());
   };
 
   const handleClear = () => {
@@ -141,10 +141,10 @@ const Field = () => {
       sdk.field.setValue(parsed);
 
       const editor = editorRef.current;
-      const model = editor?.getModel();
-      if (editor && model) {
+      const editorModel = editor?.getModel();
+      if (editor && editorModel) {
         editor.pushUndoStop();
-        const fullRange = model.getFullModelRange();
+        const fullRange = editorModel.getFullModelRange();
         editor.executeEdits('modal-save', [
           {
             range: fullRange,
@@ -201,9 +201,9 @@ const Field = () => {
                 updateUndoRedoState();
 
                 // Inject initial value on mount
-                const model = editor.getModel();
-                if (model) {
-                  model.setValue(JSON.stringify(lottieJson, null, 2));
+                const editorModel = editor.getModel();
+                if (editorModel) {
+                  editorModel.setValue(JSON.stringify(lottieJson, null, 2));
                 }
               }}
               height="100%"
