@@ -1,5 +1,5 @@
 import { AppState, ConfigAppSDK } from '@contentful/app-sdk';
-import { Heading, Box, Paragraph, List, Note, TextLink } from '@contentful/f36-components';
+import { Heading, Box, Paragraph, List, Note, TextLink, Autocomplete, Flex, Checkbox } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { ContentTypeProps } from 'contentful-management';
@@ -129,17 +129,32 @@ export const ConfigScreen = () => {
           Each content type you'll select must contain at least one <code>RichText</code> field.
         </Note>
 
-        <FieldSelection
-          contentTypes={contentTypes ?? []}
-          selectedContentFields={selectedContentFields}
-          selectedContentTypes={selectedContentTypes}
-          compatibility={compatibility}
-          handleContentTypeSelection={toggleContentType}
-          handleFieldSelection={toggleField}
+        <Autocomplete
+          items={[{ name: 'inputValue', id: 'inputValue' }]}
+          renderItem={(item, inputValue) => {
+            // const { before, match, after } = getStringMatch(item.name, inputValue);
+            // const isSelectable = props.isResourceSelectable ? props.isResourceSelectable(item) : true;
+
+            return (
+              <Flex alignItems="center" gap={tokens.spacingXs} testId={`resource-autocomplete--${item.name}`}>
+                <Checkbox value={item.id} id={item.id} isChecked isDisabled={false} onKeyDown={() => {}} />
+                {/* {isSelectable ? (
+                  <Text>
+                    <Text fontWeight="fontWeightNormal">{before}</Text>
+                    <Text fontWeight="fontWeightDemiBold">{match}</Text>
+                    <Text fontWeight="fontWeightNormal">{after}</Text>
+                  </Text>
+                ) : (
+                  <Text fontColor="gray400">{item.name}</Text>
+                )} */}
+              </Flex>
+            );
+          }}
+          onInputValueChange={(e) => console.log(e)}
+          onSelectItem={(item) => console.log(item)}
+          selectedItem={{ name: 'inputValue' }}
         />
       </Box>
-
-      <SurferLogotype />
     </>
   );
 };
