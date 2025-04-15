@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
-import { Button, Modal, Heading, Paragraph, Box, Flex } from '@contentful/f36-components';
-import tokens from '@contentful/f36-tokens';
+import React from 'react'
+import { Modal } from '@contentful/f36-components';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { css } from 'emotion';
 
