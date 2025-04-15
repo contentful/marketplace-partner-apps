@@ -250,6 +250,7 @@ const Field = () => {
       <LottiePreviewModal
         showLottiePreviewModal={showLottiePreviewModal}
         onShowLottiePreviewModalChange={handleShowLottiePreviewModalChange}
+        lottieJson={lottieJson}
       />
     </Box>
   );

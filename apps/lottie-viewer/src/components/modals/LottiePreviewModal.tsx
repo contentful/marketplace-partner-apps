@@ -1,35 +1,36 @@
 import React, { useState } from 'react'
 import { Button, Modal, Heading, Paragraph, Box, Flex } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { css } from 'emotion';
 
 type Props = {
   showLottiePreviewModal: boolean;
   onShowLottiePreviewModalChange: (showLottiePreviewModal: boolean) => void;
+  lottieJson: any
 }
 
 export default function LottiePreviewModal(props: Props) {
-  const { showLottiePreviewModal: showLottiePreviewModal, onShowLottiePreviewModalChange } = props;
+  const { showLottiePreviewModal, onShowLottiePreviewModalChange, lottieJson } = props;
 
   return (
     <>
-      <Modal onClose={() => onShowLottiePreviewModalChange(false)} isShown={showLottiePreviewModal}>
+      <Modal size="fullscreen" onClose={() => onShowLottiePreviewModalChange(false)} isShown={showLottiePreviewModal}>
         {() => (
           <>
             <Modal.Header
-              title="Modal title"
-              subtitle="subtitle"
+              title="Lottie Preview - Animation"
               onClose={() => onShowLottiePreviewModalChange(false)}
-            >
-              <Box>LOTTIE ANIMOATION</Box>
-            </Modal.Header>
+              className={css({ display: 'flex', position: 'relative' })}
+            />
             <Modal.Content>
-              <Heading>
-                First entry published! It can now be fetched via the APIs
-              </Heading>
-              <Paragraph>
-                To discover more about how to consume content from the APIs, go
-                to Space Home.
-              </Paragraph>
+              <DotLottieReact
+                className={css({ height: '100%', width: '100%' })}
+                key={JSON.stringify(lottieJson)}
+                data={lottieJson}
+                loop
+                autoplay
+              />
             </Modal.Content>
           </>
         )}
