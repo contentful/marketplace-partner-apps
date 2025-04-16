@@ -1,5 +1,7 @@
+---
 name: 'Yamllint GitHub Actions'
-on:
+
+"on":
   - pull_request
 jobs:
   yamllint:
