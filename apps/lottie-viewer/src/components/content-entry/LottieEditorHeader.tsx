@@ -19,7 +19,8 @@ export default function LottieEditorHeader({ children, additionalStyles }: Lotti
           width: '100%',
           backgroundColor: tokens.gray400,
           padding: '8px',
-          height: '56px',
+          minHeight: '56px',
+          maxHeight: '56px',
           ...additionalStyles
         })}
     >

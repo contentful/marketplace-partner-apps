@@ -5,7 +5,7 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { Box, Flex, Button, IconButton, Text } from '@contentful/f36-components';
 import Editor from '@monaco-editor/react';
 import * as monaco from 'monaco-editor';
-import { ArrowsOutThinIcon } from '@src/assets';
+import { ArrowsOutThinIcon, WarningOctagon } from '@src/assets';
 import tokens from '@contentful/f36-tokens';
 import LottieEditorHeader from '@src/components/content-entry/LottieEditorHeader';
 import { styles } from './LottiePreviewField.styles';
@@ -154,65 +154,76 @@ const LottiePreviewField = (props: Props) => {
   };
 
   return (
-    <Box
-      testId='lottie-preview-field'
-      className={cx(
-        css({ display: 'flex', flexDirection: 'column' }),
-        hasError && css({ border: `1px solid ${tokens.red400}` })
-      )}
-    >
-      <Flex flexDirection="row" className={css({ height: '500px' })}>
-        <Flex flexDirection="column" className={css({ flex: 1, minHeight: 0 })}>
-          <LottieEditorHeader>
-            <Box>JSON editor</Box>
-            <Flex gap="spacingXs">
-              <Button size="small" variant="secondary" onClick={handleClear} style={{ color: tokens.red600 }}>
-                Clear
-              </Button>
-              <Button size="small" variant="secondary" onClick={handleUndo} isDisabled={!canUndo}>
-                Undo
-              </Button>
-              <Button size="small" variant="secondary" onClick={handleRedo} isDisabled={!canRedo}>
-                Redo
-              </Button>
-              <IconButton
-                variant="secondary"
-                aria-label="preview-lottie-json"
-                icon={<ArrowsOutThinIcon width={20} height={20} />}
-                onClick={() => handleShowJsonModalChange(true)}
-              />
-            </Flex>
-          </LottieEditorHeader>
-          <Box className={css({ flex: 1, minHeight: 0 })}>
-            <Editor
-              beforeMount={handleEditorWillMount}
-              onMount={(editor) => {
-                editorRef.current = editor;
-                editor.onDidChangeModelContent(() => {
+    <Box>
+      <Box
+        testId='lottie-preview-field'
+        className={styles.lottiePreviewFieldContainer(hasError)}
+      >
+        <Flex className={styles.lottieColumnParentContainer}>
+          <Flex
+            flexDirection="column"
+            className={styles.lottieColumnContainer}
+          >
+            <LottieEditorHeader>
+              <Box className={styles.editorHeaderText}>JSON editor</Box>
+              <Flex gap="spacingXs">
+                <Button
+                  className={cx(
+                    styles.lottieJsonEditorButtons,
+                    css({ color: tokens.red600 })
+                  )}
+                  size="small" variant="secondary" onClick={handleClear}
+                >
+                  Clear
+                </Button>
+                <Button className={styles.lottieJsonEditorButtons} size="small" variant="secondary" onClick={handleUndo} isDisabled={!canUndo} >
+                  Undo
+                </Button>
+                <Button className={styles.lottieJsonEditorButtons} size="small" variant="secondary" onClick={handleRedo} isDisabled={!canRedo}>
+                  Redo
+                </Button>
+                <IconButton
+                  className={styles.previewButton}
+                  variant="secondary"
+                  aria-label="preview-lottie-json"
+                  icon={<ArrowsOutThinIcon width={20} height={20} />}
+                  onClick={() => handleShowJsonModalChange(true)}
+                />
+              </Flex>
+            </LottieEditorHeader>
+            <Box className={css({ flex: 1, minHeight: 0 })}>
+              <Editor
+                beforeMount={handleEditorWillMount}
+                onMount={(editor) => {
+                  editorRef.current = editor;
+                  editor.onDidChangeModelContent(() => {
+                    updateUndoRedoState();
+                  });
                   updateUndoRedoState();
-                });
-                updateUndoRedoState();
 
-                // Inject initial value on mount
-                const editorModel = editor.getModel();
-                if (editorModel) {
-                  editorModel.setValue(JSON.stringify(lottieJson, null, 2));
-                }
-              }}
-              height="100%"
-              defaultLanguage="json"
-              theme="lightGrayEditor"
-              options={styles.monaco.options}
-              onChange={handleJsonEditorChange}
-            />
-          </Box>
-        </Flex>
+                  // Inject initial value on mount
+                  const editorModel = editor.getModel();
+                  if (editorModel) {
+                    editorModel.setValue(JSON.stringify(lottieJson, null, 2));
+                  }
+                }}
+                height="100%"
+                defaultLanguage="json"
+                theme="lightGrayEditor"
+                options={styles.monaco.options}
+                onChange={handleJsonEditorChange}
+              />
+            </Box>
+          </Flex>
 
-        <Flex flex="1">
-          <Flex flexDirection="column" alignItems="center" className={css({ height: '100%' })}>
-            <LottieEditorHeader additionalStyles={{ borderLeft: `1px solid ${tokens.gray500}` }}>
-              <Box>Preview</Box>
+          <Flex
+            flexDirection="column"
+            className={styles.lottieColumnContainer}
+          >
+            <LottieEditorHeader additionalStyles={styles.rightPanelColumn}>
+              <Box className={styles.editorHeaderText}>Preview</Box>
               <IconButton
+                className={styles.previewButton}
                 variant="secondary"
                 aria-label="preview-animated-lottie-json"
                 icon={<ArrowsOutThinIcon width={20} height={20} />}
@@ -221,7 +232,7 @@ const LottiePreviewField = (props: Props) => {
             </LottieEditorHeader>
             <Box className={styles.lottieAnimatorContainer}>
               <DotLottieReact
-                className={css({ height: '100%', width: '100%' })}
+                className={styles.dotLottieReact}
                 key={JSON.stringify(lottieJson)}
                 data={lottieJson}
                 loop
@@ -230,28 +241,33 @@ const LottiePreviewField = (props: Props) => {
             </Box>
           </Flex>
         </Flex>
-      </Flex>
+      </Box>
 
-      {hasError && (
-        <Box padding="spacingXs" style={{ backgroundColor: tokens.red100 }}>
-          <Text fontSize="fontSizeS" fontColor="red400">
-            Invalid JSON syntax. Please correct the error.
-          </Text>
-        </Box>
-      )}
+      <Box>
+        {
+          hasError && (
+            <Box padding="spacingXs" className={styles.jsonErrorContainer}>
+              <WarningOctagon width={20} height={20} />
+              <Text fontSize="fontSizeM" fontColor="red400" >
+                Invalid JSON
+              </Text>
+            </Box>
+          )
+        }
 
-      <JsonEditorModal
-        showJsonModal={showJsonModal}
-        onShowJsonModalChange={handleShowJsonModalChange}
-        onEditorWillMount={handleEditorWillMount}
-        lottieJson={lottieJson}
-        onSave={handleModalSave}
-      />
-      <LottiePreviewModal
-        showLottiePreviewModal={showLottiePreviewModal}
-        onShowLottiePreviewModalChange={handleShowLottiePreviewModalChange}
-        lottieJson={lottieJson}
-      />
+        <JsonEditorModal
+          showJsonModal={showJsonModal}
+          onShowJsonModalChange={handleShowJsonModalChange}
+          onEditorWillMount={handleEditorWillMount}
+          lottieJson={lottieJson}
+          onSave={handleModalSave}
+        />
+        <LottiePreviewModal
+          showLottiePreviewModal={showLottiePreviewModal}
+          onShowLottiePreviewModalChange={handleShowLottiePreviewModalChange}
+          lottieJson={lottieJson}
+        />
+      </Box>
     </Box>
   );
 };
