@@ -1,6 +1,7 @@
+---
 name: Auto Merge and Delete Branch
 
-on:
+"on":
   pull_request:
     types:
       - closed

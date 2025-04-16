@@ -1,8 +1,9 @@
+---
 # Workflow name
 name: ESLint & TSC
 
 # Event for the workflow
-on: [pull_request]
+"on": [pull_request]
 
 # List of jobs
 jobs:
