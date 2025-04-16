@@ -2,7 +2,7 @@
 export const README_CONTENT_TYPE_ID = 'readmeMd';
 
 // Creates a new ReadMe content type if needed
-export async function createReadmeType(cma) {
+export async function createReadmeType(cma: any) {
   const { sys } = await cma.contentType.createWithId(
     { contentTypeId: README_CONTENT_TYPE_ID },
     {
@@ -36,8 +36,6 @@ export async function createReadmeType(cma) {
 
   if (!sys) return;
 
-  console.log(sys);
-
   //now publish the type
   await cma.contentType.publish(
     {
@@ -51,12 +49,10 @@ export async function createReadmeType(cma) {
     }
   );
 
-  console.log('published');
-
   return sys.id;
 }
 
-export async function createReadmeEntry(cma) {
+export async function createReadmeEntry(cma: any) {
   const entry = await cma.entry.create(
     {
       contentTypeId: README_CONTENT_TYPE_ID,
@@ -77,24 +73,24 @@ export async function createReadmeEntry(cma) {
 }
 
 // Need to make sure the readme content type exists
-export async function checkForReadmeType(cma) {
+export async function checkForReadmeType(cma: any) {
   console.log('Checking for ReadMe content type');
   const returnValue = await cma.contentType
     .get({
       contentTypeId: README_CONTENT_TYPE_ID,
     })
-    .catch((err) => {});
+    .catch((err: any) => {});
 
   return returnValue ? true : false;
 }
 
-export async function checkForReadmeEntries(cma) {
+export async function checkForReadmeEntries(cma: any) {
   // Find the ReadMe entries
   const { items } = await cma.entry
     .getMany({
       query: { content_type: README_CONTENT_TYPE_ID },
     })
-    .catch((err) => {
+    .catch((err: any) => {
       return [];
     });
 

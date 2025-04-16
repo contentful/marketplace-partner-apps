@@ -1,4 +1,4 @@
-import { ConfigAppSDK } from '@contentful/app-sdk';
+import { CMAClient, ConfigAppSDK } from '@contentful/app-sdk';
 import { Flex, Form, Heading, Paragraph, Button, Note, Spinner } from '@contentful/f36-components';
 import { useCMA, useSDK } from '@contentful/react-apps-toolkit';
 import { css } from 'emotion';
@@ -13,7 +13,7 @@ const ConfigScreen = () => {
   const [readmeExists, setReadmeExists] = useState<boolean | null>(null);
   const [creating, setCreating] = useState(false);
   const sdk = useSDK<ConfigAppSDK>();
-  const cma = useCMA();
+  const cma: CMAClient = useCMA();
 
   const checkReadmeContentType = useCallback(async () => {
     setIsChecking(true);

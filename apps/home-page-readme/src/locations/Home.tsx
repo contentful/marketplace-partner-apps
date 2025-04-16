@@ -37,16 +37,24 @@ export const Home = () => {
         return;
       }
 
-      const simpleReadMeList: ReadMeEntry[] = items.map((item) => {
-        const {
-          sys: { id },
+      const simpleReadMeList: ReadMeEntry[] = items.map(
+        (item: {
+          sys: { id: string };
           fields: {
-            title: { 'en-US': title },
-            readMe: { 'en-US': markdown },
-          },
-        } = item;
-        return { id, title, markdown };
-      });
+            title: { 'en-US': string };
+            readMe: { 'en-US': string };
+          };
+        }) => {
+          const {
+            sys: { id },
+            fields: {
+              title: { 'en-US': title },
+              readMe: { 'en-US': markdown },
+            },
+          } = item;
+          return { id, title, markdown };
+        }
+      );
 
       const selectedEntry = readMeId ? simpleReadMeList.find((item) => item.id === readMeId) : simpleReadMeList[0];
 
@@ -84,7 +92,7 @@ export const Home = () => {
       <Stack justifyContent="center" padding="spacing2Xs" fullWidth style={{ backgroundColor: tokens.gray700 }}>
         <Flex flexDirection="column" gap="spacingXl" style={{ width: '900px' }}>
           <Flex flexDirection="row" alignItems="center" gap="spacingXs" justifyContent="left">
-            <Text fontColor="gray100" fontSize="fontSizeL" paddingRight="spacingXs">
+            <Text fontColor="gray100" fontSize="fontSizeL">
               Select Readme
             </Text>
             <Select id="optionSelect-controlled" name="optionSelect-controlled" value={readMe.id} onChange={handleSelectChange} isDisabled={isLoading}>
