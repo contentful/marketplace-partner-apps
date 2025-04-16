@@ -3,7 +3,7 @@ import { Heading, Box, Paragraph, List, Note, TextLink, Autocomplete, Flex, Chec
 import tokens from '@contentful/f36-tokens';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { ContentTypeProps } from 'contentful-management';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import css from '@emotion/css';
 // import { getRichTextFields, setAppRichTextEditor, setDefaultRichTextEditor } from '../utils';
 import { CMAClient } from '@contentful/app-sdk';
@@ -14,7 +14,7 @@ const lock = new AsyncLock();
 const JsonFieldType = 'Object';
 const AppWidgetNamespace = 'app';
 const BuiltinWidgetNamesspace = 'builtin';
-const DefaultWidgetId = 'richTextEditor';
+const DefaultWidgetId = 'objectEditor';
 
 async function getJsonFields(cma: CMAClient, appDefinitionId: string): Promise<any[]> {
   // Get all content types
@@ -49,76 +49,37 @@ async function getJsonFields(cma: CMAClient, appDefinitionId: string): Promise<a
   return jsonFields;
 }
 
-async function setFieldAppearance(sdk: ConfigAppSDK, contentTypeId: string, fieldId: string) {
-  lock.acquire(contentTypeId, async function () {
-    const appWidgetId = sdk.ids.app;
-
-    const editorInterface = await sdk.cma.editorInterface.get({ contentTypeId: contentTypeId });
-    const control = editorInterface.controls!.find((w) => w.fieldId === fieldId)!;
-    control.widgetId = appWidgetId;
-    control.widgetNamespace = AppWidgetNamespace;
-
-    await sdk.cma.editorInterface.update(
-      {
-        spaceId: sdk.ids.space,
-        environmentId: sdk.ids.environment,
-        contentTypeId: contentTypeId,
-      },
-      editorInterface
-    );
-  });
-}
-
-async function resetFieldAppearance(sdk: ConfigAppSDK, contentTypeId: string, fieldId: string) {
-  lock.acquire(contentTypeId, async function () {
-    const editorInterface = await sdk.cma.editorInterface.get({ contentTypeId: contentTypeId });
-    const control = editorInterface.controls!.find((w) => w.fieldId === fieldId)!;
-    control.widgetId = DefaultWidgetId;
-    control.widgetNamespace = BuiltinWidgetNamesspace;
-
-    await sdk.cma.editorInterface.update(
-      {
-        spaceId: sdk.ids.space,
-        environmentId: sdk.ids.environment,
-        contentTypeId: contentTypeId,
-      },
-      editorInterface
-    );
-  });
-}
-
-async function getContentModels(sdk: ConfigAppSDK) {
-  const types = await sdk.cma.contentType.getMany({});
-  return types.items.map((x) => {
-    return { label: x.name, value: x.sys.id };
-  });
-}
 const ConfigScreen = () => {
   const [parameters, setParameters] = useState<any>({
     useImageWrapper: false,
     imageWrapperTypeId: '',
   });
-  const [selectedWrapperModelId, setSelectedWrapperModelId] = useState(parameters.imageWrapperTypeId);
-  const [contentModels, setContentModels] = useState<{ label: string; value: string }[]>([]);
   const [jsonFields, setJsonFields] = useState<any[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
   const [jsonFieldsLoaded, setJsonFieldsLoaded] = useState<boolean>(false);
-  const [isLicensed, setIsLicensed] = useState(false);
-  const [isInstalled, setIsInstalled] = useState(false);
+  const [interfaceUpdates, setInterfaceUpdates] = useState<any[]>([]);
+  const items = useMemo(
+    () =>
+      jsonFields.map((field) => ({
+        name: `${field.contentTypeName} > ${field.fieldName}`,
+        id: field.fieldId,
+        isChecked: field.isEnabled,
+        contentTypeId: field.contentTypeId,
+      })),
+    [jsonFields]
+  );
 
-  console.log({ contentModels, jsonFields });
-
-  const items = jsonFields.map((field) => ({
-    name: `${field.contentTypeName} > ${field.fieldName}`,
-    id: field.fieldId,
-    isChecked: field.isEnabled,
-    contentTypeId: field.contentTypeId,
-  }));
+  console.log({ interfaceUpdates });
 
   const sdk = useSDK<ConfigAppSDK>();
 
   const onConfigure = useCallback(async () => {
+    console.log('on configure', interfaceUpdates);
     const currentState = await sdk.app.getCurrentState();
+    await sdk.cma.editorInterface.update(interfaceUpdates[0].params, interfaceUpdates[0].updatedInterface);
+    // interfaceUpdates.forEach(async (i) => await sdk.cma.editorInterface.update(i.params, i.updatedInterface));
+    console.log('on configure 2');
+
     return {
       parameters,
       targetState: currentState,
@@ -130,12 +91,6 @@ const ConfigScreen = () => {
   }, [sdk, onConfigure]);
 
   useEffect(() => {
-    if (parameters.imageWrapperTypeId && parameters.imageWrapperTypeId !== '') {
-      setSelectedWrapperModelId(parameters.imageWrapperTypeId);
-    }
-  }, [parameters]);
-
-  useEffect(() => {
     (async () => {
       const currentParameters: any | null = await sdk.app.getParameters();
 
@@ -144,69 +99,77 @@ const ConfigScreen = () => {
       }
       sdk.app.setReady();
 
-      const models = await getContentModels(sdk);
-      setContentModels(models);
-
       const fields = await getJsonFields(sdk.cma, sdk.ids.app);
-      console.log({ fields });
       setJsonFields(fields);
       setJsonFieldsLoaded(true);
     })();
   }, [sdk]);
 
-  useEffect(() => {
-    let intervalId: any;
-    (async () => {
-      // Initial check
-      const installed = await checkInstallationStatus();
-      if (installed) {
-        return;
-      }
-      // Polling
-      intervalId = setInterval(async () => {
-        if (await checkInstallationStatus()) {
-          clearInterval(intervalId);
-        }
-      }, 2000);
-    })();
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [sdk.app]);
-  async function checkInstallationStatus(): Promise<boolean> {
-    const installed = await sdk.app.isInstalled();
-    setIsInstalled(installed);
-    return installed;
-  }
-
-  async function toggleRichTextFieldEditor(field: any) {
-    const isEnabled = !field.isEnabled;
-    updateRichTextField(field.contentTypeId, field.fieldId, { isEnabled });
-
-    if (isEnabled) {
-      await setFieldAppearance(sdk, field.contentTypeId, field.fieldId);
-    } else {
-      await resetFieldAppearance(sdk, field.contentTypeId, field.fieldId);
-    }
-  }
-
-  function updateRichTextField(targetContentTypeId: string, targetFieldId: string, updatedProperties: Partial<any>) {
+  function updateJsonField(targetContentTypeId: string, targetFieldId: string, updatedProperties: Partial<any>) {
     setJsonFields((prevFields) =>
       prevFields.map((field) => (field.contentTypeId === targetContentTypeId && field.fieldId === targetFieldId ? { ...field, ...updatedProperties } : field))
     );
   }
 
-  function handleSelectItem(item: { name: string; id: string; isChecked: boolean; contentTypeId: string }) {
-    updateRichTextField(item.contentTypeId, item.id, { isEnabled: item.isChecked });
+  async function setFieldAppearance(sdk: ConfigAppSDK, contentTypeId: string, fieldId: string) {
+    lock.acquire(contentTypeId, async function () {
+      const appWidgetId = sdk.ids.app;
+      const editorInterface = await sdk.cma.editorInterface.get({ contentTypeId: contentTypeId });
+      const control = editorInterface.controls!.find((w) => w.fieldId === fieldId)!;
+      control.widgetId = appWidgetId;
+      control.widgetNamespace = AppWidgetNamespace;
+      console.log({ editorInterface });
+      setInterfaceUpdates((prev) => [
+        ...prev,
+        { updatedInterface: editorInterface, params: { spaceId: sdk.ids.space, environmentId: sdk.ids.environment, contentTypeId: contentTypeId } },
+      ]);
 
-    if (item.isChecked) {
-      resetFieldAppearance(sdk, item.contentTypeId, item.id);
-    } else {
-      setFieldAppearance(sdk, item.contentTypeId, item.id);
-    }
+      //   return editorInterface;
+      console.log('set appearance', { editorInterface });
+
+      await sdk.cma.editorInterface.update(
+        {
+          spaceId: sdk.ids.space,
+          environmentId: sdk.ids.environment,
+          contentTypeId: contentTypeId,
+        },
+        editorInterface
+      );
+    });
   }
 
-  console.log({ jsonFields, items });
+  async function resetFieldAppearance(sdk: ConfigAppSDK, contentTypeId: string, fieldId: string) {
+    lock.acquire(contentTypeId, async function () {
+      const editorInterface = await sdk.cma.editorInterface.get({ contentTypeId: contentTypeId });
+      const control = editorInterface.controls!.find((w) => w.fieldId === fieldId)!;
+      control.widgetId = DefaultWidgetId;
+      control.widgetNamespace = BuiltinWidgetNamesspace;
+      console.log({ editorInterface });
+      setInterfaceUpdates((prev) => [
+        ...prev,
+        { updatedInterface: editorInterface, params: { spaceId: sdk.ids.space, environmentId: sdk.ids.environment, contentTypeId: contentTypeId } },
+      ]);
+      //   await sdk.cma.editorInterface.update(
+      //     {
+      //       spaceId: sdk.ids.space,
+      //       environmentId: sdk.ids.environment,
+      //       contentTypeId: contentTypeId,
+      //     },
+      //     editorInterface
+      //   );
+      return editorInterface;
+    });
+  }
+
+  async function handleSelectItem(item: { name: string; id: string; isChecked: boolean; contentTypeId: string }) {
+    updateJsonField(item.contentTypeId, item.id, { isEnabled: !item.isChecked });
+
+    if (item.isChecked) {
+      await resetFieldAppearance(sdk, item.contentTypeId, item.id);
+    } else {
+      await setFieldAppearance(sdk, item.contentTypeId, item.id);
+    }
+  }
 
   return (
     <Flex>
@@ -246,9 +209,7 @@ const ConfigScreen = () => {
         />
         <Flex>
           {jsonFieldsLoaded &&
-            items
-              .filter((item) => item.isChecked)
-              .map((item) => <Pill key={item.name} label={item.name} onClose={() => console.log('remove lottie appearance')} />)}
+            items.filter((item) => item.isChecked).map((item) => <Pill key={item.name} label={item.name} onClose={() => handleSelectItem(item)} />)}
         </Flex>
       </Box>
     </Flex>
