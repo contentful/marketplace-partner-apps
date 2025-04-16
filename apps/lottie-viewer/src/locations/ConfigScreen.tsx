@@ -9,7 +9,6 @@ import css from '@emotion/css';
 import { CMAClient } from '@contentful/app-sdk';
 // import { RtfField } from '../types';
 import AsyncLock from 'async-lock';
-import { J } from 'vitest/dist/types-198fd1d9';
 const lock = new AsyncLock();
 
 const JsonFieldType = 'Object';
@@ -17,7 +16,7 @@ const AppWidgetNamespace = 'app';
 const BuiltinWidgetNamesspace = 'builtin';
 const DefaultWidgetId = 'richTextEditor';
 
-export async function getJsonFields(cma: CMAClient, appDefinitionId: string): Promise<any[]> {
+async function getJsonFields(cma: CMAClient, appDefinitionId: string): Promise<any[]> {
   // Get all content types
   const contentTypes = await cma.contentType.getMany({});
 
@@ -50,7 +49,7 @@ export async function getJsonFields(cma: CMAClient, appDefinitionId: string): Pr
   return jsonFields;
 }
 
-export async function setFieldAppearance(sdk: ConfigAppSDK, contentTypeId: string, fieldId: string) {
+async function setFieldAppearance(sdk: ConfigAppSDK, contentTypeId: string, fieldId: string) {
   lock.acquire(contentTypeId, async function () {
     const appWidgetId = sdk.ids.app;
 
@@ -70,7 +69,7 @@ export async function setFieldAppearance(sdk: ConfigAppSDK, contentTypeId: strin
   });
 }
 
-export async function resetFieldAppearance(sdk: ConfigAppSDK, contentTypeId: string, fieldId: string) {
+async function resetFieldAppearance(sdk: ConfigAppSDK, contentTypeId: string, fieldId: string) {
   lock.acquire(contentTypeId, async function () {
     const editorInterface = await sdk.cma.editorInterface.get({ contentTypeId: contentTypeId });
     const control = editorInterface.controls!.find((w) => w.fieldId === fieldId)!;
@@ -113,6 +112,7 @@ const ConfigScreen = () => {
     name: `${field.contentTypeName} > ${field.fieldName}`,
     id: field.fieldId,
     isChecked: field.isEnabled,
+    contentTypeId: field.contentTypeId,
   }));
 
   const sdk = useSDK<ConfigAppSDK>();
@@ -148,6 +148,7 @@ const ConfigScreen = () => {
       setContentModels(models);
 
       const fields = await getJsonFields(sdk.cma, sdk.ids.app);
+      console.log({ fields });
       setJsonFields(fields);
       setJsonFieldsLoaded(true);
     })();
@@ -178,13 +179,6 @@ const ConfigScreen = () => {
     return installed;
   }
 
-  async function enableEditorForAllRichTextFields() {
-    for (const field of jsonFields.filter((f) => !f.isEnabled)) {
-      updateRichTextField(field.contentTypeId, field.fieldId, { isEnabled: true });
-      await setFieldAppearance(sdk, field.contentTypeId, field.fieldId);
-    }
-  }
-
   async function toggleRichTextFieldEditor(field: any) {
     const isEnabled = !field.isEnabled;
     updateRichTextField(field.contentTypeId, field.fieldId, { isEnabled });
@@ -202,8 +196,20 @@ const ConfigScreen = () => {
     );
   }
 
+  function handleSelectItem(item: { name: string; id: string; isChecked: boolean; contentTypeId: string }) {
+    updateRichTextField(item.contentTypeId, item.id, { isEnabled: item.isChecked });
+
+    if (item.isChecked) {
+      resetFieldAppearance(sdk, item.contentTypeId, item.id);
+    } else {
+      setFieldAppearance(sdk, item.contentTypeId, item.id);
+    }
+  }
+
+  console.log({ jsonFields, items });
+
   return (
-    <>
+    <Flex>
       <Box>
         <>
           <Heading as="h2"> Set up Lottie Preview</Heading>
@@ -229,7 +235,7 @@ const ConfigScreen = () => {
             );
           }}
           onInputValueChange={setInputValue}
-          onSelectItem={(item) => console.log(item)}
+          onSelectItem={handleSelectItem}
           // @ts-ignore
           selectedItem={{ name: inputValue }}
           itemToString={(item) => item.name}
@@ -238,12 +244,14 @@ const ConfigScreen = () => {
           showEmptyList
           usePortal
         />
-        {jsonFieldsLoaded &&
-          items
-            .filter((item) => item.isChecked)
-            .map((item) => <Pill key={item.name} label={item.name} onClose={() => console.log('remove lottie appearance')} />)}
+        <Flex>
+          {jsonFieldsLoaded &&
+            items
+              .filter((item) => item.isChecked)
+              .map((item) => <Pill key={item.name} label={item.name} onClose={() => console.log('remove lottie appearance')} />)}
+        </Flex>
       </Box>
-    </>
+    </Flex>
   );
 };
 
