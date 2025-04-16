@@ -1,0 +1,43 @@
+body,
+html {
+  background: #f7f9fa;
+  height: 100%;
+}
+
+table,
+tbody,
+thead,
+tr,
+th,
+td {
+  background: #0000;
+  border: 0;
+  font-size: 100%;
+  margin: 0;
+  padding: 0;
+  vertical-align: initial;
+}
+
+table {
+  table-layout: fixed;
+  width: 80%;
+  margin: 1rem auto;
+  border-spacing: 0px;
+  border-collapse: collapse;
+  border: 1px solid rgb(207, 217, 224);
+}
+
+table th {
+  background: rgb(231, 235, 238);
+}
+
+table th,
+table td {
+  padding: 5px;
+  border-left-width: 0px;
+  border-top-width: 0px;
+}
+
+table td {
+  border: 1px solid rgb(207, 217, 224);
+}
