@@ -1,5 +1,5 @@
 import { AppState, ConfigAppSDK } from '@contentful/app-sdk';
-import { Heading, Box, Paragraph, List, Note, TextLink, Autocomplete, Flex, Checkbox } from '@contentful/f36-components';
+import { Heading, Box, Paragraph, List, Note, TextLink, Autocomplete, Flex, Checkbox, Pill } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { ContentTypeProps } from 'contentful-management';
@@ -102,11 +102,18 @@ const ConfigScreen = () => {
   const [selectedWrapperModelId, setSelectedWrapperModelId] = useState(parameters.imageWrapperTypeId);
   const [contentModels, setContentModels] = useState<{ label: string; value: string }[]>([]);
   const [jsonFields, setJsonFields] = useState<any[]>([]);
+  const [inputValue, setInputValue] = useState<string>('');
   const [jsonFieldsLoaded, setJsonFieldsLoaded] = useState<boolean>(false);
   const [isLicensed, setIsLicensed] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
 
   console.log({ contentModels, jsonFields });
+
+  const items = jsonFields.map((field) => ({
+    name: `${field.contentTypeName} > ${field.fieldName}`,
+    id: field.fieldId,
+    isChecked: field.isEnabled,
+  }));
 
   const sdk = useSDK<ConfigAppSDK>();
 
@@ -194,41 +201,47 @@ const ConfigScreen = () => {
       prevFields.map((field) => (field.contentTypeId === targetContentTypeId && field.fieldId === targetFieldId ? { ...field, ...updatedProperties } : field))
     );
   }
+
   return (
     <>
       <Box>
         <>
-          <Heading as="h2"> About Surfer</Heading>
-
-          <Paragraph>
-            Elevate your content SEO with Surfer without leaving Contentful! Generate a list of relevant keywords, create an outline and write amazingly
-            optimized content while getting real-time feedback from our Content Editor.
-          </Paragraph>
-          <Note variant="neutral">
-            You need a Surfer account with an active subscription to use this app. Sign up{' '}
-            <TextLink href="https://app.surferseo.com/register" target="_blank">
-              here
-            </TextLink>
-            .
-          </Note>
+          <Heading as="h2"> Set up Lottie Preview</Heading>
+          <Paragraph>Preview your animation directly in your entry editor.</Paragraph>
         </>
 
-        <Heading>Select content types and fields</Heading>
+        <Heading as="h2">Add Lottie Preview to your field editor</Heading>
+
+        <Paragraph>
+          Choose the content type(s) and fields you want to use with Lottie Preview. You can change this anytime in the Fields tab of your content type. To
+          enable or disable Lottie Preview, click ‘Edit’ on the JSON Object field type and adjust the Appearance settings. Learn more about configuring your
+          content type .
+        </Paragraph>
 
         <Autocomplete
-          items={[{ name: 'inputName', id: 'inputId' }]}
+          items={items}
           renderItem={(item, inputValue) => {
             return (
               <Flex alignItems="center" gap={tokens.spacingXs} testId={`resource-autocomplete--${item.name}`}>
-                <Checkbox value={item.id} id={item.id} isChecked isDisabled={false} onKeyDown={() => {}} />
+                <Checkbox value={item.id} id={item.id} isChecked={item.isChecked} isDisabled={false} onKeyDown={() => {}} />
+                {item.name}
               </Flex>
             );
           }}
-          onInputValueChange={(e) => console.log(e)}
+          onInputValueChange={setInputValue}
           onSelectItem={(item) => console.log(item)}
-          selectedItem={{ name: 'inputName' }}
+          // @ts-ignore
+          selectedItem={{ name: inputValue }}
           itemToString={(item) => item.name}
+          textOnAfterSelect="preserve"
+          closeAfterSelect={false}
+          showEmptyList
+          usePortal
         />
+        {jsonFieldsLoaded &&
+          items
+            .filter((item) => item.isChecked)
+            .map((item) => <Pill key={item.name} label={item.name} onClose={() => console.log('remove lottie appearance')} />)}
       </Box>
     </>
   );
