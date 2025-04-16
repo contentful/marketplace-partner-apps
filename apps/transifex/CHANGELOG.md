@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.11](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.2.10...transifex-contentful-app-v1.2.11) (2025-03-13)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.7.5 to 1.8.2 in /apps/transifex ([#4606](https://github.com/contentful/marketplace-partner-apps/issues/4606)) ([5b07482](https://github.com/contentful/marketplace-partner-apps/commit/5b07482854c554fe9266c52b67236cf179e3e6d7))
+
 ## [1.2.10](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.2.9...transifex-contentful-app-v1.2.10) (2024-12-10)
 
 

@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.0.30](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.29...surfer-contentful-app-v1.0.30) (2025-03-28)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group across 1 directory with 2 updates ([#4701](https://github.com/contentful/marketplace-partner-apps/issues/4701)) ([fcc577a](https://github.com/contentful/marketplace-partner-apps/commit/fcc577ad38411660ff9ba44b6730c62257b50ef3))
+
+## [1.0.29](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.28...surfer-contentful-app-v1.0.29) (2025-03-13)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.8.1 to 1.8.2 in /apps/surfer ([#4605](https://github.com/contentful/marketplace-partner-apps/issues/4605)) ([e52c812](https://github.com/contentful/marketplace-partner-apps/commit/e52c8121c292f45ca8a7ff10c8e146d643cca620))
+* **deps:** bump the production-dependencies group in /apps/surfer with 5 updates ([#4569](https://github.com/contentful/marketplace-partner-apps/issues/4569)) ([6126704](https://github.com/contentful/marketplace-partner-apps/commit/612670486211c3d2a8461c823a1a8b1f9734bfe0))
+
 ## [1.0.28](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.27...surfer-contentful-app-v1.0.28) (2024-12-10)
 
 

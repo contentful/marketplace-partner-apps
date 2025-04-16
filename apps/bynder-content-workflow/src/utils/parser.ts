@@ -106,10 +106,5 @@ export const htmlStringToDocumentOptions: Partial<HTMLToRTOptions> = {
         },
       ],
     }),
-    em: (node, next) => ({
-      nodeType: BLOCKS.PARAGRAPH,
-      data: {},
-      content: next(node, { type: "italic" }),
-    }),
   },
 };

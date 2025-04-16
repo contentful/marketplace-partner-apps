@@ -1,13 +1,13 @@
 {
   "name": "@contentful/shopify-sku",
-  "version": "2.0.11",
+  "version": "2.0.12",
   "private": true,
   "devDependencies": {
     "@contentful/app-scripts": "2.1.2",
     "@testing-library/react": "^16.2.0",
     "@vitejs/plugin-react": "^4.3.4",
     "happy-dom": "^17.2.2",
-    "vite": "^5.4.11",
+    "vite": "^5.4.18",
     "vitest": "^2.1.8"
   },
   "dependencies": {

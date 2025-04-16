@@ -1,6 +1,6 @@
 {
   "name": "transifex-contentful-app",
-  "version": "1.2.10",
+  "version": "1.2.11",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "4.29.3",
@@ -46,6 +46,6 @@
     "prettier": "^3.4.2",
     "typescript": "5.7.2",
     "vite": "5.4.11",
-    "vitest": "2.1.8"
+    "vitest": "3.0.8"
   }
 }

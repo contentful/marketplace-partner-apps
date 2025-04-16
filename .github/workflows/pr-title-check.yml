@@ -10,7 +10,8 @@ jobs:
     steps:
       - uses: deepakputhraya/action-pr-title@master
         with:
-          # Regex to match jira ticket, examples: "[JIRA-123] My PR title" or "chore: no ticket []"
+          # Regex to match jira ticket, examples: "[JIRA-123] My PR title" or
+          # "chore: no ticket []"
           regex: '.*\[([A-Z]+-\d+|)\].*'
           allowed_prefixes: ''
           prefix_case_sensitive: false

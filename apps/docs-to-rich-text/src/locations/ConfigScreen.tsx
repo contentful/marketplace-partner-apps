@@ -51,6 +51,7 @@ const ConfigScreen = () => {
   const [richTextFields, setRichTextFields] = useState<RtfField[]>([]);
   const [richTextFieldsLoaded, setRichTextFieldsLoaded] = useState<boolean>(false);
   const [isLicensed, setIsLicensed] = useState(false);
+  const [isInstalled, setIsInstalled] = useState(false);
 
   const sdk = useSDK<ConfigAppSDK>();
 
@@ -109,6 +110,30 @@ const ConfigScreen = () => {
       setRichTextFieldsLoaded(true);
     })();
   }, [sdk]);
+  useEffect(() => {
+    let intervalId: any;
+    (async () => {
+      // Initial check
+      const installed = await checkInstallationStatus();
+      if (installed) {
+        return;
+      }
+      // Polling
+      intervalId = setInterval(async () => {
+        if (await checkInstallationStatus()) {
+          clearInterval(intervalId);
+        }
+      }, 2000);
+    })();
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [sdk.app]);
+  async function checkInstallationStatus(): Promise<boolean> {
+    const installed = await sdk.app.isInstalled();
+    setIsInstalled(installed);
+    return installed;
+  }
 
   async function enableEditorForAllRichTextFields() {
     if (!isLicensed && richTextFields.length > 5) {
@@ -258,43 +283,49 @@ const ConfigScreen = () => {
   const fieldsCard = (
     <Card>
       <Heading>Configure Rich Text Fields</Heading>
-      <p>Select which rich text fields should have Docs to Rich Text enabled</p>
-      <br />
+      {!isInstalled ? (
+        <p>Install to begin</p>
+      ) : (
+        <>
+          <p>Select which rich text fields should have Docs to Rich Text enabled</p>
+          <br />
 
-      {!richTextFieldsLoaded && (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <Spinner variant="default" />
-        </div>
-      )}
-      {richTextFieldsLoaded && (
-        <div>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              marginBottom: '20px',
-            }}>
-            {isLicenseLimitReached ? (
-              <Tooltip content="Free plan limit reached. Disable another field or upgrade to remove limits" placement="top">
-                <Button variant="primary" size="small" style={{ marginRight: '20px' }} isDisabled={true}>
-                  Enable All
-                </Button>
-              </Tooltip>
-            ) : (
-              <Button
-                variant="primary"
-                size="small"
-                style={{ marginRight: '20px' }}
-                onClick={async () => {
-                  await enableEditorForAllRichTextFields();
-                }}
-                isDisabled={false}>
-                Enable All
-              </Button>
-            )}
-          </div>
-          {fieldsTable}
-        </div>
+          {!richTextFieldsLoaded && (
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <Spinner variant="default" />
+            </div>
+          )}
+          {richTextFieldsLoaded && (
+            <div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  marginBottom: '20px',
+                }}>
+                {isLicenseLimitReached ? (
+                  <Tooltip content="Free plan limit reached. Disable another field or upgrade to remove limits" placement="top">
+                    <Button variant="primary" size="small" style={{ marginRight: '20px' }} isDisabled={true}>
+                      Enable All
+                    </Button>
+                  </Tooltip>
+                ) : (
+                  <Button
+                    variant="primary"
+                    size="small"
+                    style={{ marginRight: '20px' }}
+                    onClick={async () => {
+                      await enableEditorForAllRichTextFields();
+                    }}
+                    isDisabled={false}>
+                    Enable All
+                  </Button>
+                )}
+              </div>
+              {fieldsTable}
+            </div>
+          )}
+        </>
       )}
     </Card>
   );

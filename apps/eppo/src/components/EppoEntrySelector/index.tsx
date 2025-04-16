@@ -13,6 +13,7 @@ interface ILinkedEntryCardProps {
   onLink: (value: EntityLink) => void;
   onUnlink: (entryId: string) => void;
   isDisabled: boolean;
+  allowedContentTypes: string[];
 }
 
 const getEntryId = (value: EntityLink | undefined): string | undefined => {
@@ -23,7 +24,7 @@ const EXCLUDED_CONTENT_TYPES = [VARIATION_CONTAINER_ID];
 
 export const EppoEntrySelector: React.FunctionComponent<ILinkedEntryCardProps> = (props) => {
   const sdk = props.sdk;
-  const editorPermissions = useEntryEditorPermissions(sdk);
+  const editorPermissions = useEntryEditorPermissions(sdk, props.allowedContentTypes);
   const { fieldValue, isDisabled } = props;
   const entryId = getEntryId(fieldValue);
 
