@@ -2,10 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as monaco from 'monaco-editor';
 import { Button, Modal, Box } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
-import { styles } from '@src/components/field/LottiePreviewField.styles';
-import { css } from 'emotion';
+import { css, cx } from 'emotion';
 import Editor from '@monaco-editor/react';
 import { LottieJSON } from '@src/locations/Field';
+import { styles } from '@src/components/modals/JsonEditorModal.styles';
+import { styles as fieldStyles } from '@src/components/field/LottiePreviewField.styles';
 
 type Props = {
   showJsonModal: boolean;
@@ -65,6 +66,31 @@ export default function JsonEditorModal(props: Props) {
     }
   }, [showJsonModal, lottieJson]);
 
+  const handleClear = () => {
+    const cleared = '{}';
+    const editor = editorRef.current;
+
+    if (editor) {
+      const fullRange = editor.getModel()!.getFullModelRange();
+
+      editor.pushUndoStop();
+      editor.executeEdits('clear', [
+        {
+          range: fullRange,
+          text: cleared,
+          forceMoveMarkers: true,
+        },
+      ]);
+      editor.pushUndoStop();
+      editor.getModel()?.pushStackElement();
+    }
+  };
+
+  const handleSaveClick = () => {
+    onSave(editorValue)
+    onShowJsonModalChange(false)
+  }
+
   return (
     <Modal size="fullscreen" onClose={() => onShowJsonModalChange(false)} isShown={showJsonModal}>
       {() => (
@@ -73,32 +99,38 @@ export default function JsonEditorModal(props: Props) {
             title="Lottie Preview - JSON editor"
             onClose={() => onShowJsonModalChange(false)}
             className={css({ display: 'flex', position: 'relative' })}
-          >
-            <Box
-              className={css({
-                position: 'absolute',
-                right: '50px',
-                display: 'flex',
-                gap: `${tokens.spacingXs}`,
-              })}
-            >
-              <Button size="small" variant="secondary" onClick={handleUndo} isDisabled={!canUndo}>
-                Undo
-              </Button>
-              <Button size="small" variant="secondary" onClick={handleRedo} isDisabled={!canRedo}>
-                Redo
-              </Button>
-              <Button
-                size="small"
-                variant="positive"
-                onClick={() => onSave(editorValue)}
-              >
-                Save
-              </Button>
-            </Box>
-          </Modal.Header>
-          <Modal.Content>
-            <Box className={css({ width: '100%', height: '500px', flex: 1, minHeight: 0 })}>
+          />
+
+          <Modal.Content className={styles.modalContentContainer}>
+            <Box className={styles.lottieAnimatorContainer}>
+              <Box className={styles.greyBar} >
+                <Box
+                  className={css({
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
+                    gap: `${tokens.spacingXs}`,
+                    marginRight: tokens.spacing2Xs
+                  })}
+                >
+                  <Button
+                    className={cx(
+                      styles.lottieJsonEditorButtons,
+                      css({ color: tokens.red600 })
+                    )}
+                    size="small" variant="secondary" onClick={handleClear}
+                  >
+                    Clear
+                  </Button>
+                  <Button className={styles.lottieJsonEditorButtons} size="small" variant="secondary" onClick={handleUndo} isDisabled={!canUndo}>
+                    Undo
+                  </Button>
+                  <Button className={styles.lottieJsonEditorButtons} size="small" variant="secondary" onClick={handleRedo} isDisabled={!canRedo}>
+                    Redo
+                  </Button>
+                </Box>
+              </Box>
               <Editor
                 beforeMount={onEditorWillMount}
                 onMount={(editor) => {
@@ -110,9 +142,18 @@ export default function JsonEditorModal(props: Props) {
                 defaultLanguage="json"
                 theme="lightGrayEditor"
                 value={editorValue}
-                options={styles.monaco.options}
+                options={fieldStyles.monaco.options}
                 onChange={(val) => setEditorValue(val || '')}
               />
+            </Box>
+            <Box className={styles.buttonContainer}>
+              <Button
+                className={css({ maxHeight: '36px', minHeight: '36px' })}
+                variant='primary'
+                onClick={handleSaveClick}
+              >
+                Save
+              </Button>
             </Box>
           </Modal.Content>
         </>
