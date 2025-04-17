@@ -91,7 +91,6 @@ export const styles = {
     flex: 1,
     width: '100%',
     height: '100%',
-    backgroundColor: tokens.gray200,
     overflow: 'hidden',
     borderLeft: `1px solid ${tokens.gray400}`,
     display: 'flex',
