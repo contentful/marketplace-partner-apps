@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.5](https://github.com/contentful/marketplace-partner-apps/compare/eppo-contentful-app-v1.0.4...eppo-contentful-app-v1.0.5) (2025-04-17)
+
+
+### Bug Fixes
+
+* correct YAML formatting in new app review workflow [] ([#4874](https://github.com/contentful/marketplace-partner-apps/issues/4874)) ([ae4f190](https://github.com/contentful/marketplace-partner-apps/commit/ae4f190524cb24ba970b025c6b38593010625b71))
+
 ## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/eppo-contentful-app-v1.0.3...eppo-contentful-app-v1.0.4) (2025-03-28)
 
 

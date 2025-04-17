@@ -1,5 +1,20 @@
 import { useEffect, useRef } from 'react';
-import { Tabs, GlobalStyles, Button, Popover, Box, TextInput, Skeleton, Card, Heading, Notification, Modal, Flex, Tooltip } from '@contentful/f36-components';
+import {
+  Tabs,
+  GlobalStyles,
+  Button,
+  Popover,
+  Box,
+  TextInput,
+  Skeleton,
+  Card,
+  Heading,
+  Notification,
+  Modal,
+  Flex,
+  Tooltip,
+  Image,
+} from '@contentful/f36-components';
 import { HelpCircleIcon, WarningIcon } from '@contentful/f36-icons';
 import { FieldAppSDK } from '@contentful/app-sdk';
 import { useSDK } from '@contentful/react-apps-toolkit';
@@ -15,6 +30,11 @@ import { isUrl } from '../utils/importUtils';
 import { removeImagesFromDocument } from '../utils/imageRemoverUtils';
 import { launchGoogleDrivePicker } from '../utils/googleDrivePicker';
 import googleDriveLogo from '../assets/img/drive.png';
+import { isOffice365Html } from '../utils/officeDocUtil';
+import urlImage from '../assets/img/paste_url.png';
+import contentImage from '../assets/img/paste_content.png';
+import greenCheckImage from '../assets/img/green_check.png';
+import redXImage from '../assets/img/red_x.png';
 
 const styles = {
   popover: css({
@@ -78,10 +98,19 @@ const styles = {
     marginLeft: '0.5em !important',
   }),
   importTextInput: css({
-    width: '200px !important',
+    width: '240px !important',
   }),
   modalDriveButton: css({
     width: '200px',
+  }),
+  hintRow: css({
+    marginTop: '25px',
+  }),
+  hintSecondRow: css({
+    marginTop: '60px',
+  }),
+  hintIcon: css({
+    marginRight: '30px',
   }),
 };
 
@@ -91,9 +120,10 @@ const Field = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLicenseLimitBreached, setLicenseLimitBreached] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
-  const [isModalShown, setModalShown] = useState(false);
+  const [isGoogleAuthModalShown, setIsGoogleAuthModalShown] = useState(false);
   const [importState, setImportState] = useState<ImportState | null>(null);
   const [showValidationWarning, setShowValidationWarning] = useState(false);
+  const [isPasteInputErrorShown, setIsPasteInputErrorShown] = useState(false);
 
   sdk.window.startAutoResizer();
 
@@ -111,29 +141,30 @@ const Field = () => {
       e.preventDefault(); // Prevent default pasting behavior
       const clipboardData = e.clipboardData;
       let pastedText;
-      let isGoogleDoc = false;
+      let source = DocumentSource.Paste;
+      setLoadingState();
+
       setImportState({});
       setIsImporting(true);
 
-      if (clipboardData.types.some((f: string) => f.includes('google-docs'))) {
+      if (isGoogleDoc(clipboardData)) {
+        source = DocumentSource.GoogleDocPaste;
+      }
+
+      // if is google doc or office doc
+      if (hasTypeTextHtml(clipboardData) && (isGoogleDoc(clipboardData) || isOffice365Html(clipboardData.getData('text/html')))) {
         pastedText = clipboardData.getData('text/html');
-        isGoogleDoc = true;
       } else {
         pastedText = clipboardData.getData('text/plain');
       }
 
       if (isUrl(pastedText)) {
-        Notification.error('Document import by url is not supported. Please paste the contents of a Google or HTML document to import.');
+        setIsPasteInputErrorShown(true);
         clearImportingState();
-      } else {
-        setImportState((prevState) => ({
-          ...prevState,
-          isGoogleDoc,
-          source: DocumentSource.Paste,
-          html: pastedText,
-        }));
+        return;
       }
-      setIsOpen(false);
+
+      initializeImportState(source, pastedText);
     };
 
     const inputElement = inputRef.current;
@@ -149,6 +180,14 @@ const Field = () => {
     };
   }, [isOpen]);
 
+  function isGoogleDoc(clipboardData: any) {
+    return clipboardData.types.some((f: string) => f.includes('google-docs'));
+  }
+
+  function hasTypeTextHtml(clipboardData: any) {
+    return clipboardData.types.some((f: string) => f.includes('text/html'));
+  }
+
   useEffect(() => {
     Notification.setPlacement('top');
     IsWithinLicenseLimits(sdk.cma, sdk.ids.app!, sdk.ids.space).then((isWithinLimits) => {
@@ -160,14 +199,10 @@ const Field = () => {
   }, [sdk]);
 
   function initGoogleDrivePicker() {
-    clearImportingState();
-    setIsOpen(false);
-    setModalShown(false);
-    setIsImporting(true);
+    setLoadingState();
+
     launchGoogleDrivePicker()
-      .then((result) => {
-        importFromGoogleDoc(result.html, result.markdown);
-      })
+      .then((result) => initializeImportState(DocumentSource.GoogleDrivePicker, result.html, result.markdown))
       .catch(() => {
         Notification.error(
           'Oops! Something went wrong converting your document to rich text. Ensure your data is valid (e.g., correct HTML or Google Doc content) or try again later.',
@@ -176,76 +211,73 @@ const Field = () => {
       });
   }
 
-  function importFromGoogleDoc(html: string, markdown: string) {
-    setImportState((prevState) => ({
-      ...prevState,
-      isGoogleDoc: true,
-      source: DocumentSource.GoogleDrive,
-      html,
-      markdown,
-    }));
-  }
-
   useEffect(() => {
-    const handleHtml = async () => {
-      if (!importState?.html) return;
+    if (!importState?.html) return;
 
-      convert(importState!.html!, sdk)
-        .then((result: ConvertResponse) => {
-          setImportState((prevState) => ({
-            ...prevState,
-            richText: result.richText,
-            images: result.images,
-          }));
-        })
-        .catch(() => {
-          Notification.error(
-            'Oops! Something went wrong converting your document to rich text. Ensure your data is valid (e.g., correct HTML or Google Doc content) or try again later.',
-          );
-          clearImportingState();
-        });
-    };
-
-    handleHtml();
+    convert(importState!.html!, sdk)
+      .then((result: ConvertResponse) => {
+        setImportState((prevState) => ({
+          ...prevState,
+          richText: result.richText,
+          images: result.images,
+        }));
+      })
+      .catch(() => {
+        Notification.error(
+          'Oops! Something went wrong converting your document to rich text. Ensure your data is valid (e.g., correct HTML or Google Doc content) or try again later.',
+        );
+        clearImportingState();
+      });
   }, [importState?.html]);
 
   useEffect(() => {
     const handleImages = async () => {
-      if (importState?.images) {
-        const imageResult =
-          importState.source === DocumentSource.Paste
-            ? await processImages(sdk, importState.images)
-            : await processImagesFromGoogleDrive(sdk, importState.images, importState.markdown!);
-        setImportState({
-          ...importState,
-          imageUploadResult: imageResult,
-        });
-      }
+      if (!importState?.images) return;
+      const imageResult =
+        importState.source === DocumentSource.GoogleDrivePicker
+          ? await processImagesFromGoogleDrive(sdk, importState.images, importState.markdown!)
+          : await processImages(sdk, importState.images);
+
+      setImportState({
+        ...importState,
+        imageUploadResult: imageResult,
+      });
     };
 
     handleImages();
   }, [importState?.images]);
 
   useEffect(() => {
-    const handleImageProcessResult = async () => {
-      if (importState?.imageUploadResult) {
-        // Image failure from pasted google document
-        if (!importState!.imageUploadResult.success && importState!.source === DocumentSource.Paste && importState!.isGoogleDoc) {
-          // Display modal sugesting they select the file from Google Drive
-          setModalShown(true);
-        }
-        // Image failure that isn't able to be corrected
-        else if (!importState!.imageUploadResult.success) {
-          handleImageFailure();
-        } // success
-        else {
-          applyFieldChanges(importState!.richText!);
-        }
-      }
-    };
+    if (!importState?.imageUploadResult) return;
 
-    handleImageProcessResult();
+    // Image failure from pasted google document
+    if (!importState!.imageUploadResult.success && importState!.source === DocumentSource.GoogleDocPaste) {
+      // Display modal sugesting they select the file from Google Drive
+      setIsGoogleAuthModalShown(true);
+    } // Image failure that isn't able to be corrected
+    else if (!importState!.imageUploadResult.success) {
+      handleImageFailure();
+    } // success
+    else {
+      applyFieldChanges(importState!.richText!);
+    }
   }, [importState?.imageUploadResult]);
+
+  function initializeImportState(source: DocumentSource, html: string, markdown?: string) {
+    setImportState((prevState) => ({
+      ...prevState,
+      source,
+      html,
+      markdown,
+    }));
+  }
+
+  function setLoadingState() {
+    clearImportingState();
+    setIsOpen(false);
+    setIsGoogleAuthModalShown(false);
+    setIsImporting(true);
+  }
 
   function clearImportingState() {
     setIsImporting(false);
@@ -265,7 +297,7 @@ const Field = () => {
   }
 
   function onDeclineGoogleDrivePicker() {
-    setModalShown(false);
+    setIsGoogleAuthModalShown(false);
     handleImageFailure();
   }
 
@@ -312,7 +344,7 @@ const Field = () => {
       }}>
       <span className={styles.iconButtonContainer}>
         <img src={googleDriveLogo} className={styles.iconImage} alt="Google Drive" />
-        Choose from Drive
+        Choose from Google Drive
       </span>
     </Button>
   );
@@ -325,16 +357,14 @@ const Field = () => {
         </Button>
       </Popover.Trigger>
       <Popover.Content>
-        <Box padding="spacingM">
+        <Box padding="spacingXs">
           <Flex flexDirection="column" gap="spacingS" justifyContent="start" alignItems="start">
-            <div>
-              <Flex flexDirection="row" gap="spacing2Xs" justifyContent="center" alignItems="start">
-                <TextInput className={styles.importTextInput} ref={inputRef} autoFocus placeholder="Paste HTML or Google doc" />
-                <Tooltip placement="top" id="tooltip-1" content="Ctrl+V / ⌘V or right click & paste">
-                  <HelpCircleIcon size="tiny" />
-                </Tooltip>
-              </Flex>
+            <div style={{ alignSelf: 'end', marginBottom: '-10px' }}>
+              <Tooltip placement="top" id="tooltip-1" content="Ctrl+V / ⌘V or right click & paste">
+                <HelpCircleIcon size="tiny" />
+              </Tooltip>
             </div>
+            <TextInput className={styles.importTextInput} ref={inputRef} autoFocus placeholder="Paste HTML, Google, or Word Doc" />
             <div className={styles.hrWithText}>
               <hr className={styles.hrLine} />
               <span className={styles.orText}>or</span>
@@ -386,7 +416,7 @@ const Field = () => {
   );
 
   const authPromptModal = (
-    <Modal onClose={() => onDeclineGoogleDrivePicker()} isShown={isModalShown} size={'fullscreen'}>
+    <Modal onClose={() => onDeclineGoogleDrivePicker()} isShown={isGoogleAuthModalShown} size={'fullscreen'}>
       {() => (
         <>
           <Modal.Header title="Unable To Retrieve Images" onClose={() => onDeclineGoogleDrivePicker()} />
@@ -402,11 +432,38 @@ const Field = () => {
     </Modal>
   );
 
+  const pasteInputErrorModal = (
+    <Modal onClose={() => setIsPasteInputErrorShown(false)} isShown={isPasteInputErrorShown} size={'fullscreen'}>
+      {() => (
+        <>
+          <Modal.Header title="It Looks Like You Pasted a Link" onClose={() => setIsPasteInputErrorShown(false)} />
+          <Modal.Content>
+            Oops! It looks like you pasted a link instead of the document content. Please copy and paste the actual content from your Google, Word, or HTML
+            document.
+            <Flex justifyContent="center" alignItems="center" className={styles.hintRow}>
+              <Image alt="Green checkmark" height="50px" width="auto" src={greenCheckImage} className={styles.hintIcon} />
+              <Image alt="Selected content from Google Doc" height="auto" width="400px" src={contentImage} />
+            </Flex>
+            <Flex justifyContent="center" alignItems="center" className={styles.hintSecondRow}>
+              <Image alt="Red X" height="50px" width="auto" src={redXImage} className={styles.hintIcon} />
+              <Image alt="Import by Url is not supported" height="auto" width="400px" src={urlImage} />
+            </Flex>
+          </Modal.Content>
+          <Modal.Controls>
+            <Button size="small" variant="transparent" onClick={() => setIsPasteInputErrorShown(false)}>
+              Close
+            </Button>
+          </Modal.Controls>
+        </>
+      )}
+    </Modal>
+  );
   return (
     <div className={styles.layoutStyle}>
       <GlobalStyles />
       {isLicenseLimitBreached ? licenseLimitBreached : tabs}
       {authPromptModal}
+      {pasteInputErrorModal}
     </div>
   );
 };
