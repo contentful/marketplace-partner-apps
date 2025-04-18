@@ -3,7 +3,6 @@ import { Heading, Box, Paragraph, Autocomplete, Flex, Checkbox, Pill } from '@co
 import tokens from '@contentful/f36-tokens';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ContentTypeProps, EditorInterfaceProps } from 'contentful-management';
 
 const JsonFieldType = 'Object';
 const AppWidgetNamespace = 'app';
