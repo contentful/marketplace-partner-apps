@@ -32,7 +32,8 @@ async function getJsonFields(cma: CMAClient, appDefinitionId: string): Promise<a
         contentTypeName: contentType.name,
         fieldId: jsonField.id,
         fieldName: jsonField.name,
-        isEnabled: control!.widgetId === appDefinitionId,
+        isEnabled: !!control && control.widgetId === appDefinitionId,
+        originalEnabled: !!control && control.widgetId === appDefinitionId,
       });
     }
   }
@@ -59,10 +60,7 @@ const ConfigScreen = () => {
   const [jsonFields, setJsonFields] = useState<any[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
   const [jsonFieldsLoaded, setJsonFieldsLoaded] = useState<boolean>(false);
-  //   const interfaceUpdatesRef = useRef<Array<any>>([]);
   const installTriggeredRef = useRef(false);
-
-  const editorInterfaceMapRef = useRef<{ [key: string]: EditorInterfaceProps }>({});
   const jsonFieldsRef = useRef<any[]>([]);
   const items = useMemo(
     () =>
@@ -80,31 +78,12 @@ const ConfigScreen = () => {
   type JsonField = {
     contentTypeId: string;
     fieldId: string;
+    fieldName: string;
+    contentTypeName: string;
     isEnabled: boolean;
+    originalEnabled: boolean;
   };
 
-  function buildTargetStateFromJsonFields(appId: string) {
-    const EditorInterface: Record<string, { controls: { fieldId: string; widgetId: string; widgetNamespace: string }[] }> = {};
-
-    for (const field of jsonFieldsRef.current) {
-      const { contentTypeId, fieldId, isEnabled } = field;
-
-      // ✅ Only include fields that are explicitly enabled
-      if (!isEnabled) continue;
-
-      if (!EditorInterface[contentTypeId]) {
-        EditorInterface[contentTypeId] = { controls: [] };
-      }
-
-      EditorInterface[contentTypeId].controls.push({
-        fieldId,
-        widgetId: appId,
-        widgetNamespace: 'app',
-      });
-    }
-
-    return { EditorInterface };
-  }
   const onConfigure = useCallback(async () => {
     installTriggeredRef.current = true;
     return {
@@ -116,25 +95,37 @@ const ConfigScreen = () => {
     sdk.app.onConfigurationCompleted(async () => {
       if (!installTriggeredRef.current) return;
 
+      const fieldsByContentType: Record<string, JsonField[]> = {};
+
       for (const field of jsonFieldsRef.current) {
-        if (!field.isEnabled) continue;
+        if (!fieldsByContentType[field.contentTypeId]) {
+          fieldsByContentType[field.contentTypeId] = [];
+        }
+        fieldsByContentType[field.contentTypeId].push(field);
+      }
 
-        const { contentTypeId, fieldId } = field;
-
+      for (const [contentTypeId, allFields] of Object.entries(fieldsByContentType)) {
         const editorInterface = await sdk.cma.editorInterface.get({ contentTypeId });
 
-        const existingControl = editorInterface.controls?.find((c) => c.fieldId === fieldId);
-        if (existingControl) {
-          existingControl.widgetId = sdk.ids.app;
-          existingControl.widgetNamespace = 'app';
-        } else {
-          editorInterface.controls!.push({
-            fieldId,
-            widgetId: sdk.ids.app,
-            widgetNamespace: 'app',
-          });
-        }
-        console.log({ editorInterface });
+        // Remove any controls for fields we're managing (full list)
+        const managedFieldIds = new Set(allFields.map((f) => f.fieldId));
+        const baseControls = (editorInterface.controls || []).filter((c) => !managedFieldIds.has(c.fieldId));
+
+        // Add current desired state for all fields
+        const updatedControls = [
+          ...baseControls,
+          ...allFields.map((field) => ({
+            fieldId: field.fieldId,
+            widgetId: field.isEnabled ? sdk.ids.app : 'objectEditor',
+            widgetNamespace: field.isEnabled ? 'app' : 'builtin',
+          })),
+        ];
+
+        // Final sanity check
+        editorInterface.controls = updatedControls.filter((c) => c.fieldId && c.widgetId && c.widgetNamespace);
+
+        console.log(`🛠 Final controls for ${contentTypeId}:`, editorInterface.controls);
+
         await sdk.cma.editorInterface.update(
           {
             spaceId: sdk.ids.space,
@@ -144,6 +135,18 @@ const ConfigScreen = () => {
           editorInterface
         );
       }
+
+      // Sync original state
+      setJsonFields((prev) =>
+        prev.map((f) => ({
+          ...f,
+          originalEnabled: f.isEnabled,
+        }))
+      );
+      jsonFieldsRef.current = jsonFieldsRef.current.map((f) => ({
+        ...f,
+        originalEnabled: f.isEnabled,
+      }));
 
       installTriggeredRef.current = false;
     });
@@ -183,44 +186,8 @@ const ConfigScreen = () => {
     });
   }
 
-  async function setFieldAppearance(sdk: ConfigAppSDK, contentTypeId: string, fieldId: string) {
-    lock.acquire(contentTypeId, async function () {
-      const appWidgetId = sdk.ids.app;
-      const fetchedInterface = await sdk.cma.editorInterface.get({ contentTypeId });
-      const cloned = cloneDeep(fetchedInterface) as any;
-      editorInterfaceMapRef.current[contentTypeId] = cloned;
-
-      const control = editorInterfaceMapRef.current[contentTypeId].controls!.find((c) => c.fieldId === fieldId)!;
-      control.widgetId = appWidgetId;
-      control.widgetNamespace = AppWidgetNamespace;
-      console.log('current ref', editorInterfaceMapRef.current[contentTypeId]);
-      // editorInterface = ensureValidControlArray(editorInterface, fieldId, appWidgetId, AppWidgetNamespace);
-
-      updateJsonField(contentTypeId, fieldId, { isEnabled: true });
-    });
-  }
-
-  async function resetFieldAppearance(sdk: ConfigAppSDK, contentTypeId: string, fieldId: string) {
-    lock.acquire(contentTypeId, async function () {
-      // let editorInterface = editorInterfaceMapRef.current[contentTypeId];
-      // if (!editorInterface) {
-      //   editorInterface = await sdk.cma.editorInterface.get({ contentTypeId });
-      //   editorInterfaceMapRef.current[contentTypeId] = editorInterface;
-      // }
-      //   ensureValidControlArray(editorInterface, fieldId, DefaultWidgetId, BuiltinWidgetNamespace);
-
-      updateJsonField(contentTypeId, fieldId, { isEnabled: false });
-    });
-  }
-
   async function handleSelectItem(item: { name: string; id: string; isChecked: boolean; contentTypeId: string }) {
     updateJsonField(item.contentTypeId, item.id, { isEnabled: !item.isChecked });
-
-    if (item.isChecked) {
-      await resetFieldAppearance(sdk, item.contentTypeId, item.id);
-    } else {
-      await setFieldAppearance(sdk, item.contentTypeId, item.id);
-    }
   }
 
   return (
