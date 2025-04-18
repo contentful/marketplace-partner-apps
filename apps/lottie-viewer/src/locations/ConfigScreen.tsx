@@ -2,18 +2,20 @@ import { AppState, ConfigAppSDK } from '@contentful/app-sdk';
 import { Heading, Box, Paragraph, List, Note, TextLink, Autocomplete, Flex, Checkbox, Pill } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
 import { useSDK } from '@contentful/react-apps-toolkit';
-import { ContentTypeProps } from 'contentful-management';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { ContentTypeProps, EditorInterface, EditorInterfaceProps } from 'contentful-management';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import css from '@emotion/css';
 // import { getRichTextFields, setAppRichTextEditor, setDefaultRichTextEditor } from '../utils';
 import { CMAClient } from '@contentful/app-sdk';
 // import { RtfField } from '../types';
 import AsyncLock from 'async-lock';
+import cloneDeep from 'lodash/clonedeep';
+
 const lock = new AsyncLock();
 
 const JsonFieldType = 'Object';
 const AppWidgetNamespace = 'app';
-const BuiltinWidgetNamesspace = 'builtin';
+const BuiltinWidgetNamespace = 'builtin';
 const DefaultWidgetId = 'objectEditor';
 
 async function getJsonFields(cma: CMAClient, appDefinitionId: string): Promise<any[]> {
@@ -57,7 +59,11 @@ const ConfigScreen = () => {
   const [jsonFields, setJsonFields] = useState<any[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
   const [jsonFieldsLoaded, setJsonFieldsLoaded] = useState<boolean>(false);
-  const [interfaceUpdates, setInterfaceUpdates] = useState<any[]>([]);
+  //   const interfaceUpdatesRef = useRef<Array<any>>([]);
+  const installTriggeredRef = useRef(false);
+
+  const editorInterfaceMapRef = useRef<{ [key: string]: EditorInterfaceProps }>({});
+  const jsonFieldsRef = useRef<any[]>([]);
   const items = useMemo(
     () =>
       jsonFields.map((field) => ({
@@ -69,23 +75,79 @@ const ConfigScreen = () => {
     [jsonFields]
   );
 
-  console.log({ interfaceUpdates });
-
   const sdk = useSDK<ConfigAppSDK>();
 
-  const onConfigure = useCallback(async () => {
-    console.log('on configure', interfaceUpdates);
-    const currentState = await sdk.app.getCurrentState();
-    await sdk.cma.editorInterface.update(interfaceUpdates[0].params, interfaceUpdates[0].updatedInterface);
-    // interfaceUpdates.forEach(async (i) => await sdk.cma.editorInterface.update(i.params, i.updatedInterface));
-    console.log('on configure 2');
+  type JsonField = {
+    contentTypeId: string;
+    fieldId: string;
+    isEnabled: boolean;
+  };
 
+  function buildTargetStateFromJsonFields(appId: string) {
+    const EditorInterface: Record<string, { controls: { fieldId: string; widgetId: string; widgetNamespace: string }[] }> = {};
+
+    for (const field of jsonFieldsRef.current) {
+      const { contentTypeId, fieldId, isEnabled } = field;
+
+      // ✅ Only include fields that are explicitly enabled
+      if (!isEnabled) continue;
+
+      if (!EditorInterface[contentTypeId]) {
+        EditorInterface[contentTypeId] = { controls: [] };
+      }
+
+      EditorInterface[contentTypeId].controls.push({
+        fieldId,
+        widgetId: appId,
+        widgetNamespace: 'app',
+      });
+    }
+
+    return { EditorInterface };
+  }
+  const onConfigure = useCallback(async () => {
+    installTriggeredRef.current = true;
     return {
       parameters,
-      targetState: currentState,
     };
-  }, [parameters, sdk]);
+  }, [parameters]);
 
+  useEffect(() => {
+    sdk.app.onConfigurationCompleted(async () => {
+      if (!installTriggeredRef.current) return;
+
+      for (const field of jsonFieldsRef.current) {
+        if (!field.isEnabled) continue;
+
+        const { contentTypeId, fieldId } = field;
+
+        const editorInterface = await sdk.cma.editorInterface.get({ contentTypeId });
+
+        const existingControl = editorInterface.controls?.find((c) => c.fieldId === fieldId);
+        if (existingControl) {
+          existingControl.widgetId = sdk.ids.app;
+          existingControl.widgetNamespace = 'app';
+        } else {
+          editorInterface.controls!.push({
+            fieldId,
+            widgetId: sdk.ids.app,
+            widgetNamespace: 'app',
+          });
+        }
+        console.log({ editorInterface });
+        await sdk.cma.editorInterface.update(
+          {
+            spaceId: sdk.ids.space,
+            environmentId: sdk.ids.environment,
+            contentTypeId,
+          },
+          editorInterface
+        );
+      }
+
+      installTriggeredRef.current = false;
+    });
+  }, []);
   useEffect(() => {
     sdk.app.onConfigure(() => onConfigure());
   }, [sdk, onConfigure]);
@@ -98,66 +160,56 @@ const ConfigScreen = () => {
         setParameters(currentParameters);
       }
       sdk.app.setReady();
+      const appDefinition = await sdk.cma.appDefinition.get({
+        appDefinitionId: sdk.ids.app,
+      });
 
       const fields = await getJsonFields(sdk.cma, sdk.ids.app);
       setJsonFields(fields);
+      jsonFieldsRef.current = fields;
       setJsonFieldsLoaded(true);
     })();
   }, [sdk]);
 
   function updateJsonField(targetContentTypeId: string, targetFieldId: string, updatedProperties: Partial<any>) {
-    setJsonFields((prevFields) =>
-      prevFields.map((field) => (field.contentTypeId === targetContentTypeId && field.fieldId === targetFieldId ? { ...field, ...updatedProperties } : field))
-    );
+    setJsonFields((prevFields) => {
+      const updated = prevFields.map((field) =>
+        field.contentTypeId === targetContentTypeId && field.fieldId === targetFieldId ? { ...field, ...updatedProperties } : field
+      );
+
+      jsonFieldsRef.current = updated;
+
+      return updated;
+    });
   }
 
   async function setFieldAppearance(sdk: ConfigAppSDK, contentTypeId: string, fieldId: string) {
     lock.acquire(contentTypeId, async function () {
       const appWidgetId = sdk.ids.app;
-      const editorInterface = await sdk.cma.editorInterface.get({ contentTypeId: contentTypeId });
-      const control = editorInterface.controls!.find((w) => w.fieldId === fieldId)!;
+      const fetchedInterface = await sdk.cma.editorInterface.get({ contentTypeId });
+      const cloned = cloneDeep(fetchedInterface) as any;
+      editorInterfaceMapRef.current[contentTypeId] = cloned;
+
+      const control = editorInterfaceMapRef.current[contentTypeId].controls!.find((c) => c.fieldId === fieldId)!;
       control.widgetId = appWidgetId;
       control.widgetNamespace = AppWidgetNamespace;
-      console.log({ editorInterface });
-      setInterfaceUpdates((prev) => [
-        ...prev,
-        { updatedInterface: editorInterface, params: { spaceId: sdk.ids.space, environmentId: sdk.ids.environment, contentTypeId: contentTypeId } },
-      ]);
+      console.log('current ref', editorInterfaceMapRef.current[contentTypeId]);
+      // editorInterface = ensureValidControlArray(editorInterface, fieldId, appWidgetId, AppWidgetNamespace);
 
-      //   return editorInterface;
-      console.log('set appearance', { editorInterface });
-
-      await sdk.cma.editorInterface.update(
-        {
-          spaceId: sdk.ids.space,
-          environmentId: sdk.ids.environment,
-          contentTypeId: contentTypeId,
-        },
-        editorInterface
-      );
+      updateJsonField(contentTypeId, fieldId, { isEnabled: true });
     });
   }
 
   async function resetFieldAppearance(sdk: ConfigAppSDK, contentTypeId: string, fieldId: string) {
     lock.acquire(contentTypeId, async function () {
-      const editorInterface = await sdk.cma.editorInterface.get({ contentTypeId: contentTypeId });
-      const control = editorInterface.controls!.find((w) => w.fieldId === fieldId)!;
-      control.widgetId = DefaultWidgetId;
-      control.widgetNamespace = BuiltinWidgetNamesspace;
-      console.log({ editorInterface });
-      setInterfaceUpdates((prev) => [
-        ...prev,
-        { updatedInterface: editorInterface, params: { spaceId: sdk.ids.space, environmentId: sdk.ids.environment, contentTypeId: contentTypeId } },
-      ]);
-      //   await sdk.cma.editorInterface.update(
-      //     {
-      //       spaceId: sdk.ids.space,
-      //       environmentId: sdk.ids.environment,
-      //       contentTypeId: contentTypeId,
-      //     },
-      //     editorInterface
-      //   );
-      return editorInterface;
+      // let editorInterface = editorInterfaceMapRef.current[contentTypeId];
+      // if (!editorInterface) {
+      //   editorInterface = await sdk.cma.editorInterface.get({ contentTypeId });
+      //   editorInterfaceMapRef.current[contentTypeId] = editorInterface;
+      // }
+      //   ensureValidControlArray(editorInterface, fieldId, DefaultWidgetId, BuiltinWidgetNamespace);
+
+      updateJsonField(contentTypeId, fieldId, { isEnabled: false });
     });
   }
 
