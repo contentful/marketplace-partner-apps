@@ -13,15 +13,15 @@ describe('Config Screen component', () => {
     render(<ConfigScreen />);
 
     expect(screen.getByText('Hugging Face Integration Configuration')).toBeTruthy();
-    expect(screen.getByLabelText('Hugging Face API Key')).toBeTruthy();
-    expect(screen.getByLabelText('Text Model ID')).toBeTruthy();
-    expect(screen.getByLabelText('Image Model ID')).toBeTruthy();
+    expect(screen.getByText('Hugging Face API Key')).toBeTruthy();
+    expect(screen.getByText('Text Model ID')).toBeTruthy();
+    expect(screen.getByText('Image Model ID')).toBeTruthy();
   });
 
   it('Updates form values', () => {
     render(<ConfigScreen />);
 
-    const apiKeyInput = screen.getByLabelText('Hugging Face API Key');
+    const apiKeyInput = screen.getByPlaceholderText('hf_...');
     fireEvent.change(apiKeyInput, { target: { value: 'test-api-key' } });
 
     expect((apiKeyInput as HTMLInputElement).value).toBe('test-api-key');

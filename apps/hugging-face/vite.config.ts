@@ -8,6 +8,8 @@ export default defineConfig(() => ({
   },
   plugins: [react()],
   test: {
-    environment: 'happy-dom',
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './test/setup.ts',
   },
 }));
