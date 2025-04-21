@@ -14,12 +14,12 @@ export async function refinePrompt(prompt: string, parameters: AppInstallationPa
     const chatCompletion = await client.chatCompletion({
       model: parameters.textModelId,
       messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: prompt }
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content: prompt },
       ],
       temperature: 0.5,
       max_tokens: 2048,
-      top_p: 0.7
+      top_p: 0.7,
     });
 
     if (!chatCompletion.choices[0].message.content) {
@@ -31,4 +31,4 @@ export async function refinePrompt(prompt: string, parameters: AppInstallationPa
     console.error('Error refining prompt:', error);
     throw new Error('Failed to refine prompt with text model');
   }
-} 
+}

@@ -1,10 +1,6 @@
 import { AppInstallationParameters } from '../locations/ConfigScreen';
 
-export async function generateImage(
-  prompt: string,
-  parameters: AppInstallationParameters,
-  refinedPrompt?: string
-): Promise<Blob> {
+export async function generateImage(prompt: string, parameters: AppInstallationParameters, refinedPrompt?: string): Promise<Blob> {
   if (!parameters.huggingfaceApiKey || !parameters.imageModelId) {
     throw new Error('Missing API key or model ID configuration');
   }
@@ -26,4 +22,4 @@ export async function generateImage(
   }
 
   return response.blob();
-} 
+}

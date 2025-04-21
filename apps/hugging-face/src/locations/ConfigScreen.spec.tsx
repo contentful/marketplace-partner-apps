@@ -11,7 +11,7 @@ vi.mock('@contentful/react-apps-toolkit', () => ({
 describe('Config Screen component', () => {
   it('Renders configuration form', () => {
     render(<ConfigScreen />);
-    
+
     expect(screen.getByText('Hugging Face Integration Configuration')).toBeTruthy();
     expect(screen.getByLabelText('Hugging Face API Key')).toBeTruthy();
     expect(screen.getByLabelText('Text Model ID')).toBeTruthy();
@@ -20,10 +20,10 @@ describe('Config Screen component', () => {
 
   it('Updates form values', () => {
     render(<ConfigScreen />);
-    
+
     const apiKeyInput = screen.getByLabelText('Hugging Face API Key');
     fireEvent.change(apiKeyInput, { target: { value: 'test-api-key' } });
-    
+
     expect((apiKeyInput as HTMLInputElement).value).toBe('test-api-key');
   });
 });

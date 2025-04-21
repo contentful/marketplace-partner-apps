@@ -1,19 +1,8 @@
 import { PageAppSDK } from '@contentful/app-sdk';
-import { 
-  Grid,
-  Form,
-  FormControl,
-  Textarea,
-  Button,
-  Flex,
-  Heading,
-  Paragraph,
-  Stack,
-  Note
-} from '@contentful/f36-components';
+import { Grid, Form, FormControl, Textarea, Button, Flex, Heading, Paragraph, Stack, Note } from '@contentful/f36-components';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { useState, useEffect } from 'react';
-import { css } from 'emotion';
+import css from '@emotion/css';
 import { generateImage } from '../services/huggingfaceImage';
 import { refinePrompt } from '../services/huggingfaceText';
 
@@ -105,7 +94,7 @@ const Page = () => {
 
     setIsUploading(true);
     setError(null);
-    
+
     try {
       const response = await fetch(generatedImage);
       const blob = await response.blob();
@@ -118,36 +107,29 @@ const Page = () => {
         {
           fields: {
             title: {
-              'en-US': 'AI Generated Image'
+              'en-US': 'AI Generated Image',
             },
             description: {
-              'en-US': `Generated from prompt: ${initialPrompt}`
+              'en-US': `Generated from prompt: ${initialPrompt}`,
             },
             file: {
               'en-US': {
                 contentType: 'image/png',
                 fileName: 'ai-generated-image.png',
                 uploadFrom: {
-                  sys: { type: 'Link', linkType: 'Upload', id: upload.sys.id }
-                }
-              }
-            }
-          }
+                  sys: { type: 'Link', linkType: 'Upload', id: upload.sys.id },
+                },
+              },
+            },
+          },
         }
       );
-
-      asset = await sdk.cma.asset.processForLocale(
-        { spaceId: sdk.ids.space, assetId: asset.sys.id, version: asset.sys.version },
-        asset,
-        'en-US'
-      );
-      asset = await sdk.cma.asset.publish(
-        { spaceId: sdk.ids.space, assetId: asset.sys.id, version: asset.sys.version },
-        asset
-      );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      asset = await sdk.cma.asset.processForLocale({ spaceId: sdk.ids.space, assetId: asset.sys.id, version: asset.sys.version } as any, asset, 'en-US');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await sdk.cma.asset.publish({ spaceId: sdk.ids.space, assetId: asset.sys.id, version: asset.sys.version } as any, asset);
 
       sdk.notifier.success('Asset successfully uploaded and published');
-      
     } catch (error) {
       console.error('Error uploading asset:', error);
       setError(error instanceof Error ? error.message : 'Failed to upload asset');
@@ -158,12 +140,7 @@ const Page = () => {
   };
 
   return (
-    <Grid
-      padding="spacingXl"
-      columns="1fr"
-      rowGap="spacingXl"
-      style={{ maxWidth: '1200px', margin: '0 auto' }}
-    >
+    <Grid padding="spacingXl" columns="1fr" rowGap="spacingXl" style={{ maxWidth: '1200px', margin: '0 auto' }}>
       {/* Header Section */}
       <Grid.Item>
         <Stack spacing="spacingM">
@@ -187,9 +164,7 @@ const Page = () => {
                 rows={4}
                 resize="vertical"
               />
-              <FormControl.HelpText>
-                Be descriptive but concise. You can either refine your prompt first or generate an image directly.
-              </FormControl.HelpText>
+              <FormControl.HelpText>Be descriptive but concise. You can either refine your prompt first or generate an image directly.</FormControl.HelpText>
             </FormControl>
 
             {refinedPrompt && (
@@ -203,27 +178,15 @@ const Page = () => {
                   rows={4}
                   resize="vertical"
                 />
-                <FormControl.HelpText>
-                  This is the AI-optimized version of your prompt. You can edit it further if needed.
-                </FormControl.HelpText>
+                <FormControl.HelpText>This is the AI-optimized version of your prompt. You can edit it further if needed.</FormControl.HelpText>
               </FormControl>
             )}
 
             <Flex flexDirection="column" gap="spacingS">
-              <Button
-                variant="secondary"
-                onClick={handleRefinePrompt}
-                isDisabled={!initialPrompt.trim() || isRefining || isGenerating}
-                isLoading={isRefining}
-              >
+              <Button variant="secondary" onClick={handleRefinePrompt} isDisabled={!initialPrompt.trim() || isRefining || isGenerating} isLoading={isRefining}>
                 {isRefining ? 'Refining Prompt...' : 'Refine Prompt'}
               </Button>
-              <Button
-                variant="primary"
-                onClick={handleGenerateImage}
-                isDisabled={!initialPrompt.trim() || isGenerating}
-                isLoading={isGenerating}
-              >
+              <Button variant="primary" onClick={handleGenerateImage} isDisabled={!initialPrompt.trim() || isGenerating} isLoading={isGenerating}>
                 {isGenerating ? 'Generating Image...' : 'Generate Image'}
               </Button>
             </Flex>
@@ -235,19 +198,15 @@ const Page = () => {
       <Grid.Item>
         {isTimerActive && (
           <>
-            <Note variant="primary" className={css({ margin: '24px 0' })}>
+            <Note variant="primary" className={`${css({ margin: '24px 0' })}`}>
               Some models take ~60 seconds for image generation.
-           </Note>
-           <Note variant="premium" className={css({ margin: '24px 0' })}>
-             Timer: {timer} seconds
-           </Note>
+            </Note>
+            <Note variant="premium" className={`${css({ margin: '24px 0' })}`}>
+              Timer: {timer} seconds
+            </Note>
           </>
         )}
-        {error && (
-          <Note variant="negative">
-            {error}
-          </Note>
-        )}
+        {error && <Note variant="negative">{error}</Note>}
 
         {generatedImage && (
           <Grid columns="2fr 1fr" columnGap="spacingM" style={{ width: '100%' }}>
@@ -256,20 +215,10 @@ const Page = () => {
             </Grid.Item>
             <Grid.Item>
               <Stack spacing="spacingM">
-                <Button
-                  variant="secondary"
-                  onClick={handleGenerateImage}
-                  isDisabled={isGenerating}
-                  isLoading={isGenerating}
-                >
+                <Button variant="secondary" onClick={handleGenerateImage} isDisabled={isGenerating} isLoading={isGenerating}>
                   Regenerate Image
                 </Button>
-                <Button
-                  variant="positive"
-                  onClick={handleUploadAsset}
-                  isDisabled={isUploading}
-                  isLoading={isUploading}
-                >
+                <Button variant="positive" onClick={handleUploadAsset} isDisabled={isUploading} isLoading={isUploading}>
                   Upload to Assets
                 </Button>
               </Stack>

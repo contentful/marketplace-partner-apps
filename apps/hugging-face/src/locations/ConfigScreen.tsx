@@ -1,17 +1,7 @@
 import { ConfigAppSDK } from '@contentful/app-sdk';
-import { 
-  Flex, 
-  Form, 
-  FormControl,
-  TextInput,
-  Heading, 
-  Paragraph,
-  Note,
-  Box,
-  MenuDivider
-} from '@contentful/f36-components';
+import { Flex, Form, FormControl, TextInput, Heading, Paragraph, Box, MenuDivider } from '@contentful/f36-components';
 import { useSDK } from '@contentful/react-apps-toolkit';
-import { css } from 'emotion';
+import css from '@emotion/css';
 import { useCallback, useEffect, useState } from 'react';
 
 export interface AppInstallationParameters {
@@ -24,17 +14,13 @@ const ConfigScreen = () => {
   const [parameters, setParameters] = useState<AppInstallationParameters>({
     huggingfaceApiKey: '',
     textModelId: 'meta-llama/Llama-3.2-3B-Instruct',
-    imageModelId: 'black-forest-labs/FLUX.1-dev'
+    imageModelId: 'black-forest-labs/FLUX.1-dev',
   });
   const sdk = useSDK<ConfigAppSDK>();
 
   const onConfigure = useCallback(async () => {
     // Validate the form
-    const valid = Boolean(
-      parameters.huggingfaceApiKey &&
-      parameters.textModelId &&
-      parameters.imageModelId
-    );
+    const valid = Boolean(parameters.huggingfaceApiKey && parameters.textModelId && parameters.imageModelId);
 
     if (!valid) return false;
 
@@ -60,32 +46,28 @@ const ConfigScreen = () => {
     })();
   }, [sdk]);
 
-  const handleChange = (key: keyof AppInstallationParameters) => (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleChange = (key: keyof AppInstallationParameters) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setParameters((prev) => ({
       ...prev,
       [key]: e.target.value,
     }));
   };
 
+  const containerStyles = css({
+    minHeight: '100vh',
+    padding: '24px',
+  });
+
+  const boxStyles = css({
+    width: '800px',
+    padding: '40px',
+    border: '1px solid #DCDCDC',
+    borderRadius: '8px',
+  });
+
   return (
-    <Flex
-      justifyContent="center"
-      alignItems="center"
-      className={css({ 
-        minHeight: '100vh',
-        padding: '24px'
-      })}
-    >
-      <Box
-        className={css({
-          width: '800px',
-          padding: '40px',
-          border: '1px solid #DCDCDC',
-          borderRadius: '8px',
-        })}
-      >
+    <Flex justifyContent="center" alignItems="center" className={`${containerStyles}`}>
+      <Box className={`${boxStyles}`}>
         <Form>
           <Heading>Hugging Face Integration Configuration</Heading>
           <Paragraph>Configure your Hugging Face API settings to enable AI image generation.</Paragraph>
@@ -102,14 +84,13 @@ const ConfigScreen = () => {
               placeholder="hf_..."
             />
             <FormControl.HelpText>
-              You can find this in your Hugging Face account settings. Your API key will be stored securely in Contentful. Never share or expose your API key in client-side code.
+              You can find this in your Hugging Face account settings. Your API key will be stored securely in Contentful. Never share or expose your API key in
+              client-side code.
             </FormControl.HelpText>
           </FormControl>
 
-          <Heading marginBottom='none'>Model Requirements</Heading>
-          <Paragraph marginBottom='spacingM'>
-            The selected models must be available on the Hugging Face Inference API to work with this integration.
-          </Paragraph>
+          <Heading marginBottom="none">Model Requirements</Heading>
+          <Paragraph marginBottom="spacingM">The selected models must be available on the Hugging Face Inference API to work with this integration.</Paragraph>
 
           <FormControl isRequired marginBottom="spacingM">
             <FormControl.Label>Text Model ID</FormControl.Label>
@@ -119,9 +100,7 @@ const ConfigScreen = () => {
               onChange={handleChange('textModelId')}
               placeholder="meta-llama/Llama-3.2-3B-Instruct"
             />
-            <FormControl.HelpText>
-              Enter the Hugging Face model ID for text processing. (Must be a Text Generation model)
-            </FormControl.HelpText>
+            <FormControl.HelpText>Enter the Hugging Face model ID for text processing. (Must be a Text Generation model)</FormControl.HelpText>
           </FormControl>
 
           <FormControl isRequired marginBottom="spacingM">
@@ -132,9 +111,7 @@ const ConfigScreen = () => {
               onChange={handleChange('imageModelId')}
               placeholder="black-forest-labs/FLUX.1-dev"
             />
-            <FormControl.HelpText>
-              Enter the Hugging Face model ID for image generation. (Must be a Text-to-Image model)
-            </FormControl.HelpText>
+            <FormControl.HelpText>Enter the Hugging Face model ID for image generation. (Must be a Text-to-Image model)</FormControl.HelpText>
           </FormControl>
         </Form>
       </Box>
