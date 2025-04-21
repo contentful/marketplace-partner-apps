@@ -29,7 +29,7 @@ const Page = () => {
 
     if (isTimerActive) {
       interval = setInterval(() => {
-        setTimer((prev) => prev + 1);
+        setTimer((prev: number) => prev + 1);
       }, 1000);
     }
 
@@ -158,7 +158,7 @@ const Page = () => {
               <Textarea
                 name="initialPrompt"
                 value={initialPrompt}
-                onChange={(e) => setInitialPrompt(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInitialPrompt(e.target.value)}
                 placeholder="e.g., A calm forest with a surreal glow"
                 isDisabled={isRefining || isGenerating}
                 rows={4}
@@ -173,7 +173,7 @@ const Page = () => {
                 <Textarea
                   name="refinedPrompt"
                   value={refinedPrompt}
-                  onChange={(e) => setRefinedPrompt(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setRefinedPrompt(e.target.value)}
                   isDisabled={isGenerating}
                   rows={4}
                   resize="vertical"
