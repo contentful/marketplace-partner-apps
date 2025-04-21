@@ -47,7 +47,7 @@ const ConfigScreen = () => {
   }, [sdk]);
 
   const handleChange = (key: keyof AppInstallationParameters) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setParameters((prev) => ({
+    setParameters((prev: AppInstallationParameters) => ({
       ...prev,
       [key]: e.target.value,
     }));
