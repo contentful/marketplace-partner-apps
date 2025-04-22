@@ -22,12 +22,23 @@ export const styles = {
     display: 'flex',
     flexWrap: 'wrap',
     gap: tokens.spacing2Xs,
-    marginTop: tokens.spacingS, // just a little extra space under the Autocomplete
+    marginTop: tokens.spacingS,
   }),
   heading: css({
     margin: 0,
   }),
   paragraph: css({
     marginTop: tokens.spacingS,
+  }),
+  textLink: css({
+    svg: {
+      width: '16px',
+      height: '16px',
+    },
+  }),
+  autocompleteMenu: css({
+    '&[data-test-id="cf-autocomplete"]': {
+      minWidth: '100%',
+    },
   }),
 };
