@@ -25,5 +25,6 @@
   "apps/docs-to-rich-text": "1.2.0",
   "apps/vwo-fme": "1.0.3",
   "apps/sfmc-studio": "1.2.1",
-  "apps/statsig": "1.1.2"
+  "apps/statsig": "1.1.2",
+  "apps/convox": "1.0.0"
 }
