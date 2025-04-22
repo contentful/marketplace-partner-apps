@@ -1,4 +1,4 @@
-import { AppInstallationParameters } from '../locations/ConfigScreen';
+import { AppInstallationParameters } from '../utils/types';
 
 export async function generateImage(prompt: string, parameters: AppInstallationParameters, refinedPrompt?: string): Promise<Blob> {
   if (!parameters.huggingfaceApiKey || !parameters.imageModelId) {

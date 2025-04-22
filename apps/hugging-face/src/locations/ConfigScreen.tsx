@@ -3,24 +3,20 @@ import { Flex, Form, FormControl, TextInput, Heading, Paragraph, Box, MenuDivide
 import { useSDK } from '@contentful/react-apps-toolkit';
 import css from '@emotion/css';
 import { useCallback, useEffect, useState } from 'react';
-
-export interface AppInstallationParameters {
-  huggingfaceApiKey?: string;
-  textModelId?: string;
-  imageModelId?: string;
-}
+import { AppInstallationParameters } from '../utils/types';
 
 const ConfigScreen = () => {
   const [parameters, setParameters] = useState<AppInstallationParameters>({
     huggingfaceApiKey: '',
     textModelId: 'meta-llama/Llama-3.2-3B-Instruct',
+    textModelInferenceProvider: 'hf-inference',
     imageModelId: 'black-forest-labs/FLUX.1-dev',
   });
   const sdk = useSDK<ConfigAppSDK>();
 
   const onConfigure = useCallback(async () => {
     // Validate the form
-    const valid = Boolean(parameters.huggingfaceApiKey && parameters.textModelId && parameters.imageModelId);
+    const valid = Boolean(parameters.huggingfaceApiKey && parameters.textModelId && parameters.imageModelId && parameters.textModelInferenceProvider);
 
     if (!valid) return false;
 
@@ -101,6 +97,17 @@ const ConfigScreen = () => {
               placeholder="meta-llama/Llama-3.2-3B-Instruct"
             />
             <FormControl.HelpText>Enter the Hugging Face model ID for text processing. (Must be a Text Generation model)</FormControl.HelpText>
+          </FormControl>
+
+          <FormControl isRequired marginBottom="spacingM">
+            <FormControl.Label>Text Model Inference Provider</FormControl.Label>
+            <TextInput
+              name="textModelInferenceProvider"
+              value={parameters.textModelInferenceProvider || ''}
+              onChange={handleChange('textModelInferenceProvider')}
+              placeholder="hf-inference"
+            />
+            <FormControl.HelpText>Enter the Inference Provider you wish to use with your text model</FormControl.HelpText>
           </FormControl>
 
           <FormControl isRequired marginBottom="spacingM">
