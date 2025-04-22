@@ -36,9 +36,15 @@ export const styles = {
       height: '16px',
     },
   }),
-  autocompleteMenu: css({
-    '&[data-test-id="cf-autocomplete"]': {
-      minWidth: '100%',
-    },
-  }),
+  //   autocompleteMenu: css({
+  //     '&[data-test-id="cf-autocomplete"]': {
+  //       minWidth: '100%',
+  //     },
+  //   }),
+  menu: (width?: number) =>
+    css({
+      width: width ? `${width}px` : 'auto',
+      boxSizing: 'border-box',
+      backgroundColor: 'orange',
+    }),
 };

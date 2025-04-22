@@ -2,7 +2,7 @@ import { ConfigAppSDK } from '@contentful/app-sdk';
 import { Heading, Box, Paragraph, Autocomplete, Flex, Checkbox, Pill, TextLink, FormLabel, Card, Text } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
 import { useSDK } from '@contentful/react-apps-toolkit';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { styles } from './Config.styles';
 import { ExternalLinkIcon } from '@contentful/f36-icons';
 
@@ -199,7 +199,6 @@ const ConfigScreen = () => {
         <FormLabel htmlFor="autocomplete">Select content type(s)</FormLabel>
         <Autocomplete
           id="autocomplete"
-          className={styles.autocompleteMenu}
           items={items}
           renderItem={(item) => (
             <Flex alignItems="center" gap={tokens.spacingXs} testId={`resource-autocomplete--${item.name}`}>
@@ -214,11 +213,10 @@ const ConfigScreen = () => {
           itemToString={(item) => item.name}
           textOnAfterSelect="preserve"
           closeAfterSelect={false}
-          isOpen={true}
           showEmptyList
+          listWidth="full"
           usePortal
         />
-
         <Flex className={styles.pillsRow}>
           {jsonFieldsLoaded &&
             items.filter((item) => item.isChecked).map((item) => <Pill key={item.name} label={item.name} onClose={() => handleSelectItem(item)} />)}
