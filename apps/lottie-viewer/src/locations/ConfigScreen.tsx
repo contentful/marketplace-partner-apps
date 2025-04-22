@@ -1,8 +1,9 @@
 import { ConfigAppSDK } from '@contentful/app-sdk';
-import { Heading, Box, Paragraph, Autocomplete, Flex, Checkbox, Pill } from '@contentful/f36-components';
+import { Heading, Box, Paragraph, Autocomplete, Flex, Checkbox, Pill, TextLink, FormLabel, Card } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { styles } from './Config.styles';
 
 const JsonFieldType = 'Object';
 const AppWidgetNamespace = 'app';
@@ -165,19 +166,32 @@ const ConfigScreen = () => {
       isEnabled: !item.isChecked,
     });
   }
-
   return (
-    <Flex>
-      <Box>
-        <Heading as="h2">Set up Lottie Preview</Heading>
-        <Paragraph>Preview your animation directly in your entry editor.</Paragraph>
-        <Heading as="h2">Add Lottie Preview to your field editor</Heading>
-        <Paragraph>
+    <Flex className={styles.wrapper}>
+      <Card className={styles.configCard}>
+        <Heading as="h2" className={styles.heading}>
+          Set up Lottie Preview
+        </Heading>
+        <Paragraph className={styles.paragraph}>Preview your animation directly in your entry editor.</Paragraph>
+
+        <hr className={styles.divider} />
+
+        <Heading as="h2" className={styles.heading}>
+          Add Lottie Preview to your field editor
+        </Heading>
+        <Paragraph className={styles.paragraph}>
           Choose the content type(s) and fields you want to use with Lottie Preview. You can change this anytime in the Fields tab of your content type. To
-          enable or disable Lottie Preview, click ‘Edit’ on the JSON Object field type and adjust the Appearance settings.
+          enable or disable Lottie Preview, click ‘Edit’ on the JSON Object field type and adjust the Appearance settings. Learn more about configuring your
+          content type{' '}
+          <TextLink href="https://www.contentful.com/help/content-types/configure-content-type/" target="_blank" rel="noopener noreferrer">
+            here
+          </TextLink>
+          .
         </Paragraph>
 
+        <FormLabel htmlFor="autocomplete">Select content type(s)</FormLabel>
         <Autocomplete
+          id="autocomplete"
           items={items}
           renderItem={(item) => (
             <Flex alignItems="center" gap={tokens.spacingXs} testId={`resource-autocomplete--${item.name}`}>
@@ -196,13 +210,51 @@ const ConfigScreen = () => {
           usePortal
         />
 
-        <Flex>
+        <Flex className={styles.pillsRow}>
           {jsonFieldsLoaded &&
             items.filter((item) => item.isChecked).map((item) => <Pill key={item.name} label={item.name} onClose={() => handleSelectItem(item)} />)}
         </Flex>
-      </Box>
+      </Card>
     </Flex>
   );
+
+  // return (
+  //   <Flex>
+  //     <Box>
+  //       <Heading as="h2">Set up Lottie Preview</Heading>
+  //       <Paragraph>Preview your animation directly in your entry editor.</Paragraph>
+  //       <Heading as="h2">Add Lottie Preview to your field editor</Heading>
+  //       <Paragraph>
+  //         Choose the content type(s) and fields you want to use with Lottie Preview. You can change this anytime in the Fields tab of your content type. To
+  //         enable or disable Lottie Preview, click ‘Edit’ on the JSON Object field type and adjust the Appearance settings.
+  //       </Paragraph>
+
+  //       <Autocomplete
+  //         items={items}
+  //         renderItem={(item) => (
+  //           <Flex alignItems="center" gap={tokens.spacingXs} testId={`resource-autocomplete--${item.name}`}>
+  //             <Checkbox value={item.id} id={item.id} isChecked={item.isChecked} isDisabled={false} onKeyDown={() => {}} />
+  //             {item.name}
+  //           </Flex>
+  //         )}
+  //         onInputValueChange={setInputValue}
+  //         onSelectItem={handleSelectItem}
+  //         //@ts-ignore
+  //         selectedItem={{ name: inputValue }}
+  //         itemToString={(item) => item.name}
+  //         textOnAfterSelect="preserve"
+  //         closeAfterSelect={false}
+  //         showEmptyList
+  //         usePortal
+  //       />
+
+  //       <Flex>
+  //         {jsonFieldsLoaded &&
+  //           items.filter((item) => item.isChecked).map((item) => <Pill key={item.name} label={item.name} onClose={() => handleSelectItem(item)} />)}
+  //       </Flex>
+  //     </Box>
+  //   </Flex>
+  // );
 };
 
 export default ConfigScreen;
