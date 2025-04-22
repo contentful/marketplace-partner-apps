@@ -1,7 +1,14 @@
 import { ConfigAppSDK } from '@contentful/app-sdk';
-import { ContentTypeProps } from 'contentful-management';
 
-export const JsonFieldType = 'Object';
+const JsonFieldType = 'Object';
+const AppWidgetNamespace = 'app';
+const DefaultWidgetId = 'objectEditor';
+
+interface Control {
+  fieldId: string;
+  widgetId?: string;
+  widgetNamespace?: string;
+}
 
 export interface JsonField {
   contentTypeId: string;
@@ -36,4 +43,29 @@ export async function getJsonFields(cma: ConfigAppSDK['cma'], appDefinitionId: s
     const typeCompare = a.contentTypeName.localeCompare(b.contentTypeName);
     return typeCompare !== 0 ? typeCompare : a.fieldName.localeCompare(b.fieldName);
   });
+}
+
+export function groupFieldsByContentType(fields: JsonField[]): Record<string, JsonField[]> {
+  return fields.reduce((acc, field) => {
+    if (!acc[field.contentTypeId]) acc[field.contentTypeId] = [];
+    acc[field.contentTypeId].push(field);
+    return acc;
+  }, {} as Record<string, JsonField[]>);
+}
+
+export function buildEditorInterfaceControls(allFields: JsonField[], existingControls: Control[] = [], appId: string): Control[] {
+  const managedFieldIds = new Set(allFields.map((f) => f.fieldId));
+
+  const baseControls = existingControls.filter((c) => !managedFieldIds.has(c.fieldId));
+
+  const updatedControls: Control[] = [
+    ...baseControls,
+    ...allFields.map((field) => ({
+      fieldId: field.fieldId,
+      widgetId: field.isEnabled ? appId : DefaultWidgetId,
+      widgetNamespace: field.isEnabled ? AppWidgetNamespace : 'builtin',
+    })),
+  ];
+
+  return updatedControls.filter((c) => c.fieldId && c.widgetId && c.widgetNamespace);
 }

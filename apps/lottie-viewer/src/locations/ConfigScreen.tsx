@@ -2,90 +2,18 @@ import { ConfigAppSDK } from '@contentful/app-sdk';
 import { Heading, Box, Paragraph, Autocomplete, Flex, Checkbox, Pill, TextLink, FormLabel, Card, Text } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
 import { useSDK } from '@contentful/react-apps-toolkit';
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { styles } from './Config.styles';
 import { ExternalLinkIcon } from '@contentful/f36-icons';
 import { useJsonFieldsState } from '@src/hooks/useJsonFieldsState';
-import { getJsonFields } from '@src/utils/getJsonFields';
-
-const JsonFieldType = 'Object';
-const AppWidgetNamespace = 'app';
-const DefaultWidgetId = 'objectEditor';
-
-interface JsonField {
-  contentTypeId: string;
-  contentTypeName: string;
-  fieldId: string;
-  fieldName: string;
-  isEnabled: boolean;
-  originalEnabled: boolean;
-}
-
-interface Control {
-  fieldId: string;
-  widgetId?: string;
-  widgetNamespace?: string;
-}
-
-// async function getJsonFields(cma: ConfigAppSDK['cma'], appDefinitionId: string): Promise<JsonField[]> {
-//   const contentTypes = await cma.contentType.getMany({});
-//   const jsonFields: JsonField[] = [];
-
-//   for (const contentType of contentTypes.items) {
-//     const editorInterface = await cma.editorInterface.get({ contentTypeId: contentType.sys.id });
-//     for (const jsonField of contentType.fields.filter((f) => f.type === JsonFieldType)) {
-//       const control = editorInterface.controls?.find((w) => w.fieldId === jsonField.id);
-//       const isUsingApp = !!control && control.widgetId === appDefinitionId;
-//       jsonFields.push({
-//         contentTypeId: contentType.sys.id,
-//         contentTypeName: contentType.name,
-//         fieldId: jsonField.id,
-//         fieldName: jsonField.name,
-//         isEnabled: isUsingApp,
-//         originalEnabled: isUsingApp,
-//       });
-//     }
-//   }
-
-//   return jsonFields.sort((a, b) => {
-//     const typeCompare = a.contentTypeName.localeCompare(b.contentTypeName);
-//     return typeCompare !== 0 ? typeCompare : a.fieldName.localeCompare(b.fieldName);
-//   });
-// }
-
-function groupFieldsByContentType(fields: JsonField[]): Record<string, JsonField[]> {
-  return fields.reduce((acc, field) => {
-    if (!acc[field.contentTypeId]) acc[field.contentTypeId] = [];
-    acc[field.contentTypeId].push(field);
-    return acc;
-  }, {} as Record<string, JsonField[]>);
-}
-
-function buildEditorInterfaceControls(allFields: JsonField[], existingControls: Control[] = [], appId: string): Control[] {
-  const managedFieldIds = new Set(allFields.map((f) => f.fieldId));
-
-  const baseControls = existingControls.filter((c) => !managedFieldIds.has(c.fieldId));
-
-  const updatedControls: Control[] = [
-    ...baseControls,
-    ...allFields.map((field) => ({
-      fieldId: field.fieldId,
-      widgetId: field.isEnabled ? appId : DefaultWidgetId,
-      widgetNamespace: field.isEnabled ? AppWidgetNamespace : 'builtin',
-    })),
-  ];
-
-  return updatedControls.filter((c) => c.fieldId && c.widgetId && c.widgetNamespace);
-}
+import { buildEditorInterfaceControls, getJsonFields, groupFieldsByContentType } from '@src/configUtils';
 
 const ConfigScreen = () => {
   const sdk = useSDK<ConfigAppSDK>();
   const [parameters, setParameters] = useState<Record<string, any>>({});
-  // const [jsonFields, setJsonFields] = useState<JsonField[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
   const [jsonFieldsLoaded, setJsonFieldsLoaded] = useState<boolean>(false);
   const installTriggeredRef = useRef<boolean>(false);
-  // const jsonFieldsRef = useRef<JsonField[]>([]);
 
   const { jsonFields, jsonFieldsRef, initialize, updateField, resetOriginalState } = useJsonFieldsState();
 
@@ -119,9 +47,7 @@ const ConfigScreen = () => {
 
       for (const [contentTypeId, allFields] of Object.entries(fieldsByContentType)) {
         const editorInterface = await sdk.cma.editorInterface.get({ contentTypeId });
-
         editorInterface.controls = buildEditorInterfaceControls(allFields, editorInterface.controls, sdk.ids.app);
-
         await sdk.cma.editorInterface.update(
           {
             spaceId: sdk.ids.space,
@@ -141,10 +67,8 @@ const ConfigScreen = () => {
       const currentParameters = await sdk.app.getParameters();
       if (currentParameters) setParameters(currentParameters);
       const fields = await getJsonFields(sdk.cma, sdk.ids.app);
-
       initialize(fields);
       setJsonFieldsLoaded(true);
-
       sdk.app.setReady();
     })();
   }, [sdk]);
@@ -155,19 +79,6 @@ const ConfigScreen = () => {
     });
   }
 
-  // function updateJsonField(contentTypeId: string, fieldId: string, updates: Partial<JsonField>) {
-  //   setJsonFields((prev) => {
-  //     const updated = prev.map((field) => (field.contentTypeId === contentTypeId && field.fieldId === fieldId ? { ...field, ...updates } : field));
-  //     jsonFieldsRef.current = updated;
-  //     return updated;
-  //   });
-  // }
-
-  // function handleSelectItem(item: { name: string; id: string; isChecked: boolean; contentTypeId: string }) {
-  //   updateJsonField(item.contentTypeId, item.id, {
-  //     isEnabled: !item.isChecked,
-  //   });
-  // }
   return (
     <Flex className={styles.wrapper}>
       <Card className={styles.configCard}>

@@ -1,13 +1,5 @@
+import { JsonField } from '@src/configUtils';
 import { useRef, useState } from 'react';
-
-export interface JsonField {
-  contentTypeId: string;
-  contentTypeName: string;
-  fieldId: string;
-  fieldName: string;
-  isEnabled: boolean;
-  originalEnabled: boolean;
-}
 
 type JsonFieldUpdate = Partial<Pick<JsonField, 'isEnabled'>>;
 
@@ -42,6 +34,6 @@ export function useJsonFieldsState() {
     initialize,
     updateField,
     resetOriginalState,
-    setJsonFields, // in case manual override is still needed
+    setJsonFields,
   };
 }
