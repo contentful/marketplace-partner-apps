@@ -87,13 +87,15 @@ const ConfigScreen = () => {
 
   const items = useMemo(
     () =>
-      jsonFields.map((field) => ({
-        name: `${field.contentTypeName} > ${field.fieldName}`,
-        id: field.fieldId,
-        isChecked: field.isEnabled,
-        contentTypeId: field.contentTypeId,
-      })),
-    [jsonFields]
+      jsonFields
+        .map((field) => ({
+          name: `${field.contentTypeName} > ${field.fieldName}`,
+          id: field.fieldId,
+          isChecked: field.isEnabled,
+          contentTypeId: field.contentTypeId,
+        }))
+        .filter((item) => item.name.toLowerCase().includes(inputValue.toLowerCase())),
+    [jsonFields, inputValue]
   );
 
   const onConfigure = useCallback(async () => {
