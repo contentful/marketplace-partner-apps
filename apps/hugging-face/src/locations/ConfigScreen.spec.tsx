@@ -15,6 +15,7 @@ describe('Config Screen component', () => {
     expect(screen.getByText('Hugging Face Integration Configuration')).toBeTruthy();
     expect(screen.getByText('Hugging Face API Key')).toBeTruthy();
     expect(screen.getByText('Text Model ID')).toBeTruthy();
+    expect(screen.getByText('Text Model Inference Provider')).toBeTruthy();
     expect(screen.getByText('Image Model ID')).toBeTruthy();
   });
 
