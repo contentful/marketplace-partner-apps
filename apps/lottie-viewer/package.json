@@ -5,6 +5,7 @@
   "dependencies": {
     "@contentful/app-sdk": "^4.29.5",
     "@contentful/f36-components": "^4.79.1",
+    "@contentful/f36-icons": "^4.29.0",
     "@contentful/f36-tokens": "^4.2.0",
     "@contentful/field-editor-json": "^3.3.38",
     "@contentful/react-apps-toolkit": "^1.2.16",
@@ -34,6 +35,7 @@
     "@contentful/app-scripts": "1.19.1",
     "@svgr/rollup": "^8.1.0",
     "@testing-library/react": "14.0.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "16.18.38",
     "@types/prismjs": "^1.26.5",
     "@types/react": "18.3.1",
