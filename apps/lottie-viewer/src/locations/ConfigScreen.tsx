@@ -12,11 +12,9 @@ const ConfigScreen = () => {
   const sdk = useSDK<ConfigAppSDK>();
   const [parameters, setParameters] = useState<Record<string, any>>({});
   const [inputValue, setInputValue] = useState<string>('');
-  const [jsonFieldsLoaded, setJsonFieldsLoaded] = useState<boolean>(false);
   const installTriggeredRef = useRef<boolean>(false);
 
   const { jsonFields, jsonFieldsRef, initialize, updateField, resetOriginalState } = useJsonFieldsState();
-  console.log({ jsonFields });
 
   const items = useMemo(
     () =>
@@ -69,7 +67,6 @@ const ConfigScreen = () => {
       if (currentParameters) setParameters(currentParameters);
       const fields = await getJsonFields(sdk.cma, sdk.ids.app);
       initialize(fields);
-      setJsonFieldsLoaded(true);
       sdk.app.setReady();
     })();
   }, [sdk]);
@@ -115,7 +112,7 @@ const ConfigScreen = () => {
           items={items}
           renderItem={(item) => (
             <Flex alignItems="center" gap={tokens.spacingXs} testId={`resource-autocomplete--${item.name}`}>
-              <Checkbox testId={`checkbox-${item.id}`} value={item.id} id={item.id} isChecked={item.isChecked} isDisabled={false} />
+              <Checkbox testId={`checkbox-${item.id}`} value={item.id} id={item.id} isChecked={item.isChecked} isDisabled={false} onChange={() => {}} />
               <Text fontWeight="fontWeightMedium">{item.name}</Text>
             </Flex>
           )}

@@ -9,7 +9,7 @@ import { useSDK } from '@contentful/react-apps-toolkit';
 vi.mock('@src/hooks/useJsonFieldsState');
 vi.mock('@contentful/react-apps-toolkit');
 
-vi.mock('@src/configUtils', async (importOriginal) => {
+vi.mock('@src/configUtils', async () => {
   return {
     getJsonFields: vi.fn().mockResolvedValue([
       {
