@@ -21,8 +21,8 @@ export const styles = {
   pillsRow: css({
     display: 'flex',
     flexWrap: 'wrap',
-    gap: tokens.spacing2Xs,
-    marginTop: tokens.spacingS,
+    gap: tokens.spacingXs,
+    margin: `${tokens.spacingS} 0`,
   }),
   heading: css({
     margin: 0,

@@ -1,9 +1,9 @@
 import { ConfigAppSDK } from '@contentful/app-sdk';
-import { Heading, Box, Paragraph, Autocomplete, Flex, Checkbox, Pill, TextLink, FormLabel, Card, Text } from '@contentful/f36-components';
+import { Heading, Paragraph, Autocomplete, Flex, Checkbox, Pill, TextLink, FormLabel, Card, Text } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { styles } from './Config.styles';
+import { styles } from './ConfigScreen.styles';
 import { ExternalLinkIcon } from '@contentful/f36-icons';
 import { useJsonFieldsState } from '@src/hooks/useJsonFieldsState';
 import { buildEditorInterfaceControls, getJsonFields, groupFieldsByContentType } from '@src/configUtils';
@@ -114,7 +114,7 @@ const ConfigScreen = () => {
           items={items}
           renderItem={(item) => (
             <Flex alignItems="center" gap={tokens.spacingXs} testId={`resource-autocomplete--${item.name}`}>
-              <Checkbox value={item.id} id={item.id} isChecked={item.isChecked} isDisabled={false} onKeyDown={() => {}} />
+              <Checkbox value={item.id} id={item.id} isChecked={item.isChecked} isDisabled={false} />
               <Text fontWeight="fontWeightMedium">{item.name}</Text>
             </Flex>
           )}
