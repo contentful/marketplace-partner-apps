@@ -18,14 +18,12 @@ const ConfigScreen = () => {
 
   const items = useMemo(
     () =>
-      jsonFields
-        .map((field) => ({
-          name: `${field.contentTypeName} > ${field.fieldName}`,
-          id: field.fieldId,
-          isChecked: field.isEnabled,
-          contentTypeId: field.contentTypeId,
-        }))
-        .filter((item) => item.name.toLowerCase().includes(inputValue.toLowerCase())),
+      jsonFields.map((field) => ({
+        name: `${field.contentTypeName} > ${field.fieldName}`,
+        id: field.fieldId,
+        isChecked: field.isEnabled,
+        contentTypeId: field.contentTypeId,
+      })),
     [jsonFields, inputValue]
   );
 
@@ -109,7 +107,7 @@ const ConfigScreen = () => {
         <FormLabel htmlFor="autocomplete">Select content type(s)</FormLabel>
         <Autocomplete
           id="autocomplete"
-          items={items}
+          items={items.filter((item) => item.name.toLowerCase().includes(inputValue.toLowerCase()))}
           renderItem={(item) => (
             <Flex alignItems="center" gap={tokens.spacingXs} testId={`resource-autocomplete--${item.name}`}>
               <Checkbox testId={`checkbox-${item.id}`} value={item.id} id={item.id} isChecked={item.isChecked} isDisabled={false} onChange={() => {}} />
