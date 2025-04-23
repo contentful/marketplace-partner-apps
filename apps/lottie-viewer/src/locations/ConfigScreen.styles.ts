@@ -11,7 +11,7 @@ export const styles = {
     display: 'flex',
     flexDirection: 'column',
     padding: `${tokens.spacingL} ${tokens.spacingL} ${tokens.spacingS} `,
-    maxWidth: '960px',
+    maxWidth: '900px',
   }),
   divider: css({
     border: 'none',
@@ -29,6 +29,10 @@ export const styles = {
   }),
   paragraph: css({
     marginTop: tokens.spacingS,
+  }),
+  note: css({
+    marginTop: tokens.spacingL,
+    marginBottom: tokens.spacingS,
   }),
   textLink: css({
     svg: {

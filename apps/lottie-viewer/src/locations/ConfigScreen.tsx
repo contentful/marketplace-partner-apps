@@ -1,5 +1,5 @@
 import { ConfigAppSDK } from '@contentful/app-sdk';
-import { Heading, Paragraph, Autocomplete, Flex, Checkbox, Pill, TextLink, FormLabel, Card, Text } from '@contentful/f36-components';
+import { Heading, Paragraph, Autocomplete, Flex, Checkbox, Pill, TextLink, FormLabel, Card, Text, Note } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -16,6 +16,7 @@ const ConfigScreen = () => {
   const installTriggeredRef = useRef<boolean>(false);
 
   const { jsonFields, jsonFieldsRef, initialize, updateField, resetOriginalState } = useJsonFieldsState();
+  console.log({ jsonFields });
 
   const items = useMemo(
     () =>
@@ -128,11 +129,18 @@ const ConfigScreen = () => {
           showEmptyList
           listWidth="full"
           usePortal
+          isDisabled={!jsonFields.length}
         />
-        <Flex className={styles.pillsRow}>
-          {jsonFieldsLoaded &&
-            items.filter((item) => item.isChecked).map((item) => <Pill key={item.name} label={item.name} onClose={() => handleSelectItem(item)} />)}
-        </Flex>
+        {!jsonFields.length ? (
+          <Note variant="neutral" className={styles.note}>
+            There are no JSON object field types to select to use with Lottie Preview. Once you have added one to a content type, it will appear here.
+          </Note>
+        ) : (
+          <Flex className={styles.pillsRow}>
+            {jsonFieldsLoaded &&
+              items.filter((item) => item.isChecked).map((item) => <Pill key={item.name} label={item.name} onClose={() => handleSelectItem(item)} />)}
+          </Flex>
+        )}
       </Card>
     </Flex>
   );
