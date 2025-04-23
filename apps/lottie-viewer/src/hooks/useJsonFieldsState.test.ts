@@ -14,7 +14,7 @@ const mockFields = [
   },
 ];
 
-describe('useJsonFieldsState (modern React 18)', () => {
+describe('useJsonFieldsState', () => {
   it('initializes state and ref', async () => {
     const { result } = renderHook(() => useJsonFieldsState());
 
