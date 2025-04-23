@@ -15,8 +15,6 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["vitest/globals"],
-
     // Enable absolute imports
     "baseUrl": "src",
     "paths": {

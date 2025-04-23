@@ -115,7 +115,7 @@ const ConfigScreen = () => {
           items={items}
           renderItem={(item) => (
             <Flex alignItems="center" gap={tokens.spacingXs} testId={`resource-autocomplete--${item.name}`}>
-              <Checkbox value={item.id} id={item.id} isChecked={item.isChecked} isDisabled={false} />
+              <Checkbox testId={`checkbox-${item.id}`} value={item.id} id={item.id} isChecked={item.isChecked} isDisabled={false} />
               <Text fontWeight="fontWeightMedium">{item.name}</Text>
             </Flex>
           )}
@@ -137,8 +137,11 @@ const ConfigScreen = () => {
           </Note>
         ) : (
           <Flex className={styles.pillsRow}>
-            {jsonFieldsLoaded &&
-              items.filter((item) => item.isChecked).map((item) => <Pill key={item.name} label={item.name} onClose={() => handleSelectItem(item)} />)}
+            {items
+              .filter((item) => item.isChecked)
+              .map((item) => (
+                <Pill testId={`pill-${item.id}`} key={item.name} label={item.name} onClose={() => handleSelectItem(item)} />
+              ))}
           </Flex>
         )}
       </Card>
