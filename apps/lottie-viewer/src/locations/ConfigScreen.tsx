@@ -128,7 +128,8 @@ const ConfigScreen = () => {
         />
         {!jsonFields.length ? (
           <Note variant="neutral" className={styles.note}>
-            There are no JSON object field types to select to use with Lottie Preview. Once you have added one to a content type, it will appear here.
+            There are no JSON object field types to select to use with Lottie Preview. Once you have added one to a content type, the dropdown will display a
+            list of Content types with a JSON object field type.
           </Note>
         ) : (
           <Flex className={styles.pillsRow}>
