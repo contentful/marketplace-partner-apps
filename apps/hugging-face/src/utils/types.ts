@@ -3,4 +3,5 @@ export interface AppInstallationParameters {
   textModelId?: string;
   imageModelId?: string;
   textModelInferenceProvider?: string;
+  imageModelInferenceProvider?: string;
 }

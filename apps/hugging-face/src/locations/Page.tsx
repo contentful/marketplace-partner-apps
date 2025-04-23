@@ -187,6 +187,7 @@ const Page = () => {
           setShowGeneratingImageModal(false);
           setGeneratedImage(null);
           setError(null);
+          setRefinedPrompt('');
         }}
       />
     </>

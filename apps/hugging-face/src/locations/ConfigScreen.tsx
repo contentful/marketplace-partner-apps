@@ -107,7 +107,7 @@ const ConfigScreen = () => {
               onChange={handleChange('textModelInferenceProvider')}
               placeholder="hf-inference"
             />
-            <FormControl.HelpText>Enter the Inference Provider you wish to use with your text model</FormControl.HelpText>
+            <FormControl.HelpText>Enter the Inference Provider you wish to use with your text model.</FormControl.HelpText>
           </FormControl>
 
           <FormControl isRequired marginBottom="spacingM">
@@ -119,6 +119,17 @@ const ConfigScreen = () => {
               placeholder="black-forest-labs/FLUX.1-dev"
             />
             <FormControl.HelpText>Enter the Hugging Face model ID for image generation. (Must be a Text-to-Image model)</FormControl.HelpText>
+          </FormControl>
+
+          <FormControl isRequired marginBottom="spacingM">
+            <FormControl.Label>Image Model Inference Provider</FormControl.Label>
+            <TextInput
+              name="imageModelInferenceProvider"
+              value={parameters.imageModelInferenceProvider || ''}
+              onChange={handleChange('imageModelInferenceProvider')}
+              placeholder="hf-inference"
+            />
+            <FormControl.HelpText>Enter the Inference Provider you wish to use with your image model.</FormControl.HelpText>
           </FormControl>
         </Form>
       </Box>

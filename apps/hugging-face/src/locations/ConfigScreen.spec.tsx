@@ -17,6 +17,7 @@ describe('Config Screen component', () => {
     expect(screen.getByText('Text Model ID')).toBeTruthy();
     expect(screen.getByText('Text Model Inference Provider')).toBeTruthy();
     expect(screen.getByText('Image Model ID')).toBeTruthy();
+    expect(screen.getByText('Image Model Inference Provider')).toBeTruthy();
   });
 
   it('Updates form values', () => {

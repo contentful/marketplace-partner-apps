@@ -29,7 +29,6 @@ export async function refinePrompt(prompt: string, parameters: AppInstallationPa
 
     return chatCompletion.choices[0].message.content;
   } catch (error) {
-    console.error('Error refining prompt:', error);
     throw new Error('Failed to refine prompt with text model');
   }
 }
