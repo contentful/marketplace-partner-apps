@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
-import { ApiResponse, LanguageMapping, TranslationRequest } from "../interfaces/translationstudio";
+import { LanguageMapping, TranslationRequest } from "../interfaces/translationstudio";
 
 export const postAuthenticate = (key: string, space:string): Promise<Response> => {
 
@@ -50,24 +50,15 @@ export const validateLicense = (key: string): Promise<Response> => {
 };
 
 
-export const getHistoryForElement = ({ space, entry }: { space: string; entry: string; }): Promise<ApiResponse<History[]>> => {
-	return fetch(`/api/history?space=${space}&entry=${entry}`, {
+export function getHistoryForElement({ space, entry, env }: { space: string; entry: string; env: string; })
+{
+	return fetch(`/api/history?space=${space}&entry=${entry}&env=${env}`, {
 		cache: "no-cache",
 		headers:{
 			'X-translationstudio': 'translationstudio'
 		}
 	});
 };
-
-export const getHistory = ({ project, key }: { project: number; key: string }): Promise<ApiResponse<History[]>> => {
-	return fetch("/api/history", {
-		cache: "no-cache",
-		headers:{
-			'X-translationstudio': 'translationstudio'
-		}
-	});
-};
-
 
 export async function getLanguages() {
 

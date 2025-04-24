@@ -36,12 +36,20 @@ import { SidebarAppSDK } from "@contentful/app-sdk";
 import DateInput from "../../components/DateInput";
 import { LOGO } from "utils/logo";
 import Image from "next/image";
+import { TranslationHistory } from "app/api/history/route";
+import { listenerCount } from "process";
 
-const getEntryHistory = async (space: string, entry: string) => {
+const getEntryHistory = async (space: string, entry: string, env:string) => {
 	try {
-		const data = await getHistoryForElement({ space, entry });
-		if (data.status === 200) 
-			return await data.json();
+		const response = await getHistoryForElement({ space, entry, env });
+		if (response.status === 200) 
+		{
+			const data:TranslationHistory[] = await response.json();
+			return data;
+		}
+
+		const error = await response.json();
+		throw new Error(error.message);
 	}
 	catch (err:any)
 	{
@@ -65,6 +73,60 @@ const getLanguageMapping = async () => {
 	return [];
 };
 
+const PrintTable = function(props: { list:TranslationHistory[], field:string, title:string, key:string })
+{
+	if (props.list.length === 0)
+		return <></>;
+
+	return <table style={{ paddingBottom: "1em", width: "100%"}}>
+		<thead>
+			<tr>
+				<th colSpan={2}>{props.title}</th>
+			</tr>
+  		</thead>
+		<tbody>
+			{props.list.map((e:any, i) => <tr key={props.key+i}>
+				<td style={{ paddingRight: "1em"}}>{e["target-language"]}</td>
+				<td>{new Date(e[props.field]).toLocaleString()}</td>
+			</tr>)}
+		</tbody>
+	</table>
+}
+
+const ShowHistory = function(props:{ history:TranslationHistory[]})
+{
+	const imported:TranslationHistory[] = [];
+	const intranslation:TranslationHistory[] = [];
+	const waiting:TranslationHistory[] = [];
+
+	props.history.forEach(e => {
+		if (e["time-imported"] > 0 && e["time-imported"] > e["time-intranslation"] && e["time-imported"] > e["time-requested"])
+			imported.push(e);
+		else if (e["time-intranslation"] > 0 && e["time-intranslation"] > e["time-imported"] && e["time-intranslation"] > e["time-requested"])
+			intranslation.push(e);
+		else if (e["time-requested"] > 0 && e["time-requested"] > e["time-imported"] && e["time-requested"] > e["time-intranslation"])
+			waiting.push(e);
+	});
+
+	if (imported.length === 0 && intranslation.length === 0 && waiting.length === 0)
+	{
+		return <Box marginTop="spacingM">
+			<Caption>This entry has not been translated, yet.</Caption>
+		</Box>
+	}
+
+	imported.sort((a, b) => b["time-imported"] - a["time-imported"]);
+	intranslation.sort((a, b) => b["time-intranslation"] - a["time-intranslation"]);
+	waiting.sort((a, b) => b["time-requested"] - a["time-requested"]);
+	
+	return <Box>
+		<Paragraph>Translation History</Paragraph>
+		<PrintTable key="imp" title="Translated and imported" field="time-imported" list={imported} />
+		<PrintTable key="int" title="In translation" field="time-intranslation" list={intranslation} />
+		<PrintTable key="wait" title="Queued/Not yet translated" field="time-requested" list={waiting} />
+	</Box>
+}
+
 // Component
 const Sidebar = () => {
 	const today = new Date();
@@ -74,7 +136,7 @@ const Sidebar = () => {
 
 	// State
 	const [languageMapping, setLanguageMappings] = useState<LanguageMapping[]>();
-	const [history, setHistory] = useState<History[]>([]);
+	const [history, setHistory] = useState<TranslationHistory[]>([]);
 	const [selectedTranslation, setSelectedTranslation] = useState<number>(0);
 	const [dueDate, setDueDate] = useState<string>("");
 	const [urgent, setUrgent] = useState(false);
@@ -109,7 +171,7 @@ const Sidebar = () => {
 				}
 			}
 			
-			return getEntryHistory(space, entry);
+			return getEntryHistory(space, entry, sdk.ids.environment);
 		})
 		.then((hdata) => setHistory(hdata))
 		.catch((err:any) => {
@@ -236,20 +298,18 @@ const Sidebar = () => {
 				<Paragraph>Translation date</Paragraph>
 				<DateInput onChange={setDate} value={dueDate} />
 				<Checkbox name="urgent" isChecked={urgent} onChange={handleCheckbox}>
-					This is an urgent request
+					Translate immediately and do not use quotes
 				</Checkbox>
 				<Checkbox name="email" isChecked={sendEmail} onChange={handleCheckboxMail}>
 					Notify me by mail about the translation status
 				</Checkbox>
-				<Box marginTop="spacingM" marginBottom="spacingM">
-					{!history?.length && <Caption>This entry has not been translated, yet.</Caption>}
-				</Box>
 			</>)}
 			<Box style={{textAlign: "center", paddingBottom: "2em"}}>
 				<Button variant="positive" style={{ width: "100%" }} isDisabled={pending} onClick={() => translate()} title={"Translate " + title + (isUrgent() ? "(urgent)" : "")}>
-					Translate {urgent && " urgently"}
+					Translate {urgent && " immediately"}
 				</Button>
 			</Box>
+			<ShowHistory history={history} />
 		</>
 	);
 };
