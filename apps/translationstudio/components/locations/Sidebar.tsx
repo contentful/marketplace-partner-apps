@@ -305,13 +305,23 @@ const Sidebar = () => {
 				</Checkbox>
 			</>)}
 			<Box style={{textAlign: "center", paddingBottom: "2em"}}>
-				<Button variant="positive" style={{ width: "100%" }} isDisabled={pending} onClick={() => translate()} title={"Translate " + title + (isUrgent() ? "(urgent)" : "")}>
-					Translate {urgent && " immediately"}
+				<Button variant="positive" style={{ width: "100%" }} isDisabled={pending} onClick={() => translate()} title={getButtonTitle(machineTranslation, urgent)}>
+					{getButtonTitle(machineTranslation, urgent)}
 				</Button>
 			</Box>
 			<ShowHistory history={history} />
 		</>
 	);
 };
+
+const getButtonTitle = function(machineTranslation:boolean, urgent:boolean)
+{
+	if (machineTranslation)
+		return "Translate using machine translation";
+	else if (urgent)
+		return "Translate immediately";
+	else
+		return "Request translation";
+}
 
 export default Sidebar;
