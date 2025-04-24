@@ -317,7 +317,7 @@ const Sidebar = () => {
 const getButtonTitle = function(machineTranslation:boolean, urgent:boolean)
 {
 	if (machineTranslation)
-		return "Translate using machine translation";
+		return "Translate using ai service";
 	else if (urgent)
 		return "Translate immediately";
 	else
