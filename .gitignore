@@ -12,4 +12,6 @@ tags
 .tool-versions
 .env.local
 .cursorindexingignore
+.cursor/
+.cursorignore
 .specstory
