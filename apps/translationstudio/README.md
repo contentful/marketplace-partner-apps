@@ -24,7 +24,7 @@ You will find detailed instructions at [PRIVACY.md](PRIVACY.md).
 
 ## License information
 
-This extension is published under GNU GENERAL PUBLIC LICENSE, Version 2.
+This extension (excluding logos) is published under GNU GENERAL PUBLIC LICENSE, Version 2.
 
 This extension was bootstrapped using https://github.com/contentful/create-contentful-app
 
