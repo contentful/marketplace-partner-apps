@@ -1,0 +1,43 @@
+{
+  "name": "Klaviyo",
+  "description": "Sync your Contentful content with Klaviyo",
+  "id": "klaviyo",
+  "category": "Marketing",
+  "version": "0.1.0",
+  "locations": [
+    {
+      "location": "app-config",
+      "component": "ConfigScreen"
+    },
+    {
+      "location": "entry-sidebar",
+      "component": "Sidebar"
+    },
+    {
+      "location": "entry-field",
+      "component": "Field"
+    },
+    {
+      "location": "dialog",
+      "component": "FieldSelectDialog"
+    }
+  ],
+  "parameters": {
+    "installation": [
+      {
+        "id": "klaviyoApiKey",
+        "name": "Klaviyo API Key",
+        "description": "Your Klaviyo API key",
+        "type": "Symbol",
+        "required": true
+      },
+      {
+        "id": "klaviyoCompanyId",
+        "name": "Klaviyo Company ID",
+        "description": "Your Klaviyo company ID",
+        "type": "Symbol",
+        "required": true
+      }
+    ]
+  }
+} 

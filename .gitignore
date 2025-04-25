@@ -11,5 +11,8 @@ tags
 .eslintcache
 .tool-versions
 .env.local
+.env
 .cursorindexingignore
+.cursor/
+.cursorignore
 .specstory
