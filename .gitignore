@@ -13,3 +13,4 @@ tags
 .env.local
 .cursorindexingignore
 .specstory
+.cursor
