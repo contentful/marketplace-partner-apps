@@ -26,7 +26,8 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "create-app-definition": "contentful-app-scripts create-app-definition",
     "install-ci": "npm ci",
-    "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id 4zHLWlbaJEuEXYcwBvw5P2 --token ${TEST_CMA_TOKEN}"
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./dist --organization-id $DEFINITIONS_ORG_ID --definition-id 2MDeQRgmR50sN1HIIw7OiE --token $CONTENTFUL_CMA_TOKEN",
+    "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./dist --organization-id ${TEST_ORG_ID} --definition-id 4zHLWlbaJEuEXYcwBvw5P2 --token ${TEST_CMA_TOKEN}"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -36,17 +37,17 @@
     "@svgr/rollup": "^8.1.0",
     "@testing-library/react": "14.0.0",
     "@testing-library/user-event": "^14.6.1",
-    "@types/node": "16.18.38",
+    "@types/node": "^20.17.30",
     "@types/prismjs": "^1.26.5",
     "@types/react": "18.3.1",
     "@types/react-dom": "18.3.0",
     "@types/react-syntax-highlighter": "^15.5.13",
-    "@vitejs/plugin-react": "4.2.1",
+    "@vitejs/plugin-react": "^4.4.1",
     "eslint": "^8.57.0",
     "jsdom": "^26.0.0",
     "typescript": "5.1.6",
-    "vite": "4.5.13",
-    "vitest": "0.32.4"
+    "vite": "^6.3.3",
+    "vitest": "^3.1.2"
   },
   "jest": {
     "testEnvironment": "jsdom"

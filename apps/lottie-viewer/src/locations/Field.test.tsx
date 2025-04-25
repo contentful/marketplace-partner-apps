@@ -9,9 +9,7 @@ vi.mock('@contentful/react-apps-toolkit', () => ({
 
 vi.mock('@src/components/field/LottiePreviewField', () => ({
   __esModule: true,
-  default: ({ lottieJson }: { lottieJson: any }) => (
-    <div data-testid="lottie-preview-field">{JSON.stringify(lottieJson)}</div>
-  ),
+  default: ({ lottieJson }: { lottieJson: any }) => <div data-testid="lottie-preview-field">{JSON.stringify(lottieJson)}</div>,
 }));
 
 describe('Field', () => {
@@ -47,6 +45,6 @@ describe('Field', () => {
   it('renders LottiePreviewField with empty object if getValue is null', () => {
     mockSdk.field.getValue.mockReturnValue(null);
     render(<Field />);
-    expect(screen.getByTestId('lottie-preview-field')).toContain({});
+    expect(screen.getByTestId('lottie-preview-field').textContent).toBe('{}');
   });
 });
