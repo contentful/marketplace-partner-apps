@@ -1,6 +1,6 @@
 {
   "name": "lottie-viewer",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "^4.29.5",
