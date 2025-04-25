@@ -3,6 +3,13 @@
 ## 1.0.0 (2025-04-25)
 
 
+### Bug Fixes
+
+* lottie preview rename [INTEG-2555] ([#4929](https://github.com/contentful/marketplace-partner-apps/issues/4929)) ([15211b9](https://github.com/contentful/marketplace-partner-apps/commit/15211b920d0b3661aa7dfdbf5d53588fb4f8528d))
+
+## 1.0.0 (2025-04-25)
+
+
 ### Features
 
 * [INTEG-2557] Lottie Viewer config page ([#4913](https://github.com/contentful/marketplace-partner-apps/issues/4913)) ([b0a5061](https://github.com/contentful/marketplace-partner-apps/commit/b0a506111f167fff01ea6d4695ac1f4a65e76ce0))
