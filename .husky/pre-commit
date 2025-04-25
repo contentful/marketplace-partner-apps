@@ -1,4 +1,21 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+# Get staged JSON files
+STAGED_JSON_FILES=$(git diff --cached --name-only --diff-filter=ACM "*.json")
+
+# Also check critical files
+CRITICAL_FILES=".release-please-manifest.json release-please-config.json lerna.json"
+
+# Combine lists (unique files only)
+ALL_FILES=$(echo "$STAGED_JSON_FILES $CRITICAL_FILES" | tr ' ' '\n' | sort | uniq)
+
+# Validate all JSON files
+for FILE in $ALL_FILES; do
+  if [ -f "$FILE" ]; then
+    echo "Validating $FILE..."
+    npx jsonlint -q "$FILE" || exit 1
+  fi
+done
+
 npx lint-staged
