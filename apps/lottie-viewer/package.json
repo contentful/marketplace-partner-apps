@@ -43,7 +43,7 @@
     "@types/react-dom": "18.3.0",
     "@types/react-syntax-highlighter": "^15.5.13",
     "@vitejs/plugin-react": "^4.4.1",
-    "eslint": "^8.57.0",
+    "eslint": "^9.25.1",
     "jsdom": "^26.0.0",
     "typescript": "5.1.6",
     "vite": "^6.3.3",
