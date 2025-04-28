@@ -1,6 +1,7 @@
 import { Button, Flex, Heading, Paragraph, Modal, Text, Skeleton, Subheading, Image, Note } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
 import { ClockIcon } from '@contentful/f36-icons';
+import { styles } from './GenerateImageModal.styles';
 
 interface GenerateImageModalProps {
   showGeneratingImageModal: boolean;
@@ -30,38 +31,26 @@ export const GenerateImageModal = ({
       {() => (
         <>
           <Modal.Header title="Hugging Face image generator" onClose={closeGeneratingImageModal} />
-          <Modal.Content style={{ paddingBottom: 0, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Flex style={{ width: '1024px', height: '100%', gap: tokens.spacingL, flexDirection: 'column' }}>
-              <Heading style={{ marginBottom: 0 }}>Generating your image</Heading>
+          <Modal.Content className={styles.modalContent}>
+            <Flex className={styles.contentWrapper}>
+              <Heading className={styles.heading}>Generating your image</Heading>
               <Flex justifyContent="space-between">
-                <Flex flexDirection="column" style={{ width: '600px' }}>
+                <Flex flexDirection="column" className={styles.promptSection}>
                   <Subheading as="h2" marginBottom="spacingXs">
                     Prompt
                   </Subheading>
-                  <Paragraph style={{ marginBottom: 0 }}>"{prompt}"</Paragraph>
+                  <Paragraph className={styles.promptText}>"{prompt}"</Paragraph>
                 </Flex>
-                <Flex
-                  justifyContent="center"
-                  flexDirection="column"
-                  style={{
-                    border: `1px solid ${tokens.gray300}`,
-                    borderRadius: tokens.borderRadiusSmall,
-                    padding: tokens.spacingM,
-                    height: '112px',
-                    gap: tokens.spacingXs,
-                  }}>
+                <Flex justifyContent="center" flexDirection="column" className={styles.timerSection}>
                   <Flex alignItems="center" gap={tokens.spacing2Xs}>
-                    <ClockIcon style={{ fill: tokens.gray900 }} />
-                    <Subheading style={{ marginBottom: 0 }}>Timer: {timer} seconds</Subheading>
+                    <ClockIcon className={styles.clockIcon} />
+                    <Subheading className={styles.timer}>Timer: {timer} seconds</Subheading>
                   </Flex>
                   <Text fontColor="gray700">Some models take ~60 seconds for image generation.</Text>
                 </Flex>
               </Flex>
               {error && (
-                <Flex
-                  alignItems="center"
-                  justifyContent="center"
-                  style={{ height: '100%', width: '100%', border: `1px solid ${tokens.red500}`, borderRadius: tokens.borderRadiusSmall }}>
+                <Flex alignItems="center" justifyContent="center" className={styles.error}>
                   <Note variant="negative">Error: {error}. Please try again.</Note>
                 </Flex>
               )}
@@ -73,7 +62,7 @@ export const GenerateImageModal = ({
               {!error && !!generatedImage && <Image height="100%" width="100%" src={generatedImage} alt="Generated image" />}
             </Flex>
           </Modal.Content>
-          <Modal.Controls style={{ padding: `${tokens.spacingM} ${tokens.spacingL}` }}>
+          <Modal.Controls className={styles.modalControls}>
             <Button size="small" onClick={closeGeneratingImageModal}>
               Cancel
             </Button>

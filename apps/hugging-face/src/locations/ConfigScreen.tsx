@@ -1,9 +1,10 @@
 import { ConfigAppSDK } from '@contentful/app-sdk';
-import { Flex, Form, FormControl, TextInput, Heading, Paragraph, Box, MenuDivider } from '@contentful/f36-components';
+import { Flex, Form, FormControl, TextInput, Heading, Paragraph, Box, MenuDivider, Select } from '@contentful/f36-components';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import css from '@emotion/css';
 import { useCallback, useEffect, useState } from 'react';
 import { AppInstallationParameters } from '../utils/types';
+import { INFERENCE_PROVIDERS } from '@huggingface/inference';
 
 const ConfigScreen = () => {
   const [parameters, setParameters] = useState<AppInstallationParameters>({
@@ -11,6 +12,7 @@ const ConfigScreen = () => {
     textModelId: 'meta-llama/Llama-3.2-3B-Instruct',
     textModelInferenceProvider: 'hf-inference',
     imageModelId: 'black-forest-labs/FLUX.1-dev',
+    imageModelInferenceProvider: 'hf-inference',
   });
   const sdk = useSDK<ConfigAppSDK>();
 
@@ -43,6 +45,13 @@ const ConfigScreen = () => {
   }, [sdk]);
 
   const handleChange = (key: keyof AppInstallationParameters) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setParameters((prev: AppInstallationParameters) => ({
+      ...prev,
+      [key]: e.target.value,
+    }));
+  };
+
+  const handleSelectChange = (key: keyof AppInstallationParameters) => (e: React.ChangeEvent<HTMLSelectElement>) => {
     setParameters((prev: AppInstallationParameters) => ({
       ...prev,
       [key]: e.target.value,
@@ -101,12 +110,19 @@ const ConfigScreen = () => {
 
           <FormControl isRequired marginBottom="spacingM">
             <FormControl.Label>Text Model Inference Provider</FormControl.Label>
-            <TextInput
+            <Select
               name="textModelInferenceProvider"
               value={parameters.textModelInferenceProvider || ''}
-              onChange={handleChange('textModelInferenceProvider')}
-              placeholder="hf-inference"
-            />
+              onChange={handleSelectChange('textModelInferenceProvider')}>
+              <Select.Option value="" isDisabled>
+                Select an Inference Provider
+              </Select.Option>
+              {INFERENCE_PROVIDERS.map((provider) => (
+                <Select.Option key={provider} value={provider}>
+                  {provider}
+                </Select.Option>
+              ))}
+            </Select>
             <FormControl.HelpText>Enter the Inference Provider you wish to use with your text model.</FormControl.HelpText>
           </FormControl>
 
@@ -123,12 +139,19 @@ const ConfigScreen = () => {
 
           <FormControl isRequired marginBottom="spacingM">
             <FormControl.Label>Image Model Inference Provider</FormControl.Label>
-            <TextInput
+            <Select
               name="imageModelInferenceProvider"
               value={parameters.imageModelInferenceProvider || ''}
-              onChange={handleChange('imageModelInferenceProvider')}
-              placeholder="hf-inference"
-            />
+              onChange={handleSelectChange('imageModelInferenceProvider')}>
+              <Select.Option value="" isDisabled>
+                Select an Inference Provider
+              </Select.Option>
+              {INFERENCE_PROVIDERS.map((provider) => (
+                <Select.Option key={provider} value={provider}>
+                  {provider}
+                </Select.Option>
+              ))}
+            </Select>
             <FormControl.HelpText>Enter the Inference Provider you wish to use with your image model.</FormControl.HelpText>
           </FormControl>
         </Form>

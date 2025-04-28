@@ -1,5 +1,5 @@
 import { Form, FormControl, Textarea, Button, Flex, Modal, Spinner, Text, Note } from '@contentful/f36-components';
-import tokens from '@contentful/f36-tokens';
+import { styles } from './RefinePromptModal.styles';
 
 interface RefinePromptModalProps {
   showRefinePromptModal: boolean;
@@ -24,7 +24,7 @@ export const RefinePromptModal = ({
     {() => (
       <>
         <Modal.Header title="Refine prompt" onClose={closeRefinePromptModal} />
-        <Modal.Content style={{ paddingBottom: 0 }}>
+        <Modal.Content className={styles.modalContent}>
           {error && <Note variant="negative">Error: {error}. Please try again.</Note>}
           {isRefining && !error && (
             <Flex>
@@ -34,20 +34,20 @@ export const RefinePromptModal = ({
           )}
           {!isRefining && !error && (
             <Form onSubmit={onSubmitRefinedPrompt}>
-              <FormControl style={{ marginBottom: 0 }}>
+              <FormControl className={styles.formControl}>
                 <Textarea
                   value={refinedPrompt}
                   onChange={(e) => {
                     setRefinedPrompt(e.target.value);
                   }}
-                  style={{ paddingBottom: 0, height: '140px', maxHeight: '260px', minHeight: '64px' }}
+                  className={styles.textArea}
                 />
                 <FormControl.HelpText>This is the AI-optimized version of your prompt. You can edit it further if needed.</FormControl.HelpText>
               </FormControl>
             </Form>
           )}
         </Modal.Content>
-        <Modal.Controls style={{ padding: `${tokens.spacingM} ${tokens.spacingL}` }}>
+        <Modal.Controls className={styles.modalControls}>
           <Button size="small" onClick={closeRefinePromptModal}>
             Cancel
           </Button>

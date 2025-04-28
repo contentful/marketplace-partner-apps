@@ -1,5 +1,5 @@
 import { Form, FormControl, Textarea, Button, Flex, Heading, Paragraph } from '@contentful/f36-components';
-import tokens from '@contentful/f36-tokens';
+import { styles } from './InitialPrompt.styles';
 
 interface InitialPromptProps {
   initialPrompt: string;
@@ -10,30 +10,21 @@ interface InitialPromptProps {
 }
 
 export const InitialPrompt = ({ initialPrompt, setInitialPrompt, isDisabled, onClickRefinePrompt, onClickGenerateImage }: InitialPromptProps) => (
-  <Flex
-    flexDirection="column"
-    style={{
-      backgroundColor: tokens.colorWhite,
-      margin: `0 ${tokens.spacingL}`,
-      borderRadius: tokens.borderRadiusMedium,
-      padding: tokens.spacingXl,
-      alignItems: 'center',
-      height: '100vh',
-    }}>
-    <Flex flexDirection="column" style={{ width: '900px', gap: tokens.spacingL }}>
+  <Flex flexDirection="column" className={styles.page}>
+    <Flex flexDirection="column" className={styles.contentWrapper}>
       <Flex flexDirection="column">
-        <Heading style={{ marginBottom: tokens.spacing2Xs }}>Hugging Face Image Generator</Heading>
-        <Paragraph style={{ marginBottom: 0 }}>Enter your initial image concept, optimize it for the best results and generate an image.</Paragraph>
+        <Heading className={styles.heading}>Hugging Face Image Generator</Heading>
+        <Paragraph className={styles.subText}>Enter your initial image concept, optimize it for the best results and generate an image.</Paragraph>
       </Flex>
 
-      <Form onSubmit={onClickRefinePrompt} style={{ border: `1px solid ${tokens.gray300}`, borderRadius: tokens.borderRadiusSmall, padding: tokens.spacingL }}>
+      <Form onSubmit={onClickRefinePrompt} className={styles.form}>
         <Flex flexDirection="column">
-          <Heading as="h2" style={{ fontSize: tokens.fontSizeL, marginBottom: 0 }}>
+          <Heading as="h2" className={styles.formHeading}>
             Describe your image
           </Heading>
           <Paragraph>Be descriptive, but concise. You can either refine your prompt first or generate an image directly.</Paragraph>
         </Flex>
-        <FormControl isRequired style={{ marginBottom: tokens.spacingS }}>
+        <FormControl isRequired className={styles.formControl}>
           <FormControl.Label>Image concept</FormControl.Label>
           <Textarea
             name="initialPrompt"
@@ -43,7 +34,7 @@ export const InitialPrompt = ({ initialPrompt, setInitialPrompt, isDisabled, onC
             isDisabled={isDisabled}
             rows={4}
             resize="vertical"
-            style={{ height: '64px' }}
+            className={styles.formTextArea}
           />
         </FormControl>
         <Flex justifyContent="flex-end" gap="spacingM">

@@ -4,9 +4,9 @@ import { useSDK } from '@contentful/react-apps-toolkit';
 import { generateImage } from '../services/huggingfaceImage';
 import { refinePrompt } from '../services/huggingfaceText';
 import { AppInstallationParameters } from '../utils/types';
-import { GenerateImageModal } from '../components/GenerateImageModal';
-import { RefinePromptModal } from '../components/RefinePromptModal';
-import { InitialPrompt } from '../components/InitialPrompt';
+import { GenerateImageModal } from '../components/GenerateImageModal/GenerateImageModal';
+import { RefinePromptModal } from '../components/RefinePromptModal/RefinePromptModal';
+import { InitialPrompt } from '../components/InitialPrompt/InitialPrompt';
 
 const Page = () => {
   const sdk = useSDK<PageAppSDK>();
@@ -19,8 +19,7 @@ const Page = () => {
   // const [isUploading, setIsUploading] = useState(false);
   const [timer, setTimer] = useState(0);
   const [isTimerActive, setIsTimerActive] = useState(false);
-  const [showRefinePromptModal, setShowRefinePromptModal] = useState(false);
-  const [showGeneratingImageModal, setShowGeneratingImageModal] = useState(false);
+  const [showModal, setShowModal] = useState<string | null>(null);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -141,41 +140,40 @@ const Page = () => {
         setInitialPrompt={setInitialPrompt}
         isDisabled={isRefining || isGenerating}
         onClickRefinePrompt={(event) => {
-          setShowRefinePromptModal(true);
+          setShowModal('refine-prompt');
           handleRefinePrompt(event);
         }}
         onClickGenerateImage={(event) => {
-          setShowGeneratingImageModal(true);
+          setShowModal('generate-image');
           handleGenerateImage(event);
         }}
       />
       <RefinePromptModal
-        showRefinePromptModal={showRefinePromptModal}
+        showRefinePromptModal={showModal === 'refine-prompt'}
         refinedPrompt={refinedPrompt}
         isRefining={isRefining}
         setRefinedPrompt={setRefinedPrompt}
         error={error}
         onSubmitRefinedPrompt={(event) => {
-          setShowRefinePromptModal(false);
-          setShowGeneratingImageModal(true);
+          setShowModal('generate-image');
           handleGenerateImage(event);
         }}
         closeRefinePromptModal={() => {
-          setShowRefinePromptModal(false);
+          setShowModal(null);
           setRefinedPrompt('');
           setError(null);
         }}
       />
 
       <GenerateImageModal
-        showGeneratingImageModal={showGeneratingImageModal}
+        showGeneratingImageModal={showModal === 'generate-image'}
         prompt={refinedPrompt || initialPrompt}
         generatedImage={generatedImage}
         error={error}
         timer={timer}
         isGenerating={isGenerating}
         onClickNextAfterImageGeneration={(event) => {
-          setShowGeneratingImageModal(false);
+          setShowModal(null);
           // handleUploadAsset();
         }}
         onRetryImageGeneration={(event) => {
@@ -184,7 +182,7 @@ const Page = () => {
           handleGenerateImage(event);
         }}
         closeGeneratingImageModal={() => {
-          setShowGeneratingImageModal(false);
+          setShowModal(null);
           setGeneratedImage(null);
           setError(null);
           setRefinedPrompt('');
