@@ -1,25 +1,25 @@
-import { AppInstallationParameters } from '../locations/ConfigScreen';
+import { InferenceClient } from '@huggingface/inference';
+import { AppInstallationParameters } from '../utils/types';
 
 export async function generateImage(prompt: string, parameters: AppInstallationParameters, refinedPrompt?: string): Promise<Blob> {
-  if (!parameters.huggingfaceApiKey || !parameters.imageModelId) {
-    throw new Error('Missing API key or model ID configuration');
+  if (!parameters.huggingfaceApiKey || !parameters.imageModelId || !parameters.imageModelInferenceProvider) {
+    throw new Error('Missing API key or model ID configuration or inference provider');
   }
+
+  const client = new InferenceClient(parameters.huggingfaceApiKey);
 
   const finalPrompt = refinedPrompt || prompt;
 
-  const response = await fetch(`https://api-inference.huggingface.co/models/${parameters.imageModelId}`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${parameters.huggingfaceApiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ inputs: finalPrompt }),
-  });
+  try {
+    const image = await client.textToImage({
+      provider: parameters.imageModelInferenceProvider,
+      model: parameters.imageModelId,
+      inputs: finalPrompt,
+      parameters: { num_inference_steps: 5 },
+    });
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Hugging Face API error: ${error}`);
+    return image;
+  } catch (error) {
+    throw new Error('Failed to generate image with image model');
   }
-
-  return response.blob();
 }

@@ -1,79 +1,23 @@
-This project was bootstrapped with [Create Contentful App](https://github.com/contentful/create-contentful-app).
+## 🎉 Welcome to Hugging Face
 
-## How to use
+This project is a **Contentful Page App** that allows you to create stock images directly inside Contentful.
 
-Execute create-contentful-app with npm, npx or yarn to bootstrap the example:
+## What is Hugging Face?
 
-```bash
-# npx
-npx create-contentful-app --example vite-react
+Hugging Face is an open source, machine learning platform. For this app, we are using Hugging Face's AI interface to create images.
 
-# npm
-npm init contentful-app --example vite-react
+## 🚀 Getting Started
 
-# Yarn
-yarn create contentful-app --example vite-react
-```
+1. Install the app in your Contentful space, making sure to set your Hugging Face API key, the id for the text model you would like to use, and the id for the image model you would like to use
+2. Open the "Apps" tab and select "Hugging Face"
+3. Enter your image description in the text area
+4. Press "Refine prompt" to see the AI suggested text based on your prompt
+5. Edit the "refined" text as your see fit and hit the "Generate image" button when you are happy with your prompt text 
+5. See your AI generated image based on your prompt, if you are happy with it, hit the "Next" button, if not, hit the "Cancel" button
+6. If you are happy with your image, give it a name and save it to you media library
 
-## Available Scripts
+## Tools used
 
-In the project directory, you can run:
-
-#### `npm start`
-
-Creates or updates your app definition in Contentful, and runs the app in development mode.
-Open your app to view it in the browser.
-
-The page will reload if you make edits.
-You will also see any lint errors in the console.
-
-#### `npm run build`
-
-Builds the app for production to the `dist` folder.
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.
-Your app is ready to be deployed!
-
-#### `npm run upload`
-
-Uploads the `dist` folder to Contentful and creates a bundle that is automatically activated.
-The command guides you through the deployment process and asks for all required arguments.
-Read [here](https://www.contentful.com/developers/docs/extensibility/app-framework/create-contentful-app/#deploy-with-contentful) for more information about the deployment process.
-
-#### `npm run upload-ci`
-
-Similar to `npm run upload` it will upload your app to contentful and activate it. The only difference is  
-that with this command all required arguments are read from the environment variables, for example when you add
-the upload command to your CI pipeline.
-
-For this command to work, the following environment variables must be set:
-
-- `CONTENTFUL_ORG_ID` - The ID of your organization
-- `CONTENTFUL_APP_DEF_ID` - The ID of the app to which to add the bundle
-- `CONTENTFUL_ACCESS_TOKEN` - A personal [access token](https://www.contentful.com/developers/docs/references/content-management-api/#/reference/personal-access-tokens)
-
-## Libraries to use
-
-To make your app look and feel like Contentful use the following libraries:
-
-- [Forma 36](https://f36.contentful.com/) – Contentful's design system
-- [Contentful Field Editors](https://www.contentful.com/developers/docs/extensibility/field-editors/) – Contentful's field editor React components
-
-## Using the `contentful-management` SDK
-
-In the default create contentful app output, a contentful management client is
-passed into each location. This can be used to interact with Contentful's
-management API. For example
-
-```js
-// Use the client
-cma.locale.getMany({}).then((locales) => console.log(locales));
-```
-
-Visit the [`contentful-management` documentation](https://www.contentful.com/developers/docs/extensibility/app-framework/sdk/#using-the-contentful-management-library)
-to find out more.
-
-## Learn More
-
-[Read more](https://www.contentful.com/developers/docs/extensibility/app-framework/create-contentful-app/) and check out the video on how to use the CLI.
+@contentful/app-sdk - A library for building Contentful UI Apps
+@contentful/f36-components - A library of Contentful UI components
+@contentful/react-apps-toolkit - A toolkit for building Contentful UI Apps

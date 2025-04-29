@@ -1,26 +1,24 @@
 import { ConfigAppSDK } from '@contentful/app-sdk';
-import { Flex, Form, FormControl, TextInput, Heading, Paragraph, Box, MenuDivider } from '@contentful/f36-components';
+import { Flex, Form, FormControl, TextInput, Heading, Paragraph, Box, MenuDivider, Select } from '@contentful/f36-components';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import css from '@emotion/css';
 import { useCallback, useEffect, useState } from 'react';
-
-export interface AppInstallationParameters {
-  huggingfaceApiKey?: string;
-  textModelId?: string;
-  imageModelId?: string;
-}
+import { AppInstallationParameters } from '../utils/types';
+import { INFERENCE_PROVIDERS } from '@huggingface/inference';
 
 const ConfigScreen = () => {
   const [parameters, setParameters] = useState<AppInstallationParameters>({
     huggingfaceApiKey: '',
     textModelId: 'meta-llama/Llama-3.2-3B-Instruct',
+    textModelInferenceProvider: 'hf-inference',
     imageModelId: 'black-forest-labs/FLUX.1-dev',
+    imageModelInferenceProvider: 'hf-inference',
   });
   const sdk = useSDK<ConfigAppSDK>();
 
   const onConfigure = useCallback(async () => {
     // Validate the form
-    const valid = Boolean(parameters.huggingfaceApiKey && parameters.textModelId && parameters.imageModelId);
+    const valid = Boolean(parameters.huggingfaceApiKey && parameters.textModelId && parameters.imageModelId && parameters.textModelInferenceProvider);
 
     if (!valid) return false;
 
@@ -47,6 +45,13 @@ const ConfigScreen = () => {
   }, [sdk]);
 
   const handleChange = (key: keyof AppInstallationParameters) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setParameters((prev: AppInstallationParameters) => ({
+      ...prev,
+      [key]: e.target.value,
+    }));
+  };
+
+  const handleSelectChange = (key: keyof AppInstallationParameters) => (e: React.ChangeEvent<HTMLSelectElement>) => {
     setParameters((prev: AppInstallationParameters) => ({
       ...prev,
       [key]: e.target.value,
@@ -104,6 +109,24 @@ const ConfigScreen = () => {
           </FormControl>
 
           <FormControl isRequired marginBottom="spacingM">
+            <FormControl.Label>Text Model Inference Provider</FormControl.Label>
+            <Select
+              name="textModelInferenceProvider"
+              value={parameters.textModelInferenceProvider || ''}
+              onChange={handleSelectChange('textModelInferenceProvider')}>
+              <Select.Option value="" isDisabled>
+                Select an Inference Provider
+              </Select.Option>
+              {INFERENCE_PROVIDERS.map((provider) => (
+                <Select.Option key={provider} value={provider}>
+                  {provider}
+                </Select.Option>
+              ))}
+            </Select>
+            <FormControl.HelpText>Enter the Inference Provider you wish to use with your text model.</FormControl.HelpText>
+          </FormControl>
+
+          <FormControl isRequired marginBottom="spacingM">
             <FormControl.Label>Image Model ID</FormControl.Label>
             <TextInput
               name="imageModelId"
@@ -112,6 +135,24 @@ const ConfigScreen = () => {
               placeholder="black-forest-labs/FLUX.1-dev"
             />
             <FormControl.HelpText>Enter the Hugging Face model ID for image generation. (Must be a Text-to-Image model)</FormControl.HelpText>
+          </FormControl>
+
+          <FormControl isRequired marginBottom="spacingM">
+            <FormControl.Label>Image Model Inference Provider</FormControl.Label>
+            <Select
+              name="imageModelInferenceProvider"
+              value={parameters.imageModelInferenceProvider || ''}
+              onChange={handleSelectChange('imageModelInferenceProvider')}>
+              <Select.Option value="" isDisabled>
+                Select an Inference Provider
+              </Select.Option>
+              {INFERENCE_PROVIDERS.map((provider) => (
+                <Select.Option key={provider} value={provider}>
+                  {provider}
+                </Select.Option>
+              ))}
+            </Select>
+            <FormControl.HelpText>Enter the Inference Provider you wish to use with your image model.</FormControl.HelpText>
           </FormControl>
         </Form>
       </Box>

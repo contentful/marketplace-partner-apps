@@ -1,17 +1,18 @@
-import { HfInference } from '@huggingface/inference';
-import { AppInstallationParameters } from '../locations/ConfigScreen';
+import { InferenceClient } from '@huggingface/inference';
+import { AppInstallationParameters } from '../utils/types';
 
 const SYSTEM_PROMPT = `You are an advanced marketing prompt engineer specializing in photorealistic image generation. Transform any user-submitted image prompt into a concise, best-practice prompt that includes realistic details, lighting, composition, environment context, and camera settings. Your final output must be only the refined prompt itself without any additional explanation or formatting.`;
 
 export async function refinePrompt(prompt: string, parameters: AppInstallationParameters): Promise<string> {
-  if (!parameters.huggingfaceApiKey || !parameters.textModelId) {
-    throw new Error('Missing API key or text model ID configuration');
+  if (!parameters.huggingfaceApiKey || !parameters.textModelId || !parameters.textModelInferenceProvider) {
+    throw new Error('Missing API key or text model ID configuration or inference provider');
   }
 
-  const client = new HfInference(parameters.huggingfaceApiKey);
+  const client = new InferenceClient(parameters.huggingfaceApiKey);
 
   try {
     const chatCompletion = await client.chatCompletion({
+      provider: parameters.textModelInferenceProvider,
       model: parameters.textModelId,
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
@@ -28,7 +29,6 @@ export async function refinePrompt(prompt: string, parameters: AppInstallationPa
 
     return chatCompletion.choices[0].message.content;
   } catch (error) {
-    console.error('Error refining prompt:', error);
     throw new Error('Failed to refine prompt with text model');
   }
 }
