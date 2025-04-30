@@ -7,6 +7,7 @@ import { AppInstallationParameters } from '../utils/types';
 import { GenerateImageModal } from '../components/GenerateImageModal/GenerateImageModal';
 import { RefinePromptModal } from '../components/RefinePromptModal/RefinePromptModal';
 import { InitialPrompt } from '../components/InitialPrompt/InitialPrompt';
+import SaveAssetModal from '../components/SaveAssetModal/SaveAssetModal';
 
 const Page = () => {
   const sdk = useSDK<PageAppSDK>();
@@ -16,10 +17,10 @@ const Page = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  // const [isUploading, setIsUploading] = useState(false);
   const [timer, setTimer] = useState(0);
   const [isTimerActive, setIsTimerActive] = useState(false);
   const [showModal, setShowModal] = useState<string | null>(null);
+  const [assetName, setAssetName] = useState('');
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -84,54 +85,48 @@ const Page = () => {
     }
   };
 
-  // const handleUploadAsset = async () => {
-  //   if (!generatedImage) return;
+  const handleUploadAsset = async () => {
+    if (!generatedImage) return;
 
-  //   setIsUploading(true);
-  //   setError(null);
+    try {
+      const fileName = `${assetName}.png` || 'ai-generated-image.png';
+      const response = await fetch(generatedImage);
+      const blob = await response.blob();
+      const file = new File([blob], fileName, { type: 'image/png' });
+      const buffer = await file.arrayBuffer();
+      const upload = await sdk.cma.upload.create({ spaceId: sdk.ids.space }, { file: buffer });
 
-  //   try {
-  //     const response = await fetch(generatedImage);
-  //     const blob = await response.blob();
-  //     const file = new File([blob], 'ai-generated-image.png', { type: 'image/png' });
-  //     const buffer = await file.arrayBuffer();
-  //     const upload = await sdk.cma.upload.create({ spaceId: sdk.ids.space }, { file: buffer });
+      let asset = await sdk.cma.asset.create(
+        { spaceId: sdk.ids.space },
+        {
+          fields: {
+            title: {
+              'en-US': assetName,
+            },
+            description: {
+              'en-US': `Generated from prompt: ${initialPrompt}`,
+            },
+            file: {
+              'en-US': {
+                contentType: 'image/png',
+                fileName: fileName,
+                uploadFrom: {
+                  sys: { type: 'Link', linkType: 'Upload', id: upload.sys.id },
+                },
+              },
+            },
+          },
+        }
+      );
 
-  //     let asset = await sdk.cma.asset.create(
-  //       { spaceId: sdk.ids.space },
-  //       {
-  //         fields: {
-  //           title: {
-  //             'en-US': 'AI Generated Image',
-  //           },
-  //           description: {
-  //             'en-US': `Generated from prompt: ${initialPrompt}`,
-  //           },
-  //           file: {
-  //             'en-US': {
-  //               contentType: 'image/png',
-  //               fileName: 'ai-generated-image.png',
-  //               uploadFrom: {
-  //                 sys: { type: 'Link', linkType: 'Upload', id: upload.sys.id },
-  //               },
-  //             },
-  //           },
-  //         },
-  //       }
-  //     );
+      asset = await sdk.cma.asset.processForLocale({ spaceId: sdk.ids.space }, asset, 'en-US');
+      asset = await sdk.cma.asset.publish({ spaceId: sdk.ids.space, assetId: asset.sys.id }, asset);
 
-  //     asset = await sdk.cma.asset.processForLocale({ spaceId: sdk.ids.space, assetId: asset.sys.id, version: asset.sys.version }, asset, 'en-US');
-  //     asset = await sdk.cma.asset.publish({ spaceId: sdk.ids.space, assetId: asset.sys.id, version: asset.sys.version }, asset);
-
-  //     sdk.notifier.success('Asset successfully uploaded and published');
-  //   } catch (error) {
-  //     console.error('Error uploading asset:', error);
-  //     setError(error instanceof Error ? error.message : 'Failed to upload asset');
-  //     sdk.notifier.error('Failed to upload asset');
-  //   } finally {
-  //     setIsUploading(false);
-  //   }
-  // };
+      sdk.notifier.success('Image saved to media library');
+    } catch (error) {
+      sdk.notifier.error(error instanceof Error ? error.message : 'Failed to upload asset');
+    }
+  };
 
   return (
     <>
@@ -172,9 +167,8 @@ const Page = () => {
         error={error}
         timer={timer}
         isGenerating={isGenerating}
-        onClickNextAfterImageGeneration={(event) => {
-          setShowModal(null);
-          // handleUploadAsset();
+        onClickNextAfterImageGeneration={() => {
+          setShowModal('save-asset');
         }}
         onRetryImageGeneration={(event) => {
           setGeneratedImage(null);
@@ -186,6 +180,18 @@ const Page = () => {
           setGeneratedImage(null);
           setError(null);
           setRefinedPrompt('');
+        }}
+      />
+      <SaveAssetModal
+        isShown={showModal === 'save-asset'}
+        assetName={assetName}
+        setAssetName={setAssetName}
+        onSave={() => {
+          handleUploadAsset();
+          setShowModal(null);
+        }}
+        onClose={() => {
+          setShowModal(null);
         }}
       />
     </>

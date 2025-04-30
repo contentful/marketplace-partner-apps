@@ -45,8 +45,6 @@
     "lint": "eslint . --ext .ts,.tsx",
     "test": "vitest",
     "create-app-definition": "contentful-app-scripts create-app-definition",
-    "upload": "contentful-app-scripts upload --bundle-dir ./dist",
-    "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./dist  --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN",
     "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id 7dJ4K2h5qKXisoxIeR1Z2B --token ${TEST_CMA_TOKEN}"
   },
   "eslintConfig": {
