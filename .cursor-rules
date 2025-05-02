@@ -1,0 +1,34 @@
+{
+  "apply_prettier": true,
+  "apply_eslint": true,
+  "formatOnSave": true,
+  "formatOnSaveTimeout": 5000,
+  "telemetry": false,
+  "importSorting": {
+    "enabled": true,
+    "sortOrder": ["react", "next", "node", "contentful", "external", "internal", "sibling", "parent", "index"]
+  },
+  "editor": {
+    "tabSize": 2,
+    "insertSpaces": true,
+    "detectIndentation": true,
+    "trimTrailingWhitespace": true,
+    "insertFinalNewline": true
+  },
+  "search": {
+    "exclude": [
+      "**/.git",
+      "**/node_modules",
+      "**/dist",
+      "**/.contentful",
+      "**/coverage",
+      "**/.nyc_output"
+    ]
+  },
+  "typescript": {
+    "preferences": {
+      "quoteStyle": "single",
+      "importModuleSpecifierPreference": "shortest"
+    }
+  }
+} 
