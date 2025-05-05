@@ -1,5 +1,5 @@
 {
-  "name": "general-template",
+  "name": "google-docs-template",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -20,7 +20,7 @@
     "test": "vitest",
     "create-app-definition": "contentful-app-scripts create-app-definition",
     "add-locations": "contentful-app-scripts add-locations",
-    "deploy:staging": "contentful-app-scripts upload --bundle-dir ./build",
+    "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id 4i0mp5lQtgNsHYVrD5jIkj --token ${TEST_CMA_TOKEN}",
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN"
   },
   "eslintConfig": {
@@ -39,7 +39,7 @@
     ]
   },
   "devDependencies": {
-    "@contentful/app-scripts": "^2.3.0",
+    "@contentful/app-scripts": "^2.5.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.3.1",
     "@types/node": "^22.13.5",

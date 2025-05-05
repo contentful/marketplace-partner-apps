@@ -14,4 +14,4 @@ describe('Home component', () => {
 
     expect(getByText('Hello Home Component (AppId: test-app)')).toBeInTheDocument();
   });
-});
+}); 

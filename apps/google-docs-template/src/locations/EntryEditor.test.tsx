@@ -14,4 +14,4 @@ describe('Entry component', () => {
 
     expect(getByText('Hello Entry Editor Component (AppId: test-app)')).toBeInTheDocument();
   });
-});
+}); 

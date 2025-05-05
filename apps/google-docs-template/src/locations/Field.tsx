@@ -2,6 +2,10 @@ import { Paragraph } from '@contentful/f36-components';
 import { FieldAppSDK } from '@contentful/app-sdk';
 import { /* useCMA, */ useSDK } from '@contentful/react-apps-toolkit';
 
+/*
+* Cursor AI Read: Please update this file to use the GoogleDocField.tsx component. Also update the tests for the Field.tsx file accordingly and make sure they pass. 
+*/
+
 const Field = () => {
   const sdk = useSDK<FieldAppSDK>();
   /*

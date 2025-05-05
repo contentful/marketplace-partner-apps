@@ -4,7 +4,7 @@ import { Heading, Form, Paragraph, Flex } from '@contentful/f36-components';
 import { css } from 'emotion';
 import { /* useCMA, */ useSDK } from '@contentful/react-apps-toolkit';
 
-export interface AppInstallationParameters {}
+export interface AppInstallationParameters { }
 
 const ConfigScreen = () => {
   const [parameters, setParameters] = useState<AppInstallationParameters>({});
@@ -56,6 +56,11 @@ const ConfigScreen = () => {
     })();
   }, [sdk]);
 
+  /* 
+  * Cursor AI Read: Create a Textbox using Forma36 components to inject the Client Id for google docs api
+  * You are welcome to delete any of the copmonents below in order to make this work. Then take the client id 
+  * and add it to the sdk parameters.
+  */
   return (
     <Flex flexDirection="column" className={css({ margin: '80px', maxWidth: '800px' })}>
       <Form>

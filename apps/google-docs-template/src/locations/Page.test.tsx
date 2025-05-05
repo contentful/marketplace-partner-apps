@@ -1,4 +1,4 @@
-import Sidebar from './Sidebar';
+import Page from './Page';
 import { render } from '@testing-library/react';
 import { mockCma, mockSdk } from '../../test/mocks';
 import { vi } from 'vitest';
@@ -8,10 +8,10 @@ vi.mock('@contentful/react-apps-toolkit', () => ({
   useCMA: () => mockCma,
 }));
 
-describe('Sidebar component', () => {
+describe('Page component', () => {
   it('Component text exists', () => {
-    const { getByText } = render(<Sidebar />);
+    const { getByText } = render(<Page />);
 
-    expect(getByText('Hello Sidebar Component (AppId: test-app)')).toBeInTheDocument();
+    expect(getByText('Hello Page Component (AppId: test-app)')).toBeInTheDocument();
   });
-});
+}); 
