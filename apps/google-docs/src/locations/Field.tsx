@@ -1,6 +1,11 @@
-import { Paragraph } from '@contentful/f36-components';
+import React from 'react';
 import { FieldAppSDK } from '@contentful/app-sdk';
-import { /* useCMA, */ useSDK } from '@contentful/react-apps-toolkit';
+import { useSDK } from '@contentful/react-apps-toolkit';
+import GoogleDocField from '../components/GoogleDocField';
+
+/*
+* Cursor AI Read: Please update this file to use the GoogleDocField.tsx component. Also update the tests for the Field.tsx file accordingly and make sure they pass. 
+*/
 
 const Field = () => {
   const sdk = useSDK<FieldAppSDK>();
@@ -12,7 +17,12 @@ const Field = () => {
   // If you only want to extend Contentful's default editing experience
   // reuse Contentful's editor components
   // -> https://www.contentful.com/developers/docs/extensibility/field-editors/
-  return <Paragraph>Hello Entry Field Component (AppId: {sdk.ids.app})</Paragraph>;
+  return (
+    <div>
+      <GoogleDocField />
+      <div style={{ display: 'none' }}>AppId: {sdk.ids.app}</div>
+    </div>
+  );
 };
 
 export default Field;
