@@ -1,10 +1,12 @@
 import { useCallback, useState, useEffect } from 'react';
 import { ConfigAppSDK } from '@contentful/app-sdk';
-import { Heading, Form, Paragraph, Flex } from '@contentful/f36-components';
+import { Heading, Form, Paragraph, Flex, FormControl, TextInput } from '@contentful/f36-components';
 import { css } from 'emotion';
 import { /* useCMA, */ useSDK } from '@contentful/react-apps-toolkit';
 
-export interface AppInstallationParameters { }
+export interface AppInstallationParameters {
+  googleDocsClientId?: string;
+}
 
 const ConfigScreen = () => {
   const [parameters, setParameters] = useState<AppInstallationParameters>({});
@@ -56,6 +58,14 @@ const ConfigScreen = () => {
     })();
   }, [sdk]);
 
+  const handleClientIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setParameters((prev) => ({
+      ...prev,
+      googleDocsClientId: value
+    }));
+  };
+
   /* 
   * Cursor AI Read: Create a Textbox using Forma36 components to inject the Client Id for google docs api
   * You are welcome to delete any of the copmonents below in order to make this work. Then take the client id 
@@ -64,8 +74,23 @@ const ConfigScreen = () => {
   return (
     <Flex flexDirection="column" className={css({ margin: '80px', maxWidth: '800px' })}>
       <Form>
-        <Heading>App Config</Heading>
-        <Paragraph>Welcome to your contentful app. This is your config page.</Paragraph>
+        <Heading>Google Docs Integration Configuration</Heading>
+        <Paragraph>Configure your Google Docs integration by providing the required API credentials.</Paragraph>
+        
+        <FormControl>
+          <FormControl.Label htmlFor="googleDocsClientId">Google Docs Client ID</FormControl.Label>
+          <TextInput
+            id="googleDocsClientId"
+            name="googleDocsClientId"
+            value={parameters.googleDocsClientId || ''}
+            onChange={handleClientIdChange}
+            placeholder="Enter your Google Docs API Client ID"
+            width="large"
+          />
+          <FormControl.HelpText>
+            The Client ID from your Google Cloud Platform project. Required for authentication with Google Docs API.
+          </FormControl.HelpText>
+        </FormControl>
       </Form>
     </Flex>
   );
