@@ -109,7 +109,7 @@ export default function GoogleDocField() {
   // Render loading state
   if (isLoading) {
     return (
-      <Flex alignItems="center" justifyContent="center" padding="spacingM">
+      <Flex alignItems="center" justifyContent="center" padding="spacingM" data-testid="loading-indicator">
         <Spinner />
         <Text marginLeft="spacingS">Loading...</Text>
       </Flex>
@@ -119,7 +119,7 @@ export default function GoogleDocField() {
   // Render error state
   if (error) {
     return (
-      <Note variant="negative">
+      <Note variant="negative" data-testid="error-display">
         <Text fontWeight="fontWeightDemiBold">Error</Text>
         <Text>{error.message}</Text>
       </Note>
@@ -131,7 +131,7 @@ export default function GoogleDocField() {
     return (
       <Card>
         <Paragraph>Connect to Google Docs to edit content in a collaborative document.</Paragraph>
-        <Button variant="primary" onClick={authenticate}>Authenticate</Button>
+        <Button variant="primary" onClick={authenticate} data-testid="auth-button">Authenticate</Button>
       </Card>
     )
   }
@@ -141,7 +141,7 @@ export default function GoogleDocField() {
     return (
       <Card>
         <Paragraph>Create a new Google Document to edit this content.</Paragraph>
-        <Button variant="primary" onClick={handleCreateDocument}>Create Document</Button>
+        <Button variant="primary" onClick={handleCreateDocument} data-testid="create-doc-button">Create Document</Button>
       </Card>
     )
   }
@@ -151,7 +151,7 @@ export default function GoogleDocField() {
     <Card>
       <Flex flexDirection="column" gap="spacingM">
         <Box>
-          <Text fontWeight="fontWeightDemiBold">{currentDocument.title}</Text>
+          <Text fontWeight="fontWeightDemiBold" data-testid="doc-title">{currentDocument.title}</Text>
           <Paragraph>
             Use Google Docs to edit your content collaboratively, then sync changes back to Contentful.
           </Paragraph>
@@ -163,11 +163,12 @@ export default function GoogleDocField() {
             target="_blank"
             rel="noopener noreferrer"
             style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}
+            data-testid="doc-link"
           >
             <Text marginRight="spacingXs">Open in Google Docs</Text>
             <ExternalLinkIcon variant="muted" />
           </a>
-          <Button onClick={handleSyncFromDocs}>Sync from Google Docs</Button>
+          <Button onClick={handleSyncFromDocs} data-testid="sync-button">Sync from Google Docs</Button>
         </Flex>
       </Flex>
     </Card>

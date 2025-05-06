@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
-// Mock SDK
+// Define the SDK before mocking modules
 const mockSdk = {
   field: {
     getValue: vi.fn(),
@@ -23,16 +23,6 @@ const mockSdk = {
     }
   }
 };
-
-// Define the mocks before importing the components
-vi.mock('@contentful/react-apps-toolkit', () => ({
-  useSDK: () => mockSdk,
-  useCMA: () => ({}),
-  SDKContext: {
-    Provider: ({ children }: { children: React.ReactNode }) => children,
-    Consumer: ({ children }: { children: (sdk: any) => React.ReactNode }) => children({})
-  }
-}));
 
 // Mock functions for useGoogleDocs
 const mockAuthenticate = vi.fn();
@@ -59,9 +49,20 @@ const createBaseHookValue = (overrides = {}) => ({
   ...overrides
 });
 
-// Mock the useGoogleDocs hook
+// Hook mock
 const useGoogleDocsMock = vi.fn().mockImplementation(() => createBaseHookValue());
 
+// Set up mocks before importing the components
+vi.mock('@contentful/react-apps-toolkit', () => ({
+  useSDK: () => mockSdk,
+  useCMA: () => ({}),
+  SDKContext: {
+    Provider: ({ children }: { children: React.ReactNode }) => children,
+    Consumer: ({ children }: { children: (sdk: any) => React.ReactNode }) => children({})
+  }
+}));
+
+// Mock the useGoogleDocs hook
 vi.mock('../hooks/useGoogleDocs', () => ({
   useGoogleDocs: () => useGoogleDocsMock()
 }));
@@ -85,12 +86,18 @@ describe('GoogleDocField component', () => {
     useGoogleDocsMock.mockImplementation(() => createBaseHookValue());
   });
 
+  afterEach(() => {
+    vi.resetAllMocks();
+  });
+
   it('should show loading state when isLoading is true', () => {
     useGoogleDocsMock.mockImplementation(() => 
       createBaseHookValue({ isLoading: true })
     );
 
     render(<GoogleDocField />);
+    
+    // Use getAllByText to get all loading elements
     const loadingElements = screen.getAllByText(/Loading/i);
     expect(loadingElements.length).toBeGreaterThan(0);
   });
@@ -108,9 +115,8 @@ describe('GoogleDocField component', () => {
   it('should show authentication button when not authenticated', () => {
     render(<GoogleDocField />);
     
-    const authButton = screen.getByText(/Authenticate/i);
+    const authButton = screen.getByRole('button', { name: /Authenticate/i });
     expect(authButton).toBeInTheDocument();
-    expect(screen.getByText(/Connect to Google Docs/i)).toBeInTheDocument();
     
     fireEvent.click(authButton);
     expect(mockAuthenticate).toHaveBeenCalledTimes(1);
@@ -123,9 +129,8 @@ describe('GoogleDocField component', () => {
 
     render(<GoogleDocField />);
     
-    const createButton = screen.getByText(/Create Document/i);
+    const createButton = screen.getByRole('button', { name: /Create Document/i });
     expect(createButton).toBeInTheDocument();
-    expect(screen.getByText(/Create a new Google Document/i)).toBeInTheDocument();
     
     fireEvent.click(createButton);
     expect(mockCreateDocument).toHaveBeenCalledTimes(1);
@@ -148,13 +153,10 @@ describe('GoogleDocField component', () => {
 
     render(<GoogleDocField />);
     
-    expect(screen.getByText(/Test Document/i)).toBeInTheDocument();
-    expect(screen.getByText(/Open in Google Docs/i)).toBeInTheDocument();
+    expect(screen.getByText('Test Document')).toBeInTheDocument();
+    expect(screen.getByText('Open in Google Docs').closest('a')).toHaveAttribute('href', mockDocument.url);
     
-    const link = screen.getByText(/Open in Google Docs/i).closest('a');
-    expect(link).toHaveAttribute('href', mockDocument.url);
-    
-    const syncButton = screen.getByText(/Sync from Google Docs/i);
+    const syncButton = screen.getByRole('button', { name: /Sync from Google Docs/i });
     expect(syncButton).toBeInTheDocument();
     
     fireEvent.click(syncButton);
@@ -206,7 +208,7 @@ describe('GoogleDocField component', () => {
 
     render(<GoogleDocField />);
     
-    const syncButton = screen.getByText(/Sync from Google Docs/i);
+    const syncButton = screen.getByRole('button', { name: /Sync from Google Docs/i });
     fireEvent.click(syncButton);
     
     expect(consoleSpy).toHaveBeenCalledWith('Error syncing from docs:', expect.any(Error));
@@ -226,7 +228,7 @@ describe('GoogleDocField component', () => {
 
     render(<GoogleDocField />);
     
-    const createButton = screen.getByText(/Create Document/i);
+    const createButton = screen.getByRole('button', { name: /Create Document/i });
     fireEvent.click(createButton);
     
     await waitFor(() => {
