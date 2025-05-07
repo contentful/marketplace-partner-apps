@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
-import { Button, Text } from '@contentful/f36-components';
+import { Button, Text, Tooltip } from '@contentful/f36-components';
 
-export default function CreateGoogleDocButton({ sdk }: any) {
+interface GoogleDocButtonProps {
+  sdk: any;
+}
+
+export default function CreateGoogleDocButton({ sdk }: GoogleDocButtonProps) {
   const [isCreating, setIsCreating] = useState(false);
 
   const createDoc = async () => {
     const accessToken = localStorage.getItem('google_access_token');
     if (!accessToken) {
       sdk.notifier.error('Google account not connected. Please connect your account first.');
+      // Force reload to show connect button
+      window.location.reload();
       return;
     }
 
@@ -17,8 +23,21 @@ export default function CreateGoogleDocButton({ sdk }: any) {
       // Get field values from the entry
       const fields = sdk.entry.fields;
       const title = fields.title?.getValue() || 'Untitled';
+      
+      // Get other fields that might be available
       const summary = fields.summary?.getValue() || '';
       const notes = fields.notes?.getValue() || '';
+      const description = fields.description?.getValue() || '';
+      const content = fields.content?.getValue() || '';
+      
+      // Combine available content
+      const docContent = [
+        title ? `Title: ${title}` : '',
+        description ? `\n\nDescription: ${description}` : '',
+        summary ? `\n\nSummary: ${summary}` : '',
+        content ? `\n\nContent: ${content}` : '',
+        notes ? `\n\nNotes: ${notes}` : '',
+      ].join('');
 
       // Test the token first
       const tokenTest = await fetch('https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=' + accessToken);
@@ -33,6 +52,8 @@ export default function CreateGoogleDocButton({ sdk }: any) {
         return;
       }
 
+      console.log('Token validation successful, creating document...');
+
       // 1. Create a new Google Doc
       const driveRes = await fetch('https://www.googleapis.com/drive/v3/files', {
         method: 'POST',
@@ -41,12 +62,13 @@ export default function CreateGoogleDocButton({ sdk }: any) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: `Contentful: ${title}`,
+          name: `Contentful: ${title || 'Untitled Document'}`,
           mimeType: 'application/vnd.google-apps.document',
         }),
       });
 
       if (!driveRes.ok) {
+        console.error('Drive API response:', await driveRes.text());
         throw new Error(`Failed to create document: ${driveRes.status} ${driveRes.statusText}`);
       }
 
@@ -71,7 +93,7 @@ export default function CreateGoogleDocButton({ sdk }: any) {
             {
               insertText: {
                 location: { index: 1 },
-                text: `Title: ${title}\n\nSummary: ${summary}\n\nNotes: ${notes}`,
+                text: docContent || 'Contentful document content',
               },
             },
           ],
@@ -79,6 +101,7 @@ export default function CreateGoogleDocButton({ sdk }: any) {
       });
 
       if (!updateRes.ok) {
+        console.error('Docs API response:', await updateRes.text());
         throw new Error(`Failed to update document: ${updateRes.status} ${updateRes.statusText}`);
       }
 
@@ -86,6 +109,17 @@ export default function CreateGoogleDocButton({ sdk }: any) {
       window.open(`https://docs.google.com/document/d/${docId}/edit`, '_blank');
 
       sdk.notifier.success('Google Doc created successfully.');
+      
+      // Save the doc ID in a field if it exists
+      if (fields.googleDocId) {
+        try {
+          fields.googleDocId.setValue(docId);
+          console.log('Saved Google Doc ID to entry field');
+        } catch (error) {
+          console.warn('Could not save Google Doc ID to entry field:', error);
+        }
+      }
+      
     } catch (err) {
       console.error('Error creating Google Doc:', err);
       sdk.notifier.error(`Failed to create Google Doc: ${err instanceof Error ? err.message : 'Unknown error'}`);
@@ -95,14 +129,16 @@ export default function CreateGoogleDocButton({ sdk }: any) {
   };
 
   return (
-    <Button 
-      variant="positive" 
-      onClick={createDoc} 
-      isLoading={isCreating}
-      startIcon={<Text fontWeight="fontWeightDemiBold">📄</Text>}
-      isDisabled={isCreating}
-    >
-      {isCreating ? 'Creating Doc...' : 'Create Google Doc'}
-    </Button>
+    <Tooltip content="Creates a Google Doc with content from this entry" placement="top">
+      <Button 
+        variant="positive" 
+        onClick={createDoc} 
+        isLoading={isCreating}
+        startIcon={<Text fontWeight="fontWeightDemiBold">📄</Text>}
+        isDisabled={isCreating}
+      >
+        {isCreating ? 'Creating Doc...' : 'Create Google Doc'}
+      </Button>
+    </Tooltip>
   );
 }

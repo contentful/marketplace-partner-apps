@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useSDK } from '@contentful/react-apps-toolkit';
 import CreateGoogleDocButton from './GoogleDocButton';
-import { Button, Flex, Paragraph, TextLink } from '@contentful/f36-components';
+import { Button, Flex, Paragraph, TextLink, Note, Box } from '@contentful/f36-components';
 
 /*
 * Cursor AI Read: Create a Google Doc Field component that will be used to display the Google Doc in the Contentful entry editor.
@@ -33,10 +33,12 @@ import { Button, Flex, Paragraph, TextLink } from '@contentful/f36-components';
 * edge cases and provide a solution that is robust and easy to understand. You also consider multiple solutions to the problem and provide the best
 * solution to the problem.
 */
+
 export default function GoogleDocField() {
   const sdk = useSDK();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [authError, setAuthError] = useState<string | null>(null);
   
   const clientId = sdk.parameters.installation.googleDocsClientId;
   console.log('clientId', clientId);
@@ -50,7 +52,13 @@ export default function GoogleDocField() {
     );
   }
 
-  const redirectUri = window.location.origin; // Must match one in Google console
+  // This needs to exactly match what's configured in Google Cloud Console
+  // For Contentful apps, this should be the app URL
+  const redirectUri = sdk.ids?.app ? 
+    `https://app.contentful.com/apps/${sdk.ids.app}` : 
+    window.location.origin;
+    
+  console.log('Using redirect URI:', redirectUri);
 
   const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` + new URLSearchParams({
     client_id: clientId,
@@ -66,40 +74,127 @@ export default function GoogleDocField() {
 
   console.log("authUrl", authUrl);
 
-  const connectGoogle = () => {
-    // Open in a new window instead of redirecting
-    const authWindow = window.open(authUrl, '_blank', 'width=800,height=600');
+  const handleAuthMessage = useCallback((event: MessageEvent) => {
+    // Ensure the message is from our popup and has the right type
+    if (event.data?.type !== 'GOOGLE_AUTH_CALLBACK') return;
     
-    // Check periodically if the auth window has closed
-    const checkWindow = setInterval(() => {
-      if (authWindow?.closed) {
-        clearInterval(checkWindow);
-        checkAuthentication();
-      }
-    }, 500);
+    console.log('Received auth callback message:', event.data);
+    
+    const { token, error } = event.data;
+    
+    if (token) {
+      console.log('Got access token from popup message');
+      localStorage.setItem('google_access_token', token);
+      setIsAuthenticated(true);
+      setAuthError(null);
+    } else if (error) {
+      console.error('Auth error:', error);
+      setAuthError(`Authentication error: ${error}`);
+    }
+    
+    setIsLoading(false);
+  }, []);
+
+  useEffect(() => {
+    // Add message listener for popup callback
+    window.addEventListener('message', handleAuthMessage);
+    
+    return () => {
+      window.removeEventListener('message', handleAuthMessage);
+    };
+  }, [handleAuthMessage]);
+
+  const connectGoogle = () => {
+    // Clear any previous errors
+    setAuthError(null);
+    setIsLoading(true);
+    
+    try {
+      // Method 1: Direct popup auth
+      const width = 600;
+      const height = 700;
+      const left = window.screen.width / 2 - width / 2;
+      const top = window.screen.height / 2 - height / 2;
+      
+      window.open(
+        authUrl, 
+        'googleAuthPopup',
+        `width=${width},height=${height},left=${left},top=${top}`
+      );
+      
+      // Set timeout to show message if taking too long
+      setTimeout(() => {
+        if (isLoading) {
+          setAuthError('Authentication is taking longer than expected. Please check if you need to authorize the popup window.');
+          setIsLoading(false);
+        }
+      }, 20000);
+    } catch (error) {
+      console.error('Error opening auth window:', error);
+      setAuthError('Failed to open authentication popup. Please ensure popups are allowed for this site.');
+      setIsLoading(false);
+    }
   };
 
   const checkAuthentication = () => {
     const token = localStorage.getItem('google_access_token');
-    setIsAuthenticated(!!token);
-    setIsLoading(false);
+    
+    if (token) {
+      validateToken(token).then(isValid => {
+        setIsAuthenticated(isValid);
+        setIsLoading(false);
+        if (!isValid) {
+          setAuthError('Your Google authentication has expired. Please reconnect your account.');
+        }
+      });
+    } else {
+      setIsAuthenticated(false);
+      setIsLoading(false);
+    }
+  };
+  
+  const validateToken = async (token: string): Promise<boolean> => {
+    try {
+      const response = await fetch(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${token}`);
+      
+      if (!response.ok) {
+        console.error('Token validation failed:', response.status, response.statusText);
+        localStorage.removeItem('google_access_token');
+        return false;
+      }
+      
+      return true;
+    } catch (error) {
+      console.error('Error validating token:', error);
+      localStorage.removeItem('google_access_token');
+      return false;
+    }
   };
 
+  // Check for tokens in URL hash on load or after redirect
   useEffect(() => {
-    // Check for token in URL hash (after redirect from Google)
+    // Check URL for hash parameters from OAuth redirect
     const hash = window.location.hash;
-  
-    if (hash.includes('access_token')) {
+    
+    if (hash && hash.includes('access_token')) {
       const params = new URLSearchParams(hash.substring(1));
       const token = params.get('access_token');
-  
+      const error = params.get('error');
+      
       if (token) {
+        console.log('Found access token in URL hash!');
         localStorage.setItem('google_access_token', token);
         window.history.replaceState({}, '', window.location.pathname);
-        checkAuthentication();
+        setIsAuthenticated(true);
+        setAuthError(null);
+        setIsLoading(false);
+      } else if (error) {
+        console.error('Auth error in hash:', error);
+        setAuthError(`Authentication error: ${error}`);
+        setIsLoading(false);
       }
     } else {
-      // Check if we already have a token
+      // Check for existing token in localStorage
       checkAuthentication();
     }
     
@@ -107,18 +202,25 @@ export default function GoogleDocField() {
     const timeout = setTimeout(() => {
       if (isLoading) {
         setIsLoading(false);
+        setAuthError('Authentication check timed out. Please try again.');
       }
-    }, 10000); // 10 seconds timeout
+    }, 10000);
     
     return () => clearTimeout(timeout);
   }, []);
-  
+
   if (isLoading) {
     return <div>Checking Google authentication status...</div>;
   }
 
   return (
     <Flex flexDirection="column" gap="spacingM">
+      {authError && (
+        <Note variant="negative">
+          {authError}
+        </Note>
+      )}
+      
       {!isAuthenticated ? (
         <div data-testid="auth-message">
           <Paragraph>Your Google account is not connected.</Paragraph>
@@ -130,11 +232,34 @@ export default function GoogleDocField() {
               Learn more about Google authentication
             </TextLink>
           </Paragraph>
+          <Paragraph marginTop="spacingM">
+            <Note variant="warning">
+              <strong>Important:</strong> Make sure the following redirect URI is added to the authorized 
+              redirect URIs in your Google Cloud Console project:
+              <br /><br />
+              <code style={{ background: '#f0f0f0', padding: '5px', display: 'block' }}>
+                {redirectUri}
+              </code>
+              <br />
+              After adding this URI, it may take a few minutes for Google to update its systems.
+            </Note>
+          </Paragraph>
         </div>
       ) : (
         <div data-testid="google-doc-connected">
           <Paragraph>Your Google account is connected.</Paragraph>
           <CreateGoogleDocButton sdk={sdk} />
+          <Box marginTop="spacingM">
+            <Button 
+              variant="secondary" 
+              onClick={() => {
+                localStorage.removeItem('google_access_token');
+                setIsAuthenticated(false);
+              }}
+            >
+              Disconnect Google Account
+            </Button>
+          </Box>
         </div>
       )}
     </Flex>
