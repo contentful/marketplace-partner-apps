@@ -54,10 +54,7 @@ export default function GoogleDocField() {
 
   // This needs to exactly match what's configured in Google Cloud Console
   // For Contentful apps, this should be the app URL
-  const redirectUri = sdk.ids?.app ? 
-    `https://app.contentful.com/apps/${sdk.ids.app}` : 
-    window.location.origin;
-    
+  const redirectUri = window.location.origin + "/auth-callback.html";
   console.log('Using redirect URI:', redirectUri);
 
   const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` + new URLSearchParams({
@@ -70,11 +67,16 @@ export default function GoogleDocField() {
     ].join(' '),
     prompt: 'consent',
     include_granted_scopes: 'true',
+    // Adding a state parameter to prevent CSRF attacks and verify the response
+    state: 'google_auth_' + Date.now(),
   });
 
   console.log("authUrl", authUrl);
 
+  // Handle message from callback window
   const handleAuthMessage = useCallback((event: MessageEvent) => {
+    console.log('Got message event:', event.origin, event.data);
+    
     // Ensure the message is from our popup and has the right type
     if (event.data?.type !== 'GOOGLE_AUTH_CALLBACK') return;
     
@@ -83,23 +85,25 @@ export default function GoogleDocField() {
     const { token, error } = event.data;
     
     if (token) {
-      console.log('Got access token from popup message');
+      console.log('Got access token from popup message!');
       localStorage.setItem('google_access_token', token);
       setIsAuthenticated(true);
       setAuthError(null);
+      setIsLoading(false);
     } else if (error) {
-      console.error('Auth error:', error);
+      console.error('Auth error from callback:', error);
       setAuthError(`Authentication error: ${error}`);
+      setIsLoading(false);
     }
-    
-    setIsLoading(false);
   }, []);
 
   useEffect(() => {
     // Add message listener for popup callback
     window.addEventListener('message', handleAuthMessage);
+    console.log('Added message event listener');
     
     return () => {
+      console.log('Removing message event listener');
       window.removeEventListener('message', handleAuthMessage);
     };
   }, [handleAuthMessage]);
@@ -109,45 +113,71 @@ export default function GoogleDocField() {
     setAuthError(null);
     setIsLoading(true);
     
+    console.log('Starting Google authentication flow...');
+    
     try {
-      // Method 1: Direct popup auth
+      // Open in a popup window
       const width = 600;
       const height = 700;
       const left = window.screen.width / 2 - width / 2;
       const top = window.screen.height / 2 - height / 2;
       
-      window.open(
+      const authWindow = window.open(
         authUrl, 
         'googleAuthPopup',
         `width=${width},height=${height},left=${left},top=${top}`
       );
       
-      // Set timeout to show message if taking too long
+      if (!authWindow) {
+        setAuthError('Popup blocked by browser. Please allow popups for this site.');
+        setIsLoading(false);
+        return;
+      }
+      
+      console.log('Opened auth popup window');
+      
+      // Check if the popup was blocked or closed immediately
       setTimeout(() => {
-        if (isLoading) {
-          setAuthError('Authentication is taking longer than expected. Please check if you need to authorize the popup window.');
+        if (!authWindow || authWindow.closed) {
+          console.error('Auth window was blocked or closed immediately');
+          setAuthError('Authentication popup was blocked or closed. Please allow popups and try again.');
           setIsLoading(false);
         }
-      }, 20000);
+      }, 1000);
+      
+      // Set a longer timeout to show a helpful message if taking too long
+      setTimeout(() => {
+        if (isLoading) {
+          console.log('Auth flow taking longer than expected...');
+          setAuthError('Authentication is taking longer than expected. The popup window might be hidden or blocked.');
+          setIsLoading(false);
+        }
+      }, 30000); // 30 seconds
     } catch (error) {
       console.error('Error opening auth window:', error);
-      setAuthError('Failed to open authentication popup. Please ensure popups are allowed for this site.');
+      setAuthError(`Failed to open authentication popup: ${error instanceof Error ? error.message : 'Unknown error'}`);
       setIsLoading(false);
     }
   };
 
   const checkAuthentication = () => {
+    console.log('Checking authentication...');
     const token = localStorage.getItem('google_access_token');
     
     if (token) {
+      console.log('Found token in localStorage, validating...');
       validateToken(token).then(isValid => {
         setIsAuthenticated(isValid);
         setIsLoading(false);
         if (!isValid) {
+          console.error('Token validation failed');
           setAuthError('Your Google authentication has expired. Please reconnect your account.');
+        } else {
+          console.log('Token validation successful!');
         }
       });
     } else {
+      console.log('No token found in localStorage');
       setIsAuthenticated(false);
       setIsLoading(false);
     }
@@ -155,6 +185,7 @@ export default function GoogleDocField() {
   
   const validateToken = async (token: string): Promise<boolean> => {
     try {
+      console.log('Validating token with Google...');
       const response = await fetch(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${token}`);
       
       if (!response.ok) {
@@ -163,6 +194,8 @@ export default function GoogleDocField() {
         return false;
       }
       
+      const data = await response.json();
+      console.log('Token validation response:', data);
       return true;
     } catch (error) {
       console.error('Error validating token:', error);
@@ -171,46 +204,32 @@ export default function GoogleDocField() {
     }
   };
 
-  // Check for tokens in URL hash on load or after redirect
+  // Initial setup effect
   useEffect(() => {
-    // Check URL for hash parameters from OAuth redirect
-    const hash = window.location.hash;
+    console.log('Initial authentication check...');
     
-    if (hash && hash.includes('access_token')) {
-      const params = new URLSearchParams(hash.substring(1));
-      const token = params.get('access_token');
-      const error = params.get('error');
-      
-      if (token) {
-        console.log('Found access token in URL hash!');
-        localStorage.setItem('google_access_token', token);
-        window.history.replaceState({}, '', window.location.pathname);
-        setIsAuthenticated(true);
-        setAuthError(null);
-        setIsLoading(false);
-      } else if (error) {
-        console.error('Auth error in hash:', error);
-        setAuthError(`Authentication error: ${error}`);
-        setIsLoading(false);
-      }
-    } else {
-      // Check for existing token in localStorage
-      checkAuthentication();
-    }
+    // Check for existing token in localStorage
+    checkAuthentication();
     
     // Set a timeout for loading state
     const timeout = setTimeout(() => {
       if (isLoading) {
+        console.error('Authentication check timed out');
         setIsLoading(false);
         setAuthError('Authentication check timed out. Please try again.');
       }
-    }, 10000);
+    }, 15000); // 15 seconds timeout
     
     return () => clearTimeout(timeout);
   }, []);
 
   if (isLoading) {
-    return <div>Checking Google authentication status...</div>;
+    return (
+      <div>
+        <Paragraph>Checking Google authentication status...</Paragraph>
+        <Note variant="primary">If this takes too long, please try refreshing the page.</Note>
+      </div>
+    );
   }
 
   return (
