@@ -1,9 +1,7 @@
-import React, { useEffect } from 'react'
-import { Button, Box, Text, Spinner, Paragraph, Flex, Card, Note } from '@contentful/f36-components'
-import { ExternalLinkIcon } from '@contentful/f36-icons'
-import { useSDK } from '@contentful/react-apps-toolkit'
-import { FieldAppSDK } from '@contentful/app-sdk'
-import { useGoogleDocs } from './hooks/useGoogleDocs'
+import React, { useEffect, useState } from 'react'
+import { useSDK } from '@contentful/react-apps-toolkit';
+import CreateGoogleDocButton from './GoogleDocButton';
+import { Button, Flex, Paragraph, TextLink } from '@contentful/f36-components';
 
 /*
 * Cursor AI Read: Create a Google Doc Field component that will be used to display the Google Doc in the Contentful entry editor.
@@ -36,141 +34,109 @@ import { useGoogleDocs } from './hooks/useGoogleDocs'
 * solution to the problem.
 */
 export default function GoogleDocField() {
-  const sdk = useSDK<FieldAppSDK>()
-  const {
-    isAuthenticated,
-    isLoading,
-    error,
-    currentDocument,
-    authenticate,
-    createDocumentFromContentModel,
-    fetchDocumentContent,
-    parseDocumentToFields,
-    updateDocumentWithFields
-  } = useGoogleDocs()
+  const sdk = useSDK();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  const clientId = sdk.parameters.installation.googleDocsClientId;
+  console.log('clientId', clientId);
+  
+  if (!clientId) {
+    return (
+      <div data-testid="error-message">
+        <Paragraph>Error: Google Docs client ID not configured.</Paragraph>
+        <Paragraph>Please add the Google Docs client ID in the app configuration.</Paragraph>
+      </div>
+    );
+  }
 
-  // Load document if ID exists in field
+  const redirectUri = window.location.origin; // Must match one in Google console
+
+  const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` + new URLSearchParams({
+    client_id: clientId,
+    redirect_uri: redirectUri,
+    response_type: 'token',
+    scope: [
+      'https://www.googleapis.com/auth/drive.file',
+      'https://www.googleapis.com/auth/documents'
+    ].join(' '),
+    prompt: 'consent',
+    include_granted_scopes: 'true',
+  });
+
+  console.log("authUrl", authUrl);
+
+  const connectGoogle = () => {
+    // Open in a new window instead of redirecting
+    const authWindow = window.open(authUrl, '_blank', 'width=800,height=600');
+    
+    // Check periodically if the auth window has closed
+    const checkWindow = setInterval(() => {
+      if (authWindow?.closed) {
+        clearInterval(checkWindow);
+        checkAuthentication();
+      }
+    }, 500);
+  };
+
+  const checkAuthentication = () => {
+    const token = localStorage.getItem('google_access_token');
+    setIsAuthenticated(!!token);
+    setIsLoading(false);
+  };
+
   useEffect(() => {
-    const loadDocument = async () => {
-      if (isAuthenticated) {
-        const documentId = sdk.field.getValue()
-        if (documentId) {
-          try {
-            await fetchDocumentContent(documentId)
-          } catch (err) {
-            console.error('Error loading document:', err)
-          }
-        }
+    // Check for token in URL hash (after redirect from Google)
+    const hash = window.location.hash;
+  
+    if (hash.includes('access_token')) {
+      const params = new URLSearchParams(hash.substring(1));
+      const token = params.get('access_token');
+  
+      if (token) {
+        localStorage.setItem('google_access_token', token);
+        window.history.replaceState({}, '', window.location.pathname);
+        checkAuthentication();
       }
+    } else {
+      // Check if we already have a token
+      checkAuthentication();
     }
-
-    loadDocument()
-  }, [isAuthenticated, sdk.field, fetchDocumentContent])
-
-  // Create content model object from Contentful fields
-  const getContentModel = () => {
-    const fields = sdk.contentType.fields.map(field => ({
-      id: field.id,
-      name: field.name,
-      type: field.type
-    }))
-
-    return { fields }
-  }
-
-  // Handle creating a new document
-  const handleCreateDocument = async () => {
-    try {
-      await createDocumentFromContentModel(getContentModel())
-    } catch (err) {
-      console.error('Error creating document:', err)
-    }
-  }
-
-  // Handle syncing content from Google Docs to Contentful
-  const handleSyncFromDocs = async () => {
-    if (!currentDocument) return
-
-    try {
-      const contentModel = getContentModel()
-      const fieldValues = parseDocumentToFields(contentModel)
-      
-      // For this example, we're just setting the current field, but in a real app
-      // we would update multiple fields based on the content model
-      const currentFieldId = sdk.field.id
-      if (fieldValues[currentFieldId]) {
-        await sdk.field.setValue(fieldValues[currentFieldId])
+    
+    // Set a timeout for loading state
+    const timeout = setTimeout(() => {
+      if (isLoading) {
+        setIsLoading(false);
       }
-    } catch (err) {
-      console.error('Error syncing from docs:', err)
-    }
-  }
-
-  // Render loading state
+    }, 10000); // 10 seconds timeout
+    
+    return () => clearTimeout(timeout);
+  }, []);
+  
   if (isLoading) {
-    return (
-      <Flex alignItems="center" justifyContent="center" padding="spacingM" data-testid="loading-indicator">
-        <Spinner />
-        <Text marginLeft="spacingS">Loading...</Text>
-      </Flex>
-    )
+    return <div>Checking Google authentication status...</div>;
   }
 
-  // Render error state
-  if (error) {
-    return (
-      <Note variant="negative" data-testid="error-display">
-        <Text fontWeight="fontWeightDemiBold">Error</Text>
-        <Text>{error.message}</Text>
-      </Note>
-    )
-  }
-
-  // Render unauthenticated state
-  if (!isAuthenticated) {
-    return (
-      <Card>
-        <Paragraph>Connect to Google Docs to edit content in a collaborative document.</Paragraph>
-        <Button variant="primary" onClick={authenticate} data-testid="auth-button">Authenticate</Button>
-      </Card>
-    )
-  }
-
-  // Render authenticated state without document
-  if (!currentDocument) {
-    return (
-      <Card>
-        <Paragraph>Create a new Google Document to edit this content.</Paragraph>
-        <Button variant="primary" onClick={handleCreateDocument} data-testid="create-doc-button">Create Document</Button>
-      </Card>
-    )
-  }
-
-  // Render authenticated state with document
   return (
-    <Card>
-      <Flex flexDirection="column" gap="spacingM">
-        <Box>
-          <Text fontWeight="fontWeightDemiBold" data-testid="doc-title">{currentDocument.title}</Text>
-          <Paragraph>
-            Use Google Docs to edit your content collaboratively, then sync changes back to Contentful.
+    <Flex flexDirection="column" gap="spacingM">
+      {!isAuthenticated ? (
+        <div data-testid="auth-message">
+          <Paragraph>Your Google account is not connected.</Paragraph>
+          <Button variant="primary" onClick={connectGoogle}>
+            Connect Google Account
+          </Button>
+          <Paragraph marginTop="spacingS">
+            <TextLink as="a" href="https://developers.google.com/docs/api/how-tos/authorizing" target="_blank">
+              Learn more about Google authentication
+            </TextLink>
           </Paragraph>
-        </Box>
-        
-        <Flex gap="spacingM" alignItems="center">
-          <a
-            href={currentDocument.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}
-            data-testid="doc-link"
-          >
-            <Text marginRight="spacingXs">Open in Google Docs</Text>
-            <ExternalLinkIcon variant="muted" />
-          </a>
-          <Button onClick={handleSyncFromDocs} data-testid="sync-button">Sync from Google Docs</Button>
-        </Flex>
-      </Flex>
-    </Card>
+        </div>
+      ) : (
+        <div data-testid="google-doc-connected">
+          <Paragraph>Your Google account is connected.</Paragraph>
+          <CreateGoogleDocButton sdk={sdk} />
+        </div>
+      )}
+    </Flex>
   )
 }
