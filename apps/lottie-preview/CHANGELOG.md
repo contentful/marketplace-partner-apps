@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.0...lottie-preview-v1.0.1) (2025-05-09)
+
+
+### Bug Fixes
+
+* lottie license [] ([#4983](https://github.com/contentful/marketplace-partner-apps/issues/4983)) ([45b4f3f](https://github.com/contentful/marketplace-partner-apps/commit/45b4f3fb015f3f30ddccbc4d66b24589f9da4890))
+
 ## 1.0.0 (2025-04-25)
 
 
