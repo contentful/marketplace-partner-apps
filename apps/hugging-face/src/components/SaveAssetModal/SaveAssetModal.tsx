@@ -1,19 +1,6 @@
 import React from 'react';
 import { Modal, Button, Form, FormControl, TextInput, Heading } from '@contentful/f36-components';
-import tokens from '@contentful/f36-tokens';
-import { css } from 'emotion';
-
-export const styles = {
-  modalContent: css({
-    paddingBottom: 0,
-  }),
-  formControl: css({
-    marginBottom: tokens.spacing2Xs,
-  }),
-  modalControls: css({
-    padding: `${tokens.spacingM} ${tokens.spacingL}`,
-  }),
-};
+import { styles } from './SaveAssetModal.styles';
 
 interface SaveAssetModalProps {
   isShown: boolean;

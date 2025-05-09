@@ -3,6 +3,7 @@ import { PageAppSDK } from '@contentful/app-sdk';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { generateImage } from '../services/huggingfaceImage';
 import { refinePrompt } from '../services/huggingfaceText';
+import { uploadAsset } from '../services/uploadAsset';
 import { AppInstallationParameters } from '../utils/types';
 import { GenerateImageModal } from '../components/GenerateImageModal/GenerateImageModal';
 import { RefinePromptModal } from '../components/RefinePromptModal/RefinePromptModal';
@@ -85,49 +86,6 @@ const Page = () => {
     }
   };
 
-  const handleUploadAsset = async () => {
-    if (!generatedImage) return;
-
-    try {
-      const fileName = `${assetName}.png` || 'ai-generated-image.png';
-      const response = await fetch(generatedImage);
-      const blob = await response.blob();
-      const file = new File([blob], fileName, { type: 'image/png' });
-      const buffer = await file.arrayBuffer();
-      const upload = await sdk.cma.upload.create({ spaceId: sdk.ids.space }, { file: buffer });
-
-      let asset = await sdk.cma.asset.create(
-        { spaceId: sdk.ids.space },
-        {
-          fields: {
-            title: {
-              'en-US': assetName,
-            },
-            description: {
-              'en-US': `Generated from prompt: ${initialPrompt}`,
-            },
-            file: {
-              'en-US': {
-                contentType: 'image/png',
-                fileName: fileName,
-                uploadFrom: {
-                  sys: { type: 'Link', linkType: 'Upload', id: upload.sys.id },
-                },
-              },
-            },
-          },
-        }
-      );
-
-      asset = await sdk.cma.asset.processForLocale({ spaceId: sdk.ids.space }, asset, 'en-US');
-      asset = await sdk.cma.asset.publish({ spaceId: sdk.ids.space, assetId: asset.sys.id }, asset);
-
-      sdk.notifier.success('Image saved to media library');
-    } catch (error) {
-      sdk.notifier.error(error instanceof Error ? error.message : 'Failed to upload asset');
-    }
-  };
-
   return (
     <>
       <InitialPrompt
@@ -187,7 +145,12 @@ const Page = () => {
         assetName={assetName}
         setAssetName={setAssetName}
         onSave={() => {
-          handleUploadAsset();
+          uploadAsset({
+            sdk,
+            initialPrompt,
+            assetName,
+            generatedImage,
+          });
           setShowModal(null);
         }}
         onClose={() => {
