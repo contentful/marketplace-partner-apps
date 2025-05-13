@@ -13,6 +13,7 @@ describe('SaveAssetModal', () => {
     onSave: mockOnSave,
     assetName: '',
     setAssetName: mockSetAssetName,
+    isSaving: false,
   };
 
   it('renders the modal when isShown is true', () => {
