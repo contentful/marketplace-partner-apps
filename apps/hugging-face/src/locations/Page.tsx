@@ -22,6 +22,7 @@ const Page = () => {
   const [isTimerActive, setIsTimerActive] = useState(false);
   const [showModal, setShowModal] = useState<string | null>(null);
   const [assetName, setAssetName] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -79,7 +80,7 @@ const Page = () => {
       const imageUrl = URL.createObjectURL(imageBlob);
       setGeneratedImage(imageUrl);
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Failed to generate image');
+      setError(error instanceof Error ? error.message : 'Failed to refine prompt');
     } finally {
       setIsGenerating(false);
       setIsTimerActive(false);
@@ -136,25 +137,37 @@ const Page = () => {
         closeGeneratingImageModal={() => {
           setShowModal(null);
           setGeneratedImage(null);
-          setError(null);
           setRefinedPrompt('');
+          setError(null);
         }}
       />
       <SaveAssetModal
         isShown={showModal === 'save-asset'}
         assetName={assetName}
         setAssetName={setAssetName}
-        onSave={() => {
-          uploadAsset({
+        isSaving={isSaving}
+        onSave={async () => {
+          setIsSaving(true);
+          await uploadAsset({
             sdk,
             initialPrompt,
             assetName,
             generatedImage,
           });
+          setIsSaving(false);
           setShowModal(null);
+          setGeneratedImage(null);
+          setRefinedPrompt('');
+          setInitialPrompt('');
+          setError(null);
+          setAssetName('');
         }}
         onClose={() => {
           setShowModal(null);
+          setGeneratedImage(null);
+          setRefinedPrompt('');
+          setError(null);
+          setAssetName('');
         }}
       />
     </>

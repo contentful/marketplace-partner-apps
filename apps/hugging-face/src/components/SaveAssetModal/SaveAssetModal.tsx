@@ -8,9 +8,10 @@ interface SaveAssetModalProps {
   onSave: () => void;
   assetName: string;
   setAssetName: (name: string) => void;
+  isSaving: boolean;
 }
 
-export const SaveAssetModal: React.FC<SaveAssetModalProps> = ({ isShown, onClose, onSave, assetName, setAssetName }) => {
+export const SaveAssetModal: React.FC<SaveAssetModalProps> = ({ isShown, onClose, onSave, assetName, setAssetName, isSaving }) => {
   return (
     <Modal onClose={onClose} isShown={isShown}>
       {() => (
@@ -36,7 +37,7 @@ export const SaveAssetModal: React.FC<SaveAssetModalProps> = ({ isShown, onClose
             <Button size="small" onClick={onClose}>
               Cancel
             </Button>
-            <Button size="small" variant="primary" onClick={onSave}>
+            <Button size="small" variant="primary" onClick={onSave} isLoading={isSaving}>
               Save image to media library
             </Button>
           </Modal.Controls>

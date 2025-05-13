@@ -51,7 +51,7 @@ export const GenerateImageModal = ({
               </Flex>
               {error && (
                 <Flex alignItems="center" justifyContent="center" className={styles.error}>
-                  <Note variant="negative">Error: {error}. Please try again.</Note>
+                  <Note variant="negative">{error}</Note>
                 </Flex>
               )}
               {!error && !generatedImage && (

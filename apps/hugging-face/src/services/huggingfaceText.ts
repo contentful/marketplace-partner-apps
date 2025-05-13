@@ -29,6 +29,9 @@ export async function refinePrompt(prompt: string, parameters: AppInstallationPa
 
     return chatCompletion.choices[0].message.content;
   } catch (error) {
-    throw new Error('Failed to refine prompt with text model');
+    const errorMessage = (error as any)?.message?.includes('exceeded')
+      ? 'You have exceeded your monthly included Huggingface credits.'
+      : 'Error: failed to refine prompt with text model. Please try again.';
+    throw new Error(errorMessage);
   }
 }
