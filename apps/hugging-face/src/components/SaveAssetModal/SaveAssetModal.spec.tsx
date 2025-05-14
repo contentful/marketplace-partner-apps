@@ -41,7 +41,7 @@ describe('SaveAssetModal', () => {
 
   it('updates the asset name when the input value changes', () => {
     render(<SaveAssetModal {...defaultProps} />);
-    const input = screen.getByLabelText('Image name');
+    const input = screen.getByLabelText(/Image name/i);
     fireEvent.change(input, { target: { value: 'New Image Name' } });
     expect(mockSetAssetName).toHaveBeenCalledWith('New Image Name');
   });

@@ -24,7 +24,7 @@ export const InitialPrompt = ({ initialPrompt, setInitialPrompt, isDisabled, onC
           </Heading>
           <Paragraph>
             Be descriptive, but concise. You can either refine your prompt first or generate an image directly. Refining your prompt and generating new images
-            use Huggingface credits. Refer to your Huggingface dashboard to check your credit usage.
+            use Hugging Face credits. Refer to your Hugging Face dashboard to check your credit usage.
           </Paragraph>
         </Flex>
         <FormControl isRequired className={styles.formControl}>

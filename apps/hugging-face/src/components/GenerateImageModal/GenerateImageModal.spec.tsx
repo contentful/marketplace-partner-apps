@@ -31,9 +31,9 @@ describe('GenerateImageModal', () => {
   });
 
   it('displays an error message when there is an error', () => {
-    const props = { ...defaultProps, error: 'Something went wrong' };
+    const props = { ...defaultProps, error: 'Error: failed to load image. Please try again.' };
     render(<GenerateImageModal {...props} />);
-    expect(screen.getByText('Error: Something went wrong. Please try again.')).toBeInTheDocument();
+    expect(screen.getByText('Error: failed to load image. Please try again.')).toBeInTheDocument();
   });
 
   it('renders a skeleton loader when the image is not generated and there is no error', () => {

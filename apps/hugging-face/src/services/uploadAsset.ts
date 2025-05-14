@@ -1,5 +1,4 @@
 import { PageAppSDK } from '@contentful/app-sdk';
-import { b } from 'vitest/dist/chunks/suite.d.FvehnV49';
 
 const createAsset = async ({
   sdk,
