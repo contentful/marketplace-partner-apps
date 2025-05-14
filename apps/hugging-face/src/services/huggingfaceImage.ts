@@ -20,6 +20,9 @@ export async function generateImage(prompt: string, parameters: AppInstallationP
 
     return image;
   } catch (error) {
-    throw new Error('Failed to generate image with image model');
+    const errorMessage = (error as any)?.message?.includes('exceeded')
+      ? 'You have exceeded your monthly included Hugging Face credits.'
+      : 'Error: failed to load image. Please try again.';
+    throw new Error(errorMessage);
   }
 }
