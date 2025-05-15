@@ -29,6 +29,8 @@ const Page = () => {
   const [imageWidth, setImageWidth] = useState(500);
   const [imageGuidanceScale, setImageGuidanceScale] = useState(3.5);
   const [imageMaxSequenceLength, setImageMaxSequenceLength] = useState(512);
+  const [actualImageWidth, setActualImageWidth] = useState<number | null>(null);
+  const [actualImageHeight, setActualImageHeight] = useState<number | null>(null);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -119,6 +121,14 @@ const Page = () => {
       );
       const imageUrl = URL.createObjectURL(imageBlob);
       setGeneratedImage(imageUrl);
+
+      const img = new window.Image();
+      img.onload = function() {
+        setActualImageWidth(img.width);
+        setActualImageHeight(img.height);
+        console.log('Actual image size:', img.width, img.height);
+      };
+      img.src = imageUrl;
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Failed to refine prompt');
     } finally {
@@ -183,7 +193,13 @@ const Page = () => {
           setGeneratedImage(null);
           setRefinedPrompt('');
           setError(null);
+          setActualImageWidth(null);
+          setActualImageHeight(null);
         }}
+        imageWidth={imageWidth}
+        imageHeight={imageHeight}
+        actualImageWidth={actualImageWidth}
+        actualImageHeight={actualImageHeight}
       />
       <SaveAssetModal
         isShown={showModal === 'save-asset'}
