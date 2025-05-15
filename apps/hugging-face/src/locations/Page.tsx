@@ -74,13 +74,15 @@ const Page = () => {
     setShowModal('image-specs');
   };
 
-  const handleImageSpecsChange = (fields: Partial<{
-    imageNumInferenceSteps: number;
-    imageHeight: number;
-    imageWidth: number;
-    imageGuidanceScale: number;
-    imageMaxSequenceLength: number;
-  }>) => {
+  const handleImageSpecsChange = (
+    fields: Partial<{
+      imageNumInferenceSteps: number;
+      imageHeight: number;
+      imageWidth: number;
+      imageGuidanceScale: number;
+      imageMaxSequenceLength: number;
+    }>
+  ) => {
     if (fields.imageNumInferenceSteps !== undefined) setImageNumInferenceSteps(fields.imageNumInferenceSteps);
     if (fields.imageHeight !== undefined) setImageHeight(fields.imageHeight);
     if (fields.imageWidth !== undefined) setImageWidth(fields.imageWidth);
@@ -123,7 +125,7 @@ const Page = () => {
       setGeneratedImage(imageUrl);
 
       const img = new window.Image();
-      img.onload = function() {
+      img.onload = function () {
         setActualImageWidth(img.width);
         setActualImageHeight(img.height);
         console.log('Actual image size:', img.width, img.height);

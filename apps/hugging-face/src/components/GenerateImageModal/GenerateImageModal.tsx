@@ -1,6 +1,6 @@
-import { Button, Flex, Heading, Paragraph, Modal, Text, Skeleton, Subheading, Image, Note } from '@contentful/f36-components';
-import tokens from '@contentful/f36-tokens';
+import { Button, Flex, Heading, Modal, Note, Paragraph, Skeleton, Subheading, Text } from '@contentful/f36-components';
 import { ClockIcon } from '@contentful/f36-icons';
+import tokens from '@contentful/f36-tokens';
 import { styles } from './GenerateImageModal.styles';
 
 interface GenerateImageModalProps {
@@ -34,9 +34,7 @@ export const GenerateImageModal = ({
   actualImageWidth,
   actualImageHeight,
 }: GenerateImageModalProps) => {
-  const showWarning =
-    actualImageWidth != null && actualImageHeight != null &&
-    (actualImageWidth !== imageWidth || actualImageHeight !== imageHeight);
+  const showWarning = actualImageWidth != null && actualImageHeight != null && (actualImageWidth !== imageWidth || actualImageHeight !== imageHeight);
   return (
     <Modal onClose={closeGeneratingImageModal} isShown={showGeneratingImageModal} size="fullscreen">
       {() => (
@@ -77,6 +75,19 @@ export const GenerateImageModal = ({
                     const displayHeight = Math.min(actualImageHeight ?? imageHeight, window.innerHeight * 0.8);
                     return (
                       <>
+                        {showWarning && (
+                          <div style={{ marginBottom: 8, width: '1024px' }}>
+                            <Note variant="warning">
+                              The generated image size does not match your requested size. This is likely a limitation of the selected model.
+                              <br />
+                              <Paragraph fontSize="fontSizeS" fontColor="gray700" style={{ margin: 0 }}>
+                                Requested: {imageWidth} x {imageHeight} px
+                                <br />
+                                Actual: {actualImageWidth ?? '?'} x {actualImageHeight ?? '?'} px
+                              </Paragraph>
+                            </Note>
+                          </div>
+                        )}
                         <div
                           style={{
                             width: displayWidth,
@@ -89,8 +100,7 @@ export const GenerateImageModal = ({
                             alignItems: 'flex-start',
                             justifyContent: 'flex-start',
                             margin: '0 auto',
-                          }}
-                        >
+                          }}>
                           <img
                             src={generatedImage}
                             alt="Generated image"
@@ -98,19 +108,6 @@ export const GenerateImageModal = ({
                             height={actualImageHeight ?? imageHeight}
                             style={{ display: 'block' }}
                           />
-                        </div>
-                        <div style={{ marginTop: 16, textAlign: 'left', width: displayWidth, maxWidth: displayWidth }}>
-                          <Paragraph fontSize="fontSizeS" fontColor="gray700" style={{ margin: 0 }}>
-                            Requested: {imageWidth} x {imageHeight} px<br />
-                            Actual: {actualImageWidth ?? '?'} x {actualImageHeight ?? '?'} px
-                          </Paragraph>
-                          {showWarning && (
-                            <div style={{ marginTop: 8, maxWidth: 600, width: '100%' }}>
-                              <Note variant="warning">
-                                The generated image size does not match your requested size. This is likely a limitation of the selected model.
-                              </Note>
-                            </div>
-                          )}
                         </div>
                       </>
                     );
