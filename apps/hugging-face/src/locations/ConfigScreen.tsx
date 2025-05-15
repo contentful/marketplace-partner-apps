@@ -154,6 +154,9 @@ const ConfigScreen = () => {
             </Select>
             <FormControl.HelpText>Enter the Inference Provider you wish to use with your image model.</FormControl.HelpText>
           </FormControl>
+
+          <MenuDivider />
+          <Heading as="h2" marginBottom="spacingS">Image Generation Settings</Heading>
         </Form>
       </Box>
     </Flex>

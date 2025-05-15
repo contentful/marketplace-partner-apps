@@ -74,15 +74,13 @@ const Page = () => {
     setShowModal('image-specs');
   };
 
-  const handleImageSpecsChange = (
-    fields: Partial<{
-      imageNumInferenceSteps: number;
-      imageHeight: number;
-      imageWidth: number;
-      imageGuidanceScale: number;
-      imageMaxSequenceLength: number;
-    }>
-  ) => {
+  const handleImageSpecsChange = (fields: Partial<{
+    imageNumInferenceSteps: number;
+    imageHeight: number;
+    imageWidth: number;
+    imageGuidanceScale: number;
+    imageMaxSequenceLength: number;
+  }>) => {
     if (fields.imageNumInferenceSteps !== undefined) setImageNumInferenceSteps(fields.imageNumInferenceSteps);
     if (fields.imageHeight !== undefined) setImageHeight(fields.imageHeight);
     if (fields.imageWidth !== undefined) setImageWidth(fields.imageWidth);
