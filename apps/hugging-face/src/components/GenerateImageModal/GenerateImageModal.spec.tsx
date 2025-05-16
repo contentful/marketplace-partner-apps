@@ -13,6 +13,8 @@ describe('GenerateImageModal', () => {
     onClickNextAfterImageGeneration: vi.fn(),
     onRetryImageGeneration: vi.fn(),
     closeGeneratingImageModal: vi.fn(),
+    imageWidth: 500,
+    imageHeight: 500,
   };
 
   it('renders the modal', () => {
