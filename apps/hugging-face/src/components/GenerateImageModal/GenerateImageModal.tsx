@@ -59,10 +59,7 @@ export const GenerateImageModal = ({
             <Flex className={styles.contentWrapper}>
               <Flex justifyContent="space-between" alignItems="flex-start" style={{ width: '100%' }}>
                 <Heading className={styles.heading}>Generating your image</Heading>
-                <Flex
-                  justifyContent="flex-end"
-                  flexDirection="column"
-                  className={styles.timerSectionCompact}>
+                <Flex justifyContent="flex-end" flexDirection="column" className={styles.timerSectionCompact}>
                   <Flex alignItems="center" gap={tokens.spacing2Xs}>
                     <ClockIcon className={styles.clockIcon} />
                     <Subheading className={styles.timer}>Timer: {timer} seconds</Subheading>

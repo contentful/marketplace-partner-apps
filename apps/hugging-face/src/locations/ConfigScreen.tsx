@@ -9,8 +9,8 @@ import { INFERENCE_PROVIDERS } from '@huggingface/inference';
 const ConfigScreen = () => {
   const [parameters, setParameters] = useState<AppInstallationParameters>({
     huggingfaceApiKey: '',
-    textModelId: 'meta-llama/Llama-3.2-3B-Instruct',
-    textModelInferenceProvider: 'hf-inference',
+    textModelId: 'Qwen/Qwen2.5-VL-7B-Instruct',
+    textModelInferenceProvider: 'hyperbolic',
     imageModelId: 'black-forest-labs/FLUX.1-dev',
     imageModelInferenceProvider: 'hf-inference',
   });
