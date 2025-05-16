@@ -178,7 +178,7 @@ const Page = () => {
       <GenerateImageModal
         showGeneratingImageModal={showModal === 'generate-image'}
         prompt={initialPrompt}
-        setPrompt={setInitialPrompt}
+        setPrompt={refinedPrompt ? setRefinedPrompt : setInitialPrompt}
         generatedImage={generatedImage}
         error={error}
         timer={timer}
