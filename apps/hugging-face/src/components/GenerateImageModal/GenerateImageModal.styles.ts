@@ -24,11 +24,10 @@ export const styles = {
   promptText: css({
     marginBottom: 0,
   }),
-  timerSection: css({
+  timerSectionCompact: css({
     border: `1px solid ${tokens.gray300}`,
     borderRadius: tokens.borderRadiusSmall,
-    padding: tokens.spacingM,
-    height: '112px',
+    padding: `${tokens.spacingS} ${tokens.spacingM} ${tokens.spacingM} ${tokens.spacingM}`,
     gap: tokens.spacingXs,
   }),
   clockIcon: css({
