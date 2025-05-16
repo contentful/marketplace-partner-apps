@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.0...lottie-preview-v1.0.1) (2025-05-16)
+
+
+### Bug Fixes
+
+* hugging face add ability to save asset [INTEG-2583] ([#4987](https://github.com/contentful/marketplace-partner-apps/issues/4987)) ([c3fb5b9](https://github.com/contentful/marketplace-partner-apps/commit/c3fb5b9634a22c9b477d98418bb213db3fd5cafc))
+* lottie license [] ([#4983](https://github.com/contentful/marketplace-partner-apps/issues/4983)) ([45b4f3f](https://github.com/contentful/marketplace-partner-apps/commit/45b4f3fb015f3f30ddccbc4d66b24589f9da4890))
+
 ## 1.0.0 (2025-04-25)
 
 
