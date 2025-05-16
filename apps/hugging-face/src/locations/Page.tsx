@@ -204,6 +204,7 @@ const Page = () => {
         imageHeight={imageHeight}
         actualImageWidth={actualImageWidth}
         actualImageHeight={actualImageHeight}
+        refinedPrompt={refinedPrompt}
       />
       <SaveAssetModal
         isShown={showModal === 'save-asset'}

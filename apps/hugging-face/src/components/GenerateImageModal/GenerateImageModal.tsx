@@ -20,6 +20,7 @@ interface GenerateImageModalProps {
   imageHeight: number;
   actualImageWidth?: number | null;
   actualImageHeight?: number | null;
+  refinedPrompt?: string;
 }
 
 export const GenerateImageModal = ({
@@ -38,6 +39,7 @@ export const GenerateImageModal = ({
   imageHeight,
   actualImageWidth,
   actualImageHeight,
+  refinedPrompt,
 }: GenerateImageModalProps) => {
   const [showWarning, setShowWarning] = useState(true);
   const shouldShowWarning =
@@ -74,7 +76,7 @@ export const GenerateImageModal = ({
                   Prompt
                 </Subheading>
                 <Textarea
-                  value={prompt}
+                  value={refinedPrompt || prompt}
                   onChange={(e) => setPrompt(e.target.value)}
                   isDisabled={isGenerating}
                   style={{ width: '100%', minWidth: '1024px', maxWidth: '1024px', resize: 'vertical' }}
