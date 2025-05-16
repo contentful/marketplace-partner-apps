@@ -56,14 +56,13 @@ export const GenerateImageModal = ({
         <>
           <Modal.Header title="Hugging Face image generator" onClose={closeGeneratingImageModal} />
           <Modal.Content className={styles.modalContent}>
-            <Flex className={styles.contentWrapper} style={{ width: '1024px', flexDirection: 'column', gap: tokens.spacingL }}>
+            <Flex className={styles.contentWrapper}>
               <Flex justifyContent="space-between" alignItems="flex-start" style={{ width: '100%' }}>
                 <Heading className={styles.heading}>Generating your image</Heading>
                 <Flex
                   justifyContent="flex-end"
                   flexDirection="column"
-                  className={styles.timerSectionCompact}
-                  style={{ minWidth: 320, marginLeft: tokens.spacingL }}>
+                  className={styles.timerSectionCompact}>
                   <Flex alignItems="center" gap={tokens.spacing2Xs}>
                     <ClockIcon className={styles.clockIcon} />
                     <Subheading className={styles.timer}>Timer: {timer} seconds</Subheading>
@@ -71,7 +70,7 @@ export const GenerateImageModal = ({
                   <Text fontColor="gray700">Some models take ~60 seconds for image generation.</Text>
                 </Flex>
               </Flex>
-              <Flex flexDirection="column" className={styles.promptSection} style={{ width: '1024px', marginTop: tokens.spacingS }}>
+              <Flex flexDirection="column" className={styles.promptSection}>
                 <Subheading as="h2" marginBottom="spacingXs">
                   Prompt
                 </Subheading>
@@ -79,12 +78,12 @@ export const GenerateImageModal = ({
                   value={refinedPrompt || prompt}
                   onChange={(e) => setPrompt(e.target.value)}
                   isDisabled={isGenerating}
-                  style={{ width: '100%', minWidth: '1024px', maxWidth: '1024px', resize: 'vertical' }}
+                  className={styles.textarea}
                   rows={2}
                   aria-label="Prompt"
                 />
                 {generatedImage && !error && (
-                  <Flex justifyContent="flex-end" style={{ width: '100%', marginTop: tokens.spacingS }}>
+                  <Flex justifyContent="flex-end" className={styles.regenerateButtonContainer}>
                     <Button size="small" variant="secondary" isDisabled={isGenerating} onClick={onRegenerateImage}>
                       Regenerate image
                     </Button>
@@ -102,14 +101,14 @@ export const GenerateImageModal = ({
                 </Skeleton.Container>
               )}
               {!error && !!generatedImage && (
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+                <div className={styles.imageContainer}>
                   {(() => {
                     const displayWidth = Math.min(actualImageWidth ?? imageWidth, window.innerWidth * 0.9);
                     const displayHeight = Math.min(actualImageHeight ?? imageHeight, window.innerHeight * 0.8);
                     return (
                       <>
                         {shouldShowWarning && (
-                          <div style={{ marginBottom: 8, width: '1024px', position: 'relative' }}>
+                          <div className={styles.warningContainer}>
                             <Note variant="warning">
                               <span>
                                 The generated image size does not match your requested size. This is likely a limitation of the selected model.
@@ -125,30 +124,23 @@ export const GenerateImageModal = ({
                                 variant="transparent"
                                 icon={<CloseIcon />}
                                 onClick={() => setShowWarning(false)}
-                                style={{ position: 'absolute', top: 8, right: 8 }}
+                                className={styles.warningCloseButton}
                               />
                             </Note>
                           </div>
                         )}
                         <div
+                          className={styles.imageWrapper}
                           style={{
                             width: displayWidth,
                             height: displayHeight,
-                            overflow: 'hidden',
-                            background: '#fafafa',
-                            border: '1px solid #eee',
-                            position: 'relative',
-                            display: 'flex',
-                            alignItems: 'flex-start',
-                            justifyContent: 'flex-start',
-                            margin: '0 auto',
                           }}>
                           <img
                             src={generatedImage}
                             alt="Generated image"
                             width={actualImageWidth ?? imageWidth}
                             height={actualImageHeight ?? imageHeight}
-                            style={{ display: 'block' }}
+                            className={styles.generatedImage}
                           />
                         </div>
                       </>
