@@ -2,7 +2,11 @@ import { PageAppSDK } from '@contentful/app-sdk';
 
 const getDefaultLocale = async (sdk: PageAppSDK) => {
   const locales = await sdk.cma.locale.getMany({ spaceId: sdk.ids.space });
-  return locales.items.find((locale) => locale.default)!.code;
+  const defaultLocale = locales.items.find((locale) => locale.default);
+  if (!defaultLocale && locales.items.length === 0) {
+    throw new Error('No locales found in the space');
+  }
+  return defaultLocale?.code || locales.items[0].code;
 };
 
 const createAsset = async ({
