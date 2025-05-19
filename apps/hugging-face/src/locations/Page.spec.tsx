@@ -4,6 +4,7 @@ import Page from './Page';
 import * as reactAppsSdk from '@contentful/react-apps-toolkit';
 import * as huggingfaceText from '../services/huggingfaceText';
 import * as huggingfaceImage from '../services/huggingfaceImage';
+import * as uploadAssetService from '../services/uploadAsset';
 
 // Mock the SDK hooks
 vi.mock('@contentful/react-apps-toolkit', async () => {
@@ -21,6 +22,12 @@ vi.mock('../services/huggingfaceImage', () => ({
 
 vi.mock('../services/huggingfaceText', () => ({
   refinePrompt: vi.fn(),
+}));
+
+vi.mock('../services/uploadAsset', () => ({
+  uploadAsset: vi.fn().mockImplementation(async ({ sdk }) => {
+    sdk.notifier.success('Image saved to media library');
+  }),
 }));
 
 beforeAll(() => {
@@ -302,10 +309,16 @@ describe('Page Component', () => {
     await act(async () => {
       saveButton.click();
     });
-    expect(mockFieldSdk.cma.upload.create).toHaveBeenCalled();
-    expect(mockFieldSdk.cma.asset.create).toHaveBeenCalled();
-    expect(mockFieldSdk.cma.asset.processForLocale).toHaveBeenCalled();
-    expect(mockFieldSdk.cma.asset.publish).toHaveBeenCalled();
+
+    await waitFor(() => {
+      expect(uploadAssetService.uploadAsset).toHaveBeenCalledWith({
+        sdk: mockFieldSdk,
+        initialPrompt: 'A text input',
+        assetName: 'My Image',
+        generatedImage: 'data:image/png;base64,mockImageData',
+      });
+    });
+
     expect(mockFieldSdk.notifier.success).toHaveBeenCalledWith('Image saved to media library');
     expect(mockFieldSdk.notifier.error).not.toHaveBeenCalled();
   });
