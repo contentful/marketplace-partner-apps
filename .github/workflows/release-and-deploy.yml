@@ -1,8 +1,9 @@
 ---
-"on":
+on:
   push:
     branches:
       - main
+      - "**"
 
 permissions:
   contents: write
@@ -12,16 +13,18 @@ name: Release and deploy apps
 jobs:
   release-please:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: google-github-actions/release-please-action@v3
+      - name: Release Please
         id: release
+        uses: googleapis/release-please-action@v4
         with:
-          command: manifest
-          token: ${{secrets.GITHUB_TOKEN}}
-          default-branch: main
-          release-type: node
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target-branch: main
+
     outputs:
       releases_created: ${{ steps.release.outputs.releases_created }}
+
 
   build-and-deploy:
     needs: release-please
