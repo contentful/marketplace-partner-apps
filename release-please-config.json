@@ -1,5 +1,6 @@
 {
-  "pull-request-title-pattern": "chore: release main",
+  "pull-request-title-pattern": "chore: release ${component} ${version}",
+  "separate-pull-requests": true,
   "packages": {
     "apps/adapt-essentials-asset-fields": {
       "release-type": "node"
