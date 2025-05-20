@@ -43,5 +43,5 @@ export default {
     node: true,
     es6: true,
   },
-  ignorePatterns: ['node_modules', 'build', 'dist', '.next', 'coverage', 'public'],
+  ignorePatterns: ['node_modules/**/*', 'build/**/*', 'dist/**/*', '.next/**/*', 'coverage/**/*', 'public/**/*'],
 };
