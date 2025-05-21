@@ -27,15 +27,15 @@
     "@contentful/app-scripts": "1.31.1",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
-    "@types/lodash": "^4.17.10",
+    "@types/lodash": "^4.17.17",
     "@types/node": "16.18.38",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
     "eslint": "8.44.0",
-    "eslint-config-next": "15.2.1",
+    "eslint-config-next": "15.3.2",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "29.7.0",
-    "typescript": "5.7.2"
+    "typescript": "5.8.3"
   },
   "eslintConfig": {
     "extends": "next"
