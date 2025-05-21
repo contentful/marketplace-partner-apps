@@ -101,7 +101,7 @@ const ConfigScreen = () =>
 	return (
 		<Flex flexDirection="column" className={css({ margin: "80px" })}>
 			<div className={css({ textAlign: "center", marginBottom: "20px" })}>
-				<Image src={LOGO} alt="" className={css({ height: "100px", width: "227px", display: "inline-block" })} />
+				<Image width="227" height="100" src={LOGO} alt="" className={css({ display: "inline-block" })} />
 			</div>
 			<Form>
 				<Heading>translationstudio license</Heading>

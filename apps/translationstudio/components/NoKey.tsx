@@ -21,13 +21,40 @@ import { LOGO } from "utils/logo";
 import { css } from "emotion";
 import Image from "next/image";
 
+export function IsLoading()
+{
+    return <>
+        <div style={{ textAlign: "center"}}>
+            <Image height={50} width={116} src={LOGO} alt="" className={css({ height: "100px", width: "227px", display: "inline-block" })} />
+        </div>
+        <div style={{ paddingTop: "1.5em", textAlign: "center"}}>
+            <Paragraph>translationstudio is loading</Paragraph>;
+        </div>
+    </>    
+}
+
+export function NoLanguageMappings() 
+{
+    return <>
+            <div style={{ textAlign: "right"}}>
+                <Image height={50} width={116} src={LOGO} alt="" style={{ height: "50px", display: "inline-block" }} />
+            </div>
+            <div style={{ paddingTop: "1.5em", textAlign: "center"}}>
+                <Paragraph>You do not yet have any translation settings configured.</Paragraph>
+                <Paragraph>Please access your <a rel="nofollow" href="https://account.translationstudio.tech" target="_blank">translationstudio account</a>.</Paragraph>
+            </div>
+        </>;
+}
+
 export default function noKey()
 {
 
     return <>
         <div style={{ textAlign: "center"}}>
-            <Image src={LOGO} alt="" className={css({ height: "100px", width: "227px", display: "inline-block" })} />
+            <Image height={50} width={116} src={LOGO} alt="" className={css({ height: "100px", width: "227px", display: "inline-block" })} />
         </div>
-        <Paragraph>Please go to the App configuration and enter a valid translationstudio license</Paragraph>;
+        <div style={{ paddingTop: "1.5em", textAlign: "center"}}>
+            <Paragraph>Please go to the App configuration and enter a valid translationstudio license</Paragraph>;
+        </div>
     </>
 }

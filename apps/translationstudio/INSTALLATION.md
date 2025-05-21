@@ -32,10 +32,13 @@ All you need to do is adding your translationstudio license created in your [tra
 > [!NOTE]
 > Your connections to translation memory systems and access settings will be configured with your translationstudio account.
 
-To allow translationstudio to access your space(s), you will need to create respective CMA tokens (Settings menu of your space). These will be needed when configuring the translationstudio Contentful connector with your translationstudio account.
+To allow translationstudio to access your space(s), you will need to create respective **CMA tokens** (Settings menu of your space). These will be needed when configuring the translationstudio Contentful connector with your translationstudio account.
 
 > [!IMPORTANT]
 > translationstudio will only use these tokens in order to export content to be translated and to import translated content. We never share your tokens with others.
+
+![Configure the extension.](readme-data/configuration-1.png)
+
 
 ## Adding translationstudio to your content models
 
