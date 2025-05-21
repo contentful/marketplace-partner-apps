@@ -14,20 +14,20 @@
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 6RGLVmXYrGaIIRIda1HwAC --token ${CONTENTFUL_CMA_TOKEN}"
   },
   "dependencies": {
-    "@contentful/app-sdk": "^4.29.3",
-    "@contentful/f36-components": "^4.74.3",
+    "@contentful/app-sdk": "^4.29.6",
+    "@contentful/f36-components": "^4.80.3",
     "@contentful/f36-image": "^4.67.4",
     "@contentful/f36-workbench": "^4.21.0",
     "@contentful/react-apps-toolkit": "^1.2.15",
     "@uidotdev/usehooks": "^2.0.1",
     "eslint-config-prettier": "^9.1.0",
-    "prettier": "^3.4.2",
+    "prettier": "^3.5.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-focus-lock": "^2.13.2",
+    "react-focus-lock": "^2.13.6",
     "react-markdown": "^9.0.1",
     "react-router-dom": "^6.28.0",
-    "remark-gfm": "^4.0.0",
+    "remark-gfm": "^4.0.1",
     "use-local-storage-extended": "^0.1.1"
   },
   "devDependencies": {
