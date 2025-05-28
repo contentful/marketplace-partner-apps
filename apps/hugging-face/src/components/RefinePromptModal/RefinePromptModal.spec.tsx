@@ -19,8 +19,8 @@ describe('RefinePromptModal', () => {
   });
 
   it('displays an error note when error is present', () => {
-    render(<RefinePromptModal {...defaultProps} error="Something went wrong" />);
-    expect(screen.getByText('Error: Something went wrong. Please try again.')).toBeInTheDocument();
+    render(<RefinePromptModal {...defaultProps} error="Error: failed to refine prompt with text model. Please try again." />);
+    expect(screen.getByText('Error: failed to refine prompt with text model. Please try again.')).toBeInTheDocument();
   });
 
   it('shows loading state when isRefining is true', () => {
