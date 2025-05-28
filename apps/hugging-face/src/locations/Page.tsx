@@ -9,6 +9,7 @@ import { GenerateImageModal } from '../components/GenerateImageModal/GenerateIma
 import { RefinePromptModal } from '../components/RefinePromptModal/RefinePromptModal';
 import { InitialPrompt } from '../components/InitialPrompt/InitialPrompt';
 import SaveAssetModal from '../components/SaveAssetModal/SaveAssetModal';
+import { GenerateImageSpecsModal } from '../components/GenerateImageSpecsModal/GenerateImageSpecsModal';
 
 const Page = () => {
   const sdk = useSDK<PageAppSDK>();
@@ -23,6 +24,13 @@ const Page = () => {
   const [showModal, setShowModal] = useState<string | null>(null);
   const [assetName, setAssetName] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const [imageNumInferenceSteps, setImageNumInferenceSteps] = useState(50);
+  const [imageHeight, setImageHeight] = useState(500);
+  const [imageWidth, setImageWidth] = useState(500);
+  const [imageGuidanceScale, setImageGuidanceScale] = useState(3.5);
+  const [imageMaxSequenceLength, setImageMaxSequenceLength] = useState(512);
+  const [actualImageWidth, setActualImageWidth] = useState<number | null>(null);
+  const [actualImageHeight, setActualImageHeight] = useState<number | null>(null);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -61,8 +69,34 @@ const Page = () => {
     }
   };
 
-  const handleGenerateImage = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleShowImageSpecsModal = (event: React.FormEvent) => {
+    event.preventDefault();
+    setShowModal('image-specs');
+  };
+
+  const handleImageSpecsChange = (
+    fields: Partial<{
+      imageNumInferenceSteps: number;
+      imageHeight: number;
+      imageWidth: number;
+      imageGuidanceScale: number;
+      imageMaxSequenceLength: number;
+    }>
+  ) => {
+    if (fields.imageNumInferenceSteps !== undefined) setImageNumInferenceSteps(fields.imageNumInferenceSteps);
+    if (fields.imageHeight !== undefined) setImageHeight(fields.imageHeight);
+    if (fields.imageWidth !== undefined) setImageWidth(fields.imageWidth);
+    if (fields.imageGuidanceScale !== undefined) setImageGuidanceScale(fields.imageGuidanceScale);
+    if (fields.imageMaxSequenceLength !== undefined) setImageMaxSequenceLength(fields.imageMaxSequenceLength);
+  };
+
+  const handleImageSpecsSubmit = () => {
+    setShowModal('generate-image');
+    handleGenerateImage();
+  };
+
+  const handleGenerateImage = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     const promptToUse = refinedPrompt || initialPrompt;
     if (!promptToUse.trim()) return;
 
@@ -75,10 +109,28 @@ const Page = () => {
       if (!parameters) {
         throw new Error('App is not properly configured');
       }
-
-      const imageBlob = await generateImage(initialPrompt, parameters, refinedPrompt);
+      const imageBlob = await generateImage(
+        initialPrompt,
+        {
+          ...parameters,
+          imageNumInferenceSteps,
+          imageHeight,
+          imageWidth,
+          imageGuidanceScale,
+          imageMaxSequenceLength,
+        },
+        refinedPrompt
+      );
       const imageUrl = URL.createObjectURL(imageBlob);
       setGeneratedImage(imageUrl);
+
+      const img = new window.Image();
+      img.onload = function () {
+        setActualImageWidth(img.width);
+        setActualImageHeight(img.height);
+        console.log('Actual image size:', img.width, img.height);
+      };
+      img.src = imageUrl;
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Failed to refine prompt');
     } finally {
@@ -97,10 +149,7 @@ const Page = () => {
           setShowModal('refine-prompt');
           handleRefinePrompt(event);
         }}
-        onClickGenerateImage={(event) => {
-          setShowModal('generate-image');
-          handleGenerateImage(event);
-        }}
+        onClickGenerateImage={handleShowImageSpecsModal}
       />
       <RefinePromptModal
         showRefinePromptModal={showModal === 'refine-prompt'}
@@ -108,20 +157,28 @@ const Page = () => {
         isRefining={isRefining}
         setRefinedPrompt={setRefinedPrompt}
         error={error}
-        onSubmitRefinedPrompt={(event) => {
-          setShowModal('generate-image');
-          handleGenerateImage(event);
-        }}
+        onSubmitRefinedPrompt={handleShowImageSpecsModal}
         closeRefinePromptModal={() => {
           setShowModal(null);
           setRefinedPrompt('');
           setError(null);
         }}
       />
-
+      <GenerateImageSpecsModal
+        isShown={showModal === 'image-specs'}
+        imageNumInferenceSteps={imageNumInferenceSteps}
+        imageHeight={imageHeight}
+        imageWidth={imageWidth}
+        imageGuidanceScale={imageGuidanceScale}
+        imageMaxSequenceLength={imageMaxSequenceLength}
+        onChange={handleImageSpecsChange}
+        onCancel={() => setShowModal(null)}
+        onSubmit={handleImageSpecsSubmit}
+      />
       <GenerateImageModal
         showGeneratingImageModal={showModal === 'generate-image'}
-        prompt={refinedPrompt || initialPrompt}
+        prompt={initialPrompt}
+        setPrompt={refinedPrompt ? setRefinedPrompt : setInitialPrompt}
         generatedImage={generatedImage}
         error={error}
         timer={timer}
@@ -134,12 +191,20 @@ const Page = () => {
           setError(null);
           handleGenerateImage(event);
         }}
+        onRegenerateImage={handleGenerateImage}
         closeGeneratingImageModal={() => {
           setShowModal(null);
           setGeneratedImage(null);
           setRefinedPrompt('');
           setError(null);
+          setActualImageWidth(null);
+          setActualImageHeight(null);
         }}
+        imageWidth={imageWidth}
+        imageHeight={imageHeight}
+        actualImageWidth={actualImageWidth}
+        actualImageHeight={actualImageHeight}
+        refinedPrompt={refinedPrompt}
       />
       <SaveAssetModal
         isShown={showModal === 'save-asset'}

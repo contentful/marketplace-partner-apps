@@ -1,9 +1,10 @@
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act, within } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, beforeAll, afterAll, Mock } from 'vitest';
 import Page from './Page';
 import * as reactAppsSdk from '@contentful/react-apps-toolkit';
 import * as huggingfaceText from '../services/huggingfaceText';
 import * as huggingfaceImage from '../services/huggingfaceImage';
+import * as uploadAssetService from '../services/uploadAsset';
 
 // Mock the SDK hooks
 vi.mock('@contentful/react-apps-toolkit', async () => {
@@ -21,6 +22,12 @@ vi.mock('../services/huggingfaceImage', () => ({
 
 vi.mock('../services/huggingfaceText', () => ({
   refinePrompt: vi.fn(),
+}));
+
+vi.mock('../services/uploadAsset', () => ({
+  uploadAsset: vi.fn().mockImplementation(async ({ sdk }) => {
+    sdk.notifier.success('Image saved to media library');
+  }),
 }));
 
 beforeAll(() => {
@@ -186,13 +193,37 @@ describe('Page Component', () => {
     await act(async () => {
       screen.getByRole('button', { name: /Refine/i }).click();
     });
-
+    await waitFor(() => expect(huggingfaceText.refinePrompt).toHaveBeenCalled());
+    expect(await screen.findByText(/This is the AI-optimized version of your prompt/i)).toBeInTheDocument();
     expect(await screen.findByText(/a very refined text input./i)).toBeInTheDocument();
     await act(async () => {
       screen.getAllByRole('button', { name: /Generate image/i })[1].click(); // click the button in the modal
     });
+
+    // Wait for and interact with the image specs modal
+    const modal = await screen.findByRole('dialog');
+    expect(modal).toBeInTheDocument();
+    expect(await screen.findByText(/Set image specs/i)).toBeInTheDocument();
+
+    await act(async () => {
+      within(modal)
+        .getByRole('button', { name: /Generate image/i })
+        .click();
+    });
+
     await waitFor(() =>
-      expect(huggingfaceImage.generateImage).toHaveBeenCalledWith('A text input', mockFieldSdk.parameters.installation, 'a very refined text input.')
+      expect(huggingfaceImage.generateImage).toHaveBeenCalledWith(
+        'A text input',
+        {
+          ...mockFieldSdk.parameters.installation,
+          imageGuidanceScale: 3.5,
+          imageHeight: 500,
+          imageMaxSequenceLength: 512,
+          imageNumInferenceSteps: 50,
+          imageWidth: 500,
+        },
+        'a very refined text input.'
+      )
     );
     expect(await screen.findByText(/Generating your image/i)).toBeInTheDocument();
     expect(await screen.findByAltText('Generated image')).toBeInTheDocument();
@@ -209,7 +240,32 @@ describe('Page Component', () => {
     await act(async () => {
       screen.getByRole('button', { name: /Generate/i }).click();
     });
-    await waitFor(() => expect(huggingfaceImage.generateImage).toHaveBeenCalledWith('A text input', mockFieldSdk.parameters.installation, ''));
+
+    // Wait for and interact with the image specs modal
+    const modal = await screen.findByRole('dialog');
+    expect(modal).toBeInTheDocument();
+    expect(await screen.findByText(/Set image specs/i)).toBeInTheDocument();
+
+    await act(async () => {
+      within(modal)
+        .getByRole('button', { name: /Generate image/i })
+        .click();
+    });
+
+    await waitFor(() =>
+      expect(huggingfaceImage.generateImage).toHaveBeenCalledWith(
+        'A text input',
+        {
+          ...mockFieldSdk.parameters.installation,
+          imageGuidanceScale: 3.5,
+          imageHeight: 500,
+          imageMaxSequenceLength: 512,
+          imageNumInferenceSteps: 50,
+          imageWidth: 500,
+        },
+        ''
+      )
+    );
     expect(await screen.findByText(/Generating your image/i)).toBeInTheDocument();
     expect(await screen.findByAltText('Generated image')).toBeInTheDocument();
   });
@@ -224,6 +280,17 @@ describe('Page Component', () => {
 
     await act(async () => {
       screen.getByRole('button', { name: /Generate/i }).click();
+    });
+
+    // Wait for and interact with the image specs modal
+    const modal = await screen.findByRole('dialog');
+    expect(modal).toBeInTheDocument();
+    expect(await screen.findByText(/Set image specs/i)).toBeInTheDocument();
+
+    await act(async () => {
+      within(modal)
+        .getByRole('button', { name: /Generate image/i })
+        .click();
     });
 
     expect(await screen.findByAltText('Generated image')).toBeInTheDocument();
@@ -242,10 +309,16 @@ describe('Page Component', () => {
     await act(async () => {
       saveButton.click();
     });
-    expect(mockFieldSdk.cma.upload.create).toHaveBeenCalled();
-    expect(mockFieldSdk.cma.asset.create).toHaveBeenCalled();
-    expect(mockFieldSdk.cma.asset.processForLocale).toHaveBeenCalled();
-    expect(mockFieldSdk.cma.asset.publish).toHaveBeenCalled();
+
+    await waitFor(() => {
+      expect(uploadAssetService.uploadAsset).toHaveBeenCalledWith({
+        sdk: mockFieldSdk,
+        initialPrompt: 'A text input',
+        assetName: 'My Image',
+        generatedImage: 'data:image/png;base64,mockImageData',
+      });
+    });
+
     expect(mockFieldSdk.notifier.success).toHaveBeenCalledWith('Image saved to media library');
     expect(mockFieldSdk.notifier.error).not.toHaveBeenCalled();
   });
