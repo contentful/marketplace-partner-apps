@@ -1,4 +1,4 @@
-import { InferenceClient } from '@huggingface/inference';
+import { InferenceClient, InferenceProvider } from '@huggingface/inference';
 import { AppInstallationParameters } from '../utils/types';
 
 const SYSTEM_PROMPT = `You are an advanced marketing prompt engineer specializing in photorealistic image generation. Transform any user-submitted image prompt into a concise, best-practice prompt that includes realistic details, lighting, composition, environment context, and camera settings. Your final output must be only the refined prompt itself without any additional explanation or formatting.`;
@@ -12,7 +12,7 @@ export async function refinePrompt(prompt: string, parameters: AppInstallationPa
 
   try {
     const chatCompletion = await client.chatCompletion({
-      provider: parameters.textModelInferenceProvider,
+      provider: parameters.textModelInferenceProvider as InferenceProvider,
       model: parameters.textModelId,
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
@@ -29,6 +29,9 @@ export async function refinePrompt(prompt: string, parameters: AppInstallationPa
 
     return chatCompletion.choices[0].message.content;
   } catch (error) {
-    throw new Error('Failed to refine prompt with text model');
+    const errorMessage = (error as any)?.message?.includes('exceeded')
+      ? 'You have exceeded your monthly included Hugging Face credits.'
+      : 'Error: failed to refine prompt with text model. Please try again.';
+    throw new Error(errorMessage);
   }
 }

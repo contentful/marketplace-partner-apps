@@ -25,7 +25,7 @@ export const RefinePromptModal = ({
       <>
         <Modal.Header title="Refine prompt" onClose={closeRefinePromptModal} />
         <Modal.Content className={styles.modalContent}>
-          {error && <Note variant="negative">Error: {error}. Please try again.</Note>}
+          {error && <Note variant="negative">{error}</Note>}
           {isRefining && !error && (
             <Flex>
               <Text marginRight="spacingXs">Generating new prompt</Text>
