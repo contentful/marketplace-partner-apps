@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/hugging-face-v1.0.0...hugging-face-v1.1.0) (2025-05-20)
+
+
+### Features
+
+* post release cleanup [INTEG-2586] ([#5007](https://github.com/contentful/marketplace-partner-apps/issues/5007)) ([39e2d6a](https://github.com/contentful/marketplace-partner-apps/commit/39e2d6a69db8201fa846fba271ba4dc7eefae0d9))
+
 ## 1.0.0 (2025-05-16)
 
 

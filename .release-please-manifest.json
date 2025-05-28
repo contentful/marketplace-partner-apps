@@ -16,7 +16,7 @@
   "apps/bynder-content-workflow": "1.0.9",
   "apps/amplitude-experiment": "1.1.0",
   "apps/xillio-transcreate": "1.0.2",
-  "apps/raster": "1.0.5",
+  "apps/raster": "1.0.6",
   "apps/eppo": "1.0.5",
   "apps/livestory": "1.0.2",
   "apps/frontify": "1.0.1",
@@ -26,6 +26,6 @@
   "apps/sfmc-studio": "1.2.1",
   "apps/statsig": "1.1.2",
   "apps/convox": "1.0.0",
-  "apps/lottie-preview": "1.0.1",
-  "apps/hugging-face": "1.0.0"
+  "apps/lottie-preview": "1.0.3",
+  "apps/hugging-face": "1.1.0"
 }
