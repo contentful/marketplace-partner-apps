@@ -16,6 +16,8 @@ export async function launchGoogleDrivePicker(): Promise<GoogleDrivePickerResult
     const left = (width - popupWidth) / 2 / systemZoom + dualScreenLeft;
     const top = (height - popupHeight) / 2 / systemZoom + dualScreenTop;
 
+    let isSettled = false;
+
     // Open the popup in the center of the screen
     const popup = window.open(
       'https://ellavationlabs.com/docs-to-rich-text/google-oauth.html',
@@ -28,7 +30,7 @@ export async function launchGoogleDrivePicker(): Promise<GoogleDrivePickerResult
     }
 
     const interval = setInterval(() => {
-      if (popup.closed) {
+      if (popup.closed && !isSettled) {
         clearInterval(interval);
         reject(new Error('Popup closed by user'));
       }
@@ -38,6 +40,8 @@ export async function launchGoogleDrivePicker(): Promise<GoogleDrivePickerResult
       if (event.origin !== 'https://ellavationlabs.com') {
         return; // Ignore messages from unexpected origins
       }
+
+      isSettled = true;
 
       if (event.data.success === true) {
         clearInterval(interval);

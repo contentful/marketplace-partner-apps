@@ -16,6 +16,7 @@ interface OptionalTreatmentVariationProps {
   onUnlinkEntry: (entryId: string) => Promise<void>;
   onRemoveVariation: (index: number) => void | Promise<void>;
   isDisabled: boolean;
+  allowedContentTypes: string[];
 }
 
 export const OptionalTreatmentVariation: React.FunctionComponent<
@@ -71,6 +72,7 @@ export const OptionalTreatmentVariation: React.FunctionComponent<
         onLink={(linkedEntry) => props.onLinkEntry(linkedEntry, props.treatmentIndex)}
         onUnlink={props.onUnlinkEntry}
         isDisabled={props.isDisabled}
+        allowedContentTypes={props.allowedContentTypes}
       />
     </FormControl>
   );

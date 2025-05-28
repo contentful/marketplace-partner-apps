@@ -1,6 +1,7 @@
-name: "Lint Pull Requests"
+---
+name: 'Lint Pull Requests'
 
-on:
+"on":
   pull_request_target:
     types:
       - opened
@@ -20,4 +21,3 @@ jobs:
       - uses: amannn/action-semantic-pull-request@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            

@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.2.3](https://github.com/contentful/marketplace-partner-apps/compare/growthbook-contentful-app-v1.2.2...growthbook-contentful-app-v1.2.3) (2025-05-28)
+
+
+### Bug Fixes
+
+* **deps:** bump next from 14.2.18 to 15.3.2 in /apps/growthbook [] ([#4975](https://github.com/contentful/marketplace-partner-apps/issues/4975)) ([9d4c79f](https://github.com/contentful/marketplace-partner-apps/commit/9d4c79fd9bb381ce5918c5bf83e45caa289ed6af))
+
+## [1.2.2](https://github.com/contentful/marketplace-partner-apps/compare/growthbook-contentful-app-v1.2.1...growthbook-contentful-app-v1.2.2) (2025-03-13)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.8.1 to 1.8.2 in /apps/growthbook ([#4622](https://github.com/contentful/marketplace-partner-apps/issues/4622)) ([785d3bb](https://github.com/contentful/marketplace-partner-apps/commit/785d3bb885ac429ce3f1712263bf5114577ed100))
+
 ## [1.2.1](https://github.com/contentful/marketplace-partner-apps/compare/growthbook-contentful-app-v1.2.0...growthbook-contentful-app-v1.2.1) (2025-03-06)
 
 

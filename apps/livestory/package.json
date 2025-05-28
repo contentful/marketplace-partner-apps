@@ -1,6 +1,6 @@
 {
   "name": "ls-contentful-app",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "^4.29.3",
@@ -11,7 +11,7 @@
     "contentful-management": "10.46.4",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "superagent": "^9.0.2"
+    "superagent": "^10.2.1"
   },
   "scripts": {
     "start": "vite",
@@ -39,7 +39,7 @@
   "devDependencies": {
     "@contentful/app-scripts": "1.30.1",
     "@testing-library/jest-dom": "5.16.5",
-    "@testing-library/react": "14.0.0",
+    "@testing-library/react": "16.3.0",
     "@tsconfig/create-react-app": "1.0.3",
     "@types/jest": "29.5.14",
     "@types/node": "20.2.5",
@@ -49,7 +49,7 @@
     "@vitejs/plugin-react": "^4.3.3",
     "cross-env": "7.0.3",
     "typescript": "5.6.3",
-    "vite": "^5.4.10",
+    "vite": "^6.3.5",
     "vitest": "^2.1.4"
   },
   "homepage": "."

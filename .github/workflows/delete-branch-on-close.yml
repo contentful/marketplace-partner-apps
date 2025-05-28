@@ -1,0 +1,26 @@
+---
+name: Auto Merge and Delete Branch
+
+"on":
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  auto-merge-and-delete:
+    runs-on: ubuntu-latest
+
+    if: github.event.pull_request.merged == true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Delete branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          branch=${{ github.event.pull_request.head.ref }}
+          if [ "$branch" != "main" ]; then
+            git push origin --delete $branch
+          fi

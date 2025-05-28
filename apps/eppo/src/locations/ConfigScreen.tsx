@@ -12,7 +12,12 @@ import {
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { ContentTypeProps } from 'contentful-management';
 
-import { PRODUCTION_API_BASE_URL, VARIATION_CONTAINER_ID } from '../constants';
+import {
+  CONFIG_FORM_API_KEY_LABEL,
+  CONFIG_FORM_DEFAULT_ASSIGNMENT_LABEL,
+  CONFIG_FORM_DEFAULT_ENTITY_LABEL,
+  VARIATION_CONTAINER_ID,
+} from '../constants';
 import { getApiBaseUrl } from '../helpers/get-api-base-url';
 import { apiRequest, ApiRequestProps, unsignedApiRequest } from '../helpers/api-request';
 import { Dropdown } from '../components/Dropdown';
@@ -173,7 +178,6 @@ const ConfigScreen = () => {
         eppoApiKey: apiKey,
         defaultEntityId: selectedEntity?.id,
         defaultAssignmentSourceId: selectedAssignmentSource?.id,
-        eppoApiBaseUrl: PRODUCTION_API_BASE_URL,
       },
       // In case you don't want to submit any update to app
       // locations, you can just pass the currentState as is
@@ -239,7 +243,7 @@ const ConfigScreen = () => {
       <Heading>Eppo app configuration</Heading>
       <Form>
         <FormControl>
-          <FormControl.Label isRequired>Eppo API key</FormControl.Label>
+          <FormControl.Label isRequired>{CONFIG_FORM_API_KEY_LABEL}</FormControl.Label>
           <TextInput
             data-testid="api-key"
             value={apiKey}
@@ -253,7 +257,7 @@ const ConfigScreen = () => {
           )}
         </FormControl>
         <FormControl>
-          <FormControl.Label isRequired>Default randomization entity</FormControl.Label>
+          <FormControl.Label isRequired>{CONFIG_FORM_DEFAULT_ENTITY_LABEL}</FormControl.Label>
           <Dropdown
             items={entities}
             selectedItem={selectedEntity}
@@ -279,7 +283,7 @@ const ConfigScreen = () => {
           )}
         </FormControl>
         <FormControl>
-          <FormControl.Label isRequired>Default assignment logging table</FormControl.Label>
+          <FormControl.Label isRequired>{CONFIG_FORM_DEFAULT_ASSIGNMENT_LABEL}</FormControl.Label>
           <Dropdown
             items={assignmentSources}
             selectedItem={selectedAssignmentSource}

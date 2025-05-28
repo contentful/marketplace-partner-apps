@@ -1,29 +1,90 @@
 {
-	"packages": {
-		"apps/adapt-essentials-asset-fields": {},
-		"apps/amplitude-experiment": {},
-		"apps/bynder": {},
-		"apps/bynder-content-workflow": {},
-		"apps/ceros": {},
-		"apps/cloudinary2": {},
-		"apps/docs-to-rich-text": {},
-		"apps/flexfields": {},
-		"apps/frontify": {},
-		"apps/eppo": {},
-		"apps/growthbook": {},
-		"apps/imageHotspotCreator": {},
-		"apps/intershop": {},
-		"apps/livestory": {},
-		"apps/raster": {},
-		"apps/sfmc-studio": {},
-		"apps/shopify": {},
-		"apps/statsig": {},
-		"apps/surfer": {},
-		"apps/transifex": {},
-		"apps/uploadcare": {},
-		"apps/voucherify": {},
-		"apps/vwo-fme": {},
-		"apps/wix": {},
-		"apps/xillio-transcreate": {}
-	}
+  "pull-request-title-pattern": "chore: release ${component} ${version}",
+  "separate-pull-requests": true,
+  "packages": {
+    "apps/adapt-essentials-asset-fields": {
+      "release-type": "node"
+    },
+    "apps/amplitude-experiment": {
+      "release-type": "node"
+    },
+    "apps/bynder": {
+      "release-type": "node"
+    },
+    "apps/bynder-content-workflow": {
+      "release-type": "node"
+    },
+    "apps/ceros": {
+      "release-type": "node"
+    },
+    "apps/cloudinary2": {
+      "release-type": "node"
+    },
+    "apps/convox": {
+      "release-type": "node"
+    },
+    "apps/docs-to-rich-text": {
+      "release-type": "node"
+    },
+    "apps/flexfields": {
+      "release-type": "node"
+    },
+    "apps/frontify": {
+      "release-type": "node"
+    },
+    "apps/eppo": {
+      "release-type": "node"
+    },
+    "apps/growthbook": {
+      "release-type": "node"
+    },
+    "apps/hugging-face": {
+      "release-type": "node"
+    },
+    "apps/imageHotspotCreator": {
+      "release-type": "node"
+    },
+    "apps/intershop": {
+      "release-type": "node"
+    },
+    "apps/livestory": {
+      "release-type": "node"
+    },
+    "apps/lottie-preview": {
+      "release-type": "node"
+    },
+    "apps/raster": {
+      "release-type": "node"
+    },
+    "apps/sfmc-studio": {
+      "release-type": "node"
+    },
+    "apps/shopify": {
+      "release-type": "node"
+    },
+    "apps/statsig": {
+      "release-type": "node"
+    },
+    "apps/surfer": {
+      "release-type": "node"
+    },
+    "apps/transifex": {
+      "release-type": "node"
+    },
+    "apps/uploadcare": {
+      "release-type": "node"
+    },
+    "apps/voucherify": {
+      "release-type": "node"
+    },
+    "apps/vwo-fme": {
+      "release-type": "node"
+    },
+    "apps/wix": {
+      "release-type": "node"
+    },
+    "apps/xillio-transcreate": {
+      "release-type": "node"
+    }
+  }
 }

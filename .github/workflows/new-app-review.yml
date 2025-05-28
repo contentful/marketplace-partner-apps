@@ -1,6 +1,7 @@
+---
 name: 'New App Review'
 
-on:
+"on":
   pull_request_target:
     types:
       - opened
@@ -28,12 +29,19 @@ jobs:
       - name: Install Dependencies
         run: npm ci
       - name: Compile TypeScript
-        # compilation is necessary because github-script does not support ts https://github.com/actions/github-script/issues/294
+        # compilation is necessary because github-script does not support ts
+        # https://github.com/actions/github-script/issues/294
         run: npx tsc --project .github/workflows/tsconfig.json
       - uses: actions/github-script@v7
         with:
           script: |
-            const { review } = require('./.github/workflows/dist/new-app-review');
+            const { review } = require(
+              './.github/workflows/dist/new-app-review'
+            );
             const { chdir, cwd } = require('node:process');
-            chdir(cwd())
-            await review({ github, ctx: context, ghCore: core })
+            chdir(cwd());
+            await review({
+              github,
+              ctx: context,
+              ghCore: core
+            });

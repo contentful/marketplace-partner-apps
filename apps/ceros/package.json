@@ -1,6 +1,6 @@
 {
   "name": "ceros-contentful-app",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "^4.29.5",
@@ -50,7 +50,7 @@
     "happy-dom": "^15.11.7",
     "typescript": "^5.7.2",
     "vite": "^5.4.11",
-    "vitest": "^2.1.8"
+    "vitest": "^3.1.4"
   },
   "homepage": "."
 }

@@ -211,6 +211,38 @@ updates:
       prefix: 'fix'
       prefix-development: 'chore'
       include: 'scope'
+    directory: '/apps/convox'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
+    groups:
+      production-dependencies:
+        applies-to: version-updates
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
+      dev-dependencies:
+        applies-to: version-updates
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
+  - package-ecosystem: npm
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: Etc/UTC
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
     directory: '/apps/docs-to-rich-text'
     ignore:
       - dependency-name: '@contentful/app-sdk'
@@ -372,6 +404,38 @@ updates:
       prefix: 'fix'
       prefix-development: 'chore'
       include: 'scope'
+    directory: '/apps/hugging-face'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
+    groups:
+      production-dependencies:
+        applies-to: version-updates
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
+      dev-dependencies:
+        applies-to: version-updates
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
+  - package-ecosystem: npm
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: Etc/UTC
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
     directory: '/apps/imageHotspotCreator'
     ignore:
       - dependency-name: '@types/node'
@@ -438,6 +502,39 @@ updates:
       include: 'scope'
     directory: '/apps/livestory'
     ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
+    groups:
+      production-dependencies:
+        applies-to: version-updates
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
+      dev-dependencies:
+        applies-to: version-updates
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
+  - package-ecosystem: npm
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: Etc/UTC
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
+    directory: '/apps/lottie-preview'
+    ignore:
+      - dependency-name: '@contentful/app-sdk'
       - dependency-name: '@types/node'
         versions:
           - '>18.15.3'

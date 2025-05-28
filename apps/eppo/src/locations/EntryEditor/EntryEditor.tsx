@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { EditorAppSDK } from '@contentful/app-sdk';
 import {
@@ -17,7 +17,13 @@ import { PlusIcon } from '@contentful/f36-icons';
 import { AutoSaveTextInput } from '../../components/AutoSaveTextInput';
 import { EppoEntrySelector } from '../../components/EppoEntrySelector';
 import { ExternalEppoLinks } from '../../components/ExternalEppoLinks';
-import { DEVELOPMENT_FRONTEND_BASE_URL } from '../../constants';
+import {
+  CONFIG_FORM_API_KEY_LABEL,
+  CONFIG_FORM_DEFAULT_ASSIGNMENT_LABEL,
+  CONFIG_FORM_DEFAULT_ENTITY_LABEL,
+  DEVELOPMENT_FRONTEND_BASE_URL,
+  PRODUCTION_BASE_URL,
+} from '../../constants';
 import { useComponentMountedHandler } from '../../hooks/useComponentMountedHandler';
 import { usePublishHandler } from '../../hooks/usePublishHandler';
 import {
@@ -26,6 +32,8 @@ import {
 } from '../../services/entry-editor-service';
 import { OptionalTreatmentVariation } from './OptionalTreatmentVariation';
 import { entryEditorStyles } from './styles';
+import { FinishConfigSetup } from './FinishConfigSetup';
+import { KeyValueMap } from '@contentful/app-sdk/dist/types/entities';
 
 type ExperimentStatus = 'DRAFT' | 'RUNNING' | 'WRAP_UP' | 'COMPLETED';
 
@@ -41,10 +49,10 @@ const generateFlagKey = (entryName: string) => {
   return `${lowerSnakeCaseEntryName}-${Date.now()}`;
 };
 
-const getFrontendBaseUrl = (sdk: EditorAppSDK): string => {
+const getFrontendBaseUrl = (): string => {
   return process.env.NODE_ENV === 'development'
     ? DEVELOPMENT_FRONTEND_BASE_URL
-    : sdk.parameters.installation.eppoApiBaseUrl;
+    : PRODUCTION_BASE_URL;
 };
 
 type ExperimentData = {
@@ -56,6 +64,32 @@ type ExperimentData = {
 
 const getEntryId = (value: EntityLink | undefined): string | undefined => {
   return value?.sys?.id;
+};
+
+const getMissingConfigFields = (installationParameters: KeyValueMap) => {
+  const missingFields: Array<string> = [];
+  if (!installationParameters.eppoApiKey) {
+    missingFields.push(CONFIG_FORM_API_KEY_LABEL);
+  }
+  if (!installationParameters.defaultEntityId) {
+    missingFields.push(CONFIG_FORM_DEFAULT_ENTITY_LABEL);
+  }
+  if (!installationParameters.defaultAssignmentSourceId) {
+    missingFields.push(CONFIG_FORM_DEFAULT_ASSIGNMENT_LABEL);
+  }
+  return missingFields;
+};
+
+const getAllowedContentTypes = (sdk: EditorAppSDK, fieldKey: string) => {
+  const allowedContentTypes: Set<string> = new Set();
+  sdk.entry.fields[fieldKey].validations.forEach((validation) => {
+    if (validation.linkContentType) {
+      validation.linkContentType.forEach((contentType) => {
+        allowedContentTypes.add(contentType);
+      });
+    }
+  });
+  return Array.from(allowedContentTypes);
 };
 
 const EntryEditor: React.FC<{ sdk: EditorAppSDK }> = ({ sdk }) => {
@@ -76,8 +110,14 @@ const EntryEditor: React.FC<{ sdk: EditorAppSDK }> = ({ sdk }) => {
   const treatmentVariation = treatmentVariations[0];
   const optionalTreatmentVariations = treatmentVariations.slice(1);
 
+  const missingConfigFields = useMemo(() => {
+    return getMissingConfigFields(sdk.parameters.installation);
+  }, [sdk.parameters.installation]);
+
+  const allowedContentTypes = getAllowedContentTypes(sdk, 'controlVariation');
+
   useComponentMountedHandler(() => {
-    if (isPublished) {
+    if (isPublished && !missingConfigFields.length) {
       const allocationId = sdk.entry.fields.allocationId.getValue() as number;
       const experimentId = sdk.entry.fields.experimentId.getValue() as number;
       fetchContentfulExperiment(sdk, allocationId, experimentId)
@@ -197,6 +237,10 @@ const EntryEditor: React.FC<{ sdk: EditorAppSDK }> = ({ sdk }) => {
 
   const hasRunningExperiment = isPublished && !!experimentData && experimentData.status !== 'DRAFT';
 
+  if (missingConfigFields.length) {
+    return <FinishConfigSetup sdk={sdk} missingConfigFields={missingConfigFields} />;
+  }
+
   return (
     <Box
       padding="spacingL"
@@ -212,7 +256,7 @@ const EntryEditor: React.FC<{ sdk: EditorAppSDK }> = ({ sdk }) => {
                 {experimentData.status === 'DRAFT' ? (
                   <ExternalEppoLinks
                     variant="negative"
-                    baseUrl={getFrontendBaseUrl(sdk)}
+                    baseUrl={getFrontendBaseUrl()}
                     featureFlagId={experimentData.featureFlagId}
                     experimentId={experimentData.experimentId}
                   >
@@ -223,7 +267,7 @@ const EntryEditor: React.FC<{ sdk: EditorAppSDK }> = ({ sdk }) => {
                 ) : (
                   <ExternalEppoLinks
                     variant="primary"
-                    baseUrl={getFrontendBaseUrl(sdk)}
+                    baseUrl={getFrontendBaseUrl()}
                     featureFlagId={experimentData.featureFlagId}
                     experimentId={experimentData.experimentId}
                   >
@@ -265,6 +309,7 @@ const EntryEditor: React.FC<{ sdk: EditorAppSDK }> = ({ sdk }) => {
                 onLink={handleControlReferenceLinked}
                 onUnlink={() => handleControlReferenceUnlinked()}
                 isDisabled={hasRunningExperiment}
+                allowedContentTypes={allowedContentTypes}
               />
               {controlVariationErrorMessage && (
                 <FormControl.ValidationMessage>
@@ -290,6 +335,7 @@ const EntryEditor: React.FC<{ sdk: EditorAppSDK }> = ({ sdk }) => {
                   setTreatmentVariationErrorMessage('Required');
                 }}
                 isDisabled={hasRunningExperiment}
+                allowedContentTypes={allowedContentTypes}
               />
               {treatmentVariationErrorMessage && (
                 <FormControl.ValidationMessage>
@@ -306,6 +352,7 @@ const EntryEditor: React.FC<{ sdk: EditorAppSDK }> = ({ sdk }) => {
                 onUnlinkEntry={handleTreatmentReferenceUnlinked}
                 onRemoveVariation={handleRemoveVariation}
                 isDisabled={hasRunningExperiment}
+                allowedContentTypes={allowedContentTypes}
               />
             ))}
             {!isPublished && (

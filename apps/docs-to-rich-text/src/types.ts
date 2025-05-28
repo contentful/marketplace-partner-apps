@@ -23,7 +23,6 @@ export interface ImportState {
   source?: DocumentSource | null;
   html?: string | null;
   markdown?: string | null;
-  isGoogleDoc?: boolean | null;
   richText?: Document | null;
   images?: EmbeddedAsset[] | null;
   imageUploadResult?: ImageProcessResult | null;
@@ -36,7 +35,8 @@ export interface ImageProcessResult {
 
 export enum DocumentSource {
   Paste = 1,
-  GoogleDrive = 2,
+  GoogleDrivePicker = 2,
+  GoogleDocPaste = 3,
 }
 
 export interface GoogleDrivePickerResult {
