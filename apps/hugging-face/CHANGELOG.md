@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/contentful/marketplace-partner-apps/compare/hugging-face-v1.1.0...hugging-face-v1.1.1) (2025-05-28)
+
+
+### Bug Fixes
+
+* update deploy scripts to use ./dist directory [INTEG-2586] ([#5008](https://github.com/contentful/marketplace-partner-apps/issues/5008)) ([55ead6a](https://github.com/contentful/marketplace-partner-apps/commit/55ead6aefd5d116d3d09a6fad558a736a366b97d))
+
 ## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/hugging-face-v1.0.0...hugging-face-v1.1.0) (2025-05-20)
 
 
