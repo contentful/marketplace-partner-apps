@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.3...lottie-preview-v1.0.4) (2025-05-28)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group across 1 directory with 4 updates [] ([#4976](https://github.com/contentful/marketplace-partner-apps/issues/4976)) ([2dfb40a](https://github.com/contentful/marketplace-partner-apps/commit/2dfb40ab5c05205bc41112a91e8e56ac051a4907))
+
 ## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.2...lottie-preview-v1.0.3) (2025-05-20)
 
 
