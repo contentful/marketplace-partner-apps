@@ -6,6 +6,7 @@
 ### Bug Fixes
 
 * **deps:** bump contentful-management from 10.46.4 to 11.52.2 in /apps/vwo-fme [] ([#4941](https://github.com/contentful/marketplace-partner-apps/issues/4941)) ([411553c](https://github.com/contentful/marketplace-partner-apps/commit/411553c513562b8b3732f14b054174d3f4fa8e01))
+* **deps:** bump react from 18.3.1 to 19.1.0 in /apps/vwo-fme ([#4757](https://github.com/contentful/marketplace-partner-apps/issues/4757)) ([68a209e](https://github.com/contentful/marketplace-partner-apps/commit/68a209e1406d9261614c861ae02dcc9f3beff35a))
 
 ## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.2...vwo-fme-v1.0.3) (2025-03-13)
 
