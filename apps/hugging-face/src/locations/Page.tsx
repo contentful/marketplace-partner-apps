@@ -177,7 +177,8 @@ const Page = () => {
       />
       <GenerateImageModal
         showGeneratingImageModal={showModal === 'generate-image'}
-        prompt={refinedPrompt || initialPrompt}
+        prompt={initialPrompt}
+        setPrompt={refinedPrompt ? setRefinedPrompt : setInitialPrompt}
         generatedImage={generatedImage}
         error={error}
         timer={timer}
@@ -190,6 +191,7 @@ const Page = () => {
           setError(null);
           handleGenerateImage(event);
         }}
+        onRegenerateImage={handleGenerateImage}
         closeGeneratingImageModal={() => {
           setShowModal(null);
           setGeneratedImage(null);
@@ -202,6 +204,7 @@ const Page = () => {
         imageHeight={imageHeight}
         actualImageWidth={actualImageWidth}
         actualImageHeight={actualImageHeight}
+        refinedPrompt={refinedPrompt}
       />
       <SaveAssetModal
         isShown={showModal === 'save-asset'}
