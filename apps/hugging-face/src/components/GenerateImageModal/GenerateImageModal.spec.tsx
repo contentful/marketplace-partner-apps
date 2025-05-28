@@ -6,13 +6,17 @@ describe('GenerateImageModal', () => {
   const defaultProps = {
     showGeneratingImageModal: true,
     prompt: 'A beautiful sunset over the mountains',
+    setPrompt: vi.fn(),
     generatedImage: null,
     error: null,
     timer: 30,
     isGenerating: false,
     onClickNextAfterImageGeneration: vi.fn(),
     onRetryImageGeneration: vi.fn(),
+    onRegenerateImage: vi.fn(),
     closeGeneratingImageModal: vi.fn(),
+    imageWidth: 500,
+    imageHeight: 500,
   };
 
   it('renders the modal', () => {
@@ -22,7 +26,8 @@ describe('GenerateImageModal', () => {
 
   it('displays the prompt text', () => {
     render(<GenerateImageModal {...defaultProps} />);
-    expect(screen.getByText(`"${defaultProps.prompt}"`)).toBeInTheDocument();
+    const textarea = screen.getByLabelText('Prompt');
+    expect(textarea).toHaveValue(defaultProps.prompt);
   });
 
   it('shows the timer with the correct value', () => {

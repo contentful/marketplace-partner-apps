@@ -13,7 +13,7 @@ if (typeof global.URL.createObjectURL === 'undefined') {
 // Run cleanup after each test case
 afterEach(() => {
   cleanup();
-  
+
   // Reset the URL.createObjectURL mock after each test
   if (typeof global.URL.createObjectURL === 'function' && vi.isMockFunction(global.URL.createObjectURL)) {
     vi.mocked(global.URL.createObjectURL).mockClear();
