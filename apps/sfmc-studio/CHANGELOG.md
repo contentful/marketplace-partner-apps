@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.1...sfmc-studio-v1.2.2) (2025-05-28)
+
+
+### Bug Fixes
+
+* **deps:** bump jspdf from 2.5.1 to 3.0.1 in /apps/sfmc-studio ([#4694](https://github.com/contentful/marketplace-partner-apps/issues/4694)) ([4eecd5b](https://github.com/contentful/marketplace-partner-apps/commit/4eecd5bfd5af3637369ea89449473e2778805732))
+
 ## [1.2.1](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.0...sfmc-studio-v1.2.1) (2025-03-06)
 
 
