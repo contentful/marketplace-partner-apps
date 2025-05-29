@@ -12,7 +12,7 @@
     "@lottiefiles/dotlottie-react": "^0.13.5",
     "@monaco-editor/react": "^4.7.0",
     "contentful-management": "^11.52.2",
-    "emotion": "^10.0.17",
+    "emotion": "^11.0.0",
     "prismjs": "^1.30.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
