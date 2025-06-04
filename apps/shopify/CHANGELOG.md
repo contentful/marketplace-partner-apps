@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.0.12...shopify-sku-v2.1.0) (2025-06-04)
+
+
+### Features
+
+* document Shopify app migration to Storefront API [INTEG-2706] ([#5134](https://github.com/contentful/marketplace-partner-apps/issues/5134)) ([a6d2c6e](https://github.com/contentful/marketplace-partner-apps/commit/a6d2c6eddd953afb1345da40294dcbc4173c8968))
+
 ## [2.0.12](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.0.11...shopify-sku-v2.0.12) (2025-03-13)
 
 
