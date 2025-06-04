@@ -7,7 +7,7 @@
     "@testing-library/react": "^16.2.0",
     "@vitejs/plugin-react": "^4.3.4",
     "happy-dom": "^17.2.2",
-    "vite": "^5.4.19",
+    "vite": "^5.4.18",
     "vitest": "^2.1.8"
   },
   "dependencies": {
@@ -17,10 +17,10 @@
     "@contentful/f36-tokens": "^4.0.5",
     "@contentful/react-apps-toolkit": "^1.2.16",
     "@emotion/css": "^11.13.5",
+    "@shopify/storefront-api-client": "^1.0.2",
     "core-js": "3.41.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "shopify-buy": "2.22.0"
+    "react-dom": "^18.3.1"
   },
   "scripts": {
     "start": "vite",
