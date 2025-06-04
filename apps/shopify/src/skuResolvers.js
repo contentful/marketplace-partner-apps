@@ -6,7 +6,7 @@ import makeProductPagination from './productPagination';
 import makeCollectionPagination from './collectionPagination';
 import { productDataTransformer, collectionDataTransformer, removeHttpsAndTrailingSlash } from './dataTransformer';
 
-import { validateParameters } from '.';
+import { validateParameters } from './utils/validation';
 import { previewsToProductVariants } from './dataTransformer';
 import { SHOPIFY_API_VERSION, SHOPIFY_ENTITY_LIMIT } from './constants';
 import { convertStringToBase64, convertBase64ToString, convertCollectionToBase64, convertProductToBase64 } from './utils/base64';
@@ -361,7 +361,7 @@ export const filterAndDecodeValidIds = (skus, skuType) => {
         return null;
       }
     })
-    .filter((decodedId) => decodedId && new RegExp(`^gid.*${skuType}`).test(decodedId));
+    .filter((decodedId) => decodedId && new RegExp(`^gid://shopify/${skuType}/`).test(decodedId));
   return validIds;
 };
 

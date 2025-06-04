@@ -14,3 +14,16 @@ tags
 .cursorindexingignore
 .specstory
 .cursor
+
+# Coverage directories and files
+coverage/
+.coverage/
+**/.coverage/**
+.nyc_output/
+*.lcov
+.coverage.json
+coverage.json
+coverage-final.json
+coverage-summary.json
+lcov.info
+*.profraw
