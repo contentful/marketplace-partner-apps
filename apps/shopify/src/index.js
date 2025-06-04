@@ -1,6 +1,7 @@
 import { setup, renderSkuPicker } from '@contentful/ecommerce-app-base';
 import { fetchProductVariantPreviews, fetchProductPreviews, fetchCollectionPreviews, makeSkuResolver } from './skuResolvers';
 import { SKU_TYPES } from './constants';
+import { validateParameters } from './utils/validation';
 
 import logo from './logo.svg';
 import { AdditionalDataRenderer } from './additionalDataRenderer';
@@ -68,18 +69,6 @@ function makeSearchPlaceholderText(skuType) {
   }
 
   return 'Search for a product variant...';
-}
-
-export function validateParameters(parameters) {
-  if (parameters.storefrontAccessToken.length < 1) {
-    return 'Provide the storefront access token to your Shopify store.';
-  }
-
-  if (parameters.apiEndpoint.length < 1) {
-    return 'Provide the Shopify store URL.';
-  }
-
-  return null;
 }
 
 function fetchPreviews(skus, config, skuType) {

@@ -6,15 +6,63 @@ const makePagination = async (sdk) => {
   const pagination = new BasePagination({
     sdk,
     dataTransformer: collectionDataTransformer,
-    fetchProducts: async function (search, PER_PAGE) {
-      const query = { query: search };
+    fetchProducts: async function (search, perPage, after = null) {
+      const queryStr = search.length ? `title:*${search}*` : '';
 
-      const collections = await this.shopifyClient.collection.fetchQuery({
-        first: PER_PAGE,
-        sortBy: 'TITLE',
-        reverse: true,
-        ...(search.length && query),
+      const query = `
+        query getCollections($first: Int!, $after: String, $query: String) {
+          collections(first: $first, after: $after, query: $query, sortKey: TITLE, reverse: true) {
+            edges {
+              node {
+                id
+                title
+                description
+                handle
+                updatedAt
+                image {
+                  url
+                }
+                products(first: 101) {
+                  edges {
+                    node {
+                      id
+                    }
+                  }
+                }
+              }
+              cursor
+            }
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
+          }
+        }
+      `;
+
+      const variables = {
+        first: perPage,
+        after,
+        query: queryStr,
+      };
+
+      const response = await this.shopifyClient.request(query, { variables });
+
+      // Update cursor for next page
+      if (response.data.collections.pageInfo.hasNextPage) {
+        this.lastCursor = response.data.collections.pageInfo.endCursor;
+      }
+
+      // Transform GraphQL response to match expected format
+      const collections = response.data.collections.edges.map((edge) => {
+        const collection = edge.node;
+        // Transform image to match old Buy SDK format
+        return {
+          ...collection,
+          image: collection.image ? { src: collection.image.url } : null,
+        };
       });
+
       return collections.map((collection) => convertCollectionToBase64(collection));
     },
   });

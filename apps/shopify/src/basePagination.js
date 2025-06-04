@@ -7,6 +7,7 @@ const PER_PAGE = 20;
 export default class BasePagination {
   hasNextProductPage = false;
   products = [];
+  lastCursor = null;
 
   prevSearch = '';
 
@@ -47,9 +48,7 @@ export default class BasePagination {
    */
   async _fetchMoreProducts(search) {
     const noProductsFetchedYet = this.products.length === 0;
-    const nextProducts = noProductsFetchedYet
-      ? await this._fetchProducts(search)
-      : await this._fetchNextPage(this.products);
+    const nextProducts = noProductsFetchedYet ? await this._fetchProducts(search) : await this._fetchNextPage(search);
 
     this.hasNextProductPage = nextProducts.length === PER_PAGE;
 
@@ -71,14 +70,14 @@ export default class BasePagination {
 
   /**
    * This method is used when the user has already fetched a batch of products
-   * and now want to render the next page.
+   * and now want to render the next page using cursor-based pagination.
    */
-  async _fetchNextPage(products) {
-    const nextPage = (await this.shopifyClient.fetchNextPage(products)).model;
-    return nextPage.map((product) => convertProductToBase64(product));
+  async _fetchNextPage(search) {
+    return this.fetchProducts(search, PER_PAGE, this.lastCursor);
   }
 
   _resetPagination() {
     this.products = [];
+    this.lastCursor = null;
   }
 }

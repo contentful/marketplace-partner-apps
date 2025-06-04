@@ -3,7 +3,7 @@
 // whether the returned variant is the default one or not
 export const DEFAULT_SHOPIFY_VARIANT_TITLE = 'Default Title';
 // upgrade API version to next stable version every quarter
-export const SHOPIFY_API_VERSION = '2024-01';
+export const SHOPIFY_API_VERSION = '2024-10';
 export const SHOPIFY_ENTITY_LIMIT = 250;
 
 export const ENTITY_TYPE = {
