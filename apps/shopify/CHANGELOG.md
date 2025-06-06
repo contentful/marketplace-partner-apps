@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.1](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.1.0...shopify-sku-v2.1.1) (2025-06-06)
+
+
+### Bug Fixes
+
+* sku searching fixes and wildcard fixes [INTEG-2726] ([#5137](https://github.com/contentful/marketplace-partner-apps/issues/5137)) ([d7b4b64](https://github.com/contentful/marketplace-partner-apps/commit/d7b4b64e843847539f881e3c4181ae453d3e6a96))
+
 ## [2.1.0](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.0.12...shopify-sku-v2.1.0) (2025-06-04)
 
 
