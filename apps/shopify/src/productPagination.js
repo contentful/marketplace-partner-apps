@@ -7,7 +7,17 @@ const makePagination = async (sdk) => {
     sdk,
     dataTransformer: productDataTransformer,
     fetchProducts: async function (search, perPage, after = null) {
-      const queryStr = search.length ? `title:*${search}* OR variants.sku:*${search}*` : '';
+      // Add space after wildcards to prevent special character interpretation
+      let queryStr = '';
+      if (search.length) {
+        const searches = [
+          `title:* ${search}*`, // partial title match with space
+          `sku:* ${search}*`, // partial SKU match with space
+          `sku:"${search}"`, // exact SKU phrase match
+          `title:"${search}"`, // exact title phrase match
+        ];
+        queryStr = searches.join(' OR ');
+      }
 
       const query = `
         query getProducts($first: Int!, $after: String, $query: String) {

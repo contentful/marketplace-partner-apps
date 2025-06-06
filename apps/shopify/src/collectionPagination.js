@@ -7,7 +7,17 @@ const makePagination = async (sdk) => {
     sdk,
     dataTransformer: collectionDataTransformer,
     fetchProducts: async function (search, perPage, after = null) {
-      const queryStr = search.length ? `title:*${search}*` : '';
+      // Add space after wildcards to prevent special character interpretation
+      let queryStr = '';
+      if (search.length) {
+        const searches = [
+          `title:* ${search}*`, // partial title match with space
+          `title:"${search}"`, // exact title phrase match
+          `handle:* ${search}*`, // partial handle match with space
+          `handle:"${search}"`, // exact handle phrase match
+        ];
+        queryStr = searches.join(' OR ');
+      }
 
       const query = `
         query getCollections($first: Int!, $after: String, $query: String) {
