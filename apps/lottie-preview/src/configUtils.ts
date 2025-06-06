@@ -21,10 +21,16 @@ export interface JsonField {
 
 export async function getJsonFields(cma: ConfigAppSDK['cma'], appDefinitionId: string): Promise<JsonField[]> {
   const contentTypes = await cma.contentType.getMany({});
+
+  // Fetch all editor interfaces for contentTypes
+  const editorInterfacePromises = contentTypes.items.map((contentType) =>
+    cma.editorInterface.get({ contentTypeId: contentType.sys.id }).then((editorInterface) => ({ contentType, editorInterface }))
+  );
+
+  const resolvedEditorInterfaces = await Promise.all(editorInterfacePromises);
   const jsonFields: JsonField[] = [];
 
-  for (const contentType of contentTypes.items) {
-    const editorInterface = await cma.editorInterface.get({ contentTypeId: contentType.sys.id });
+  for (const { contentType, editorInterface } of resolvedEditorInterfaces) {
     for (const jsonField of contentType.fields.filter((f) => f.type === JsonFieldType)) {
       const control = editorInterface.controls?.find((w) => w.fieldId === jsonField.id);
       const isUsingApp = !!control && control.widgetId === appDefinitionId;
