@@ -24,8 +24,13 @@ const ConfigScreen = () => {
         isChecked: field.isEnabled,
         contentTypeId: field.contentTypeId,
       })),
-    [jsonFields, inputValue]
+    [jsonFields]
   );
+
+  const filteredItems = useMemo(() => {
+    if (!inputValue) return items;
+    return items.filter((item) => item.name.toLowerCase().includes(inputValue.toLowerCase()));
+  }, [items, inputValue]);
 
   const onConfigure = useCallback(async () => {
     installTriggeredRef.current = true;
@@ -42,10 +47,11 @@ const ConfigScreen = () => {
 
       const fieldsByContentType = groupFieldsByContentType(jsonFieldsRef.current);
 
-      for (const [contentTypeId, allFields] of Object.entries(fieldsByContentType)) {
+      // Process all content types in parallel
+      const updatePromises = Object.entries(fieldsByContentType).map(async ([contentTypeId, allFields]) => {
         const editorInterface = await sdk.cma.editorInterface.get({ contentTypeId });
         editorInterface.controls = buildEditorInterfaceControls(allFields, editorInterface.controls, sdk.ids.app);
-        await sdk.cma.editorInterface.update(
+        return sdk.cma.editorInterface.update(
           {
             spaceId: sdk.ids.space,
             environmentId: sdk.ids.environment,
@@ -53,7 +59,9 @@ const ConfigScreen = () => {
           },
           editorInterface
         );
-      }
+      });
+
+      await Promise.all(updatePromises);
       resetOriginalState();
       installTriggeredRef.current = false;
     });
@@ -90,7 +98,7 @@ const ConfigScreen = () => {
         </Heading>
         <Paragraph className={styles.paragraph}>
           Choose the content type(s) and fields you want to use with Lottie Preview. You can change this anytime in the Fields tab of your content type. To
-          enable or disable Lottie Preview, click ‘Edit’ on the JSON Object field type and adjust the Appearance settings. Learn more about configuring your
+          enable or disable Lottie Preview, click 'Edit' on the JSON Object field type and adjust the Appearance settings. Learn more about configuring your
           content type{' '}
           <TextLink
             className={styles.textLink}
@@ -107,7 +115,7 @@ const ConfigScreen = () => {
         <FormLabel htmlFor="autocomplete">Select content type(s)</FormLabel>
         <Autocomplete
           id="autocomplete"
-          items={items.filter((item) => item.name.toLowerCase().includes(inputValue.toLowerCase()))}
+          items={filteredItems}
           renderItem={(item) => (
             <Flex alignItems="center" gap={tokens.spacingXs} testId={`resource-autocomplete--${item.name}`}>
               <Checkbox testId={`checkbox-${item.id}`} value={item.id} id={item.id} isChecked={item.isChecked} isDisabled={false} onChange={() => {}} />
