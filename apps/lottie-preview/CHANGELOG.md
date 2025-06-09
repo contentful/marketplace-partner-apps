@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.5](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.4...lottie-preview-v1.0.5) (2025-06-09)
+
+
+### Bug Fixes
+
+* performance issues on lottie viewer config page [ZEND-6496] ([#5139](https://github.com/contentful/marketplace-partner-apps/issues/5139)) ([94f102e](https://github.com/contentful/marketplace-partner-apps/commit/94f102e2536bea5f1ddef75ee22316cb2d0e1d2f))
+
 ## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.3...lottie-preview-v1.0.4) (2025-05-28)
 
 
