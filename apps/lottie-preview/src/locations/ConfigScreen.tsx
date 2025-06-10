@@ -6,14 +6,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { styles } from './ConfigScreen.styles';
 import { ClockIcon, ExternalLinkIcon } from '@contentful/f36-icons';
 import { useJsonFieldsState } from '@src/hooks/useJsonFieldsState';
-import {
-  buildEditorInterfaceControls,
-  getJsonFields,
-  getContentTypesWithJsonFieldsCount,
-  groupFieldsByContentType,
-  JsonFieldsResult,
-  JsonField,
-} from '@src/configUtils';
+import { getJsonFields, getContentTypesWithJsonFieldsCount, groupFieldsByContentType, JsonFieldsResult, JsonField } from '@src/configUtils';
+
+const AppWidgetNamespace = 'app';
+const DefaultWidgetId = 'objectEditor';
+
+interface AppState {
+  fields: JsonField[];
+}
 
 const ConfigScreen = () => {
   const sdk = useSDK<ConfigAppSDK>();
@@ -24,6 +24,8 @@ const ConfigScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState<{ processed: number; total: number } | null>(null);
   const installTriggeredRef = useRef<boolean>(false);
+  const [isConfiguring, setIsConfiguring] = useState(false);
+  const [originalState, setOriginalState] = useState<JsonFieldsResult | null>(null);
 
   const { jsonFields, jsonFieldsRef, initialize, updateField, resetOriginalState, version } = useJsonFieldsState();
 
@@ -42,9 +44,20 @@ const ConfigScreen = () => {
   }, [items, inputValue]);
 
   const onConfigure = useCallback(async () => {
-    installTriggeredRef.current = true;
-    return { parameters };
-  }, [parameters]);
+    try {
+      installTriggeredRef.current = true;
+
+      // Return the current state since we'll update editor interfaces after configuration
+      return {
+        parameters,
+        targetState: await sdk.app.getCurrentState(),
+      };
+    } catch (error) {
+      console.error('Error in onConfigure:', error);
+      sdk.notifier.error('Failed to prepare configuration. Please try again.');
+      return false;
+    }
+  }, [parameters, sdk]);
 
   useEffect(() => {
     sdk.app.onConfigure(onConfigure);
@@ -54,27 +67,118 @@ const ConfigScreen = () => {
     sdk.app.onConfigurationCompleted(async () => {
       if (!installTriggeredRef.current) return;
 
-      const fieldsByContentType = groupFieldsByContentType(jsonFieldsRef.current);
+      try {
+        const fieldsByContentType = groupFieldsByContentType(jsonFieldsRef.current);
 
-      // Process all content types in parallel
-      const updatePromises = Object.entries(fieldsByContentType).map(async ([contentTypeId, allFields]) => {
-        const editorInterface = await sdk.cma.editorInterface.get({ contentTypeId });
-        editorInterface.controls = buildEditorInterfaceControls(allFields, editorInterface.controls, sdk.ids.app);
-        return sdk.cma.editorInterface.update(
-          {
-            spaceId: sdk.ids.space,
-            environmentId: sdk.ids.environment,
-            contentTypeId,
-          },
-          editorInterface
+        // Only process content types that have changes
+        const changedContentTypes = Object.entries(fieldsByContentType).filter(([_, fields]) =>
+          fields.some((field) => field.isEnabled !== field.originalEnabled)
         );
-      });
 
-      await Promise.all(updatePromises);
-      resetOriginalState();
-      installTriggeredRef.current = false;
+        if (changedContentTypes.length === 0) {
+          console.log('No changes detected, skipping editor interface updates');
+          resetOriginalState();
+          installTriggeredRef.current = false;
+          return;
+        }
+
+        console.log(`Processing ${changedContentTypes.length} content types with changes`);
+
+        // Process in batches of 5 to avoid rate limits
+        const BATCH_SIZE = 5;
+        const results = [];
+
+        for (let i = 0; i < changedContentTypes.length; i += BATCH_SIZE) {
+          const batch = changedContentTypes.slice(i, i + BATCH_SIZE);
+          console.log(`Processing batch ${i / BATCH_SIZE + 1} of ${Math.ceil(changedContentTypes.length / BATCH_SIZE)}`);
+
+          const batchResults = await Promise.allSettled(
+            batch.map(async ([contentTypeId, fields]) => {
+              try {
+                // Get the editor interface
+                const editorInterface = await sdk.cma.editorInterface.get({ contentTypeId });
+                const existingControls = editorInterface.controls || [];
+
+                // Build new controls array
+                const updatedControls = [];
+
+                // Process each field
+                for (const field of fields) {
+                  if (field.isEnabled) {
+                    // Add our app's control for enabled fields
+                    updatedControls.push({
+                      fieldId: field.fieldId,
+                      widgetId: sdk.ids.app,
+                      widgetNamespace: 'app',
+                    });
+                  } else {
+                    // For disabled fields, set them back to the default Object widget
+                    updatedControls.push({
+                      fieldId: field.fieldId,
+                      widgetId: 'objectEditor',
+                      widgetNamespace: 'builtin',
+                    });
+                  }
+                }
+
+                // Add any remaining controls that weren't associated with our JSON fields
+                for (const control of existingControls) {
+                  if (!fields.some((f) => f.fieldId === control.fieldId)) {
+                    updatedControls.push(control);
+                  }
+                }
+
+                // Only update if there are actual changes
+                if (JSON.stringify(existingControls) !== JSON.stringify(updatedControls)) {
+                  console.log(`Updating controls for ${contentTypeId}:`, updatedControls);
+
+                  // Update the editor interface directly
+                  await sdk.cma.editorInterface.update(
+                    { contentTypeId },
+                    {
+                      ...editorInterface,
+                      controls: updatedControls,
+                    }
+                  );
+                  return { contentTypeId, success: true };
+                } else {
+                  console.log(`No changes needed for ${contentTypeId}`);
+                  return { contentTypeId, success: true, skipped: true };
+                }
+              } catch (error) {
+                console.error(`Error processing content type ${contentTypeId}:`, error);
+                throw error;
+              }
+            })
+          );
+
+          results.push(...batchResults);
+
+          // Add a small delay between batches to avoid rate limits
+          if (i + BATCH_SIZE < changedContentTypes.length) {
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          }
+        }
+
+        // Check if any updates failed
+        const failures = results.filter((result) => result.status === 'rejected');
+        if (failures.length > 0) {
+          console.error('Some editor interface updates failed:', failures);
+          sdk.notifier.warning(`${failures.length} content type(s) failed to update. Check the console for details.`);
+        } else {
+          const skipped = results.filter((result) => result.status === 'fulfilled' && (result.value as any).skipped).length;
+          const updated = results.length - failures.length - skipped;
+          console.log(`Successfully updated ${updated} content type(s), skipped ${skipped}`);
+        }
+
+        resetOriginalState();
+        installTriggeredRef.current = false;
+      } catch (error) {
+        console.error('Error updating editor interfaces:', error);
+        sdk.notifier.error('Failed to update editor interfaces. Please try again.');
+      }
     });
-  }, [sdk]);
+  }, [sdk, jsonFieldsRef]);
 
   useEffect(() => {
     (async () => {
@@ -92,7 +196,7 @@ const ConfigScreen = () => {
           // Extreme case: Show custom loading UI with progress
           sdk.app.setReady();
 
-          const result = await getJsonFields(sdk.cma, sdk.ids.app, { limit: 1000 }, (processed, total) => {
+          const result = await getJsonFields(sdk.cma, sdk.ids.app, { limit: 1000 }, async (processed, total) => {
             setLoadingProgress({ processed, total });
           });
 
@@ -101,7 +205,6 @@ const ConfigScreen = () => {
         } else {
           // Normal case: Use default Contentful loading, no custom UI
           const result = await getJsonFields(sdk.cma, sdk.ids.app, { limit: 1000 });
-
           initialize(result.fields);
           setIsLoading(false);
           sdk.app.setReady();
