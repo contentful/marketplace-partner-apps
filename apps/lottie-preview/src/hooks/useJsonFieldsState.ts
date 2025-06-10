@@ -5,11 +5,15 @@ type JsonFieldUpdate = Partial<Pick<JsonField, 'isEnabled'>>;
 
 export function useJsonFieldsState() {
   const [jsonFields, setJsonFields] = useState<JsonField[]>([]);
+  const [version, setVersion] = useState(0);
   const jsonFieldsRef = useRef<JsonField[]>([]);
 
   const initialize = (fields: JsonField[]) => {
-    setJsonFields(fields);
-    jsonFieldsRef.current = fields;
+    // Force a new array reference to trigger React re-renders
+    const newFields = [...fields];
+    setJsonFields(newFields);
+    jsonFieldsRef.current = newFields;
+    setVersion((prev) => prev + 1);
   };
 
   const updateField = (contentTypeId: string, fieldId: string, updates: JsonFieldUpdate) => {
@@ -35,5 +39,6 @@ export function useJsonFieldsState() {
     updateField,
     resetOriginalState,
     setJsonFields,
+    version,
   };
 }
