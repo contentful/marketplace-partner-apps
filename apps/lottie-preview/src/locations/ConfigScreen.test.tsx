@@ -253,7 +253,7 @@ describe('ConfigScreen (no jest-dom)', () => {
       // Should show initial progress UI (since onProgress is called immediately)
       await waitFor(() => {
         const elements = screen.getAllByText((content, element) => {
-          return element?.textContent === 'Processing content types: 0 of 100 completed';
+          return element?.textContent === 'Loading content types';
         });
         expect(elements.length).toBeGreaterThan(0);
       });
@@ -266,7 +266,7 @@ describe('ConfigScreen (no jest-dom)', () => {
       // Should show progress updates
       await waitFor(() => {
         const elements = screen.getAllByText((content, element) => {
-          return element?.textContent === 'Processing content types: 50 of 100 completed';
+          return element?.textContent === 'Loading content types';
         });
         expect(elements.length).toBeGreaterThan(0);
       });

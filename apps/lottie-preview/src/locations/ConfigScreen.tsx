@@ -1,10 +1,10 @@
 import { ConfigAppSDK } from '@contentful/app-sdk';
-import { Heading, Paragraph, Autocomplete, Flex, Checkbox, Pill, TextLink, FormLabel, Card, Text, Note } from '@contentful/f36-components';
+import { Heading, Paragraph, Autocomplete, Flex, Checkbox, Pill, TextLink, FormLabel, Card, Text, Note, Subheading } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { styles } from './ConfigScreen.styles';
-import { ExternalLinkIcon } from '@contentful/f36-icons';
+import { ClockIcon, ExternalLinkIcon } from '@contentful/f36-icons';
 import { useJsonFieldsState } from '@src/hooks/useJsonFieldsState';
 import {
   buildEditorInterfaceControls,
@@ -178,20 +178,23 @@ const ConfigScreen = () => {
 
         <FormLabel htmlFor="autocomplete">Select content type(s)</FormLabel>
         {isLoading ? (
-          // Loading state in place of autocomplete
+          // Loading state while fetching content types
           <>
-            {loadingProgress ? (
-              <Note variant="primary" className={styles.note}>
-                <strong>Processing content types:</strong> {loadingProgress.processed} of {loadingProgress.total} completed
-              </Note>
-            ) : (
-              <Note variant="primary" className={styles.note}>
-                <strong>Initializing...</strong> Scanning {totalAvailable} content types with JSON fields
+            {loadingProgress && (
+              <Note variant="neutral" className={styles.note} icon={<ClockIcon />}>
+                <Flex flexDirection="column">
+                  <span>
+                    <Subheading>Loading content types</Subheading>
+                  </span>
+                  <span>
+                    {loadingProgress.processed} of {loadingProgress.total} completed
+                  </span>
+                </Flex>
               </Note>
             )}
           </>
         ) : (
-          // Normal autocomplete when loading is complete
+          // Render autocomplete when loaded
           <>
             <Autocomplete
               id="autocomplete"
