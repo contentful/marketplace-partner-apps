@@ -36,7 +36,6 @@ export interface JsonFieldsResult {
   hasMore: boolean;
 }
 
-// Helper function to sleep/delay execution
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // Helper function to retry API calls with exponential backoff
@@ -65,7 +64,6 @@ export async function getContentTypesWithJsonFieldsCount(cma: ConfigAppSDK['cma'
       query: { limit: 1000 },
     });
 
-    // Count content types that have JSON Object fields
     let count = 0;
     for (const contentType of contentTypes.items) {
       const hasJsonFields = contentType.fields.some((f) => f.type === JsonFieldType);
@@ -107,7 +105,6 @@ async function getJsonFieldsInternal(
   options?: { limit?: number; offset?: number },
   onProgress?: (processed: number, total: number) => void
 ): Promise<JsonFieldsResult> {
-  // Fetch ALL content types (not just first 100)
   const contentTypes = await cma.contentType.getMany({
     query: { limit: 1000 },
   });
@@ -129,12 +126,10 @@ async function getJsonFieldsInternal(
     };
   }
 
-  // Apply pagination (offset and limit)
   const offset = options?.offset || 0;
   const limit = options?.limit || INITIAL_BATCH_SIZE;
   const totalWithJsonFields = contentTypesWithJson.length;
 
-  // Apply offset and limit for pagination
   const startIndex = offset;
   const endIndex = Math.min(offset + limit, totalWithJsonFields);
   const paginatedContentTypes = contentTypesWithJson.slice(startIndex, endIndex);
@@ -195,7 +190,6 @@ async function getJsonFieldsInternal(
     const batchResults = await Promise.all(batchPromises);
     results.push(...batchResults.flat());
 
-    // Report progress
     if (onProgress) {
       const processed = Math.min(i + BATCH_SIZE, paginatedContentTypes.length);
       onProgress(processed, paginatedContentTypes.length);
@@ -207,7 +201,6 @@ async function getJsonFieldsInternal(
     }
   }
 
-  // Sort alphabetically for better UX
   results.sort((a, b) => {
     const typeCompare = a.contentTypeName.localeCompare(b.contentTypeName);
     return typeCompare !== 0 ? typeCompare : a.fieldName.localeCompare(b.fieldName);

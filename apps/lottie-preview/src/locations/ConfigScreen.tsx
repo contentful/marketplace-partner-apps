@@ -47,7 +47,7 @@ const ConfigScreen = () => {
     try {
       installTriggeredRef.current = true;
 
-      // Return the current state since we'll update editor interfaces after configuration
+      // Return the current state since we update editor interfaces after configuration
       return {
         parameters,
         targetState: await sdk.app.getCurrentState(),
@@ -76,13 +76,10 @@ const ConfigScreen = () => {
         );
 
         if (changedContentTypes.length === 0) {
-          console.log('No changes detected, skipping editor interface updates');
           resetOriginalState();
           installTriggeredRef.current = false;
           return;
         }
-
-        console.log(`Processing ${changedContentTypes.length} content types with changes`);
 
         // Process in batches of 5 to avoid rate limits
         const BATCH_SIZE = 5;
@@ -90,29 +87,24 @@ const ConfigScreen = () => {
 
         for (let i = 0; i < changedContentTypes.length; i += BATCH_SIZE) {
           const batch = changedContentTypes.slice(i, i + BATCH_SIZE);
-          console.log(`Processing batch ${i / BATCH_SIZE + 1} of ${Math.ceil(changedContentTypes.length / BATCH_SIZE)}`);
 
           const batchResults = await Promise.allSettled(
             batch.map(async ([contentTypeId, fields]) => {
               try {
-                // Get the editor interface
                 const editorInterface = await sdk.cma.editorInterface.get({ contentTypeId });
                 const existingControls = editorInterface.controls || [];
 
-                // Build new controls array
                 const updatedControls = [];
 
-                // Process each field
                 for (const field of fields) {
                   if (field.isEnabled) {
-                    // Add our app's control for enabled fields
                     updatedControls.push({
                       fieldId: field.fieldId,
                       widgetId: sdk.ids.app,
                       widgetNamespace: 'app',
                     });
                   } else {
-                    // For disabled fields, set them back to the default Object widget
+                    // For unselected fields, set them back to the default Object widget
                     updatedControls.push({
                       fieldId: field.fieldId,
                       widgetId: 'objectEditor',
@@ -128,11 +120,8 @@ const ConfigScreen = () => {
                   }
                 }
 
-                // Only update if there are actual changes
+                // Only update editor interface if there are changes
                 if (JSON.stringify(existingControls) !== JSON.stringify(updatedControls)) {
-                  console.log(`Updating controls for ${contentTypeId}:`, updatedControls);
-
-                  // Update the editor interface directly
                   await sdk.cma.editorInterface.update(
                     { contentTypeId },
                     {
@@ -142,11 +131,10 @@ const ConfigScreen = () => {
                   );
                   return { contentTypeId, success: true };
                 } else {
-                  console.log(`No changes needed for ${contentTypeId}`);
                   return { contentTypeId, success: true, skipped: true };
                 }
               } catch (error) {
-                console.error(`Error processing content type ${contentTypeId}:`, error);
+                console.warn(`Error processing content type ${contentTypeId}:`, error);
                 throw error;
               }
             })
@@ -168,7 +156,6 @@ const ConfigScreen = () => {
         } else {
           const skipped = results.filter((result) => result.status === 'fulfilled' && (result.value as any).skipped).length;
           const updated = results.length - failures.length - skipped;
-          console.log(`Successfully updated ${updated} content type(s), skipped ${skipped}`);
         }
 
         resetOriginalState();
@@ -188,12 +175,11 @@ const ConfigScreen = () => {
         const currentParameters = await sdk.app.getParameters();
         if (currentParameters) setParameters(currentParameters);
 
-        // First, quickly check how many content types have JSON fields
         const contentTypesCount = await getContentTypesWithJsonFieldsCount(sdk.cma);
         setTotalAvailable(contentTypesCount);
 
         if (contentTypesCount > 50) {
-          // Extreme case: Show custom loading UI with progress
+          // Show custom loading UI with progress so config page does not time out while loading content types
           sdk.app.setReady();
 
           const result = await getJsonFields(sdk.cma, sdk.ids.app, { limit: 1000 }, async (processed, total) => {
@@ -203,7 +189,7 @@ const ConfigScreen = () => {
           initialize(result.fields);
           setIsLoading(false);
         } else {
-          // Normal case: Use default Contentful loading, no custom UI
+          // Use default Contentful loading, no custom UI
           const result = await getJsonFields(sdk.cma, sdk.ids.app, { limit: 1000 });
           initialize(result.fields);
           setIsLoading(false);
@@ -227,27 +213,7 @@ const ConfigScreen = () => {
 
   // Show error state
   if (error) {
-    return (
-      <Flex className={styles.wrapper}>
-        <Card className={styles.configCard}>
-          <Heading as="h2" className={styles.heading}>
-            Configuration Error
-          </Heading>
-          <Note variant="negative" className={styles.note}>
-            <strong>Failed to load configuration:</strong> {error}
-          </Note>
-          <Paragraph>
-            This may be due to:
-            <ul>
-              <li>Too many content types causing rate limiting</li>
-              <li>Network connectivity issues</li>
-              <li>Insufficient permissions</li>
-            </ul>
-            Lottie Preview can be configured in the Fields tab of your content type. To enable or disable Lottie Preview, click 'Edit' on the JSON Object field
-          </Paragraph>
-        </Card>
-      </Flex>
-    );
+    return null; // Default to contentful config page error state
   }
 
   return (
@@ -297,7 +263,6 @@ const ConfigScreen = () => {
             )}
           </>
         ) : (
-          // Render autocomplete when loaded
           <>
             <Autocomplete
               id="autocomplete"
