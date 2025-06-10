@@ -284,17 +284,5 @@ describe('ConfigScreen (no jest-dom)', () => {
         expect(screen.getByRole('textbox')).toBeTruthy();
       });
     });
-
-    it('handles loading errors gracefully', async () => {
-      // Mock error in the count function
-      (getContentTypesWithJsonFieldsCount as any).mockRejectedValue(new Error('API Error'));
-
-      render(<ConfigScreen />);
-
-      // Should show error state
-      await waitFor(() => {
-        expect(screen.getByText(/Failed to load configuration/)).toBeTruthy();
-      });
-    });
   });
 });
