@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.6](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.5...lottie-preview-v1.0.6) (2025-06-11)
+
+
+### Bug Fixes
+
+* lottie preview config page fails to load with many content types [ZEND-6496] ([#5146](https://github.com/contentful/marketplace-partner-apps/issues/5146)) ([364a7af](https://github.com/contentful/marketplace-partner-apps/commit/364a7af94e1aa07cdc9a971e249759071e61f16e))
+
 ## [1.0.5](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.4...lottie-preview-v1.0.5) (2025-06-09)
 
 
