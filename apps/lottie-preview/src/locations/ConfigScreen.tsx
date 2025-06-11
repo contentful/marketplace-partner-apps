@@ -6,26 +6,16 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { styles } from './ConfigScreen.styles';
 import { ClockIcon, ExternalLinkIcon } from '@contentful/f36-icons';
 import { useJsonFieldsState } from '@src/hooks/useJsonFieldsState';
-import { getJsonFields, getContentTypesWithJsonFieldsCount, groupFieldsByContentType, JsonFieldsResult, JsonField } from '@src/configUtils';
-
-const AppWidgetNamespace = 'app';
-const DefaultWidgetId = 'objectEditor';
-
-interface AppState {
-  fields: JsonField[];
-}
+import { getJsonFields, getContentTypesWithJsonFieldsCount, groupFieldsByContentType } from '@src/configUtils';
 
 const ConfigScreen = () => {
   const sdk = useSDK<ConfigAppSDK>();
   const [parameters, setParameters] = useState<Record<string, any>>({});
   const [inputValue, setInputValue] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
-  const [totalAvailable, setTotalAvailable] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState<{ processed: number; total: number } | null>(null);
   const installTriggeredRef = useRef<boolean>(false);
-  const [isConfiguring, setIsConfiguring] = useState(false);
-  const [originalState, setOriginalState] = useState<JsonFieldsResult | null>(null);
 
   const { jsonFields, jsonFieldsRef, initialize, updateField, resetOriginalState, version } = useJsonFieldsState();
 
@@ -153,9 +143,6 @@ const ConfigScreen = () => {
         if (failures.length > 0) {
           console.error('Some editor interface updates failed:', failures);
           sdk.notifier.warning(`${failures.length} content type(s) failed to update. Check the console for details.`);
-        } else {
-          const skipped = results.filter((result) => result.status === 'fulfilled' && (result.value as any).skipped).length;
-          const updated = results.length - failures.length - skipped;
         }
 
         resetOriginalState();
@@ -176,8 +163,6 @@ const ConfigScreen = () => {
         if (currentParameters) setParameters(currentParameters);
 
         const contentTypesCount = await getContentTypesWithJsonFieldsCount(sdk.cma);
-        setTotalAvailable(contentTypesCount);
-
         if (contentTypesCount > 50) {
           // Show custom loading UI with progress so config page does not time out while loading content types
           sdk.app.setReady();
@@ -197,8 +182,6 @@ const ConfigScreen = () => {
         }
       } catch (err: any) {
         setError(err.message || 'Failed to load configuration. Please try refreshing the page.');
-        setTotalAvailable(0);
-        setIsLoading(false);
         initialize([]);
         sdk.app.setReady();
       }

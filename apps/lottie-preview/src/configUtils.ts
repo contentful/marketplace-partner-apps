@@ -1,18 +1,14 @@
 import { ConfigAppSDK } from '@contentful/app-sdk';
 
-const JsonFieldType = 'Object';
-const AppWidgetNamespace = 'app';
-const DefaultWidgetId = 'objectEditor';
+const jsonFieldType = 'Object';
 
 // Batch configuration for API requests
 const BATCH_SIZE = 10; // Process editor interfaces in batches of 10
 const RETRY_DELAY = 500; // Base delay for retries (ms)
 const MAX_RETRIES = 3; // More retries with better backoff
-const OVERALL_TIMEOUT = 120000; // 60 second timeout for large content models
+const OVERALL_TIMEOUT = 120000; // 2 minute timeout for large content models
 const BATCH_DELAY = 200; // Delay between batches to avoid rate limits
-const MAX_CONTENT_TYPES_TO_PROCESS = 1000; // Support large content models
 const INITIAL_BATCH_SIZE = 1000; // Load all content types on initial load
-const SEARCH_BATCH_SIZE = 25; // Load additional content types when searching
 
 interface Control {
   fieldId: string;
@@ -43,7 +39,7 @@ async function retryWithBackoff<T>(fn: () => Promise<T>, retries: number = MAX_R
   try {
     return await fn();
   } catch (error: any) {
-    if (retries > 0 && (error.message?.includes('rate limit') || error.message?.includes('429'))) {
+    if (retries > 0 && (error?.message?.includes('rate limit') || error?.message?.includes('429'))) {
       console.warn(`Rate limit hit, retrying in ${delay}ms... (${retries} retries left)`);
       await sleep(delay);
       return retryWithBackoff(fn, retries - 1, delay * 2); // Exponential backoff
@@ -66,7 +62,7 @@ export async function getContentTypesWithJsonFieldsCount(cma: ConfigAppSDK['cma'
 
     let count = 0;
     for (const contentType of contentTypes.items) {
-      const hasJsonFields = contentType.fields.some((f) => f.type === JsonFieldType);
+      const hasJsonFields = contentType.fields.some((f) => f.type === jsonFieldType);
       if (hasJsonFields) {
         count++;
       }
@@ -74,7 +70,7 @@ export async function getContentTypesWithJsonFieldsCount(cma: ConfigAppSDK['cma'
 
     return count;
   } catch (error: any) {
-    console.error('getContentTypesWithJsonFieldsCount failed:', error.message);
+    console.error('getContentTypesWithJsonFieldsCount failed:', error);
     return 0;
   }
 }
@@ -89,7 +85,7 @@ export async function getJsonFields(
     const result = await withTimeout(getJsonFieldsInternal(cma, appDefinitionId, options, onProgress), OVERALL_TIMEOUT);
     return result;
   } catch (error: any) {
-    console.error('getJsonFields failed:', error.message);
+    console.error('getJsonFields failed:', error);
     return {
       fields: [],
       totalContentTypes: 0,
@@ -113,7 +109,7 @@ async function getJsonFieldsInternal(
   const contentTypesWithJson = contentTypes.items
     .map((contentType) => ({
       contentType,
-      jsonFields: contentType.fields.filter((f) => f.type === JsonFieldType),
+      jsonFields: contentType.fields.filter((f) => f.type === jsonFieldType),
     }))
     .filter(({ jsonFields }) => jsonFields.length > 0);
 
@@ -130,9 +126,8 @@ async function getJsonFieldsInternal(
   const limit = options?.limit || INITIAL_BATCH_SIZE;
   const totalWithJsonFields = contentTypesWithJson.length;
 
-  const startIndex = offset;
   const endIndex = Math.min(offset + limit, totalWithJsonFields);
-  const paginatedContentTypes = contentTypesWithJson.slice(startIndex, endIndex);
+  const paginatedContentTypes = contentTypesWithJson.slice(offset, endIndex);
   const hasMore = endIndex < totalWithJsonFields;
 
   if (paginatedContentTypes.length === 0) {
