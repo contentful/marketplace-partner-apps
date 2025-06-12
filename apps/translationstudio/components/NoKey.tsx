@@ -28,7 +28,7 @@ export function IsLoading()
             <Image height={50} width={116} src={LOGO} alt="" className={css({ height: "100px", width: "227px", display: "inline-block" })} />
         </div>
         <div style={{ paddingTop: "1.5em", textAlign: "center"}}>
-            <Paragraph>translationstudio is loading</Paragraph>;
+            <Paragraph>translationstudio is loading</Paragraph>
         </div>
     </>    
 }

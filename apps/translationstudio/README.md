@@ -8,7 +8,7 @@ This plugin allows you to add enterprise translation management to your Contentf
 It connects to the translationstudio gateway and, thereby, keeps all business logic separate. Consequently, this extension only adds necessary UI elements and features to Contentful.
 
 > [!NOTE]
-> You can either host the app yourself of use the app at `https://contentful.translationstudio.tech`
+> You can either host the app yourself of use the marketplace app.
 
 ## Installation
 

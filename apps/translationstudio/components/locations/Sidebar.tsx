@@ -23,33 +23,23 @@ import { Box, Button, Caption, Checkbox, IconButton, Menu, Paragraph, Radio } fr
 import { MenuIcon } from '@contentful/f36-icons';
 import NoKey, { IsLoading, NoLanguageMappings } from "../../components/NoKey";
 
-// Utils
-import { getHistoryForElement, getLanguages, postAuthenticate, postTranslation } from "../../utils/translationstudio";
-
 // Hooks
 import { useSDK } from "@contentful/react-apps-toolkit";
 
 // Types
-import type { LanguageMapping, TranslationRequest } from "../../interfaces/translationstudio";
+import type { TranslationRequest } from "../../interfaces/translationstudio";
 
 // SDK
 import { SidebarAppSDK } from "@contentful/app-sdk";
 import DateInput from "../../components/DateInput";
-import { LOGO } from "utils/logo";
-import Image from "next/image";
-import { TranslationHistory } from "app/api/history/route";
+import { ConnectorMap, SelectedConnector } from "../Types";
+import { ApiHistory, TranslationHistory } from "utils/api/ApiHistory";
+import { ApiLanguageMappings } from "utils/api/ApiLanguageMappings";
+import { ApiTranslate } from "utils/api/ApiTranslate";
 
-const getEntryHistory = async (space: string, entry: string, env:string) => {
+const getEntryHistory = async (key:string, space: string, entry: string, env:string) => {
 	try {
-		const response = await getHistoryForElement({ space, entry, env });
-		if (response.status === 200) 
-		{
-			const data:TranslationHistory[] = await response.json();
-			return data;
-		}
-
-		const error = await response.json();
-		throw new Error(error.message);
+		return await ApiHistory(key, space, entry, env);
 	}
 	catch (err:any)
 	{
@@ -59,9 +49,9 @@ const getEntryHistory = async (space: string, entry: string, env:string) => {
 	return [];
 };
 
-const getLanguageMapping = async () => {
+const getLanguageMapping = async (key:string, space:string) => {
 	try {
-		const json = await getLanguages();
+		const json = await ApiLanguageMappings(key, space);
 		if (json.length > 0)
 			return json;
 	}
@@ -131,15 +121,6 @@ const ShowHistory = function(props:{ history:TranslationHistory[]})
 const VIEW_TRANSLATION = 1;
 const VIEW_HISTORY = 2;
 
-type ConnectorMap = {
-	[id:string]:LanguageMapping
-}
-
-type SelectedConnector = {
-	id: string;
-	machineTranslation: boolean;
-	urgent: boolean;
-}
 
 // Component
 const Sidebar = () => {
@@ -168,12 +149,7 @@ const Sidebar = () => {
 	
 	useEffect(() => {
 		
-		postAuthenticate(key, space).then((res) => {
-			if(!res.ok)
-				throw new Error("Invalid license");
-
-			return getLanguageMapping();
-		})
+		getLanguageMapping(key, space)
 		.then((data) => {
 			if (data && data.length > 0)
 			{
@@ -189,7 +165,7 @@ const Sidebar = () => {
 				});
 			}
 			
-			return getEntryHistory(space, entry, sdk.ids.environment);
+			return getEntryHistory(key, space, entry, sdk.ids.environment);
 		})
 		.then((hdata) => setHistory(hdata))
 		.catch((err:any) => {
@@ -270,7 +246,7 @@ const Sidebar = () => {
 		};
 		setPending(true);
 		try {
-			const ok = await postTranslation(payload);
+			const ok = await ApiTranslate(key, space, payload);
 			if (ok) 
 				sdk.notifier.success("Translation request sent.");
 			else 

@@ -16,53 +16,42 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, see https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
 import { TranslationRequest } from "interfaces/translationstudio";
-import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
-import { getAlreadyValidatedSessionCookieData } from "utils/AuthUtils";
 import TranslationstudioConfiguration from "utils/TranslationstudioConfiguration";
 
-export const dynamic = "force-dynamic";
-
-export async function POST(req:Request)
+export async function ApiTranslate(key:string, space:string, payload: TranslationRequest)
 {
-	const cookieStore = await cookies();
-	const data = await getAlreadyValidatedSessionCookieData(cookieStore);
-	if (data === null || !data.token)
+	try
 	{
-		return NextResponse.json({ message: "Access impossible" }, {
-			status: 401
-		});
-	}
 
-    try
-	{
-        const payload:TranslationRequest = await req.json();
-		if (data.space !== payload.spaceid)
+		if (space !== payload.spaceid)
 			throw new Error("Invalid space");
 		
-		const res = await fetch(TranslationstudioConfiguration.URL + "/translate", {
+		const res = await fetch(TranslationstudioConfiguration.URL + "/translationstudio/translate", {
 			method: "POST",
 			cache: "no-cache",
 			headers:{
 				'Content-Type': 'application/json',
-				'Authorization': data.token
+				'X-translationstudio': 'translationstudio'
 			},
-			body: JSON.stringify(payload)
+			body: JSON.stringify({ 
+				license: key,
+				space: space,
+				...payload })
 		});
 
-		if (res.ok)
-			return new Response(null, { status: 204 });
+		if (!res.ok)
+		{
+			const json = await res.json();
+			if (json.message)
+				throw new Error(json.message)
+		}
 
-		const json = await res.json();
-		if (json.message)
-			throw new Error(json.message)
+		return true;
 	}
-	catch (err:any)
+	catch (error:any)
 	{
-		console.error(err.message);
+		console.error(error.message ?? error);
 	}
 
-    return NextResponse.json({ message: "Could not submit translation" }, {
-        status: 500
-    });
+	return false;
 }

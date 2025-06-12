@@ -15,43 +15,24 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
-import { NextResponse } from "next/server";
 import TranslationstudioConfiguration from "utils/TranslationstudioConfiguration";
 
-export const dynamic = "force-dynamic";
-
-async function isValidLicense(key:string)
+export async function ApiValidate(license: string)
 {
-    const respose = await fetch(TranslationstudioConfiguration.URL + "/validate", {
+    if (!license)
+        throw new Error("License missing");
+
+    const respose = await fetch(TranslationstudioConfiguration.URL + "/translationstudio/validate", {
         method: "POST",
         cache: "no-cache",
         headers:{
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-translationstudio': 'translationstudio'
         },
         body: JSON.stringify({
-            license: key
+            license: license
         })
     });
 
     return respose.ok;
-}
-
-export async function POST(req: Request)
-{
-    const json = await req.json();
-    if (!json.license)
-    {
-        return NextResponse.json({ message: "License missing" }, {
-            status: 401
-        });
-    }
-
-    if (!await isValidLicense(json.license))
-    {
-        return NextResponse.json({ message: "Invalid license" }, {
-            status: 403
-        });
-    }
-
-    return new Response(null, { status: 204 });
 }
