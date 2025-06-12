@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.5](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.4...vwo-fme-v1.0.5) (2025-06-12)
+
+
+### Bug Fixes
+
+* REVERT: bump contentful-management from 10.46.4 to 11.52.2 in /apps/vwo-fme []" ([#5160](https://github.com/contentful/marketplace-partner-apps/issues/5160)) ([a469e64](https://github.com/contentful/marketplace-partner-apps/commit/a469e6408e67050bcbce8792919d5e03ef5f0900))
+
 ## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.3...vwo-fme-v1.0.4) (2025-05-28)
 
 
