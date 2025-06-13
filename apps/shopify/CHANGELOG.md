@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.2](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.1.1...shopify-sku-v2.1.2) (2025-06-13)
+
+
+### Bug Fixes
+
+* Shopify tag searching and wildcard fixes [ZEND-6490] ([#5164](https://github.com/contentful/marketplace-partner-apps/issues/5164)) ([ea3b463](https://github.com/contentful/marketplace-partner-apps/commit/ea3b463fc2363b9fa57ee921a9eb10c95d4b8ca7))
+
 ## [2.1.1](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.1.0...shopify-sku-v2.1.1) (2025-06-06)
 
 
