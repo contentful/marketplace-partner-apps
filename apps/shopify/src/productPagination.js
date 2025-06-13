@@ -15,6 +15,8 @@ const makePagination = async (sdk) => {
           `sku:* ${search}*`, // partial SKU match with space
           `sku:"${search}"`, // exact SKU phrase match
           `title:"${search}"`, // exact title phrase match
+          `tag:* ${search}*`, // partial tag match with space
+          `tag:"${search}"`, // exact tag phrase match
         ];
         queryStr = searches.join(' OR ');
       }
