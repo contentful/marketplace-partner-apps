@@ -33,7 +33,7 @@
     "extends": "react-app"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.19.1",
+    "@contentful/app-scripts": "2.5.5",
     "@svgr/rollup": "^8.1.0",
     "@testing-library/react": "14.0.0",
     "@testing-library/user-event": "^14.6.1",
