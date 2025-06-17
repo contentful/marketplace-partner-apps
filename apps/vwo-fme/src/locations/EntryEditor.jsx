@@ -100,7 +100,7 @@ const getNewVariation = (variationName, vwoVariationsLength) => {
   let newVariation = {
     name: variationName,
     key: (vwoVariationsLength+1).toString(),
-    jsonContent: vwoVariationsLength? [{variableId: 1, value: ''}]: []
+    variables: vwoVariationsLength? [{variableId: 1, value: ''}]: []
   };
 
   return newVariation;
@@ -112,7 +112,8 @@ const EntryEditor = (props) => {
   const updateVariationsInVwo = async (vwoVariations) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const response = await props.client.updateVariations({variations: vwoVariations});
+        const filteredVwoVariations = vwoVariations.filter(variation => variation.id !== 1);
+        const response = await props.client.updateVariations({variations: filteredVwoVariations});
         if(response && response._data){
           resolve(response._data.variations);
         }
@@ -240,7 +241,7 @@ const EntryEditor = (props) => {
     else{
       let updatedVwoVariations = state.featureFlag.variations.map((vwoVariation) => {
         if(vwoVariation.id === variation.id){
-          vwoVariation.jsonContent[0].value = contentId;
+          vwoVariation.variables[0].value = contentId;
         }
         return vwoVariation;
       });
