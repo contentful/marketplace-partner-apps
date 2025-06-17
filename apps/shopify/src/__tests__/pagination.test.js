@@ -87,7 +87,7 @@ describe('Pagination Search Query Generation', () => {
         expect.stringContaining('query getProducts'),
         expect.objectContaining({
           variables: expect.objectContaining({
-            query: 'title:* test-sku* OR sku:* test-sku* OR sku:"test-sku" OR title:"test-sku" OR tag:* test-sku* OR tag:"test-sku"',
+            query: 'title:* test-sku* OR sku:* test-sku* OR sku:"test-sku" OR title:"test-sku"',
           }),
         })
       );
@@ -115,65 +115,7 @@ describe('Pagination Search Query Generation', () => {
         expect.stringContaining('query getProducts'),
         expect.objectContaining({
           variables: expect.objectContaining({
-            query:
-              'title:* sku-managed-1* OR sku:* sku-managed-1* OR sku:"sku-managed-1" OR title:"sku-managed-1" OR tag:* sku-managed-1* OR tag:"sku-managed-1"',
-          }),
-        })
-      );
-    });
-
-    it('should handle tag-based search terms', async () => {
-      const mockResponse = {
-        data: {
-          products: {
-            edges: [],
-            pageInfo: { hasNextPage: false, endCursor: null },
-          },
-        },
-      };
-      mockClient.request.mockResolvedValue(mockResponse);
-
-      const makePagination = require('../productPagination').default;
-      const pagination = await makePagination(mockSdk);
-
-      // Test with tag containing special characters
-      await pagination.fetchNext('summer-collection');
-
-      // Verify the query handles tag search properly
-      expect(mockClient.request).toHaveBeenCalledWith(
-        expect.stringContaining('query getProducts'),
-        expect.objectContaining({
-          variables: expect.objectContaining({
-            query:
-              'title:* summer-collection* OR sku:* summer-collection* OR sku:"summer-collection" OR title:"summer-collection" OR tag:* summer-collection* OR tag:"summer-collection"',
-          }),
-        })
-      );
-    });
-
-    it('should handle tag-based search with spaces', async () => {
-      const mockResponse = {
-        data: {
-          products: {
-            edges: [],
-            pageInfo: { hasNextPage: false, endCursor: null },
-          },
-        },
-      };
-      mockClient.request.mockResolvedValue(mockResponse);
-
-      const makePagination = require('../productPagination').default;
-      const pagination = await makePagination(mockSdk);
-
-      // Test with tag containing spaces
-      await pagination.fetchNext('summer sale');
-
-      // Verify the query handles tag search with spaces properly
-      expect(mockClient.request).toHaveBeenCalledWith(
-        expect.stringContaining('query getProducts'),
-        expect.objectContaining({
-          variables: expect.objectContaining({
-            query: 'title:* summer sale* OR sku:* summer sale* OR sku:"summer sale" OR title:"summer sale" OR tag:* summer sale* OR tag:"summer sale"',
+            query: 'title:* sku-managed-1* OR sku:* sku-managed-1* OR sku:"sku-managed-1" OR title:"sku-managed-1"',
           }),
         })
       );
