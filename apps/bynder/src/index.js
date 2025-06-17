@@ -5,10 +5,10 @@ import logo from './logo.svg';
 
 const CTA = 'Select a file on Bynder';
 
-// DOCS POINT TO THIS
+// DOCS POINT TO THIS BASE URL BUT LOGIN TO BYNDER BREAKS WITHOUT THE CLOUDFRONT BASE URL
 // const BYNDER_BASE_URL = 'https://ucv.bynder.com';
 const BYNDER_BASE_URL = 'https://d8ejoa1fys2rk.cloudfront.net';
-const BYNDER_SDK_URL = `${BYNDER_BASE_URL}/5.0.5/modules/compactview/bynder-compactview-3-latest.js`;
+const BYNDER_SDK_URL = `${BYNDER_BASE_URL}/5.0.5/modules/compactview/bynder-compactview-5-latest.js`;
 
 const FIELDS_TO_PERSIST = [
   'archive',
