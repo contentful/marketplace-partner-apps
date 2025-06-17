@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.17](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.1.16...bynder-assets-v1.1.17) (2025-06-17)
+
+
+### Bug Fixes
+
+* update bynder contentview version [INTEG-2805] ([#5175](https://github.com/contentful/marketplace-partner-apps/issues/5175)) ([049b859](https://github.com/contentful/marketplace-partner-apps/commit/049b85962c12e3006f873b6bffc3e9c68a8c86db))
+
 ## [1.1.16](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.1.15...bynder-assets-v1.1.16) (2024-09-24)
 
 
