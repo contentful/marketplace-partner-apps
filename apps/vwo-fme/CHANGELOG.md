@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.6](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.5...vwo-fme-v1.0.6) (2025-06-17)
+
+
+### Bug Fixes
+
+* update API payload structure to resolve data handling issue [] ([#5173](https://github.com/contentful/marketplace-partner-apps/issues/5173)) ([ddd4622](https://github.com/contentful/marketplace-partner-apps/commit/ddd4622e89d3ec4b5c340b53984add17a5e3ec13))
+
 ## [1.0.5](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.4...vwo-fme-v1.0.5) (2025-06-12)
 
 
