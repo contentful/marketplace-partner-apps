@@ -70,8 +70,8 @@ export const getRequiredEntryInformation = (entry, contentTypes, defaultLocale) 
 
 export const mapVwoVariationsAndContent = (vwoVariations,entries, contentTypes, defaultLocale) => {
   return vwoVariations.map(vwoVariation => {
-    if(vwoVariation.jsonContent.length && vwoVariation.jsonContent[0].value){
-      let contentId = vwoVariation.jsonContent[0].value;
+    if(vwoVariation.variables.length && vwoVariation.variables[0].value){
+      let contentId = vwoVariation.variables[0].value;
       let entry = entries.find(entry => entry.sys.id === contentId);
       if(!entry){
         return {vwoVariation};

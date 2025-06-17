@@ -38,7 +38,7 @@ function CreateContent(props) {
 
    const editContent = (vwoVariation) => {
       setSelectContentType(false);
-      props.sdk.navigator.openEntry(vwoVariation.jsonContent[0].value, { slideIn: { waitForClose: true } })
+      props.sdk.navigator.openEntry(vwoVariation.variables[0].value, { slideIn: { waitForClose: true } })
          .then(updatedEntry => {
             props.updateContentfulEntries(updatedEntry);
          });
