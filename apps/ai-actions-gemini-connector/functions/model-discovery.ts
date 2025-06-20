@@ -113,7 +113,7 @@ function aiActionsSuitableModels(models: Model[], modelProvider: ModelProvider, 
 async function getAvailableModels(
   fetcher: (nextPageToken?: string) => Promise<Response>,
   modelProvider: ModelProvider,
-  location: string | undefined,
+  location: string | undefined
 ): Promise<ReturnedModel[]> {
   let response: Response
   let nextPageToken: string | undefined
@@ -167,18 +167,20 @@ export type AppInstallationParameters = {
  * and subsequent function invocations from user edits in the UI.
  */
 function resolveSecret(bodyParam: string, installParam: string | undefined) {
-  return bodyParam.match(/^\*+$/) ? (installParam ?? '') : bodyParam
+  return bodyParam.match(/^\*+$/) ? installParam ?? '' : bodyParam
 }
 
 export const handler: FunctionEventHandler<FunctionTypeEnum.AppActionCall, AppInstallationParameters> = async (
   event: AppActionRequest<'Custom', CustomEventBody>,
-  context: FunctionEventContext<AppInstallationParameters>,
+  context: FunctionEventContext<AppInstallationParameters>
 ) => {
   return wrapWithErrorTransform(async () => {
     let fetcher
     let location: string | undefined
 
     const installParams = context.appInstallationParameters
+
+    log('Starting model discovery', { modelProvider: event.body.modelProvider })
 
     switch (event.body.modelProvider) {
       case 'google-gemini':
@@ -193,6 +195,9 @@ export const handler: FunctionEventHandler<FunctionTypeEnum.AppActionCall, AppIn
         throw new Error('Invalid model provider')
     }
     const models = await getAvailableModels(fetcher, event.body.modelProvider, location)
+
+    log('Model discovery complete', { numModelsFound: models.length })
+
     return { models }
   })
 }
@@ -206,8 +211,24 @@ async function wrapWithErrorTransform<T>(fn: () => Promise<T>): Promise<T | Erro
   try {
     return await fn()
   } catch (error: unknown) {
+    let stack: string | undefined
+    let errorMessage: string
+
+    if (error instanceof Error) {
+      stack = error.stack
+      errorMessage = error.message
+    } else {
+      errorMessage = String(error)
+    }
+
+    log('Error in model discovery', { errorMessage, stack })
+
     return {
-      errorMessage: error instanceof Error ? error.message : String(error),
+      errorMessage,
     }
   }
+}
+
+function log(message: string, ...args: unknown[]) {
+  console.log(`[ai-actions-gemini-connector] ${message}`, ...args)
 }
