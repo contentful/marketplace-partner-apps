@@ -3,11 +3,11 @@
   "version": "1.1.17",
   "private": true,
   "devDependencies": {
-    "@contentful/app-scripts": "2.1.2",
-    "@vitejs/plugin-react": "^4.3.4",
+    "@contentful/app-scripts": "2.5.5",
+    "@vitejs/plugin-react": "^4.6.0",
     "happy-dom": "^17.3.0",
     "vite": "^6.3.5",
-    "vitest": "^3.0.8"
+    "vitest": "^3.2.4"
   },
   "dependencies": {
     "@contentful/dam-app-base": "^3.0.9",
