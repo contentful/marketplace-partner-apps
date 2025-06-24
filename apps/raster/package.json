@@ -3,7 +3,7 @@
   "version": "1.0.6",
   "private": true,
   "dependencies": {
-    "@contentful/app-scripts": "^1.26.0",
+    "@contentful/app-scripts": "^2.5.5",
     "@contentful/app-sdk": "^4.29.7",
     "@contentful/f36-components": "^4.80.4",
     "@contentful/f36-icons": "^4.29.1",
@@ -24,7 +24,7 @@
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "^16.3.0",
-    "@contentful/app-scripts": "^1.27.0",
+    "@contentful/app-scripts": "^2.5.5",
     "@monogram/prettier-config": "^0.3.4",
     "@testing-library/user-event": "^14.6.1",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
