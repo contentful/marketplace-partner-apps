@@ -24,7 +24,7 @@
     "react-dom": "18.3.1",
     "react-image-crop": "^11.0.10",
     "react-magic-dropzone": "^1.0.1",
-    "styled-components": "5.3.11"
+    "styled-components": "6.1.19"
   },
   "scripts": {
     "start": "vite",
