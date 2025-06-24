@@ -14,6 +14,7 @@ jobs:
         uses: karancode/yamllint-github-action@master
         with:
           yamllint_file_or_dir: '.github/workflows/*.yml'
+          yamllint_config_filepath: '.yamllint.yaml'
           yamllint_strict: false
           yamllint_comment: true
         env:
