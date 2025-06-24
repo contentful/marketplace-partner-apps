@@ -12,19 +12,19 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@contentful/app-sdk": "4.29.3",
-    "@contentful/f36-components": "4.75.2",
-    "@contentful/f36-icons": "4.29.0",
+    "@contentful/app-sdk": "4.29.7",
+    "@contentful/f36-components": "4.80.4",
+    "@contentful/f36-icons": "4.29.1",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "11.13.5",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.0",
-    "axios": "1.8.2",
+    "axios": "1.10.0",
     "http-status-codes": "2.3.0",
     "lodash": "4.17.21",
     "prop-types": "15.8.1",
     "react": "18.3.1",
-    "react-hook-form": "7.54.2",
+    "react-hook-form": "7.58.1",
     "react-router-dom": "6.28.0"
   },
   "devDependencies": {
