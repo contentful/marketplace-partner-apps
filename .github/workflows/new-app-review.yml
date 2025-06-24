@@ -2,7 +2,7 @@
 name: 'New App Review'
 
 "on":
-  pull_request_target:
+  pull_request:
     types:
       - opened
       - edited
@@ -19,9 +19,6 @@ jobs:
         with:
           # Fetch all history for all branches and tags
           fetch-depth: 0
-          # Ensure the workflow can access the forked repository's contents
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
       - uses: actions/setup-node@v3
         with:
           node-version: 18

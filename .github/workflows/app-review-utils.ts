@@ -25,11 +25,36 @@ const getNewAppDirectories = (files: PullRequestFile[]) => {
   return [...new Set(newAppDirs)];
 };
 
+const sanitizeAppDirectory = (appDir: string): string => {
+  // Ensure the directory path is safe and within the apps directory
+  const normalizedPath = path.normalize(appDir);
+  const resolvedPath = path.resolve(normalizedPath);
+  const appsPath = path.resolve('apps');
+
+  // Ensure the path is within the apps directory and doesn't contain path traversal
+  if (!resolvedPath.startsWith(appsPath + path.sep) || normalizedPath.includes('..')) {
+    throw new Error(`Invalid app directory path: ${appDir}`);
+  }
+
+  // Additional validation - ensure it's a simple apps/appname structure
+  const pathParts = normalizedPath.split(path.sep);
+  if (pathParts.length !== 2 || pathParts[0] !== 'apps' || !pathParts[1] || pathParts[1].includes(' ')) {
+    throw new Error(`Invalid app directory structure: ${appDir}`);
+  }
+
+  return normalizedPath;
+};
+
 const installAppDependencies = async (newAppDir: string) => {
   try {
-    await execPromise(`(cd ${newAppDir} && npm ci)`);
+    // Sanitize the directory path
+    const sanitizedDir = sanitizeAppDirectory(newAppDir);
+
+    // Use proper escaping and validation
+    await execPromise(`cd ${JSON.stringify(sanitizedDir)} && npm ci`);
   } catch (error) {
     console.error(`Failed to install app dependencies for ${newAppDir}: ${error}`);
+    throw error; // Re-throw to handle validation failures properly
   }
 };
 
@@ -147,4 +172,5 @@ export {
   handleValidationWarnings,
   hasPackageJson,
   packageJsonPath,
+  sanitizeAppDirectory,
 };
