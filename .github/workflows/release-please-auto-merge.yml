@@ -1,0 +1,110 @@
+---
+name: 'release-please dependency-only auto-merge'
+
+"on":
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  auto-merge-dependency-releases:
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    # Only run on Release Please PRs with "chore: release" title
+    if: |
+      github.actor == 'github-actions[bot]' &&
+      startsWith(github.event.pull_request.title, 'chore: release')
+    steps:
+      - name: Check if release contains only dependency updates
+        id: check-dependencies
+        run: |
+          PR_BODY="${{ github.event.pull_request.body }}"
+
+          # Check for sections that should NOT be present in dependency-only releases
+          if echo "$PR_BODY" | grep -E "### (Features|Performance Improvements|Reverts|Documentation)" -i; then
+            echo "Found non-dependency sections, skipping auto-merge"
+            echo "is-dependency-only=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Check for breaking changes
+          if echo "$PR_BODY" | grep -E "BREAKING CHANGE" -i; then
+            echo "Found breaking changes, skipping auto-merge"
+            echo "is-dependency-only=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Positive check: ensure we have dependency-related entries
+          if echo "$PR_BODY" | grep -E "\*\*deps\*\*:" -i; then
+            echo "Found dependency updates, proceeding with auto-merge"
+            echo "is-dependency-only=true" >> $GITHUB_OUTPUT
+          else
+            echo "No dependency updates found, skipping auto-merge"
+            echo "is-dependency-only=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check if PR is from fork
+        if: steps.check-dependencies.outputs.is-dependency-only == 'true'
+        shell: bash
+        run: |
+          if [ "${{ github.event.pull_request.head.repo.fork }}" == "true" ]; then
+            echo "Skipping action on fork PR"
+            exit 1
+          fi
+
+      - name: Retrieve github token
+        if: steps.check-dependencies.outputs.is-dependency-only == 'true'
+        id: vault
+        uses: hashicorp/vault-action@v2.4.3
+        with:
+          url: ${{ secrets.VAULT_URL }}
+          role: ${{ github.event.repository.name }}-github-action
+          method: jwt
+          path: github-actions
+          exportEnv: false
+          secrets: |
+            github/token/${{ github.event.repository.name }}-dependabot token | GITHUB_MERGE_TOKEN ;
+
+      - name: Approve PR
+        if: steps.check-dependencies.outputs.is-dependency-only == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ steps.vault.outputs.GITHUB_MERGE_TOKEN }}
+          script: |
+            const opts = github.rest.pulls.listReviews.endpoint.merge({
+              pull_number: context.payload.pull_request.number,
+              owner: context.payload.repository.owner.login,
+              repo: context.payload.repository.name,
+            });
+
+            const reviews = await github.paginate(opts);
+
+            const ourReview = reviews.find(
+              (review) =>
+                review.state === "APPROVED" && review.user && review.user.login === "contentful-automation[bot]"
+            );
+
+            if (ourReview) {
+              console.log(
+                `The user "${ourReview.user.login}" has already approved and requested this PR is merged, exiting`
+              );
+            } else {
+              await github.rest.pulls.createReview({
+                owner: context.payload.repository.owner.login,
+                repo: context.payload.repository.name,
+                pull_number: context.payload.pull_request.number,
+                event: 'APPROVE',
+                body: 'Auto-approving dependency-only release'
+              });
+            }
+
+      - name: Enable auto merge
+        if: steps.check-dependencies.outputs.is-dependency-only == 'true'
+        shell: bash
+        run: |
+          echo "Auto merging dependency-only release PR"
+          gh pr merge --auto ${{ github.event.pull_request.html_url }}
+        env:
+          GH_TOKEN: ${{ steps.vault.outputs.GITHUB_MERGE_TOKEN }}
