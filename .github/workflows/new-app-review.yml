@@ -10,6 +10,10 @@ name: 'New App Review'
     branches:
       - 'main'
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   main:
     name: New App Review
