@@ -19,7 +19,9 @@ jobs:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
 
       - name: Check if PR is from fork
-        if: ${{ steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major' }}
+        if: >
+          ${{ steps.dependabot-metadata.outputs.update-type != 
+          'version-update:semver-major' }}
         shell: bash
         run: |
           if [ "${{ github.event.pull_request.head.repo.fork }}" == "true" ]; then
@@ -28,7 +30,9 @@ jobs:
           fi
 
       - name: Retrieve Github Token
-        if: ${{ steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major' }}
+        if: >
+          ${{ steps.dependabot-metadata.outputs.update-type != 
+          'version-update:semver-major' }}
         id: vault
         uses: hashicorp/vault-action@v2.4.3
         with:
@@ -41,7 +45,9 @@ jobs:
             github/token/${{ github.event.repository.name }}-dependabot token | GITHUB_MERGE_TOKEN ;
 
       - name: approve PR
-        if: ${{ steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major' }}
+        if: >
+          ${{ steps.dependabot-metadata.outputs.update-type != 
+          'version-update:semver-major' }}
         uses: actions/github-script@v7
         with:
           github-token: ${{ steps.vault.outputs.GITHUB_MERGE_TOKEN }}
@@ -56,12 +62,14 @@ jobs:
 
             const ourReview = reviews.find(
               (review) =>
-                review.state === "APPROVED" && review.user && review.user.login === "contentful-automation[bot]"
+                review.state === "APPROVED" && review.user && 
+                review.user.login === "contentful-automation[bot]"
             );
 
             if (ourReview) {
               console.log(
-                `The user "${ourReview.user.login}" has already approved and requested this PR is merged, exiting`
+                `The user "${ourReview.user.login}" has already approved 
+                and requested this PR is merged, exiting`
               );
             } else {
               await github.rest.pulls.createReview({
@@ -74,7 +82,9 @@ jobs:
             }
 
       - name: Get merge type
-        if: ${{ steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major' }}
+        if: >
+          ${{ steps.dependabot-metadata.outputs.update-type != 
+          'version-update:semver-major' }}
         id: merge-type
         uses: actions/github-script@v7
         with:
@@ -107,12 +117,15 @@ jobs:
             return mergeMethod;
 
       - name: Enable auto merge
-        if: ${{ steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major' }}
+        if: >
+          ${{ steps.dependabot-metadata.outputs.update-type != 
+          'version-update:semver-major' }}
         shell: bash
         run: |
           merge_method="$(echo ${{ steps.merge-type.outputs.result }} | tr -d '"')"
           echo "Auto merging PR using method $merge_method"
           gh pr merge "--$merge_method" --auto ${{ github.event.pull_request.html_url }}
         env:
-          # Note: The GH_TOKEN env var is required for now, even though it contradicts GH's documentation
+          # Note: The GH_TOKEN env var is required for now, even though it 
+          # contradicts GH's documentation
           GH_TOKEN: ${{ steps.vault.outputs.GITHUB_MERGE_TOKEN }}
