@@ -9,7 +9,7 @@
     "@contentful/react-apps-toolkit": "1.2.16",
     "contentful-management": "11.54.0",
     "emotion": "10.0.27",
-    "react": "18.3.1",
+    "react": "19.1.0",
     "react-dom": "18.3.1",
     "react-router": "6.28.0",
     "react-router-dom": "6.28.0"
@@ -31,7 +31,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "16.3.0",
     "@types/node": "18.15.3",
-    "@types/react": "18.3.12",
+    "@types/react": "19.1.8",
     "@types/react-dom": "18.3.1",
     "@vitejs/plugin-react": "4.6.0",
     "happy-dom": "15.11.7",
