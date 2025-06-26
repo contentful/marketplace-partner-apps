@@ -11,7 +11,7 @@
     "@emotion/css": "^11.13.5",
     "contentful-management": "11.54.0",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "19.1.0"
   },
   "scripts": {
     "install-ci": "npm ci",
@@ -42,7 +42,7 @@
     "@testing-library/react": "^16.3.0",
     "@types/node": "18.15.3",
     "@types/react": "18.3.12",
-    "@types/react-dom": "18.3.1",
+    "@types/react-dom": "19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
     "happy-dom": "^17.2.2",
     "typescript": "5.8.3",
