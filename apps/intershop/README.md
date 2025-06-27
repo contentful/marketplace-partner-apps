@@ -35,7 +35,7 @@ This project was bootstrapped with [Create Contentful App](https://github.com/co
   "@testing-library/jest-dom": "5.17.0",
   "@testing-library/react": "14.0.0",
   "@tsconfig/create-react-app": "2.0.1",
-  "@types/node": "16.18.50",
+  "@types/node": "^20",
   "@types/react": "18.2.21",
   "@types/react-dom": "18.2.7",
   "cross-env": "7.0.3",
