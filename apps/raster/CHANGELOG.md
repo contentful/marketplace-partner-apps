@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/raster-v1.0.6...raster-v1.0.7) (2025-06-27)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group across 1 directory with 8 updates ([#5190](https://github.com/contentful/marketplace-partner-apps/issues/5190)) ([7dddeab](https://github.com/contentful/marketplace-partner-apps/commit/7dddeab0d4e296c28f95e9ec97d254382ba4a996))
+
 ## [1.0.6](https://github.com/contentful/marketplace-partner-apps/compare/raster-v1.0.5...raster-v1.0.6) (2025-05-27)
 
 
