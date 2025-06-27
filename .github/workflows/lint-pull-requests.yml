@@ -11,6 +11,7 @@ name: 'Lint Pull Requests'
       - 'main'
 
 permissions:
+  contents: read
   pull-requests: read
 
 jobs:
