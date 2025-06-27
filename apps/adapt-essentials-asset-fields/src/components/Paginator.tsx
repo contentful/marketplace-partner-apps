@@ -8,7 +8,7 @@ import useActivePage from './hooks/useActivePage';
 import useSkip from './hooks/useSkip';
 import useOrder from './hooks/useOrder';
 import useLimit from './hooks/useLimit';
-import { useCMA } from './hooks/useCMA';
+import { useCMA } from '@contentful/react-apps-toolkit';
 import useQuery from './hooks/useQuery';
 
 const Paginator = () => {
