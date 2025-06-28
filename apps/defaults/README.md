@@ -119,9 +119,9 @@ Example:
 
 ## Deployment to Contentful
 
-1. `yarn build` – produces `build/` (front-end) and `build/functions/`.
-2. `yarn upload` – uploads the bundle and lets you activate it (use `upload-ci` for CI pipelines).
-3. `yarn create-app-event` – create an event subscription connecting `Entry.create` events to your function.
+1. `npm build` – produces `build/` (front-end) and `build/functions/`.
+2. `npm upload` – uploads the bundle and lets you activate it (use `upload-ci` for CI pipelines).
+3. `npm create-app-event` – create an event subscription connecting `Entry.create` events to your function.
 
 Afterwards, creating an entry that matches the configuration will automatically be enriched with your defaults.
 
@@ -130,5 +130,5 @@ Afterwards, creating an entry that matches the configuration will automatically 
 ## Testing
 
 ```bash
-yarn test
+npm test
 ```
