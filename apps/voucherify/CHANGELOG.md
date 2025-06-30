@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.29](https://github.com/contentful/marketplace-partner-apps/compare/voucherify-contentful-app-v1.0.28...voucherify-contentful-app-v1.0.29) (2025-06-30)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group across 1 directory with 5 updates ([#5184](https://github.com/contentful/marketplace-partner-apps/issues/5184)) ([9a12140](https://github.com/contentful/marketplace-partner-apps/commit/9a12140c97199ba62cae494fb1aa8af500564ab0))
+
 ## [1.0.28](https://github.com/contentful/marketplace-partner-apps/compare/voucherify-contentful-app-v1.0.27...voucherify-contentful-app-v1.0.28) (2025-03-13)
 
 
