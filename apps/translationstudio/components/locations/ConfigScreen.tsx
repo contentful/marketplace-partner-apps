@@ -104,7 +104,7 @@ const ConfigScreen = () =>
 			</div>
 			<Form>
 				<Heading>translationstudio license</Heading>
-				<SectionHeading marginBottom="spacingXs">Pase your translationstudio license here</SectionHeading>
+				<SectionHeading marginBottom="spacingXs">Paste your translationstudio license here</SectionHeading>
 				<Flex className={css({ alignItems: "flex-start", marginBottom: "10px" })}>
 					<Textarea
 						className={css({ width: "100%", marginRight: "20px" })}
