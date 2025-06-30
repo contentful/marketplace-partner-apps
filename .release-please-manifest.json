@@ -25,7 +25,7 @@
   "apps/vwo-fme": "1.0.6",
   "apps/sfmc-studio": "1.2.2",
   "apps/statsig": "1.1.2",
-  "apps/convox": "1.0.0",
+  "apps/convox": "1.0.1",
   "apps/lottie-preview": "1.0.6",
   "apps/hugging-face": "1.1.1"
 }
