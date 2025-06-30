@@ -5,6 +5,21 @@
 
 ## Installation
 
+### Installation as a custom extension
+
+To add this extension to your Contentful organisation, please follow the steps below:
+
+1. Create an instance of this project and make it available under any URL
+2. Open your **Organization settings & subscriptions** and navigate to **Apps**
+3. Create a new app
+4. Provide the name `translationstudio`
+5. Add the frontend URL as configured in 1)
+6. Select the **Locations** `App configuration screen` and `Entry sidebar`
+7. Click on **Save**
+9. Install the app to your space(s)
+
+You will need to configure the app in each space. You can find it at **Apps** - **Installed Apps**
+
 ### Installation from the Contentful marketplace
 
 This documentation will be updated once the extension has been added.
