@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/ls-contentful-app-v1.0.3...ls-contentful-app-v1.0.4) (2025-06-30)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group in /apps/livestory with 4 updates ([#5051](https://github.com/contentful/marketplace-partner-apps/issues/5051)) ([ed8aa34](https://github.com/contentful/marketplace-partner-apps/commit/ed8aa34bb21f3ed1c2ca2cc3736ee2ebf63e4386))
+
 ## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/ls-contentful-app-v1.0.2...ls-contentful-app-v1.0.3) (2025-05-28)
 
 
