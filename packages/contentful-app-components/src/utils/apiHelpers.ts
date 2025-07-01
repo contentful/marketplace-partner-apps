@@ -146,23 +146,58 @@ export async function fetchContentTypes(
     skip?: number;
     order?: string;
     filters?: any[];
+    fetchAll?: boolean;
   } = {}
 ): Promise<{ items: any[]; total: number }> {
-  const { limit = 1000, skip = 0, order = 'name' } = options;
+  const { limit = 1000, skip = 0, order = 'name', fetchAll = false } = options;
 
   try {
-    const response = await cma.contentType.getMany({
-      query: {
-        limit,
-        skip,
-        order,
-      },
-    });
+    if (fetchAll) {
+      // Fetch all content types by paginating through all pages
+      const allItems: any[] = [];
+      let currentSkip = skip;
+      let total = 0;
+      let hasMore = true;
 
-    return {
-      items: response.items,
-      total: response.total,
-    };
+      while (hasMore) {
+        const response = await cma.contentType.getMany({
+          query: {
+            limit,
+            skip: currentSkip,
+            order,
+          },
+        });
+
+        allItems.push(...response.items);
+        total = response.total;
+        currentSkip += limit;
+        hasMore = currentSkip < total;
+
+        // Add a small delay between requests to avoid rate limits
+        if (hasMore) {
+          await sleep(100);
+        }
+      }
+
+      return {
+        items: allItems,
+        total,
+      };
+    } else {
+      // Fetch just the current page
+      const response = await cma.contentType.getMany({
+        query: {
+          limit,
+          skip,
+          order,
+        },
+      });
+
+      return {
+        items: response.items,
+        total: response.total,
+      };
+    }
   } catch (error) {
     console.error('Error fetching content types:', error);
     throw error;

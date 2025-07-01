@@ -15,50 +15,82 @@ export function useContentTypes(options: UseContentTypesOptions = {}): UseConten
   const [error, setError] = useState<Error | null>(null);
   const [total, setTotal] = useState(0);
   const [hasMore, setHasMore] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [currentSkip, setCurrentSkip] = useState(0);
 
-  const { filters = [], limit = 1000, skip = 0, order = 'name', onProgress } = options;
+  const { filters = [], limit = 1000, skip = 0, order = 'name', onProgress, fetchAll = false } = options;
 
-  const fetchContentTypesData = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
+  const fetchContentTypesData = useCallback(
+    async (isLoadMore = false) => {
+      try {
+        if (isLoadMore) {
+          setIsLoadingMore(true);
+        } else {
+          setLoading(true);
+        }
+        setError(null);
 
-      // Convert legacy fieldTypeFilters to filters if present
-      const allFilters = [...filters];
+        // Convert legacy fieldTypeFilters to filters if present
+        const allFilters = [...filters];
 
-      const response = await fetchContentTypes(cma, {
-        limit,
-        skip,
-        order,
-      });
+        const response = await fetchContentTypes(cma, {
+          limit,
+          skip: isLoadMore ? currentSkip : skip,
+          order,
+          fetchAll,
+        });
 
-      // Apply filters to the fetched content types
-      const filteredContentTypes = filterContentTypes(response.items, allFilters);
+        // Apply filters to the fetched content types
+        const filteredContentTypes = filterContentTypes(response.items, allFilters);
 
-      setContentTypes(filteredContentTypes);
-      setTotal(response.total);
-      setHasMore(skip + limit < response.total);
+        if (isLoadMore) {
+          // Append new content types to existing ones
+          setContentTypes((prev) => [...prev, ...filteredContentTypes]);
+          setCurrentSkip((prev) => prev + limit);
+        } else {
+          // Replace content types
+          setContentTypes(filteredContentTypes);
+          setCurrentSkip(skip + limit);
+        }
 
-      // Report progress if callback provided
-      if (onProgress) {
-        onProgress(filteredContentTypes.length, response.total);
+        setTotal(response.total);
+        setHasMore(currentSkip + limit < response.total);
+
+        // Report progress if callback provided
+        if (onProgress) {
+          const totalProcessed = isLoadMore ? contentTypes.length + filteredContentTypes.length : filteredContentTypes.length;
+          onProgress(totalProcessed, response.total);
+        }
+      } catch (err: any) {
+        const error = new Error(err?.message || 'Failed to fetch content types');
+        setError(error);
+        console.error('useContentTypes error:', error);
+      } finally {
+        if (isLoadMore) {
+          setIsLoadingMore(false);
+        } else {
+          setLoading(false);
+        }
       }
-    } catch (err: any) {
-      const error = new Error(err?.message || 'Failed to fetch content types');
-      setError(error);
-      console.error('useContentTypes error:', error);
-    } finally {
-      setLoading(false);
+    },
+    [cma, filters, limit, skip, order, onProgress, fetchAll, currentSkip, contentTypes.length]
+  );
+
+  const loadMore = useCallback(async () => {
+    if (hasMore && !isLoadingMore) {
+      await fetchContentTypesData(true);
     }
-  }, [cma, filters, limit, skip, order, onProgress]);
+  }, [hasMore, isLoadingMore, fetchContentTypesData]);
 
   const refetch = useCallback(async () => {
+    setCurrentSkip(skip);
     await fetchContentTypesData();
-  }, [fetchContentTypesData]);
+  }, [fetchContentTypesData, skip]);
 
   useEffect(() => {
+    setCurrentSkip(skip);
     fetchContentTypesData();
-  }, [fetchContentTypesData]);
+  }, [fetchContentTypesData, skip]);
 
   return {
     contentTypes,
@@ -67,5 +99,7 @@ export function useContentTypes(options: UseContentTypesOptions = {}): UseConten
     total,
     hasMore,
     refetch,
+    loadMore,
+    isLoadingMore,
   };
 }

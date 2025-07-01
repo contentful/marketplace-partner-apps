@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Autocomplete, Checkbox, Flex, Note, Text, Pill, FormLabel } from '@contentful/f36-components';
+import { Autocomplete, Checkbox, Flex, Note, Text, Pill, FormLabel, Button } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
 import { ContentTypeProps } from 'contentful-management';
 import { ContentTypeSelectorProps, ContentTypeItem } from './types';
@@ -35,6 +35,9 @@ export function ContentTypeSelector({
     contentTypes: hookContentTypes,
     loading: hookLoading,
     error: hookError,
+    hasMore,
+    loadMore,
+    isLoadingMore,
   } = useContentTypes({
     filters: [...filters, ...convertFieldTypeFilters(fieldTypeFilters)],
   });
@@ -144,6 +147,15 @@ export function ContentTypeSelector({
             .map((item) => (
               <Pill key={item.id} label={item.name} onClose={() => handleRemovePill(item.id)} isDisabled={disabled} />
             ))}
+        </Flex>
+      )}
+
+      {/* Load More button */}
+      {shouldUseHook && hasMore && (
+        <Flex marginTop="spacingM" justifyContent="center">
+          <Button variant="secondary" size="small" onClick={loadMore} isDisabled={disabled || isLoadingMore} isLoading={isLoadingMore}>
+            {isLoadingMore ? 'Loading...' : 'Load More Content Types'}
+          </Button>
         </Flex>
       )}
     </div>

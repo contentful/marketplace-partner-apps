@@ -98,6 +98,7 @@ export interface UseContentTypesOptions {
   skip?: number;
   order?: string;
   onProgress?: (processed: number, total: number) => void;
+  fetchAll?: boolean; // Whether to fetch all content types or just the current page
 }
 
 export interface UseContentTypesReturn {
@@ -107,6 +108,8 @@ export interface UseContentTypesReturn {
   total: number;
   hasMore: boolean;
   refetch: () => Promise<void>;
+  loadMore: () => Promise<void>; // Load the next page of content types
+  isLoadingMore: boolean; // Whether we're currently loading more content types
 }
 
 export interface UseContentTypeFieldsOptions {
