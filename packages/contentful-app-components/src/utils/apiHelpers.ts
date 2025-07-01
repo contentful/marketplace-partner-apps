@@ -147,9 +147,10 @@ export async function fetchContentTypes(
     order?: string;
     filters?: any[];
     fetchAll?: boolean;
+    onProgress?: (processed: number, total: number) => void;
   } = {}
 ): Promise<{ items: any[]; total: number }> {
-  const { limit = 1000, skip = 0, order = 'name', fetchAll = false } = options;
+  const { limit = 1000, skip = 0, order = 'name', fetchAll = false, onProgress } = options;
 
   try {
     if (fetchAll) {
@@ -172,6 +173,11 @@ export async function fetchContentTypes(
         total = response.total;
         currentSkip += limit;
         hasMore = currentSkip < total;
+
+        // Report progress if callback provided
+        if (onProgress) {
+          onProgress(allItems.length, total);
+        }
 
         // Add a small delay between requests to avoid rate limits
         if (hasMore) {
@@ -207,15 +213,18 @@ export async function fetchContentTypes(
 /**
  * Fetch editor interfaces for content types
  */
-export async function fetchEditorInterfaces(cma: PlainClientAPI, contentTypeIds: string[], options: BatchOptions = {}): Promise<Record<string, any>> {
-  const { batchSize = 10, delay = 1000, maxRetries = 3, baseDelay = 500 } = options;
+export async function fetchEditorInterfaces(
+  cma: PlainClientAPI,
+  contentTypeIds: string[],
+  options: BatchOptions & ProgressOptions = {}
+): Promise<Record<string, any>> {
+  const { batchSize = 10, delay = 1000, maxRetries = 3, baseDelay = 500, onProgress } = options;
   const editorInterfaces: Record<string, any> = {};
 
-  // Process in batches
-  for (let i = 0; i < contentTypeIds.length; i += batchSize) {
-    const batch = contentTypeIds.slice(i, i + batchSize);
-
-    const batchPromises = batch.map(async (contentTypeId) => {
+  // Use withProgress for better progress tracking
+  const results = await withProgress(
+    contentTypeIds,
+    async (contentTypeId) => {
       try {
         const editorInterface = await withRetry(() => cma.editorInterface.get({ contentTypeId }), { maxRetries, baseDelay });
         return { contentTypeId, editorInterface };
@@ -223,22 +232,16 @@ export async function fetchEditorInterfaces(cma: PlainClientAPI, contentTypeIds:
         console.warn(`Failed to fetch editor interface for ${contentTypeId}:`, error);
         return { contentTypeId, editorInterface: null };
       }
-    });
+    },
+    { onProgress, batchSize }
+  );
 
-    const batchResults = await Promise.allSettled(batchPromises);
-
-    // Collect successful results
-    batchResults.forEach((result) => {
-      if (result.status === 'fulfilled' && result.value.editorInterface) {
-        editorInterfaces[result.value.contentTypeId] = result.value.editorInterface;
-      }
-    });
-
-    // Add delay between batches to avoid rate limits
-    if (i + batchSize < contentTypeIds.length) {
-      await sleep(delay);
+  // Convert results to the expected format
+  results.forEach((result) => {
+    if (result && result.editorInterface) {
+      editorInterfaces[result.contentTypeId] = result.editorInterface;
     }
-  }
+  });
 
   return editorInterfaces;
 }

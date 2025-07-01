@@ -26,7 +26,7 @@ const ConfigScreen = () => {
     fetchAll: true, // Fetch all content types automatically
     appDefinitionId: sdk.ids.app, // The app ID to check for in editor interfaces
     includeEditorInterfaces: true, // Fetch editor interfaces to determine current state
-    onProgress: (processed, total) => {
+    onProgress: (processed: number, total: number) => {
       setLoadingProgress({ processed, total });
     },
   });

@@ -1,5 +1,6 @@
 // Components
 export { ContentTypeSelector, ContentTypeSelectorWithFields } from './components/ContentTypeSelector';
+export { ContentTypeFieldSelector } from './components/ContentTypeSelector/ContentTypeFieldSelector';
 export type {
   ContentTypeSelectorProps,
   ContentTypeSelectorWithFieldsProps,
@@ -8,16 +9,23 @@ export type {
   ContentTypeItem,
   FieldItem,
 } from './components/ContentTypeSelector/types';
+export type { ContentTypeFieldSelectorProps, ContentTypeFieldItem } from './components/ContentTypeSelector/ContentTypeFieldSelector';
 
 // Hooks
 export { useContentTypes } from './hooks/useContentTypes';
 export { useContentTypeSelection } from './hooks/useContentTypeSelection';
+export { useContentTypesWithEditorInterfaces } from './hooks/useContentTypesWithEditorInterfaces';
 export type {
   UseContentTypesOptions,
   UseContentTypesReturn,
   UseContentTypeSelectionOptions,
   UseContentTypeSelectionReturn,
 } from './components/ContentTypeSelector/types';
+export type {
+  UseContentTypesWithEditorInterfacesOptions,
+  UseContentTypesWithEditorInterfacesReturn,
+  ContentTypeWithEditorInterface,
+} from './hooks/useContentTypesWithEditorInterfaces';
 
 // Utilities
 export {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import { useCMA } from '@contentful/react-apps-toolkit';
 import { ContentTypeProps } from 'contentful-management';
 import { UseContentTypesOptions, UseContentTypesReturn, ContentTypeFilter } from '../components/ContentTypeSelector/types';
@@ -16,12 +16,24 @@ export function useContentTypes(options: UseContentTypesOptions = {}): UseConten
   const [total, setTotal] = useState(0);
   const [hasMore, setHasMore] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [currentSkip, setCurrentSkip] = useState(0);
+
+  // Use refs to avoid dependency issues
+  const currentSkipRef = useRef(0);
+  const mountedRef = useRef(true);
 
   const { filters = [], limit = 1000, skip = 0, order = 'name', onProgress, fetchAll = true } = options;
 
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
   const fetchContentTypesData = useCallback(
     async (isLoadMore = false) => {
+      if (!mountedRef.current) return;
+
       try {
         if (isLoadMore) {
           setIsLoadingMore(true);
@@ -35,10 +47,13 @@ export function useContentTypes(options: UseContentTypesOptions = {}): UseConten
 
         const response = await fetchContentTypes(cma as any, {
           limit,
-          skip: isLoadMore ? currentSkip : skip,
+          skip: isLoadMore ? currentSkipRef.current : skip,
           order,
           fetchAll,
+          onProgress,
         });
+
+        if (!mountedRef.current) return;
 
         // Apply filters to the fetched content types
         const filteredContentTypes = filterContentTypes(response.items, allFilters);
@@ -46,15 +61,16 @@ export function useContentTypes(options: UseContentTypesOptions = {}): UseConten
         if (isLoadMore) {
           // Append new content types to existing ones
           setContentTypes((prev) => [...prev, ...filteredContentTypes]);
-          setCurrentSkip((prev) => prev + limit);
+          currentSkipRef.current += limit;
         } else {
           // Replace content types
           setContentTypes(filteredContentTypes);
-          setCurrentSkip(skip + limit);
+          currentSkipRef.current = skip + limit;
         }
 
         setTotal(response.total);
-        setHasMore(currentSkip + limit < response.total);
+        // When fetchAll is true, we've already fetched everything, so no more pages
+        setHasMore(fetchAll ? false : currentSkipRef.current < response.total);
 
         // Report progress if callback provided
         if (onProgress) {
@@ -62,10 +78,14 @@ export function useContentTypes(options: UseContentTypesOptions = {}): UseConten
           onProgress(totalProcessed, response.total);
         }
       } catch (err: any) {
+        if (!mountedRef.current) return;
+
         const error = new Error(err?.message || 'Failed to fetch content types');
         setError(error);
         console.error('useContentTypes error:', error);
       } finally {
+        if (!mountedRef.current) return;
+
         if (isLoadMore) {
           setIsLoadingMore(false);
         } else {
@@ -73,24 +93,25 @@ export function useContentTypes(options: UseContentTypesOptions = {}): UseConten
         }
       }
     },
-    [cma, filters, limit, skip, order, onProgress, fetchAll, currentSkip]
+    [cma, filters, limit, skip, order, onProgress, fetchAll]
   );
 
   const loadMore = useCallback(async () => {
-    if (hasMore && !isLoadingMore) {
+    if (hasMore && !isLoadingMore && !fetchAll) {
       await fetchContentTypesData(true);
     }
-  }, [hasMore, isLoadingMore, fetchContentTypesData]);
+  }, [hasMore, isLoadingMore, fetchContentTypesData, fetchAll]);
 
   const refetch = useCallback(async () => {
-    setCurrentSkip(skip);
+    currentSkipRef.current = skip;
     await fetchContentTypesData();
   }, [fetchContentTypesData, skip]);
 
+  // Initial fetch - only run once on mount and when skip changes
   useEffect(() => {
-    setCurrentSkip(skip);
+    currentSkipRef.current = skip;
     fetchContentTypesData();
-  }, [fetchContentTypesData, skip]);
+  }, [skip]); // Only depend on skip
 
   return {
     contentTypes,
