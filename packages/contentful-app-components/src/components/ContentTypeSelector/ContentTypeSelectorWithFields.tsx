@@ -175,9 +175,7 @@ export function ContentTypeSelectorWithFields({
     <Flex alignItems="center" gap={tokens.spacingXs}>
       <Checkbox value={item.id} id={item.id} isChecked={item.isSelected} isDisabled={disabled} onChange={() => {}} />
       <Text fontWeight="fontWeightMedium">{item.name}</Text>
-      <Text variant="secondary" fontSize="fontSizeS">
-        ({item.type})
-      </Text>
+      <Text fontSize="fontSizeS">({item.type})</Text>
     </Flex>
   );
 
@@ -216,7 +214,7 @@ export function ContentTypeSelectorWithFields({
           renderItem={renderItem ? (item) => renderItem(item.contentType) : defaultRenderContentTypeItem}
           onInputValueChange={setInputValue}
           onSelectItem={handleContentTypeSelect}
-          selectedItem={{ name: inputValue }}
+          selectedItem={undefined}
           itemToString={(item) => item.name}
           textOnAfterSelect="preserve"
           closeAfterSelect={false}
@@ -233,7 +231,7 @@ export function ContentTypeSelectorWithFields({
             {contentTypeItems
               .filter((item) => item.isSelected)
               .map((item) => (
-                <Pill key={item.id} label={item.name} onClose={() => handleRemoveContentTypePill(item.id)} isDisabled={disabled} />
+                <Pill key={item.id} label={item.name} onClose={() => handleRemoveContentTypePill(item.id)} />
               ))}
           </Flex>
         )}
@@ -258,7 +256,7 @@ export function ContentTypeSelectorWithFields({
                 renderItem={renderFieldItem ? (item) => renderFieldItem(item.field, selectedContentTypes[0]) : defaultRenderFieldItem}
                 onInputValueChange={setFieldInputValue}
                 onSelectItem={handleFieldSelect}
-                selectedItem={{ name: fieldInputValue }}
+                selectedItem={undefined}
                 itemToString={(item) => item.name}
                 textOnAfterSelect="preserve"
                 closeAfterSelect={false}
@@ -276,7 +274,7 @@ export function ContentTypeSelectorWithFields({
 
                 return (
                   <Box key={contentTypeId} marginTop="spacingM">
-                    <Text variant="secondary" fontSize="fontSizeS" marginBottom="spacingXs">
+                    <Text fontSize="fontSizeS" marginBottom="spacingXs">
                       {contentType.name}:
                     </Text>
                     <Flex gap="spacingXs" flexWrap="wrap">
@@ -284,7 +282,7 @@ export function ContentTypeSelectorWithFields({
                         const field = contentType.fields.find((f) => f.id === fieldId);
                         if (!field) return null;
 
-                        return <Pill key={fieldId} label={field.name} onClose={() => handleRemoveFieldPill(contentTypeId, fieldId)} isDisabled={disabled} />;
+                        return <Pill key={fieldId} label={field.name} onClose={() => handleRemoveFieldPill(contentTypeId, fieldId)} />;
                       })}
                     </Flex>
                   </Box>

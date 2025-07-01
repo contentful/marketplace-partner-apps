@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { fetchContentTypes, retryWithBackoff } from '../apiUtils';
+import { fetchContentTypes, withRetry } from '../apiHelpers';
 import { mockSdk } from '../../../test/mocks/mockSdk';
 import { mockContentTypes } from '../../../test/mocks/mockContentTypes';
 
@@ -22,8 +22,11 @@ describe('apiUtils', () => {
       expect(result.items).toEqual(mockContentTypes);
       expect(result.total).toBe(mockContentTypes.length);
       expect(mockSdk.cma.contentType.getMany).toHaveBeenCalledWith({
-        limit: 1000,
-        skip: 0,
+        query: {
+          limit: 1000,
+          skip: 0,
+          order: 'name',
+        },
       });
     });
 
@@ -71,13 +74,19 @@ describe('apiUtils', () => {
 
       const result = await fetchContentTypes(mockSdk.cma, { limit: 2, fetchAll: true });
 
-      expect(result.items).toEqual([...firstBatch, ...secondBatch]);
+      // The API orders by name, so Article comes first, then Blog Post, then Product
+      expect(result.items).toHaveLength(3);
+      expect(result.items[0].name).toBe('Article');
+      expect(result.items[1].name).toBe('Blog Post');
+      expect(result.items[2].name).toBe('Product');
       expect(result.total).toBe(mockContentTypes.length);
       expect(mockSdk.cma.contentType.getMany).toHaveBeenCalledTimes(2);
     });
 
     it('should handle API errors', async () => {
       const error = new Error('API Error');
+      // Reset the mock to ensure clean state
+      mockSdk.cma.contentType.getMany.mockReset();
       mockSdk.cma.contentType.getMany.mockRejectedValue(error);
 
       await expect(fetchContentTypes(mockSdk.cma, { limit: 1000 })).rejects.toThrow('API Error');
@@ -98,37 +107,45 @@ describe('apiUtils', () => {
     });
   });
 
-  describe('retryWithBackoff', () => {
+  describe('withRetry', () => {
     it('should succeed on first try', async () => {
       const mockFn = vi.fn().mockResolvedValue('success');
 
-      const result = await retryWithBackoff(mockFn, 3);
+      const result = await withRetry(() => mockFn(), { maxRetries: 3 });
 
       expect(result).toBe('success');
       expect(mockFn).toHaveBeenCalledTimes(1);
     });
 
     it('should retry on failure and eventually succeed', async () => {
-      const mockFn = vi.fn().mockRejectedValueOnce(new Error('First failure')).mockRejectedValueOnce(new Error('Second failure')).mockResolvedValue('success');
+      const mockFn = vi
+        .fn()
+        .mockRejectedValueOnce(new Error('rate limit exceeded'))
+        .mockRejectedValueOnce(new Error('network timeout'))
+        .mockResolvedValue('success');
 
-      const result = await retryWithBackoff(mockFn, 3);
+      const result = await withRetry(() => mockFn(), { maxRetries: 3 });
 
       expect(result).toBe('success');
       expect(mockFn).toHaveBeenCalledTimes(3);
     });
 
     it('should throw after max retries', async () => {
-      const mockFn = vi.fn().mockRejectedValue(new Error('Persistent failure'));
+      const mockFn = vi.fn().mockRejectedValue(new Error('rate limit exceeded'));
 
-      await expect(retryWithBackoff(mockFn, 2)).rejects.toThrow('Persistent failure');
-      expect(mockFn).toHaveBeenCalledTimes(2);
+      await expect(withRetry(() => mockFn(), { maxRetries: 2 })).rejects.toThrow('rate limit exceeded');
+      expect(mockFn).toHaveBeenCalledTimes(3);
     });
 
     it('should use exponential backoff', async () => {
-      const mockFn = vi.fn().mockRejectedValueOnce(new Error('First failure')).mockRejectedValueOnce(new Error('Second failure')).mockResolvedValue('success');
+      const mockFn = vi
+        .fn()
+        .mockRejectedValueOnce(new Error('rate limit exceeded'))
+        .mockRejectedValueOnce(new Error('network timeout'))
+        .mockResolvedValue('success');
 
       const startTime = Date.now();
-      await retryWithBackoff(mockFn, 3);
+      await withRetry(() => mockFn(), { maxRetries: 3 });
       const endTime = Date.now();
 
       // Should have delays between retries (roughly 100ms + 200ms = 300ms minimum)

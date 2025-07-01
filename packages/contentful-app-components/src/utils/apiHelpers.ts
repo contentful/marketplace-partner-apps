@@ -140,7 +140,7 @@ export async function withProgress<T, R>(items: T[], processor: (item: T, index:
  * Fetch content types with pagination
  */
 export async function fetchContentTypes(
-  cma: PlainClientAPI,
+  cma: any,
   options: {
     limit?: number;
     skip?: number;

@@ -152,7 +152,7 @@ export function ContentTypeSelector({
           setTimeout(handleLoadMoreIfNeeded, 100);
         }}
         onSelectItem={handleSelectItem}
-        selectedItem={{ name: inputValue }}
+        selectedItem={undefined}
         itemToString={(item) => item.name}
         textOnAfterSelect="preserve"
         closeAfterSelect={false}
@@ -171,7 +171,7 @@ export function ContentTypeSelector({
           {items
             .filter((item) => item.isSelected)
             .map((item) => (
-              <Pill key={item.id} label={item.name} onClose={() => handleRemovePill(item.id)} isDisabled={disabled} />
+              <Pill key={item.id} label={item.name} onClose={() => handleRemovePill(item.id)} />
             ))}
         </Flex>
       )}

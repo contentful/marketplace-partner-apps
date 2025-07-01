@@ -33,7 +33,7 @@ export function useContentTypes(options: UseContentTypesOptions = {}): UseConten
         // Convert legacy fieldTypeFilters to filters if present
         const allFilters = [...filters];
 
-        const response = await fetchContentTypes(cma, {
+        const response = await fetchContentTypes(cma as any, {
           limit,
           skip: isLoadMore ? currentSkip : skip,
           order,
@@ -73,7 +73,7 @@ export function useContentTypes(options: UseContentTypesOptions = {}): UseConten
         }
       }
     },
-    [cma, filters, limit, skip, order, onProgress, fetchAll, currentSkip, contentTypes.length]
+    [cma, filters, limit, skip, order, onProgress, fetchAll, currentSkip]
   );
 
   const loadMore = useCallback(async () => {

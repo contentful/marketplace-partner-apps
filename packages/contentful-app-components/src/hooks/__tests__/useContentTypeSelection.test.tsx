@@ -1,34 +1,31 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
 import { useContentTypeSelection } from '../useContentTypeSelection';
-import { mockContentTypes } from '../../../test/mocks/mockContentTypes';
 
 describe('useContentTypeSelection', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it('should initialize with empty selection', () => {
+  it('should initialize with default values', () => {
     const { result } = renderHook(() => useContentTypeSelection());
 
     expect(result.current.selectedContentTypes).toEqual([]);
-    expect(result.current.selectedFields).toEqual([]);
-    expect(result.current.isContentTypeSelected('blogPost')).toBe(false);
-    expect(result.current.isFieldSelected('blogPost', 'jsonField')).toBe(false);
+    expect(result.current.selectedFields).toEqual({});
   });
 
-  it('should initialize with existing selection', () => {
-    const initialSelection = {
-      contentTypes: ['blogPost'],
-      fields: [{ contentTypeId: 'blogPost', fieldId: 'jsonField' }],
+  it('should initialize with provided values', () => {
+    const initialSelection = ['blogPost', 'product'];
+    const initialFieldSelection = {
+      blogPost: ['jsonField'],
+      product: ['metadata'],
     };
 
-    const { result } = renderHook(() => useContentTypeSelection(initialSelection));
+    const { result } = renderHook(() =>
+      useContentTypeSelection({
+        initialSelection,
+        initialFieldSelection,
+      })
+    );
 
-    expect(result.current.selectedContentTypes).toEqual(['blogPost']);
-    expect(result.current.selectedFields).toEqual([{ contentTypeId: 'blogPost', fieldId: 'jsonField' }]);
-    expect(result.current.isContentTypeSelected('blogPost')).toBe(true);
-    expect(result.current.isFieldSelected('blogPost', 'jsonField')).toBe(true);
+    expect(result.current.selectedContentTypes).toEqual(initialSelection);
+    expect(result.current.selectedFields).toEqual(initialFieldSelection);
   });
 
   it('should toggle content type selection', () => {
@@ -56,69 +53,50 @@ describe('useContentTypeSelection', () => {
       result.current.toggleField('blogPost', 'jsonField');
     });
 
-    expect(result.current.selectedFields).toEqual([{ contentTypeId: 'blogPost', fieldId: 'jsonField' }]);
+    expect(result.current.selectedFields).toEqual({
+      blogPost: ['jsonField'],
+    });
     expect(result.current.isFieldSelected('blogPost', 'jsonField')).toBe(true);
 
     act(() => {
       result.current.toggleField('blogPost', 'jsonField');
     });
 
-    expect(result.current.selectedFields).toEqual([]);
+    expect(result.current.selectedFields).toEqual({});
     expect(result.current.isFieldSelected('blogPost', 'jsonField')).toBe(false);
-  });
-
-  it('should select all fields of a content type', () => {
-    const { result } = renderHook(() => useContentTypeSelection());
-
-    act(() => {
-      result.current.selectAllFields('blogPost', ['jsonField', 'title']);
-    });
-
-    expect(result.current.selectedFields).toEqual([
-      { contentTypeId: 'blogPost', fieldId: 'jsonField' },
-      { contentTypeId: 'blogPost', fieldId: 'title' },
-    ]);
-    expect(result.current.isFieldSelected('blogPost', 'jsonField')).toBe(true);
-    expect(result.current.isFieldSelected('blogPost', 'title')).toBe(true);
   });
 
   it('should clear all selections', () => {
-    const initialSelection = {
-      contentTypes: ['blogPost', 'product'],
-      fields: [
-        { contentTypeId: 'blogPost', fieldId: 'jsonField' },
-        { contentTypeId: 'product', fieldId: 'metadata' },
-      ],
-    };
-
-    const { result } = renderHook(() => useContentTypeSelection(initialSelection));
+    const { result } = renderHook(() =>
+      useContentTypeSelection({
+        initialSelection: ['blogPost'],
+        initialFieldSelection: { blogPost: ['jsonField'] },
+      })
+    );
 
     act(() => {
-      result.current.clearAll();
+      result.current.clearSelection();
     });
 
     expect(result.current.selectedContentTypes).toEqual([]);
-    expect(result.current.selectedFields).toEqual([]);
-    expect(result.current.isContentTypeSelected('blogPost')).toBe(false);
-    expect(result.current.isContentTypeSelected('product')).toBe(false);
-    expect(result.current.isFieldSelected('blogPost', 'jsonField')).toBe(false);
-    expect(result.current.isFieldSelected('product', 'metadata')).toBe(false);
+    expect(result.current.selectedFields).toEqual({});
   });
 
   it('should get selected fields for a content type', () => {
-    const initialSelection = {
-      contentTypes: ['blogPost'],
-      fields: [
-        { contentTypeId: 'blogPost', fieldId: 'jsonField' },
-        { contentTypeId: 'product', fieldId: 'metadata' },
-      ],
+    const initialFieldSelection = {
+      blogPost: ['jsonField'],
+      product: ['metadata'],
     };
 
-    const { result } = renderHook(() => useContentTypeSelection(initialSelection));
+    const { result } = renderHook(() =>
+      useContentTypeSelection({
+        initialFieldSelection,
+      })
+    );
 
-    expect(result.current.getSelectedFieldsForContentType('blogPost')).toEqual(['jsonField']);
-    expect(result.current.getSelectedFieldsForContentType('product')).toEqual(['metadata']);
-    expect(result.current.getSelectedFieldsForContentType('nonexistent')).toEqual([]);
+    expect(result.current.selectedFields.blogPost).toEqual(['jsonField']);
+    expect(result.current.selectedFields.product).toEqual(['metadata']);
+    expect(result.current.selectedFields.nonexistent).toBeUndefined();
   });
 
   it('should handle multiple content types and fields', () => {
@@ -126,16 +104,16 @@ describe('useContentTypeSelection', () => {
 
     act(() => {
       result.current.toggleContentType('blogPost');
-      result.current.toggleContentType('product');
       result.current.toggleField('blogPost', 'jsonField');
+      result.current.toggleContentType('product');
       result.current.toggleField('product', 'metadata');
     });
 
     expect(result.current.selectedContentTypes).toEqual(['blogPost', 'product']);
-    expect(result.current.selectedFields).toEqual([
-      { contentTypeId: 'blogPost', fieldId: 'jsonField' },
-      { contentTypeId: 'product', fieldId: 'metadata' },
-    ]);
+    expect(result.current.selectedFields).toEqual({
+      blogPost: ['jsonField'],
+      product: ['metadata'],
+    });
   });
 
   it('should not duplicate selections', () => {
@@ -147,7 +125,64 @@ describe('useContentTypeSelection', () => {
       result.current.toggleContentType('blogPost');
     });
 
-    expect(result.current.selectedContentTypes).toEqual([]); // Toggled odd number of times
-    expect(result.current.selectedContentTypes).toHaveLength(0);
+    expect(result.current.selectedContentTypes).toEqual(['blogPost']); // Toggled odd number of times
+    expect(result.current.selectedContentTypes).toHaveLength(1);
+  });
+
+  it('should handle single select mode', () => {
+    const { result } = renderHook(() => useContentTypeSelection({ multiSelect: false }));
+
+    act(() => {
+      result.current.toggleContentType('blogPost');
+      result.current.toggleContentType('product');
+    });
+
+    expect(result.current.selectedContentTypes).toEqual(['product']); // Only the last one
+  });
+
+  it('should handle field single select mode', () => {
+    const { result } = renderHook(() => useContentTypeSelection({ fieldMultiSelect: false }));
+
+    act(() => {
+      result.current.toggleField('blogPost', 'jsonField');
+      result.current.toggleField('blogPost', 'metadata');
+    });
+
+    expect(result.current.selectedFields.blogPost).toEqual(['metadata']); // Only the last one
+  });
+
+  it('should clear field selections when content type is deselected', () => {
+    const { result } = renderHook(() => useContentTypeSelection());
+
+    act(() => {
+      result.current.toggleContentType('blogPost');
+      result.current.toggleField('blogPost', 'jsonField');
+      result.current.toggleField('blogPost', 'metadata');
+    });
+
+    expect(result.current.selectedFields.blogPost).toEqual(['jsonField', 'metadata']);
+
+    act(() => {
+      result.current.toggleContentType('blogPost'); // Deselect content type
+    });
+
+    expect(result.current.selectedFields.blogPost).toBeUndefined();
+  });
+
+  it('should set selection directly', () => {
+    const { result } = renderHook(() => useContentTypeSelection());
+
+    act(() => {
+      result.current.setSelection(['blogPost', 'product'], {
+        blogPost: ['jsonField'],
+        product: ['metadata'],
+      });
+    });
+
+    expect(result.current.selectedContentTypes).toEqual(['blogPost', 'product']);
+    expect(result.current.selectedFields).toEqual({
+      blogPost: ['jsonField'],
+      product: ['metadata'],
+    });
   });
 });
