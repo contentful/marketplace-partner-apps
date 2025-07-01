@@ -1,0 +1,41 @@
+{
+  "name": "@contentful/app-components",
+  "version": "0.1.0",
+  "description": "Reusable components for Contentful apps",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "prebuild": "npm run clean"
+  },
+  "peerDependencies": {
+    "@contentful/app-sdk": "^5.0.0",
+    "@contentful/f36-components": "^5.0.0",
+    "@contentful/f36-tokens": "^5.0.0",
+    "@contentful/react-apps-toolkit": "^5.0.0",
+    "contentful-management": "^11.0.0",
+    "react": "^18.0.0"
+  },
+  "devDependencies": {
+    "@contentful/app-sdk": "^5.0.0",
+    "@contentful/f36-components": "^5.0.0",
+    "@contentful/f36-tokens": "^5.0.0",
+    "@contentful/react-apps-toolkit": "^5.0.0",
+    "contentful-management": "^11.0.0",
+    "@types/react": "^18.0.0",
+    "typescript": "^5.0.0"
+  },
+  "keywords": [
+    "contentful",
+    "app",
+    "components",
+    "react"
+  ],
+  "author": "Contentful",
+  "license": "MIT"
+}
