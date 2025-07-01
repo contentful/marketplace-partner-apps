@@ -11,24 +11,35 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "clean": "rm -rf dist",
-    "prebuild": "npm run clean"
+    "prebuild": "npm run clean",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "peerDependencies": {
-    "@contentful/app-sdk": "^5.0.0",
-    "@contentful/f36-components": "^5.0.0",
-    "@contentful/f36-tokens": "^5.0.0",
-    "@contentful/react-apps-toolkit": "^5.0.0",
+    "@contentful/app-sdk": "^4.29.0",
+    "@contentful/f36-components": "^4.80.0",
+    "@contentful/f36-tokens": "^4.2.0",
+    "@contentful/react-apps-toolkit": "^1.2.0",
     "contentful-management": "^11.0.0",
     "react": "^18.0.0"
   },
   "devDependencies": {
-    "@contentful/app-sdk": "^5.0.0",
-    "@contentful/f36-components": "^5.0.0",
-    "@contentful/f36-tokens": "^5.0.0",
-    "@contentful/react-apps-toolkit": "^5.0.0",
+    "@contentful/app-sdk": "^4.29.0",
+    "@contentful/f36-components": "^4.80.0",
+    "@contentful/f36-tokens": "^4.2.0",
+    "@contentful/react-apps-toolkit": "^1.2.0",
     "contentful-management": "^11.0.0",
     "@types/react": "^18.0.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@testing-library/jest-dom": "^6.0.0",
+    "vitest": "^3.1.4",
+    "jsdom": "^26.1.0",
+    "@vitest/coverage-v8": "^3.1.4",
+    "@vitejs/plugin-react": "^4.5.0",
+    "@types/node": "^20.17.30"
   },
   "keywords": [
     "contentful",
