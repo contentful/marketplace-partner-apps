@@ -18,7 +18,7 @@ export function useContentTypes(options: UseContentTypesOptions = {}): UseConten
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [currentSkip, setCurrentSkip] = useState(0);
 
-  const { filters = [], limit = 1000, skip = 0, order = 'name', onProgress, fetchAll = false } = options;
+  const { filters = [], limit = 1000, skip = 0, order = 'name', onProgress, fetchAll = true } = options;
 
   const fetchContentTypesData = useCallback(
     async (isLoadMore = false) => {

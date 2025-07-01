@@ -74,21 +74,22 @@ Hook for fetching and managing content types with filtering and pagination.
 
 #### Pagination
 
-The hook supports two pagination modes:
+The hook supports automatic pagination to handle large content models:
 
-1. **Manual pagination** (default): Fetch content types in pages and use `loadMore()` to fetch the next page
-2. **Automatic pagination**: Set `fetchAll: true` to automatically fetch all content types at once
+- **Automatic pagination** (default): Automatically fetches all content types in batches of 1000
+- **Manual pagination**: Set `fetchAll: false` to manually control pagination with `loadMore()`
 
 ```tsx
-// Manual pagination (default)
-const { contentTypes, hasMore, loadMore, isLoadingMore } = useContentTypes({
-  limit: 100, // Fetch 100 content types per page
-  fetchAll: false, // Default behavior
+// Automatic pagination (default behavior)
+const { contentTypes, loading, error } = useContentTypes({
+  limit: 1000, // Batch size for fetching
+  fetchAll: true, // Default - automatically fetch all content types
 });
 
-// Automatic pagination
-const { contentTypes } = useContentTypes({
-  fetchAll: true, // Fetch all content types at once
+// Manual pagination (for advanced use cases)
+const { contentTypes, hasMore, loadMore, isLoadingMore } = useContentTypes({
+  limit: 100,
+  fetchAll: false, // Manual pagination
 });
 ```
 
@@ -96,10 +97,10 @@ const { contentTypes } = useContentTypes({
 import { useContentTypes } from '@contentful/app-components';
 
 function MyComponent() {
-  const { contentTypes, loading, error, total, hasMore, refetch, loadMore, isLoadingMore } = useContentTypes({
+  const { contentTypes, loading, error, total } = useContentTypes({
     filters: [{ type: 'fieldType', value: 'Object' }],
-    limit: 100,
-    fetchAll: false, // Set to true to fetch all content types at once
+    limit: 1000, // Batch size for fetching
+    fetchAll: true, // Default - automatically fetch all content types
     onProgress: (processed, total) => {
       console.log(`Processed ${processed} of ${total} content types`);
     },
@@ -113,12 +114,6 @@ function MyComponent() {
       {contentTypes.map((contentType) => (
         <div key={contentType.sys.id}>{contentType.name}</div>
       ))}
-
-      {hasMore && (
-        <button onClick={loadMore} disabled={isLoadingMore}>
-          {isLoadingMore ? 'Loading...' : 'Load More'}
-        </button>
-      )}
     </div>
   );
 }

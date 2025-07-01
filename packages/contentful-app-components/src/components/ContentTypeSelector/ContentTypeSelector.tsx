@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { Autocomplete, Checkbox, Flex, Note, Text, Pill, FormLabel, Button } from '@contentful/f36-components';
+import React, { useMemo, useState, useCallback } from 'react';
+import { Autocomplete, Checkbox, Flex, Note, Text, Pill, FormLabel } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
 import { ContentTypeProps } from 'contentful-management';
 import { ContentTypeSelectorProps, ContentTypeItem } from './types';
@@ -70,6 +70,26 @@ export function ContentTypeSelector({
     return items.filter((item) => item.name.toLowerCase().includes(inputValue.toLowerCase()));
   }, [items, inputValue]);
 
+  // Auto-load more content types when needed
+  const handleLoadMoreIfNeeded = useCallback(() => {
+    if (shouldUseHook && hasMore && !isLoadingMore) {
+      // If we have less than 50 items or the search results are limited, load more
+      if (contentTypes.length < 50 || (inputValue && filteredItems.length < 20)) {
+        loadMore();
+      }
+    }
+  }, [shouldUseHook, hasMore, isLoadingMore, contentTypes.length, inputValue, filteredItems.length, loadMore]);
+
+  // Auto-load more when search input changes and we need more results
+  React.useEffect(() => {
+    if (inputValue && shouldUseHook && hasMore && !isLoadingMore) {
+      // If search results are limited, try to load more content types
+      if (filteredItems.length < 20) {
+        loadMore();
+      }
+    }
+  }, [inputValue, shouldUseHook, hasMore, isLoadingMore, filteredItems.length, loadMore]);
+
   // Handle item selection
   const handleSelectItem = (item: ContentTypeItem) => {
     if (disabled) return;
@@ -126,7 +146,11 @@ export function ContentTypeSelector({
         id="content-type-selector"
         items={filteredItems}
         renderItem={renderItem ? (item) => renderItem(item.contentType) : defaultRenderItem}
-        onInputValueChange={setInputValue}
+        onInputValueChange={(value) => {
+          setInputValue(value);
+          // Trigger load more if needed when user types
+          setTimeout(handleLoadMoreIfNeeded, 100);
+        }}
         onSelectItem={handleSelectItem}
         selectedItem={{ name: inputValue }}
         itemToString={(item) => item.name}
@@ -137,6 +161,8 @@ export function ContentTypeSelector({
         usePortal
         isDisabled={disabled || contentTypes.length === 0}
         placeholder={placeholder}
+        // Add a custom prop to handle scroll events if the Autocomplete component supports it
+        // This would ideally be onScroll or similar, but we'll work with what's available
       />
 
       {/* Selected content types as pills */}
@@ -147,15 +173,6 @@ export function ContentTypeSelector({
             .map((item) => (
               <Pill key={item.id} label={item.name} onClose={() => handleRemovePill(item.id)} isDisabled={disabled} />
             ))}
-        </Flex>
-      )}
-
-      {/* Load More button */}
-      {shouldUseHook && hasMore && (
-        <Flex marginTop="spacingM" justifyContent="center">
-          <Button variant="secondary" size="small" onClick={loadMore} isDisabled={disabled || isLoadingMore} isLoading={isLoadingMore}>
-            {isLoadingMore ? 'Loading...' : 'Load More Content Types'}
-          </Button>
         </Flex>
       )}
     </div>
