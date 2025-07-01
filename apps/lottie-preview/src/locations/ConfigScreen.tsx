@@ -4,7 +4,7 @@ import { useSDK } from '@contentful/react-apps-toolkit';
 import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import { styles } from './ConfigScreen.styles';
 import { ExternalLinkIcon } from '@contentful/f36-icons';
-import { ContentTypeFieldSelector, useContentTypesWithEditorInterfaces, filters } from 'contentful-app-components';
+import { ContentTypeFieldSelector, useContentTypesWithEditorInterfaces, filters } from '@contentful/app-components';
 import type { ContentTypeProps, ContentFields } from 'contentful-management';
 
 const ConfigScreen = () => {
@@ -76,9 +76,9 @@ const ConfigScreen = () => {
         const results = [];
 
         // Process ALL content types with JSON fields, not just those with selected fields
-        const allContentTypesWithJsonFields = contentTypes.filter((ct) => ct.fields.some((field) => field.type === 'Object'));
+        const allContentTypesWithJsonFields = contentTypes.filter((ct: ContentTypeProps) => ct.fields.some((field: any) => field.type === 'Object'));
 
-        const changedContentTypes = allContentTypesWithJsonFields.map((contentType) => {
+        const changedContentTypes = allContentTypesWithJsonFields.map((contentType: ContentTypeProps) => {
           const contentTypeId = contentType.sys.id;
           const selectedFieldsForType = selectedFieldsByContentType[contentTypeId] || [];
           return [contentTypeId, selectedFieldsForType] as [string, string[]];
@@ -88,9 +88,9 @@ const ConfigScreen = () => {
           const batch = changedContentTypes.slice(i, i + BATCH_SIZE);
 
           const batchResults = await Promise.allSettled(
-            batch.map(async ([contentTypeId, fieldIds]) => {
+            batch.map(async ([contentTypeId, fieldIds]: [string, string[]]) => {
               try {
-                const contentType = contentTypes.find((ct) => ct.sys.id === contentTypeId);
+                const contentType = contentTypes.find((ct: ContentTypeProps) => ct.sys.id === contentTypeId);
                 if (!contentType) return { contentTypeId, success: true, skipped: true };
 
                 const editorInterface = await sdk.cma.editorInterface.get({ contentTypeId });
@@ -108,7 +108,7 @@ const ConfigScreen = () => {
                 }
 
                 // For unselected JSON fields in this content type, set them back to default
-                const jsonFields = contentType.fields.filter((field) => field.type === 'Object');
+                const jsonFields = contentType.fields.filter((field: any) => field.type === 'Object');
                 for (const field of jsonFields) {
                   if (!fieldIds.includes(field.id)) {
                     updatedControls.push({
@@ -121,7 +121,7 @@ const ConfigScreen = () => {
 
                 // Add any remaining controls that weren't associated with our JSON fields
                 for (const control of existingControls) {
-                  if (!jsonFields.some((f) => f.id === control.fieldId)) {
+                  if (!jsonFields.some((f: any) => f.id === control.fieldId)) {
                     updatedControls.push(control);
                   }
                 }

@@ -1,8 +1,37 @@
 # @contentful/app-components
 
-Reusable components for Contentful apps that provide common functionality for content type selection, field filtering, and app configuration.
+Reusable components for Contentful apps, extracted from the Lottie Preview app.
 
-## Installation
+## Usage
+
+### In the current monorepo (development)
+
+The package is currently located in `packages/contentful-app-components` and is linked to apps via file dependencies.
+
+To build and use:
+
+```bash
+# Build the package first
+cd packages/contentful-app-components
+npm run build
+
+# Install in the app
+cd ../../apps/lottie-preview
+npm install
+
+# Build the app
+npm run build
+```
+
+Or use the convenience script:
+
+```bash
+./build-packages-first.sh
+```
+
+### When moved to its own repository (future)
+
+Once this package is moved to its own repository and published to npm, apps can use it like any other npm package:
 
 ```bash
 npm install @contentful/app-components
@@ -12,215 +41,73 @@ npm install @contentful/app-components
 
 ### ContentTypeSelector
 
-A basic content type selector component for simple content type selection without field drilling.
+Simple content type selection without editor interface logic.
 
 ```tsx
 import { ContentTypeSelector } from '@contentful/app-components';
 
-function MyConfigScreen() {
-  const [selectedContentTypes, setSelectedContentTypes] = useState<string[]>([]);
-
-  return (
-    <ContentTypeSelector
-      selectedContentTypes={selectedContentTypes}
-      onSelectionChange={setSelectedContentTypes}
-      filters={[
-        { type: 'fieldType', value: 'Object' }, // Only show content types with JSON fields
-      ]}
-      multiSelect={true}
-      searchable={true}
-    />
-  );
-}
+<ContentTypeSelector contentTypes={contentTypes} selectedContentTypeIds={selectedIds} onSelectionChange={setSelectedIds} multiSelect={true} />;
 ```
 
-### ContentTypeSelectorWithFields
+### ContentTypeFieldSelector
 
-A content type selector with field-level selection capabilities.
+Field-level selection with editor interface integration (used by Lottie Preview).
 
 ```tsx
-import { ContentTypeSelectorWithFields } from '@contentful/app-components';
+import { ContentTypeFieldSelector } from '@contentful/app-components';
 
-function MyConfigScreen() {
-  const [selectedContentTypes, setSelectedContentTypes] = useState<string[]>([]);
-  const [selectedFields, setSelectedFields] = useState<Record<string, string[]>>({});
-
-  return (
-    <ContentTypeSelectorWithFields
-      selectedContentTypes={selectedContentTypes}
-      selectedFields={selectedFields}
-      onSelectionChange={setSelectedContentTypes}
-      onFieldSelectionChange={(contentTypeId, fieldIds) => {
-        setSelectedFields((prev) => ({
-          ...prev,
-          [contentTypeId]: fieldIds,
-        }));
-      }}
-      fieldFilters={[
-        { type: 'fieldType', value: 'Object' }, // Only show JSON fields
-      ]}
-      multiSelect={true}
-      searchable={true}
-    />
-  );
-}
+<ContentTypeFieldSelector
+  contentTypes={contentTypes}
+  selectedFieldIds={selectedFieldIds}
+  contentTypesWithEditorInterfaces={contentTypesWithEditorInterfaces}
+  appDefinitionId={sdk.ids.app}
+  onSelectionChange={setSelectedFieldIds}
+  multiSelect={true}
+/>;
 ```
 
 ## Hooks
 
 ### useContentTypes
 
-Hook for fetching and managing content types with filtering and pagination.
+Basic content type fetching with filtering and pagination.
 
-#### Pagination
+### useContentTypesWithEditorInterfaces
 
-The hook supports automatic pagination to handle large content models:
+Content type fetching with editor interface integration for determining current app configuration.
 
-- **Automatic pagination** (default): Automatically fetches all content types in batches of 1000
-- **Manual pagination**: Set `fetchAll: false` to manually control pagination with `loadMore()`
+## Utilities
 
-```tsx
-// Automatic pagination (default behavior)
-const { contentTypes, loading, error } = useContentTypes({
-  limit: 1000, // Batch size for fetching
-  fetchAll: true, // Default - automatically fetch all content types
-});
+### Filters
 
-// Manual pagination (for advanced use cases)
-const { contentTypes, hasMore, loadMore, isLoadingMore } = useContentTypes({
-  limit: 100,
-  fetchAll: false, // Manual pagination
-});
-```
-
-```tsx
-import { useContentTypes } from '@contentful/app-components';
-
-function MyComponent() {
-  const { contentTypes, loading, error, total } = useContentTypes({
-    filters: [{ type: 'fieldType', value: 'Object' }],
-    limit: 1000, // Batch size for fetching
-    fetchAll: true, // Default - automatically fetch all content types
-    onProgress: (processed, total) => {
-      console.log(`Processed ${processed} of ${total} content types`);
-    },
-  });
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
-
-  return (
-    <div>
-      {contentTypes.map((contentType) => (
-        <div key={contentType.sys.id}>{contentType.name}</div>
-      ))}
-    </div>
-  );
-}
-```
-
-### useContentTypeSelection
-
-Hook for managing content type and field selection state.
-
-```tsx
-import { useContentTypeSelection } from '@contentful/app-components';
-
-function MyComponent() {
-  const { selectedContentTypes, selectedFields, toggleContentType, toggleField, setSelection, clearSelection } = useContentTypeSelection({
-    initialSelection: ['contentType1', 'contentType2'],
-    multiSelect: true,
-  });
-
-  return (
-    <div>
-      <button onClick={() => toggleContentType('contentType1')}>Toggle Content Type 1</button>
-      <button onClick={() => toggleField('contentType1', 'field1')}>Toggle Field 1</button>
-      <button onClick={clearSelection}>Clear All</button>
-    </div>
-  );
-}
-```
-
-## Filters
-
-### Content Type Filters
-
-```tsx
-// Filter by field type
-{ type: 'fieldType', value: 'Object' }
-
-// Filter by name
-{ type: 'name', value: 'Product', operator: 'contains' }
-
-// Custom filter function
-{
-  type: 'custom',
-  value: (contentType) => contentType.fields.length > 5
-}
-```
-
-### Field Filters
-
-```tsx
-// Filter by field type
-{ type: 'fieldType', value: 'RichText' }
-
-// Filter by required fields
-{ type: 'required', value: true }
-
-// Filter by localized fields
-{ type: 'localized', value: true }
-```
-
-## Pre-built Filters
+Pre-built filters for common use cases:
 
 ```tsx
 import { filters } from '@contentful/app-components';
 
-// Common content type filters
+// Content type filters
 filters.hasJsonFields;
 filters.hasRichTextFields;
 filters.hasAssetFields;
-filters.hasReferenceFields;
 
-// Common field filters
+// Field filters
+filters.jsonFields;
 filters.requiredFields;
 filters.localizedFields;
-filters.jsonFields;
-filters.richTextFields;
 ```
 
-## API Utilities
+## Architecture Notes
 
-```tsx
-import { processContentTypesInBatches, withRetry, withProgress } from '@contentful/app-components';
+This package is designed to be:
 
-// Process content types in batches
-const results = await processContentTypesInBatches(
-  cma,
-  async (contentType) => {
-    // Process each content type
-    return await someAsyncOperation(contentType);
-  },
-  { batchSize: 10, delay: 1000 }
-);
+1. **Self-contained** - All dependencies are properly declared
+2. **Type-safe** - Full TypeScript support with proper type exports
+3. **Reusable** - Components can be used by multiple Contentful apps
+4. **Extensible** - Easy to add new components and utilities
 
-// Retry with exponential backoff
-const result = await withRetry(() => apiCall(), { maxRetries: 3, baseDelay: 1000 });
+When moving to its own repository:
 
-// Process with progress tracking
-const results = await withProgress(
-  items,
-  async (item, index) => {
-    return await processItem(item);
-  },
-  (processed, total) => {
-    console.log(`Processed ${processed} of ${total}`);
-  }
-);
-```
-
-## License
-
-MIT
+1. Update the package name if needed
+2. Publish to npm
+3. Update apps to use the published version instead of file dependencies
+4. Remove the package from this monorepo
