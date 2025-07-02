@@ -1,17 +1,16 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { Autocomplete, Pill, Text, Flex, Note, Spinner } from '@contentful/f36-components';
-import { useContentTypes } from '../../hooks/useContentTypes';
 import type { ConfigAppSDK } from '@contentful/app-sdk';
-import type { ContentTypeFilter, ContentTypeOption } from '../../types';
+import type { ContentTypeProps } from 'contentful-management';
+import { retryWithBackoff, withTimeout, fetchAllContentTypes } from '../../utils/apiHelpers';
+import type { ContentTypeOption } from '../../types';
 
 export interface SelectContentTypesProps {
   cma: ConfigAppSDK['cma'];
   selectedContentTypeIds: string[];
   onSelectionChange: (contentTypeIds: string[]) => void;
-  filters?: ContentTypeFilter[];
   placeholder?: string;
   disabled?: boolean;
-  searchable?: boolean;
   onProgress?: (processed: number, total: number) => void;
   renderEmptyState?: () => React.ReactNode;
 }
@@ -20,22 +19,38 @@ export const SelectContentTypes: React.FC<SelectContentTypesProps> = ({
   cma,
   selectedContentTypeIds,
   onSelectionChange,
-  filters = [],
   placeholder = 'Select content types...',
   disabled = false,
-  searchable = true,
   onProgress,
   renderEmptyState,
 }) => {
   const [inputValue, setInputValue] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
-  const observerRef = useRef<IntersectionObserver | null>(null);
-  const lastItemRef = useRef<HTMLDivElement | null>(null);
+  const [contentTypes, setContentTypes] = useState<ContentTypeProps[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const { contentTypes, loading, error, hasMore, loadMore, search } = useContentTypes(cma, {
-    filters,
-    onProgress,
-  });
+  // Fetch all content types on mount
+  useEffect(() => {
+    const loadContentTypes = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const allContentTypes = await withTimeout(
+          fetchAllContentTypes(cma, onProgress),
+          120000 // 2 minute timeout
+        );
+        setContentTypes(allContentTypes);
+      } catch (err: any) {
+        console.error('Failed to fetch content types:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadContentTypes();
+  }, [cma, onProgress]);
 
   // Convert content types to options
   const options = useMemo((): ContentTypeOption[] => {
@@ -46,10 +61,14 @@ export const SelectContentTypes: React.FC<SelectContentTypesProps> = ({
     }));
   }, [contentTypes]);
 
-  // Filter options based on input
+  // Filter options based on input (client-side filtering)
   const filteredOptions = useMemo(() => {
     if (!inputValue) return options;
-    return options.filter((option) => option.name.toLowerCase().includes(inputValue.toLowerCase()));
+    return options.filter(
+      (option) =>
+        option.name.toLowerCase().includes(inputValue.toLowerCase()) ||
+        (option.description && option.description.toLowerCase().includes(inputValue.toLowerCase()))
+    );
   }, [options, inputValue]);
 
   // Convert selected IDs to pills
@@ -62,18 +81,9 @@ export const SelectContentTypes: React.FC<SelectContentTypesProps> = ({
       .filter(Boolean) as Array<{ id: string; label: string }>;
   }, [selectedContentTypeIds, options]);
 
-  const handleInputChange = useCallback(
-    (value: string) => {
-      setInputValue(value);
-      if (searchable && value.length >= 2) {
-        search(value);
-      } else if (value.length === 0) {
-        // Reset search when input is cleared
-        search('');
-      }
-    },
-    [search, searchable]
-  );
+  const handleInputChange = useCallback((value: string) => {
+    setInputValue(value);
+  }, []);
 
   const handleSelectItem = useCallback(
     (item: ContentTypeOption) => {
@@ -93,35 +103,19 @@ export const SelectContentTypes: React.FC<SelectContentTypesProps> = ({
     [selectedContentTypeIds, onSelectionChange]
   );
 
-  // Intersection observer for infinite scroll
-  useEffect(() => {
-    if (!hasMore || loading) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          loadMore();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    observerRef.current = observer;
-
-    if (lastItemRef.current) {
-      observer.observe(lastItemRef.current);
-    }
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, [hasMore, loading, loadMore]);
-
   // Show error state
   if (error) {
     return <Note variant="negative">Error loading content types: {error}</Note>;
+  }
+
+  // Show loading state
+  if (loading) {
+    return (
+      <Flex alignItems="center" gap="spacingS">
+        <Spinner size="small" />
+        <Text>Loading content types...</Text>
+      </Flex>
+    );
   }
 
   return (
@@ -161,7 +155,7 @@ export const SelectContentTypes: React.FC<SelectContentTypesProps> = ({
       />
 
       {/* Empty state */}
-      {!loading && options.length === 0 && renderEmptyState && <div style={{ marginTop: '8px' }}>{renderEmptyState()}</div>}
+      {!loading && filteredOptions.length === 0 && inputValue && renderEmptyState && <div style={{ marginTop: '8px' }}>{renderEmptyState()}</div>}
     </div>
   );
 };
