@@ -24,6 +24,20 @@ export const useContentTypeFields = (cma: ConfigAppSDK['cma'], options: UseConte
   const isSearching = useRef(false);
   const allContentTypesRef = useRef<ContentTypeProps[]>([]);
 
+  // Store filters in refs to prevent infinite loops
+  const contentTypeFiltersRef = useRef(options.contentTypeFilters);
+  const fieldFiltersRef = useRef(options.fieldFilters);
+  const appDefinitionIdRef = useRef(options.appDefinitionId);
+  const onProgressRef = useRef(options.onProgress);
+
+  // Update refs when options change
+  useEffect(() => {
+    contentTypeFiltersRef.current = options.contentTypeFilters;
+    fieldFiltersRef.current = options.fieldFilters;
+    appDefinitionIdRef.current = options.appDefinitionId;
+    onProgressRef.current = options.onProgress;
+  }, [options.contentTypeFilters, options.fieldFilters, options.appDefinitionId, options.onProgress]);
+
   const fetchContentTypesWithFields = useCallback(
     async (
       pagination: { limit?: number; offset?: number; search?: string } = {},
@@ -36,7 +50,7 @@ export const useContentTypeFields = (cma: ConfigAppSDK['cma'], options: UseConte
         let contentTypes: ContentTypeProps[];
 
         // If we have filters, we need to fetch ALL content types first to filter them
-        if (options.contentTypeFilters && options.contentTypeFilters.length > 0) {
+        if (contentTypeFiltersRef.current && contentTypeFiltersRef.current.length > 0) {
           // Fetch all content types if we don't have them cached
           if (allContentTypesRef.current.length === 0) {
             setProgress({ processed: 0, total: 0 });
@@ -46,7 +60,7 @@ export const useContentTypeFields = (cma: ConfigAppSDK['cma'], options: UseConte
           }
 
           // Apply content type filters
-          contentTypes = applyContentTypeFilters(allContentTypesRef.current, options.contentTypeFilters);
+          contentTypes = applyContentTypeFilters(allContentTypesRef.current, contentTypeFiltersRef.current);
 
           // Apply pagination to filtered results
           const startIndex = offset;
@@ -87,8 +101,8 @@ export const useContentTypeFields = (cma: ConfigAppSDK['cma'], options: UseConte
             let fields = contentType.fields;
 
             // Apply field filters if provided
-            if (options.fieldFilters && options.fieldFilters.length > 0) {
-              fields = applyFieldFilters(contentType.fields, options.fieldFilters);
+            if (fieldFiltersRef.current && fieldFiltersRef.current.length > 0) {
+              fields = applyFieldFilters(contentType.fields, fieldFiltersRef.current);
             }
 
             return {
@@ -109,7 +123,7 @@ export const useContentTypeFields = (cma: ConfigAppSDK['cma'], options: UseConte
         throw new Error(`Failed to fetch content types with fields: ${err.message}`);
       }
     },
-    [cma, options.contentTypeFilters, options.fieldFilters]
+    [cma] // Only depend on cma, not the filters
   );
 
   const loadInitial = useCallback(async () => {
@@ -127,8 +141,8 @@ export const useContentTypeFields = (cma: ConfigAppSDK['cma'], options: UseConte
       setContentTypesWithFields(result.contentTypesWithFields);
       setHasMore(result.hasMore);
 
-      if (options.onProgress) {
-        options.onProgress(result.contentTypesWithFields.length, result.total);
+      if (onProgressRef.current) {
+        onProgressRef.current(result.contentTypesWithFields.length, result.total);
       }
     } catch (err: any) {
       setError(err.message);
@@ -136,7 +150,7 @@ export const useContentTypeFields = (cma: ConfigAppSDK['cma'], options: UseConte
       setLoading(false);
       setProgress(null);
     }
-  }, [fetchContentTypesWithFields, loading, options.onProgress]);
+  }, [fetchContentTypesWithFields, loading]);
 
   const loadMore = useCallback(async () => {
     if (loading || isLoadingMore.current || !hasMore) return;
@@ -159,8 +173,8 @@ export const useContentTypeFields = (cma: ConfigAppSDK['cma'], options: UseConte
       setHasMore(result.hasMore);
       currentOffset.current = newOffset;
 
-      if (options.onProgress) {
-        options.onProgress(contentTypesWithFields.length + result.contentTypesWithFields.length, result.total);
+      if (onProgressRef.current) {
+        onProgressRef.current(contentTypesWithFields.length + result.contentTypesWithFields.length, result.total);
       }
     } catch (err: any) {
       setError(err.message);
@@ -169,7 +183,7 @@ export const useContentTypeFields = (cma: ConfigAppSDK['cma'], options: UseConte
       setProgress(null);
       isLoadingMore.current = false;
     }
-  }, [fetchContentTypesWithFields, loading, hasMore, contentTypesWithFields.length, options.onProgress]);
+  }, [fetchContentTypesWithFields, loading, hasMore, contentTypesWithFields.length]);
 
   const search = useCallback(
     async (query: string) => {
@@ -201,8 +215,8 @@ export const useContentTypeFields = (cma: ConfigAppSDK['cma'], options: UseConte
         currentOffset.current = 0;
         currentSearch.current = query;
 
-        if (options.onProgress) {
-          options.onProgress(result.contentTypesWithFields.length, result.total);
+        if (onProgressRef.current) {
+          onProgressRef.current(result.contentTypesWithFields.length, result.total);
         }
       } catch (err: any) {
         setError(err.message);
@@ -212,7 +226,7 @@ export const useContentTypeFields = (cma: ConfigAppSDK['cma'], options: UseConte
         isSearching.current = false;
       }
     },
-    [fetchContentTypesWithFields, options.onProgress]
+    [fetchContentTypesWithFields]
   );
 
   const reset = useCallback(() => {
