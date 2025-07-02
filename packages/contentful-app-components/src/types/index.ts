@@ -25,6 +25,7 @@ export interface ContentTypeFieldOption {
   fieldId: string;
   contentTypeName: string;
   fieldName: string;
+  isAlreadyConfigured?: boolean;
 }
 
 export interface PaginationOptions {
@@ -53,4 +54,28 @@ export interface UseContentTypesReturn {
   loadMore: () => Promise<void>;
   search: (query: string) => void;
   reset: () => void;
+}
+
+export interface ContentTypeWithEditorInterface {
+  contentType: ContentTypeProps;
+  editorInterface: any; // EditorInterface type from contentful-management
+  fields: ContentFields[];
+}
+
+export interface UseContentTypeFieldsOptions {
+  contentTypeFilters?: ContentTypeFilter[];
+  fieldFilters?: FieldFilter[];
+  appDefinitionId?: string;
+  onProgress?: (processed: number, total: number) => void;
+}
+
+export interface UseContentTypeFieldsReturn {
+  contentTypesWithFields: ContentTypeWithEditorInterface[];
+  loading: boolean;
+  error: string | null;
+  hasMore: boolean;
+  loadMore: () => Promise<void>;
+  search: (query: string) => void;
+  reset: () => void;
+  progress: { processed: number; total: number } | null;
 }

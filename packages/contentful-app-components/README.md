@@ -33,6 +33,31 @@ const MyConfigScreen = () => {
 };
 ```
 
+### SelectContentTypeFields
+
+A more advanced component for selecting specific fields within content types. This component handles fetching editor interfaces and can show which fields are already configured for your app.
+
+```tsx
+import { SelectContentTypeFields, hasJsonFields, jsonFields } from '@contentful/app-components';
+
+const MyConfigScreen = () => {
+  const [selectedFieldIds, setSelectedFieldIds] = useState<string[]>([]);
+
+  return (
+    <SelectContentTypeFields
+      cma={sdk.cma}
+      selectedFieldIds={selectedFieldIds}
+      onSelectionChange={setSelectedFieldIds}
+      contentTypeFilters={[hasJsonFields]} // Only content types with JSON fields
+      fieldFilters={[jsonFields]} // Only JSON fields
+      appDefinitionId={sdk.ids.app} // For checking already configured fields
+      placeholder="Select content types and JSON fields..."
+      searchable={true}
+    />
+  );
+};
+```
+
 ## Hooks
 
 ### useContentTypes
@@ -45,6 +70,27 @@ import { useContentTypes, hasJsonFields } from '@contentful/app-components';
 const MyComponent = () => {
   const { contentTypes, loading, error, hasMore, loadMore, search } = useContentTypes(sdk.cma, {
     filters: [hasJsonFields],
+    onProgress: (processed, total) => {
+      console.log(`Loaded ${processed} of ${total} content types`);
+    },
+  });
+
+  // Use the hook data...
+};
+```
+
+### useContentTypeFields
+
+A hook for fetching content types with their fields and editor interfaces. This is useful for apps that need to know which fields are already configured.
+
+```tsx
+import { useContentTypeFields, hasJsonFields, jsonFields } from '@contentful/app-components';
+
+const MyComponent = () => {
+  const { contentTypesWithFields, loading, error, hasMore, loadMore, search, progress } = useContentTypeFields(sdk.cma, {
+    contentTypeFilters: [hasJsonFields],
+    fieldFilters: [jsonFields],
+    appDefinitionId: sdk.ids.app,
     onProgress: (processed, total) => {
       console.log(`Loaded ${processed} of ${total} content types`);
     },
@@ -90,6 +136,7 @@ Utility functions for API operations:
 - **Pagination**: Load content types in batches with infinite scroll
 - **Search**: Search content types after typing 2+ characters
 - **Filtering**: Filter content types and fields by various criteria
+- **Optimized Performance**: Batch processing with 10 items per batch to maximize throughput without hitting rate limits
 - **Progress Tracking**: Track loading progress for large content models
 - **Error Handling**: Robust error handling with retry logic
 - **TypeScript**: Full TypeScript support with type definitions
