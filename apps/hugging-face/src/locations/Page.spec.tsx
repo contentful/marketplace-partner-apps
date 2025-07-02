@@ -1,10 +1,11 @@
 import { render, screen, fireEvent, waitFor, act, within } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach, beforeAll, afterAll, Mock } from 'vitest';
+import { describe, it, expect, vi, beforeEach, beforeAll, afterAll, afterEach, Mock } from 'vitest';
 import Page from './Page';
 import * as reactAppsSdk from '@contentful/react-apps-toolkit';
 import * as huggingfaceText from '../services/huggingfaceText';
 import * as huggingfaceImage from '../services/huggingfaceImage';
 import * as uploadAssetService from '../services/uploadAsset';
+import Modal from 'react-modal';
 
 // Mock the SDK hooks
 vi.mock('@contentful/react-apps-toolkit', async () => {
@@ -41,6 +42,12 @@ beforeAll(() => {
   const mockFile = new File([''], 'mock.txt', { type: 'text/plain' });
   mockFile.arrayBuffer = vi.fn(() => Promise.resolve(new ArrayBuffer(8))) as any;
   global.File = vi.fn(() => mockFile) as any;
+
+  // Set up Modal app element to prevent warnings and DOM issues
+  const modalRoot = document.createElement('div');
+  modalRoot.setAttribute('id', 'modal-root');
+  document.body.appendChild(modalRoot);
+  Modal.setAppElement('#modal-root');
 });
 
 afterAll(() => {
@@ -143,6 +150,33 @@ describe('Page Component', () => {
       return new Promise((resolve) => {
         setTimeout(() => resolve('a very refined text input.' as any), 100);
       });
+    });
+  });
+
+  afterEach(async () => {
+    // Close any open modals by pressing Escape key
+    const openModals = screen.queryAllByRole('dialog');
+    for (const modal of openModals) {
+      await act(async () => {
+        fireEvent.keyDown(modal, { key: 'Escape', code: 'Escape' });
+      });
+    }
+
+    // Wait for any pending async operations to complete
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 200));
+    });
+
+    // Allow all pending timers and promises to resolve
+    await waitFor(
+      () => {
+        // Ensure no modals are still open
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      },
+      { timeout: 2000 }
+    ).catch(() => {
+      // If modals are still open, this is expected in some tests
+      // The important part is that we've given them time to clean up
     });
   });
 
