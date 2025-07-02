@@ -12,10 +12,10 @@ npm install @contentful/app-components
 
 ### SelectContentTypes
 
-A simple autocomplete component for selecting content types.
+A simple autocomplete component for selecting content types. Fetches all content types and provides client-side search by name and description.
 
 ```tsx
-import { SelectContentTypes, hasJsonFields } from '@contentful/app-components';
+import { SelectContentTypes } from '@contentful/app-components';
 
 const MyConfigScreen = () => {
   const [selectedContentTypeIds, setSelectedContentTypeIds] = useState<string[]>([]);
@@ -25,9 +25,7 @@ const MyConfigScreen = () => {
       cma={sdk.cma}
       selectedContentTypeIds={selectedContentTypeIds}
       onSelectionChange={setSelectedContentTypeIds}
-      filters={[hasJsonFields]} // Only show content types with JSON fields
       placeholder="Select content types..."
-      searchable={true}
     />
   );
 };
@@ -133,9 +131,8 @@ Utility functions for API operations:
 
 ## Features
 
-- **Pagination**: Load content types in batches with infinite scroll
-- **Search**: Search content types after typing 2+ characters
-- **Filtering**: Filter content types and fields by various criteria
+- **Simple Content Type Selection**: Fast, client-side search by name and description
+- **Advanced Field Selection**: Field-level selection with filtering and editor interface checking
 - **Optimized Performance**: Batch processing with 10 items per batch to maximize throughput without hitting rate limits
 - **Progress Tracking**: Track loading progress for large content models
 - **Error Handling**: Robust error handling with retry logic
@@ -149,15 +146,15 @@ Utility functions for API operations:
 <SelectContentTypes cma={sdk.cma} selectedContentTypeIds={selectedIds} onSelectionChange={setSelectedIds} placeholder="Choose content types..." />
 ```
 
-### Filtered Content Type Selection
+### Content Type Selection with Custom Empty State
 
 ```tsx
 <SelectContentTypes
   cma={sdk.cma}
   selectedContentTypeIds={selectedIds}
   onSelectionChange={setSelectedIds}
-  filters={[hasJsonFields, hasRichTextFields]}
-  placeholder="Select content types with JSON or Rich Text fields..."
+  placeholder="Search and select content types..."
+  renderEmptyState={() => <Note variant="neutral">No content types found matching your search.</Note>}
 />
 ```
 
