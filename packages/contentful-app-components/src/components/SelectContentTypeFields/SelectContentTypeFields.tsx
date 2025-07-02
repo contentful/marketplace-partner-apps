@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
-import { Autocomplete, Pill, Text, Flex, Note, Spinner, Subheading } from '@contentful/f36-components';
+import { Autocomplete, Checkbox, Pill, Text, Flex, Note, Spinner, Subheading } from '@contentful/f36-components';
 import { ClockIcon } from '@contentful/f36-icons';
 import { useContentTypeFields } from '../../hooks/useContentTypeFields';
 import type { ConfigAppSDK } from '@contentful/app-sdk';
@@ -54,15 +54,18 @@ export const SelectContentTypeFields: React.FC<SelectContentTypeFieldsProps> = (
         const control = editorInterface.controls?.find((c: any) => c.fieldId === field.id);
         const isAlreadyConfigured = appDefinitionId ? control && control.widgetId === appDefinitionId : false;
 
-        options.push({
-          id: `${contentType.sys.id}:${field.id}`,
-          name: `${contentType.name} > ${field.name}`,
-          contentTypeId: contentType.sys.id,
-          fieldId: field.id,
-          contentTypeName: contentType.name,
-          fieldName: field.name,
-          isAlreadyConfigured,
-        });
+        // Only add to dropdown if NOT already configured
+        if (!isAlreadyConfigured) {
+          options.push({
+            id: `${contentType.sys.id}:${field.id}`,
+            name: `${contentType.name} > ${field.name}`,
+            contentTypeId: contentType.sys.id,
+            fieldId: field.id,
+            contentTypeName: contentType.name,
+            fieldName: field.name,
+            isAlreadyConfigured: false, // Always false since we filter these out
+          });
+        }
       });
     });
 
@@ -75,8 +78,29 @@ export const SelectContentTypeFields: React.FC<SelectContentTypeFieldsProps> = (
     return fieldOptions.filter((option) => option.name.toLowerCase().includes(inputValue.toLowerCase()));
   }, [fieldOptions, inputValue]);
 
-  // Convert selected IDs to pills
-  const pills = useMemo(() => {
+  // Get already configured items to show as pills
+  const alreadyConfiguredItems = useMemo(() => {
+    const items: Array<{ id: string; label: string }> = [];
+
+    contentTypesWithFields.forEach(({ contentType, editorInterface, fields }) => {
+      fields.forEach((field) => {
+        const control = editorInterface.controls?.find((c: any) => c.fieldId === field.id);
+        const isAlreadyConfigured = appDefinitionId ? control && control.widgetId === appDefinitionId : false;
+
+        if (isAlreadyConfigured) {
+          items.push({
+            id: `${contentType.sys.id}:${field.id}`,
+            label: `${contentType.name} > ${field.name}`,
+          });
+        }
+      });
+    });
+
+    return items;
+  }, [contentTypesWithFields, appDefinitionId]);
+
+  // Convert selected IDs to pills (only newly selected, not already configured)
+  const selectedPills = useMemo(() => {
     return selectedFieldIds
       .map((id) => {
         const option = fieldOptions.find((opt) => opt.id === id);
@@ -84,6 +108,11 @@ export const SelectContentTypeFields: React.FC<SelectContentTypeFieldsProps> = (
       })
       .filter(Boolean) as Array<{ id: string; label: string }>;
   }, [selectedFieldIds, fieldOptions]);
+
+  // Combine already configured and newly selected pills
+  const allPills = useMemo(() => {
+    return [...alreadyConfiguredItems, ...selectedPills];
+  }, [alreadyConfiguredItems, selectedPills]);
 
   const handleInputChange = useCallback(
     (value: string) => {
@@ -110,10 +139,14 @@ export const SelectContentTypeFields: React.FC<SelectContentTypeFieldsProps> = (
 
   const handlePillRemove = useCallback(
     (pillId: string) => {
-      const newSelection = selectedFieldIds.filter((id) => id !== pillId);
-      onSelectionChange(newSelection);
+      // Only allow removing newly selected items, not already configured ones
+      const isAlreadyConfigured = alreadyConfiguredItems.some((item) => item.id === pillId);
+      if (!isAlreadyConfigured) {
+        const newSelection = selectedFieldIds.filter((id) => id !== pillId);
+        onSelectionChange(newSelection);
+      }
     },
-    [selectedFieldIds, onSelectionChange]
+    [selectedFieldIds, onSelectionChange, alreadyConfiguredItems]
   );
 
   // Intersection observer for infinite scroll
@@ -147,8 +180,18 @@ export const SelectContentTypeFields: React.FC<SelectContentTypeFieldsProps> = (
     return <Note variant="negative">Error loading content types and fields: {error}</Note>;
   }
 
+  // Debug logging
+  console.log('[SelectContentTypeFields] Render state:', {
+    loading,
+    progress,
+    contentTypesCount: contentTypesWithFields.length,
+    fieldOptionsCount: fieldOptions.length,
+    error,
+  });
+
   // Show loading state with progress
-  if (loading && progress) {
+  if (loading && progress && progress.total > 0) {
+    console.log('[SelectContentTypeFields] Showing progress UI');
     return (
       <Note variant="neutral" icon={<ClockIcon />}>
         <Flex flexDirection="column">
@@ -165,15 +208,6 @@ export const SelectContentTypeFields: React.FC<SelectContentTypeFieldsProps> = (
 
   return (
     <div>
-      {/* Selected pills */}
-      {pills.length > 0 && (
-        <Flex gap="spacingXs" flexWrap="wrap" marginBottom="spacingS">
-          {pills.map((pill) => (
-            <Pill key={pill.id} label={pill.label} onClose={() => handlePillRemove(pill.id)} testId={`pill-${pill.id}`} />
-          ))}
-        </Flex>
-      )}
-
       {/* Autocomplete */}
       <Autocomplete
         items={filteredOptions}
@@ -189,15 +223,20 @@ export const SelectContentTypeFields: React.FC<SelectContentTypeFieldsProps> = (
         usePortal
         renderItem={(item) => (
           <Flex alignItems="center" gap="spacingXs" testId={`option-${item.id}`}>
+            <Checkbox isChecked={selectedFieldIds.includes(item.id)} onChange={() => handleSelectItem(item)} />
             <Text fontWeight="fontWeightMedium">{item.name}</Text>
-            {item.isAlreadyConfigured && (
-              <Text fontSize="fontSizeS" fontColor="green600">
-                (Already configured)
-              </Text>
-            )}
           </Flex>
         )}
       />
+
+      {/* Selected pills below autocomplete */}
+      {allPills.length > 0 && (
+        <Flex gap="spacingXs" flexWrap="wrap" marginTop="spacingS">
+          {allPills.map((pill) => (
+            <Pill key={pill.id} label={pill.label} onClose={() => handlePillRemove(pill.id)} testId={`pill-${pill.id}`} />
+          ))}
+        </Flex>
+      )}
 
       {/* Empty state */}
       {!loading && fieldOptions.length === 0 && renderEmptyState && <div style={{ marginTop: '8px' }}>{renderEmptyState()}</div>}
