@@ -1,8 +1,44 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, vi, expect } from 'vitest';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { describe, it, vi, expect, beforeAll, afterEach } from 'vitest';
 import { GenerateImageSpecsModal } from './GenerateImageSpecsModal';
+import Modal from 'react-modal';
 
 describe('GenerateImageSpecsModal', () => {
+  beforeAll(() => {
+    // Set up Modal app element to prevent warnings and DOM issues
+    const modalRoot = document.createElement('div');
+    modalRoot.setAttribute('id', 'modal-root');
+    document.body.appendChild(modalRoot);
+    Modal.setAppElement('#modal-root');
+  });
+
+  afterEach(async () => {
+    // Close any open modals by pressing Escape key
+    const openModals = screen.queryAllByRole('dialog');
+    for (const modal of openModals) {
+      await act(async () => {
+        fireEvent.keyDown(modal, { key: 'Escape', code: 'Escape' });
+      });
+    }
+
+    // Wait for any pending async operations to complete
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 200));
+    });
+
+    // Allow all pending timers and promises to resolve
+    await waitFor(
+      () => {
+        // Ensure no modals are still open
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      },
+      { timeout: 2000 }
+    ).catch(() => {
+      // If modals are still open, this is expected in some tests
+      // The important part is that we've given them time to clean up
+    });
+  });
+
   const defaultProps = {
     isShown: true,
     imageNumInferenceSteps: 50,
