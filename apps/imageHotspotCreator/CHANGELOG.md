@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.25](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.24...image-hotspot-creator-v1.0.25) (2025-07-02)
+
+
+### Bug Fixes
+
+* **deps:** bump contentful-management from 11.53.0 to 11.54.0 in /apps/imageHotspotCreator in the production-dependencies group ([#5271](https://github.com/contentful/marketplace-partner-apps/issues/5271)) ([662ad27](https://github.com/contentful/marketplace-partner-apps/commit/662ad27147940a023a04d0067920992b002c859b))
+* **deps:** bump the production-dependencies group in /apps/imageHotspotCreator with 9 updates ([#5080](https://github.com/contentful/marketplace-partner-apps/issues/5080)) ([6b5a9d8](https://github.com/contentful/marketplace-partner-apps/commit/6b5a9d80e64ef146a03580c6dabbbc9c1f3cba65))
+* update to node v20 [INTEG-2829] ([#5318](https://github.com/contentful/marketplace-partner-apps/issues/5318)) ([fdc406d](https://github.com/contentful/marketplace-partner-apps/commit/fdc406d9328bc6279abb658dcf5a1bf28795a449))
+
 ## [1.0.24](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.23...image-hotspot-creator-v1.0.24) (2025-01-08)
 
 
