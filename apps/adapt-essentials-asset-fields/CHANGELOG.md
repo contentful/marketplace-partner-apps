@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.11](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.1.10...adapt-essentials-asset-fields-v1.1.11) (2025-07-02)
+
+
+### Bug Fixes
+
+* update to node v20 [INTEG-2829] ([#5318](https://github.com/contentful/marketplace-partner-apps/issues/5318)) ([fdc406d](https://github.com/contentful/marketplace-partner-apps/commit/fdc406d9328bc6279abb658dcf5a1bf28795a449))
+
 ## [1.1.10](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.1.9...adapt-essentials-asset-fields-v1.1.10) (2024-12-10)
 
 
