@@ -1,0 +1,31 @@
+{
+  "name": "@contentful/app-components",
+  "version": "0.1.0",
+  "description": "Reusable components for Contentful apps",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@contentful/f36-components": "^4.0.0",
+    "@contentful/f36-icons": "^4.0.0",
+    "@contentful/f36-tokens": "^4.0.0",
+    "contentful-management": "^10.0.0",
+    "react": "^18.0.0"
+  },
+  "peerDependencies": {
+    "@contentful/app-sdk": "^4.0.0",
+    "react": "^18.0.0"
+  },
+  "devDependencies": {
+    "@contentful/app-sdk": "^4.0.0",
+    "@types/react": "^18.0.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "@contentful/app-sdk": "^4.0.0",
+    "react": "^18.0.0"
+  }
+}
