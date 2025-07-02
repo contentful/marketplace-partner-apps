@@ -1,3 +1,4 @@
+---
 name: "CodeQL Scan for GitHub Actions Workflows"
 
 on:
