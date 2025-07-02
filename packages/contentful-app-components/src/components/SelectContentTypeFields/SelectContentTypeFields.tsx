@@ -180,18 +180,8 @@ export const SelectContentTypeFields: React.FC<SelectContentTypeFieldsProps> = (
     return <Note variant="negative">Error loading content types and fields: {error}</Note>;
   }
 
-  // Debug logging
-  console.log('[SelectContentTypeFields] Render state:', {
-    loading,
-    progress,
-    contentTypesCount: contentTypesWithFields.length,
-    fieldOptionsCount: fieldOptions.length,
-    error,
-  });
-
   // Show loading state with progress
   if (loading && progress && progress.total > 0) {
-    console.log('[SelectContentTypeFields] Showing progress UI');
     return (
       <Note variant="neutral" icon={<ClockIcon />}>
         <Flex flexDirection="column">
