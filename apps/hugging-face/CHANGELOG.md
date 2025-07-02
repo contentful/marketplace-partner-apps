@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.2](https://github.com/contentful/marketplace-partner-apps/compare/hugging-face-v1.1.1...hugging-face-v1.1.2) (2025-07-02)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group in /apps/hugging-face with 2 updates ([#5056](https://github.com/contentful/marketplace-partner-apps/issues/5056)) ([1857fe0](https://github.com/contentful/marketplace-partner-apps/commit/1857fe0bf30190cf4080e0dd8dc1d24eb2db2573))
+* update to node v20 [INTEG-2829] ([#5318](https://github.com/contentful/marketplace-partner-apps/issues/5318)) ([fdc406d](https://github.com/contentful/marketplace-partner-apps/commit/fdc406d9328bc6279abb658dcf5a1bf28795a449))
+
 ## [1.1.1](https://github.com/contentful/marketplace-partner-apps/compare/hugging-face-v1.1.0...hugging-face-v1.1.1) (2025-05-28)
 
 
