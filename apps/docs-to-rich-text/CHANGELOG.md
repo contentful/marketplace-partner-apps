@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/contentful/marketplace-partner-apps/compare/docs-to-rich-text-v1.2.0...docs-to-rich-text-v1.2.1) (2025-07-02)
+
+
+### Bug Fixes
+
+* update to node v20 [INTEG-2829] ([#5318](https://github.com/contentful/marketplace-partner-apps/issues/5318)) ([fdc406d](https://github.com/contentful/marketplace-partner-apps/commit/fdc406d9328bc6279abb658dcf5a1bf28795a449))
+
 ## [1.2.0](https://github.com/contentful/marketplace-partner-apps/compare/docs-to-rich-text-v1.1.2...docs-to-rich-text-v1.2.0) (2025-04-17)
 
 
