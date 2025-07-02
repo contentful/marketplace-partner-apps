@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.6...vwo-fme-v1.0.7) (2025-07-02)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group in /apps/vwo-fme with 2 updates ([#5076](https://github.com/contentful/marketplace-partner-apps/issues/5076)) ([79c2252](https://github.com/contentful/marketplace-partner-apps/commit/79c2252ac4e17488cc7fea05051dc60724e6e16f))
+* update to node v20 [INTEG-2829] ([#5318](https://github.com/contentful/marketplace-partner-apps/issues/5318)) ([fdc406d](https://github.com/contentful/marketplace-partner-apps/commit/fdc406d9328bc6279abb658dcf5a1bf28795a449))
+
 ## [1.0.6](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.5...vwo-fme-v1.0.6) (2025-06-17)
 
 
