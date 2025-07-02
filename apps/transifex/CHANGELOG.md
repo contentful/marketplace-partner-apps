@@ -11,6 +11,17 @@
 * **deps:** bump the production-dependencies group in /apps/transifex with 7 updates ([#5212](https://github.com/contentful/marketplace-partner-apps/issues/5212)) ([c975044](https://github.com/contentful/marketplace-partner-apps/commit/c975044ebccd452ace865e58b1b186cd6b6e0ee7))
 * update to node v20 [INTEG-2829] ([#5318](https://github.com/contentful/marketplace-partner-apps/issues/5318)) ([fdc406d](https://github.com/contentful/marketplace-partner-apps/commit/fdc406d9328bc6279abb658dcf5a1bf28795a449))
 
+## [1.2.12](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.2.11...transifex-contentful-app-v1.2.12) (2025-07-02)
+
+
+### Bug Fixes
+
+* **deps:** bump brace-expansion from 1.1.11 to 1.1.12 in /apps/transifex ([#5161](https://github.com/contentful/marketplace-partner-apps/issues/5161)) ([c96e7ec](https://github.com/contentful/marketplace-partner-apps/commit/c96e7ec8f82df5a60fdd832f9c3ed172db5a9348))
+* **deps:** bump contentful-management from 11.53.0 to 11.54.0 in /apps/transifex in the production-dependencies group ([#5258](https://github.com/contentful/marketplace-partner-apps/issues/5258)) ([cd0db1f](https://github.com/contentful/marketplace-partner-apps/commit/cd0db1f34c3c5cdebf2fb2a8087da60370c972b3))
+* **deps:** bump eslint from 9.29.0 to 9.30.0 in /apps/transifex in the production-dependencies group ([#5328](https://github.com/contentful/marketplace-partner-apps/issues/5328)) ([3f1e8f4](https://github.com/contentful/marketplace-partner-apps/commit/3f1e8f4e2b7e70ef8afe9879198fc634e2b2db25))
+* **deps:** bump the production-dependencies group in /apps/transifex with 7 updates ([#5212](https://github.com/contentful/marketplace-partner-apps/issues/5212)) ([c975044](https://github.com/contentful/marketplace-partner-apps/commit/c975044ebccd452ace865e58b1b186cd6b6e0ee7))
+* update to node v20 [INTEG-2829] ([#5318](https://github.com/contentful/marketplace-partner-apps/issues/5318)) ([fdc406d](https://github.com/contentful/marketplace-partner-apps/commit/fdc406d9328bc6279abb658dcf5a1bf28795a449))
+
 ## [1.2.11](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.2.10...transifex-contentful-app-v1.2.11) (2025-03-13)
 
 
