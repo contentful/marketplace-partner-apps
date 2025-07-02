@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.29](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.0.28...ceros-contentful-app-v1.0.29) (2025-07-02)
+
+
+### Bug Fixes
+
+* **deps:** bump contentful-management from 11.53.0 to 11.54.0 in /apps/ceros in the production-dependencies group ([#5296](https://github.com/contentful/marketplace-partner-apps/issues/5296)) ([0cf2d03](https://github.com/contentful/marketplace-partner-apps/commit/0cf2d03e824f85dcbd9cce0af667ee800ddcf048))
+* **deps:** bump the production-dependencies group in /apps/ceros with 4 updates ([#5082](https://github.com/contentful/marketplace-partner-apps/issues/5082)) ([8d3ebb2](https://github.com/contentful/marketplace-partner-apps/commit/8d3ebb2aa3075ba1de387e0c9d8a4e0f59373b12))
+* update to node v20 [INTEG-2829] ([#5318](https://github.com/contentful/marketplace-partner-apps/issues/5318)) ([fdc406d](https://github.com/contentful/marketplace-partner-apps/commit/fdc406d9328bc6279abb658dcf5a1bf28795a449))
+
 ## [1.0.28](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.0.27...ceros-contentful-app-v1.0.28) (2025-03-13)
 
 
