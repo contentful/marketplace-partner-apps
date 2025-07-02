@@ -47,8 +47,10 @@ const ConfigScreen = () => {
   }, [selectedFieldIds]);
 
   const onConfigure = useCallback(async () => {
+    console.log('onConfigure called');
     try {
       installTriggeredRef.current = true;
+      console.log('installTriggeredRef.current set to true');
 
       // Return the current state since we update editor interfaces after configuration
       return {
@@ -68,21 +70,25 @@ const ConfigScreen = () => {
 
   useEffect(() => {
     sdk.app.onConfigurationCompleted(async () => {
+      console.log('onConfigurationCompleted called, installTriggeredRef.current =', installTriggeredRef.current);
       if (!installTriggeredRef.current) return;
 
       try {
+        console.log('Starting editor interface update logic');
         // Process in batches of 5 to avoid rate limits
         const BATCH_SIZE = 5;
         const results = [];
 
         // Process ALL content types with JSON fields, not just those with selected fields
         const allContentTypesWithJsonFields = contentTypes.filter((ct: ContentTypeProps) => ct.fields.some((field: any) => field.type === 'Object'));
+        console.log('Content types with JSON fields:', allContentTypesWithJsonFields.length);
 
         const changedContentTypes = allContentTypesWithJsonFields.map((contentType: ContentTypeProps) => {
           const contentTypeId = contentType.sys.id;
           const selectedFieldsForType = selectedFieldsByContentType[contentTypeId] || [];
           return [contentTypeId, selectedFieldsForType] as [string, string[]];
         });
+        console.log('Changed content types:', changedContentTypes.length);
 
         for (let i = 0; i < changedContentTypes.length; i += BATCH_SIZE) {
           const batch = changedContentTypes.slice(i, i + BATCH_SIZE);

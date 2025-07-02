@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import React, { useCallback, useMemo, useState, useEffect, useRef } from 'react';
 import { Autocomplete, Checkbox, Flex, FormLabel, Note, Pill, Subheading, Text } from '@contentful/f36-components';
 import { ClockIcon } from '@contentful/f36-icons';
 import tokens from '@contentful/f36-tokens';
@@ -69,8 +69,9 @@ export function ContentTypeFieldSelector({
   const [inputValue, setInputValue] = useState('');
 
   // Initialize selected fields from editor interfaces (only once)
+  const hasInitializedRef = useRef(false);
   useEffect(() => {
-    if (contentTypesWithEditorInterfaces.length > 0 && selectedFieldIds.length === 0 && appDefinitionId) {
+    if (!hasInitializedRef.current && contentTypesWithEditorInterfaces.length > 0 && selectedFieldIds.length === 0 && appDefinitionId) {
       const preSelectedIds: string[] = [];
 
       for (const { contentType, editorInterface } of contentTypesWithEditorInterfaces) {
@@ -87,8 +88,10 @@ export function ContentTypeFieldSelector({
       if (preSelectedIds.length > 0) {
         onSelectionChange(preSelectedIds);
       }
+
+      hasInitializedRef.current = true;
     }
-  }, [contentTypesWithEditorInterfaces, appDefinitionId, selectedFieldIds.length, onSelectionChange]);
+  }, [contentTypesWithEditorInterfaces, appDefinitionId, onSelectionChange]);
 
   // Filter content types first
   const filteredContentTypes = useMemo(() => {
