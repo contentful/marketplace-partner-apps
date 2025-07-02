@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.3](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.2...sfmc-studio-v1.2.3) (2025-07-02)
+
+
+### Bug Fixes
+
+* **deps:** bump prettier from 3.6.1 to 3.6.2 in /apps/sfmc-studio in the production-dependencies group ([#5309](https://github.com/contentful/marketplace-partner-apps/issues/5309)) ([d3dd2ec](https://github.com/contentful/marketplace-partner-apps/commit/d3dd2ec1cff3fe343af2a3c34c017cdfc7ae89bf))
+* **deps:** bump the production-dependencies group in /apps/sfmc-studio with 11 updates ([#5218](https://github.com/contentful/marketplace-partner-apps/issues/5218)) ([766609a](https://github.com/contentful/marketplace-partner-apps/commit/766609a62ad27c054a5648b2990db936643ffa7a))
+* **deps:** bump the production-dependencies group in /apps/sfmc-studio with 3 updates ([#5283](https://github.com/contentful/marketplace-partner-apps/issues/5283)) ([63ecfab](https://github.com/contentful/marketplace-partner-apps/commit/63ecfab6a849f7c0056b343ae8863331b402098a))
+* update to node v20 [INTEG-2829] ([#5318](https://github.com/contentful/marketplace-partner-apps/issues/5318)) ([fdc406d](https://github.com/contentful/marketplace-partner-apps/commit/fdc406d9328bc6279abb658dcf5a1bf28795a449))
+
 ## [1.2.2](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.1...sfmc-studio-v1.2.2) (2025-05-28)
 
 
