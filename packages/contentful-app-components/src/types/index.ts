@@ -28,6 +28,22 @@ export interface ContentTypeFieldOption {
   isAlreadyConfigured?: boolean;
 }
 
+export interface ContentTypeField {
+  id: string; // format: "contentTypeId:fieldId"
+  contentTypeId: string;
+  contentTypeName: string;
+  fieldId: string;
+  fieldName: string;
+  fieldType: string;
+  isConfigured: boolean;
+}
+
+export interface ContentTypeWithFields {
+  id: string;
+  name: string;
+  fields: ContentTypeField[];
+}
+
 export interface PaginationOptions {
   limit?: number;
   offset?: number;

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import type { ConfigAppSDK } from '@contentful/app-sdk';
 import type { ContentTypeProps } from 'contentful-management';
 import type { UseContentTypeFieldsOptions, UseContentTypeFieldsReturn, ContentTypeWithEditorInterface } from '../types';
-import { retryWithBackoff, withTimeout, fetchAllContentTypes, fetchEditorInterfacesForContentTypes } from '../utils/apiHelpers';
+import { retryWithBackoff, withTimeout, fetchAllContentTypes, fetchEditorInterfacesInBatches } from '../utils/apiHelpers';
 import { applyContentTypeFilters, applyFieldFilters } from '../utils/contentTypeFilters';
 
 const INITIAL_LIMIT = 1000;
@@ -62,13 +62,17 @@ export const useContentTypeFields = (cma: ConfigAppSDK['cma'], options: UseConte
       }
 
       setProgress({ processed: 0, total: contentTypes.length });
-      const editorInterfaces = await fetchEditorInterfacesForContentTypes(cma, contentTypes, (processed, total) => {
+      const contentTypeIds = contentTypes.map((ct) => ct.sys.id);
+      const editorInterfaceResults = await fetchEditorInterfacesInBatches(cma, contentTypeIds, (processed: number, total: number) => {
         setProgress({ processed, total });
       });
 
       const result: ContentTypeWithEditorInterface[] = contentTypes
         .map((contentType) => {
-          const editorInterface = editorInterfaces.find((ei) => ei.contentTypeId === contentType.sys.id)?.editorInterface || { controls: [] };
+          const editorInterfaceResult = editorInterfaceResults.find(
+            (result: any) => result.status === 'fulfilled' && result.value.contentTypeId === contentType.sys.id
+          );
+          const editorInterface = editorInterfaceResult?.status === 'fulfilled' ? editorInterfaceResult.value.editorInterface : { controls: [] };
           let fields = contentType.fields;
           if (memoizedOptions.fieldFilters.length > 0) {
             fields = applyFieldFilters(contentType.fields, memoizedOptions.fieldFilters);

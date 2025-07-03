@@ -40,7 +40,7 @@ export const SelectContentTypes: React.FC<SelectContentTypesProps> = ({
           fetchAllContentTypes(cma, onProgress),
           120000 // 2 minute timeout
         );
-        setContentTypes(allContentTypes);
+        setContentTypes(allContentTypes as ContentTypeProps[]);
       } catch (err: any) {
         console.error('Failed to fetch content types:', err);
         setError(err.message);
