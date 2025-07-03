@@ -6,12 +6,24 @@ import { styles } from './ConfigScreen.styles';
 import { ExternalLinkIcon } from '@contentful/f36-icons';
 import { SelectContentTypeFields, hasJsonFields, jsonFields } from '@contentful/app-components';
 
+// Interface to match the original JsonField structure
+interface JsonField {
+  contentTypeId: string;
+  contentTypeName: string;
+  fieldId: string;
+  fieldName: string;
+  isEnabled: boolean;
+  originalEnabled: boolean;
+}
+
 const ConfigScreen = () => {
   const sdk = useSDK<ConfigAppSDK>();
-  const [parameters, setParameters] = useState<Record<string, any>>({});
   const [selectedFieldIds, setSelectedFieldIds] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const installTriggeredRef = useRef<boolean>(false);
+
+  // Track the original state like the main branch
+  const jsonFieldsRef = useRef<JsonField[]>([]);
 
   const onConfigure = useCallback(async () => {
     try {
@@ -19,7 +31,7 @@ const ConfigScreen = () => {
 
       // Return the current state since we update editor interfaces after configuration
       return {
-        parameters,
+        parameters: {},
         targetState: await sdk.app.getCurrentState(),
       };
     } catch (error) {
@@ -27,49 +39,52 @@ const ConfigScreen = () => {
       sdk.notifier.error('Failed to prepare configuration. Please try again.');
       return false;
     }
-  }, [parameters, sdk]);
+  }, [sdk]);
 
   useEffect(() => {
     sdk.app.onConfigure(onConfigure);
   }, [sdk, onConfigure]);
+
+  // Group fields by content type (same as main branch)
+  const groupFieldsByContentType = (fields: JsonField[]) => {
+    const grouped: Record<string, JsonField[]> = {};
+    fields.forEach((field) => {
+      if (!grouped[field.contentTypeId]) {
+        grouped[field.contentTypeId] = [];
+      }
+      grouped[field.contentTypeId].push(field);
+    });
+    return grouped;
+  };
+
+  // Reset original state (same as main branch)
+  const resetOriginalState = () => {
+    jsonFieldsRef.current = jsonFieldsRef.current.map((field) => ({
+      ...field,
+      originalEnabled: field.isEnabled,
+    }));
+  };
 
   useEffect(() => {
     sdk.app.onConfigurationCompleted(async () => {
       if (!installTriggeredRef.current) return;
 
       try {
-        // Convert selected field IDs back to our internal format
-        const fields: Array<{ contentTypeId: string; fieldId: string; isEnabled: boolean; originalEnabled: boolean }> = selectedFieldIds.map((fieldId) => {
-          const [contentTypeId, fieldIdOnly] = fieldId.split(':');
-          return {
-            contentTypeId,
-            fieldId: fieldIdOnly,
-            isEnabled: true,
-            originalEnabled: false, // We'll determine this by checking current editor interfaces
-          };
-        });
+        const fieldsByContentType = groupFieldsByContentType(jsonFieldsRef.current);
 
-        // Group fields by content type (simplified version without full JsonField interface)
-        const fieldsByContentType = fields.reduce((acc, field) => {
-          if (!acc[field.contentTypeId]) {
-            acc[field.contentTypeId] = [];
-          }
-          acc[field.contentTypeId].push(field);
-          return acc;
-        }, {} as Record<string, typeof fields>);
-
-        // Only process content types that have changes
+        // Only process content types that have changes (same logic as main branch)
         const changedContentTypes = Object.entries(fieldsByContentType).filter(([_, fields]) =>
           fields.some((field) => field.isEnabled !== field.originalEnabled)
         );
 
         if (changedContentTypes.length === 0) {
+          resetOriginalState();
           installTriggeredRef.current = false;
           return;
         }
 
-        // Process in batches of 5 to avoid rate limits
-        const BATCH_SIZE = 5;
+        // Process in batches of 10 to avoid rate limits (same as main branch)
+        const BATCH_SIZE = 10;
         const results = [];
 
         for (let i = 0; i < changedContentTypes.length; i += BATCH_SIZE) {
@@ -142,26 +157,47 @@ const ConfigScreen = () => {
           sdk.notifier.warning(`${failures.length} content type(s) failed to update. Check the console for details.`);
         }
 
+        resetOriginalState();
         installTriggeredRef.current = false;
       } catch (error) {
         console.error('Error updating editor interfaces:', error);
         sdk.notifier.error('Failed to update editor interfaces. Please try again.');
       }
     });
-  }, [sdk, selectedFieldIds]);
+  }, [sdk]);
+
+  // Handle selection changes from SelectContentTypeFields
+  const handleSelectionChange = (newSelectedFieldIds: string[]) => {
+    setSelectedFieldIds(newSelectedFieldIds);
+  };
+
+  // Handle field data changes from SelectContentTypeFields
+  const handleFieldDataChange = useCallback(
+    (fieldData: Array<{ contentTypeId: string; contentTypeName: string; fieldId: string; fieldName: string; isAlreadyConfigured: boolean }>) => {
+      // Update jsonFieldsRef with the actual field data
+      const jsonFields: JsonField[] = fieldData.map(({ contentTypeId, contentTypeName, fieldId, fieldName, isAlreadyConfigured }) => ({
+        contentTypeId,
+        contentTypeName,
+        fieldId,
+        fieldName,
+        originalEnabled: isAlreadyConfigured,
+        isEnabled: selectedFieldIds.includes(`${contentTypeId}:${fieldId}`),
+      }));
+
+      jsonFieldsRef.current = jsonFields;
+    },
+    [selectedFieldIds]
+  );
 
   useEffect(() => {
     (async () => {
       try {
         setError(null);
 
-        const currentParameters = await sdk.app.getParameters();
-        if (currentParameters) setParameters(currentParameters);
-
         // Set app as ready immediately since SelectContentTypeFields handles its own loading
         sdk.app.setReady();
       } catch (err: any) {
-        setError(err.message || 'Failed to load configuration. Please try refreshing the page.');
+        setError(err.message || 'Failed to load configuration. Please refreshing the page.');
         sdk.app.setReady();
       }
     })();
@@ -206,7 +242,8 @@ const ConfigScreen = () => {
         <SelectContentTypeFields
           cma={sdk.cma}
           selectedFieldIds={selectedFieldIds}
-          onSelectionChange={setSelectedFieldIds}
+          onSelectionChange={handleSelectionChange}
+          onFieldDataChange={handleFieldDataChange}
           contentTypeFilters={[hasJsonFields]} // Only content types with JSON fields
           fieldFilters={[jsonFields]} // Only JSON fields
           appDefinitionId={sdk.ids.app} // For checking already configured fields

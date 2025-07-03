@@ -17,6 +17,9 @@ export interface SelectContentTypeFieldsProps {
   searchable?: boolean;
   onProgress?: (processed: number, total: number) => void;
   renderEmptyState?: () => React.ReactNode;
+  onFieldDataChange?: (
+    fieldData: Array<{ contentTypeId: string; contentTypeName: string; fieldId: string; fieldName: string; isAlreadyConfigured: boolean }>
+  ) => void;
 }
 
 export const SelectContentTypeFields: React.FC<SelectContentTypeFieldsProps> = ({
@@ -31,11 +34,13 @@ export const SelectContentTypeFields: React.FC<SelectContentTypeFieldsProps> = (
   searchable = true,
   onProgress,
   renderEmptyState,
+  onFieldDataChange,
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const lastItemRef = useRef<HTMLDivElement | null>(null);
+  const hasAutoPopulatedRef = useRef<boolean>(false);
 
   const { contentTypesWithFields, loading, error, hasMore, loadMore, search, progress } = useContentTypeFields(cma, {
     contentTypeFilters,
@@ -44,18 +49,64 @@ export const SelectContentTypeFields: React.FC<SelectContentTypeFieldsProps> = (
     onProgress,
   });
 
+  // Helper function to check if a field is already configured
+  const isFieldAlreadyConfigured = useCallback(
+    (editorInterface: any, fieldId: string) => {
+      const control = editorInterface.controls?.find((c: any) => c.fieldId === fieldId);
+      return appDefinitionId ? control && control.widgetId === appDefinitionId : false;
+    },
+    [appDefinitionId]
+  );
+
+  // Auto-populate selectedFieldIds with already configured fields on initial load
+  useEffect(() => {
+    if (!loading && contentTypesWithFields.length > 0 && selectedFieldIds.length === 0 && !hasAutoPopulatedRef.current) {
+      const alreadyConfiguredFieldIds: string[] = [];
+
+      contentTypesWithFields.forEach(({ contentType, editorInterface, fields }) => {
+        fields.forEach((field) => {
+          if (isFieldAlreadyConfigured(editorInterface, field.id)) {
+            alreadyConfiguredFieldIds.push(`${contentType.sys.id}:${field.id}`);
+          }
+        });
+      });
+
+      if (alreadyConfiguredFieldIds.length > 0) {
+        onSelectionChange(alreadyConfiguredFieldIds);
+        hasAutoPopulatedRef.current = true;
+      }
+    }
+  }, [loading, contentTypesWithFields, selectedFieldIds.length, isFieldAlreadyConfigured, onSelectionChange]);
+
+  // Notify parent of field data changes
+  useEffect(() => {
+    if (onFieldDataChange && !loading) {
+      const fieldData: Array<{ contentTypeId: string; contentTypeName: string; fieldId: string; fieldName: string; isAlreadyConfigured: boolean }> = [];
+
+      contentTypesWithFields.forEach(({ contentType, editorInterface, fields }) => {
+        fields.forEach((field) => {
+          fieldData.push({
+            contentTypeId: contentType.sys.id,
+            contentTypeName: contentType.name,
+            fieldId: field.id,
+            fieldName: field.name,
+            isAlreadyConfigured: isFieldAlreadyConfigured(editorInterface, field.id),
+          });
+        });
+      });
+
+      onFieldDataChange(fieldData);
+    }
+  }, [contentTypesWithFields, loading, isFieldAlreadyConfigured, onFieldDataChange]);
+
   // Convert content types with fields to field options
   const fieldOptions = useMemo((): ContentTypeFieldOption[] => {
     const options: ContentTypeFieldOption[] = [];
 
     contentTypesWithFields.forEach(({ contentType, editorInterface, fields }) => {
       fields.forEach((field) => {
-        // Check if this field is already configured for the app
-        const control = editorInterface.controls?.find((c: any) => c.fieldId === field.id);
-        const isAlreadyConfigured = appDefinitionId ? control && control.widgetId === appDefinitionId : false;
-
         // Only add to dropdown if NOT already configured
-        if (!isAlreadyConfigured) {
+        if (!isFieldAlreadyConfigured(editorInterface, field.id)) {
           options.push({
             id: `${contentType.sys.id}:${field.id}`,
             name: `${contentType.name} > ${field.name}`,
@@ -70,7 +121,7 @@ export const SelectContentTypeFields: React.FC<SelectContentTypeFieldsProps> = (
     });
 
     return options;
-  }, [contentTypesWithFields, appDefinitionId]);
+  }, [contentTypesWithFields, isFieldAlreadyConfigured]);
 
   // Filter options based on input
   const filteredOptions = useMemo(() => {
@@ -78,41 +129,30 @@ export const SelectContentTypeFields: React.FC<SelectContentTypeFieldsProps> = (
     return fieldOptions.filter((option) => option.name.toLowerCase().includes(inputValue.toLowerCase()));
   }, [fieldOptions, inputValue]);
 
-  // Get already configured items to show as pills
-  const alreadyConfiguredItems = useMemo(() => {
-    const items: Array<{ id: string; label: string }> = [];
-
-    contentTypesWithFields.forEach(({ contentType, editorInterface, fields }) => {
-      fields.forEach((field) => {
-        const control = editorInterface.controls?.find((c: any) => c.fieldId === field.id);
-        const isAlreadyConfigured = appDefinitionId ? control && control.widgetId === appDefinitionId : false;
-
-        if (isAlreadyConfigured) {
-          items.push({
-            id: `${contentType.sys.id}:${field.id}`,
-            label: `${contentType.name} > ${field.name}`,
-          });
-        }
-      });
-    });
-
-    return items;
-  }, [contentTypesWithFields, appDefinitionId]);
-
-  // Convert selected IDs to pills (only newly selected, not already configured)
+  // Convert selected IDs to pills (all selected items)
   const selectedPills = useMemo(() => {
     return selectedFieldIds
       .map((id) => {
+        // First check if it's in fieldOptions (newly selected, not already configured)
         const option = fieldOptions.find((opt) => opt.id === id);
-        return option ? { id: option.id, label: option.name } : null;
+        if (option) {
+          return { id: option.id, label: option.name };
+        }
+
+        // If not in fieldOptions, it might be an already configured item
+        // We need to find it in the content types data
+        for (const { contentType, editorInterface, fields } of contentTypesWithFields) {
+          for (const field of fields) {
+            if (`${contentType.sys.id}:${field.id}` === id) {
+              return { id, label: `${contentType.name} > ${field.name}` };
+            }
+          }
+        }
+
+        return null;
       })
       .filter(Boolean) as Array<{ id: string; label: string }>;
-  }, [selectedFieldIds, fieldOptions]);
-
-  // Combine already configured and newly selected pills
-  const allPills = useMemo(() => {
-    return [...alreadyConfiguredItems, ...selectedPills];
-  }, [alreadyConfiguredItems, selectedPills]);
+  }, [selectedFieldIds, fieldOptions, contentTypesWithFields]);
 
   const handleInputChange = useCallback(
     (value: string) => {
@@ -139,14 +179,11 @@ export const SelectContentTypeFields: React.FC<SelectContentTypeFieldsProps> = (
 
   const handlePillRemove = useCallback(
     (pillId: string) => {
-      // Only allow removing newly selected items, not already configured ones
-      const isAlreadyConfigured = alreadyConfiguredItems.some((item) => item.id === pillId);
-      if (!isAlreadyConfigured) {
-        const newSelection = selectedFieldIds.filter((id) => id !== pillId);
-        onSelectionChange(newSelection);
-      }
+      // Allow removing any selected item
+      const newSelection = selectedFieldIds.filter((id) => id !== pillId);
+      onSelectionChange(newSelection);
     },
-    [selectedFieldIds, onSelectionChange, alreadyConfiguredItems]
+    [selectedFieldIds, onSelectionChange]
   );
 
   // Intersection observer for infinite scroll
@@ -220,9 +257,9 @@ export const SelectContentTypeFields: React.FC<SelectContentTypeFieldsProps> = (
       />
 
       {/* Selected pills below autocomplete */}
-      {allPills.length > 0 && (
+      {selectedPills.length > 0 && (
         <Flex gap="spacingXs" flexWrap="wrap" marginTop="spacingS">
-          {allPills.map((pill) => (
+          {selectedPills.map((pill: { id: string; label: string }) => (
             <Pill key={pill.id} label={pill.label} onClose={() => handlePillRemove(pill.id)} testId={`pill-${pill.id}`} />
           ))}
         </Flex>
