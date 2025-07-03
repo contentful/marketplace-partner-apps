@@ -210,7 +210,7 @@ const ConfigScreen = () => {
           .
         </Paragraph>
 
-        <FormLabel htmlFor="content-type-fields">Select content type(s) and JSON fields</FormLabel>
+        <FormLabel htmlFor="content-type-fields">Select content type(s)</FormLabel>
 
         <SelectContentTypeFields
           cma={sdk.cma}
