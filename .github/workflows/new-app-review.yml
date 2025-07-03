@@ -2,17 +2,13 @@
 name: 'New App Review'
 
 "on":
-  pull_request:
+  pull_request_target:
     types:
       - opened
       - edited
       - synchronize
     branches:
       - 'main'
-
-permissions:
-  contents: read
-  pull-requests: write
 
 jobs:
   main:
@@ -23,9 +19,12 @@ jobs:
         with:
           # Fetch all history for all branches and tags
           fetch-depth: 0
+          # Ensure the workflow can access the forked repository's contents
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
       - uses: actions/setup-node@v3
         with:
-          node-version: 20
+          node-version: 18
           cache: 'npm'
       - name: Install Dependencies
         run: npm ci
