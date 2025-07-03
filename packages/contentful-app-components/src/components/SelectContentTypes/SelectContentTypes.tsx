@@ -15,7 +15,7 @@ export interface SelectContentTypesProps {
   renderEmptyState?: () => React.ReactNode;
 }
 
-export const SelectContentTypes: React.FC<SelectContentTypesProps> = ({
+export function SelectContentTypes({
   cma,
   selectedContentTypeIds,
   onSelectionChange,
@@ -23,7 +23,7 @@ export const SelectContentTypes: React.FC<SelectContentTypesProps> = ({
   disabled = false,
   onProgress,
   renderEmptyState,
-}) => {
+}: SelectContentTypesProps) {
   const [inputValue, setInputValue] = useState('');
   const [contentTypes, setContentTypes] = useState<ContentTypeProps[]>([]);
   const [loading, setLoading] = useState(true); // Start with loading true
@@ -163,4 +163,4 @@ export const SelectContentTypes: React.FC<SelectContentTypesProps> = ({
       {!loading && filteredOptions.length === 0 && inputValue && renderEmptyState && <div style={{ marginTop: '8px' }}>{renderEmptyState()}</div>}
     </div>
   );
-};
+}

@@ -22,7 +22,7 @@ export interface SelectContentTypeFieldsProps {
   ) => void;
 }
 
-export const SelectContentTypeFields: React.FC<SelectContentTypeFieldsProps> = ({
+export function SelectContentTypeFields({
   cma,
   selectedFieldIds,
   onSelectionChange,
@@ -35,9 +35,8 @@ export const SelectContentTypeFields: React.FC<SelectContentTypeFieldsProps> = (
   onProgress,
   renderEmptyState,
   onFieldDataChange,
-}) => {
+}: SelectContentTypeFieldsProps) {
   const [inputValue, setInputValue] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const lastItemRef = useRef<HTMLDivElement | null>(null);
   const hasAutoPopulatedRef = useRef<boolean>(false);
@@ -269,4 +268,4 @@ export const SelectContentTypeFields: React.FC<SelectContentTypeFieldsProps> = (
       {!loading && fieldOptions.length === 0 && renderEmptyState && <div style={{ marginTop: '8px' }}>{renderEmptyState()}</div>}
     </div>
   );
-};
+}
