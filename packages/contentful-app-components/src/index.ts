@@ -11,6 +11,7 @@ export { useContentTypeFields } from './hooks/useContentTypeFields';
 // Utilities
 export * from './utils/apiHelpers';
 export * from './utils/contentTypeFilters';
+export { groupFieldsByContentType } from './utils/contentTypeUtils';
 
 // Types
 export * from './types';

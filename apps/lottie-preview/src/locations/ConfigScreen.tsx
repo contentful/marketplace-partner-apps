@@ -4,7 +4,7 @@ import { useSDK } from '@contentful/react-apps-toolkit';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { styles } from './ConfigScreen.styles';
 import { ExternalLinkIcon } from '@contentful/f36-icons';
-import { SelectContentTypeFields, hasJsonFields, jsonFields } from '@contentful/app-components';
+import { SelectContentTypeFields, hasJsonFields, jsonFields, groupFieldsByContentType } from '@contentful/app-components';
 
 interface JsonField {
   contentTypeId: string;
@@ -42,17 +42,6 @@ const ConfigScreen = () => {
   useEffect(() => {
     sdk.app.onConfigure(onConfigure);
   }, [sdk, onConfigure]);
-
-  const groupFieldsByContentType = (fields: JsonField[]) => {
-    const grouped: Record<string, JsonField[]> = {};
-    fields.forEach((field) => {
-      if (!grouped[field.contentTypeId]) {
-        grouped[field.contentTypeId] = [];
-      }
-      grouped[field.contentTypeId].push(field);
-    });
-    return grouped;
-  };
 
   const resetOriginalState = () => {
     jsonFieldsRef.current = jsonFieldsRef.current.map((field) => ({
