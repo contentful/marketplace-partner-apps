@@ -125,15 +125,6 @@ export function SelectContentTypes({
 
   return (
     <div>
-      {/* Selected pills */}
-      {pills.length > 0 && (
-        <Flex gap="spacingXs" flexWrap="wrap" marginBottom="spacingS">
-          {pills.map((pill) => (
-            <Pill key={pill.id} label={pill.label} onClose={() => handlePillRemove(pill.id)} testId={`pill-${pill.id}`} />
-          ))}
-        </Flex>
-      )}
-
       {/* Autocomplete */}
       <Autocomplete
         items={filteredOptions}
@@ -158,6 +149,15 @@ export function SelectContentTypes({
           </Flex>
         )}
       />
+
+      {/* Selected pills below autocomplete */}
+      {pills.length > 0 && (
+        <Flex gap="spacingXs" flexWrap="wrap" marginTop="spacingS">
+          {pills.map((pill) => (
+            <Pill key={pill.id} label={pill.label} onClose={() => handlePillRemove(pill.id)} testId={`pill-${pill.id}`} />
+          ))}
+        </Flex>
+      )}
 
       {/* Empty state for filtered results */}
       {!loading && filteredOptions.length === 0 && inputValue && renderEmptyState && <div style={{ marginTop: '8px' }}>{renderEmptyState()}</div>}
