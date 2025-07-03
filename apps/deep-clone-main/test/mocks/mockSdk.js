@@ -1,9 +1,19 @@
+import { vi } from 'vitest';
+
 const mockSdk = {
   app: {
-    onConfigure: jest.fn(),
-    getParameters: jest.fn().mockReturnValueOnce({}),
-    setReady: jest.fn(),
-    getCurrentState: jest.fn(),
+    onConfigure: vi.fn(),
+    getParameters: vi.fn().mockReturnValueOnce({}),
+    setReady: vi.fn(),
+    getCurrentState: vi.fn(),
+  },
+  parameters: {
+    installation: {
+      cloneText: 'Copy',
+      cloneTextBefore: true,
+      automaticRedirect: true,
+      msToRedirect: 5000,
+    },
   },
   ids: {
     app: 'test-app',
