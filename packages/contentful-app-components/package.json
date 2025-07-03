@@ -8,13 +8,8 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "test": "vitest run",
-    "test:watch": "vitest"
-  },
-  "dependencies": {
-    "@contentful/f36-components": "^4.0.0",
-    "@contentful/f36-icons": "^4.0.0",
-    "@contentful/f36-tokens": "^4.0.0",
-    "contentful-management": "^10.0.0"
+    "test:watch": "vitest",
+    "install-ci": "npm install"
   },
   "peerDependencies": {
     "@contentful/app-sdk": "^4.0.0",
