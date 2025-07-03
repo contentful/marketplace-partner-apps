@@ -22,7 +22,12 @@
   },
   "devDependencies": {
     "@contentful/app-sdk": "^4.0.0",
+    "@contentful/f36-components": "^4.0.0",
+    "@contentful/f36-icons": "^4.0.0",
+    "@contentful/f36-tokens": "^4.0.0",
     "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "contentful-management": "^10.0.0",
     "typescript": "^5.0.0",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.0.0",
