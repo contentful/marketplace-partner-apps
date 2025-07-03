@@ -1,8 +1,8 @@
-import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Autocomplete, Pill, Text, Flex, Note, Spinner } from '@contentful/f36-components';
 import type { ConfigAppSDK } from '@contentful/app-sdk';
 import type { ContentTypeProps } from 'contentful-management';
-import { retryWithBackoff, withTimeout, fetchAllContentTypes } from '../../utils/apiHelpers';
+import { withTimeout, fetchAllContentTypes } from '../../utils/apiHelpers';
 import type { ContentTypeOption } from '../../types';
 
 export interface SelectContentTypesProps {
@@ -26,7 +26,7 @@ export const SelectContentTypes: React.FC<SelectContentTypesProps> = ({
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [contentTypes, setContentTypes] = useState<ContentTypeProps[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // Start with loading true
   const [error, setError] = useState<string | null>(null);
 
   // Fetch all content types on mount
@@ -43,7 +43,7 @@ export const SelectContentTypes: React.FC<SelectContentTypesProps> = ({
         setContentTypes(allContentTypes as ContentTypeProps[]);
       } catch (err: any) {
         console.error('Failed to fetch content types:', err);
-        setError(err.message);
+        setError(err.message || 'Failed to load content types');
       } finally {
         setLoading(false);
       }
@@ -118,6 +118,11 @@ export const SelectContentTypes: React.FC<SelectContentTypesProps> = ({
     );
   }
 
+  // Show empty state when no content types are available
+  if (contentTypes.length === 0 && renderEmptyState) {
+    return <div>{renderEmptyState()}</div>;
+  }
+
   return (
     <div>
       {/* Selected pills */}
@@ -154,7 +159,7 @@ export const SelectContentTypes: React.FC<SelectContentTypesProps> = ({
         )}
       />
 
-      {/* Empty state */}
+      {/* Empty state for filtered results */}
       {!loading && filteredOptions.length === 0 && inputValue && renderEmptyState && <div style={{ marginTop: '8px' }}>{renderEmptyState()}</div>}
     </div>
   );

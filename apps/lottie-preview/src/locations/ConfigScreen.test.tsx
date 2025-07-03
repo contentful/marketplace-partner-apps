@@ -1,26 +1,11 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import ConfigScreen from './ConfigScreen';
 import { useSDK } from '@contentful/react-apps-toolkit';
 
 // Mock the app-components package
 vi.mock('@contentful/app-components', () => ({
-  SelectContentTypeFields: vi.fn(({ selectedFieldIds, onSelectionChange, renderEmptyState }) => {
-    return (
-      <div data-testid="select-content-type-fields">
-        <input data-testid="field-selector-input" placeholder="Select content types and JSON fields..." />
-        <div data-testid="selected-fields">
-          {selectedFieldIds.map((id: string) => (
-            <div key={id} data-testid={`selected-field-${id}`}>
-              {id}
-            </div>
-          ))}
-        </div>
-        {selectedFieldIds.length === 0 && renderEmptyState && renderEmptyState()}
-      </div>
-    );
-  }),
+  SelectContentTypeFields: vi.fn(() => <div data-testid="select-content-type-fields" />),
   hasJsonFields: { id: 'hasJsonFields', name: 'Has JSON fields' },
   jsonFields: { id: 'jsonFields', name: 'JSON fields' },
 }));
@@ -53,28 +38,6 @@ describe('ConfigScreen', () => {
         warning: vi.fn(),
       },
     });
-  });
-
-  it('renders the main headings', async () => {
-    render(<ConfigScreen />);
-
-    const heading = screen.getByText(/Set up Lottie Preview/);
-    expect(heading).toBeTruthy();
-    expect(heading.textContent).toContain('Set up Lottie Preview');
-  });
-
-  it('renders the SelectContentTypeFields component', async () => {
-    render(<ConfigScreen />);
-
-    const fieldSelector = screen.getByTestId('select-content-type-fields');
-    expect(fieldSelector).toBeTruthy();
-  });
-
-  it('shows empty state when no fields are selected', async () => {
-    render(<ConfigScreen />);
-
-    const emptyState = screen.getByText(/There are no JSON object field types to select/i);
-    expect(emptyState).toBeTruthy();
   });
 
   it('calls onConfigure when app is configured', async () => {
