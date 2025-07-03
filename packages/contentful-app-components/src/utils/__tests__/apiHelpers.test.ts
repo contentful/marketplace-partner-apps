@@ -48,6 +48,10 @@ describe('retryWithBackoff', () => {
     const mockFn = vi.fn().mockRejectedValue(new Error('rate limit exceeded'));
 
     const promise = retryWithBackoff(mockFn);
+
+    // Handle the promise rejection to prevent unhandled promise rejection
+    const handlePromise = promise.catch(() => {});
+
     // Advance through all retries
     await vi.advanceTimersByTimeAsync(500); // 1st retry
     await vi.advanceTimersByTimeAsync(1000); // 2nd retry
@@ -55,12 +59,9 @@ describe('retryWithBackoff', () => {
 
     // Properly handle the rejected promise
     await expect(promise).rejects.toThrow('rate limit exceeded');
-    // Clean up any remaining promise state
-    try {
-      await promise;
-    } catch {
-      // Expected to throw, ignore
-    }
+
+    // Ensure the catch handler is awaited
+    await handlePromise;
   });
 
   it('should not retry on non-rate limit error', async () => {
@@ -113,24 +114,26 @@ describe('withTimeout', () => {
 
     const promise = withTimeout(mockPromise, 1000);
 
+    // Handle the promise rejection to prevent unhandled promise rejection
+    const handlePromise = promise.catch(() => {});
+
     // Advance time to trigger timeout
     await vi.advanceTimersByTimeAsync(1000);
 
     // Properly handle the rejected promise
     await expect(promise).rejects.toThrow('Operation timed out after 1000ms');
-    // Clean up any remaining promise state
-    try {
-      await promise;
-    } catch {
-      // Expected to throw, ignore
-    }
+
+    // Ensure the catch handler is awaited
+    await handlePromise;
   });
 
   it('should throw original error when promise rejects', async () => {
     const mockPromise = Promise.reject(new Error('network error'));
 
+    // Handle the promise rejection to prevent unhandled promise rejection
+    mockPromise.catch(() => {});
+
     await expect(withTimeout(mockPromise, 1000)).rejects.toThrow('network error');
-    await withTimeout(mockPromise, 1000).catch(() => {}); // Prevent unhandled rejection
   });
 });
 
