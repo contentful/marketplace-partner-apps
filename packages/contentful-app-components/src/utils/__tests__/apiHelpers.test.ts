@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { retryWithBackoff, withTimeout, debounce, processInBatches, BATCH_SIZE, RETRY_DELAY, MAX_RETRIES, OVERALL_TIMEOUT, BATCH_DELAY } from '../apiHelpers';
 
 // Mock timers
@@ -11,6 +11,10 @@ describe('retryWithBackoff', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('should return result on successful first attempt', async () => {
     const mockFn = vi.fn().mockResolvedValue('success');
 
@@ -21,32 +25,44 @@ describe('retryWithBackoff', () => {
   });
 
   it('should retry on rate limit error and eventually succeed', async () => {
-    const mockFn = vi.fn().mockRejectedValueOnce(new Error('rate limit exceeded')).mockRejectedValueOnce(new Error('429')).mockResolvedValue('success');
+    const mockFn = vi
+      .fn()
+      .mockRejectedValueOnce(new Error('rate limit exceeded'))
+      .mockRejectedValueOnce(new Error('rate limit exceeded'))
+      .mockRejectedValueOnce(new Error('rate limit exceeded'))
+      .mockResolvedValue('success');
 
     const promise = retryWithBackoff(mockFn);
-    await vi.advanceTimersByTimeAsync(500); // first retry
-    await vi.advanceTimersByTimeAsync(1000); // second retry
-    await expect(promise).resolves.toBe('success');
+
+    // Advance through all retries
+    await vi.advanceTimersByTimeAsync(500); // 1st retry
+    await vi.advanceTimersByTimeAsync(1000); // 2nd retry
+    await vi.advanceTimersByTimeAsync(2000); // 3rd retry
+
+    const result = await promise;
+    expect(result).toBe('success');
+    expect(mockFn).toHaveBeenCalledTimes(4); // 1 initial + 3 retries
   });
 
   it('should throw error after max retries', async () => {
     const mockFn = vi.fn().mockRejectedValue(new Error('rate limit exceeded'));
 
     const promise = retryWithBackoff(mockFn);
+
+    // Advance through all retries
     await vi.advanceTimersByTimeAsync(500); // 1st retry
     await vi.advanceTimersByTimeAsync(1000); // 2nd retry
     await vi.advanceTimersByTimeAsync(2000); // 3rd retry
+
     await expect(promise).rejects.toThrow('rate limit exceeded');
-    await promise.catch(() => {});
+    await promise.catch(() => {}); // Prevent unhandled rejection
   });
 
   it('should not retry on non-rate limit error', async () => {
     const mockFn = vi.fn().mockRejectedValue(new Error('network error'));
 
     await expect(retryWithBackoff(mockFn)).rejects.toThrow('network error');
-    try {
-      await retryWithBackoff(mockFn);
-    } catch (e) {}
+    expect(mockFn).toHaveBeenCalledTimes(1);
   });
 
   it('should use custom retry count and delay', async () => {
@@ -54,7 +70,8 @@ describe('retryWithBackoff', () => {
 
     const promise = retryWithBackoff(mockFn, 1, 1000);
     await vi.advanceTimersByTimeAsync(1000); // custom delay
-    await expect(promise).resolves.toBe('success');
+    const result = await promise;
+    expect(result).toBe('success');
   });
 
   it('should resolve immediately if no error', async () => {
@@ -68,7 +85,12 @@ describe('retryWithBackoff', () => {
 
 describe('withTimeout', () => {
   beforeEach(() => {
-    vi.clearAllTimers();
+    vi.useFakeTimers();
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it('should return result when promise resolves before timeout', async () => {
@@ -89,21 +111,25 @@ describe('withTimeout', () => {
     await vi.advanceTimersByTimeAsync(1000);
 
     await expect(promise).rejects.toThrow('Operation timed out after 1000ms');
-    await promise.catch(() => {});
+    await promise.catch(() => {}); // Prevent unhandled rejection
   });
 
   it('should throw original error when promise rejects', async () => {
     const mockPromise = Promise.reject(new Error('network error'));
 
     await expect(withTimeout(mockPromise, 1000)).rejects.toThrow('network error');
-    await withTimeout(mockPromise, 1000).catch(() => {});
+    await withTimeout(mockPromise, 1000).catch(() => {}); // Prevent unhandled rejection
   });
 });
 
 describe('debounce', () => {
   beforeEach(() => {
-    vi.clearAllTimers();
+    vi.useFakeTimers();
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it('should call function only once after delay', async () => {
