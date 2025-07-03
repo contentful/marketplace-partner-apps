@@ -6,7 +6,6 @@ import { styles } from './ConfigScreen.styles';
 import { ExternalLinkIcon } from '@contentful/f36-icons';
 import { SelectContentTypeFields, hasJsonFields, jsonFields } from '@contentful/app-components';
 
-// Interface to match the original JsonField structure
 interface JsonField {
   contentTypeId: string;
   contentTypeName: string;
@@ -22,7 +21,6 @@ const ConfigScreen = () => {
   const [error, setError] = useState<string | null>(null);
   const installTriggeredRef = useRef<boolean>(false);
 
-  // Track the original state like the main branch
   const jsonFieldsRef = useRef<JsonField[]>([]);
 
   const onConfigure = useCallback(async () => {
@@ -45,7 +43,6 @@ const ConfigScreen = () => {
     sdk.app.onConfigure(onConfigure);
   }, [sdk, onConfigure]);
 
-  // Group fields by content type (same as main branch)
   const groupFieldsByContentType = (fields: JsonField[]) => {
     const grouped: Record<string, JsonField[]> = {};
     fields.forEach((field) => {
@@ -57,7 +54,6 @@ const ConfigScreen = () => {
     return grouped;
   };
 
-  // Reset original state (same as main branch)
   const resetOriginalState = () => {
     jsonFieldsRef.current = jsonFieldsRef.current.map((field) => ({
       ...field,
@@ -72,7 +68,6 @@ const ConfigScreen = () => {
       try {
         const fieldsByContentType = groupFieldsByContentType(jsonFieldsRef.current);
 
-        // Only process content types that have changes (same logic as main branch)
         const changedContentTypes = Object.entries(fieldsByContentType).filter(([_, fields]) =>
           fields.some((field) => field.isEnabled !== field.originalEnabled)
         );
@@ -83,7 +78,6 @@ const ConfigScreen = () => {
           return;
         }
 
-        // Process in batches of 10 to avoid rate limits (same as main branch)
         const BATCH_SIZE = 10;
         const results = [];
 
@@ -106,7 +100,6 @@ const ConfigScreen = () => {
                       widgetNamespace: 'app',
                     });
                   } else {
-                    // For unselected fields, set them back to the default Object widget
                     updatedControls.push({
                       fieldId: field.fieldId,
                       widgetId: 'objectEditor',
@@ -115,14 +108,12 @@ const ConfigScreen = () => {
                   }
                 }
 
-                // Add any remaining controls that weren't associated with our JSON fields
                 for (const control of existingControls) {
                   if (!fields.some((f) => f.fieldId === control.fieldId)) {
                     updatedControls.push(control);
                   }
                 }
 
-                // Only update editor interface if there are changes
                 if (JSON.stringify(existingControls) !== JSON.stringify(updatedControls)) {
                   await sdk.cma.editorInterface.update(
                     { contentTypeId },
@@ -144,13 +135,11 @@ const ConfigScreen = () => {
 
           results.push(...batchResults);
 
-          // Add a small delay between batches to avoid rate limits
           if (i + BATCH_SIZE < changedContentTypes.length) {
             await new Promise((resolve) => setTimeout(resolve, 1000));
           }
         }
 
-        // Check if any updates failed
         const failures = results.filter((result) => result.status === 'rejected');
         if (failures.length > 0) {
           console.error('Some editor interface updates failed:', failures);
@@ -166,15 +155,12 @@ const ConfigScreen = () => {
     });
   }, [sdk]);
 
-  // Handle selection changes from SelectContentTypeFields
   const handleSelectionChange = (newSelectedFieldIds: string[]) => {
     setSelectedFieldIds(newSelectedFieldIds);
   };
 
-  // Handle field data changes from SelectContentTypeFields
   const handleFieldDataChange = useCallback(
     (fieldData: Array<{ contentTypeId: string; contentTypeName: string; fieldId: string; fieldName: string; isAlreadyConfigured: boolean }>) => {
-      // Update jsonFieldsRef with the actual field data
       const jsonFields: JsonField[] = fieldData.map(({ contentTypeId, contentTypeName, fieldId, fieldName, isAlreadyConfigured }) => ({
         contentTypeId,
         contentTypeName,
@@ -194,7 +180,6 @@ const ConfigScreen = () => {
       try {
         setError(null);
 
-        // Set app as ready immediately since SelectContentTypeFields handles its own loading
         sdk.app.setReady();
       } catch (err: any) {
         setError(err.message || 'Failed to load configuration. Please refreshing the page.');
@@ -203,9 +188,8 @@ const ConfigScreen = () => {
     })();
   }, [sdk]);
 
-  // Show error state
   if (error) {
-    return null; // Default to contentful config page error state
+    return null;
   }
 
   return (
@@ -244,9 +228,9 @@ const ConfigScreen = () => {
           selectedFieldIds={selectedFieldIds}
           onSelectionChange={handleSelectionChange}
           onFieldDataChange={handleFieldDataChange}
-          contentTypeFilters={[hasJsonFields]} // Only content types with JSON fields
-          fieldFilters={[jsonFields]} // Only JSON fields
-          appDefinitionId={sdk.ids.app} // For checking already configured fields
+          contentTypeFilters={[hasJsonFields]}
+          fieldFilters={[jsonFields]}
+          appDefinitionId={sdk.ids.app}
           placeholder="Select content types and JSON fields..."
           renderEmptyState={() => (
             <Note variant="neutral" className={styles.note}>
