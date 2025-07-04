@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.26](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.25...image-hotspot-creator-v1.0.26) (2025-07-04)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.80.4 to 4.80.5 in /apps/imageHotspotCreator in the production-dependencies group ([#5455](https://github.com/contentful/marketplace-partner-apps/issues/5455)) ([ea17faf](https://github.com/contentful/marketplace-partner-apps/commit/ea17faf731e560b15809424cad5d41eef40a08d5))
+* **deps:** bump contentful-management from 11.54.0 to 11.54.1 in /apps/imageHotspotCreator in the production-dependencies group ([#5371](https://github.com/contentful/marketplace-partner-apps/issues/5371)) ([a78d64d](https://github.com/contentful/marketplace-partner-apps/commit/a78d64df8d40ea3ca8c76da441c0032ebfa144b2))
+
 ## [1.0.25](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.24...image-hotspot-creator-v1.0.25) (2025-07-02)
 
 
