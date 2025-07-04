@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.21](https://github.com/contentful/marketplace-partner-apps/compare/wix-contentful-app-v1.0.20...wix-contentful-app-v1.0.21) (2025-07-04)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.80.4 to 4.80.5 in /apps/wix in the production-dependencies group ([#5437](https://github.com/contentful/marketplace-partner-apps/issues/5437)) ([0dbac82](https://github.com/contentful/marketplace-partner-apps/commit/0dbac82576acc4f8d083eb900a8a50fc9cf3b258))
+* **deps:** bump contentful-management from 11.54.0 to 11.54.1 in /apps/wix in the production-dependencies group ([#5378](https://github.com/contentful/marketplace-partner-apps/issues/5378)) ([9ce4d0a](https://github.com/contentful/marketplace-partner-apps/commit/9ce4d0a59220e62b514524469c3aed1d2064a7a9))
+
 ## [1.0.20](https://github.com/contentful/marketplace-partner-apps/compare/wix-contentful-app-v1.0.19...wix-contentful-app-v1.0.20) (2025-07-02)
 
 
