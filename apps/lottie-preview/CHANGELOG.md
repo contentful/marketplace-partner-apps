@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.7...lottie-preview-v1.0.8) (2025-07-04)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.80.4 to 4.80.5 in /apps/lottie-preview in the production-dependencies group ([#5465](https://github.com/contentful/marketplace-partner-apps/issues/5465)) ([871e143](https://github.com/contentful/marketplace-partner-apps/commit/871e143348651376fc717224f1c280b46f8c3649))
+* **deps:** bump @lottiefiles/dotlottie-react from 0.13.5 to 0.14.2 in /apps/lottie-preview in the production-dependencies group ([#5411](https://github.com/contentful/marketplace-partner-apps/issues/5411)) ([d05c4af](https://github.com/contentful/marketplace-partner-apps/commit/d05c4af8037f734a1fa105e5cd6d1504641c0e30))
+
 ## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.6...lottie-preview-v1.0.7) (2025-07-02)
 
 
