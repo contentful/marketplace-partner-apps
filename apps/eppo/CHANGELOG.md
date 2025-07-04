@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/eppo-contentful-app-v1.0.6...eppo-contentful-app-v1.0.7) (2025-07-04)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group in /apps/eppo with 4 updates ([#5453](https://github.com/contentful/marketplace-partner-apps/issues/5453)) ([fb8aadf](https://github.com/contentful/marketplace-partner-apps/commit/fb8aadf83526e6b5df0da82a0bb995ecc4ec253b))
+
 ## [1.0.6](https://github.com/contentful/marketplace-partner-apps/compare/eppo-contentful-app-v1.0.5...eppo-contentful-app-v1.0.6) (2025-07-02)
 
 
