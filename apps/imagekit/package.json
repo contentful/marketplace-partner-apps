@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "^4.17.1",
+    "@contentful/dam-app-base": "^2.0.0",
     "@contentful/f36-components": "4.81.1",
     "@contentful/react-apps-toolkit": "^1.2.16",
     "@dnd-kit/core": "^6.3.1",
@@ -52,6 +53,7 @@
     "dev": "vite",
     "preview": "vite preview",
     "create-app-definition": "contentful-app-scripts create-app-definition",
+    "add-locations": "contentful-app-scripts add-locations",
     "upload": "contentful-app-scripts upload --bundle-dir ./build",
     "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN",
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 6ayotuRVOE8Fcw2SI2FFdE --token ${CONTENTFUL_CMA_TOKEN}"
