@@ -50,7 +50,8 @@
     "test": "vitest",
     "lint": "eslint src",
     "dev": "vite",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "contentful-app-scripts deploy --definition-id=6ayotuRVOE8Fcw2SI2FFdE --bundle-folder=build"
   },
   "browserslist": {
     "production": [
