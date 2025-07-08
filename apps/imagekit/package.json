@@ -1,0 +1,62 @@
+{
+  "name": "imagekit-contentful",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@contentful/app-sdk": "^4.17.1",
+    "@contentful/dam-app-base": "^2.0.0",
+    "@contentful/f36-components": "^4.4.1",
+    "@contentful/react-apps-toolkit": "^1.2.16",
+    "@emotion/css": "^11.13.5",
+    "@emotion/react": "^11.14.0",
+    "@imagekit/react": "^5.0.1",
+    "file-size": "^1.0.0",
+    "imagekit-media-library-widget": "^2.1.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@contentful/app-scripts": "^2.3.0",
+    "@tsconfig/vite-react": "^3.4.0",
+    "@types/file-size": "^1.0.3",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@typescript-eslint/eslint-plugin": "^8.16.0",
+    "@typescript-eslint/parser": "^8.16.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "cross-env": "7.0.3",
+    "eslint": "^9.27.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "prettier": "^3.4.1",
+    "typescript": "^5.7.2",
+    "vite": "^6.2.3"
+  },
+  "scripts": {
+    "start": "vite",
+    "install-ci": "npm ci",
+    "build": "tsc && vite build",
+    "lint": "eslint src",
+    "dev": "vite",
+    "preview": "vite preview",
+    "create-app-definition": "contentful-app-scripts create-app-definition",
+    "add-locations": "contentful-app-scripts add-locations",
+    "upload": "contentful-app-scripts upload --bundle-dir ./build",
+    "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "homepage": "."
+}
