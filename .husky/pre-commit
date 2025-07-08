@@ -1,6 +1,32 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+# Setup nvm if it exists (common issue with non-interactive shells)
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+fi
+
+# Try to find npm/npx in common locations if not in PATH
+if ! command -v npx >/dev/null 2>&1; then
+  # Check nvm managed node
+  if [ -d "$HOME/.nvm/versions/node" ]; then
+    # Find the current or latest node version
+    NODE_VERSION=$(ls -1 "$HOME/.nvm/versions/node" | sort -V | tail -n1)
+    if [ -n "$NODE_VERSION" ] && [ -f "$HOME/.nvm/versions/node/$NODE_VERSION/bin/npx" ]; then
+      export PATH="$HOME/.nvm/versions/node/$NODE_VERSION/bin:$PATH"
+    fi
+  fi
+fi
+
+# Check if npx is available after trying to set it up
+if ! command -v npx >/dev/null 2>&1; then
+  echo "ERROR: npx not found - cannot run pre-commit checks"
+  echo "Please install Node.js/npm to enable validation"
+  echo "If you need to bypass this check temporarily, use: git commit --no-verify"
+  exit 1
+fi
+
 # Get staged JSON files
 STAGED_JSON_FILES=$(git diff --cached --name-only --diff-filter=ACM "*.json")
 
