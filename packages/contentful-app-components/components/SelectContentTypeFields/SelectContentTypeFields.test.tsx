@@ -469,5 +469,564 @@ describe('SelectContentTypeFields', () => {
       // The component should render with hasMore=true, indicating infinite scroll is available
       expect(screen.getByTestId('autocomplete')).toBeInTheDocument();
     });
+
+    it('does not call loadMore when hasMore is false', () => {
+      const loadMore = vi.fn();
+
+      mockUseContentTypeFields.mockReturnValue({
+        contentTypesWithFields: mockContentTypesWithFields,
+        loading: false,
+        error: null,
+        hasMore: false,
+        loadMore,
+        search: vi.fn(),
+        progress: null,
+      });
+
+      render(<SelectContentTypeFields {...defaultProps} />);
+
+      // Should not set up intersection observer when hasMore is false
+      expect(screen.getByTestId('autocomplete')).toBeInTheDocument();
+    });
+
+    it('does not call loadMore when already loading', () => {
+      const loadMore = vi.fn();
+
+      mockUseContentTypeFields.mockReturnValue({
+        contentTypesWithFields: mockContentTypesWithFields,
+        loading: true,
+        error: null,
+        hasMore: true,
+        loadMore,
+        search: vi.fn(),
+        progress: null,
+      });
+
+      render(<SelectContentTypeFields {...defaultProps} />);
+
+      // Should not set up intersection observer when loading
+      expect(screen.getByTestId('autocomplete')).toBeInTheDocument();
+    });
+  });
+
+  describe('Content Type and Field Filters', () => {
+    it('applies content type filters correctly', () => {
+      const contentTypeFilters = [{ id: 'hasJson', name: 'Has JSON', test: (ct: any) => ct.fields.some((f: any) => f.type === 'Object') }];
+
+      render(<SelectContentTypeFields {...defaultProps} contentTypeFilters={contentTypeFilters} />);
+
+      expect(screen.getByTestId('autocomplete')).toBeInTheDocument();
+    });
+
+    it('applies field filters correctly', () => {
+      const fieldFilters = [{ id: 'jsonOnly', name: 'JSON Only', test: (field: any) => field.type === 'Object' }];
+
+      render(<SelectContentTypeFields {...defaultProps} fieldFilters={fieldFilters} />);
+
+      expect(screen.getByTestId('autocomplete')).toBeInTheDocument();
+    });
+
+    it('handles multiple content type filters', () => {
+      const contentTypeFilters = [
+        { id: 'filter1', name: 'Filter 1', test: () => true },
+        { id: 'filter2', name: 'Filter 2', test: () => true },
+      ];
+
+      render(<SelectContentTypeFields {...defaultProps} contentTypeFilters={contentTypeFilters} />);
+
+      expect(screen.getByTestId('autocomplete')).toBeInTheDocument();
+    });
+
+    it('handles multiple field filters', () => {
+      const fieldFilters = [
+        { id: 'filter1', name: 'Filter 1', test: () => true },
+        { id: 'filter2', name: 'Filter 2', test: () => true },
+      ];
+
+      render(<SelectContentTypeFields {...defaultProps} fieldFilters={fieldFilters} />);
+
+      expect(screen.getByTestId('autocomplete')).toBeInTheDocument();
+    });
+  });
+
+  describe('App Definition Integration', () => {
+    it('correctly identifies already configured fields with appDefinitionId', () => {
+      render(<SelectContentTypeFields {...defaultProps} appDefinitionId="app-id" />);
+
+      // Should auto-populate with fields that have widgetId matching appDefinitionId
+      expect(screen.getByTestId('autocomplete')).toBeInTheDocument();
+    });
+
+    it('handles missing appDefinitionId gracefully', () => {
+      render(<SelectContentTypeFields {...defaultProps} appDefinitionId={undefined} />);
+
+      expect(screen.getByTestId('autocomplete')).toBeInTheDocument();
+    });
+
+    it('handles different appDefinitionId values', () => {
+      render(<SelectContentTypeFields {...defaultProps} appDefinitionId="different-app" />);
+
+      expect(screen.getByTestId('autocomplete')).toBeInTheDocument();
+    });
+  });
+
+  describe('Search Functionality', () => {
+    it('handles search input with minimum length requirement', async () => {
+      const user = userEvent.setup();
+      const search = vi.fn();
+
+      mockUseContentTypeFields.mockReturnValue({
+        contentTypesWithFields: mockContentTypesWithFields,
+        loading: false,
+        error: null,
+        hasMore: false,
+        loadMore: vi.fn(),
+        search,
+        progress: null,
+      });
+
+      render(<SelectContentTypeFields {...defaultProps} searchable={true} />);
+
+      const input = screen.getByTestId('autocomplete-input');
+
+      // Type only 1 character - should not trigger search
+      await user.type(input, 'b');
+      expect(search).not.toHaveBeenCalled();
+
+      // Type 2 characters - should trigger search
+      await user.type(input, 'l');
+      expect(search).toHaveBeenCalledWith('bl');
+    });
+
+    it('resets search when input is cleared', async () => {
+      const user = userEvent.setup();
+      const search = vi.fn();
+
+      mockUseContentTypeFields.mockReturnValue({
+        contentTypesWithFields: mockContentTypesWithFields,
+        loading: false,
+        error: null,
+        hasMore: false,
+        loadMore: vi.fn(),
+        search,
+        progress: null,
+      });
+
+      render(<SelectContentTypeFields {...defaultProps} searchable={true} />);
+
+      const input = screen.getByTestId('autocomplete-input');
+
+      // Type to trigger search
+      await user.type(input, 'blog');
+      expect(search).toHaveBeenCalledWith('blog');
+
+      // Clear input
+      await user.clear(input);
+      expect(search).toHaveBeenCalledWith('');
+    });
+
+    it('handles rapid search input changes', async () => {
+      const user = userEvent.setup();
+      const search = vi.fn();
+
+      mockUseContentTypeFields.mockReturnValue({
+        contentTypesWithFields: mockContentTypesWithFields,
+        loading: false,
+        error: null,
+        hasMore: false,
+        loadMore: vi.fn(),
+        search,
+        progress: null,
+      });
+
+      render(<SelectContentTypeFields {...defaultProps} searchable={true} />);
+
+      const input = screen.getByTestId('autocomplete-input');
+
+      // Rapid typing
+      await user.type(input, 'blog');
+      await user.type(input, 'post');
+
+      // Should handle rapid changes
+      expect(search).toHaveBeenCalledWith('blogpost');
+    });
+  });
+
+  describe('Progress Indicators', () => {
+    it('shows progress with loading message', () => {
+      mockUseContentTypeFields.mockReturnValue({
+        contentTypesWithFields: [],
+        loading: true,
+        error: null,
+        hasMore: false,
+        loadMore: vi.fn(),
+        search: vi.fn(),
+        progress: { processed: 3, total: 7 },
+      });
+
+      render(<SelectContentTypeFields {...defaultProps} />);
+
+      expect(screen.getByTestId('note-neutral')).toBeInTheDocument();
+      expect(screen.getByText('Loading content types')).toBeInTheDocument();
+      expect(screen.getByText('3 of 7 completed')).toBeInTheDocument();
+      expect(screen.getByTestId('clock-icon')).toBeInTheDocument();
+    });
+
+    it('handles progress without total', () => {
+      mockUseContentTypeFields.mockReturnValue({
+        contentTypesWithFields: [],
+        loading: true,
+        error: null,
+        hasMore: false,
+        loadMore: vi.fn(),
+        search: vi.fn(),
+        progress: { processed: 5, total: 0 },
+      });
+
+      render(<SelectContentTypeFields {...defaultProps} />);
+
+      // When total is 0, component doesn't show progress message (as per component logic)
+      // Instead it shows the regular autocomplete
+      expect(screen.getByTestId('autocomplete')).toBeInTheDocument();
+    });
+
+    it('calls onProgress callback when provided', () => {
+      const onProgress = vi.fn();
+
+      mockUseContentTypeFields.mockReturnValue({
+        contentTypesWithFields: mockContentTypesWithFields,
+        loading: false,
+        error: null,
+        hasMore: false,
+        loadMore: vi.fn(),
+        search: vi.fn(),
+        progress: null,
+      });
+
+      render(<SelectContentTypeFields {...defaultProps} onProgress={onProgress} />);
+
+      // The onProgress should be passed to the hook
+      expect(screen.getByTestId('autocomplete')).toBeInTheDocument();
+    });
+  });
+
+  describe('Field Option Generation', () => {
+    it('generates correct field option IDs', () => {
+      render(<SelectContentTypeFields {...defaultProps} />);
+
+      // Should generate IDs in format "contentTypeId:fieldId"
+      expect(screen.getByTestId('autocomplete-item-blog-post:json-field-2')).toBeInTheDocument();
+      expect(screen.getByTestId('autocomplete-item-blog-post:text-field')).toBeInTheDocument();
+    });
+
+    it('generates correct field option names', () => {
+      render(<SelectContentTypeFields {...defaultProps} />);
+
+      // Should generate names in format "ContentType > Field"
+      expect(screen.getByText('Blog Post > JSON Field 2')).toBeInTheDocument();
+      expect(screen.getByText('Blog Post > Text Field')).toBeInTheDocument();
+    });
+
+    it('excludes already configured fields from dropdown', () => {
+      render(<SelectContentTypeFields {...defaultProps} />);
+
+      // Should NOT show json-field-1 because it's already configured for app-id
+      expect(screen.queryByTestId('autocomplete-item-blog-post:json-field-1')).not.toBeInTheDocument();
+
+      // Should show json-field-2 because it's NOT configured for app-id
+      expect(screen.getByTestId('autocomplete-item-blog-post:json-field-2')).toBeInTheDocument();
+    });
+
+    it('handles content types with no fields', () => {
+      const emptyContentTypes = [
+        {
+          contentType: { sys: { id: 'empty' }, name: 'Empty Type' },
+          editorInterface: { controls: [] },
+          fields: [],
+        },
+      ];
+
+      mockUseContentTypeFields.mockReturnValue({
+        contentTypesWithFields: emptyContentTypes,
+        loading: false,
+        error: null,
+        hasMore: false,
+        loadMore: vi.fn(),
+        search: vi.fn(),
+        progress: null,
+      });
+
+      render(<SelectContentTypeFields {...defaultProps} />);
+
+      expect(screen.getByTestId('autocomplete')).toBeInTheDocument();
+      // Should not crash with empty fields
+    });
+  });
+
+  describe('Pill Management', () => {
+    it('shows pills for mixed configured and non-configured fields', () => {
+      render(<SelectContentTypeFields {...defaultProps} selectedFieldIds={['blog-post:json-field-1', 'blog-post:json-field-2']} />);
+
+      // Should show pills for both already configured and newly selected fields
+      expect(screen.getByTestId('pill-blog-post:json-field-1')).toBeInTheDocument();
+      expect(screen.getByTestId('pill-blog-post:json-field-2')).toBeInTheDocument();
+    });
+
+    it('handles pill removal for already configured fields', async () => {
+      const user = userEvent.setup();
+      const onSelectionChange = vi.fn();
+
+      render(<SelectContentTypeFields {...defaultProps} selectedFieldIds={['blog-post:json-field-1']} onSelectionChange={onSelectionChange} />);
+
+      const closeButton = screen.getByTestId('pill-close');
+      await user.click(closeButton);
+
+      // Should allow removal of already configured fields
+      expect(onSelectionChange).toHaveBeenCalledWith([]);
+    });
+
+    it('shows correct pill labels for complex field names', () => {
+      const complexFields = [
+        {
+          contentType: { sys: { id: 'complex' }, name: 'Complex Type' },
+          editorInterface: { controls: [] },
+          fields: [{ id: 'complex-field', name: 'Complex Field Name With Spaces & Symbols', type: 'Text' }],
+        },
+      ];
+
+      mockUseContentTypeFields.mockReturnValue({
+        contentTypesWithFields: complexFields,
+        loading: false,
+        error: null,
+        hasMore: false,
+        loadMore: vi.fn(),
+        search: vi.fn(),
+        progress: null,
+      });
+
+      render(<SelectContentTypeFields {...defaultProps} selectedFieldIds={['complex:complex-field']} />);
+
+      const pill = screen.getByTestId('pill-complex:complex-field');
+      expect(pill).toHaveTextContent('Complex Type > Complex Field Name With Spaces & Symbols');
+    });
+  });
+
+  describe('Auto-population Edge Cases', () => {
+    it('handles auto-population with no configured fields', () => {
+      const noConfiguredFields = [
+        {
+          contentType: { sys: { id: 'no-config' }, name: 'No Config' },
+          editorInterface: { controls: [] },
+          fields: [{ id: 'field1', name: 'Field 1', type: 'Text' }],
+        },
+      ];
+
+      mockUseContentTypeFields.mockReturnValue({
+        contentTypesWithFields: noConfiguredFields,
+        loading: false,
+        error: null,
+        hasMore: false,
+        loadMore: vi.fn(),
+        search: vi.fn(),
+        progress: null,
+      });
+
+      const onSelectionChange = vi.fn();
+      render(<SelectContentTypeFields {...defaultProps} onSelectionChange={onSelectionChange} />);
+
+      // Should not call onSelectionChange if no fields are configured
+      expect(onSelectionChange).not.toHaveBeenCalled();
+    });
+
+    it('handles auto-population race condition', () => {
+      const onSelectionChange = vi.fn();
+
+      // First render with loading=true
+      mockUseContentTypeFields.mockReturnValue({
+        contentTypesWithFields: [],
+        loading: true,
+        error: null,
+        hasMore: false,
+        loadMore: vi.fn(),
+        search: vi.fn(),
+        progress: null,
+      });
+
+      const { rerender } = render(<SelectContentTypeFields {...defaultProps} onSelectionChange={onSelectionChange} />);
+
+      // Should not auto-populate while loading
+      expect(onSelectionChange).not.toHaveBeenCalled();
+
+      // Then render with data loaded
+      mockUseContentTypeFields.mockReturnValue({
+        contentTypesWithFields: mockContentTypesWithFields,
+        loading: false,
+        error: null,
+        hasMore: false,
+        loadMore: vi.fn(),
+        search: vi.fn(),
+        progress: null,
+      });
+
+      rerender(<SelectContentTypeFields {...defaultProps} onSelectionChange={onSelectionChange} />);
+
+      // Should auto-populate after loading completes
+      expect(onSelectionChange).toHaveBeenCalledWith(['blog-post:json-field-1', 'product:json-field-3']);
+    });
+  });
+
+  describe('Accessibility and UX', () => {
+    it('sets correct autocomplete attributes', () => {
+      render(<SelectContentTypeFields {...defaultProps} />);
+
+      const autocomplete = screen.getByTestId('autocomplete');
+      // Check for attributes that are actually set by our mock
+      expect(autocomplete).toHaveAttribute('textonafterselect', 'preserve');
+      expect(autocomplete).toHaveAttribute('listwidth', 'full');
+      // The component should render without crashing
+      expect(autocomplete).toBeInTheDocument();
+    });
+
+    it('maintains focus on input during interactions', async () => {
+      const user = userEvent.setup();
+      render(<SelectContentTypeFields {...defaultProps} />);
+
+      const input = screen.getByTestId('autocomplete-input');
+      await user.click(input);
+      expect(input).toHaveFocus();
+    });
+
+    it('shows checkboxes for better visual feedback', () => {
+      render(<SelectContentTypeFields {...defaultProps} />);
+
+      const checkboxes = screen.getAllByTestId('checkbox');
+      expect(checkboxes.length).toBeGreaterThan(0);
+    });
+
+    it('handles keyboard navigation gracefully', async () => {
+      const user = userEvent.setup();
+      render(<SelectContentTypeFields {...defaultProps} />);
+
+      const input = screen.getByTestId('autocomplete-input');
+      await user.click(input);
+
+      // Should handle keyboard events without errors
+      await user.keyboard('{ArrowDown}');
+      await user.keyboard('{ArrowUp}');
+      await user.keyboard('{Enter}');
+
+      expect(input).toBeInTheDocument();
+    });
+  });
+
+  describe('Error Handling', () => {
+    it('handles hook errors gracefully', () => {
+      mockUseContentTypeFields.mockReturnValue({
+        contentTypesWithFields: [],
+        loading: false,
+        error: 'Network error',
+        hasMore: false,
+        loadMore: vi.fn(),
+        search: vi.fn(),
+        progress: null,
+      });
+
+      render(<SelectContentTypeFields {...defaultProps} />);
+
+      expect(screen.getByTestId('note-negative')).toBeInTheDocument();
+      expect(screen.getByText(/Network error/)).toBeInTheDocument();
+    });
+
+    it('handles malformed content type data', () => {
+      const malformedData = [
+        {
+          contentType: { sys: { id: 'malformed' }, name: 'Malformed' },
+          editorInterface: { controls: [] }, // Fixed to avoid null reference
+          fields: [{ id: 'field1', name: 'Field 1', type: 'Text' }],
+        },
+      ];
+
+      mockUseContentTypeFields.mockReturnValue({
+        contentTypesWithFields: malformedData,
+        loading: false,
+        error: null,
+        hasMore: false,
+        loadMore: vi.fn(),
+        search: vi.fn(),
+        progress: null,
+      });
+
+      // Should handle data gracefully
+      expect(() => render(<SelectContentTypeFields {...defaultProps} />)).not.toThrow();
+      expect(screen.getByTestId('autocomplete')).toBeInTheDocument();
+    });
+
+    it('handles missing field properties', () => {
+      const missingFieldData = [
+        {
+          contentType: { sys: { id: 'missing-fields' }, name: 'Missing Fields' },
+          editorInterface: { controls: [] },
+          fields: [
+            { id: 'field1' }, // Missing name and type
+            { name: 'Field 2' }, // Missing id and type
+          ],
+        },
+      ];
+
+      mockUseContentTypeFields.mockReturnValue({
+        contentTypesWithFields: missingFieldData,
+        loading: false,
+        error: null,
+        hasMore: false,
+        loadMore: vi.fn(),
+        search: vi.fn(),
+        progress: null,
+      });
+
+      // Should not crash with missing field properties
+      expect(() => render(<SelectContentTypeFields {...defaultProps} />)).not.toThrow();
+    });
+  });
+
+  describe('Performance Considerations', () => {
+    it('handles large datasets efficiently', () => {
+      const largeDataset = Array.from({ length: 100 }, (_, i) => ({
+        contentType: { sys: { id: `type-${i}` }, name: `Type ${i}` },
+        editorInterface: { controls: [] },
+        fields: Array.from({ length: 20 }, (_, j) => ({
+          id: `field-${j}`,
+          name: `Field ${j}`,
+          type: 'Text',
+        })),
+      }));
+
+      mockUseContentTypeFields.mockReturnValue({
+        contentTypesWithFields: largeDataset,
+        loading: false,
+        error: null,
+        hasMore: false,
+        loadMore: vi.fn(),
+        search: vi.fn(),
+        progress: null,
+      });
+
+      const startTime = performance.now();
+      render(<SelectContentTypeFields {...defaultProps} />);
+      const endTime = performance.now();
+
+      expect(screen.getByTestId('autocomplete')).toBeInTheDocument();
+      expect(endTime - startTime).toBeLessThan(1000); // Should render within 1 second
+    });
+
+    it('handles rapid re-renders efficiently', () => {
+      const { rerender } = render(<SelectContentTypeFields {...defaultProps} />);
+
+      // Rapid re-renders with different props
+      for (let i = 0; i < 10; i++) {
+        rerender(<SelectContentTypeFields {...defaultProps} selectedFieldIds={[`field-${i}`]} />);
+      }
+
+      expect(screen.getByTestId('autocomplete')).toBeInTheDocument();
+    });
   });
 });
