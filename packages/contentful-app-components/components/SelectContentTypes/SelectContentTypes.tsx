@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Autocomplete, Pill, Text, Flex, Note, Spinner } from '@contentful/f36-components';
 import type { ConfigAppSDK } from '@contentful/app-sdk';
 import type { ContentTypeProps } from 'contentful-management';
-import { withTimeout, fetchAllContentTypes } from '../../utils/apiHelpers';
+import { withTimeout, fetchAllContentTypes } from '../../utils/apiUtils';
 import type { ContentTypeOption } from '../../types';
 
 export interface SelectContentTypesProps {

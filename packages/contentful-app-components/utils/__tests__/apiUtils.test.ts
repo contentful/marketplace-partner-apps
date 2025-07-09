@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { retryWithBackoff, withTimeout, debounce, processInBatches, BATCH_SIZE, RETRY_DELAY, MAX_RETRIES, OVERALL_TIMEOUT, BATCH_DELAY } from '../apiHelpers';
+import { retryWithBackoff, withTimeout, debounce, processInBatches, BATCH_SIZE, RETRY_DELAY, MAX_RETRIES, OVERALL_TIMEOUT, BATCH_DELAY } from '../apiUtils';
 
 // Mock timers
 vi.useFakeTimers();

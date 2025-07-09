@@ -1,7 +1,7 @@
 // Mock fetchAllContentTypes and withTimeout before importing the component
-vi.mock('../../utils/apiHelpers', () => {
+vi.mock('../../utils/apiUtils', () => {
   return {
-    ...vi.importActual('../../utils/apiHelpers'),
+    ...vi.importActual('../../utils/apiUtils'),
     fetchAllContentTypes: vi.fn(),
     withTimeout: vi.fn((promise) => promise),
   };
@@ -13,7 +13,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import { SelectContentTypes } from './SelectContentTypes';
-import { fetchAllContentTypes, withTimeout } from '../../utils/apiHelpers';
+import { fetchAllContentTypes, withTimeout } from '../../utils/apiUtils';
 
 // Mock F36 components
 vi.mock('@contentful/f36-components', () => ({

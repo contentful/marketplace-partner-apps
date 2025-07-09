@@ -2,8 +2,8 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import type { ConfigAppSDK } from '@contentful/app-sdk';
 import type { ContentTypeProps } from 'contentful-management';
 import type { UseContentTypesOptions, UseContentTypesReturn, ContentTypesResult, ContentTypeFilter, PaginationOptions } from '../types';
-import { retryWithBackoff, withTimeout, debounce } from '../utils/apiHelpers';
-import { applyContentTypeFilters } from '../utils/contentTypeFilters';
+import { retryWithBackoff, withTimeout, debounce } from '../utils/apiUtils';
+import { applyContentTypeFilters } from '../utils/contentTypeUtils';
 
 const INITIAL_LIMIT = 1000;
 const SEARCH_LIMIT = 100;

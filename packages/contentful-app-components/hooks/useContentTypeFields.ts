@@ -2,8 +2,8 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import type { ConfigAppSDK } from '@contentful/app-sdk';
 import type { ContentTypeProps } from 'contentful-management';
 import type { UseContentTypeFieldsOptions, UseContentTypeFieldsReturn, ContentTypeWithEditorInterface } from '../types';
-import { retryWithBackoff, withTimeout, fetchAllContentTypes, fetchEditorInterfacesInBatches } from '../utils/apiHelpers';
-import { applyContentTypeFilters, applyFieldFilters } from '../utils/contentTypeFilters';
+import { retryWithBackoff, withTimeout, fetchAllContentTypes, fetchEditorInterfacesInBatches } from '../utils/apiUtils';
+import { applyContentTypeFilters, applyFieldFilters } from '../utils/contentTypeUtils';
 
 const INITIAL_LIMIT = 1000;
 const SEARCH_LIMIT = 100;
