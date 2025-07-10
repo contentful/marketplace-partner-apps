@@ -19,13 +19,12 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "install-ci": "npm install",
     "create-app-definition": "contentful-app-scripts create-app-definition",
     "upload": "contentful-app-scripts upload --bundle-dir ./dist",
     "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./dist --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "browserslist": {
     "production": [
@@ -46,8 +45,13 @@
     "@testing-library/user-event": "^14.0.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.7",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
     "@vitejs/plugin-react": "^4.6.0",
     "cross-env": "7.0.3",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.1.0",
     "jsdom": "^24.0.0",
     "typescript": "^5.7.2",
     "vite": "^6.3.5",
