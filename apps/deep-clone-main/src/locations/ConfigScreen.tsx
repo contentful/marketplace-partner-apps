@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, ChangeEvent } from 'react';
+import { useCallback, useState, useEffect, ChangeEvent } from 'react';
 import { Heading, Card, Tabs, Stack, FormControl, TextInput, Radio, Paragraph, FormLabel } from '@contentful/f36-components';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { SelectContentTypes } from '@contentful/app-components';

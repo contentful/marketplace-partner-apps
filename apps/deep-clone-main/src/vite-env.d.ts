@@ -10,7 +10,7 @@ interface ImportMeta {
 }
 
 // Type definitions for the app parameters
-interface AppParameters {
+export interface AppParameters {
   cloneText: string;
   cloneTextBefore: boolean;
   cloneAssets: boolean;
@@ -20,7 +20,7 @@ interface AppParameters {
 }
 
 // Type definitions for references used in the cloning process
-interface Reference {
+export interface Reference {
   [entryId: string]: {
     sys: {
       id: string;
