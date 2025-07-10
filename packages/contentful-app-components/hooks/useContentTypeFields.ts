@@ -2,12 +2,12 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import type { ConfigAppSDK } from '@contentful/app-sdk';
 import type { ContentTypeProps } from 'contentful-management';
 import type { UseContentTypeFieldsOptions, UseContentTypeFieldsReturn, ContentTypeWithEditorInterface } from '../types';
-import { retryWithBackoff, withTimeout, fetchAllContentTypes, fetchEditorInterfacesInBatches } from '../utils/apiUtils';
+import { retryWithBackoff, fetchAllContentTypes, fetchEditorInterfacesInBatches } from '../utils/apiUtils';
 import { applyContentTypeFilters, applyFieldFilters } from '../utils/contentTypeUtils';
 
 const INITIAL_LIMIT = 1000;
 const SEARCH_LIMIT = 100;
-const OVERALL_TIMEOUT = 120000;
+// const OVERALL_TIMEOUT = 120000;
 
 export const useContentTypeFields = (cma: ConfigAppSDK['cma'], options: UseContentTypeFieldsOptions = {}): UseContentTypeFieldsReturn => {
   const [contentTypesWithFields, setContentTypesWithFields] = useState<ContentTypeWithEditorInterface[]>([]);
