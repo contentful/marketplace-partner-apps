@@ -3,7 +3,6 @@
 interface ImportMetaEnv {
   readonly NODE_ENV: string;
   readonly VITE_APP_TITLE: string;
-  // Add other environment variables here
 }
 
 interface ImportMeta {
@@ -11,7 +10,7 @@ interface ImportMeta {
 }
 
 // Type definitions for the app parameters
-export interface AppParameters {
+interface AppParameters {
   cloneText: string;
   cloneTextBefore: boolean;
   cloneAssets: boolean;
@@ -21,7 +20,7 @@ export interface AppParameters {
 }
 
 // Type definitions for references used in the cloning process
-export interface Reference {
+interface Reference {
   [entryId: string]: {
     sys: {
       id: string;
@@ -41,11 +40,4 @@ export interface Reference {
       };
     };
   };
-}
-
-// Augment the global window object if needed
-declare global {
-  interface Window {
-    // Add any global properties here if needed
-  }
 }

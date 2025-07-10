@@ -16,14 +16,12 @@ interface NewEntries {
 interface ContentTypeField {
   id: string;
   type: string;
-  // Add other field properties as needed
 }
 
 interface ContentType {
   sys: {
     id: string;
     type: string;
-    // Add other sys properties as needed
   };
   fields: ContentTypeField[];
   displayField?: string;
@@ -41,7 +39,6 @@ interface FieldValue {
 function Sidebar() {
   const sdk = useSDK() as SidebarAppSDK;
 
-  // Get installation parameters with defaults
   const installationParams: InstallationParams = {
     cloneText: 'Copy',
     cloneTextBefore: true,
@@ -51,7 +48,6 @@ function Sidebar() {
     ...sdk.parameters.installation,
   };
 
-  // Convert msToRedirect to number if it's a string
   if (typeof installationParams.msToRedirect === 'string') {
     installationParams.msToRedirect = parseInt(installationParams.msToRedirect, 10);
   }
