@@ -38,7 +38,7 @@ interface FieldValue {
   [key: string]: any;
 }
 
-const Sidebar: React.FC = () => {
+function Sidebar() {
   const sdk = useSDK() as SidebarAppSDK;
 
   // Get installation parameters with defaults
@@ -275,6 +275,6 @@ const Sidebar: React.FC = () => {
       </Caption>
     </Stack>
   );
-};
+}
 
 export default Sidebar;

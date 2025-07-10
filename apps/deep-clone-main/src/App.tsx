@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { locations } from '@contentful/app-sdk';
-import ConfigScreen from './locations/ConfigScreen';
-import Sidebar from './locations/Sidebar';
+import ConfigScreen from './locations/ConfigScreen.tsx';
+import Sidebar from './locations/Sidebar.tsx';
 
 import { useSDK } from '@contentful/react-apps-toolkit';
 
@@ -10,7 +10,7 @@ const ComponentLocationSettings = {
   [locations.LOCATION_ENTRY_SIDEBAR]: Sidebar,
 } as const;
 
-const App: React.FC = () => {
+function App() {
   const sdk = useSDK();
 
   const Component = useMemo(() => {
@@ -23,6 +23,6 @@ const App: React.FC = () => {
   }, [sdk.location]);
 
   return Component ? <Component /> : null;
-};
+}
 
 export default App;

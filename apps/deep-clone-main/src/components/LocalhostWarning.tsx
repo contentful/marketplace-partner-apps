@@ -1,7 +1,6 @@
-import React from 'react';
 import { Paragraph, TextLink, Note, Flex } from '@contentful/f36-components';
 
-const LocalhostWarning: React.FC = () => {
+function LocalhostWarning() {
   return (
     <Flex marginTop="spacingXl" justifyContent="center">
       <Note title="App running outside of Contentful" style={{ maxWidth: '800px' }}>
@@ -21,6 +20,6 @@ const LocalhostWarning: React.FC = () => {
       </Note>
     </Flex>
   );
-};
+}
 
 export default LocalhostWarning;

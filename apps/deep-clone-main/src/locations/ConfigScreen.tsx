@@ -18,7 +18,7 @@ interface ConfigResult {
   parameters: AppParameters;
 }
 
-const ConfigScreen: React.FC = () => {
+function ConfigScreen() {
   const [parameters, setParameters] = useState<ConfigParameters>({
     cloneTextBefore: true,
     cloneAssets: false,
@@ -216,6 +216,6 @@ const ConfigScreen: React.FC = () => {
       </Tabs>
     </Card>
   );
-};
+}
 
 export default ConfigScreen;
