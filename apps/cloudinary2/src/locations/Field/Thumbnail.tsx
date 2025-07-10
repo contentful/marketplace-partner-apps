@@ -5,13 +5,14 @@ import tokens from '@contentful/f36-tokens';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Cloudinary as cloudinaryCore } from 'cloudinary-core';
 import { css } from '@emotion/react';
-import { useMemo } from 'react';
+import { Cloudinary as cloudinaryCore } from 'cloudinary-core';
+import fileSize from 'file-size';
+import { useCallback, useMemo } from 'react';
 import logo from '../../assets/logo.svg';
 import { VALID_IMAGE_FORMATS } from '../../constants';
-import { AppInstallationParameters, CloudinaryAsset } from '../../types';
-import fileSize from 'file-size';
+import { AppInstallationParameters, CloudinaryAsset, MediaLibraryResult } from '../../types';
+import { extractAsset } from '../../utils';
 
 const styles = {
   dragHandle: css({
@@ -54,9 +55,10 @@ interface Props {
   asset: CloudinaryAsset & { id: string };
   isDisabled: boolean;
   onDelete: () => void;
+  onReplace: (oldAsset: CloudinaryAsset, newAsset: CloudinaryAsset) => void;
 }
 
-export function Thumbnail({ asset, isDisabled, onDelete }: Props) {
+export function Thumbnail({ asset, isDisabled, onDelete, onReplace }: Props) {
   const sdk = useSDK<FieldAppSDK<AppInstallationParameters>>();
 
   const alt = [asset.public_id, ...(asset.tags ?? [])].join(', ');
@@ -68,6 +70,32 @@ export function Thumbnail({ asset, isDisabled, onDelete }: Props) {
     transform: CSS.Transform.toString(transform),
     transition,
   };
+
+  const handleReplace = useCallback(async () => {
+    const result: MediaLibraryResult | undefined = await sdk.dialogs.openCurrentApp({
+      position: 'center',
+      title: `Edit or replace ${asset.public_id}`,
+      shouldCloseOnOverlayClick: true,
+      shouldCloseOnEscapePress: true,
+      width: 1400,
+
+      parameters: {
+        asset: {
+          resource_type: asset.resource_type,
+          type: asset.type,
+          public_id: asset.public_id,
+        },
+        maxFiles: 1,
+      },
+    });
+
+    if (!result) {
+      return;
+    }
+    // assuming the user only selects one asset
+    const newAsset = result.assets.map(extractAsset)[0];
+    onReplace(asset, newAsset);
+  }, [sdk.dialogs]);
 
   const consoleUrl = `https://console.cloudinary.com/console/media_library/query_search?q=${encodeURIComponent(
     `{"userExpression":"(public_id = \\"${asset.public_id}\\")"}`,
@@ -82,10 +110,11 @@ export function Thumbnail({ asset, isDisabled, onDelete }: Props) {
         src={url}
         title={alt}
         type="image"
-        icon={<img src={logo} alt="" width={24} height={24} />}
+        onClick={handleReplace}
+        icon={<img src={logo} alt="" width={18} height={18} />}
         size="small"
         actions={[
-          <MenuItem key="edit" as="a" href={consoleUrl} target="_blank" onClick={() => window.open(consoleUrl, "_blank")}>
+          <MenuItem key="edit" as="a" href={consoleUrl} target="_blank" onClick={handleReplace}>
             Edit in Cloudinary <ExternalLinkIcon css={styles.menuItemIcon} />
           </MenuItem>,
           <MenuItem key="remove" onClick={onDelete} isDisabled={isDisabled}>
@@ -136,12 +165,14 @@ function getUrlFromAsset(installationParams: AppInstallationParameters, asset: C
     return cloudinary.url(asset.public_id, {
       type: asset.type,
       rawTransformation: transformations,
+      version: String(asset.version),
     });
   }
   if (asset.resource_type === 'video') {
-    return cloudinary.video_thumbnail_url(asset.public_id, {
+    return cloudinary.video_url(asset.public_id, {
       type: asset.type,
-      rawTransformation: transformations,
+      rawTransformation: `/h_149/f_avif,fl_animated,e_loop/${asset.raw_transformation}`,
+      version: String(asset.version),
     });
   }
 }
