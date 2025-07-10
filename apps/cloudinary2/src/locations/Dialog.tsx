@@ -108,7 +108,7 @@ const Dialog = () => {
           inline_container: `#${container.id}`,
           remove_header: true,
           default_transformations: [transformations],
-          ...asset,
+          asset,
         };
 
         const instance = window.cloudinary.createMediaLibrary(options, {
