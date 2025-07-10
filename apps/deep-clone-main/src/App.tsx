@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { locations } from '@contentful/app-sdk';
 import ConfigScreen from './locations/ConfigScreen.tsx';
 import Sidebar from './locations/Sidebar.tsx';
@@ -10,7 +10,7 @@ const ComponentLocationSettings = {
   [locations.LOCATION_ENTRY_SIDEBAR]: Sidebar,
 } as const;
 
-function App() {
+const App = () => {
   const sdk = useSDK();
 
   const Component = useMemo(() => {
@@ -23,6 +23,6 @@ function App() {
   }, [sdk.location]);
 
   return Component ? <Component /> : null;
-}
+};
 
 export default App;

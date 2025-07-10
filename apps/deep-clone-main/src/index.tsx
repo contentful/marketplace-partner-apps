@@ -6,10 +6,7 @@ import { SDKProvider } from '@contentful/react-apps-toolkit';
 import LocalhostWarning from './components/LocalhostWarning';
 import App from './App';
 
-const container = document.getElementById('root');
-if (!container) {
-  throw new Error('Root container not found');
-}
+const container = document.getElementById('root')!;
 
 const root = createRoot(container);
 
