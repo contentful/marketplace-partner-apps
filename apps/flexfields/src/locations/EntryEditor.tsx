@@ -2,8 +2,9 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { EditorAppSDK, EditorLocaleSettings } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
 import { getDefaultWidgetId } from "@contentful/default-field-editors";
-import { Workbench } from "@contentful/f36-workbench";
 import { Stack, Form, Heading, Text } from "@contentful/f36-components";
+import { Layout } from '@contentful/f36-layout';
+import tokens from '@contentful/f36-tokens';
 import { calculateEditorFields, getFieldAppSdk, getLocaleName } from "../utils";
 import { type Rule } from "../types/Rule";
 // Import for markdown editor
@@ -75,8 +76,8 @@ const EntryEditor = () => {
 
   let hasLocailizedFields = false;
   return (
-    <Workbench>
-      <Workbench.Content type="text" style={{ padding: '1.5rem 0px 200px' }}>
+    <Layout variant="fullscreen" offsetTop={0}>
+      <Layout.Body className={css({ padding: `${tokens.spacingL} 0 200px`} )}>
         <Form
           className={css`
             div {
@@ -177,8 +178,8 @@ const EntryEditor = () => {
             />
           )}
         </Form>
-      </Workbench.Content>
-    </Workbench>
+      </Layout.Body>
+    </Layout>
   );
 };
 
