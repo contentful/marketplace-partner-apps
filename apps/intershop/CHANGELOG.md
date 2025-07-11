@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.21](https://github.com/contentful/marketplace-partner-apps/compare/intershop-connector-v1.0.20...intershop-connector-v1.0.21) (2025-07-11)
+
+
+### Bug Fixes
+
+* **deps:** bump contentful-management from 11.54.0 to 11.54.1 in /apps/intershop in the production-dependencies group ([#5408](https://github.com/contentful/marketplace-partner-apps/issues/5408)) ([444b41c](https://github.com/contentful/marketplace-partner-apps/commit/444b41c3d1ad864ffb2d533c277dc50db3ac76bd))
+* **deps:** bump the production-dependencies group in /apps/intershop with 2 updates ([#5468](https://github.com/contentful/marketplace-partner-apps/issues/5468)) ([a5a21bd](https://github.com/contentful/marketplace-partner-apps/commit/a5a21bd7e54210b70128f12d772bbe405c993e94))
+
 ## [1.0.20](https://github.com/contentful/marketplace-partner-apps/compare/intershop-connector-v1.0.19...intershop-connector-v1.0.20) (2025-07-02)
 
 
