@@ -11,7 +11,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "npx serve@latest out",
+    "start2": "next start",
     "lint": "next lint",
     "test": "jest --watch",
     "test:ci": "jest --ci",
@@ -24,7 +25,8 @@
     "@contentful/f36-tokens": "^4.2.0",
     "@contentful/react-apps-toolkit": "^1.2.16",
     "next": ">=15.3.0",
-    "react": ">=18.3.1"
+    "react": ">=18.3.1",
+    "serve": "^14.2.4"
   },
   "devDependencies": {
     "@contentful/app-scripts": "^2.5.1",

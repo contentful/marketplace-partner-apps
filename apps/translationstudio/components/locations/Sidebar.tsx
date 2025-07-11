@@ -19,7 +19,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 
 // Components
-import { Box, Button, Caption, Checkbox, IconButton, Menu, Paragraph, Radio } from "@contentful/f36-components";
+import { Box, Caption, IconButton, Menu, Paragraph } from "@contentful/f36-components";
 import { MenuIcon } from '@contentful/f36-icons';
 import NoKey, { IsLoading, NoLanguageMappings } from "../../components/NoKey";
 
@@ -27,15 +27,15 @@ import NoKey, { IsLoading, NoLanguageMappings } from "../../components/NoKey";
 import { useSDK } from "@contentful/react-apps-toolkit";
 
 // Types
-import type { TranslationRequest } from "../../interfaces/translationstudio";
+import type { SelectedEntries } from "../../interfaces/translationstudio";
 
 // SDK
 import { SidebarAppSDK } from "@contentful/app-sdk";
-import DateInput from "../../components/DateInput";
-import { ConnectorMap, SelectedConnector } from "../Types";
+import { ConnectorMap } from "../Types";
 import { ApiHistory, TranslationHistory } from "utils/api/ApiHistory";
 import { ApiLanguageMappings } from "utils/api/ApiLanguageMappings";
-import { ApiTranslate } from "utils/api/ApiTranslate";
+import TranslationPane from "../TranslationPane";
+import { getAvailableLanguages, buildValidLanguageMap } from "utils/LanguageUtils";
 
 const getEntryHistory = async (key:string, space: string, entry: string, env:string) => {
 	try {
@@ -131,21 +131,15 @@ const Sidebar = () => {
 	// State
 	const [languageMapping, setLanguageMappings] = useState<ConnectorMap|null>(null);
 	const [history, setHistory] = useState<TranslationHistory[]>([]);
-	const [selectedTranslation, setSelectedTranslation] = useState<SelectedConnector>({ id: "", machineTranslation: false, urgent: false });
-	const [dueDate, setDueDate] = useState<string>("");
-	const [sendEmail, setSendEmail] = useState(true);
-	const [pending, setPending] = useState(false);
 	const [isReady, setIsReady] = useState(false);
 	const [viewType, setViewType] = useState(VIEW_TRANSLATION)
 
 	const entry = sdk.ids.entry;
 	const space = sdk.ids.space;
-	const app = sdk.ids.app;
 	const email = sdk.user.email;
 	const titleField = sdk.contentType.displayField;
 	const title = sdk.entry.fields[titleField]?.getValue() ?? entry;
 	const key = sdk.parameters.installation.translationStudioKey ?? "";
-	
 	
 	useEffect(() => {
 		
@@ -157,12 +151,8 @@ const Sidebar = () => {
 				for (let _d of data)
 					map[_d.id] = _d;
 
-				setLanguageMappings(map)
-				setSelectedTranslation({
-					id: data[0].id,
-					machineTranslation: data[0].machine === true,
-					urgent: data[0].machine === true
-				});
+				const languageList = getAvailableLanguages(sdk.locales.available, sdk.locales.default);
+        		setLanguageMappings(buildValidLanguageMap(map, languageList));
 			}
 			
 			return getEntryHistory(key, space, entry, sdk.ids.environment);
@@ -174,135 +164,26 @@ const Sidebar = () => {
 		})
 		.finally(() => setIsReady(true));
 		
-	}, [entry, key, space, sdk, setLanguageMappings, setHistory, setSelectedTranslation, setIsReady]);
-
-	
-	const setDate = (event: { target: { value: React.SetStateAction<string> } }) => {
-		setDueDate(event.target.value);
-	};
-
-	const getDueDate = (): number => {
-
-		if (dueDate === "")
-			return 0;
-
-		const val = Date.parse(dueDate);
-		return isNaN(val) ? 0 : val;
-	};
-
-	const handleCheckbox: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-		setSelectedTranslation({
-			id: selectedTranslation.id,
-			machineTranslation: selectedTranslation.machineTranslation,
-			urgent: e.target.checked
-		})
-	};
-
-	const handleCheckboxMail: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-		setSendEmail(e.target.checked);
-	};
-
-	// creates "translations" prop for the TS call
-	const getTranslations = () => {
-
-		const trans = languageMapping && selectedTranslation.id &&  languageMapping[selectedTranslation.id];
-		if (!trans)
-			return [];
-
-		return trans["targets"].map((item) => ({
-				source: trans["source"],
-				target: item,
-				"connector": trans["connector"]
-			}));
-	};
-
-	const isUrgent = function()
-	{
-		return selectedTranslation.machineTranslation || selectedTranslation.urgent;
-	}
-
-	// actual TS request
-	const translate = async () => {
-		
-		const translations = getTranslations() || [];
-		if (translations.length === 0)
-		{
-			sdk.notifier.error("Invalid langauge mapping found.");
-			return;
-		}
-
-		const urgent = isUrgent();
-		const payload: TranslationRequest = {
-			app_id: app,
-			apikey: key, // Translation Studio Key
-			environment: sdk.ids.environment, // contentful space environment
-			entry_uid: entry, // UID of the entry
-			title: title, // entry title
-			spaceid: space,
-			urgent: urgent,
-			email: selectedTranslation.machineTranslation || !sendEmail ? "" : email,
-			duedate: urgent ? 0 : getDueDate(),
-			translations: translations
-		};
-		setPending(true);
-		try {
-			const ok = await ApiTranslate(key, space, payload);
-			if (ok) 
-				sdk.notifier.success("Translation request sent.");
-			else 
-				sdk.notifier.error("Translation request could not be sent.");
-		}
-		finally {
-			setPending(false);
-		}
-	};
-
-	const onSelectLanguageMapping = function(id:string)
-	{
-		if (languageMapping === null)
-			return;
-
-		const elem = languageMapping[id];
-		if (elem === undefined)
-			return;
-
-		setSelectedTranslation({
-			id: id,
-			machineTranslation: elem.machine === true,
-			urgent: elem.machine === true
-		});
-	}
+	}, [entry, key, space, sdk, setLanguageMappings, setHistory, setIsReady]);
 
 	const TranslationSettings = function()
 	{
 		if (languageMapping === null)
 			return <></>;
-		
-		return <>
-			<Paragraph>Translation Settings</Paragraph>
-				<Box marginBottom="spacingM">
-					{Object.keys(languageMapping).map((id, idx) => (
-						<Radio onChange={() => onSelectLanguageMapping(id)} name="mappings" isChecked={id === selectedTranslation.id} value={id} key={id} defaultChecked={idx === 0}>
-							{languageMapping[id]["name"]}
-						</Radio>
-					))}
-				</Box>
-				{!selectedTranslation.machineTranslation && (<>
-					<Paragraph>Translation date</Paragraph>
-					<DateInput onChange={setDate} value={dueDate} />
-					<Checkbox name="urgent" isChecked={selectedTranslation.urgent} onChange={handleCheckbox}>
-						Translate immediately and do not use quotes
-					</Checkbox>
-					<Checkbox name="email" isChecked={sendEmail} onChange={handleCheckboxMail}>
-						Notify me by mail about the translation status
-					</Checkbox>
-				</>)}
-				<Box style={{textAlign: "center", paddingBottom: "2em"}}>
-					<Button variant="positive" style={{ width: "100%" }} isDisabled={pending} onClick={() => translate()} title={getButtonTitle(selectedTranslation.machineTranslation, selectedTranslation.urgent)}>
-						{getButtonTitle(selectedTranslation.machineTranslation, selectedTranslation.urgent)}
-					</Button>
-				</Box>
-			</>
+
+		const selectedEntries:SelectedEntries = { }
+		selectedEntries[sdk.ids.entry] = title;
+		return <TranslationPane 
+			keepUnusableEntries={false}
+			entries={selectedEntries} 
+			languageMapping={languageMapping} 
+			space={sdk.ids.space} 
+			app={sdk.ids.app} 
+			email={email} 
+			license={key} 
+			notifier={sdk.notifier} 
+			environment={sdk.ids.environment}  
+		/>
 	}
 
 	const TranslationMenu = function() 
@@ -321,9 +202,9 @@ const Sidebar = () => {
 	}
 
 	if (!isReady)
-		return <IsLoading />
+		return <IsLoading fullWidth={false} />
 	else if (!key) 
-		return <NoKey />;
+		return <NoKey fullWidth={false} />;
 	else if (languageMapping === null)
 		return <NoLanguageMappings />
 
@@ -335,15 +216,5 @@ const Sidebar = () => {
 		</>
 	);
 };
-
-const getButtonTitle = function(machineTranslation:boolean, urgent:boolean)
-{
-	if (machineTranslation)
-		return "Translate using ai service";
-	else if (urgent)
-		return "Translate immediately";
-	else
-		return "Request translation";
-}
 
 export default Sidebar;
