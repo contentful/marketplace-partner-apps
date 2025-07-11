@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.4](https://github.com/contentful/marketplace-partner-apps/compare/statsig-v1.1.3...statsig-v1.1.4) (2025-07-11)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.80.4 to 4.80.5 in /apps/statsig in the production-dependencies group ([#5464](https://github.com/contentful/marketplace-partner-apps/issues/5464)) ([bcfb5e4](https://github.com/contentful/marketplace-partner-apps/commit/bcfb5e4c566de5eca0c773afc68a2efefb540d22))
+
 ## [1.1.3](https://github.com/contentful/marketplace-partner-apps/compare/statsig-v1.1.2...statsig-v1.1.3) (2025-07-02)
 
 
