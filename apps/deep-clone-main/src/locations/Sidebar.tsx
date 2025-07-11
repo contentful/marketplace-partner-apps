@@ -231,13 +231,13 @@ function Sidebar() {
     if (installationParams.cloneAssets === true && type === 'asset') {
       try {
         entry = await sdk.cma.asset.get({ assetId: entryId });
-      } catch (error) {
+      } catch (_error) {
         return;
       }
     } else {
       try {
         entry = await sdk.cma.entry.get({ entryId: entryId });
-      } catch (error) {
+      } catch (_error) {
         return;
       }
     }

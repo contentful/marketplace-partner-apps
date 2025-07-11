@@ -11,11 +11,7 @@ export default [
     languageOptions: {
       parser: typescriptParser,
       parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-        ecmaFeatures: {
-          jsx: true,
-        },
+        ecmaFeatures: { jsx: true },
       },
       globals: {
         window: 'readonly',
@@ -24,15 +20,11 @@ export default [
         process: 'readonly',
         HTMLInputElement: 'readonly',
         setTimeout: 'readonly',
-        clearTimeout: 'readonly',
-        HTMLElement: 'readonly',
-        Event: 'readonly',
-        Node: 'readonly',
       },
     },
     plugins: {
       '@typescript-eslint': typescript,
-      react: react,
+      react,
       'react-hooks': reactHooks,
     },
     rules: {
@@ -40,12 +32,10 @@ export default [
       ...reactHooks.configs.recommended.rules,
       'react/react-in-jsx-scope': 'off',
       'react/no-unescaped-entities': 'off',
-      'no-unused-vars': 'warn',
+      'no-unused-vars': ['warn', { varsIgnorePattern: '^_', argsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }],
     },
     settings: {
-      react: {
-        version: 'detect',
-      },
+      react: { version: 'detect' },
     },
   },
   {
@@ -55,9 +45,6 @@ export default [
         describe: 'readonly',
         it: 'readonly',
         expect: 'readonly',
-        beforeEach: 'readonly',
-        afterEach: 'readonly',
-        jest: 'readonly',
       },
     },
   },
