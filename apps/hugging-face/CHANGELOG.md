@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/contentful/marketplace-partner-apps/compare/hugging-face-v1.1.2...hugging-face-v1.1.3) (2025-07-11)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.80.4 to 4.80.5 in /apps/hugging-face in the production-dependencies group ([#5528](https://github.com/contentful/marketplace-partner-apps/issues/5528)) ([33ea0fe](https://github.com/contentful/marketplace-partner-apps/commit/33ea0fe1126ae1a29c3b06e7abdcf14581fd37b2))
+
 ## [1.1.2](https://github.com/contentful/marketplace-partner-apps/compare/hugging-face-v1.1.1...hugging-face-v1.1.2) (2025-07-02)
 
 
