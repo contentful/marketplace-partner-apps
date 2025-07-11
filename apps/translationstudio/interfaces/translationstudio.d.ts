@@ -44,13 +44,12 @@ export type LanguageMapping = {
 	"source": string;
 	"targets": string[];
 }
-export interface TranslationRequest {
+
+export interface TranslationRequestBase {
 	app_id?: string;
 	apikey: string;
 	email: string;
 	duedate?: number;
-	title: string;
-	entry_uid: string;
 	spaceid: string;
 	urgent: boolean;
 	environment: string;
@@ -59,6 +58,17 @@ export interface TranslationRequest {
 		target: string;
 		"connector": string;
 	}[];
+}
+export interface TranslationRequest extends TranslationRequestBase {
+	title: string;
+	entry_uid: string;
+}
+export type TranslationRequestMultipleEntry = {
+	title: string;
+	entry_uid: string;
+}
+export interface TranslationRequestMultiple extends TranslationRequestBase {
+	entries: TranslationRequestMultipleEntry[];
 }
 
 export interface History {
@@ -76,4 +86,8 @@ export type SessionTokenData = {
     clientid: string;
     space: string;
     token: string;
+}
+
+export type SelectedEntries = {
+    [id: string]: string;
 }

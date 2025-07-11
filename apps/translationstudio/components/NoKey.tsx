@@ -15,20 +15,34 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
-import { Paragraph } from "@contentful/f36-components";
+import { Paragraph, Spinner, Stack } from "@contentful/f36-components";
 import React from "react";
 import { LOGO } from "utils/logo";
 import { css } from "emotion";
 import Image from "next/image";
 
-export function IsLoading()
+export function TranslationstudioLogo()
 {
     return <>
         <div style={{ textAlign: "center"}}>
             <Image height={50} width={116} src={LOGO} alt="" className={css({ height: "100px", width: "227px", display: "inline-block" })} />
         </div>
+    </>    
+}
+
+export function IsLoading(props:{ fullWidth:boolean })
+{
+    const height = props.fullWidth ? 100 : 50;
+    const width = props.fullWidth ? 227 : 116;
+    
+    return <>
+        <div style={{ textAlign: "center"}}>
+            <Image height={height} width={width} src={LOGO} alt="" className={css({ height: height + "px", width: width+"px", display: "inline-block" })} />
+        </div>
         <div style={{ paddingTop: "1.5em", textAlign: "center"}}>
-            <Paragraph>translationstudio is loading</Paragraph>
+            <Stack flexDirection="column">
+                <Spinner variant="default" />
+            </Stack>
         </div>
     </>    
 }
@@ -46,7 +60,7 @@ export function NoLanguageMappings()
         </>;
 }
 
-export default function noKey()
+export default function NoKey(props:{ fullWidth:boolean})
 {
 
     return <>

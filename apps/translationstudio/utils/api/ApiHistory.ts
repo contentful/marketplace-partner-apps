@@ -27,6 +27,32 @@ export type TranslationHistory = {
     "time-imported": number;
 }
 
+export async function ApiHistorySpace(key: string, space: string)
+{
+    if (space === "" || key === "")
+        throw new Error("Bad input");
+    
+    const res = await fetch(TranslationstudioConfiguration.URL + "/translationstudio/history/" + space, {
+        cache: "no-cache",
+        headers:{
+            'X-translationstudio': 'translationstudio',
+            "X-license": key
+        }
+    });
+
+    if (res.ok)
+    {
+        const js = await res.json();
+        if (js && Array.isArray(js))
+            return js as TranslationHistory[];
+        else
+            return [];
+    }
+    const err = await res.json();
+    throw new Error("Could not fetch history: " + (err.message ?? "no reason given"));
+
+}
+
 export async function ApiHistory(key: string, space: string, entry: string, env: string)
 {
     if (space === "" || entry === "" || env === "" || key === "")
