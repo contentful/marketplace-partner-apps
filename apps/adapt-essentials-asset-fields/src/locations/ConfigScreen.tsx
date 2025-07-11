@@ -2,9 +2,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { ConfigAppSDK } from '@contentful/app-sdk';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import MarkdownRender from '../components/MarkdownRender';
-import { Box, Text } from '@contentful/f36-components';
-import { Workbench } from '@contentful/f36-workbench';
+import { Box, GlobalStyles, Text } from '@contentful/f36-components';
+import { Layout } from '@contentful/f36-layout';
 import { css } from 'emotion';
+import styles from './styles.module.css';
 
 import originalReadme from '../../README.md?raw';
 
@@ -79,14 +80,17 @@ const ConfigScreen = () => {
   }, [sdk]);
 
   return (
-    <Workbench>
-      <Workbench.Content>
-        <Box marginTop="spacingXl" className="page">
-          {!installed && <InstallationInstructions />}
-          <MarkdownRender value={appPart} />
-        </Box>
-      </Workbench.Content>
-    </Workbench>
+    <>
+      <GlobalStyles />
+      <Layout variant="fullscreen" offsetTop={0}>
+        <Layout.Body>
+          <Box marginTop="spacingXl" className={styles.page}>
+            {!installed && <InstallationInstructions />}
+            <MarkdownRender value={appPart} />
+          </Box>
+        </Layout.Body>
+      </Layout>
+    </>
   );
 };
 
