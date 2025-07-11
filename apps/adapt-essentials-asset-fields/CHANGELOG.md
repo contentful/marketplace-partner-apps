@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.1.11...adapt-essentials-asset-fields-v1.2.0) (2025-07-11)
+
+
+### Features
+
+* use new Forma 36 Layout component [UFO-1877] ([#5544](https://github.com/contentful/marketplace-partner-apps/issues/5544)) ([6b1e4f0](https://github.com/contentful/marketplace-partner-apps/commit/6b1e4f06e002d9597cd401ed34a5351a3a9ef6d6))
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group in /apps/adapt-essentials-asset-fields with 2 updates ([#5459](https://github.com/contentful/marketplace-partner-apps/issues/5459)) ([74fbe84](https://github.com/contentful/marketplace-partner-apps/commit/74fbe84a0f60708a08efdd140880ebd77e03eaa3))
+
 ## [1.1.11](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.1.10...adapt-essentials-asset-fields-v1.1.11) (2025-07-02)
 
 
