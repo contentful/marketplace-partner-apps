@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.2.0](https://github.com/contentful/marketplace-partner-apps/compare/amplitude-contentful-v1.1.2...amplitude-contentful-v1.2.0) (2025-07-11)
+
+
+### Features
+
+* Amplitude Experiment - add support for feature flags ([#4078](https://github.com/contentful/marketplace-partner-apps/issues/4078)) ([17a3ba8](https://github.com/contentful/marketplace-partner-apps/commit/17a3ba8b41fc6833a039692d3fe6f3bd825910fd))
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.80.4 to 4.80.5 in /apps/amplitude-experiment in the production-dependencies group ([#5470](https://github.com/contentful/marketplace-partner-apps/issues/5470)) ([f08c546](https://github.com/contentful/marketplace-partner-apps/commit/f08c546fa0cbe38cc0138f19f33933dec44ae4d3))
+* **deps:** bump contentful-management from 11.53.0 to 11.54.0 in /apps/amplitude-experiment in the production-dependencies group ([#5265](https://github.com/contentful/marketplace-partner-apps/issues/5265)) ([06e90cc](https://github.com/contentful/marketplace-partner-apps/commit/06e90cc7c60b4529fd8d715836d0d59de657b75c))
+* **deps:** bump contentful-management from 11.54.0 to 11.54.1 in /apps/amplitude-experiment in the production-dependencies group ([#5359](https://github.com/contentful/marketplace-partner-apps/issues/5359)) ([22703bc](https://github.com/contentful/marketplace-partner-apps/commit/22703bcd5a6adc1db9c4cbe7eade21a5a2b2039b))
+* **deps:** bump nanoid from 3.3.7 to 3.3.8 in /apps/amplitude-experiment ([#3888](https://github.com/contentful/marketplace-partner-apps/issues/3888)) ([432e95c](https://github.com/contentful/marketplace-partner-apps/commit/432e95ca6247b6c95f7d459c03323c46c2d54168))
+* **deps:** bump the production-dependencies group in /apps/amplitude-experiment with 5 updates ([#5045](https://github.com/contentful/marketplace-partner-apps/issues/5045)) ([ca996c4](https://github.com/contentful/marketplace-partner-apps/commit/ca996c4763e0299d06635c62ac9b885e05c28e30))
+* update to node v20 [INTEG-2829] ([#5318](https://github.com/contentful/marketplace-partner-apps/issues/5318)) ([fdc406d](https://github.com/contentful/marketplace-partner-apps/commit/fdc406d9328bc6279abb658dcf5a1bf28795a449))
+
 ## [1.1.2](https://github.com/contentful/marketplace-partner-apps/compare/amplitude-contentful-v1.1.1...amplitude-contentful-v1.1.2) (2025-07-09)
 
 
