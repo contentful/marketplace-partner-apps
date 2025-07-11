@@ -16,6 +16,7 @@
   "scripts": {
     "start": "vite",
     "build": "rm -rf build && tsc && vite build",
+    "preinstall": "cd ../../packages/contentful-app-components && npm install && npm run build",
     "test": "vitest run --passWithNoTests",
     "create-app-definition": "contentful-app-scripts create-app-definition",
     "install-ci": "npm ci",

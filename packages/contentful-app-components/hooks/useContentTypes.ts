@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import type { ConfigAppSDK } from '@contentful/app-sdk';
 import type { ContentTypeProps } from 'contentful-management';
-import type { UseContentTypesOptions, UseContentTypesReturn, ContentTypesResult, ContentTypeFilter, PaginationOptions } from '../types';
+import type { UseContentTypesOptions, UseContentTypesReturn, ContentTypesResult, PaginationOptions } from '../types';
 import { retryWithBackoff, withTimeout, debounce } from '../utils/apiUtils';
 import { applyContentTypeFilters } from '../utils/contentTypeUtils';
 
@@ -21,7 +21,7 @@ export const useContentTypes = (cma: ConfigAppSDK['cma'], options: UseContentTyp
   const isSearching = useRef(false);
 
   const fetchContentTypes = useCallback(
-    async (pagination: PaginationOptions = {}, isLoadMore: boolean = false, isSearch: boolean = false): Promise<ContentTypesResult> => {
+    async (pagination: PaginationOptions = {}, _isLoadMore: boolean = false, isSearch: boolean = false): Promise<ContentTypesResult> => {
       const { limit = isSearch ? SEARCH_LIMIT : INITIAL_LIMIT, offset = 0, search } = pagination;
 
       try {

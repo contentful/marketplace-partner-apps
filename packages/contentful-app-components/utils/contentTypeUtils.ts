@@ -7,7 +7,7 @@ export function groupFieldsByContentType<T extends { contentTypeId: string }>(fi
     if (!acc[field.contentTypeId]) {
       acc[field.contentTypeId] = [];
     }
-    acc[field.contentTypeId].push(field);
+    acc[field.contentTypeId]?.push(field);
     return acc;
   }, {} as Record<string, T[]>);
 }

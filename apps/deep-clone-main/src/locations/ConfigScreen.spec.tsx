@@ -1,4 +1,3 @@
-import React from 'react';
 import { vi } from 'vitest';
 import ConfigScreen from './ConfigScreen';
 import { render } from '@testing-library/react';
@@ -14,10 +13,8 @@ describe('Config Screen component', () => {
     const { getByText } = render(<ConfigScreen />);
 
     // simulate the user clicking the install button
-    await mockSdk.app.onConfigure.mock.calls[0][0]();
+    await mockSdk.app.onConfigure.mock.calls[0]?.[0]?.();
 
-    expect(
-      getByText('Clone Text')
-    ).toBeInTheDocument();
+    expect(getByText('Clone Text')).toBeInTheDocument();
   });
 });

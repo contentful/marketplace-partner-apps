@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
-import { Autocomplete, Checkbox, Pill, Text, Flex, Note, Spinner, Subheading } from '@contentful/f36-components';
+import { Autocomplete, Checkbox, Pill, Text, Flex, Note, Subheading } from '@contentful/f36-components';
 import { ClockIcon } from '@contentful/f36-icons';
 import { useContentTypeFields } from '../../hooks/useContentTypeFields';
 import type { ConfigAppSDK } from '@contentful/app-sdk';
@@ -44,8 +44,8 @@ export function SelectContentTypeFields({
   const { contentTypesWithFields, loading, error, hasMore, loadMore, search, progress } = useContentTypeFields(cma, {
     contentTypeFilters,
     fieldFilters,
-    appDefinitionId,
-    onProgress,
+    appDefinitionId: appDefinitionId || '',
+    onProgress: onProgress || (() => {}),
   });
 
   // Helper function to check if a field is already configured
@@ -140,7 +140,7 @@ export function SelectContentTypeFields({
 
         // If not in fieldOptions, it might be an already configured item
         // We need to find it in the content types data
-        for (const { contentType, editorInterface, fields } of contentTypesWithFields) {
+        for (const { contentType, fields } of contentTypesWithFields) {
           for (const field of fields) {
             if (`${contentType.sys.id}:${field.id}` === id) {
               return { id, label: `${contentType.name} > ${field.name}` };
@@ -191,7 +191,7 @@ export function SelectContentTypeFields({
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
+        if (entries[0]?.isIntersecting) {
           loadMore();
         }
       },
