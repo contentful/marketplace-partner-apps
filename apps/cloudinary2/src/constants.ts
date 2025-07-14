@@ -8,6 +8,7 @@ export const DEFAULT_APP_INSTALLATION_PARAMETERS: AppInstallationParameters = {
   quality: 'auto',
   format: 'auto',
   installationUuid: '',
+  showUploadButton: 'true',
 };
 export const DEFAULT_BACKEND_PARAMETERS: BackendParameters = {
   apiSecret: '',
