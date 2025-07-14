@@ -1,9 +1,8 @@
-import { Integration } from "@contentful/dam-app-base";
 import { MediaLibraryWidgetOptions } from "imagekit-media-library-widget";
 
 export const DIALOG_TITLE = 'Select or upload an asset from ImageKit Media Library';
 
-export const DEFAULT_INTEGRATION_PARAMETERS: Partial<Integration> = {
+export const DEFAULT_INTEGRATION_PARAMETERS = {
   cta: 'Select or upload an asset',
   name: 'ImageKit Media Library',
   logo: 'https://ikmedia.imagekit.io/logo/light-icon_GTyhLlWNX-.svg?tr=f-png:r-100',
