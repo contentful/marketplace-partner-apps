@@ -3,6 +3,7 @@ import { useSDK } from '@contentful/react-apps-toolkit';
 import { injectGlobal } from '@emotion/css';
 import { css } from '@emotion/react';
 import { useCallback } from 'react';
+import { APP_ENV, APP_VERSION } from '../constants';
 import { AppInstallationParameters, MediaLibraryResult } from '../types';
 import { loadScript } from '../utils';
 
@@ -20,6 +21,12 @@ interface MediaLibraryOptions {
   inline_container: string | HTMLElement;
   remove_header: boolean;
   default_transformations: unknown[];
+  integration: {
+    platform: string;
+    type: string;
+    version: string;
+    environment: string;
+  };
 }
 
 interface MediaLibraryInstance {
@@ -110,6 +117,12 @@ const Dialog = () => {
           remove_header: true,
           default_transformations: [transformations],
           asset,
+          integration: {
+            platform: 'contentful',
+            type: 'asset-link',
+            version: APP_VERSION,
+            environment: APP_ENV,
+          },
         };
 
         const instance = window.cloudinary.createMediaLibrary(options, {
