@@ -119,7 +119,7 @@ const Dialog = () => {
           asset,
           integration: {
             platform: 'contentful',
-            type: 'asset-link',
+            type: 'contentful',
             version: APP_VERSION,
             environment: APP_ENV,
           },
