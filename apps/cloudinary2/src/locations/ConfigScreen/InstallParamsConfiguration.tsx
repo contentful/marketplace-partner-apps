@@ -1,10 +1,10 @@
-import { Form, TextLink } from '@contentful/f36-components';
+import { Checkbox, Form, FormControl, TextLink } from '@contentful/f36-components';
+import { ExternalLinkTrimmedIcon } from '@contentful/f36-icons';
 import { useCallback } from 'react';
 import { SelectField } from '../../components/SelectField';
 import { TextField } from '../../components/TextField';
 import { DEFAULT_APP_INSTALLATION_PARAMETERS } from '../../constants';
 import { AppInstallationParameters } from '../../types';
-import { ExternalLinkTrimmedIcon } from '@contentful/f36-icons';
 import { BackendConfiguration } from './BackendConfiguration';
 
 const MAX_FILES_UPPER_LIMIT = 1000;
@@ -12,7 +12,7 @@ const MAX_FILES_UPPER_LIMIT = 1000;
 type Props = {
   parameters: AppInstallationParameters;
   onParametersChange: (parameters: AppInstallationParameters) => void;
-} & React.ComponentProps<typeof BackendConfiguration>
+} & React.ComponentProps<typeof BackendConfiguration>;
 
 export function InstallParamsConfiguration(props: Props) {
   const { parameters, onParametersChange } = props;
@@ -42,7 +42,19 @@ export function InstallParamsConfiguration(props: Props) {
       <TextField
         testId="config-apiKey"
         name="API key"
-        description={<>You can access the API key through Cloudinary's <TextLink href="https://console.cloudinary.com/settings/api-keys" target="_blank" rel="noreferrer noopener" icon={<ExternalLinkTrimmedIcon />} alignIcon="end">Access keys</TextLink></>}
+        description={
+          <>
+            You can access the API key through Cloudinary's{' '}
+            <TextLink
+              href="https://console.cloudinary.com/settings/api-keys"
+              target="_blank"
+              rel="noreferrer noopener"
+              icon={<ExternalLinkTrimmedIcon />}
+              alignIcon="end">
+              Access keys
+            </TextLink>
+          </>
+        }
         value={parameters.apiKey}
         onChange={(value) => onParameterChange('apiKey', value)}
         isRequired
@@ -124,6 +136,17 @@ export function InstallParamsConfiguration(props: Props) {
         value={parameters.format}
         onChange={(value) => onParameterChange('format', value)}
       />
+      <Checkbox
+        isChecked={parameters.showUploadButton === 'true'}
+        value={'showUploadButton'}
+        onChange={(event) => onParameterChange('showUploadButton', event.currentTarget.checked ? 'true' : 'false')}>
+        Show Upload Button
+      </Checkbox>
+      <FormControl.HelpText>
+        Enable or disable the upload functionality. When checked, users will see an Upload button that allows them to add assets directly to your library. When
+        unchecked, the upload option will be hidden, preventing any new assets from being added manually. This setting is useful when you want to restrict asset
+        input to predefined sources only.
+      </FormControl.HelpText>
     </Form>
   );
 }

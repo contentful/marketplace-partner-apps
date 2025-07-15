@@ -37,6 +37,7 @@ interface ShowOptions {
     path: string;
   };
   asset?: AssetId;
+  remove_upload_operation?: boolean;
 }
 
 declare global {
@@ -115,7 +116,9 @@ const Dialog = () => {
           insertHandler: (data) => sdk.close(data),
         });
 
-        const showOptions: ShowOptions = {};
+        const showOptions: ShowOptions = {
+          remove_upload_operation: configurationParams.showUploadButton === 'false',
+        };
         if (typeof configurationParams.startFolder === 'string' && configurationParams.startFolder.length) {
           showOptions.folder = { path: configurationParams.startFolder };
         }
