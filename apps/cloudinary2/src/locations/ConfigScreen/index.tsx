@@ -2,8 +2,8 @@ import { ConfigAppSDK } from '@contentful/app-sdk';
 import { GlobalStyles, Heading, Paragraph } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
 import { useSDK } from '@contentful/react-apps-toolkit';
-import { ContentTypeProps } from 'contentful-management';
 import { css } from '@emotion/react';
+import { ContentTypeProps } from 'contentful-management';
 import { useCallback, useEffect, useState } from 'react';
 import logo from '../../assets/logo.svg';
 import { DEFAULT_APP_INSTALLATION_PARAMETERS, DEFAULT_BACKEND_PARAMETERS } from '../../constants';
@@ -63,18 +63,20 @@ const ConfigScreen = () => {
   const [contentTypes, setContentTypes] = useState<ContentTypeProps[]>([]);
   const [selectedFields, setSelectedFields] = useState<SelectedFields>({});
 
-  const onConfigure = useCallback(() => ({
-    parameters: {
-      ...parameters,
-      installationUuid: parameters.installationUuid || window.crypto.randomUUID(),
-    },
-    targetState: selectedFieldsToTargetState(contentTypes, selectedFields),
-  }), [backendParameters, parameters, contentTypes, selectedFields, sdk]);
+  const onConfigure = useCallback(
+    () => ({
+      parameters: {
+        ...parameters,
+        installationUuid: parameters.installationUuid || window.crypto.randomUUID(),
+      },
+      targetState: selectedFieldsToTargetState(contentTypes, selectedFields),
+    }),
+    [backendParameters, parameters, contentTypes, selectedFields, sdk],
+  );
 
   const onConfigurationCompleted = useCallback(
     async (error: any) => {
-      const genericErrorMessage =
-        'Unable to store configuration. Please try again.';
+      const genericErrorMessage = 'Unable to store configuration. Please try again.';
 
       if (error) {
         sdk.notifier.error(genericErrorMessage);
@@ -94,7 +96,7 @@ const ConfigScreen = () => {
         sdk.notifier.error(genericErrorMessage);
       }
     },
-    [setBackendParameters, sdk.app.getParameters, backendParameters]
+    [setBackendParameters, sdk.app.getParameters, backendParameters],
   );
 
   useEffect(() => {
@@ -119,6 +121,7 @@ const ConfigScreen = () => {
         startFolder: currentParameters?.startFolder ?? DEFAULT_APP_INSTALLATION_PARAMETERS.startFolder,
         quality: currentParameters?.quality ?? DEFAULT_APP_INSTALLATION_PARAMETERS.format,
         format: currentParameters?.format ?? DEFAULT_APP_INSTALLATION_PARAMETERS.format,
+        showUploadButton: currentParameters?.showUploadButton ?? DEFAULT_APP_INSTALLATION_PARAMETERS.showUploadButton,
       });
       setSelectedFields(editorInterfacesToSelectedFields(editorInterfacesResponse.items, sdk.ids.app));
 
@@ -138,8 +141,10 @@ const ConfigScreen = () => {
         </Paragraph>
         <hr css={styles.splitter} />
         <InstallParamsConfiguration
-          parameters={parameters} onParametersChange={setParameters}
-          backendParameters={backendParameters} onBackendParametersChange={setBackendParameters}
+          parameters={parameters}
+          onParametersChange={setParameters}
+          backendParameters={backendParameters}
+          onBackendParametersChange={setBackendParameters}
         />
         <hr css={styles.splitter} />
         <FieldSelector
