@@ -1,6 +1,5 @@
 import { FieldAppSDK } from '@contentful/app-sdk';
 import { AssetCard, DateTime, DragHandle, Menu, MenuDivider, MenuItem } from '@contentful/f36-components';
-import { ExternalLinkIcon } from '@contentful/f36-icons';
 import tokens from '@contentful/f36-tokens';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { useSortable } from '@dnd-kit/sortable';
@@ -115,7 +114,7 @@ export function Thumbnail({ asset, isDisabled, onDelete, onReplace }: Props) {
         size="small"
         actions={[
           <MenuItem key="edit" as="a" href={consoleUrl} target="_blank" onClick={handleReplace}>
-            Edit in Cloudinary <ExternalLinkIcon css={styles.menuItemIcon} />
+            Edit in Cloudinary
           </MenuItem>,
           <MenuItem key="remove" onClick={onDelete} isDisabled={isDisabled}>
             Remove
