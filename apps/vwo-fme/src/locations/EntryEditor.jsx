@@ -5,6 +5,7 @@ import CreateFeatureFlag from '../components/CreateFeatureFlag';
 import tokens from '@contentful/f36-tokens';
 import Variations from '../components/Variations';
 import { ExternalLinkIcon } from '@contentful/f36-icons';
+import VwoAppActionService from '../services/vwoAppActionService';
 
 const styles = {
   editor: css({
@@ -63,39 +64,6 @@ const reducer = (state, action) => {
   }
 };
 
-const fetchInitialData = async (props) => {
-  const { space } = props.sdk;
-  const [contentTypes, entries] = await Promise.all([
-    space.getContentTypes({ order: 'name', limit: 1000}),
-    space.getEntries({ skip: 0, limit: 1000})
-  ]);
-  const featureFlag = props.sdk.entry.fields.featureFlag.getValue();
-  let error = '';
-  if(featureFlag?.id && props.client){
-    try {
-      const resp = await props.client.getFeatureFlagById(featureFlag.id);
-      if(resp && resp._data?.variations){
-        let variations = resp._data?.variations;
-        variations.sort((a,b) => b.id-a.id)
-        featureFlag.variations = variations;
-      } else {
-        const message = resp?._errors?.length ? resp._errors[0].message: 'Something went wrong while fetching feature flag details.';
-        throw new Error(message);
-      }
-    } catch (err) {
-      error = err.message;
-      props.sdk.notifier.error(err);
-    }
-  }
-
-  return {
-    featureFlag: featureFlag,
-    contentTypes: contentTypes.items,
-    entries: entries.items,
-    error: error
-  }
-}
-
 const getNewVariation = (variationName, vwoVariationsLength) => {
   let newVariation = {
     name: variationName,
@@ -108,54 +76,61 @@ const getNewVariation = (variationName, vwoVariationsLength) => {
 
 const EntryEditor = (props) => {
   const [state, dispatch] = useReducer(reducer, props.sdk, initialState);
+  const vwoService = new VwoAppActionService(props.sdk);
+  
+  const fetchInitialData = async () => {
+    const { space } = props.sdk;
+    const [contentTypes, entries] = await Promise.all([
+      space.getContentTypes({ order: 'name', limit: 1000}),
+      space.getEntries({ skip: 0, limit: 1000})
+    ]);
+    const featureFlag = props.sdk.entry.fields.featureFlag.getValue();
+    let error = '';
+    if(featureFlag?.id){
+      try {
+        const featureFlagData = await vwoService.fetchFeatureFlag(featureFlag.id);        
+        featureFlag.variations = featureFlagData.variations;
+      } catch (err) {
+        error = err.message;
+        props.sdk.notifier.error(err);
+      }
+    }
+      
+    return {
+      featureFlag: featureFlag,
+      contentTypes: contentTypes.items,
+      entries: entries.items,
+      error: error
+    }
+  }
 
   const updateVariationsInVwo = async (vwoVariations) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const filteredVwoVariations = vwoVariations.filter(variation => variation.id !== 1);
-        const response = await props.client.updateVariations({variations: filteredVwoVariations});
-        if(response && response._data){
-          resolve(response._data.variations);
-        }
-        else if(response && response._errors?.length){
-          if(response._errors[0].code === 404){
-            dispatch({ type: actionTypes.SET_ERROR, payload: response._errors[0].message });
-          }
-          reject(response._errors[0].message);
-        }
-        else{
-          reject('Something went wrong while updating VWO Variations. Please try again');
-        }
+        const variations = await vwoService.updateVariations(vwoVariations, state.featureFlag.id);
+        resolve(variations);
       } catch (err) {
         reject(err.message);
       }
     });
   };
-
+  
   const updateFeatureFlagDetails = useCallback(async (updatedFeatureFlag) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const response = await props.client.updateFeatureFlag(updatedFeatureFlag);
-        if(response && response._data){
-          props.sdk.entry.fields.featureFlag.setValue(response._data);
-          dispatch({ type: actionTypes.SET_FEATURE_FLAG, payload: response._data });
-          dispatch({ type: actionTypes.SET_ERROR, payload: '' });
-          resolve(response._data);
-        }
-        else if(response && response._errors?.length){
-          if(response._errors[0].code === 404){
-            dispatch({ type: actionTypes.SET_ERROR, payload: response._errors[0].message });
-          }
-          reject(response._errors[0].message);
-        }
-        else{
-          reject('Something went wrong while updating Feature flag details. Please try again');
-        }
+        const response = await vwoService.updateFeatureFlag(updatedFeatureFlag);
+        props.sdk.entry.fields.featureFlag.setValue(response);
+        dispatch({ type: actionTypes.SET_FEATURE_FLAG, payload: response });
+        dispatch({ type: actionTypes.SET_ERROR, payload: '' });
+        resolve(response);
       } catch (err) {
-        reject(err.message)
+        if (err.message.includes('404')) {
+          dispatch({ type: actionTypes.SET_ERROR, payload: err.message });
+        }
+        reject(err.message);
       }
     });
-  }, [props.client, props.sdk.entry.fields.featureFlag]);
+  }, [props.sdk.entry.fields.featureFlag]);
 
   const updateVwoVariationName = async (vwoVariation, variationName) => {
     const updatedVwoVariations = state.featureFlag.variations.map(variation => {
@@ -168,7 +143,6 @@ const EntryEditor = (props) => {
     return updateVariationsInVwo(updatedVwoVariations)
     .then(variations => {
       variations.sort((a,b) => b.id-a.id);
-      dispatch({ type: actionTypes.SET_ENTRIES, payload: variations });
       props.sdk.notifier.success('VWO Variation name updated successfully');
       return true;
     })
@@ -217,7 +191,7 @@ const EntryEditor = (props) => {
   const updateVwoVariationContent = async (variation, contentId, updateEntries) => {
     // Default variation cannot be edited directly. Update variable instead and default variations will be updated
     if(variation.id === 1){
-      let featureFlag = state.featureFlag;
+      let featureFlag = state.featureFlag;      
       featureFlag.variables = [{
         variableName: featureFlag.variables?.variableName || 'vwoContentful',
         dataType: 'string',
@@ -263,29 +237,18 @@ const EntryEditor = (props) => {
     }
   }
 
-  const createFeatureFlag = async (featureFlag) => {
+  const createFeatureFlag = async (featureFlag) => {        
     if(featureFlag){
       try{
-        let resp = await props.client.createFeatureFlag(featureFlag);
-        if(resp && resp._data){
-          featureFlag.id = resp._data.id;
-          featureFlag.variations = [resp._data.variations];
-          props.sdk.entry.fields.title.setValue(featureFlag.name);
-          props.sdk.entry.fields.featureFlag.setValue(featureFlag);
-          dispatch({ type: actionTypes.SET_FEATURE_FLAG, payload: featureFlag });
-          dispatch({ type: actionTypes.SET_CURRENT_STEP, payload: 3 });
-          dispatch({ type: actionTypes.SET_ERROR, payload: '' });
-          props.sdk.notifier.success('Feature flag created successfully');
-        }
-        else if(resp && resp._errors?.length){
-          if(resp._errors[0].code === 404){
-            dispatch({ type: actionTypes.SET_ERROR, payload: resp._errors[0].message });
-          }
-          props.sdk.notifier.error(resp._errors[0].message);
-        }
-        else{
-          props.sdk.notifier.error('Something went wrong. Please try again');
-        }
+        const _data = await vwoService.createFeatureFlag(featureFlag);        
+        featureFlag.id = _data.id;
+        featureFlag.variations = Array.isArray(_data.variations) ? _data.variations : [_data.variations];
+        props.sdk.entry.fields.title.setValue(_data.name);
+        props.sdk.entry.fields.featureFlag.setValue(featureFlag);
+        dispatch({ type: actionTypes.SET_FEATURE_FLAG, payload: featureFlag });
+        dispatch({ type: actionTypes.SET_CURRENT_STEP, payload: 3 });
+        dispatch({ type: actionTypes.SET_ERROR, payload: '' });
+        props.sdk.notifier.success('Feature flag created successfully');
       } catch (err) {
         props.sdk.notifier.error(err.message);
       }
@@ -297,7 +260,7 @@ const EntryEditor = (props) => {
       locale: props.sdk.locales.default,
       contentTypes: state.contentTypes.map(contentType => contentType.sys.id).filter(contentType => contentType !== props.sdk.contentType.sys.id)
     });
-    
+
     if(!data){
       return;
     }
@@ -335,7 +298,7 @@ const EntryEditor = (props) => {
   };
 
   useEffect( () => {
-    fetchInitialData(props)
+    fetchInitialData()
       .then(data => {
         dispatch({ type: actionTypes.SET_INITIAL_DATA, payload: data });
         return data;
@@ -346,7 +309,7 @@ const EntryEditor = (props) => {
       .finally(() => {
         dispatch({ type: actionTypes.SET_LOADING, payload: false });
       });
-  }, [props.client, props]);
+  }, [props]);
 
   useEffect(() => {
     const unsubscribeMetaChange = props.sdk.entry.fields.meta.onValueChanged(data => {
@@ -361,7 +324,7 @@ const EntryEditor = (props) => {
   ]);
 
   const isFeatureFlagCreated = state.featureFlag?.id;
-
+  
   return (
     <React.Fragment>
       <div className={styles.editor}>

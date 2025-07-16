@@ -2,7 +2,6 @@ import React, {useEffect, useState, useCallback} from 'react';
 import { locations } from '@contentful/app-sdk';
 import ConfigScreen from './locations/ConfigScreen';
 import EntryEditor from './locations/EntryEditor';
-import VwoClient from './vwo-client';
 import Sidebar from './locations/Sidebar';
 import tokens from '@contentful/f36-tokens';
 import { Modal, Flex, Heading, Paragraph, FormControl, TextInput, TextLink, Button } from '@contentful/f36-components';
@@ -21,13 +20,11 @@ const styles = {
 const App = (props) => {
   const [loading, setLoading] = useState(false);
   const [state,setState] = useState({
-    client: null,
     accessToken: props.sdk.parameters.installation.accessToken || '',
     showAuth: false,
     accountId: props.sdk.parameters.installation.accountId || ''
   });
-
-  const makeClient = useCallback((params) => new VwoClient(params), []);
+  
 
   const openAuth = useCallback(() => {
     setState(prevState => ({ ...prevState, showAuth: true }));
@@ -38,55 +35,24 @@ const App = (props) => {
     const vwoAccountId = props.sdk.parameters.installation.accountId;
 
     if(vwoAccountId && apiToken){
-      const params = {
-        authToken: apiToken,
-        accountId: vwoAccountId,
-        onReauth: openAuth
-      }
       setState({
-        client: makeClient(params),
         accessToken: apiToken,
         accountId: vwoAccountId,
         showAuth: false
       });
     }
-
-
-    // const areCredentialsValid = await validateCredentials(vwoAccountId, apiToken);
-
-    // if (areCredentialsValid?.code === 200){
-    //   const params = {
-    //     authToken: apiToken,
-    //     accountId: vwoAccountId,
-    //     onReauth: openAuth
-    //   }
-    //   setState({
-    //     client: makeClient(params),
-    //     accessToken: apiToken,
-    //     accountId: vwoAccountId,
-    //     showAuth: false
-    //   });
-    // } else if (areCredentialsValid?.code === 429){
-    //   props.sdk.notifier.error(areCredentialsValid.message || 'Rate limit exceeded');
-    // }
-  }, [makeClient, openAuth]);
+  }, [openAuth]);
 
   const updateCredentials = useCallback((credentials) => {
     if (!credentials.token || !credentials.accountId){
       return;
     }
-    let params = {
-      authToken: credentials.token,
-      accountId: credentials.accountId,
-      onReauth: openAuth
-    };
     setState({
-      client: makeClient(params),
       accessToken: credentials.token,
       accountId: credentials.accountId,
       showAuth: false
     });
-  }, [makeClient, openAuth]);
+  }, [openAuth]);
 
   const connectToVwo = useCallback(async () => {
     setLoading(true);
@@ -144,9 +110,9 @@ const App = (props) => {
 
   // Perform conditional rendering based on location
   if (props.sdk.location.is(locations.LOCATION_ENTRY_EDITOR)) {
-    return <EntryEditor sdk={props.sdk} client={state.client} openAuth={openAuth} />
+    return <EntryEditor sdk={props.sdk} openAuth={openAuth} />
   } else if (props.sdk.location.is(locations.LOCATION_ENTRY_SIDEBAR)) {
-    return <Sidebar sdk={props.sdk} client={state.client}/>;
+    return <Sidebar sdk={props.sdk}/>;
   }
 
   // Handle other locations here...
@@ -158,7 +124,6 @@ const App = (props) => {
         accountId={state.accountId}
         updateCredentials={updateCredentials}
         sdk={props.sdk}
-        client={state.client}
       />
     );
   }
