@@ -1,7 +1,8 @@
-import { vi } from 'vitest';
-import ConfigScreen from './ConfigScreen';
+import { describe, expect, it, vi } from 'vitest';
+import ConfigScreen from '../../src/locations/ConfigScreen';
 import { render } from '@testing-library/react';
-import { mockCma, mockSdk } from '../../test/mocks';
+import { mockCma, mockSdk } from '../mocks';
+import React from 'react';
 
 vi.mock('@contentful/react-apps-toolkit', () => ({
   useSDK: () => mockSdk,
@@ -15,6 +16,6 @@ describe('Config Screen component', () => {
     // simulate the user clicking the install button
     await mockSdk.app.onConfigure.mock.calls[0]?.[0]?.();
 
-    expect(getByText('Clone Text')).toBeInTheDocument();
+    expect(getByText('Clone Text')).toBeDefined();
   });
 });
