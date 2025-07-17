@@ -55,12 +55,7 @@
     "test": "vitest run --passWithNoTests",
     "lint": "eslint src",
     "dev": "vite",
-    "preview": "vite preview",
-    "create-app-definition": "contentful-app-scripts create-app-definition",
-    "add-locations": "contentful-app-scripts add-locations",
-    "upload": "contentful-app-scripts upload --bundle-dir ./build",
-    "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN",
-    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 6ayotuRVOE8Fcw2SI2FFdE --token ${CONTENTFUL_CMA_TOKEN}"
+    "preview": "vite preview"
   },
   "browserslist": {
     "production": [
