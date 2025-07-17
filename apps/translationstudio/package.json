@@ -14,7 +14,8 @@
     "start": "npx serve@latest out",
     "start2": "next start",
     "lint": "next lint",
-    "test": "jest --watch",
+    "test": "jest",
+    "test_watch": "jest --watch",
     "test:ci": "jest --ci",
     "install-ci": "npm ci",
     "create-app-definition": "contentful-app-scripts create-app-definition"
