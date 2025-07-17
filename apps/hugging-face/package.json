@@ -22,7 +22,7 @@
     "@typescript-eslint/eslint-plugin": "^8.37.0",
     "@typescript-eslint/parser": "^8.37.0",
     "@vitejs/plugin-react": "^4.6.0",
-    "contentful-management": "^11.54.0",
+    "contentful-management": "^11.54.2",
     "eslint": "^9.31.0",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-prettier": "^5.5.1",
