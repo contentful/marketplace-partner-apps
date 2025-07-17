@@ -36,7 +36,6 @@ function Variations(props) {
   const vwoVariations = props.featureFlag.variations;
   const mappedVariations = mapVwoVariationsAndContent(vwoVariations, props.entries, props.contentTypes, props.sdk.locales.default);
   const defaultVariation = mappedVariations.filter((variation) => variation.vwoVariation.id === 1)[0] || {};
-  console.log({ defaultVariation });
 
   const isDefaultVariationContentAdded = defaultVariation?.variationContent;
 

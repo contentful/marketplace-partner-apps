@@ -309,7 +309,7 @@ const EntryEditor = (props) => {
       .finally(() => {
         dispatch({ type: actionTypes.SET_LOADING, payload: false });
       });
-  }, [props]);
+  }, []);
 
   useEffect(() => {
     const unsubscribeMetaChange = props.sdk.entry.fields.meta.onValueChanged(data => {

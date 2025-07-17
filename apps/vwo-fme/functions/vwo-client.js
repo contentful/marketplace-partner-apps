@@ -90,10 +90,8 @@ export default class VwoClient {
       },
     });
 
-    console.log({ status: response.status }, this.accessToken, this.featureId);
     if (response.status === 200) {
       const resp = await response.json();
-      console.log({ resp }, 'from updateVariations');
       return resp;
     }
 
