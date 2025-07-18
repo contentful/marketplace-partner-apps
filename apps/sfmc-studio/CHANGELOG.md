@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.4](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.3...sfmc-studio-v1.2.4) (2025-07-18)
+
+
+### Bug Fixes
+
+* **deps:** bump @ant-design/plots from 2.5.0 to 2.6.0 in /apps/sfmc-studio in the production-dependencies group ([#5423](https://github.com/contentful/marketplace-partner-apps/issues/5423)) ([0db26e1](https://github.com/contentful/marketplace-partner-apps/commit/0db26e1a5df2a355619245d4aef9d31d972f188e))
+* **deps:** bump the production-dependencies group in /apps/sfmc-studio with 2 updates ([#5440](https://github.com/contentful/marketplace-partner-apps/issues/5440)) ([c1f7398](https://github.com/contentful/marketplace-partner-apps/commit/c1f7398ff2f27705fae1fe47c31c436003c0d982))
+
 ## [1.2.3](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.2...sfmc-studio-v1.2.3) (2025-07-02)
 
 
