@@ -1,6 +1,6 @@
 {
   "name": "raster",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "private": true,
   "dependencies": {
     "@contentful/app-scripts": "^1.26.0",
