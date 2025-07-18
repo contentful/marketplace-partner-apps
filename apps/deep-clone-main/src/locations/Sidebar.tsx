@@ -2,23 +2,18 @@ import { useState } from 'react';
 import { Stack, Button, Caption } from '@contentful/f36-components';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { SidebarAppSDK } from '@contentful/app-sdk';
-import { cloneEntry, InstallationParams } from '../utils/clone';
+import EntryCloner from '../utils/EntryCloner';
+import { AppParameters } from '@/vite-env';
 
 function Sidebar() {
   const sdk = useSDK() as SidebarAppSDK;
 
-  const installationParams: InstallationParams = {
+  const installationParams: AppParameters = {
     cloneText: 'Copy',
     cloneTextBefore: true,
-    cloneAssets: false,
     automaticRedirect: true,
-    msToRedirect: 5000,
     ...sdk.parameters.installation,
   };
-
-  if (typeof installationParams.msToRedirect === 'string') {
-    installationParams.msToRedirect = parseInt(installationParams.msToRedirect, 10);
-  }
 
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isDisabled, setDisabled] = useState<boolean>(false);
@@ -27,7 +22,9 @@ function Sidebar() {
   const clone = async (): Promise<void> => {
     setLoading(true);
     setDisabled(true);
-    const clonedEntry = await cloneEntry(sdk.ids.entry, installationParams, sdk.cma);
+    await sdk.entry.save();
+    const cloner = new EntryCloner(sdk.cma, installationParams);
+    const clonedEntry = await cloner.cloneEntry(sdk.ids.entry);
 
     setLoading(false);
 
@@ -35,7 +32,7 @@ function Sidebar() {
       setTimeout(() => {
         sdk.navigator.openEntry(clonedEntry.sys.id);
         setDisabled(false);
-      }, installationParams.msToRedirect);
+      }, 5000);
     } else {
       setDisabled(false);
     }
@@ -50,7 +47,7 @@ function Sidebar() {
         {isLoading
           ? `Cloning: Found 0 references, created 0 new entries, updated 0 references`
           : isDisabled && installationParams.automaticRedirect
-          ? `Redirecting to newly created clone in ${Math.round(installationParams.msToRedirect / 1000)} seconds.`
+          ? `Redirecting to newly created clone in ${Math.round(5000 / 1000)} seconds.`
           : 'This clones the entry and all referenced entries'}
       </Caption>
     </Stack>
