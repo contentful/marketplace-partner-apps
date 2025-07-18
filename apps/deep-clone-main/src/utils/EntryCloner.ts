@@ -2,9 +2,7 @@ import { ContentTypeProps, CreateEntryProps, EntryProps } from 'contentful-manag
 import { CMAClient } from '@contentful/app-sdk';
 import { AppParameters } from '@/vite-env';
 
-type ReferenceMap = {
-  [entryId: string]: EntryProps;
-};
+type ReferenceMap = Record<string, EntryProps>;
 
 class EntryCloner {
   private references: ReferenceMap = {};
@@ -49,7 +47,7 @@ class EntryCloner {
     }
   }
 
-  private async createClones(): Promise<ReferenceMap> {
+  private async createClones(): Promise<void> {
     for (const entryId in this.references) {
       const entry = this.references[entryId];
 
@@ -65,8 +63,6 @@ class EntryCloner {
 
       this.clones[entryId] = clone;
     }
-
-    return this.clones;
   }
 
   private async updateReferenceTree(): Promise<void> {
@@ -138,24 +134,18 @@ class EntryCloner {
     // Create a deep copy of the entry fields to avoid modifying the original
     const entryFields = JSON.parse(JSON.stringify(entry.fields));
 
-    const contentType =
-      this.contentTypes[entry.sys.contentType.sys.id] ||
-      (await this.cma.contentType.get({
-        contentTypeId: entry.sys.contentType.sys.id,
-      }));
-    this.contentTypes[entry.sys.contentType.sys.id] = contentType;
+    const contentTypeId = entry.sys.contentType.sys.id;
+    const contentType = this.contentTypes[contentTypeId] || (await this.cma.contentType.get({ contentTypeId: contentTypeId }));
+    this.contentTypes[contentTypeId] = contentType;
 
     const titleField = contentType.fields.find((field) => field.id === contentType.displayField);
 
     // Update title field for the clone
     if (titleField && entryFields[titleField.id]) {
-      for (const locale in entryFields[titleField.id]) {
-        if (entryFields[titleField.id][locale]) {
-          const title = entryFields[titleField.id][locale];
-          entryFields[titleField.id][locale] = this.parameters.cloneTextBefore
-            ? `${this.parameters.cloneText} ${title}`
-            : `${title} ${this.parameters.cloneText}`;
-        }
+      const titleFieldValues = entryFields[titleField.id];
+      for (const locale in titleFieldValues) {
+        const title = titleFieldValues[locale];
+        titleFieldValues[locale] = this.parameters.cloneTextBefore ? `${this.parameters.cloneText} ${title}` : `${title} ${this.parameters.cloneText}`;
       }
     }
 

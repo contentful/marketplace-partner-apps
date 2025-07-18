@@ -1,12 +1,12 @@
-import type { EntryProps } from 'contentful-management';
+import type { EntryProps, KeyValueMap } from 'contentful-management';
 
-export const getMockContentType = (fields: any[], displayField: string = 'title') => ({
+export const getMockContentType = (fields: KeyValueMap[], displayField: string = 'title') => ({
   sys: { id: 'testContentType' },
   fields,
   displayField,
 });
 
-export const getMockEntry = (id: string, fields: any): EntryProps => ({
+export const getMockEntry = (id: string, fields: KeyValueMap): EntryProps => ({
   sys: {
     id,
     type: 'Entry',
