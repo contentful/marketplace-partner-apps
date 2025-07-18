@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.4](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.1.3...shopify-sku-v2.1.4) (2025-07-18)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group in /apps/shopify with 2 updates ([#5520](https://github.com/contentful/marketplace-partner-apps/issues/5520)) ([7b1add9](https://github.com/contentful/marketplace-partner-apps/commit/7b1add9ff0b148ddb9ea8a9d2ecff7e954b4c696))
+
 ## [2.1.3](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.1.2...shopify-sku-v2.1.3) (2025-07-02)
 
 
