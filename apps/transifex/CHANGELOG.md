@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.13](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.2.12...transifex-contentful-app-v1.2.13) (2025-07-18)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.29.7 to 4.31.0 in /apps/transifex in the production-dependencies group ([#5574](https://github.com/contentful/marketplace-partner-apps/issues/5574)) ([81bb1f1](https://github.com/contentful/marketplace-partner-apps/commit/81bb1f1536d5ec50882e90388c136e2034091c06))
+* **deps:** bump @contentful/f36-components from 4.80.4 to 4.80.5 in /apps/transifex in the production-dependencies group ([#5448](https://github.com/contentful/marketplace-partner-apps/issues/5448)) ([174c61e](https://github.com/contentful/marketplace-partner-apps/commit/174c61ea50f91e32e294b9c353dabf235267cd4c))
+* **deps:** bump the production-dependencies group in /apps/transifex with 2 updates ([#5584](https://github.com/contentful/marketplace-partner-apps/issues/5584)) ([ada8c19](https://github.com/contentful/marketplace-partner-apps/commit/ada8c198efa53a6373ee45f05cca53f17451197e))
+
 ## [1.2.12](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.2.11...transifex-contentful-app-v1.2.12) (2025-07-02)
 
 
