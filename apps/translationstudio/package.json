@@ -14,7 +14,7 @@
     "start": "npx serve@latest out",
     "start2": "next start",
     "lint": "next lint",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test_watch": "jest --watch",
     "test:ci": "jest --ci",
     "install-ci": "npm ci",
