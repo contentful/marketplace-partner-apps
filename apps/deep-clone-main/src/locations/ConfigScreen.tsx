@@ -52,8 +52,6 @@ function ConfigScreen() {
     // Ensure all parameters are properly formatted
     const formattedParameters: AppParameters = {
       ...parameters,
-      msToRedirect: typeof parameters.msToRedirect === 'string' ? parseInt(parameters.msToRedirect, 10) : parameters.msToRedirect,
-      selectedContentTypes: selectedContentTypes, // Include selected content types
     };
 
     return {
