@@ -26,6 +26,6 @@
   "apps/sfmc-studio": "1.2.3",
   "apps/statsig": "1.1.3",
   "apps/convox": "1.0.1",
-  "apps/lottie-preview": "1.0.7",
+  "apps/lottie-preview": "1.1.0",
   "apps/hugging-face": "1.1.2"
 }
