@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.0](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.11...thrillworks-flex-fields-app-v1.3.0) (2025-07-18)
+
+
+### Features
+
+* use new Forma 36 Layout component [UFO-1877] ([#5544](https://github.com/contentful/marketplace-partner-apps/issues/5544)) ([6b1e4f0](https://github.com/contentful/marketplace-partner-apps/commit/6b1e4f06e002d9597cd401ed34a5351a3a9ef6d6))
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group in /apps/flexfields with 2 updates ([#5432](https://github.com/contentful/marketplace-partner-apps/issues/5432)) ([dbca928](https://github.com/contentful/marketplace-partner-apps/commit/dbca928b835112c8ce3f3981e31c842610757904))
+* **deps:** bump the production-dependencies group in /apps/flexfields with 2 updates ([#5499](https://github.com/contentful/marketplace-partner-apps/issues/5499)) ([92ae5e1](https://github.com/contentful/marketplace-partner-apps/commit/92ae5e1c78831197e2b89c70a414631bf6650693))
+
 ## [1.2.11](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.10...thrillworks-flex-fields-app-v1.2.11) (2025-07-02)
 
 
