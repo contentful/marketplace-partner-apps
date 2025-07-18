@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.7...vwo-fme-v1.0.8) (2025-07-18)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.29.7 to 4.31.0 in /apps/vwo-fme in the production-dependencies group ([#5579](https://github.com/contentful/marketplace-partner-apps/issues/5579)) ([9edadbd](https://github.com/contentful/marketplace-partner-apps/commit/9edadbdf1fc16bdb64651c428d163d19f5e911cc))
+* **deps:** bump @contentful/app-sdk from 4.31.0 to 4.32.0 in /apps/vwo-fme in the production-dependencies group ([#5587](https://github.com/contentful/marketplace-partner-apps/issues/5587)) ([ac2a46f](https://github.com/contentful/marketplace-partner-apps/commit/ac2a46f061304e7265f6391845094b599886a7ac))
+* **deps:** bump @contentful/f36-components from 4.80.4 to 4.80.5 in /apps/vwo-fme in the production-dependencies group ([#5439](https://github.com/contentful/marketplace-partner-apps/issues/5439)) ([f2dbdc7](https://github.com/contentful/marketplace-partner-apps/commit/f2dbdc7147095af61f16697ea26523b3eec46352))
+* **deps:** bump on-headers and compression in /apps/vwo-fme ([#5615](https://github.com/contentful/marketplace-partner-apps/issues/5615)) ([3f34b11](https://github.com/contentful/marketplace-partner-apps/commit/3f34b115f3c7b3f3a3173379d71c00d28e9eeb55))
+
 ## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.6...vwo-fme-v1.0.7) (2025-07-02)
 
 
