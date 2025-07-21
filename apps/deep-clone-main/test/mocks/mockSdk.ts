@@ -5,32 +5,25 @@ const mockSdk = {
     onConfigure: vi.fn(),
     getParameters: vi.fn().mockReturnValue({}),
     setReady: vi.fn(),
-    getCurrentState: vi.fn(),
   },
   ids: {
-    app: 'test-app',
-    space: 'test-space',
-    environment: 'master',
+    entry: 'test-entry',
   },
   parameters: {
     installation: {
       cloneText: 'Copy',
       cloneTextBefore: true,
-      automaticRedirect: true,
-      msToRedirect: 5000,
+      redirect: true,
     },
-    instance: {},
   },
   entry: {
-    getSys: vi.fn().mockReturnValue({ id: 'test-entry' }),
-    fields: {},
-  },
-  contentType: {
-    getSys: vi.fn().mockReturnValue({ id: 'test-content-type' }),
+    save: vi.fn(),
   },
   notifier: {
     success: vi.fn(),
-    error: vi.fn(),
+  },
+  navigator: {
+    openEntry: vi.fn(),
   },
 };
 
