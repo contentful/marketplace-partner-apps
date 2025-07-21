@@ -18,7 +18,8 @@
     "test_watch": "jest --watch",
     "test:ci": "jest --ci",
     "install-ci": "npm ci",
-    "create-app-definition": "contentful-app-scripts create-app-definition"
+    "create-app-definition": "contentful-app-scripts create-app-definition",
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./out --organization-id ${DEFINITIONS_ORG_ID} --definition-id 7FSju5TTAttraHZZr7Xfcr --token ${CONTENTFUL_CMA_TOKEN}"
   },
   "dependencies": {
     "@contentful/app-sdk": "^4.29.6",
