@@ -3,5 +3,5 @@
 export type AppParameters = {
   cloneText: string;
   cloneTextBefore: boolean;
-  redirect: boolean;
+  automaticRedirect: boolean;
 };

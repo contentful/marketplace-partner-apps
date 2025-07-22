@@ -13,7 +13,7 @@ const mockSdk = {
     installation: {
       cloneText: 'Copy',
       cloneTextBefore: true,
-      redirect: true,
+      automaticRedirect: true,
     },
   },
   entry: {

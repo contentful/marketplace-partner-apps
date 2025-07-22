@@ -3,6 +3,12 @@ import { CMAClient } from '@contentful/app-sdk';
 import { AppParameters } from '@/vite-env';
 
 type ReferenceMap = Record<string, EntryProps>;
+type CloneResult = {
+  clonedEntry: EntryProps;
+  referencesCount: number;
+  clonesCount: number;
+  updatesCount: number;
+};
 
 class EntryCloner {
   private references: ReferenceMap = {};
@@ -17,12 +23,7 @@ class EntryCloner {
     this.parameters = parameters;
   }
 
-  async cloneEntry(entryId: string): Promise<{
-    clonedEntry: EntryProps;
-    referencesCount: number;
-    clonesCount: number;
-    updatesCount: number;
-  }> {
+  async cloneEntry(entryId: string): Promise<CloneResult> {
     this.references = {};
     this.clones = {};
     this.updates = 0;

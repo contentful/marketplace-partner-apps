@@ -18,7 +18,7 @@ describe('EntryCloner', () => {
     mockParameters = {
       cloneText: '[CLONE]',
       cloneTextBefore: true,
-      redirect: true,
+      automaticRedirect: true,
     };
 
     entryCloner = new EntryCloner(mockCma as any, mockParameters);
@@ -159,7 +159,7 @@ describe('EntryCloner', () => {
           ],
         },
       });
-      const updateddMainEntry = getMockEntry('cloned-main-entry-id', {
+      const updatedMainEntry = getMockEntry('cloned-main-entry-id', {
         title: { 'en-US': '[CLONE] Main Entry Title' },
         references: {
           'en-US': [
@@ -175,7 +175,7 @@ describe('EntryCloner', () => {
 
       const result = await entryCloner.cloneEntry('main-entry-id');
       expect(result).toEqual({
-        clonedEntry: updateddMainEntry,
+        clonedEntry: updatedMainEntry,
         referencesCount: 2,
         clonesCount: 2,
         updatesCount: 1,

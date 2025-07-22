@@ -18,21 +18,22 @@ function Sidebar() {
   const [referencesCount, setReferencesCount] = useState<number>(0);
   const [clonesCount, setClonesCount] = useState<number>(0);
   const [updatesCount, setUpdatesCount] = useState<number>(0);
-  const [countdown, setCountdown] = useState<number>(REDIRECT_DELAY / 1000);
+  const [countdown, setCountdown] = useState<number>(0);
 
   useEffect(() => {
-    if (finished && parameters.redirect) {
-      const interval = setInterval(() => {
-        if (countdown > 0) {
-          setCountdown((currentCountdown) => currentCountdown - 1);
-        } else {
+    if (countdown === 0) return;
+
+    const interval = setInterval(() => {
+      setCountdown((currentCountdown) => {
+        if (currentCountdown <= 1) {
           clearInterval(interval);
+          return 0;
         }
-      }, 1000);
-      return () => clearInterval(interval);
-    }
-    return undefined;
-  }, [finished]);
+        return currentCountdown - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [countdown]);
 
   const clone = async (): Promise<void> => {
     setLoading(true);
@@ -51,7 +52,8 @@ function Sidebar() {
     setUpdatesCount(updatesCount);
     setLoading(false);
     setFinished(true);
-    if (parameters.redirect) {
+    setCountdown(REDIRECT_DELAY / 1000);
+    if (parameters.automaticRedirect) {
       setTimeout(() => {
         sdk.navigator.openEntry(clonedEntry.sys.id);
       }, REDIRECT_DELAY);
@@ -80,9 +82,9 @@ function Sidebar() {
           {cloneMessage()}
         </Text>
       )}
-      {finished && parameters.redirect && (
+      {finished && parameters.automaticRedirect && (
         <Text fontColor="gray500" fontWeight="fontWeightMedium">
-          Redirecting to newly created clone in {countdown} seconds.
+          Redirecting to newly created clone in {countdown} seconds
         </Text>
       )}
     </Stack>
