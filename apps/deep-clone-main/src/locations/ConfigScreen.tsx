@@ -1,61 +1,47 @@
-import { useCallback, useState, useEffect, ChangeEvent } from 'react';
-import { Heading, Card, Tabs, Stack, FormControl, TextInput, Radio, Paragraph, FormLabel } from '@contentful/f36-components';
+import { useCallback, useState, useEffect } from 'react';
+import { Heading, Stack, FormControl, TextInput, Radio, Paragraph, Flex, Box, Subheading, Switch } from '@contentful/f36-components';
 import { useSDK } from '@contentful/react-apps-toolkit';
-import { SelectContentTypes } from '@contentful/app-components';
 import { AppParameters } from '../vite-env';
 import { ConfigAppSDK } from '@contentful/app-sdk';
-
-interface ConfigParameters {
-  cloneTextBefore: boolean;
-  cloneAssets: boolean;
-  cloneText: string;
-  automaticRedirect: boolean;
-  msToRedirect: string | number;
-  selectedContentTypes?: string[];
-}
-
-interface ConfigResult {
-  parameters: AppParameters;
-}
+import { styles } from './ConfigScreen.styles';
+import ContentTypeMultiSelect, { ContentType } from '../components/ContentTypeMultiSelect';
 
 function ConfigScreen() {
-  const [parameters, setParameters] = useState<ConfigParameters>({
-    cloneTextBefore: true,
-    cloneAssets: false,
+  const [parameters, setParameters] = useState<AppParameters>({
     cloneText: 'Copy',
+    cloneTextBefore: true,
     automaticRedirect: true,
-    msToRedirect: 5000,
   });
-
-  // Add state for selected content types
-  const [selectedContentTypes, setSelectedContentTypes] = useState<string[]>([]);
-
-  const sdk = useSDK() as ConfigAppSDK;
+  const [selectedContentTypes, setSelectedContentTypes] = useState<ContentType[]>([]);
+  const sdk = useSDK<ConfigAppSDK>();
 
   useEffect(() => {
     (async () => {
-      const currentParameters = await sdk.app.getParameters();
-
+      const currentParameters: AppParameters | null = await sdk.app.getParameters();
       if (currentParameters) {
-        setParameters(currentParameters as ConfigParameters);
-        // Initialize selected content types from parameters if they exist
-        if (currentParameters.selectedContentTypes) {
-          setSelectedContentTypes(currentParameters.selectedContentTypes);
-        }
+        setParameters({ ...parameters, ...currentParameters });
       }
-
       sdk.app.setReady();
     })();
   }, [sdk]);
 
-  const onConfigure = useCallback(async (): Promise<ConfigResult> => {
-    // Ensure all parameters are properly formatted
-    const formattedParameters: AppParameters = {
-      ...parameters,
-    };
+  const onConfigure = useCallback(async () => {
+    if (!parameters.cloneText?.trim()) {
+      sdk.notifier.error('The app configuration was not saved. Please try again.');
+      return false;
+    }
+    const editorInterface = selectedContentTypes.reduce((acc, contentType) => {
+      return {
+        ...acc,
+        [contentType.id]: {
+          sidebar: { position: 0 },
+        },
+      };
+    }, {});
 
     return {
-      parameters: formattedParameters,
+      parameters,
+      targetState: { EditorInterface: { ...editorInterface } },
     };
   }, [parameters, selectedContentTypes]);
 
@@ -63,156 +49,77 @@ function ConfigScreen() {
     sdk.app.onConfigure(onConfigure);
   }, [sdk, onConfigure]);
 
-  // Handler for content type selection
-  const handleContentTypeSelection = useCallback((contentTypeIds: string[]) => {
-    console.log('Selected content types:', contentTypeIds);
-    setSelectedContentTypes(contentTypeIds);
-  }, []);
-
-  const handleCloneTextChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setParameters({ ...parameters, cloneText: e.target.value });
-    },
-    [parameters]
-  );
-
-  const handleMsToRedirectChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setParameters({ ...parameters, msToRedirect: e.target.value });
-    },
-    [parameters]
-  );
-
   return (
-    <Card style={{ maxWidth: '50em', margin: '3em auto' }}>
-      <img src="https://www.svgrepo.com/show/3110/copy.svg" alt="Deep Cloning" style={{ height: '5em', display: 'block' }} />
-      <Tabs defaultTab="first">
-        <Tabs.List>
-          <Tabs.Tab panelId="first">Configuration</Tabs.Tab>
-          <Tabs.Tab panelId="second">Content Types</Tabs.Tab>
-          <Tabs.Tab panelId="third">Feedback</Tabs.Tab>
-        </Tabs.List>
-        <Tabs.Panel id="first" style={{ marginTop: '3em' }}>
-          <Stack flexDirection="column" alignItems="left">
-            <FormControl isRequired isInvalid={!parameters.cloneText}>
-              <FormControl.Label>Clone Text</FormControl.Label>
-              <TextInput
-                value={parameters.cloneText}
-                name="cloneText"
-                type="clone-text"
-                placeholder="Your clone text (before or after the title)"
-                onChange={handleCloneTextChange}
-              />
-              <FormControl.HelpText>Displayed before or after the title of the entry.</FormControl.HelpText>
-              {!parameters.cloneText && <FormControl.ValidationMessage>Please, provide your clone text</FormControl.ValidationMessage>}
-            </FormControl>
+    <Flex justifyContent="center" alignItems="center">
+      <Box marginBottom="spacing2Xl" marginTop="spacing2Xl">
+        <Heading>Set up Deep Clone</Heading>
 
-            <FormControl isInvalid={!parameters.cloneTextBefore}>
-              <FormLabel>Display 'clone' text before or after</FormLabel>
+        <Subheading marginBottom="spacing2Xs">Assign content types</Subheading>
+        <Paragraph marginBottom="spacingM">
+          The Deep Clone app will only be enabled for the content types you assign. The sidebar widget will be displayed on these entry pages.
+        </Paragraph>
+        <Paragraph fontWeight="fontWeightDemiBold" marginBottom="spacingXs">
+          Content types
+        </Paragraph>
+        <ContentTypeMultiSelect selectedContentTypes={selectedContentTypes} setSelectedContentTypes={setSelectedContentTypes} sdk={sdk} cma={sdk.cma} />
 
-              <Stack flexDirection="row">
-                <Radio
-                  id="radiocloneTextBefore"
-                  name="radio-clone-text-before"
-                  isChecked={parameters.cloneTextBefore}
-                  onChange={() => setParameters({ ...parameters, cloneTextBefore: true })}>
-                  Before
-                </Radio>
-                <Radio
-                  id="radiocloneTextBefore2"
-                  name="radio-clone-text-before2"
-                  isChecked={!parameters.cloneTextBefore}
-                  onChange={() => setParameters({ ...parameters, cloneTextBefore: false })}>
-                  After
-                </Radio>
-              </Stack>
-            </FormControl>
-            <FormControl isInvalid={!parameters.automaticRedirect}>
-              <FormLabel>Enable Automatic Redirect</FormLabel>
-              <Stack flexDirection="row">
-                <Radio
-                  id="radiocautomaticRedirect"
-                  name="radio-automatic-redirect"
-                  isChecked={parameters.automaticRedirect}
-                  onChange={() => setParameters({ ...parameters, automaticRedirect: true })}>
-                  Yes
-                </Radio>
-                <Radio
-                  id="radioautomaticRedirect2"
-                  name="radio-automatic-redirect2"
-                  isChecked={!parameters.automaticRedirect}
-                  onChange={() => setParameters({ ...parameters, automaticRedirect: false })}>
-                  No
-                </Radio>
-              </Stack>
-            </FormControl>
-            {/* 
+        <Subheading marginTop="spacing2Xl" marginBottom="spacingL">
+          Naming
+        </Subheading>
 
-            <FormControl isInvalid={!parameters.cloneAssets}>
-              <FormLabel>Clone assets</FormLabel>
-              <Stack flexDirection="row">
-                <Radio
-                  id="radioCloneAssets"
-                  name="radio-clone-asset"
-                  isChecked={parameters.cloneAssets}
-                  onChange={() =>
-                    setParameters({ ...parameters, cloneAssets: true })
-                  }
-                >
-                  Yes
-                </Radio>
-                <Radio
-                  id="radioCloneAssets2"
-                  name="radio-clone-asset2"
-                  isChecked={!parameters.cloneAssets}
-                  onChange={() =>
-                    setParameters({ ...parameters, cloneAssets: false })
-                  }
-                >
-                  No
-                </Radio>
-              </Stack>
-            </FormControl>
-            */}
+        <FormControl isRequired isInvalid={!parameters.cloneText}>
+          <FormControl.Label className={styles.textInputLabel}>Clone text</FormControl.Label>
+          <TextInput value={parameters.cloneText} name="cloneText" type="text" onChange={(e) => setParameters({ ...parameters, cloneText: e.target.value })} />
+          <FormControl.HelpText>This text will display at the beginning or end of the cloned entry name</FormControl.HelpText>
+          {!parameters.cloneText && <FormControl.ValidationMessage>Please, provide a clone text</FormControl.ValidationMessage>}
+        </FormControl>
 
-            <FormControl isRequired isInvalid={!parameters.msToRedirect}>
-              <FormControl.Label>Milliseconds to redirect</FormControl.Label>
-              <TextInput
-                value={parameters.msToRedirect.toString()}
-                name="msToRedirect"
-                type="ms-to-redirect"
-                placeholder="The seconds it takes for the redirect"
-                onChange={handleMsToRedirectChange}
-              />
-              <FormControl.HelpText>How quickly should the page redirect to the new entry</FormControl.HelpText>
-              {!parameters.msToRedirect && <FormControl.ValidationMessage>Please, provide the seconds for the redirect</FormControl.ValidationMessage>}
-            </FormControl>
+        <FormControl isInvalid={!parameters.cloneTextBefore}>
+          <FormControl.Label className={styles.textInputLabel} marginBottom="spacingM">
+            Display "clone text" before or after the cloned entry's name?
+          </FormControl.Label>
 
-            <Paragraph>
-              <strong>Note:</strong> After saving changes, you may need to refresh your browser for the changes to take effect in the sidebar.
-            </Paragraph>
+          <Stack flexDirection="column" alignItems="start" spacing="spacingXs">
+            <Radio
+              id="cloneTextBefore"
+              name="clone-text-before"
+              isChecked={parameters.cloneTextBefore}
+              onChange={() => setParameters({ ...parameters, cloneTextBefore: true })}>
+              Before
+            </Radio>
+            <Radio
+              id="cloneTextBefore2"
+              name="clone-text-before"
+              isChecked={!parameters.cloneTextBefore}
+              onChange={() => setParameters({ ...parameters, cloneTextBefore: false })}>
+              After
+            </Radio>
           </Stack>
-        </Tabs.Panel>
+        </FormControl>
 
-        <Tabs.Panel id="second" style={{ marginTop: '3em' }}>
-          <Stack flexDirection="column" alignItems="left" spacing="spacingM">
-            <Heading as="h3">Select Content Types</Heading>
-            <Paragraph>Choose which content types should have the clone functionality available in their sidebar.</Paragraph>
+        <Subheading marginTop="spacing2Xl" marginBottom="spacingL">
+          Redirect
+        </Subheading>
 
-            <SelectContentTypes cma={sdk.cma} selectedContentTypeIds={selectedContentTypes} onSelectionChange={handleContentTypeSelection} />
-          </Stack>
-        </Tabs.Panel>
+        <FormControl isInvalid={!parameters.automaticRedirect}>
+          <Switch
+            id="automaticRedirect"
+            name="automatic-redirect"
+            isChecked={parameters.automaticRedirect}
+            onChange={() => setParameters({ ...parameters, automaticRedirect: !parameters.automaticRedirect })}
+            helpText="Enable automatic redirect 3 seconds after the entry is cloned">
+            Automatic redirect
+          </Switch>
+        </FormControl>
 
-        <Tabs.Panel id="third" style={{ marginTop: '3em' }}>
-          <Heading marginTop="spacingS" as="h3">
-            Questions or comments?
-          </Heading>
-          <Paragraph>
-            Please reach out to <a href="mailto:patrick.geers@contentful.com">Patrick Geers</a>
-          </Paragraph>
-        </Tabs.Panel>
-      </Tabs>
-    </Card>
+        <Subheading marginTop="spacing2Xl" marginBottom="spacingL">
+          Getting started
+        </Subheading>
+        <Paragraph>
+          To use Deep Clone, you must add the app to your entry sidebar. Navigate to the content model, select a content type and click on Sidebar.
+        </Paragraph>
+      </Box>
+    </Flex>
   );
 }
 
