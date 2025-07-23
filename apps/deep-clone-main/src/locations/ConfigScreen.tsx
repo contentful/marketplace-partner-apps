@@ -82,13 +82,15 @@ function ConfigScreen() {
           <Stack flexDirection="column" alignItems="start" spacing="spacingXs">
             <Radio
               id="cloneTextBefore"
+              testId="cloneTextBefore"
               name="clone-text-before"
               isChecked={parameters.cloneTextBefore}
               onChange={() => setParameters({ ...parameters, cloneTextBefore: true })}>
               Before
             </Radio>
             <Radio
-              id="cloneTextBefore2"
+              id="cloneTextAfter"
+              testId="cloneTextAfter"
               name="clone-text-before"
               isChecked={!parameters.cloneTextBefore}
               onChange={() => setParameters({ ...parameters, cloneTextBefore: false })}>
@@ -106,7 +108,7 @@ function ConfigScreen() {
             id="automaticRedirect"
             name="automatic-redirect"
             isChecked={parameters.automaticRedirect}
-            onChange={() => setParameters({ ...parameters, automaticRedirect: !parameters.automaticRedirect })}
+            onChange={(e) => setParameters({ ...parameters, automaticRedirect: e.target.checked })}
             helpText="Enable automatic redirect 3 seconds after the entry is cloned">
             Automatic redirect
           </Switch>
