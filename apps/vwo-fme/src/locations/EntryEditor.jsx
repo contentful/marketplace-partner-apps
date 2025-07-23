@@ -1,4 +1,4 @@
-import React, {useEffect, useCallback, useReducer} from 'react';
+import React, {useEffect, useCallback, useReducer, useMemo} from 'react';
 import { Skeleton, Modal, Paragraph, Button, Heading, Flex } from '@contentful/f36-components';
 import { css } from 'emotion';
 import CreateFeatureFlag from '../components/CreateFeatureFlag';
@@ -76,10 +76,10 @@ const getNewVariation = (variationName, vwoVariationsLength) => {
 
 const EntryEditor = (props) => {
   const [state, dispatch] = useReducer(reducer, props.sdk, initialState);
-  const vwoService = new VwoAppActionService(props.sdk);
+  const vwoService = useMemo(() => new VwoAppActionService(props.sdk), [props.sdk]);
   
-  const fetchInitialData = async () => {
-    const { space } = props.sdk;
+  const fetchInitialData = useCallback(async () => {
+    const space  = props.sdk.space;
     const [contentTypes, entries] = await Promise.all([
       space.getContentTypes({ order: 'name', limit: 1000}),
       space.getEntries({ skip: 0, limit: 1000})
@@ -102,7 +102,7 @@ const EntryEditor = (props) => {
       entries: entries.items,
       error: error
     }
-  }
+  }, [props.sdk.entry.fields.featureFlag, props.sdk.notifier, vwoService, props.sdk.space]);
 
   const updateVariationsInVwo = async (vwoVariations) => {
     return new Promise(async (resolve, reject) => {
@@ -130,7 +130,7 @@ const EntryEditor = (props) => {
         reject(err.message);
       }
     });
-  }, [props.sdk.entry.fields.featureFlag]);
+  }, [props.sdk.entry.fields.featureFlag, vwoService]);
 
   const updateVwoVariationName = async (vwoVariation, variationName) => {
     const updatedVwoVariations = state.featureFlag.variations.map(variation => {
@@ -309,7 +309,7 @@ const EntryEditor = (props) => {
       .finally(() => {
         dispatch({ type: actionTypes.SET_LOADING, payload: false });
       });
-  }, []);
+  }, [fetchInitialData, props.sdk.notifier]);
 
   useEffect(() => {
     const unsubscribeMetaChange = props.sdk.entry.fields.meta.onValueChanged(data => {
