@@ -63,12 +63,16 @@ export const getRequiredEntryInformation = (entry, contentTypes, defaultLocale) 
   };
 };
 
-export const mapVwoVariationsAndContent = (vwoVariations, entries, contentTypes, defaultLocale) => {
+export const mapVwoVariationsAndContent = async (vwoVariations, contentTypes, defaultLocale, getEntries) => {
   const _vwoVariations = Array.isArray(vwoVariations) ? vwoVariations : [vwoVariations];
+  const entries = await getEntries({
+    'sys.id[in]': Array.from(new Set(_vwoVariations.map((vwoVariation) => vwoVariation?.variables[0]?.value ?? ''))).join(','),
+  });
+  const entryItems = entries.items;
   return _vwoVariations.map((vwoVariation) => {
     if (vwoVariation.variables.length && vwoVariation.variables[0].value) {
       let contentId = vwoVariation.variables[0].value;
-      let entry = entries.find((entry) => entry?.sys?.id === contentId || entry.id === contentId);
+      let entry = entryItems.find((entry) => entry?.sys?.id === contentId || entry.id === contentId);
       if (!entry) {
         return { vwoVariation };
       }

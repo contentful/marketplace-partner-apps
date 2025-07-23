@@ -1,7 +1,7 @@
-import { Button, Heading, List, Paragraph } from '@contentful/f36-components';
+import { Button, Heading, List, Paragraph, Skeleton } from '@contentful/f36-components';
 import { css } from 'emotion';
 import { mapVwoVariationsAndContent } from '../utils';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import VariationItem from './VariationItem';
 import tokens from '@contentful/f36-tokens';
 import CreateContent from './CreateContent';
@@ -34,10 +34,29 @@ const styles = {
 function Variations(props) {
   const [newVariationModal, setNewVariationModal] = useState(false);
   const vwoVariations = props.featureFlag.variations;
-  const mappedVariations = mapVwoVariationsAndContent(vwoVariations, props.entries, props.contentTypes, props.sdk.locales.default);
-  const defaultVariation = mappedVariations.filter((variation) => variation.vwoVariation.id === 1)[0] || {};
+  const [defaultVariation, setDefaultVariation] = useState({});
+  const [isDefaultVariationContentAdded, setIsDefaultVariationContentAdded] = useState(false);
+  const [mappedVariations, setMappedVariations] = useState([]);
+  const [isVariationsLoading, setIsVariationsLoading] = useState(false);
 
-  const isDefaultVariationContentAdded = defaultVariation?.variationContent;
+  const fetchMappedVariations = useCallback(async () => {
+    try {
+      setIsVariationsLoading(true);
+      const mappedVariations = await mapVwoVariationsAndContent(vwoVariations, props.contentTypes, props.sdk.locales.default, props.sdk.space.getEntries);
+      setMappedVariations(mappedVariations);
+      const defaultVariation = mappedVariations.filter((variation) => variation.vwoVariation.id === 1)[0] || {};
+      setDefaultVariation(defaultVariation);
+      setIsDefaultVariationContentAdded(defaultVariation?.variationContent);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsVariationsLoading(false);
+    }
+  }, [vwoVariations, props.contentTypes, props.sdk.locales.default, props.sdk.space.getEntries]);
+
+  useEffect(() => {
+    fetchMappedVariations();
+  }, [fetchMappedVariations]);
 
   return (
     <React.Fragment>
@@ -85,7 +104,7 @@ function Variations(props) {
               Add Variation
             </Button>
           </div>
-          {mappedVariations.length > 1 && (
+          {!isVariationsLoading ? (
             <List style={{ width: '100%', listStyle: 'none', padding: '0px' }}>
               {mappedVariations
                 .filter((variation) => variation.vwoVariation.id !== 1)
@@ -108,6 +127,10 @@ function Variations(props) {
                   );
                 })}
             </List>
+          ) : (
+            <Skeleton.Container>
+              <Skeleton.BodyText numberOfLines={10} />
+            </Skeleton.Container>
           )}
         </div>
       )}
