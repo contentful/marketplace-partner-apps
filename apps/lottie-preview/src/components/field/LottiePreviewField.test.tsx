@@ -1,7 +1,8 @@
+import React from 'react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { useSDK } from '@contentful/react-apps-toolkit';
-import LottiePreviewField from '@src/components/field/LottiePreviewField';
+import LottiePreviewField from './LottiePreviewField';
 
 // Mocks
 vi.mock('@contentful/react-apps-toolkit', () => ({

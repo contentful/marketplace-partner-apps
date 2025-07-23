@@ -2,6 +2,7 @@
   "name": "lottie-preview",
   "version": "1.0.7",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@contentful/app-components": "file:../../packages/contentful-app-components",
     "@contentful/app-sdk": "^4.29.5",
@@ -23,6 +24,7 @@
   "scripts": {
     "start": "vite",
     "build": "rm -rf build && tsc && vite build",
+    "preinstall": "cd ../../packages/contentful-app-components && npm install && npm run build",
     "test": "vitest run --passWithNoTests",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "create-app-definition": "contentful-app-scripts create-app-definition",
@@ -34,7 +36,7 @@
     "extends": "react-app"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.19.1",
+    "@contentful/app-scripts": "2.5.5",
     "@svgr/rollup": "^8.1.0",
     "@testing-library/react": "14.0.0",
     "@testing-library/user-event": "^14.6.1",
