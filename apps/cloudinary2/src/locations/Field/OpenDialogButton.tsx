@@ -4,9 +4,9 @@ import tokens from '@contentful/f36-tokens';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { css } from '@emotion/react';
 import { useCallback } from 'react';
+import logo from '../../assets/logo.svg';
 import { CloudinaryAsset, MediaLibraryResult } from '../../types';
 import { extractAsset } from '../../utils';
-import logo from '../../assets/logo.svg';
 
 const styles = {
   container: css({
@@ -27,10 +27,11 @@ interface Props {
 
 export function OpenDialogButton({ onNewAssetsAdded, isDisabled }: Props) {
   const sdk = useSDK();
+  const action = sdk.parameters.installation.showUploadButton === 'true' ? 'Select or upload an asset' : 'Select an asset';
   const handleDialogOpenClick = useCallback(async () => {
     const result: MediaLibraryResult | undefined = await sdk.dialogs.openCurrentApp({
       position: 'center',
-      title: 'Select or upload a file on Cloudinary',
+      title: `${action} on Cloudinary`,
       shouldCloseOnOverlayClick: true,
       shouldCloseOnEscapePress: true,
       width: 1400,
@@ -48,7 +49,7 @@ export function OpenDialogButton({ onNewAssetsAdded, isDisabled }: Props) {
     <div css={styles.container}>
       <img src={logo} alt="Logo" css={styles.logo} />
       <Button startIcon={<AssetIcon />} variant="secondary" size="small" onClick={handleDialogOpenClick} isDisabled={isDisabled}>
-        Select or upload an asset
+        {action}
       </Button>
     </div>
   );
