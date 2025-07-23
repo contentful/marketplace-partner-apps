@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
-export interface AppParameters {
+export type AppParameters = {
   cloneText: string;
   cloneTextBefore: boolean;
   automaticRedirect: boolean;
-}
+};
