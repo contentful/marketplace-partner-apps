@@ -1,9 +1,7 @@
-import React from 'react';
 import { Box, Button, Modal } from '@contentful/f36-components';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { css } from 'emotion';
-import tokens from '@contentful/f36-tokens';
-import { styles } from '@src/components/modals/LottiePreviewModal.styles';
+import { styles } from '@/components/modals/LottiePreviewModal.styles';
 
 type Props = {
   showLottiePreviewModal: boolean;
