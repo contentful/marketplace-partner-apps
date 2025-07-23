@@ -1,55 +1,92 @@
-import { useState } from 'react';
-import { Stack, Button, Caption } from '@contentful/f36-components';
-import { useSDK } from '@contentful/react-apps-toolkit';
+import { useEffect, useState } from 'react';
+import { Text, Button, Stack } from '@contentful/f36-components';
+import { useAutoResizer, useSDK } from '@contentful/react-apps-toolkit';
 import { SidebarAppSDK } from '@contentful/app-sdk';
 import EntryCloner from '../utils/EntryCloner';
 import { AppParameters } from '@/vite-env';
 
 function Sidebar() {
+  const REDIRECT_DELAY = 3000;
   const sdk = useSDK() as SidebarAppSDK;
+  useAutoResizer();
 
-  const installationParams: AppParameters = {
-    cloneText: 'Copy',
-    cloneTextBefore: true,
-    automaticRedirect: true,
-    ...sdk.parameters.installation,
-  };
+  const parameters = sdk.parameters.installation as AppParameters;
 
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isDisabled, setDisabled] = useState<boolean>(false);
+  const [finished, setFinished] = useState<boolean>(false);
+  const [referencesCount, setReferencesCount] = useState<number>(0);
+  const [clonesCount, setClonesCount] = useState<number>(0);
+  const [updatesCount, setUpdatesCount] = useState<number>(0);
+  const [countdown, setCountdown] = useState<number>(0);
 
-  // Initiate the clone process, show/hide loading, disable/enable button
+  useEffect(() => {
+    if (countdown === 0) return;
+
+    const interval = setInterval(() => {
+      setCountdown((currentCountdown) => {
+        if (currentCountdown <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return currentCountdown - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [countdown]);
+
   const clone = async (): Promise<void> => {
     setLoading(true);
     setDisabled(true);
+    setFinished(false);
+    setReferencesCount(0);
+    setClonesCount(0);
+    setUpdatesCount(0);
+
     await sdk.entry.save();
-    const cloner = new EntryCloner(sdk.cma, installationParams);
-    const clonedEntry = await cloner.cloneEntry(sdk.ids.entry);
+    const cloner = new EntryCloner(sdk.cma, parameters);
+    const { clonedEntry, referencesCount, clonesCount, updatesCount } = await cloner.cloneEntry(sdk.ids.entry);
 
+    setReferencesCount(referencesCount);
+    setClonesCount(clonesCount);
+    setUpdatesCount(updatesCount);
     setLoading(false);
-
-    if (installationParams.automaticRedirect === true) {
+    setFinished(true);
+    setCountdown(REDIRECT_DELAY / 1000);
+    if (parameters.automaticRedirect) {
       setTimeout(() => {
         sdk.navigator.openEntry(clonedEntry.sys.id);
-        setDisabled(false);
-      }, 5000);
+      }, REDIRECT_DELAY);
     } else {
       setDisabled(false);
     }
+    sdk.notifier.success('Clone successful');
+  };
+
+  const cloneMessage = () => {
+    return `Found ${referencesCount} ${referencesCount > 1 ? 'references' : 'reference'}, created ${clonesCount} new ${
+      clonesCount > 1 ? 'entries' : 'entry'
+    }, updated ${updatesCount} ${updatesCount > 1 ? 'references' : 'reference'}`;
   };
 
   return (
-    <Stack alignItems="start" flexDirection="column" spacing="spacingS">
-      <Button variant="primary" isLoading={isLoading} isDisabled={isDisabled} onClick={clone}>
-        Clone
+    <Stack spacing="spacingM" flexDirection="column" alignItems="start">
+      <Text fontColor="gray500" fontWeight="fontWeightMedium">
+        Clone this entry and all referenced entries
+      </Text>
+      <Button variant="secondary" isLoading={isLoading} isDisabled={isDisabled} onClick={clone} isFullWidth>
+        Clone entry
       </Button>
-      <Caption id="caption">
-        {isLoading
-          ? `Cloning: Found 0 references, created 0 new entries, updated 0 references`
-          : isDisabled && installationParams.automaticRedirect
-          ? `Redirecting to newly created clone in ${Math.round(5000 / 1000)} seconds.`
-          : 'This clones the entry and all referenced entries'}
-      </Caption>
+      {finished && (
+        <Text fontColor="gray500" fontWeight="fontWeightMedium">
+          {cloneMessage()}
+        </Text>
+      )}
+      {finished && parameters.automaticRedirect && (
+        <Text fontColor="gray500" fontWeight="fontWeightMedium">
+          Redirecting to newly created clone in {countdown} seconds
+        </Text>
+      )}
     </Stack>
   );
 }

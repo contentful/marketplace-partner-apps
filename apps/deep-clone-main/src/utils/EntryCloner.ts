@@ -3,11 +3,18 @@ import { CMAClient } from '@contentful/app-sdk';
 import { AppParameters } from '@/vite-env';
 
 type ReferenceMap = Record<string, EntryProps>;
+type CloneResult = {
+  clonedEntry: EntryProps;
+  referencesCount: number;
+  clonesCount: number;
+  updatesCount: number;
+};
 
 class EntryCloner {
   private references: ReferenceMap = {};
   private clones: ReferenceMap = {};
   private contentTypes: { [id: string]: ContentTypeProps } = {};
+  private updates: number = 0;
   private parameters: AppParameters;
   private cma: CMAClient;
 
@@ -16,13 +23,19 @@ class EntryCloner {
     this.parameters = parameters;
   }
 
-  async cloneEntry(entryId: string): Promise<EntryProps> {
+  async cloneEntry(entryId: string): Promise<CloneResult> {
     this.references = {};
     this.clones = {};
+    this.updates = 0;
     await this.findReferences(entryId);
     await this.createClones();
     await this.updateReferenceTree();
-    return this.clones[entryId] as EntryProps;
+    return {
+      clonedEntry: this.clones[entryId] as EntryProps,
+      referencesCount: Object.keys(this.references).length,
+      clonesCount: Object.keys(this.clones).length,
+      updatesCount: this.updates,
+    };
   }
 
   private async findReferences(entryId: string): Promise<void> {
@@ -79,6 +92,7 @@ class EntryCloner {
       }
 
       if (cloneWasUpdated) {
+        this.updates++;
         await this.cma.entry.update(
           { entryId: clone.sys.id },
           {
