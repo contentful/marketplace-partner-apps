@@ -71,6 +71,9 @@
     "apps/transifex": {
       "release-type": "node"
     },
+    "apps/translationstudio": {
+      "release-type": "node"
+    },
     "apps/uploadcare": {
       "release-type": "node"
     },
