@@ -47,6 +47,30 @@ describe('Config Screen component', () => {
     });
   });
 
+  it('saves after changing parameters', async () => {
+    const user = userEvent.setup();
+    render(<ConfigScreen />);
+    expect(await screen.findByLabelText(/Clone text/i)).toBeTruthy();
+
+    const input = screen.getByLabelText(/Clone text/i);
+    await user.clear(input);
+    await user.type(input, 'Clone');
+
+    const cloneTextBefore = screen.getByTestId('cloneTextAfter');
+    await user.click(cloneTextBefore);
+
+    const automaticRedirect = screen.getByLabelText(/Automatic redirect/i);
+    await user.click(automaticRedirect);
+
+    await act(async () => {
+      const result = await saveAppInstallation();
+      expect(result).toEqual({
+        parameters: { cloneText: 'Clone', cloneTextBefore: false, automaticRedirect: false },
+        targetState: { EditorInterface: {} },
+      });
+    });
+  });
+
   it('shows a toast error if the clone text is not set', async () => {
     const user = userEvent.setup();
     render(<ConfigScreen />);
