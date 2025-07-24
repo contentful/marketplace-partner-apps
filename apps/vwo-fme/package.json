@@ -16,14 +16,16 @@
   },
   "scripts": {
     "start": "cross-env BROWSER=none react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && npm run build:functions",
+    "build:functions": "contentful-app-scripts build-functions --ci",
     "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
     "create-app-definition": "contentful-app-scripts create-app-definition",
     "upload": "contentful-app-scripts upload --bundle-dir ./build",
     "install-ci": "npm install --legacy-peer-deps",
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 71oYmQJFCIWn9pxizjN8dZ --token ${CONTENTFUL_CMA_TOKEN}",
-    "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id 1Ruf35Q3xWxPZhedm8ygEx --token ${TEST_CMA_TOKEN}"
+    "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${TEST_ORG_ID} --definition-id 1Ruf35Q3xWxPZhedm8ygEx --token ${TEST_CMA_TOKEN}",
+    "upsert-actions": "source .env && contentful-app-scripts upsert-actions"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -41,7 +43,7 @@
     ]
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.27.0",
+    "@contentful/app-scripts": "^2.5.5",
     "@testing-library/jest-dom": "5.17.0",
     "@testing-library/react": "16.3.0",
     "cross-env": "^7.0.3"
