@@ -10,8 +10,6 @@ function Sidebar() {
   const sdk = useSDK() as SidebarAppSDK;
   useAutoResizer();
 
-  const parameters = sdk.parameters.installation as AppParameters;
-
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isDisabled, setDisabled] = useState<boolean>(false);
   const [finished, setFinished] = useState<boolean>(false);
@@ -19,20 +17,81 @@ function Sidebar() {
   const [clonesCount, setClonesCount] = useState<number>(0);
   const [updatesCount, setUpdatesCount] = useState<number>(0);
   const [countdown, setCountdown] = useState<number>(0);
+  const [freshParameters, setFreshParameters] = useState<AppParameters | null>(null);
+
+  // Function to fetch fresh parameters directly from CMA
+  const fetchFreshParameters = async (): Promise<AppParameters> => {
+    try {
+      if (!sdk.ids.organization || !sdk.ids.app || !sdk.ids.space) {
+        throw new Error('Required SDK IDs not available');
+      }
+      
+      const appInstallation = await sdk.cma.appInstallation.getForOrganization({
+        appDefinitionId: sdk.ids.app,
+        organizationId: sdk.ids.organization,
+      });
+      
+      // Find the installation for this space
+      const currentInstallation = appInstallation.items.find(
+        (installation: any) => installation.sys.space?.sys.id === sdk.ids.space
+      );
+      
+      if (currentInstallation?.parameters) {
+        console.log('Fetched fresh parameters from CMA:', currentInstallation.parameters);
+        return currentInstallation.parameters as AppParameters;
+      }
+    } catch (error) {
+      console.warn('Failed to fetch fresh parameters from CMA:', error);
+    }
+    
+    // Fallback to SDK parameters
+    console.log('Using fallback SDK parameters');
+    return sdk.parameters.installation as AppParameters;
+  };
+
+  // Fetch fresh parameters on mount and when config might be updated
+  useEffect(() => {
+    const loadFreshParameters = async () => {
+      const params = await fetchFreshParameters();
+      setFreshParameters(params);
+    };
+
+    // Always load fresh parameters on mount
+    loadFreshParameters();
+
+    // Also check if configuration was recently updated
+    try {
+      const configUpdatedTime = window.localStorage.getItem('deep-clone-config-updated');
+      if (configUpdatedTime) {
+        const updateTime = parseInt(configUpdatedTime);
+        const now = Date.now();
+        const fiveMinutesAgo = now - (5 * 60 * 1000);
+        
+        // If config was updated in the last 5 minutes, fetch fresh parameters
+        if (updateTime > fiveMinutesAgo) {
+          console.log('Configuration recently updated, fetching fresh parameters');
+          window.localStorage.removeItem('deep-clone-config-updated');
+          loadFreshParameters(); // Fetch fresh parameters instead of reloading
+        }
+      }
+    } catch (error) {
+      console.warn('Could not check for configuration updates:', error);
+    }
+  }, []);
 
   useEffect(() => {
     if (countdown === 0) return;
 
-    const interval = setInterval(() => {
+    const interval = window.setInterval(() => {
       setCountdown((currentCountdown) => {
         if (currentCountdown <= 1) {
-          clearInterval(interval);
+          window.clearInterval(interval);
           return 0;
         }
         return currentCountdown - 1;
       });
     }, 1000);
-    return () => clearInterval(interval);
+    return () => window.clearInterval(interval);
   }, [countdown]);
 
   const clone = async (): Promise<void> => {
@@ -42,6 +101,10 @@ function Sidebar() {
     setReferencesCount(0);
     setClonesCount(0);
     setUpdatesCount(0);
+
+    // Fetch fresh parameters each time clone is called
+    const parameters = await fetchFreshParameters();
+    console.log("FRESH PARAMETERS", parameters);
 
     await sdk.entry.save();
     const cloner = new EntryCloner(sdk.cma, parameters);
@@ -53,6 +116,8 @@ function Sidebar() {
     setLoading(false);
     setFinished(true);
     setCountdown(REDIRECT_DELAY / 1000);
+    
+    // Check redirect setting with fresh parameters
     if (parameters.automaticRedirect) {
       setTimeout(() => {
         sdk.navigator.openEntry(clonedEntry.sys.id);
@@ -68,6 +133,9 @@ function Sidebar() {
       clonesCount > 1 ? 'entries' : 'entry'
     }, updated ${updatesCount} ${updatesCount > 1 ? 'references' : 'reference'}`;
   };
+
+  // Get fresh parameters for render logic
+  const parameters = freshParameters || (sdk.parameters.installation as AppParameters);
 
   return (
     <Stack spacing="spacingM" flexDirection="column" alignItems="start">

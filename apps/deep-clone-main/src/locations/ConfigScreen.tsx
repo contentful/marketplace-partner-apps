@@ -39,6 +39,13 @@ function ConfigScreen() {
       };
     }, {});
 
+    // Store flag for sidebar to detect configuration update
+    try {
+      window.localStorage.setItem('deep-clone-config-updated', Date.now().toString());
+    } catch (error) {
+      console.warn('Could not store config update flag:', error);
+    }
+
     return {
       parameters,
       targetState: { EditorInterface: { ...editorInterface } },
