@@ -37,7 +37,6 @@ function Sidebar() {
       );
       
       if (currentInstallation?.parameters) {
-        console.log('Fetched fresh parameters from CMA:', currentInstallation.parameters);
         return currentInstallation.parameters as AppParameters;
       }
     } catch (error) {
@@ -45,11 +44,10 @@ function Sidebar() {
     }
     
     // Fallback to SDK parameters
-    console.log('Using fallback SDK parameters');
     return sdk.parameters.installation as AppParameters;
   };
 
-  // Fetch fresh parameters on mount and when config might be updated
+  // Fetch fresh parameters on mount
   useEffect(() => {
     const loadFreshParameters = async () => {
       const params = await fetchFreshParameters();
@@ -58,25 +56,6 @@ function Sidebar() {
 
     // Always load fresh parameters on mount
     loadFreshParameters();
-
-    // Also check if configuration was recently updated
-    try {
-      const configUpdatedTime = window.localStorage.getItem('deep-clone-config-updated');
-      if (configUpdatedTime) {
-        const updateTime = parseInt(configUpdatedTime);
-        const now = Date.now();
-        const fiveMinutesAgo = now - (5 * 60 * 1000);
-        
-        // If config was updated in the last 5 minutes, fetch fresh parameters
-        if (updateTime > fiveMinutesAgo) {
-          console.log('Configuration recently updated, fetching fresh parameters');
-          window.localStorage.removeItem('deep-clone-config-updated');
-          loadFreshParameters(); // Fetch fresh parameters instead of reloading
-        }
-      }
-    } catch (error) {
-      console.warn('Could not check for configuration updates:', error);
-    }
   }, []);
 
   useEffect(() => {
@@ -104,8 +83,6 @@ function Sidebar() {
 
     // Fetch fresh parameters each time clone is called
     const parameters = await fetchFreshParameters();
-    console.log("FRESH PARAMETERS", parameters);
-
     await sdk.entry.save();
     const cloner = new EntryCloner(sdk.cma, parameters);
     const { clonedEntry, referencesCount, clonesCount, updatesCount } = await cloner.cloneEntry(sdk.ids.entry);
