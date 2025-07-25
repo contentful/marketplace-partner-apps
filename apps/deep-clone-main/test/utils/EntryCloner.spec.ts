@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { mockCma } from './mocks';
-import EntryCloner from '../src/utils/EntryCloner';
-import type { AppParameters } from '../src/vite-env';
+import { mockCma } from '../mocks';
+import EntryCloner from '../../src/utils/EntryCloner';
+import type { AppParameters } from '../../src/vite-env';
 import { getMockContentType, getMockEntry } from './EntryClonerTestUtils';
 
 vi.mock('@contentful/app-sdk', () => ({

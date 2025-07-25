@@ -10,6 +10,15 @@ const mockCma = {
     create: vi.fn(),
     update: vi.fn(),
   },
+  appInstallation: {
+    getForOrganization: vi.fn().mockReturnValue({
+      items: [
+        {
+          sys: { space: { sys: { id: 'test-space' } } },
+        },
+      ],
+    }),
+  },
 };
 
 export { mockCma };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import Sidebar from '../../src/locations/Sidebar';
-import { render, act, fireEvent, waitFor, screen } from '@testing-library/react';
+import { render, act, fireEvent } from '@testing-library/react';
 import { mockCma, mockSdk } from '../mocks';
 
 beforeEach(() => {
@@ -33,6 +33,14 @@ vi.mock('../../src/utils/EntryCloner', () => {
   };
 });
 
+vi.mock('../../src/utils/useInstallationParameters', () => ({
+  useInstallationParameters: vi.fn().mockReturnValue({
+    cloneText: 'Copy',
+    cloneTextBefore: true,
+    automaticRedirect: true,
+  }),
+}));
+
 describe('Sidebar component', () => {
   it('Component text exists', () => {
     const { getByText } = render(<Sidebar />);
@@ -58,5 +66,28 @@ describe('Sidebar component', () => {
       vi.advanceTimersByTime(3000);
     });
     expect(mockSdk.navigator.openEntry).toHaveBeenCalledWith('cloned-id');
+  });
+
+  it('use updated parameters', async () => {
+    const { useInstallationParameters } = await import('../../src/utils/useInstallationParameters');
+    (useInstallationParameters as any).mockReturnValue({
+      cloneText: 'Updated',
+      cloneTextBefore: false,
+      automaticRedirect: false,
+    });
+
+    const { getByText } = render(<Sidebar />);
+    expect(getByText('Clone entry')).toBeDefined();
+
+    await act(async () => {
+      fireEvent.click(getByText('Clone entry'));
+    });
+
+    const EntryCloner = (await import('../../src/utils/EntryCloner')).default;
+    expect(EntryCloner).toHaveBeenCalledWith(mockCma, {
+      cloneText: 'Updated',
+      cloneTextBefore: false,
+      automaticRedirect: false,
+    });
   });
 });
