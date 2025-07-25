@@ -7,7 +7,10 @@
     "@contentful/app-components": "file:../../packages/contentful-app-components",
     "@contentful/app-sdk": "^4.29.7",
     "@contentful/f36-components": "4.80.5",
+    "@contentful/f36-multiselect": "^4.81.0",
     "@contentful/react-apps-toolkit": "1.2.16",
+    "@emotion/css": "^11.13.5",
+    "@testing-library/user-event": "^14.6.1",
     "contentful-management": "11.54.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
