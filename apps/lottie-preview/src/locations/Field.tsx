@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FieldAppSDK } from '@contentful/app-sdk';
 import { useSDK } from '@contentful/react-apps-toolkit';
-import LottiePreviewField from '@src/components/field/LottiePreviewField';
+import LottiePreviewField from '@/components/field/LottiePreviewField';
 
 export type LottieJSON = {
   v: string;         // version

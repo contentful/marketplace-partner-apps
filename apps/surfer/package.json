@@ -1,17 +1,17 @@
 {
   "name": "surfer-contentful-app",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "4.29.7",
-    "@contentful/f36-components": "4.80.4",
+    "@contentful/f36-components": "4.80.5",
     "@contentful/f36-icons": "^4.29.1",
-    "@contentful/f36-multiselect": "^4.26.1",
+    "@contentful/f36-multiselect": "^4.80.5",
     "@contentful/f36-tokens": "^4.0.5",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@contentful/rich-text-html-renderer": "^16.6.10",
     "@emotion/css": "^11.13.5",
-    "contentful-management": "11.54.0",
+    "contentful-management": "11.54.1",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },

@@ -1,6 +1,6 @@
 {
   "name": "raster",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "private": true,
   "dependencies": {
     "@contentful/app-scripts": "^1.26.0",
@@ -38,7 +38,7 @@
     "eslint-config-react-app": "^7.0.1",
     "happy-dom": "^15.10.2",
     "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-import": "^2.32.0",
     "jsdom": "^26.1.0",

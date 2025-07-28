@@ -1,16 +1,16 @@
 {
   "name": "transifex-contentful-app",
-  "version": "1.2.12",
+  "version": "1.2.13",
   "private": true,
   "dependencies": {
-    "@contentful/app-sdk": "4.29.7",
+    "@contentful/app-sdk": "4.35.0",
     "@contentful/f36-components": "4.80.5",
     "@contentful/f36-icons": "^4.29.1",
     "@contentful/f36-tokens": "4.2.0",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "^11.13.5",
-    "contentful-management": "^11.54.0",
-    "eslint": "^8.57.0",
+    "contentful-management": "^11.54.3",
+    "eslint": "^9.32.0",
     "nconf": "^0.13.0",
     "prop-type": "^0.0.1",
     "react": "18.3.1",
@@ -36,7 +36,7 @@
     "@types/node": "^20",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
-    "@vitejs/plugin-react": "4.6.0",
+    "@vitejs/plugin-react": "4.7.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
@@ -45,7 +45,7 @@
     "happy-dom": "17.2.2",
     "prettier": "^3.6.2",
     "typescript": "5.8.3",
-    "vite": "^6.3.5",
+    "vite": "^7.0.6",
     "vitest": "3.2.4"
   }
 }
