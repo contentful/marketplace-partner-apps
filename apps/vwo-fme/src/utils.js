@@ -87,7 +87,7 @@ export const mapVwoVariationsAndContent = async (vwoVariations, contentTypes, de
 };
 
 export const globalConstants = {
-  VWO_APP_ACTION_ID: 'handleVWOActions', // Find it in contentful-app-manifest.json
+  VWO_APP_ACTION_NAME: 'VWO Actions', // Find it in contentful-app-manifest.json
   VWO_GET_FEATURE_FLAG_ACTION: 'get',
   VWO_UPDATE_FEATURE_FLAG_ACTION: 'update',
   VWO_UPDATE_VARIATIONS_ACTION: 'updateVariations',
