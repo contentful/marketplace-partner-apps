@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/frontify-assets-v1.0.2...frontify-assets-v1.0.3) (2025-07-28)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.10.0 to 1.11.0 in /apps/frontify ([#5696](https://github.com/contentful/marketplace-partner-apps/issues/5696)) ([0c18342](https://github.com/contentful/marketplace-partner-apps/commit/0c18342096f60bf2ad884ddbe19a3da837672a6f))
+* **deps:** bump form-data from 4.0.3 to 4.0.4 in /apps/frontify ([#5657](https://github.com/contentful/marketplace-partner-apps/issues/5657)) ([0db2faf](https://github.com/contentful/marketplace-partner-apps/commit/0db2faff628a0d8349f06030c24e62c3b815dbcf))
+
 ## [1.0.2](https://github.com/contentful/marketplace-partner-apps/compare/frontify-assets-v1.0.1...frontify-assets-v1.0.2) (2025-07-02)
 
 
