@@ -10,7 +10,7 @@
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "^11.13.5",
     "contentful-management": "^11.54.3",
-    "eslint": "^8.57.0",
+    "eslint": "^9.32.0",
     "nconf": "^0.13.0",
     "prop-type": "^0.0.1",
     "react": "18.3.1",
@@ -45,7 +45,7 @@
     "happy-dom": "17.2.2",
     "prettier": "^3.6.2",
     "typescript": "5.8.3",
-    "vite": "^6.3.5",
+    "vite": "^7.0.6",
     "vitest": "3.2.4"
   }
 }

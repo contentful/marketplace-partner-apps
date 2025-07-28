@@ -21,13 +21,13 @@
     "@contentful/f36-tokens": "^4.2.0",
     "@contentful/react-apps-toolkit": "^1.2.15",
     "@uidotdev/usehooks": "^2.0.1",
-    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.4.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-focus-lock": "^2.13.2",
     "react-markdown": "^9.0.1",
-    "react-router-dom": "^6.28.0",
+    "react-router-dom": "^7.7.1",
     "remark-gfm": "^4.0.0",
     "use-local-storage-extended": "^0.1.1"
   },
@@ -44,6 +44,6 @@
     "happy-dom": "^15.11.7",
     "type-fest": "^4.41.0",
     "typescript": "~5.8.3",
-    "vite": "^6.3.5"
+    "vite": "^7.0.6"
   }
 }
