@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.21](https://github.com/contentful/marketplace-partner-apps/compare/wix-contentful-app-v1.0.20...wix-contentful-app-v1.0.21) (2025-07-28)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.80.4 to 4.80.5 in /apps/wix in the production-dependencies group ([#5437](https://github.com/contentful/marketplace-partner-apps/issues/5437)) ([0dbac82](https://github.com/contentful/marketplace-partner-apps/commit/0dbac82576acc4f8d083eb900a8a50fc9cf3b258))
+* **deps:** bump axios from 1.10.0 to 1.11.0 in /apps/wix ([#5701](https://github.com/contentful/marketplace-partner-apps/issues/5701)) ([b7e623c](https://github.com/contentful/marketplace-partner-apps/commit/b7e623c999e5f9092d9ceb532c78d19f54690493))
+* **deps:** bump contentful-management from 11.54.0 to 11.54.1 in /apps/wix in the production-dependencies group ([#5378](https://github.com/contentful/marketplace-partner-apps/issues/5378)) ([9ce4d0a](https://github.com/contentful/marketplace-partner-apps/commit/9ce4d0a59220e62b514524469c3aed1d2064a7a9))
+* **deps:** bump form-data from 4.0.3 to 4.0.4 in /apps/wix ([#5631](https://github.com/contentful/marketplace-partner-apps/issues/5631)) ([51c2eca](https://github.com/contentful/marketplace-partner-apps/commit/51c2ecae8b42b1edb5ba3de1fe98f08deb013d04))
+
 ## [1.0.20](https://github.com/contentful/marketplace-partner-apps/compare/wix-contentful-app-v1.0.19...wix-contentful-app-v1.0.20) (2025-07-02)
 
 

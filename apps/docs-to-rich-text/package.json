@@ -1,6 +1,6 @@
 {
   "name": "docs-to-rich-text",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "^4.29.3",
@@ -38,7 +38,7 @@
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.6.0",
     "eslint": "^9.30.1",
-    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.1",
     "happy-dom": "^15.11.6",
     "typescript": "^5.8.3",
