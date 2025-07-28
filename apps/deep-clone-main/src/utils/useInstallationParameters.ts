@@ -32,6 +32,7 @@ const fetchParameters = async (sdk: BaseAppSDK): Promise<KeyValueMap> => {
     if (currentInstallation?.parameters) {
       return currentInstallation.parameters as KeyValueMap;
     }
+    return sdk.parameters.installation;
   } catch (error) {
     console.warn('Failed to fetch fresh parameters from CMA:', error);
   }
