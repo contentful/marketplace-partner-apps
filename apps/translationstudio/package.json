@@ -39,7 +39,7 @@
     "eslint": "^9.31.0",
     "eslint-config-next": "^15.4.3",
     "jest": "^30.0.5",
-    "jest-environment-jsdom": "^29.7.0",
+    "jest-environment-jsdom": "^30.0.5",
     "typescript": "5.8.3"
   }
 }
