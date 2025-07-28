@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.11](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.10...bynder-content-workflow-v1.0.11) (2025-07-28)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.80.4 to 4.80.5 in /apps/bynder-content-workflow in the production-dependencies group ([#5450](https://github.com/contentful/marketplace-partner-apps/issues/5450)) ([915b17b](https://github.com/contentful/marketplace-partner-apps/commit/915b17b7f6b8e613bdc454a1eb52da668ba3041c))
+* **deps:** bump axios from 1.10.0 to 1.11.0 in /apps/bynder-content-workflow ([#5704](https://github.com/contentful/marketplace-partner-apps/issues/5704)) ([e03ae9f](https://github.com/contentful/marketplace-partner-apps/commit/e03ae9f3d45c7fa5fcfc9b06d6f96cea04b78c8d))
+* **deps:** bump contentful-management from 11.54.0 to 11.54.1 in /apps/bynder-content-workflow in the production-dependencies group ([#5410](https://github.com/contentful/marketplace-partner-apps/issues/5410)) ([532ea67](https://github.com/contentful/marketplace-partner-apps/commit/532ea6755d57ce5a6af5ac356fd42df989ed3d49))
+* **deps:** bump form-data from 4.0.3 to 4.0.4 in /apps/bynder-content-workflow ([#5671](https://github.com/contentful/marketplace-partner-apps/issues/5671)) ([d05c07c](https://github.com/contentful/marketplace-partner-apps/commit/d05c07cf914de5cf179f22c9c375c439e172cf97))
+
 ## [1.0.10](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.9...bynder-content-workflow-v1.0.10) (2025-07-02)
 
 
