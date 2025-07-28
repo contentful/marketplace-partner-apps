@@ -51,7 +51,7 @@ function ConfigScreen() {
 
   return (
     <Flex justifyContent="center" alignItems="center">
-      <Box marginBottom="spacing2Xl" marginTop="spacing2Xl">
+      <Box marginBottom="spacing2Xl" marginTop="spacing2Xl" className={styles.body}>
         <Heading>Set up Deep Clone</Heading>
 
         <Subheading marginBottom="spacing2Xs">Assign content types</Subheading>
