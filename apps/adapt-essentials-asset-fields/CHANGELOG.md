@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.2.0](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.1.11...adapt-essentials-asset-fields-v1.2.0) (2025-07-28)
+
+
+### Features
+
+* use new Forma 36 Layout component [UFO-1877] ([#5544](https://github.com/contentful/marketplace-partner-apps/issues/5544)) ([6b1e4f0](https://github.com/contentful/marketplace-partner-apps/commit/6b1e4f06e002d9597cd401ed34a5351a3a9ef6d6))
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.10.0 to 1.11.0 in /apps/adapt-essentials-asset-fields ([#5715](https://github.com/contentful/marketplace-partner-apps/issues/5715)) ([fc58541](https://github.com/contentful/marketplace-partner-apps/commit/fc58541ad913369779a4539cb488a0f3f7e449f2))
+* **deps:** bump form-data from 4.0.3 to 4.0.4 in /apps/adapt-essentials-asset-fields ([#5673](https://github.com/contentful/marketplace-partner-apps/issues/5673)) ([cb0a714](https://github.com/contentful/marketplace-partner-apps/commit/cb0a7147da991b81e6e3185d2b222e67e08e7a78))
+* **deps:** bump the production-dependencies group in /apps/adapt-essentials-asset-fields with 2 updates ([#5459](https://github.com/contentful/marketplace-partner-apps/issues/5459)) ([74fbe84](https://github.com/contentful/marketplace-partner-apps/commit/74fbe84a0f60708a08efdd140880ebd77e03eaa3))
+
 ## [1.1.11](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.1.10...adapt-essentials-asset-fields-v1.1.11) (2025-07-02)
 
 
