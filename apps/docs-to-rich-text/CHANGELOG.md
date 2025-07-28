@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.2](https://github.com/contentful/marketplace-partner-apps/compare/docs-to-rich-text-v1.2.1...docs-to-rich-text-v1.2.2) (2025-07-28)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.80.4 to 4.80.5 in /apps/docs-to-rich-text in the production-dependencies group ([#5452](https://github.com/contentful/marketplace-partner-apps/issues/5452)) ([793f729](https://github.com/contentful/marketplace-partner-apps/commit/793f7293201918221d7c5c589a9b4fbe811555f2))
+* **deps:** bump @contentful/field-editor-rich-text from 4.9.0 to 4.9.1 in /apps/docs-to-rich-text in the production-dependencies group ([#5363](https://github.com/contentful/marketplace-partner-apps/issues/5363)) ([bf0d474](https://github.com/contentful/marketplace-partner-apps/commit/bf0d4749537f03a19b857e02117f70c5bf3fd83f))
+* **deps:** bump axios from 1.10.0 to 1.11.0 in /apps/docs-to-rich-text ([#5716](https://github.com/contentful/marketplace-partner-apps/issues/5716)) ([9dcd473](https://github.com/contentful/marketplace-partner-apps/commit/9dcd4739b985906b44204bbeda87b639242f154c))
+* **deps:** bump form-data from 4.0.3 to 4.0.4 in /apps/docs-to-rich-text ([#5661](https://github.com/contentful/marketplace-partner-apps/issues/5661)) ([1ad3a01](https://github.com/contentful/marketplace-partner-apps/commit/1ad3a01957e1b0111c73bc2e122d0a7837da93e4))
+
 ## [1.2.1](https://github.com/contentful/marketplace-partner-apps/compare/docs-to-rich-text-v1.2.0...docs-to-rich-text-v1.2.1) (2025-07-02)
 
 
