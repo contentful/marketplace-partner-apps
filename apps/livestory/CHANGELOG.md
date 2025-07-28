@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.5](https://github.com/contentful/marketplace-partner-apps/compare/ls-contentful-app-v1.0.4...ls-contentful-app-v1.0.5) (2025-07-28)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.10.0 to 1.11.0 in /apps/livestory ([#5711](https://github.com/contentful/marketplace-partner-apps/issues/5711)) ([f4fd4c6](https://github.com/contentful/marketplace-partner-apps/commit/f4fd4c68eed870fec5461e08dbb9420667777474))
+* **deps:** bump form-data from 4.0.3 to 4.0.4 in /apps/livestory ([#5651](https://github.com/contentful/marketplace-partner-apps/issues/5651)) ([fdf50d9](https://github.com/contentful/marketplace-partner-apps/commit/fdf50d96bcf608d526afa084b103a0a9371ceb69))
+
 ## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/ls-contentful-app-v1.0.3...ls-contentful-app-v1.0.4) (2025-07-02)
 
 
