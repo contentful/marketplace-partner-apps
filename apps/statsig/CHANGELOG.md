@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.1.4](https://github.com/contentful/marketplace-partner-apps/compare/statsig-v1.1.3...statsig-v1.1.4) (2025-07-28)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.80.4 to 4.80.5 in /apps/statsig in the production-dependencies group ([#5464](https://github.com/contentful/marketplace-partner-apps/issues/5464)) ([bcfb5e4](https://github.com/contentful/marketplace-partner-apps/commit/bcfb5e4c566de5eca0c773afc68a2efefb540d22))
+* **deps:** bump axios from 1.10.0 to 1.11.0 in /apps/statsig ([#5705](https://github.com/contentful/marketplace-partner-apps/issues/5705)) ([8026a4c](https://github.com/contentful/marketplace-partner-apps/commit/8026a4cbc6867353ac62e22f40a65cd930314950))
+* **deps:** bump form-data in /apps/statsig ([#5645](https://github.com/contentful/marketplace-partner-apps/issues/5645)) ([33fed63](https://github.com/contentful/marketplace-partner-apps/commit/33fed6383b1e0c662bff1fd1e7cef0c524d6435e))
+* **deps:** bump on-headers and compression in /apps/statsig ([#5618](https://github.com/contentful/marketplace-partner-apps/issues/5618)) ([cde2d1c](https://github.com/contentful/marketplace-partner-apps/commit/cde2d1c315621eec675a134744f5992d9e38055c))
+
 ## [1.1.3](https://github.com/contentful/marketplace-partner-apps/compare/statsig-v1.1.2...statsig-v1.1.3) (2025-07-02)
 
 
