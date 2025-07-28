@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.2.13](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.2.12...transifex-contentful-app-v1.2.13) (2025-07-28)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.29.7 to 4.31.0 in /apps/transifex in the production-dependencies group ([#5574](https://github.com/contentful/marketplace-partner-apps/issues/5574)) ([81bb1f1](https://github.com/contentful/marketplace-partner-apps/commit/81bb1f1536d5ec50882e90388c136e2034091c06))
+* **deps:** bump @contentful/app-sdk from 4.33.0 to 4.34.0 in /apps/transifex in the production-dependencies group ([#5672](https://github.com/contentful/marketplace-partner-apps/issues/5672)) ([0965051](https://github.com/contentful/marketplace-partner-apps/commit/0965051f84859edc206d0ef9e04b0d26ccc7d3cd))
+* **deps:** bump @contentful/app-sdk from 4.34.0 to 4.35.0 in /apps/transifex in the production-dependencies group ([#5747](https://github.com/contentful/marketplace-partner-apps/issues/5747)) ([d0483bd](https://github.com/contentful/marketplace-partner-apps/commit/d0483bda4d973e07f2e38e63ce15dbfe6b04d4a6))
+* **deps:** bump @contentful/f36-components from 4.80.4 to 4.80.5 in /apps/transifex in the production-dependencies group ([#5448](https://github.com/contentful/marketplace-partner-apps/issues/5448)) ([174c61e](https://github.com/contentful/marketplace-partner-apps/commit/174c61ea50f91e32e294b9c353dabf235267cd4c))
+* **deps:** bump axios from 1.10.0 to 1.11.0 in /apps/transifex ([#5688](https://github.com/contentful/marketplace-partner-apps/issues/5688)) ([0334dc0](https://github.com/contentful/marketplace-partner-apps/commit/0334dc0356edb4bb380fa306bfad1a182e744e15))
+* **deps:** bump form-data from 4.0.3 to 4.0.4 in /apps/transifex ([#5650](https://github.com/contentful/marketplace-partner-apps/issues/5650)) ([0ae1f5d](https://github.com/contentful/marketplace-partner-apps/commit/0ae1f5d28785e30c7c69bdb09394964b9266191f))
+* **deps:** bump the production-dependencies group in /apps/transifex with 2 updates ([#5584](https://github.com/contentful/marketplace-partner-apps/issues/5584)) ([ada8c19](https://github.com/contentful/marketplace-partner-apps/commit/ada8c198efa53a6373ee45f05cca53f17451197e))
+* **deps:** bump the production-dependencies group in /apps/transifex with 2 updates ([#5638](https://github.com/contentful/marketplace-partner-apps/issues/5638)) ([486feec](https://github.com/contentful/marketplace-partner-apps/commit/486feec26889270124942ff1261f6b4b737549ad))
+
 ## [1.2.12](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.2.11...transifex-contentful-app-v1.2.12) (2025-07-02)
 
 
