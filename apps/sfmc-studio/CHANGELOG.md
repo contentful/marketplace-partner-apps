@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.2.4](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.3...sfmc-studio-v1.2.4) (2025-07-28)
+
+
+### Bug Fixes
+
+* **deps:** bump @ant-design/plots from 2.5.0 to 2.6.0 in /apps/sfmc-studio in the production-dependencies group ([#5423](https://github.com/contentful/marketplace-partner-apps/issues/5423)) ([0db26e1](https://github.com/contentful/marketplace-partner-apps/commit/0db26e1a5df2a355619245d4aef9d31d972f188e))
+* **deps:** bump @eslint/plugin-kit from 0.3.3 to 0.3.4 in /apps/sfmc-studio ([#5763](https://github.com/contentful/marketplace-partner-apps/issues/5763)) ([eaac7da](https://github.com/contentful/marketplace-partner-apps/commit/eaac7daa4e85491b2441522fec9d0179968b0e3f))
+* **deps:** bump axios from 1.10.0 to 1.11.0 in /apps/sfmc-studio ([#5702](https://github.com/contentful/marketplace-partner-apps/issues/5702)) ([d66b156](https://github.com/contentful/marketplace-partner-apps/commit/d66b156de69073eb94ae52f354e41a417b36de59))
+* **deps:** bump form-data from 4.0.3 to 4.0.4 in /apps/sfmc-studio ([#5646](https://github.com/contentful/marketplace-partner-apps/issues/5646)) ([537efd1](https://github.com/contentful/marketplace-partner-apps/commit/537efd1034cae3f0d0271a1e118dcebeb9f764e5))
+* **deps:** bump the production-dependencies group in /apps/sfmc-studio with 2 updates ([#5440](https://github.com/contentful/marketplace-partner-apps/issues/5440)) ([c1f7398](https://github.com/contentful/marketplace-partner-apps/commit/c1f7398ff2f27705fae1fe47c31c436003c0d982))
+
 ## [1.2.3](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.2...sfmc-studio-v1.2.3) (2025-07-02)
 
 
