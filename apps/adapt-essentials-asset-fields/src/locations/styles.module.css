@@ -1,0 +1,10 @@
+@import '@contentful/f36-tokens/dist/css/content-width.css';
+
+.page {
+  max-width: var(--content-width-default);
+  margin: 0 auto;
+}
+
+.header {
+  background-color: var(--color-white) !important;
+}

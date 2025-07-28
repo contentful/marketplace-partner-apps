@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.2.0](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.1.8...cloudinary-assets-v1.2.0) (2025-07-28)
+
+
+### Features
+
+* Cloudinary thumbnail "click to edit" [] ([#5545](https://github.com/contentful/marketplace-partner-apps/issues/5545)) ([785a3cd](https://github.com/contentful/marketplace-partner-apps/commit/785a3cdcf6668a2720e614c6c2aa42c76f41cb05))
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.80.4 to 4.80.5 in /apps/cloudinary2 in the production-dependencies group ([#5445](https://github.com/contentful/marketplace-partner-apps/issues/5445)) ([90be4ee](https://github.com/contentful/marketplace-partner-apps/commit/90be4ee308550336ab8b0351af9ba8dceb1c4e5f))
+* **deps:** bump axios from 1.10.0 to 1.11.0 in /apps/cloudinary2 ([#5707](https://github.com/contentful/marketplace-partner-apps/issues/5707)) ([069d823](https://github.com/contentful/marketplace-partner-apps/commit/069d82348de9230d96127935a962fbd46c9d88c5))
+* **deps:** bump contentful-management from 11.54.0 to 11.54.1 in /apps/cloudinary2 in the production-dependencies group ([#5402](https://github.com/contentful/marketplace-partner-apps/issues/5402)) ([eaa3013](https://github.com/contentful/marketplace-partner-apps/commit/eaa301314e84e4bf36336a345a964a90e3ec9e75))
+* **deps:** bump form-data from 4.0.3 to 4.0.4 in /apps/cloudinary2 ([#5662](https://github.com/contentful/marketplace-partner-apps/issues/5662)) ([24a8aba](https://github.com/contentful/marketplace-partner-apps/commit/24a8abae6023ff4008de2f1f3eef86c3e15dd143))
+
 ## [1.1.8](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.1.7...cloudinary-assets-v1.1.8) (2025-07-02)
 
 

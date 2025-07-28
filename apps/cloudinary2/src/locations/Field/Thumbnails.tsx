@@ -42,6 +42,13 @@ export function Thumbnails({ assets, isDisabled, onChange }: Props) {
     [assets, onChange],
   );
 
+  const handleReplace = useCallback(
+    (oldAsset: CloudinaryAsset, newAsset: CloudinaryAsset) => {
+      onChange(assets.map((asset) => (asset.public_id === oldAsset.public_id ? newAsset : asset)));
+    },
+    [assets, onChange],
+  );
+
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event;
@@ -60,7 +67,7 @@ export function Thumbnails({ assets, isDisabled, onChange }: Props) {
       <SortableContext items={assetsWithIds}>
         <div css={styles.grid}>
           {assetsWithIds.map((asset, index) => (
-            <Thumbnail key={asset.id} asset={asset} isDisabled={isDisabled} onDelete={() => handleDelete(index)} />
+            <Thumbnail key={asset.id} asset={asset} isDisabled={isDisabled} onDelete={() => handleDelete(index)} onReplace={handleReplace} />
           ))}
         </div>
       </SortableContext>

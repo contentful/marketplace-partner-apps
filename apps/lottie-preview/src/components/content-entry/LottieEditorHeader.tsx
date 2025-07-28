@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 import { Flex } from '@contentful/f36-components'
 import tokens from '@contentful/f36-tokens'
 import { css } from 'emotion'
