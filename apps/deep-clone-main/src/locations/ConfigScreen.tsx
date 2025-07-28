@@ -51,10 +51,16 @@ function ConfigScreen() {
 
   return (
     <Flex justifyContent="center" alignItems="center">
-      <Box marginBottom="spacing2Xl" marginTop="spacing2Xl">
-        <Heading>Set up Deep Clone</Heading>
+      <Box marginBottom="spacing2Xl" marginTop="spacing2Xl" className={styles.body}>
+        <Heading marginBottom="spacingS">Set up Deep Clone</Heading>
+        <Paragraph>
+          Deep Clone enables users to duplicate an entry along with its entire reference tree, automatically copying all linked entries and preserving their
+          structure.
+        </Paragraph>
 
-        <Subheading marginBottom="spacing2Xs">Assign content types</Subheading>
+        <Subheading marginTop="spacingXl" marginBottom="spacing2Xs">
+          Assign content types
+        </Subheading>
         <Paragraph marginBottom="spacingM">
           The Deep Clone app will only be enabled for the content types you assign. The sidebar widget will be displayed on these entry pages.
         </Paragraph>

@@ -110,7 +110,7 @@ const ContentTypeMultiSelect: React.FC<ContentTypeMultiSelectProps> = ({ selecte
 
         {selectedContentTypes.length > 0 && (
           <Box width="full" overflow="auto">
-            <Stack flexDirection="row" spacing="spacing2Xs" flexWrap="wrap">
+            <Stack flexDirection="row" spacing="spacingXs" flexWrap="wrap">
               {selectedContentTypes.map((contentType, index) => (
                 <Pill
                   key={index}

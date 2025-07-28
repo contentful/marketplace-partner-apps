@@ -5,12 +5,15 @@ const mockSdk = {
   cma: mockCma,
   app: {
     onConfigure: vi.fn(),
-    getParameters: vi.fn().mockReturnValue({}),
+    getParameters: vi.fn(),
     setReady: vi.fn(),
     getCurrentState: vi.fn(),
   },
   ids: {
     entry: 'test-entry',
+    space: 'test-space',
+    organization: 'test-organization',
+    app: 'test-app',
   },
   parameters: {
     installation: {
