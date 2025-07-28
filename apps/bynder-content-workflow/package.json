@@ -43,6 +43,6 @@
     "happy-dom": "18.0.1",
     "typescript": "5.8.3",
     "vite": "^5.0.0",
-    "vitest": "2.1.4"
+    "vitest": "3.2.4"
   }
 }
