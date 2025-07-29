@@ -1,3 +1,4 @@
+import React from 'react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { useSDK } from '@contentful/react-apps-toolkit';
@@ -7,7 +8,7 @@ vi.mock('@contentful/react-apps-toolkit', () => ({
   useSDK: vi.fn(),
 }));
 
-vi.mock('@src/components/field/LottiePreviewField', () => ({
+vi.mock('@/components/field/LottiePreviewField', () => ({
   __esModule: true,
   default: ({ lottieJson }: { lottieJson: any }) => <div data-testid="lottie-preview-field">{JSON.stringify(lottieJson)}</div>,
 }));

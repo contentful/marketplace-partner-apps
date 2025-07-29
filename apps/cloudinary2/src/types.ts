@@ -6,6 +6,7 @@ export interface AppInstallationParameters {
   startFolder: string;
   quality: string;
   format: string;
+  showUploadButton: string;
 }
 
 export interface BackendParameters {
