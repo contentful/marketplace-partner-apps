@@ -35,7 +35,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "prettier": "^3.4.1",
     "typescript": "^5.7.2",
-    "vite": "^6.2.3",
+    "vite": "^6.3.5",
     "vitest": "^3.2.4",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
@@ -44,7 +44,7 @@
   },
   "scripts": {
     "start": "vite",
-    "install-ci": "npm ci",
+    "install-ci": "npm install",
     "build": "tsc && vite build",
     "test": "vitest",
     "lint": "eslint src",
