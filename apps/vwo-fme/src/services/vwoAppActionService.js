@@ -14,6 +14,31 @@ class VwoAppActionService {
         },
       }
     );
+    this.actionId = null;
+  }
+
+  /**
+   * Initialize the service by fetching the app action ID
+   * @returns {Promise<void>}
+   */
+  async initialize() {
+    try {
+      const appActions = await this.cma.appAction.getMany({
+        organizationId: this.sdk.ids.organization,
+        appDefinitionId: this.sdk.ids.app,
+      });
+
+      const appAction = appActions.items.find((action) => action.name === globalConstants.VWO_APP_ACTION_NAME);
+
+      if (!appAction) {
+        console.warn('App action not found');
+        throw new Error('App action not found');
+      }
+
+      this.actionId = appAction.sys.id;
+    } catch (err) {
+      throw new Error(`Failed to initialize VwoAppActionService: ${err.message}`);
+    }
   }
 
   /**
@@ -23,9 +48,13 @@ class VwoAppActionService {
    */
   async fetchFeatureFlag(featureFlagId) {
     try {
+      if (!this.actionId) {
+        await this.initialize();
+      }
+
       const { response, errors } = await this.cma.appActionCall.createWithResponse(
         {
-          appActionId: globalConstants.VWO_APP_ACTION_ID,
+          appActionId: this.actionId,
           appDefinitionId: this.sdk.ids.app,
           spaceId: this.sdk.ids.space,
           environmentId: this.sdk.ids.environment,
@@ -64,9 +93,13 @@ class VwoAppActionService {
    */
   async createFeatureFlag(featureFlag) {
     try {
+      if (!this.actionId) {
+        await this.initialize();
+      }
+
       const { response } = await this.cma.appActionCall.createWithResponse(
         {
-          appActionId: globalConstants.VWO_APP_ACTION_ID,
+          appActionId: this.actionId,
           appDefinitionId: this.sdk.ids.app,
           spaceId: this.sdk.ids.space,
           environmentId: this.sdk.ids.environment,
@@ -105,9 +138,13 @@ class VwoAppActionService {
    */
   async updateFeatureFlag(updatedFeatureFlag) {
     try {
+      if (!this.actionId) {
+        await this.initialize();
+      }
+
       const { response } = await this.cma.appActionCall.createWithResponse(
         {
-          appActionId: globalConstants.VWO_APP_ACTION_ID,
+          appActionId: this.actionId,
           appDefinitionId: this.sdk.ids.app,
           spaceId: this.sdk.ids.space,
           environmentId: this.sdk.ids.environment,
@@ -145,13 +182,17 @@ class VwoAppActionService {
    */
   async updateVariations(vwoVariations, featureId) {
     try {
+      if (!this.actionId) {
+        await this.initialize();
+      }
+
       if (!featureId) {
         throw new Error('Feature ID is required to update variations');
       }
       const filteredVwoVariations = vwoVariations.filter((variation) => variation.id !== 1);
       const { response } = await this.cma.appActionCall.createWithResponse(
         {
-          appActionId: globalConstants.VWO_APP_ACTION_ID,
+          appActionId: this.actionId,
           appDefinitionId: this.sdk.ids.app,
           spaceId: this.sdk.ids.space,
           environmentId: this.sdk.ids.environment,
