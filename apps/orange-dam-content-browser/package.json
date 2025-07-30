@@ -1,6 +1,6 @@
 {
-  "name": "my-first-app",
-  "version": "0.1.0",
+  "name": "orange-dam-content-browser-contentful-plugin",
+  "version": "1.1.0",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "^4.29.1",
@@ -19,9 +19,8 @@
     "install-ci": "npm ci",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "cypress run --component",
-    "test:open": "cypress open",
-    "test:coverage": "nyc npx cypress run --component",
+    "test-apps": "cypress run --component",
+    "test-apps:coverage": "nyc npx cypress run --component",
     "create-app-definition": "contentful-app-scripts create-app-definition",
     "upload": "contentful-app-scripts upload --bundle-dir ./build",
     "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN"
