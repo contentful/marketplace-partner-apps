@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "^4.36.0",
-    "@contentful/f36-components": "^4.80.5",
+    "@contentful/f36-components": "^4.81.1",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@testing-library/jest-dom": "^6.6.4",
     "emotion": "^10.0.17"
