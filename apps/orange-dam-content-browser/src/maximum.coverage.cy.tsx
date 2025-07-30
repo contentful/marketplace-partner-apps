@@ -46,8 +46,6 @@ describe('Maximum Coverage Execution Tests', () => {
             return 'media';
           case MediaType.Audio:
             return 'audio';
-          case MediaType.Story:
-          case MediaType.Widget:
           default:
             return 'interactive';
         }
@@ -155,39 +153,39 @@ describe('Maximum Coverage Execution Tests', () => {
     });
   });
 
-  it('should execute styled components and exports', () => {
+  it('should successfully import and validate component modules', () => {
     cy.then(async () => {
-      // Import and execute styled components to trigger their code
-      try {
-        const assetCardStyled = await import('./components/AssetCard/AssetCard.styled');
-        expect(typeof assetCardStyled).to.equal('object');
-        
-        const assetPreviewStyled = await import('./components/AssetPreview/AssetPreview.styled');
-        expect(typeof assetPreviewStyled).to.equal('object');
-        
-        const otherPreviewStyled = await import('./components/AssetPreview/OtherPreview/OtherPreview.styled');
-        expect(typeof otherPreviewStyled).to.equal('object');
-        
-        // Execute index file imports to trigger export logic
-        const assetCardIndex = await import('./components/AssetCard/index');
-        expect(typeof assetCardIndex).to.equal('object');
-        
-        const assetPreviewIndex = await import('./components/AssetPreview/index');
-        expect(typeof assetPreviewIndex).to.equal('object');
-        
-        const imagePreviewIndex = await import('./components/AssetPreview/ImagePreview/index');
-        expect(typeof imagePreviewIndex).to.equal('object');
-        
-        const otherPreviewIndex = await import('./components/AssetPreview/OtherPreview/index');
-        expect(typeof otherPreviewIndex).to.equal('object');
-        
-        const videoPreviewIndex = await import('./components/AssetPreview/VideoPreview/index');
-        expect(typeof videoPreviewIndex).to.equal('object');
-        
-      } catch (error) {
-        // If styled components fail, that's expected - we still executed the import
-        expect(error).to.exist;
-      }
+      // Test styled component imports - these should succeed
+      const assetCardStyled = await import('./components/AssetCard/AssetCard.styled');
+      expect(typeof assetCardStyled).to.equal('object');
+      expect(assetCardStyled.Card).to.exist;
+      
+      const assetPreviewStyled = await import('./components/AssetPreview/AssetPreview.styled');
+      expect(typeof assetPreviewStyled).to.equal('object');
+      
+      const otherPreviewStyled = await import('./components/AssetPreview/OtherPreview/OtherPreview.styled');
+      expect(typeof otherPreviewStyled).to.equal('object');
+      
+      // Test index file imports - these should provide default exports
+      const assetCardIndex = await import('./components/AssetCard/index');
+      expect(typeof assetCardIndex).to.equal('object');
+      expect(assetCardIndex.default).to.exist;
+      
+      const assetPreviewIndex = await import('./components/AssetPreview/index');
+      expect(typeof assetPreviewIndex).to.equal('object');
+      expect(assetPreviewIndex.default).to.exist;
+      
+      const imagePreviewIndex = await import('./components/AssetPreview/ImagePreview/index');
+      expect(typeof imagePreviewIndex).to.equal('object');
+      expect(imagePreviewIndex.default).to.exist;
+      
+      const otherPreviewIndex = await import('./components/AssetPreview/OtherPreview/index');
+      expect(typeof otherPreviewIndex).to.equal('object');
+      expect(otherPreviewIndex.default).to.exist;
+      
+      const videoPreviewIndex = await import('./components/AssetPreview/VideoPreview/index');
+      expect(typeof videoPreviewIndex).to.equal('object');
+      expect(videoPreviewIndex.default).to.exist;
     });
   });
 
@@ -232,7 +230,8 @@ describe('Maximum Coverage Execution Tests', () => {
     expect(totalSize).to.equal(18432);
     
     const allTags = mockData.assets.reduce((tags, asset) => {
-      return [...tags, ...asset.tags];
+      tags.push(...asset.tags);
+      return tags;
     }, [] as string[]);
     expect(allTags.length).to.equal(8);
     

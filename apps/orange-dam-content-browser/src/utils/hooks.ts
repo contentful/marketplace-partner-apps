@@ -17,7 +17,7 @@ export const useDesignSystem = () => {
     });
 
     const script = document.createElement('script');
-    script.src = 'https://design-system.orangelogic.com/entry.1.0.212.js';
+    script.src = 'https://design-system.orangelogic.com/entry.1.0.298.js';
     script.type = 'module';
     document.head.appendChild(script);
 

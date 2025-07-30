@@ -1,15 +1,3 @@
-import '@orangelogic-private/design-system/components/button';
-import '@orangelogic-private/design-system/components/button-group';
-import '@orangelogic-private/design-system/components/card';
-import '@orangelogic-private/design-system/components/icon';
-import '@orangelogic-private/design-system/components/icon-button';
-import '@orangelogic-private/design-system/components/image';
-import '@orangelogic-private/design-system/components/progress-bar';
-import '@orangelogic-private/design-system/components/skeleton';
-import '@orangelogic-private/design-system/components/tooltip';
-
-import '@orangelogic-private/design-system/react-types';
-
 import { locations } from '@contentful/app-sdk';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { useMemo } from 'react';
