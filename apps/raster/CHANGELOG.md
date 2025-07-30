@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/raster-v1.0.7...raster-v1.0.8) (2025-07-28)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.80.4 to 4.80.5 in /apps/raster in the production-dependencies group ([#5443](https://github.com/contentful/marketplace-partner-apps/issues/5443)) ([f5711cb](https://github.com/contentful/marketplace-partner-apps/commit/f5711cb8c0a056311ef82df8160383be73dadf59))
+* **deps:** bump axios from 1.10.0 to 1.11.0 in /apps/raster ([#5700](https://github.com/contentful/marketplace-partner-apps/issues/5700)) ([376ba89](https://github.com/contentful/marketplace-partner-apps/commit/376ba89373f159c3bd0230e25c6ad43dbd8e740b))
+* **deps:** bump form-data from 4.0.3 to 4.0.4 in /apps/raster ([#5649](https://github.com/contentful/marketplace-partner-apps/issues/5649)) ([a02dc2e](https://github.com/contentful/marketplace-partner-apps/commit/a02dc2e8158b701bf3320600004f375ce9672626))
+* **deps:** bump swr from 2.3.3 to 2.3.4 in /apps/raster in the production-dependencies group ([#5381](https://github.com/contentful/marketplace-partner-apps/issues/5381)) ([95eb8f1](https://github.com/contentful/marketplace-partner-apps/commit/95eb8f1a66e946caafc17272adcc54667b93fbf3))
+
 ## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/raster-v1.0.6...raster-v1.0.7) (2025-07-02)
 
 

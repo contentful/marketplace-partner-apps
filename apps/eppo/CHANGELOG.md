@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/eppo-contentful-app-v1.0.6...eppo-contentful-app-v1.0.7) (2025-07-28)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.10.0 to 1.11.0 in /apps/eppo ([#5697](https://github.com/contentful/marketplace-partner-apps/issues/5697)) ([8e8697b](https://github.com/contentful/marketplace-partner-apps/commit/8e8697bac445e92c65cb3d6fe777d8a2b9cd3fc7))
+* **deps:** bump form-data in /apps/eppo ([#5656](https://github.com/contentful/marketplace-partner-apps/issues/5656)) ([06bd370](https://github.com/contentful/marketplace-partner-apps/commit/06bd370e87c16aa02024456aebe03fb2f6ca0442))
+* **deps:** bump on-headers and compression in /apps/eppo ([#5616](https://github.com/contentful/marketplace-partner-apps/issues/5616)) ([3dde707](https://github.com/contentful/marketplace-partner-apps/commit/3dde707658ee3ad2adef5660f58432125014faaa))
+* **deps:** bump the production-dependencies group in /apps/eppo with 4 updates ([#5453](https://github.com/contentful/marketplace-partner-apps/issues/5453)) ([fb8aadf](https://github.com/contentful/marketplace-partner-apps/commit/fb8aadf83526e6b5df0da82a0bb995ecc4ec253b))
+
 ## [1.0.6](https://github.com/contentful/marketplace-partner-apps/compare/eppo-contentful-app-v1.0.5...eppo-contentful-app-v1.0.6) (2025-07-02)
 
 
