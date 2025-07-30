@@ -41,7 +41,7 @@
     "eslint-plugin-react": "^7.37.5",
     "typescript": "5.8.3",
     "vite": "4.5.5",
-    "vitest": "0.32.4",
+    "vitest": "3.2.4",
     "happy-dom": "^17.5.6"
   }
 }
