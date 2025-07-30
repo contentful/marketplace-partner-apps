@@ -34,7 +34,7 @@
     "crypto-js": "^4.2.0",
     "currency-symbol-map": "^5.1.0",
     "dayjs": "^1.11.13",
-    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.3",
     "html-react-parser": "^5.2.6",
     "html-to-image": "^1.11.13",
