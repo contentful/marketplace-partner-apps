@@ -43,8 +43,10 @@ class EntryCloner {
       return;
     }
 
-    const entry = await this.cma.entry.get({ entryId: entryId });
-    // TODO: error handling
+    let entry;
+    try {
+      entry = await this.cma.entry.get({ entryId: entryId });
+    } catch (error) {} // Deleted entries are not found
 
     if (entry !== undefined) {
       this.references[entryId] = entry;
@@ -66,15 +68,17 @@ class EntryCloner {
 
       if (!entry) continue;
 
-      const entryFields = await this.getFieldsForClone(entry);
-      const createProps: CreateEntryProps = {
-        fields: entryFields,
-        ...(entry.metadata ? { metadata: entry.metadata } : {}),
-      };
-
-      const clone = await this.cma.entry.create({ contentTypeId: entry.sys.contentType.sys.id }, createProps);
-
-      this.clones[entryId] = clone;
+      try {
+        const entryFields = await this.getFieldsForClone(entry);
+        const createProps: CreateEntryProps = {
+          fields: entryFields,
+          ...(entry.metadata ? { metadata: entry.metadata } : {}),
+        };
+        const clone = await this.cma.entry.create({ contentTypeId: entry.sys.contentType.sys.id }, createProps);
+        this.clones[entryId] = clone;
+      } catch (error) {
+        console.warn('Error creating clone', error);
+      }
     }
   }
 
@@ -92,14 +96,18 @@ class EntryCloner {
       }
 
       if (cloneWasUpdated) {
-        this.updates++;
-        await this.cma.entry.update(
-          { entryId: clone.sys.id },
-          {
-            sys: { ...clone.sys, version: clone.sys.version },
-            fields: clone.fields,
-          }
-        );
+        try {
+          await this.cma.entry.update(
+            { entryId: clone.sys.id },
+            {
+              sys: { ...clone.sys, version: clone.sys.version },
+              fields: clone.fields,
+            }
+          );
+          this.updates++;
+        } catch (error) {
+          console.warn('Error updating clone', error);
+        }
       }
     }
   }

@@ -229,4 +229,72 @@ describe('EntryCloner', () => {
       );
     });
   });
+
+  describe('Handle deleted entries', () => {
+    it('should not fail if an entry was deleted', async () => {
+      const contentType = getMockContentType([
+        { id: 'title', type: 'Text' },
+        { id: 'reference', type: 'Link', linkType: 'Entry' },
+      ]);
+
+      const mainEntry = getMockEntry('main-entry-id', {
+        title: { 'en-US': 'Main Entry Title' },
+        reference: {
+          'en-US': {
+            sys: { type: 'Link', linkType: 'Entry', id: 'referenced-entry-id' },
+          },
+        },
+      });
+
+      const clonedMainEntry = getMockEntry('cloned-main-entry-id', {
+        title: { 'en-US': '[CLONE] Main Entry Title' },
+        reference: {
+          'en-US': {
+            sys: { type: 'Link', linkType: 'Entry', id: 'referenced-entry-id' },
+          },
+        },
+      });
+
+      const updatedMainEntry = getMockEntry('cloned-main-entry-id', {
+        title: { 'en-US': '[CLONE] Main Entry Title' },
+        reference: {
+          'en-US': {
+            sys: { type: 'Link', linkType: 'Entry', id: 'referenced-entry-id' },
+          },
+        },
+      });
+
+      mockCma.contentType.get.mockResolvedValue(contentType);
+      mockCma.entry.get.mockResolvedValueOnce(mainEntry).mockRejectedValueOnce(new Error('Error'));
+      mockCma.entry.create.mockResolvedValueOnce(clonedMainEntry);
+      const result = await entryCloner.cloneEntry('main-entry-id');
+      expect(result).toEqual({
+        clonedEntry: updatedMainEntry,
+        referencesCount: 1,
+        clonesCount: 1,
+        updatesCount: 0,
+      });
+
+      expect(mockCma.entry.get).toHaveBeenCalledTimes(2);
+      expect(mockCma.entry.get).toHaveBeenCalledWith({ entryId: 'main-entry-id' });
+      expect(mockCma.entry.get).toHaveBeenCalledWith({ entryId: 'referenced-entry-id' });
+      expect(mockCma.entry.create).toHaveBeenCalledTimes(1);
+      expect(mockCma.entry.update).not.toHaveBeenCalled();
+
+      expect(mockCma.entry.create).toHaveBeenNthCalledWith(
+        1,
+        { contentTypeId: 'testContentType' },
+        {
+          fields: {
+            title: { 'en-US': '[CLONE] Main Entry Title' },
+            reference: {
+              'en-US': {
+                sys: { type: 'Link', linkType: 'Entry', id: 'referenced-entry-id' },
+              },
+            },
+          },
+        }
+      );
+    });
+  });
 });
