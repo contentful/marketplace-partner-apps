@@ -57,7 +57,7 @@
     "@babel/preset-env": "^7.28.0",
     "@babel/preset-react": "^7.27.1",
     "@babel/preset-typescript": "^7.27.1",
-    "@testing-library/jest-dom": "5.16.5",
+    "@testing-library/jest-dom": "6.6.4",
     "@testing-library/react": "^14.3.1",
     "@types/crypto-js": "^4.2.2",
     "@types/lodash": "^4.17.20",
