@@ -40,8 +40,22 @@ ALL_FILES=$(echo "$STAGED_JSON_FILES $CRITICAL_FILES" | tr ' ' '\n' | sort | uni
 for FILE in $ALL_FILES; do
   if [ -f "$FILE" ]; then
     echo "Validating $FILE..."
-    npx jsonlint -q "$FILE" || exit 1
+    if command -v npx >/dev/null 2>&1; then
+      npx jsonlint -q "$FILE" || exit 1
+    else
+      echo "ERROR: npx not found - cannot validate JSON files"
+      echo "Please install Node.js/npm to enable JSON validation"
+      echo "If you need to bypass this check temporarily, use: git commit --no-verify"
+      exit 1
+    fi
   fi
 done
 
-npx lint-staged
+# Run lint-staged - this is required, not optional
+if command -v npx >/dev/null 2>&1; then
+  npx lint-staged
+else
+  echo "ERROR: npx not found, cannot run lint-staged"
+  echo "Please install Node.js/npm or use 'git commit --no-verify' to bypass (not recommended)"
+  exit 1
+fi
