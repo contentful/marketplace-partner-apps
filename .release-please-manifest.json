@@ -1,8 +1,5 @@
 {
-  "apps/adapt-essentials-asset-fields": "1.2.0",
-  "apps/amplitude-experiment": "1.1.3",
   "apps/bynder": "1.1.19",
-  "apps/bynder-content-workflow": "1.0.11",
   "apps/ceros": "1.0.29",
   "apps/cloudinary": "1.0.7",
   "apps/cloudinary2": "1.2.1",
