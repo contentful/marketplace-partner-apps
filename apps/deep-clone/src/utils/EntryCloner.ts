@@ -3,12 +3,6 @@ import { CMAClient } from '@contentful/app-sdk';
 import { AppParameters } from '@/vite-env';
 
 type ReferenceMap = Record<string, EntryProps>;
-type CloneResult = {
-  clonedEntry: EntryProps;
-  referencesCount: number;
-  clonesCount: number;
-  updatesCount: number;
-};
 
 class EntryCloner {
   private references: ReferenceMap = {};
@@ -17,25 +11,32 @@ class EntryCloner {
   private updates: number = 0;
   private parameters: AppParameters;
   private cma: CMAClient;
+  private setReferencesCount: (count: number) => void;
+  private setClonesCount: (count: number) => void;
+  private setUpdatesCount: (count: number) => void;
 
-  constructor(cma: CMAClient, parameters: AppParameters) {
+  constructor(
+    cma: CMAClient,
+    parameters: AppParameters,
+    setReferencesCount: (count: number) => void,
+    setClonesCount: (count: number) => void,
+    setUpdatesCount: (count: number) => void
+  ) {
     this.cma = cma;
     this.parameters = parameters;
+    this.setReferencesCount = setReferencesCount;
+    this.setClonesCount = setClonesCount;
+    this.setUpdatesCount = setUpdatesCount;
   }
 
-  async cloneEntry(entryId: string): Promise<CloneResult> {
+  async cloneEntry(entryId: string): Promise<EntryProps> {
     this.references = {};
     this.clones = {};
     this.updates = 0;
     await this.findReferences(entryId);
     await this.createClones();
     await this.updateReferenceTree();
-    return {
-      clonedEntry: this.clones[entryId] as EntryProps,
-      referencesCount: Object.keys(this.references).length,
-      clonesCount: Object.keys(this.clones).length,
-      updatesCount: this.updates,
-    };
+    return this.clones[entryId] as EntryProps;
   }
 
   private async findReferences(entryId: string): Promise<void> {
@@ -50,6 +51,7 @@ class EntryCloner {
 
     if (entry !== undefined) {
       this.references[entryId] = entry;
+      this.setReferencesCount(Object.keys(this.references).length);
 
       for (const fieldName in entry.fields) {
         const field = entry.fields[fieldName];
@@ -63,11 +65,7 @@ class EntryCloner {
   }
 
   private async createClones(): Promise<void> {
-    for (const entryId in this.references) {
-      const entry = this.references[entryId];
-
-      if (!entry) continue;
-
+    const clonePromises = Object.entries(this.references).map(async ([entryId, entry]) => {
       try {
         const entryFields = await this.getFieldsForClone(entry);
         const createProps: CreateEntryProps = {
@@ -76,14 +74,17 @@ class EntryCloner {
         };
         const clone = await this.cma.entry.create({ contentTypeId: entry.sys.contentType.sys.id }, createProps);
         this.clones[entryId] = clone;
+        this.setClonesCount(Object.keys(this.clones).length);
       } catch (error) {
         console.warn('Error creating clone', error);
       }
-    }
+    });
+
+    await Promise.all(clonePromises);
   }
 
   private async updateReferenceTree(): Promise<void> {
-    for (const clone of Object.values(this.clones)) {
+    const updatePromises = Object.values(this.clones).map(async (clone) => {
       let cloneWasUpdated = false;
       for (const fieldId in clone.fields) {
         const field = clone.fields[fieldId];
@@ -105,11 +106,14 @@ class EntryCloner {
             }
           );
           this.updates++;
+          this.setUpdatesCount(this.updates);
         } catch (error) {
           console.warn('Error updating clone', error);
         }
       }
-    }
+    });
+
+    await Promise.all(updatePromises);
   }
 
   private async inspectField(fieldValue: any): Promise<void> {
@@ -117,8 +121,8 @@ class EntryCloner {
 
     if (this.isReferenceArray(fieldValue)) {
       await Promise.all(
-        fieldValue.map(async (f: any) => {
-          return await this.inspectField(f);
+        fieldValue.map((f: any) => {
+          return this.inspectField(f);
         })
       );
       return;
@@ -134,8 +138,8 @@ class EntryCloner {
 
     if (this.isReferenceArray(fieldValue)) {
       const didUpdateArray = await Promise.all(
-        fieldValue.map(async (f: any) => {
-          return await this.updateReferencesOnField(f);
+        fieldValue.map((f: any) => {
+          return this.updateReferencesOnField(f);
         })
       );
       return didUpdateArray.some((didUpdate) => didUpdate);

@@ -8,6 +8,10 @@ vi.mock('@contentful/app-sdk', () => ({
   CMAClient: vi.fn().mockImplementation(() => mockCma),
 }));
 
+const setReferencesCount = vi.fn();
+const setClonesCount = vi.fn();
+const setUpdatesCount = vi.fn();
+
 describe('EntryCloner', () => {
   let entryCloner: EntryCloner;
   let mockParameters: AppParameters;
@@ -20,8 +24,7 @@ describe('EntryCloner', () => {
       cloneTextBefore: true,
       automaticRedirect: true,
     };
-
-    entryCloner = new EntryCloner(mockCma as any, mockParameters);
+    entryCloner = new EntryCloner(mockCma as any, mockParameters, setReferencesCount, setClonesCount, setUpdatesCount);
   });
 
   describe('Clone entry with reference field', () => {
@@ -70,12 +73,10 @@ describe('EntryCloner', () => {
       mockCma.entry.get.mockResolvedValueOnce(mainEntry).mockResolvedValueOnce(referencedEntry);
       mockCma.entry.create.mockResolvedValueOnce(clonedMainEntry).mockResolvedValueOnce(clonedReferencedEntry);
       const result = await entryCloner.cloneEntry('main-entry-id');
-      expect(result).toEqual({
-        clonedEntry: updatedMainEntry,
-        referencesCount: 2,
-        clonesCount: 2,
-        updatesCount: 1,
-      });
+      expect(result).toEqual(updatedMainEntry);
+      expect(setReferencesCount).toHaveBeenCalledWith(2);
+      expect(setClonesCount).toHaveBeenCalledWith(2);
+      expect(setUpdatesCount).toHaveBeenCalledWith(1);
 
       expect(mockCma.entry.get).toHaveBeenCalledTimes(2);
       expect(mockCma.entry.get).toHaveBeenCalledWith({ entryId: 'main-entry-id' });
@@ -174,12 +175,10 @@ describe('EntryCloner', () => {
       mockCma.entry.create.mockResolvedValueOnce(clonedMainEntry).mockResolvedValueOnce(clonedReferencedEntry);
 
       const result = await entryCloner.cloneEntry('main-entry-id');
-      expect(result).toEqual({
-        clonedEntry: updatedMainEntry,
-        referencesCount: 2,
-        clonesCount: 2,
-        updatesCount: 1,
-      });
+      expect(result).toEqual(updatedMainEntry);
+      expect(setReferencesCount).toHaveBeenCalledWith(2);
+      expect(setClonesCount).toHaveBeenCalledWith(2);
+      expect(setUpdatesCount).toHaveBeenCalledWith(1);
 
       expect(mockCma.entry.get).toHaveBeenCalledWith({ entryId: 'main-entry-id' });
       expect(mockCma.entry.get).toHaveBeenCalledWith({ entryId: 'referenced-entry-id' });
@@ -268,12 +267,10 @@ describe('EntryCloner', () => {
       mockCma.entry.get.mockResolvedValueOnce(mainEntry).mockRejectedValueOnce(new Error('Error'));
       mockCma.entry.create.mockResolvedValueOnce(clonedMainEntry);
       const result = await entryCloner.cloneEntry('main-entry-id');
-      expect(result).toEqual({
-        clonedEntry: updatedMainEntry,
-        referencesCount: 1,
-        clonesCount: 1,
-        updatesCount: 0,
-      });
+      expect(result).toEqual(updatedMainEntry);
+      expect(setReferencesCount).toHaveBeenCalledWith(1);
+      expect(setClonesCount).toHaveBeenCalledWith(1);
+      expect(setUpdatesCount).not.toHaveBeenCalled();
 
       expect(mockCma.entry.get).toHaveBeenCalledTimes(2);
       expect(mockCma.entry.get).toHaveBeenCalledWith({ entryId: 'main-entry-id' });
