@@ -26,13 +26,13 @@
     "apps/docs-to-rich-text": {
       "release-type": "node"
     },
+    "apps/eppo": {
+      "release-type": "node"
+    },
     "apps/flexfields": {
       "release-type": "node"
     },
     "apps/frontify": {
-      "release-type": "node"
-    },
-    "apps/eppo": {
       "release-type": "node"
     },
     "apps/growthbook": {
