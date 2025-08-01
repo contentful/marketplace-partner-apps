@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.33](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.32...surfer-contentful-app-v1.0.33) (2025-08-01)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group in /apps/surfer with 4 updates ([#5922](https://github.com/contentful/marketplace-partner-apps/issues/5922)) ([9350e47](https://github.com/contentful/marketplace-partner-apps/commit/9350e477042eda5de33bdbf7e4c9064569b19321))
+
 ## [1.0.32](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.31...surfer-contentful-app-v1.0.32) (2025-07-28)
 
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.3](https://github.com/contentful/marketplace-partner-apps/compare/docs-to-rich-text-v1.2.2...docs-to-rich-text-v1.2.3) (2025-08-01)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.80.5 to 4.81.1 in /apps/docs-to-rich-text in the production-dependencies group ([#5880](https://github.com/contentful/marketplace-partner-apps/issues/5880)) ([808713b](https://github.com/contentful/marketplace-partner-apps/commit/808713ba40763acb725b1a33f97b772385c78055))
+* **deps:** bump the production-dependencies group in /apps/docs-to-rich-text with 2 updates ([#5842](https://github.com/contentful/marketplace-partner-apps/issues/5842)) ([1a493bf](https://github.com/contentful/marketplace-partner-apps/commit/1a493bfd4a61f97f47559d813e70867cadb19763))
+
 ## [1.2.2](https://github.com/contentful/marketplace-partner-apps/compare/docs-to-rich-text-v1.2.1...docs-to-rich-text-v1.2.2) (2025-07-28)
 
 
