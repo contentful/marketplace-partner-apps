@@ -29,8 +29,8 @@
     ]
   },
   "dependencies": {
-    "@contentful/app-sdk": "^4.29.7",
-    "@contentful/f36-components": "^4.80.5",
+    "@contentful/app-sdk": "^4.37.0",
+    "@contentful/f36-components": "^4.81.1",
     "@contentful/f36-core": "^4.68.1",
     "@contentful/f36-icons": "^4.29.1",
     "@contentful/f36-popover": "^4.68.1",
@@ -47,7 +47,7 @@
     "@popperjs/core": "^2.11.5",
     "@tanstack/react-query": "^4.3.9",
     "constate": "^3.3.3",
-    "contentful-management": "^11.53.0",
+    "contentful-management": "^11.54.4",
     "emotion": "^10.0.17",
     "jest-environment-jsdom": "^29.7.0",
     "lodash": "^4.17.15",
