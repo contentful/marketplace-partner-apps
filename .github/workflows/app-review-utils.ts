@@ -50,8 +50,24 @@ const installAppDependencies = async (newAppDir: string) => {
     // Sanitize the directory path
     const sanitizedDir = sanitizeAppDirectory(newAppDir);
 
-    // Use proper escaping and validation
-    await execPromise(`cd ${JSON.stringify(sanitizedDir)} && npm ci`);
+    // Try npm ci first, fall back to npm install if no package-lock.json exists
+    try {
+      await execPromise(`cd ${JSON.stringify(sanitizedDir)} && npm ci`);
+    } catch (ciError) {
+      // If npm ci fails due to missing package-lock.json, try npm install
+      if (
+        ciError &&
+        typeof ciError === 'object' &&
+        'stderr' in ciError &&
+        typeof ciError.stderr === 'string' &&
+        ciError.stderr.includes('existing package-lock.json')
+      ) {
+        console.log(`No package-lock.json found for ${newAppDir}, falling back to npm install`);
+        await execPromise(`cd ${JSON.stringify(sanitizedDir)} && npm install`);
+      } else {
+        throw ciError;
+      }
+    }
   } catch (error) {
     console.error(`Failed to install app dependencies for ${newAppDir}: ${error}`);
     throw error; // Re-throw to handle validation failures properly

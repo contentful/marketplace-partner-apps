@@ -44,12 +44,9 @@ function Sidebar() {
     setUpdatesCount(0);
 
     await sdk.entry.save();
-    const cloner = new EntryCloner(sdk.cma, parameters);
-    const { clonedEntry, referencesCount, clonesCount, updatesCount } = await cloner.cloneEntry(sdk.ids.entry);
+    const cloner = new EntryCloner(sdk.cma, parameters, setReferencesCount, setClonesCount, setUpdatesCount);
+    const clonedEntry = await cloner.cloneEntry(sdk.ids.entry);
 
-    setReferencesCount(referencesCount);
-    setClonesCount(clonesCount);
-    setUpdatesCount(updatesCount);
     setLoading(false);
     setFinished(true);
     setCountdown(REDIRECT_DELAY / 1000);
@@ -64,12 +61,6 @@ function Sidebar() {
     sdk.notifier.success('Clone successful');
   };
 
-  const cloneMessage = () => {
-    return `Found ${referencesCount} ${referencesCount > 1 ? 'references' : 'reference'}, created ${clonesCount} new ${
-      clonesCount > 1 ? 'entries' : 'entry'
-    }, updated ${updatesCount} ${updatesCount > 1 ? 'references' : 'reference'}`;
-  };
-
   return (
     <Stack spacing="spacingM" flexDirection="column" alignItems="start">
       <Text fontColor="gray500" fontWeight="fontWeightMedium">
@@ -78,10 +69,18 @@ function Sidebar() {
       <Button variant="secondary" isLoading={isLoading} isDisabled={isDisabled} onClick={clone} isFullWidth>
         Clone entry
       </Button>
-      {finished && (
-        <Text fontColor="gray500" fontWeight="fontWeightMedium">
-          {cloneMessage()}
-        </Text>
+      {referencesCount > 0 && (
+        <Stack spacing="spacing2Xs" flexDirection="column" alignItems="start">
+          <Text fontColor="gray500" fontWeight="fontWeightMedium">
+            {`Found ${referencesCount} ${referencesCount === 1 ? 'reference' : 'references'}.`}
+          </Text>
+          <Text fontColor="gray500" fontWeight="fontWeightMedium">
+            {`Created ${clonesCount} new ${clonesCount === 1 ? 'entry' : 'entries'} out of ${referencesCount}.`}
+          </Text>
+          <Text fontColor="gray500" fontWeight="fontWeightMedium">
+            {`Updated ${updatesCount} ${updatesCount === 1 ? 'reference' : 'references'}.`}
+          </Text>
+        </Stack>
       )}
       {finished && parameters.automaticRedirect && (
         <Text fontColor="gray500" fontWeight="fontWeightMedium">
