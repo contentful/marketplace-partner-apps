@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.1](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.2.0...cloudinary-assets-v1.2.1) (2025-08-01)
+
+
+### Bug Fixes
+
+* **deps:** bump react, react-dom and @types/react in /apps/cloudinary2 [] ([#5482](https://github.com/contentful/marketplace-partner-apps/issues/5482)) ([92018e7](https://github.com/contentful/marketplace-partner-apps/commit/92018e729e457dde2a186bfd95666c857e903d5d))
+* **deps:** bump the production-dependencies group across 1 directory with 7 updates ([#5860](https://github.com/contentful/marketplace-partner-apps/issues/5860)) ([c64ea61](https://github.com/contentful/marketplace-partner-apps/commit/c64ea612c1a4e9b51bf47f13230f99a1ecd4c82e))
+
 ## [1.2.0](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.1.8...cloudinary-assets-v1.2.0) (2025-07-28)
 
 

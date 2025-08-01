@@ -1,6 +1,6 @@
 {
   "name": "translationstudio",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": {
     "name": "I-D Media GmbH",
     "url": "https://translationstudio.tech"
@@ -40,6 +40,6 @@
     "eslint-config-next": "^15.4.5",
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",
-    "typescript": "5.9.2"
+    "typescript": "5.8.3"
   }
 }
