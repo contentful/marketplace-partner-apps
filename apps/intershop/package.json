@@ -1,6 +1,6 @@
 {
   "name": "intershop-connector",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "^4.37.0",
@@ -45,7 +45,7 @@
     "@types/react-dom": "19.1.7",
     "@vitejs/plugin-react": "^4.7.0",
     "happy-dom": "^17.2.2",
-    "typescript": "5.9.2",
+    "typescript": "5.8.3",
     "vite": "^7.0.6",
     "vitest": "^3.2.4"
   },
