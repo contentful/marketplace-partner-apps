@@ -27,7 +27,7 @@
   "apps/statsig": "1.1.4",
   "apps/convox": "1.0.3",
   "apps/lottie-preview": "1.0.7",
-  "apps/hugging-face": "1.1.3",
+  "apps/hugging-face": "1.1.4",
   "apps/translationstudio": "1.0.1",
   "apps/deep-clone": "1.0.1"
 }
