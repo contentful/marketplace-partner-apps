@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.2](https://github.com/contentful/marketplace-partner-apps/compare/translationstudio-v1.0.1...translationstudio-v1.0.2) (2025-08-01)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.35.0 to 4.36.0 in /apps/translationstudio in the production-dependencies group ([#5792](https://github.com/contentful/marketplace-partner-apps/issues/5792)) ([ec9a2bb](https://github.com/contentful/marketplace-partner-apps/commit/ec9a2bbfe25b9f9186c95e4afb03378b60c8d0e1))
+* **deps:** bump @contentful/app-sdk from 4.36.0 to 4.37.0 in /apps/translationstudio in the production-dependencies group ([#5951](https://github.com/contentful/marketplace-partner-apps/issues/5951)) ([4d189a7](https://github.com/contentful/marketplace-partner-apps/commit/4d189a7b2128dbfc87054137fe8c07ac7957df9a))
+* **deps:** bump the production-dependencies group in /apps/translationstudio with 2 updates ([#5862](https://github.com/contentful/marketplace-partner-apps/issues/5862)) ([d4131ac](https://github.com/contentful/marketplace-partner-apps/commit/d4131aced743a3ee76973a1e65627036877f4a68))
+
 ## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/translationstudio-v1.0.0...translationstudio-v1.0.1) (2025-07-28)
 
 
