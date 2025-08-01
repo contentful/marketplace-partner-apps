@@ -36,4 +36,5 @@
   "dependencies": {
     "lerna": "^7.0.2"
   }
-}
+}npm install --save-dev @babel/plugin-proposal-private-property-in-object
+
