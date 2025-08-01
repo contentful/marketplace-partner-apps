@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.7...lottie-preview-v1.1.0) (2025-08-01)
+
+
+### Features
+
+* Deep clone app [INTEG-2762] ([#5687](https://github.com/contentful/marketplace-partner-apps/issues/5687)) ([5c6d2c4](https://github.com/contentful/marketplace-partner-apps/commit/5c6d2c47e0fc9e1615a380fb6ceb413b8c4ff44b))
+* official release version of deep-clone is now set to 1.0.1 [INTEG-3003] ([#5908](https://github.com/contentful/marketplace-partner-apps/issues/5908)) ([1dd642d](https://github.com/contentful/marketplace-partner-apps/commit/1dd642da5e75c43746d179cedfe6ef9ca5d98d94))
+* reusable content type and content type field selectors [INTEG-2836] ([#5340](https://github.com/contentful/marketplace-partner-apps/issues/5340)) ([6b0da39](https://github.com/contentful/marketplace-partner-apps/commit/6b0da39bd3eb208862d62e753285d979ac006996))
+
+
+### Bug Fixes
+
+* Deep clone improvements [] ([#5906](https://github.com/contentful/marketplace-partner-apps/issues/5906)) ([0c99ebf](https://github.com/contentful/marketplace-partner-apps/commit/0c99ebf547d88ddf161ffaae06673e50f41d1738))
+* **deps:** bump @contentful/f36-components from 4.80.4 to 4.80.5 in /apps/lottie-preview in the production-dependencies group ([#5465](https://github.com/contentful/marketplace-partner-apps/issues/5465)) ([871e143](https://github.com/contentful/marketplace-partner-apps/commit/871e143348651376fc717224f1c280b46f8c3649))
+* **deps:** bump @lottiefiles/dotlottie-react from 0.13.5 to 0.14.2 in /apps/lottie-preview in the production-dependencies group ([#5411](https://github.com/contentful/marketplace-partner-apps/issues/5411)) ([d05c4af](https://github.com/contentful/marketplace-partner-apps/commit/d05c4af8037f734a1fa105e5cd6d1504641c0e30))
+* lottie-preview to build correctly in circleci [] ([#5717](https://github.com/contentful/marketplace-partner-apps/issues/5717)) ([1ad191f](https://github.com/contentful/marketplace-partner-apps/commit/1ad191fcdfe02a3e76f9ee305b791bf1b4db5f3f))
+
 ## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.6...lottie-preview-v1.0.7) (2025-07-02)
 
 
