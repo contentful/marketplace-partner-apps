@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.28](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.27...uploadcare-contentful-app-v1.0.28) (2025-08-01)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.36.0 to 4.37.0 in /apps/uploadcare in the production-dependencies group ([#5935](https://github.com/contentful/marketplace-partner-apps/issues/5935)) ([26a66a2](https://github.com/contentful/marketplace-partner-apps/commit/26a66a251326fc538c1a0412e754b568caba0e6b))
+* **deps:** bump @contentful/f36-components from 4.80.5 to 4.81.1 in /apps/uploadcare in the production-dependencies group ([#5857](https://github.com/contentful/marketplace-partner-apps/issues/5857)) ([9d433b9](https://github.com/contentful/marketplace-partner-apps/commit/9d433b9273d614c4647f836484ab73a90671d2ea))
+* **deps:** bump the production-dependencies group in /apps/uploadcare with 2 updates ([#5773](https://github.com/contentful/marketplace-partner-apps/issues/5773)) ([df14fa8](https://github.com/contentful/marketplace-partner-apps/commit/df14fa8f56d274257bd06d92543999cfe874fe3a))
+
 ## [1.0.27](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.26...uploadcare-contentful-app-v1.0.27) (2025-07-28)
 
 
