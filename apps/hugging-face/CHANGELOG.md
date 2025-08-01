@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.4](https://github.com/contentful/marketplace-partner-apps/compare/hugging-face-v1.1.3...hugging-face-v1.1.4) (2025-08-01)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.35.0 to 4.36.0 in /apps/hugging-face in the production-dependencies group ([#5834](https://github.com/contentful/marketplace-partner-apps/issues/5834)) ([c6e55d9](https://github.com/contentful/marketplace-partner-apps/commit/c6e55d9aa74790ca5b83ace872c7358ed74f979e))
+* **deps:** bump @contentful/app-sdk from 4.36.0 to 4.37.0 in /apps/hugging-face in the production-dependencies group ([#5958](https://github.com/contentful/marketplace-partner-apps/issues/5958)) ([581d864](https://github.com/contentful/marketplace-partner-apps/commit/581d864f595de1b169d3c9bd213e762f844a9f69))
+* **deps:** bump @contentful/f36-components from 4.80.5 to 4.81.1 in /apps/hugging-face in the production-dependencies group ([#5876](https://github.com/contentful/marketplace-partner-apps/issues/5876)) ([a75f1fc](https://github.com/contentful/marketplace-partner-apps/commit/a75f1fc8c4c09bed8d7565b7832f5c687efbbe70))
+
 ## [1.1.3](https://github.com/contentful/marketplace-partner-apps/compare/hugging-face-v1.1.2...hugging-face-v1.1.3) (2025-07-28)
 
 
