@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.1.5](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.1.4...shopify-sku-v2.1.5) (2025-08-01)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.80.5 to 4.81.1 in /apps/shopify in the production-dependencies group ([#5869](https://github.com/contentful/marketplace-partner-apps/issues/5869)) ([63fc716](https://github.com/contentful/marketplace-partner-apps/commit/63fc71627c7507b2fbb60cc5d7106b9c031b5699))
+* **deps:** bump @shopify/storefront-api-client from 1.0.8 to 1.0.9 in /apps/shopify in the production-dependencies group ([#5779](https://github.com/contentful/marketplace-partner-apps/issues/5779)) ([2ad1b71](https://github.com/contentful/marketplace-partner-apps/commit/2ad1b719910164510498770c742469dfe5a0bb04))
+
 ## [2.1.4](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.1.3...shopify-sku-v2.1.4) (2025-07-28)
 
 

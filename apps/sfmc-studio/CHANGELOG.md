@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.5](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.4...sfmc-studio-v1.2.5) (2025-08-01)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.36.0 to 4.37.0 in /apps/sfmc-studio in the production-dependencies group ([#5929](https://github.com/contentful/marketplace-partner-apps/issues/5929)) ([30e4b87](https://github.com/contentful/marketplace-partner-apps/commit/30e4b874e1a7b2294ddacb34052b34e07a63e580))
+* **deps:** bump eslint-config-prettier from 9.1.0 to 10.1.8 in /apps/sfmc-studio ([#5782](https://github.com/contentful/marketplace-partner-apps/issues/5782)) ([b21c78c](https://github.com/contentful/marketplace-partner-apps/commit/b21c78c57b0bee0ef67f4ea81499de80d005aa7c))
+* **deps:** bump the production-dependencies group in /apps/sfmc-studio with 3 updates ([#5878](https://github.com/contentful/marketplace-partner-apps/issues/5878)) ([d6e3463](https://github.com/contentful/marketplace-partner-apps/commit/d6e3463913620dd40adf0f2ef78e631748455871))
+* **deps:** bump the production-dependencies group in /apps/sfmc-studio with 6 updates ([#5789](https://github.com/contentful/marketplace-partner-apps/issues/5789)) ([b714d69](https://github.com/contentful/marketplace-partner-apps/commit/b714d6991672bc498bffbc2ea4fec740390587f0))
+
 ## [1.2.4](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.3...sfmc-studio-v1.2.4) (2025-07-28)
 
 

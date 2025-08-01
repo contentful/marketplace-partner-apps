@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.27](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.26...image-hotspot-creator-v1.0.27) (2025-08-01)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.36.0 to 4.37.0 in /apps/imageHotspotCreator in the production-dependencies group ([#5910](https://github.com/contentful/marketplace-partner-apps/issues/5910)) ([654ecbf](https://github.com/contentful/marketplace-partner-apps/commit/654ecbf47cf9832baa433dc0b33760e87232308c))
+* **deps:** bump @contentful/f36-components from 4.80.5 to 4.81.1 in /apps/imageHotspotCreator in the production-dependencies group ([#5899](https://github.com/contentful/marketplace-partner-apps/issues/5899)) ([f67acff](https://github.com/contentful/marketplace-partner-apps/commit/f67acff34ef400b20f3efe7e9ed38c4d08a8b45f))
+* **deps:** bump @mui/icons-material from 5.17.1 to 5.18.0 in /apps/imageHotspotCreator ([#5785](https://github.com/contentful/marketplace-partner-apps/issues/5785)) ([b83f11f](https://github.com/contentful/marketplace-partner-apps/commit/b83f11f44fce8e6034bb6a855b78fafd56cf1e92))
+* **deps:** bump @mui/material from 5.17.1 to 5.18.0 in /apps/imageHotspotCreator ([#5902](https://github.com/contentful/marketplace-partner-apps/issues/5902)) ([a81648b](https://github.com/contentful/marketplace-partner-apps/commit/a81648b4bdd7f096dc1d7773cc30eb4efbb7a354))
+* **deps:** bump the production-dependencies group in /apps/imageHotspotCreator with 2 updates ([#5771](https://github.com/contentful/marketplace-partner-apps/issues/5771)) ([f9c1144](https://github.com/contentful/marketplace-partner-apps/commit/f9c1144696a122d1efb28b56483b4c8b22739698))
+
 ## [1.0.26](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.25...image-hotspot-creator-v1.0.26) (2025-07-28)
 
 

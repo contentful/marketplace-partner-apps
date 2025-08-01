@@ -1,9 +1,9 @@
 {
   "name": "ls-contentful-app",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "private": true,
   "dependencies": {
-    "@contentful/app-sdk": "^4.36.0",
+    "@contentful/app-sdk": "^4.37.0",
     "@contentful/f36-components": "4.81.1",
     "@contentful/f36-tokens": "4.2.0",
     "@contentful/react-apps-toolkit": "1.2.16",
