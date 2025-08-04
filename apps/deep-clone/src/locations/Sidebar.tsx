@@ -11,14 +11,16 @@ function Sidebar() {
   const sdk = useSDK() as SidebarAppSDK;
   useAutoResizer();
 
-  const [isLoading, setLoading] = useState<boolean>(false);
-  const [isDisabled, setDisabled] = useState<boolean>(false);
-  const [finished, setFinished] = useState<boolean>(false);
   const [referencesCount, setReferencesCount] = useState<number>(0);
   const [clonesCount, setClonesCount] = useState<number>(0);
   const [updatesCount, setUpdatesCount] = useState<number>(0);
   const [countdown, setCountdown] = useState<number>(0);
   const parameters = useInstallationParameters(sdk) as AppParameters;
+
+  const [isConfirming, setIsConfirming] = useState<boolean>(false);
+  const [isCloning, setIsCloning] = useState<boolean>(false);
+  const [isFinished, setIsFinished] = useState<boolean>(false);
+  const [isRedirecting, setIsRedirecting] = useState<boolean>(false);
 
   useEffect(() => {
     if (countdown === 0) return;
@@ -35,28 +37,44 @@ function Sidebar() {
     return () => clearInterval(interval);
   }, [countdown]);
 
-  const clone = async (): Promise<void> => {
-    setLoading(true);
-    setDisabled(true);
-    setFinished(false);
+  const resetState = () => {
+    setIsConfirming(false);
+    setIsCloning(false);
+    setIsFinished(false);
+    setIsRedirecting(false);
     setReferencesCount(0);
     setClonesCount(0);
     setUpdatesCount(0);
+  };
 
+  const clone = async (): Promise<void> => {
+    resetState();
+    setIsConfirming(true);
     await sdk.entry.save();
-    const cloner = new EntryCloner(sdk.cma, parameters, setReferencesCount, setClonesCount, setUpdatesCount);
-    const clonedEntry = await cloner.cloneEntry(sdk.ids.entry);
+    const cloner = new EntryCloner(sdk.cma, parameters, sdk.ids.entry, setReferencesCount, setClonesCount, setUpdatesCount);
+    const referencesQty = await cloner.getReferencesQty();
+    const confirmation = await sdk.dialogs.openConfirm({
+      title: 'Clone entry',
+      message: `Are you sure you want to clone this entry? This will create ${referencesQty} new entries.`,
+    });
+    if (!confirmation) {
+      resetState();
+      return;
+    }
+    setIsConfirming(false);
+    setIsCloning(true);
 
-    setLoading(false);
-    setFinished(true);
-    setCountdown(REDIRECT_DELAY / 1000);
+    const clonedEntry = await cloner.cloneEntry();
+
+    setIsCloning(false);
+    setIsFinished(true);
 
     if (parameters.automaticRedirect) {
+      setIsRedirecting(true);
+      setCountdown(REDIRECT_DELAY / 1000);
       setTimeout(() => {
         sdk.navigator.openEntry(clonedEntry.sys.id);
       }, REDIRECT_DELAY);
-    } else {
-      setDisabled(false);
     }
     sdk.notifier.success('Clone successful');
   };
@@ -66,23 +84,28 @@ function Sidebar() {
       <Text fontColor="gray500" fontWeight="fontWeightMedium">
         Clone this entry and all referenced entries
       </Text>
-      <Button variant="secondary" isLoading={isLoading} isDisabled={isDisabled} onClick={clone} isFullWidth>
+      <Button variant="secondary" isLoading={isCloning} isDisabled={isConfirming || isCloning || isRedirecting} onClick={clone} isFullWidth>
         Clone entry
       </Button>
-      {referencesCount > 0 && (
-        <Stack spacing="spacing2Xs" flexDirection="column" alignItems="start">
+
+      <Stack spacing="spacing2Xs" flexDirection="column" alignItems="start">
+        {(isConfirming || isCloning || isRedirecting || isFinished) && (
           <Text fontColor="gray500" fontWeight="fontWeightMedium">
             {`Found ${referencesCount} ${referencesCount === 1 ? 'reference' : 'references'}.`}
           </Text>
-          <Text fontColor="gray500" fontWeight="fontWeightMedium">
-            {`Created ${clonesCount} new ${clonesCount === 1 ? 'entry' : 'entries'} out of ${referencesCount}.`}
-          </Text>
-          <Text fontColor="gray500" fontWeight="fontWeightMedium">
-            {`Updated ${updatesCount} ${updatesCount === 1 ? 'reference' : 'references'}.`}
-          </Text>
-        </Stack>
-      )}
-      {finished && parameters.automaticRedirect && (
+        )}
+        {(isCloning || isRedirecting || isFinished) && (
+          <>
+            <Text fontColor="gray500" fontWeight="fontWeightMedium">
+              {`Created ${clonesCount} new ${clonesCount === 1 ? 'entry' : 'entries'} out of ${referencesCount}.`}
+            </Text>
+            <Text fontColor="gray500" fontWeight="fontWeightMedium">
+              {`Updated ${updatesCount} ${updatesCount === 1 ? 'reference' : 'references'}.`}
+            </Text>
+          </>
+        )}
+      </Stack>
+      {isRedirecting && parameters.automaticRedirect && (
         <Text fontColor="gray500" fontWeight="fontWeightMedium">
           Redirecting to newly created clone in {countdown} seconds
         </Text>
