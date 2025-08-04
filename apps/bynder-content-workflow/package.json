@@ -16,7 +16,7 @@
     "emotion": "10.0.27",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-top-loading-bar": "^2.3.1",
+    "react-top-loading-bar": "^3.0.2",
     "showdown": "^2.1.0",
     "uuid": "^9.0.1"
   },
