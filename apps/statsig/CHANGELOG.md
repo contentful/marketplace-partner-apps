@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.6](https://github.com/contentful/marketplace-partner-apps/compare/statsig-v1.1.5...statsig-v1.1.6) (2025-08-05)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.37.0 to 4.39.0 in /apps/statsig in the production-dependencies group ([#6019](https://github.com/contentful/marketplace-partner-apps/issues/6019)) ([b28832d](https://github.com/contentful/marketplace-partner-apps/commit/b28832d4bd689dd910e285d058851562b0e7a31e))
+* Revert "chore: release  statsig 1.1.5 []" ([#6029](https://github.com/contentful/marketplace-partner-apps/issues/6029)) ([2277da6](https://github.com/contentful/marketplace-partner-apps/commit/2277da6722cfc1ccbb1c470ff3fb150469fc97e9))
+* statsig emotion library updates [] ([#6033](https://github.com/contentful/marketplace-partner-apps/issues/6033)) ([a3674c8](https://github.com/contentful/marketplace-partner-apps/commit/a3674c82ad0258f75fc5fa29e145ad60a591e8fa))
+
 ## [1.1.5](https://github.com/contentful/marketplace-partner-apps/compare/statsig-v1.1.4...statsig-v1.1.5) (2025-08-05)
 
 
