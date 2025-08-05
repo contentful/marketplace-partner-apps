@@ -1,17 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 
-import {
-  CommonProps,
-  ExpandProps,
-  mergeRefs,
-  PolymorphicComponent,
-  PolymorphicProps,
-  useId,
-} from '@contentful/f36-core';
-import { cx } from 'emotion';
-
+import { CommonProps, ExpandProps, mergeRefs, PolymorphicComponent, PolymorphicProps, useId } from '@contentful/f36-core';
+import * as emotion from '@emotion/css';
 import { useMenuContext } from '../MenuContext';
 import { getMenuItemStyles } from './MenuItem.styles';
+
+const { cx } = emotion;
 
 const MENU_ITEM_DEFAULT_TAG = 'button';
 
@@ -37,23 +31,10 @@ interface MenuItemInternalProps extends CommonProps {
   icon?: React.ReactElement;
 }
 
-export type MenuItemProps<E extends React.ElementType = typeof MENU_ITEM_DEFAULT_TAG> =
-  PolymorphicProps<MenuItemInternalProps, E>;
+export type MenuItemProps<E extends React.ElementType = typeof MENU_ITEM_DEFAULT_TAG> = PolymorphicProps<MenuItemInternalProps, E>;
 
-function _MenuItem<E extends React.ElementType = typeof MENU_ITEM_DEFAULT_TAG>(
-  props: MenuItemProps<E>,
-  ref: React.Ref<any>,
-) {
-  const {
-    testId,
-    className,
-    as,
-    isActive = false,
-    isDisabled,
-    isInitiallyFocused,
-    icon,
-    ...otherProps
-  } = props;
+function _MenuItem<E extends React.ElementType = typeof MENU_ITEM_DEFAULT_TAG>(props: MenuItemProps<E>, ref: React.Ref<any>) {
+  const { testId, className, as, isActive = false, isDisabled, isInitiallyFocused, icon, ...otherProps } = props;
 
   const id = useId(undefined, 'menu-item');
   const itemTestId = testId || `cf-ui-${id}`;
@@ -79,8 +60,7 @@ function _MenuItem<E extends React.ElementType = typeof MENU_ITEM_DEFAULT_TAG>(
       className={cx(styles.root, className)}
       data-test-id={itemTestId}
       ref={mergeRefs(itemRef, ref)}
-      tabIndex={-1}
-    >
+      tabIndex={-1}>
       {icon}
       {props.children}
     </Element>
@@ -89,7 +69,4 @@ function _MenuItem<E extends React.ElementType = typeof MENU_ITEM_DEFAULT_TAG>(
 
 _MenuItem.displayName = 'MenuItem';
 
-export const MenuItem: PolymorphicComponent<
-  ExpandProps<MenuItemInternalProps>,
-  typeof MENU_ITEM_DEFAULT_TAG
-> = React.forwardRef(_MenuItem);
+export const MenuItem: PolymorphicComponent<ExpandProps<MenuItemInternalProps>, typeof MENU_ITEM_DEFAULT_TAG> = React.forwardRef(_MenuItem);

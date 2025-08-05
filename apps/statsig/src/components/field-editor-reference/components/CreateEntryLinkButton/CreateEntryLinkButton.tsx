@@ -1,11 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 
 import { ChevronDownIcon, PlusIcon } from '@contentful/f36-icons';
 
 import { Button } from '@contentful/f36-components';
 import { ContentType } from '../../types';
 import { CreateEntryMenuTrigger } from './CreateEntryMenuTrigger';
-import { css } from 'emotion';
+import { css } from '@emotion/css';
 import get from 'lodash/get';
 import tokens from '@contentful/f36-tokens';
 
@@ -54,13 +54,7 @@ export const CreateEntryLinkButton = ({
 }: CreateEntryLinkButtonProps) => {
   contentTypes = contentTypes.sort((a, b) => a.name.localeCompare(b.name));
   const suggestedContentType = contentTypes.find((ct) => ct.sys.id === suggestedContentTypeId);
-  const buttonText =
-    text ||
-    `Add ${get(
-      suggestedContentType || (contentTypes.length === 1 ? contentTypes[0] : {}),
-      'name',
-      'entry',
-    )}`;
+  const buttonText = text || `Add ${get(suggestedContentType || (contentTypes.length === 1 ? contentTypes[0] : {}), 'name', 'entry')}`;
   const hasDropdown = contentTypes.length > 1 || customDropdownItems;
 
   // TODO: Introduce `icon: string` and remove `hasPlusIcon` or remove "Plus" if we keep new layout.
@@ -77,8 +71,7 @@ export const CreateEntryLinkButton = ({
       onSelect={onSelect}
       testId={testId}
       dropdownSettings={dropdownSettings}
-      customDropdownItems={customDropdownItems}
-    >
+      customDropdownItems={customDropdownItems}>
       {({ isSelecting }) => (
         <Button
           endIcon={hasDropdown ? <ChevronDownIcon /> : undefined}
@@ -88,8 +81,7 @@ export const CreateEntryLinkButton = ({
           startIcon={isSelecting ? undefined : plusIcon}
           size="small"
           testId="create-entry-link-button"
-          isLoading={isSelecting}
-        >
+          isLoading={isSelecting}>
           {buttonText}
         </Button>
       )}

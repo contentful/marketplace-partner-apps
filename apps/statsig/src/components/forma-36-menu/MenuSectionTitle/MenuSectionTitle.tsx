@@ -2,9 +2,10 @@ import React from 'react';
 
 import type { ExpandProps } from '@contentful/f36-core';
 import { Caption, CaptionProps } from '@contentful/f36-typography';
-import { cx } from 'emotion';
-
+import * as emotion from '@emotion/css';
 import { getMenuSectionTitleStyles } from './MenuSectionTitle.styles';
+
+const { cx } = emotion;
 
 export type MenuSectionTitleProps = CaptionProps;
 
@@ -23,8 +24,7 @@ export const MenuSectionTitle = (props: ExpandProps<MenuSectionTitleProps>) => {
       testId={testId}
       className={cx(styles, className)}
       marginBottom="none"
-      {...otherProps}
-    >
+      {...otherProps}>
       {children}
     </Caption>
   );
