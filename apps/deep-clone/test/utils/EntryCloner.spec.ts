@@ -24,7 +24,7 @@ describe('EntryCloner', () => {
       cloneTextBefore: true,
       automaticRedirect: true,
     };
-    entryCloner = new EntryCloner(mockCma as any, mockParameters, setReferencesCount, setClonesCount, setUpdatesCount);
+    entryCloner = new EntryCloner(mockCma as any, mockParameters, 'main-entry-id', setReferencesCount, setClonesCount, setUpdatesCount);
   });
 
   describe('Clone entry with reference field', () => {
@@ -72,7 +72,7 @@ describe('EntryCloner', () => {
       mockCma.contentType.get.mockResolvedValue(contentType);
       mockCma.entry.get.mockResolvedValueOnce(mainEntry).mockResolvedValueOnce(referencedEntry);
       mockCma.entry.create.mockResolvedValueOnce(clonedMainEntry).mockResolvedValueOnce(clonedReferencedEntry);
-      const result = await entryCloner.cloneEntry('main-entry-id');
+      const result = await entryCloner.cloneEntry();
       expect(result).toEqual(updatedMainEntry);
       expect(setReferencesCount).toHaveBeenCalledWith(2);
       expect(setClonesCount).toHaveBeenCalledWith(2);
@@ -174,7 +174,7 @@ describe('EntryCloner', () => {
       mockCma.entry.get.mockResolvedValueOnce(mainEntry).mockResolvedValueOnce(referencedEntry);
       mockCma.entry.create.mockResolvedValueOnce(clonedMainEntry).mockResolvedValueOnce(clonedReferencedEntry);
 
-      const result = await entryCloner.cloneEntry('main-entry-id');
+      const result = await entryCloner.cloneEntry();
       expect(result).toEqual(updatedMainEntry);
       expect(setReferencesCount).toHaveBeenCalledWith(2);
       expect(setClonesCount).toHaveBeenCalledWith(2);
@@ -266,7 +266,7 @@ describe('EntryCloner', () => {
       mockCma.contentType.get.mockResolvedValue(contentType);
       mockCma.entry.get.mockResolvedValueOnce(mainEntry).mockRejectedValueOnce(new Error('Error'));
       mockCma.entry.create.mockResolvedValueOnce(clonedMainEntry);
-      const result = await entryCloner.cloneEntry('main-entry-id');
+      const result = await entryCloner.cloneEntry();
       expect(result).toEqual(updatedMainEntry);
       expect(setReferencesCount).toHaveBeenCalledWith(1);
       expect(setClonesCount).toHaveBeenCalledWith(1);
