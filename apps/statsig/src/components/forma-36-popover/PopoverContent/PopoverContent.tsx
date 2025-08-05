@@ -1,4 +1,4 @@
-import React, { HTMLAttributes } from 'react';
+import React from 'react';
 
 import type { CommonProps, PropsWithHTMLElement, ExpandProps } from '@contentful/f36-core';
 import { Portal } from '@contentful/f36-utils';
