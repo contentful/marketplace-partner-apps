@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 
 import { Flex, Text, Tooltip } from '@contentful/f36-components';
 import { FolderOpenTrimmedIcon } from '@contentful/f36-icons';
 import tokens from '@contentful/f36-tokens';
-import { css } from 'emotion';
+import { css } from '@emotion/css';
 
 interface SourceProps {
   spaceName: string;
