@@ -1,16 +1,5 @@
 # Changelog
 
-## [1.1.5](https://github.com/contentful/marketplace-partner-apps/compare/statsig-v1.1.4...statsig-v1.1.5) (2025-08-01)
-
-
-### Bug Fixes
-
-* **deps:** bump @contentful/app-sdk from 4.36.0 to 4.37.0 in /apps/statsig in the production-dependencies group ([#5917](https://github.com/contentful/marketplace-partner-apps/issues/5917)) ([666d2de](https://github.com/contentful/marketplace-partner-apps/commit/666d2defe69af15ba9c1c45eeca9503f910ac0b5))
-* **deps:** bump @contentful/f36-components from 4.80.5 to 4.81.1 in /apps/statsig in the production-dependencies group ([#5871](https://github.com/contentful/marketplace-partner-apps/issues/5871)) ([09cc77c](https://github.com/contentful/marketplace-partner-apps/commit/09cc77c6c374bc2af1970f5fc8d1b51107b35706))
-* **deps:** bump contentful-management from 10.46.4 to 11.54.3 in /apps/statsig ([#5643](https://github.com/contentful/marketplace-partner-apps/issues/5643)) ([172569e](https://github.com/contentful/marketplace-partner-apps/commit/172569e56949b6b5256f13504e0cb6befa710ba7))
-* **deps:** bump emotion from 10.0.27 to 11.0.0 in /apps/statsig ([#5421](https://github.com/contentful/marketplace-partner-apps/issues/5421)) ([b10f603](https://github.com/contentful/marketplace-partner-apps/commit/b10f6031c5b82eec58e9ec25ecf505d5ba9798a7))
-* **deps:** bump the production-dependencies group in /apps/statsig with 3 updates ([#5796](https://github.com/contentful/marketplace-partner-apps/issues/5796)) ([c285934](https://github.com/contentful/marketplace-partner-apps/commit/c285934859b9362109edef8ba98f30cac5f368b4))
-
 ## [1.1.4](https://github.com/contentful/marketplace-partner-apps/compare/statsig-v1.1.3...statsig-v1.1.4) (2025-07-28)
 
 
