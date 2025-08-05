@@ -1,11 +1,9 @@
 import React from 'react';
 
-import * as emotion from '@emotion/css';
+import { cx } from '@emotion/css';
 import type { CommonProps, PropsWithHTMLElement, ExpandProps } from '@contentful/f36-core';
 
 import { getMenuDividerStyles } from './MenuDivider.styles';
-
-const { cx } = emotion;
 
 export type MenuDividerProps = PropsWithHTMLElement<CommonProps, 'hr'>;
 

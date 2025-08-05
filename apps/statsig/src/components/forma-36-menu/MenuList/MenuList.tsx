@@ -1,6 +1,6 @@
 import React from 'react';
 
-import * as emotion from '@emotion/css';
+import { cx } from '@emotion/css';
 import type { CommonProps, PropsWithHTMLElement, ExpandProps } from '@contentful/f36-core';
 
 import { useMenuContext } from '../MenuContext';
@@ -9,8 +9,6 @@ import { MenuListFooter } from '../MenuList/MenuListFooter';
 import { MenuListHeader } from '../MenuList/MenuListHeader';
 import { useSubmenuContext } from '../SubmenuContext';
 import { Popover } from '../../forma-36-popover';
-
-const { cx } = emotion;
 
 interface MenuListInternalProps extends CommonProps {
   children?: React.ReactNode;

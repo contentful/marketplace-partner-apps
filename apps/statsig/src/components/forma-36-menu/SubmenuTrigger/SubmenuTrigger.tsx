@@ -1,14 +1,12 @@
 import React, { forwardRef } from 'react';
 
 import { ExpandProps } from '@contentful/f36-core';
-import * as emotion from '@emotion/css';
+import { cx } from '@emotion/css';
 import { ChevronRightIcon } from '@contentful/f36-icons';
 import { MenuItem, MenuItemProps } from '../MenuItem/MenuItem';
 import { MenuTrigger } from '../MenuTrigger/MenuTrigger';
 import { useSubmenuContext } from '../SubmenuContext';
 import { getSubmenuTriggerStyles } from '../SubmenuTrigger/SubmenuTrigger.styles';
-
-const { cx } = emotion;
 
 export type SubmenuTriggerProps = Omit<MenuItemProps<'button'>, 'isInitiallyFocused' | 'as'>;
 

@@ -1,11 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 
 import { CommonProps, ExpandProps, mergeRefs, PolymorphicComponent, PolymorphicProps, useId } from '@contentful/f36-core';
-import * as emotion from '@emotion/css';
+import { cx } from '@emotion/css';
 import { useMenuContext } from '../MenuContext';
 import { getMenuItemStyles } from './MenuItem.styles';
-
-const { cx } = emotion;
 
 const MENU_ITEM_DEFAULT_TAG = 'button';
 
