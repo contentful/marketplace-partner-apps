@@ -23,8 +23,8 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "rm -rf build && tsc && vite build",
-    "preinstall": "cd ../../packages/contentful-app-components && npm install && npm run build",
+    "build": "rm -rf build && npm run preinstall && tsc && vite build",
+    "preinstall": "cd ../../packages/contentful-app-components && npm install",
     "test": "vitest run --passWithNoTests",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "create-app-definition": "contentful-app-scripts create-app-definition",
