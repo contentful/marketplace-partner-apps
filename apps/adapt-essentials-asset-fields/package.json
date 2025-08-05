@@ -14,7 +14,7 @@
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 6RGLVmXYrGaIIRIda1HwAC --token ${CONTENTFUL_CMA_TOKEN}"
   },
   "dependencies": {
-    "@contentful/app-sdk": "^4.37.0",
+    "@contentful/app-sdk": "^4.39.0",
     "@contentful/f36-components": "^4.81.1",
     "@contentful/f36-image": "^4.81.0",
     "@contentful/f36-layout": "5.0.0-alpha.18",
@@ -35,7 +35,7 @@
     "@contentful/app-scripts": "^1.31.1",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/eslint-plugin": "^8.39.0",
     "@typescript-eslint/parser": "^8.17.0",
     "@vitejs/plugin-react-swc": "^3.11.0",
     "eslint": "^9.32.0",
