@@ -1,7 +1,6 @@
 import React from 'react';
 
 import type { CommonProps, PropsWithHTMLElement, ExpandProps } from '@contentful/f36-core';
-import { Box } from '@contentful/f36-components';
 import { cx } from '@emotion/css';
 import { Portal } from '@contentful/f36-utils';
 import { getPopoverContentStyles } from './PopoverContent.styles';
