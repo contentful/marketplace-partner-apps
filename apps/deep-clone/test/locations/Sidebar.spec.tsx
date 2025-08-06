@@ -2,7 +2,7 @@ import React from 'react';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import Sidebar from '../../src/locations/Sidebar';
 import { render, act, fireEvent } from '@testing-library/react';
-import { mockCma, mockSdk } from '../mocks';
+import { mockSdk } from '../mocks';
 
 beforeEach(() => {
   vi.useFakeTimers();
@@ -16,19 +16,19 @@ afterEach(() => {
 
 vi.mock('@contentful/react-apps-toolkit', () => ({
   useSDK: () => mockSdk,
-  useCMA: () => mockCma,
   useAutoResizer: () => {},
 }));
 
 vi.mock('../../src/utils/EntryCloner', () => {
   return {
-    default: vi.fn().mockImplementation(() => ({
-      cloneEntry: vi.fn().mockResolvedValue({
-        clonedEntry: { sys: { id: 'cloned-id' } },
-        referencesCount: 2,
-        clonesCount: 2,
-        updatesCount: 1,
+    default: vi.fn().mockImplementation((cma, parameters, entryId, setReferencesCount, setClonesCount, setUpdatesCount) => ({
+      cloneEntry: vi.fn().mockImplementation(async () => {
+        setReferencesCount(2);
+        setClonesCount(2);
+        setUpdatesCount(1);
+        return { sys: { id: 'cloned-id' } };
       }),
+      getReferencesQty: vi.fn().mockImplementation(async () => 2),
     })),
   };
 });
@@ -53,7 +53,9 @@ describe('Sidebar component', () => {
     await act(async () => {
       fireEvent.click(getByText('Clone entry'));
     });
-    expect(getByText('Found 2 references, created 2 new entries, updated 1 reference')).toBeDefined();
+    expect(getByText('Found 2 references.')).toBeDefined();
+    expect(getByText('Created 2 new entries out of 2.')).toBeDefined();
+    expect(getByText('Updated 1 reference.')).toBeDefined();
   });
 
   it('calls redirect and shows redirect message', async () => {
@@ -84,10 +86,17 @@ describe('Sidebar component', () => {
     });
 
     const EntryCloner = (await import('../../src/utils/EntryCloner')).default;
-    expect(EntryCloner).toHaveBeenCalledWith(mockCma, {
-      cloneText: 'Updated',
-      cloneTextBefore: false,
-      automaticRedirect: false,
-    });
+    expect(EntryCloner).toHaveBeenCalledWith(
+      expect.anything(),
+      {
+        cloneText: 'Updated',
+        cloneTextBefore: false,
+        automaticRedirect: false,
+      },
+      'test-entry',
+      expect.anything(),
+      expect.anything(),
+      expect.anything()
+    );
   });
 });

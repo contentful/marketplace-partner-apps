@@ -1,6 +1,6 @@
 {
   "name": "sfmc-studio",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "private": true,
   "scripts": {
     "install-ci": "npm ci",
@@ -23,25 +23,25 @@
     "coverage": "jest --coverage --silent --json --outputFile=jest-output.json"
   },
   "dependencies": {
-    "@ant-design/plots": "^2.6.2",
+    "@ant-design/plots": "^2.6.3",
     "@contentful/app-scripts": "^1.32.2",
-    "@contentful/app-sdk": "^4.36.0",
-    "@contentful/f36-components": "^4.80.5",
+    "@contentful/app-sdk": "^4.39.0",
+    "@contentful/f36-components": "^4.81.1",
     "@contentful/react-apps-toolkit": "^1.2.16",
     "@reduxjs/toolkit": "^2.8.2",
-    "antd": "^5.26.6",
+    "antd": "^5.26.7",
     "axios": "^1.11.0",
     "crypto-js": "^4.2.0",
     "currency-symbol-map": "^5.1.0",
     "dayjs": "^1.11.13",
-    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.3",
     "html-react-parser": "^5.2.6",
     "html-to-image": "^1.11.13",
     "jspdf": "^3.0.1",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
-    "next": "^15.4.4",
+    "next": "^15.4.5",
     "prettier": "^3.6.2",
     "react": "^18",
     "react-dom": "^18",
@@ -50,7 +50,7 @@
     "redux-mock-store": "^1.5.5",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^3.1.0",
-    "sass": "^1.89.2"
+    "sass": "^1.90.0"
   },
   "devDependencies": {
     "@babel/core": "^7.28.0",
@@ -67,7 +67,7 @@
     "@types/redux-mock-store": "^1.5.0",
     "babel-jest": "^30.0.5",
     "eslint": "^9.32.0",
-    "eslint-config-next": "15.4.4",
+    "eslint-config-next": "15.4.5",
     "jest": "30.0.5",
     "jest-environment-jsdom": "30.0.5",
     "typescript": "^5"

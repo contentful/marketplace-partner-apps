@@ -1,12 +1,12 @@
 {
   "name": "bynder-content-workflow",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "private": true,
   "dependencies": {
-    "@contentful/app-sdk": "4.36.0",
-    "@contentful/f36-components": "4.80.5",
+    "@contentful/app-sdk": "4.37.0",
+    "@contentful/f36-components": "4.81.1",
     "@contentful/f36-tokens": "4.2.0",
-    "@contentful/field-editor-rich-text": "^3.27.7",
+    "@contentful/field-editor-rich-text": "^4.10.0",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@contentful/rich-text-html-renderer": "^16.3.0",
     "camelcase": "^8.0.0",
@@ -18,8 +18,7 @@
     "react-dom": "18.2.0",
     "react-top-loading-bar": "^2.3.1",
     "showdown": "^2.1.0",
-    "uuid": "^9.0.1",
-    "nanoid": "3.3.8"
+    "uuid": "^9.0.1"
   },
   "scripts": {
     "install-ci": "npm ci",

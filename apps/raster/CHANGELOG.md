@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.9](https://github.com/contentful/marketplace-partner-apps/compare/raster-v1.0.8...raster-v1.0.9) (2025-08-01)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.29.7 to 4.36.0 in /apps/raster in the production-dependencies group ([#5798](https://github.com/contentful/marketplace-partner-apps/issues/5798)) ([0180c96](https://github.com/contentful/marketplace-partner-apps/commit/0180c9632e97b86082ad5095d082b76a19431c87))
+* **deps:** bump @contentful/app-sdk from 4.36.0 to 4.37.0 in /apps/raster in the production-dependencies group ([#5919](https://github.com/contentful/marketplace-partner-apps/issues/5919)) ([fa20301](https://github.com/contentful/marketplace-partner-apps/commit/fa20301fab1311d317b3c12397134de713b07deb))
+* **deps:** bump @contentful/f36-components from 4.80.5 to 4.81.1 in /apps/raster in the production-dependencies group ([#5893](https://github.com/contentful/marketplace-partner-apps/issues/5893)) ([278de94](https://github.com/contentful/marketplace-partner-apps/commit/278de942262ae433a3d89b5788bc5f5db5ce8ac2))
+* **deps:** bump react, react-dom and @types/react in /apps/raster ([#5850](https://github.com/contentful/marketplace-partner-apps/issues/5850)) ([3fe45c2](https://github.com/contentful/marketplace-partner-apps/commit/3fe45c2efd686416f5408fd01c1e5818b381166b))
+
 ## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/raster-v1.0.7...raster-v1.0.8) (2025-07-28)
 
 
