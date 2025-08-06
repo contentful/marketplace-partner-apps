@@ -1,6 +1,6 @@
 {
   "name": "sfmc-studio",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "private": true,
   "scripts": {
     "install-ci": "npm ci",
@@ -23,9 +23,9 @@
     "coverage": "jest --coverage --silent --json --outputFile=jest-output.json"
   },
   "dependencies": {
-    "@ant-design/plots": "^2.6.2",
+    "@ant-design/plots": "^2.6.3",
     "@contentful/app-scripts": "^1.32.2",
-    "@contentful/app-sdk": "^4.36.0",
+    "@contentful/app-sdk": "^4.39.0",
     "@contentful/f36-components": "^4.81.1",
     "@contentful/react-apps-toolkit": "^1.2.16",
     "@reduxjs/toolkit": "^2.8.2",
@@ -50,7 +50,7 @@
     "redux-mock-store": "^1.5.5",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^3.1.0",
-    "sass": "^1.89.2"
+    "sass": "^1.90.0"
   },
   "devDependencies": {
     "@babel/core": "^7.28.0",

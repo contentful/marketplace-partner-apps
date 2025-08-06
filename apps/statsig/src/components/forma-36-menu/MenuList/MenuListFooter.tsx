@@ -1,8 +1,7 @@
 import React from 'react';
 
+import { cx } from '@emotion/css';
 import type { CommonProps, PropsWithHTMLElement, ExpandProps } from '@contentful/f36-core';
-import { cx } from 'emotion';
-
 import { getMenuFooterStyles } from './MenuList.styles';
 
 export type MenuListFooterProps = PropsWithHTMLElement<CommonProps, 'div'>;

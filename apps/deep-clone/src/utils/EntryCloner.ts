@@ -11,6 +11,7 @@ class EntryCloner {
   private updates: number = 0;
   private parameters: AppParameters;
   private cma: CMAClient;
+  private entryId: string;
   private setReferencesCount: (count: number) => void;
   private setClonesCount: (count: number) => void;
   private setUpdatesCount: (count: number) => void;
@@ -18,25 +19,31 @@ class EntryCloner {
   constructor(
     cma: CMAClient,
     parameters: AppParameters,
+    entryId: string,
     setReferencesCount: (count: number) => void,
     setClonesCount: (count: number) => void,
     setUpdatesCount: (count: number) => void
   ) {
     this.cma = cma;
     this.parameters = parameters;
+    this.entryId = entryId;
     this.setReferencesCount = setReferencesCount;
     this.setClonesCount = setClonesCount;
     this.setUpdatesCount = setUpdatesCount;
   }
 
-  async cloneEntry(entryId: string): Promise<EntryProps> {
-    this.references = {};
-    this.clones = {};
-    this.updates = 0;
-    await this.findReferences(entryId);
+  async cloneEntry(): Promise<EntryProps> {
+    if (Object.keys(this.references).length === 0) {
+      await this.findReferences(this.entryId);
+    }
     await this.createClones();
     await this.updateReferenceTree();
-    return this.clones[entryId] as EntryProps;
+    return this.clones[this.entryId] as EntryProps;
+  }
+
+  async getReferencesQty(): Promise<number> {
+    await this.findReferences(this.entryId);
+    return Object.keys(this.references).length;
   }
 
   private async findReferences(entryId: string): Promise<void> {

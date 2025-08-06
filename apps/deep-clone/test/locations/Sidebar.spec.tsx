@@ -2,7 +2,7 @@ import React from 'react';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import Sidebar from '../../src/locations/Sidebar';
 import { render, act, fireEvent } from '@testing-library/react';
-import { mockCma, mockSdk } from '../mocks';
+import { mockSdk } from '../mocks';
 
 beforeEach(() => {
   vi.useFakeTimers();
@@ -16,19 +16,19 @@ afterEach(() => {
 
 vi.mock('@contentful/react-apps-toolkit', () => ({
   useSDK: () => mockSdk,
-  useCMA: () => mockCma,
   useAutoResizer: () => {},
 }));
 
 vi.mock('../../src/utils/EntryCloner', () => {
   return {
-    default: vi.fn().mockImplementation((cma, parameters, setReferencesCount, setClonesCount, setUpdatesCount) => ({
+    default: vi.fn().mockImplementation((cma, parameters, entryId, setReferencesCount, setClonesCount, setUpdatesCount) => ({
       cloneEntry: vi.fn().mockImplementation(async () => {
         setReferencesCount(2);
         setClonesCount(2);
         setUpdatesCount(1);
         return { sys: { id: 'cloned-id' } };
       }),
+      getReferencesQty: vi.fn().mockImplementation(async () => 2),
     })),
   };
 });
@@ -93,6 +93,7 @@ describe('Sidebar component', () => {
         cloneTextBefore: false,
         automaticRedirect: false,
       },
+      'test-entry',
       expect.anything(),
       expect.anything(),
       expect.anything()
