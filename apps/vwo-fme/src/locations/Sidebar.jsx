@@ -3,6 +3,7 @@ import { Button, ButtonGroup, IconButton, Text, Flex, TextLink, TextInput } from
 import { css } from 'emotion';
 import tokens from '@contentful/f36-tokens';
 import { EditIcon, ExternalLinkIcon } from '@contentful/f36-icons';
+import VwoAppActionService from '../services/vwoAppActionService';
 
 
 const styles = {
@@ -28,6 +29,7 @@ const Sidebar = (props) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
+  const vwoService = new VwoAppActionService(props.sdk);
 
   const resetFeatureFlagValue = useCallback(() => {
     const featureFlag = props.sdk.entry.fields.featureFlag.getValue();
@@ -40,16 +42,12 @@ const Sidebar = (props) => {
 
   const updateFeatureFlagDetails = async (updatedFeatureFlag) => {
     return new Promise(async (resolve, reject) => {
-      const response = await props.client.updateFeatureFlag(updatedFeatureFlag);
-      if(response && response._data){
-        props.sdk.entry.fields.featureFlag.setValue(response._data);
-        resolve(response._data);
-      }
-      else if(response && response._errors?.length){
-        reject(response._errors[0].message);
-      }
-      else{
-        reject('Something went wrong while updating Feature flag details. Please try again');
+      try {
+        const response = await vwoService.updateFeatureFlag(updatedFeatureFlag);
+        props.sdk.entry.fields.featureFlag.setValue(response);
+        resolve(response);
+      } catch (err) {
+        reject(err.message);
       }
     });
   }
