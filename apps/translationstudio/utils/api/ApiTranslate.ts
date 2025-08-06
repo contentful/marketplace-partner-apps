@@ -15,67 +15,81 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
-import { TranslationRequest, TranslationRequestMultiple } from 'interfaces/translationstudio';
-import TranslationstudioConfiguration from 'utils/TranslationstudioConfiguration';
+import { TranslationRequest, TranslationRequestMultiple } from "interfaces/translationstudio";
+import TranslationstudioConfiguration from "utils/TranslationstudioConfiguration";
 
-export async function ApiTranslate(key: string, space: string, payload: TranslationRequest) {
-  try {
-    if (space !== payload.spaceid) throw new Error('Invalid space');
+export async function ApiTranslate(key:string, space:string, payload: TranslationRequest)
+{
+	try
+	{
 
-    const res = await fetch(TranslationstudioConfiguration.URL + '/translationstudio/translate', {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-translationstudio': 'translationstudio',
-      },
-      body: JSON.stringify({
-        license: key,
-        space: space,
-        ...payload,
-      }),
-    });
+		if (space !== payload.spaceid)
+			throw new Error("Invalid space");
+		
+		const res = await fetch(TranslationstudioConfiguration.URL + "/translationstudio/translate", {
+			method: "POST",
+			cache: "no-cache",
+			headers:{
+				'Content-Type': 'application/json',
+				'X-translationstudio': 'translationstudio'
+			},
+			body: JSON.stringify({ 
+				license: key,
+				space: space,
+				...payload })
+		});
 
-    if (!res.ok) {
-      const json = await res.json();
-      if (json.message) throw new Error(json.message);
-    }
+		if (!res.ok)
+		{
+			const json = await res.json();
+			if (json.message)
+				throw new Error(json.message)
+		}
 
-    return true;
-  } catch (error: any) {
-    console.error(error.message ?? error);
-  }
+		return true;
+	}
+	catch (error:any)
+	{
+		console.error(error.message ?? error);
+	}
 
-  return false;
+	return false;
 }
 
-export async function ApiTranslateMultiple(key: string, space: string, payload: TranslationRequestMultiple) {
-  try {
-    if (space !== payload.spaceid) throw new Error('Invalid space');
 
-    const res = await fetch(TranslationstudioConfiguration.URL + '/translationstudio/translate/multiple', {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-translationstudio': 'translationstudio',
-      },
-      body: JSON.stringify({
-        license: key,
-        space: space,
-        ...payload,
-      }),
-    });
+export async function ApiTranslateMultiple(key:string, space:string, payload: TranslationRequestMultiple)
+{
+	try
+	{
+		if (space !== payload.spaceid)
+			throw new Error("Invalid space");
+		
+		const res = await fetch(TranslationstudioConfiguration.URL + "/translationstudio/translate/multiple", {
+			method: "POST",
+			cache: "no-cache",
+			headers:{
+				'Content-Type': 'application/json',
+				'X-translationstudio': 'translationstudio'
+			},
+			body: JSON.stringify({ 
+				license: key,
+				space: space,
+				...payload })
+		});
 
-    if (!res.ok) {
-      const json = await res.json();
-      if (json.message) throw new Error(json.message);
-    }
+		if (!res.ok)
+		{
+			const json = await res.json();
+			if (json.message)
+				throw new Error(json.message)
+		}
 
-    return true;
-  } catch (error: any) {
-    console.error(error.message ?? error);
-  }
+		return true;
+	}
+	catch (error:any)
+	{
+		console.error(error.message ?? error);
+	}
 
-  return false;
+	return false;
 }

@@ -15,22 +15,24 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
-import TranslationstudioConfiguration from 'utils/TranslationstudioConfiguration';
+import TranslationstudioConfiguration from "utils/TranslationstudioConfiguration";
 
-export async function ApiValidate(license: string) {
-  if (!license) throw new Error('License missing');
+export async function ApiValidate(license: string)
+{
+    if (!license)
+        throw new Error("License missing");
 
-  const respose = await fetch(TranslationstudioConfiguration.URL + '/translationstudio/validate', {
-    method: 'POST',
-    cache: 'no-cache',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-translationstudio': 'translationstudio',
-    },
-    body: JSON.stringify({
-      license: license,
-    }),
-  });
+    const respose = await fetch(TranslationstudioConfiguration.URL + "/translationstudio/validate", {
+        method: "POST",
+        cache: "no-cache",
+        headers:{
+            'Content-Type': 'application/json',
+            'X-translationstudio': 'translationstudio'
+        },
+        body: JSON.stringify({
+            license: license
+        })
+    });
 
-  return respose.ok;
+    return respose.ok;
 }

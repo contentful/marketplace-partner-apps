@@ -1,11 +1,13 @@
-import type { LanguageMapping } from '../interfaces/translationstudio';
+
+import type { LanguageMapping } from "../interfaces/translationstudio";
+
 
 export type ConnectorMap = {
-  [id: string]: LanguageMapping;
-};
+    [id:string]:LanguageMapping
+}
 
 export type SelectedConnector = {
-  id: string;
-  machineTranslation: boolean;
-  urgent: boolean;
-};
+    id: string;
+    machineTranslation: boolean;
+    urgent: boolean;
+}

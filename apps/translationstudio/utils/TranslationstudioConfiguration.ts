@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, see https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
 const TranslationstudioConfiguration = {
-  URL: 'https://contentful.translationstudio.tech',
-};
+    URL: "https://contentful.translationstudio.tech",
+}
 
-export default TranslationstudioConfiguration;
+export default TranslationstudioConfiguration
