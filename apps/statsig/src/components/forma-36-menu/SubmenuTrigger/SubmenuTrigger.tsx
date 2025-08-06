@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 
-import type { ExpandProps } from '@contentful/f36-core';
+import { ExpandProps } from '@contentful/f36-core';
+import { cx } from '@emotion/css';
 import { ChevronRightIcon } from '@contentful/f36-icons';
-import { cx } from 'emotion';
-
 import { MenuItem, MenuItemProps } from '../MenuItem/MenuItem';
 import { MenuTrigger } from '../MenuTrigger/MenuTrigger';
 import { useSubmenuContext } from '../SubmenuContext';
@@ -11,10 +10,7 @@ import { getSubmenuTriggerStyles } from '../SubmenuTrigger/SubmenuTrigger.styles
 
 export type SubmenuTriggerProps = Omit<MenuItemProps<'button'>, 'isInitiallyFocused' | 'as'>;
 
-const _SubmenuTrigger = (
-  props: ExpandProps<SubmenuTriggerProps>,
-  ref: React.Ref<HTMLButtonElement>,
-) => {
+const _SubmenuTrigger = (props: ExpandProps<SubmenuTriggerProps>, ref: React.Ref<HTMLButtonElement>) => {
   const { className, children } = props;
   const { getSubmenuTriggerProps, isOpen } = useSubmenuContext()!;
 
@@ -22,11 +18,7 @@ const _SubmenuTrigger = (
 
   return (
     <MenuTrigger>
-      <MenuItem
-        {...props}
-        {...getSubmenuTriggerProps(props, ref)}
-        className={cx(styles.root({ isActive: isOpen }), className)}
-      >
+      <MenuItem {...props} {...getSubmenuTriggerProps(props, ref)} className={cx(styles.root({ isActive: isOpen }), className)}>
         <span className={styles.content}>{children}</span>
         <ChevronRightIcon className={styles.icon} />
       </MenuItem>
@@ -34,4 +26,4 @@ const _SubmenuTrigger = (
   );
 };
 
-export const SubmenuTrigger = React.forwardRef(_SubmenuTrigger);
+export const SubmenuTrigger = forwardRef(_SubmenuTrigger);

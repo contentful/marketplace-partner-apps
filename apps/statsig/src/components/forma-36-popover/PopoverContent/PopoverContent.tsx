@@ -1,9 +1,8 @@
 import React from 'react';
 
 import type { CommonProps, PropsWithHTMLElement, ExpandProps } from '@contentful/f36-core';
+import { cx } from '@emotion/css';
 import { Portal } from '@contentful/f36-utils';
-import { cx } from 'emotion';
-
 import { getPopoverContentStyles } from './PopoverContent.styles';
 import { usePopoverContext } from '../PopoverContext';
 
@@ -14,13 +13,7 @@ interface PopoverContentInternalProps extends CommonProps {
 export type PopoverContentProps = PropsWithHTMLElement<PopoverContentInternalProps, 'div'>;
 
 const _PopoverContent = (props: ExpandProps<PopoverContentProps>, ref: any) => {
-  const {
-    children,
-    className,
-    testId = 'cf-ui-popover-content',
-    role = 'dialog',
-    ...otherProps
-  } = props;
+  const { children, className, testId = 'cf-ui-popover-content', role = 'dialog', ...otherProps } = props;
   const { isOpen, renderOnlyWhenOpen, getPopoverProps, usePortal } = usePopoverContext();
 
   const styles = getPopoverContentStyles(isOpen);
@@ -35,8 +28,7 @@ const _PopoverContent = (props: ExpandProps<PopoverContentProps>, ref: any) => {
       role={role}
       // specific attribute to mark that this element is absolute positioned
       // for internal contentful apps usage
-      data-position-absolute
-    >
+      data-position-absolute>
       {children}
     </div>
   );

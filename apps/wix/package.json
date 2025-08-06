@@ -1,18 +1,18 @@
 {
   "name": "wix-contentful-app",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "private": true,
   "dependencies": {
-    "@contentful/app-sdk": "4.36.0",
-    "@contentful/f36-components": "4.80.5",
+    "@contentful/app-sdk": "4.39.0",
+    "@contentful/f36-components": "4.81.1",
     "@contentful/f36-tokens": "4.2.0",
     "@contentful/react-apps-toolkit": "1.2.16",
     "contentful-management": "11.54.4",
     "emotion": "10.0.27",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
     "react-router": "7.7.1",
-    "react-router-dom": "6.28.0"
+    "react-router-dom": "7.7.1"
   },
   "scripts": {
     "install-ci": "npm ci",
@@ -31,13 +31,13 @@
     "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/react": "16.3.0",
     "@types/node": "^20",
-    "@types/react": "18.3.12",
-    "@types/react-dom": "18.3.1",
+    "@types/react": "19.1.9",
+    "@types/react-dom": "19.1.7",
     "@vitejs/plugin-react": "4.7.0",
     "happy-dom": "15.11.7",
     "jsdom": "^26.1.0",
     "prettier": "3.6.2",
-    "typescript": "5.8.3",
+    "typescript": "5.9.2",
     "vite": "7.0.6",
     "vite-plugin-mkcert": "^1.17.8",
     "vitest": "3.2.4"
