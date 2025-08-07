@@ -1,3 +1,3 @@
 export interface ExtensionStatus {
-  [key: string]: 'success' | 'pending' | 'failed';
-}
+  [key: string]: 'success' | 'pending' | 'failed'
+} 

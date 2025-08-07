@@ -55,13 +55,9 @@ const installAppDependencies = async (newAppDir: string) => {
       await execPromise(`cd ${JSON.stringify(sanitizedDir)} && npm ci`);
     } catch (ciError) {
       // If npm ci fails due to missing package-lock.json, try npm install
-      if (
-        ciError &&
-        typeof ciError === 'object' &&
-        'stderr' in ciError &&
-        typeof ciError.stderr === 'string' &&
-        ciError.stderr.includes('existing package-lock.json')
-      ) {
+      if (ciError && typeof ciError === 'object' && 'stderr' in ciError && 
+          typeof ciError.stderr === 'string' && 
+          ciError.stderr.includes('existing package-lock.json')) {
         console.log(`No package-lock.json found for ${newAppDir}, falling back to npm install`);
         await execPromise(`cd ${JSON.stringify(sanitizedDir)} && npm install`);
       } else {

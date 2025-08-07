@@ -1,4 +1,4 @@
 export interface FileVersionInfo {
-  id: string;
-  name: string;
-}
+  id: string
+  name: string
+} 

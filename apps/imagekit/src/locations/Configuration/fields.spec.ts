@@ -75,7 +75,7 @@ describe('fields', () => {
             ],
           },
         ] as EditorInterfaceProps[],
-        'some-app'
+        'some-app',
       );
 
       expect(result).toEqual({
