@@ -1,0 +1,26 @@
+trigger:
+  tags:
+    include:
+      - '*.*.*'
+  branches:
+    include:
+      - 'master'
+  paths:
+    exclude:
+      - .azure/*
+
+resources:
+  repositories:
+    - repository: infra-templates
+      type: git
+      name: Infra_Pipelines-templates-dev
+      ref: refs/tags/1.0.8
+
+extends:
+  template: azure-pipelines/gab-extensions/pipeline.yml@infra-templates
+  parameters:
+    extensionName: Contentful
+    outputDir: build
+    enableNPMAuthenticate: true
+    additionalVariables:
+      - group: "Global Vars"
