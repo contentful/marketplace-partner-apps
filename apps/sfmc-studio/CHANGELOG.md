@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.6](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.5...sfmc-studio-v1.2.6) (2025-08-08)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.40.0 to 4.41.0 in /apps/sfmc-studio in the production-dependencies group ([#6090](https://github.com/contentful/marketplace-partner-apps/issues/6090)) ([8b84778](https://github.com/contentful/marketplace-partner-apps/commit/8b847781cdb7712c8fcc9543d05f836248db5460))
+* **deps:** bump sass from 1.89.2 to 1.90.0 in /apps/sfmc-studio in the production-dependencies group ([#6037](https://github.com/contentful/marketplace-partner-apps/issues/6037)) ([cd82282](https://github.com/contentful/marketplace-partner-apps/commit/cd82282943e49ded9e6fa9dffb73431cbf6ef157))
+* **deps:** bump the production-dependencies group in /apps/sfmc-studio with 2 updates ([#5991](https://github.com/contentful/marketplace-partner-apps/issues/5991)) ([d0a2d30](https://github.com/contentful/marketplace-partner-apps/commit/d0a2d3045ae39987d49334aa2439b73f66f0b39e))
+* **deps:** bump the production-dependencies group in /apps/sfmc-studio with 3 updates ([#6057](https://github.com/contentful/marketplace-partner-apps/issues/6057)) ([79cf7c6](https://github.com/contentful/marketplace-partner-apps/commit/79cf7c67a54e3fd581955d0330ae63bbf181b1f8))
+
 ## [1.2.5](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.4...sfmc-studio-v1.2.5) (2025-08-01)
 
 
