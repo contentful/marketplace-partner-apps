@@ -3,7 +3,7 @@
   "version": "1.0.22",
   "private": true,
   "dependencies": {
-    "@contentful/app-sdk": "4.40.0",
+    "@contentful/app-sdk": "4.41.0",
     "@contentful/f36-components": "4.81.1",
     "@contentful/f36-tokens": "4.2.0",
     "@contentful/react-apps-toolkit": "1.2.16",
@@ -11,8 +11,8 @@
     "emotion": "10.0.27",
     "react": "19.1.1",
     "react-dom": "19.1.1",
-    "react-router": "7.7.1",
-    "react-router-dom": "7.7.1"
+    "react-router": "7.8.0",
+    "react-router-dom": "7.8.0"
   },
   "scripts": {
     "install-ci": "npm ci",
