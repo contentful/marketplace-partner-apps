@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.8](https://github.com/contentful/marketplace-partner-apps/compare/statsig-v1.1.7...statsig-v1.1.8) (2025-08-08)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.39.0 to 4.40.0 in /apps/statsig in the production-dependencies group ([#6064](https://github.com/contentful/marketplace-partner-apps/issues/6064)) ([cd2ecaa](https://github.com/contentful/marketplace-partner-apps/commit/cd2ecaa60ef41495203c4da064f694950d943dfe))
+* **deps:** bump @contentful/app-sdk from 4.40.0 to 4.41.0 in /apps/statsig in the production-dependencies group ([#6102](https://github.com/contentful/marketplace-partner-apps/issues/6102)) ([fe191b2](https://github.com/contentful/marketplace-partner-apps/commit/fe191b26d2398b75e31436a26b5d8f14d0980fb6))
+
 ## [1.1.7](https://github.com/contentful/marketplace-partner-apps/compare/statsig-v1.1.6...statsig-v1.1.7) (2025-08-05)
 
 
