@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.2](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.2.1...adapt-essentials-asset-fields-v1.2.2) (2025-08-08)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.37.0 to 4.39.0 in /apps/adapt-essentials-asset-fields in the production-dependencies group ([#6009](https://github.com/contentful/marketplace-partner-apps/issues/6009)) ([b7f5dab](https://github.com/contentful/marketplace-partner-apps/commit/b7f5dab3e34c9212060f0d7ae81ec04a236a0d9a))
+* **deps:** bump @contentful/app-sdk from 4.39.0 to 4.40.0 in /apps/adapt-essentials-asset-fields in the production-dependencies group ([#6044](https://github.com/contentful/marketplace-partner-apps/issues/6044)) ([26d83b5](https://github.com/contentful/marketplace-partner-apps/commit/26d83b56001c6a8b12e160c6ca11807ef1053612))
+* **deps:** bump the production-dependencies group in /apps/adapt-essentials-asset-fields with 2 updates ([#6103](https://github.com/contentful/marketplace-partner-apps/issues/6103)) ([cef82cb](https://github.com/contentful/marketplace-partner-apps/commit/cef82cbb64487750cc2a2c6ad39e2586adade803))
+
 ## [1.2.1](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.2.0...adapt-essentials-asset-fields-v1.2.1) (2025-08-01)
 
 
