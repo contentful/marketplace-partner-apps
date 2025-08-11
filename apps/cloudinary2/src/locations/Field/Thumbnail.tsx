@@ -160,18 +160,32 @@ function getUrlFromAsset(installationParams: AppInstallationParameters, asset: C
   });
 
   const transformations = `${asset.raw_transformation ?? ''}/c_fill,g_auto,h_149,w_194`;
+  
+  // Create base options object
+  const baseOptions = {
+    type: asset.type,
+    rawTransformation: transformations,
+  };
+  
+  // Only include version if it's defined and not null/undefined
+  const options = asset.version != null ? {
+    ...baseOptions,
+    version: String(asset.version),
+  } : baseOptions;
+  
   if (asset.resource_type === 'image' && VALID_IMAGE_FORMATS.includes(asset.format)) {
-    return cloudinary.url(asset.public_id, {
-      type: asset.type,
-      rawTransformation: transformations,
-      version: String(asset.version),
-    });
+    return cloudinary.url(asset.public_id, options);
   }
   if (asset.resource_type === 'video') {
-    return cloudinary.video_url(asset.public_id, {
+    const videoOptions = asset.version != null ? {
       type: asset.type,
       rawTransformation: `/h_149/f_avif,fl_animated,e_loop/${asset.raw_transformation}`,
       version: String(asset.version),
-    });
+    } : {
+      type: asset.type,
+      rawTransformation: `/h_149/f_avif,fl_animated,e_loop/${asset.raw_transformation}`,
+    };
+    
+    return cloudinary.video_url(asset.public_id, videoOptions);
   }
 }

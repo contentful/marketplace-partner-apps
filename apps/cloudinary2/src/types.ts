@@ -24,7 +24,7 @@ export type CloudinaryAsset = {
   width: number;
   format: string;
   height: number;
-  version: number;
+  version?: number;
   duration: number | null;
   metadata: string[];
   public_id: string;
