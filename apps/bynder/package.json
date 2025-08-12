@@ -4,7 +4,7 @@
   "private": true,
   "devDependencies": {
     "@contentful/app-scripts": "2.5.5",
-    "@vitejs/plugin-react": "^4.7.0",
+    "@vitejs/plugin-react": "^5.0.0",
     "happy-dom": "^17.3.0",
     "vite": "^7.1.2",
     "vitest": "^3.2.4"
