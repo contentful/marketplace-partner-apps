@@ -35,7 +35,7 @@
     "@contentful/app-scripts": "^1.31.1",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "@typescript-eslint/eslint-plugin": "^8.39.0",
+    "@typescript-eslint/eslint-plugin": "^8.39.1",
     "@typescript-eslint/parser": "^8.17.0",
     "@vitejs/plugin-react-swc": "^3.11.0",
     "eslint": "^9.33.0",
@@ -44,6 +44,6 @@
     "happy-dom": "^18.0.1",
     "type-fest": "^4.41.0",
     "typescript": "~5.9.2",
-    "vite": "^7.1.1"
+    "vite": "^7.1.2"
   }
 }
