@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.3.0](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.2.14...transifex-contentful-app-v1.3.0) (2025-08-08)
+
+
+### Features
+
+* Transifex  app handle environment alias [INTEG-001] ([#5984](https://github.com/contentful/marketplace-partner-apps/issues/5984)) ([07293cf](https://github.com/contentful/marketplace-partner-apps/commit/07293cf32c9639e627fc714fdcb141d062f4a67b))
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.37.0 to 4.39.0 in /apps/transifex in the production-dependencies group ([#5993](https://github.com/contentful/marketplace-partner-apps/issues/5993)) ([4504c2a](https://github.com/contentful/marketplace-partner-apps/commit/4504c2abcb8a76dab287e17a9312cb8953771081))
+* **deps:** bump @contentful/app-sdk from 4.39.0 to 4.40.0 in /apps/transifex in the production-dependencies group ([#6063](https://github.com/contentful/marketplace-partner-apps/issues/6063)) ([7e2425b](https://github.com/contentful/marketplace-partner-apps/commit/7e2425b9e37a592a8a2cada639905c019204471b))
+* **deps:** bump @contentful/app-sdk from 4.40.0 to 4.41.0 in /apps/transifex in the production-dependencies group ([#6092](https://github.com/contentful/marketplace-partner-apps/issues/6092)) ([be4d7fd](https://github.com/contentful/marketplace-partner-apps/commit/be4d7fd538046c82c1ab556895dbf66332d9967b))
+
 ## [1.2.14](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.2.13...transifex-contentful-app-v1.2.14) (2025-08-01)
 
 
