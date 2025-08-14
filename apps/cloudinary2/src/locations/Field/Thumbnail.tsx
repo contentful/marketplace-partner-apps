@@ -70,20 +70,41 @@ export function Thumbnail({ asset, isDisabled, onDelete, onReplace }: Props) {
     transition,
   };
 
-  const handleReplace = useCallback(async () => {
+  const handleEdit = useCallback(async () => {
+    const title = asset.resource_type === 'video' ? 'Trim Video' : 'Edit Image';
     const result: MediaLibraryResult | undefined = await sdk.dialogs.openCurrentApp({
       position: 'center',
-      title: `Edit or replace ${asset.public_id}`,
+      title: title,
       shouldCloseOnOverlayClick: true,
       shouldCloseOnEscapePress: true,
       width: 1400,
 
       parameters: {
-        asset: {
-          resource_type: asset.resource_type,
-          type: asset.type,
-          public_id: asset.public_id,
-        },
+        dialog: 'medial-editor',
+        asset,
+      },
+    });
+
+    if (!result) {
+      return;
+    }
+    // assuming the user only selects one asset
+    const newAsset = result.assets.map(extractAsset)[0];
+    onReplace(asset, newAsset);
+  }, [sdk.dialogs]);
+
+  const handleReplace = useCallback(async () => {
+    const title = asset.resource_type === 'video' ? 'Replace Video' : 'Replace Image';
+    const result: MediaLibraryResult | undefined = await sdk.dialogs.openCurrentApp({
+      position: 'center',
+      title: title,
+      shouldCloseOnOverlayClick: true,
+      shouldCloseOnEscapePress: true,
+      width: 1400,
+
+      parameters: {
+        dialog: 'medial-library',
+        filter: asset.resource_type,
         maxFiles: 1,
       },
     });
@@ -96,9 +117,17 @@ export function Thumbnail({ asset, isDisabled, onDelete, onReplace }: Props) {
     onReplace(asset, newAsset);
   }, [sdk.dialogs]);
 
+  const onPreview = useCallback(() => {
+    window.open(asset.secure_url, '_blank');
+  }, [asset.secure_url]);
+
   const consoleUrl = `https://console.cloudinary.com/console/media_library/query_search?q=${encodeURIComponent(
     `{"userExpression":"(public_id = \\"${asset.public_id}\\")"}`,
   )}`;
+
+  const handleOpenInCloudinary = useCallback(() => {
+    window.open(consoleUrl, '_blank');
+  }, [consoleUrl]);
 
   return (
     <div ref={setNodeRef}>
@@ -109,22 +138,34 @@ export function Thumbnail({ asset, isDisabled, onDelete, onReplace }: Props) {
         src={url}
         title={alt}
         type="image"
-        onClick={handleReplace}
+        onClick={handleEdit}
         icon={<img src={logo} alt="" width={18} height={18} />}
         size="small"
         actions={[
-          <MenuItem key="edit" as="a" href={consoleUrl} target="_blank" onClick={handleReplace}>
-            Edit in Cloudinary
+          <MenuItem key="edit" as="button" onClick={handleEdit}>
+            Edit
+          </MenuItem>,
+          <MenuItem key="replace" onClick={handleReplace} isDisabled={isDisabled}>
+            Replace
           </MenuItem>,
           <MenuItem key="remove" onClick={onDelete} isDisabled={isDisabled}>
             Remove
           </MenuItem>,
           <MenuDivider key="divider" />,
+          <MenuItem key="open-in-cloudinary" as="button" onClick={handleOpenInCloudinary}>
+            Open in Cloudinary
+          </MenuItem>,
+
+          <MenuItem key="preview" onClick={onPreview} isDisabled={isDisabled}>
+            Preview
+          </MenuItem>,
+
+          <MenuDivider key="divider" />,
           <Menu.SectionTitle key="file-information-title">File information</Menu.SectionTitle>,
           <MenuItem key="file-information" css={styles.fileInformation.menuItem} isDisabled>
             <dl css={styles.fileInformation.dl}>
               <dt>Location:</dt>
-              <dd>{asset.public_id.split('/').slice(0, -1).join('/') || 'Home'}</dd>
+              <dd>{asset.public_id?.split('/').slice(0, -1).join('/') || 'Home'}</dd>
               {asset.format && (
                 <>
                   <dt>Format:</dt>

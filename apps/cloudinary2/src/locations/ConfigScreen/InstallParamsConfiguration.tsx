@@ -142,11 +142,31 @@ export function InstallParamsConfiguration(props: Props) {
         onChange={(event) => onParameterChange('showUploadButton', event.currentTarget.checked ? 'true' : 'false')}>
         Show Upload Button
       </Checkbox>
+
       <FormControl.HelpText>
         Enable or disable the upload functionality. When checked, users will see an Upload button that allows them to add assets directly to your library. When
         unchecked, the upload option will be hidden, preventing any new assets from being added manually. This setting is useful when you want to restrict asset
         input to predefined sources only.
       </FormControl.HelpText>
+      <TextField
+        testId="config-imageEditorOverlays"
+        name="Image editor overlays"
+        description={`public ids for image editor overlays`}
+        value={parameters.imageEditorOverlays?.join(',')}
+        onChange={(value) => {
+          const overlays = value
+            .split(',')
+            .map((c) => c.trim())
+            .filter((c) => c !== '');
+          if (value.endsWith(',')) {
+            onParameterChange('imageEditorOverlays', [...overlays, '']);
+          } else {
+            onParameterChange('imageEditorOverlays', overlays);
+          }
+        }}
+        isRequired
+        type="text"
+      />
     </Form>
   );
 }

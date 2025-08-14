@@ -7,6 +7,7 @@ export interface AppInstallationParameters {
   quality: string;
   format: string;
   showUploadButton: string;
+  imageEditorOverlays: string[];
 }
 
 export interface BackendParameters {
@@ -33,6 +34,7 @@ export type CloudinaryAsset = {
   resource_type: string;
   original_url?: string;
   original_secure_url?: string;
+  original_raw_transformation?: string;
   raw_transformation?: string;
 };
 
@@ -43,6 +45,8 @@ export interface MediaLibraryResult {
   assets: MediaLibraryResultAsset[];
   mlId: string;
 }
+
+export type ResourceTypeFilter = 'image' | 'video' | 'all';
 
 export interface MediaLibraryResultAsset {
   public_id: string;
