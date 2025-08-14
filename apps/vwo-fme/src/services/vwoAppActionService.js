@@ -24,17 +24,13 @@ class VwoAppActionService {
   async initialize() {
     try {
       const appActions = await this.cma.appAction.getManyForEnvironment({});
-      console.log('app actions', appActions);
 
       const appAction = appActions.items.find((action) => action.name === globalConstants.VWO_APP_ACTION_NAME);
 
       if (!appAction) {
-        console.log('app action not found');
         console.warn('App action not found');
         throw new Error('App action not found');
       }
-
-      console.log('app action', appAction);
 
       this.actionId = appAction.sys.id;
     } catch (err) {
@@ -98,13 +94,7 @@ class VwoAppActionService {
         await this.initialize();
       }
 
-      console.log('creating feature flag', featureFlag);
-      console.log('action id', this.actionId);
-      console.log('app definition id', this.sdk.ids.app);
-      console.log('space id', this.sdk.ids.space);
-      console.log('environment id', this.sdk.ids.environment);
-
-      const { response } = await this.sdk.cma.appActionCall.createWithResponse(
+      const { response } = await this.cma.appActionCall.createWithResponse(
         {
           appActionId: this.actionId,
           appDefinitionId: this.sdk.ids.app,
@@ -118,8 +108,6 @@ class VwoAppActionService {
           },
         }
       );
-
-      console.log('response', response);
 
       if (response.statusCode !== 200) {
         throw new Error('Something went wrong while creating feature flag. Please try again');
