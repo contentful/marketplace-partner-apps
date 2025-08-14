@@ -32,6 +32,9 @@ const mockSdk = {
   navigator: {
     openEntry: vi.fn(),
   },
+  dialogs: {
+    openConfirm: vi.fn().mockResolvedValue(true),
+  },
 };
 
 export { mockSdk };

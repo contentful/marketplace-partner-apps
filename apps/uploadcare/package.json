@@ -1,6 +1,6 @@
 {
   "name": "uploadcare-contentful-app",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "private": true,
   "scripts": {
     "install-ci": "npm ci",
@@ -13,7 +13,7 @@
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 3Ju8DSs6cEG3TnqFa979vc --token ${CONTENTFUL_CMA_TOKEN}"
   },
   "dependencies": {
-    "@contentful/app-sdk": "4.36.0",
+    "@contentful/app-sdk": "4.41.0",
     "@contentful/f36-components": "4.81.1",
     "@contentful/f36-icons": "4.29.1",
     "@contentful/f36-tokens": "4.2.0",
@@ -36,7 +36,7 @@
     "@types/react-dom": "18.3.0",
     "cross-env": "7.0.3",
     "eslint": "9.9.0",
-    "eslint-config-prettier": "9.1.0",
+    "eslint-config-prettier": "10.1.8",
     "prettier": "3.3.3",
     "prettier-plugin-organize-imports": "4.0.0",
     "react-scripts": "5.0.1",

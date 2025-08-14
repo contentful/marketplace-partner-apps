@@ -1,9 +1,10 @@
 import tokens from '@contentful/f36-tokens';
-import { css, ObjectInterpolation } from 'emotion';
+import { css } from '@emotion/css';
 
 import type { MenuItemProps } from './MenuItem';
 
-const activeStyle: ObjectInterpolation<undefined> = {
+// Note: ObjectInterpolation may need to be replaced with a generic object type in Emotion 11
+const activeStyle: Record<string, any> = {
   backgroundColor: tokens.gray200,
   fontWeight: tokens.fontWeightMedium,
   '&:hover': {
@@ -11,7 +12,7 @@ const activeStyle: ObjectInterpolation<undefined> = {
   },
 };
 
-const disabledStyle: ObjectInterpolation<undefined> = {
+const disabledStyle: Record<string, any> = {
   opacity: 0.5,
   cursor: 'auto',
   '&:hover': {
@@ -19,13 +20,7 @@ const disabledStyle: ObjectInterpolation<undefined> = {
   },
 };
 
-export const getMenuItemStyles = ({
-  isActive,
-  isDisabled,
-}: {
-  isActive: MenuItemProps['isActive'];
-  isDisabled: MenuItemProps['isDisabled'];
-}) => {
+export const getMenuItemStyles = ({ isActive, isDisabled }: { isActive: MenuItemProps['isActive']; isDisabled: MenuItemProps['isDisabled'] }) => {
   return {
     root: css(
       [
@@ -77,7 +72,7 @@ export const getMenuItemStyles = ({
         },
       ],
       isActive && activeStyle,
-      isDisabled && disabledStyle,
+      isDisabled && disabledStyle
     ),
   };
 };
