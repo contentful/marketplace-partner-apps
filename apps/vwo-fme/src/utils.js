@@ -93,10 +93,3 @@ export const globalConstants = {
   VWO_UPDATE_VARIATIONS_ACTION: 'updateVariations',
   VWO_CREATE_FEATURE_FLAG_ACTION: 'create',
 };
-
-export const APP_ORGANIZATION_ID = '5EJGHo8tYJcjnEhYWDxivp';
-const APP_DEFINITION_ID = '71oYmQJFCIWn9pxizjN8dZ';
-
-export const isMarketplaceVersion = ({ appId }) => {
-  return appId === APP_DEFINITION_ID;
-};
