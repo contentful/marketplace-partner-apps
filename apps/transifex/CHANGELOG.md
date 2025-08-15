@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.3.0...transifex-contentful-app-v1.3.1) (2025-08-15)
+
+
+### Bug Fixes
+
+* **deps:** bump eslint from 9.32.0 to 9.33.0 in /apps/transifex in the production-dependencies group ([#6120](https://github.com/contentful/marketplace-partner-apps/issues/6120)) ([824ace9](https://github.com/contentful/marketplace-partner-apps/commit/824ace9c9d1b1a97905939b094a2efc7d1c2d008))
+
 ## [1.3.0](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.2.14...transifex-contentful-app-v1.3.0) (2025-08-08)
 
 
