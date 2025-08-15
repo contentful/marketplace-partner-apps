@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.2.1...cloudinary-assets-v1.2.2) (2025-08-15)
+
+
+### Bug Fixes
+
+* bug with url construction of cloudinary assets [INTEG-3024] ([#6129](https://github.com/contentful/marketplace-partner-apps/issues/6129)) ([1953fe3](https://github.com/contentful/marketplace-partner-apps/commit/1953fe3cf75a5780a886fd4e704fddbe832cc077))
+
 ## [1.2.1](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.2.0...cloudinary-assets-v1.2.1) (2025-08-01)
 
 
