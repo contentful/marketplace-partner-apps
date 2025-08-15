@@ -13,7 +13,7 @@
     "@contentful/app-scripts": "^2.5.5",
     "@contentful/f36-tokens": "^4.2.0",
     "@eslint/js": "^9.33.0",
-    "@huggingface/inference": "^4.7.0",
+    "@huggingface/inference": "^4.7.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.5.1",
     "@types/node": "^22.14.1",
