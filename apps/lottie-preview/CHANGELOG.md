@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.7...lottie-preview-v1.1.0) (2025-08-15)
+
+
+### Features
+
+* Deep clone app [INTEG-2762] ([#5687](https://github.com/contentful/marketplace-partner-apps/issues/5687)) ([5c6d2c4](https://github.com/contentful/marketplace-partner-apps/commit/5c6d2c47e0fc9e1615a380fb6ceb413b8c4ff44b))
+* Deep clone: Add confirmation modal [INTEG-3005] ([#5985](https://github.com/contentful/marketplace-partner-apps/issues/5985)) ([ddb8614](https://github.com/contentful/marketplace-partner-apps/commit/ddb861406f7a970de62dec93e36c2dcd4a8800fd))
+* official release version of deep-clone is now set to 1.0.1 [INTEG-3003] ([#5908](https://github.com/contentful/marketplace-partner-apps/issues/5908)) ([1dd642d](https://github.com/contentful/marketplace-partner-apps/commit/1dd642da5e75c43746d179cedfe6ef9ca5d98d94))
+* reusable content type and content type field selectors [INTEG-2836] ([#5340](https://github.com/contentful/marketplace-partner-apps/issues/5340)) ([6b0da39](https://github.com/contentful/marketplace-partner-apps/commit/6b0da39bd3eb208862d62e753285d979ac006996))
+
+
+### Bug Fixes
+
+* Deep clone improvements [] ([#5906](https://github.com/contentful/marketplace-partner-apps/issues/5906)) ([0c99ebf](https://github.com/contentful/marketplace-partner-apps/commit/0c99ebf547d88ddf161ffaae06673e50f41d1738))
+* lottie-preview to build correctly in circleci [] ([#5717](https://github.com/contentful/marketplace-partner-apps/issues/5717)) ([1ad191f](https://github.com/contentful/marketplace-partner-apps/commit/1ad191fcdfe02a3e76f9ee305b791bf1b4db5f3f))
+
 ## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.6...lottie-preview-v1.0.7) (2025-07-02)
 
 
