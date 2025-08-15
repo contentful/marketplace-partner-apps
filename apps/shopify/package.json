@@ -4,8 +4,8 @@
   "description": "Contentful app for importing Shopify products using the Storefront API",
   "private": true,
   "devDependencies": {
-    "@babel/core": "^7.28.0",
-    "@babel/preset-env": "^7.28.0",
+    "@babel/core": "^7.28.3",
+    "@babel/preset-env": "^7.28.3",
     "@contentful/app-scripts": "2.5.5",
     "@testing-library/react": "^16.2.0",
     "@vitejs/plugin-react": "^4.7.0",
