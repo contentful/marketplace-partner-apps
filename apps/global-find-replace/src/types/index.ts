@@ -70,6 +70,7 @@ export interface AppState extends SearchFilters {
   spaceId: string;
   confirmationModalShown: boolean;
   processedCount: number;
+  environment: string;
 }
 
 export const PAGE_SIZE_OPTIONS = [20, 50, 100] as const;
@@ -84,4 +85,26 @@ export interface ReplaceResult {
 export interface DiffLine {
   diffOriginal: string;
   diffUpdated: string;
+}
+
+export interface BuildMatchEntriesParams {
+  entry: Entry;
+  field: any;
+  fieldName: string;
+  fieldDef: FieldDefinition;
+  contentTypes: ContentType[];
+  locale: string;
+  find: string;
+  replace: string;
+  caseSensitive?: boolean;
+}
+
+export interface SearchEntriesParams {
+  contentTypeIds: string[];
+  contentTypes: ContentType[];
+  locale: string;
+  find: string;
+  replace: string;
+  caseSensitive?: boolean;
+  searchAllFields?: boolean;
 }

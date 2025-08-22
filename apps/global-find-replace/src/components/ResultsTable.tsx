@@ -13,6 +13,7 @@ interface ResultsTableProps {
   spaceId: string;
   selectedCount: number;
   processedCount: number;
+  environment: string;
   onEntrySelectionChange: (entryId: string) => void;
   onSelectAllChange: (checked: boolean) => void;
 }
@@ -25,6 +26,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
   spaceId,
   selectedCount,
   processedCount,
+  environment,
   onEntrySelectionChange,
   onSelectAllChange,
 }) => {
@@ -76,7 +78,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
               <TextLink
                 icon={<ExternalLinkIcon />}
                 alignIcon="end"
-                href={`https://app.contentful.com/spaces/${spaceId}/environments/master/entries/${entry.entryId}`}
+                href={`https://app.contentful.com/spaces/${spaceId}/environments/${environment}/entries/${entry.entryId}`}
                 target="_blank"
                 rel="noopener noreferrer">
                 {entry.name}

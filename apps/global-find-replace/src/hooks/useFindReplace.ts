@@ -35,6 +35,7 @@ export const useFindReplace = () => {
     spaceId: '',
     confirmationModalShown: false,
     processedCount: 0,
+    environment: '',
   };
 
   const [state, setState] = useState<AppState>({
@@ -57,6 +58,7 @@ export const useFindReplace = () => {
         locale: locales[0] || '',
         contentTypes,
         spaceId: sdk.ids.space,
+        environment: sdk.ids.environment,
       }));
     };
 
@@ -96,6 +98,8 @@ export const useFindReplace = () => {
       contentTypes: prev.contentTypes,
       locales: prev.locales,
       locale: prev.locale,
+      spaceId: prev.spaceId,
+      environment: prev.environment,
     }));
   };
 
@@ -109,15 +113,15 @@ export const useFindReplace = () => {
     try {
       const contentTypeIds = state.selectedContentTypes.length ? state.selectedContentTypes : state.contentTypes.map((ct) => ct.sys.id);
 
-      const matches = await contentfulService.current.searchEntries(
-        contentTypeIds,
-        state.contentTypes,
-        state.locale,
-        state.find,
-        state.replace,
-        state.caseSensitive,
-        state.includeAllFields,
-      );
+      const matches = await contentfulService.current.searchEntries({
+        contentTypeIds: contentTypeIds,
+        contentTypes: state.contentTypes,
+        locale: state.locale,
+        find: state.find,
+        replace: state.replace,
+        caseSensitive: state.caseSensitive,
+        searchAllFields: state.includeAllFields,
+      });
 
       const initialSelection = matches.reduce(
         (acc, item) => {

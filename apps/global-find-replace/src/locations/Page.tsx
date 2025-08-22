@@ -24,14 +24,8 @@ const FindReplaceApp: React.FC = () => {
     selectedCount,
   } = useFindReplace();
 
-  const searchFilters = {
-    find: state.find,
-    replace: state.replace,
-    selectedContentTypes: state.selectedContentTypes,
-    locale: state.locale,
-    caseSensitive: state.caseSensitive,
-    includeAllFields: state.includeAllFields,
-  };
+  const { find, replace, selectedContentTypes, locale, caseSensitive, includeAllFields } = state;
+  const searchFilters = { find, replace, selectedContentTypes, locale, caseSensitive, includeAllFields };
 
   function updatePageSize(size: number) {
     updateState({ pageSize: size, currentPage: 0 });
@@ -140,6 +134,7 @@ const FindReplaceApp: React.FC = () => {
               spaceId={state.spaceId}
               selectedCount={selectedCount}
               processedCount={state.processedCount}
+              environment={state.environment}
               onEntrySelectionChange={handleEntrySelection}
               onSelectAllChange={handleSelectAll}
             />

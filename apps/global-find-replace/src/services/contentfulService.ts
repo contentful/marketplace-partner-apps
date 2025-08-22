@@ -1,5 +1,5 @@
 import { PageAppSDK } from '@contentful/app-sdk';
-import { ContentType, Entry, MatchField, FieldDefinition } from '../types';
+import { ContentType, Entry, MatchField, FieldDefinition, BuildMatchEntriesParams, SearchEntriesParams } from '../types';
 import { replaceFieldValueByType, isReferenceField } from '../utils/fieldProcessors';
 
 export class ContentfulService {
@@ -30,17 +30,9 @@ export class ContentfulService {
   /**
    * Builds match entries for a given entry and field
    */
-  private buildMatchEntries(
-    entry: Entry,
-    field: any,
-    fieldName: string,
-    fieldDef: FieldDefinition,
-    contentTypes: ContentType[],
-    locale: string,
-    find: string,
-    replace: string,
-    caseSensitive: boolean = false,
-  ): MatchField[] {
+  private buildMatchEntries(params: BuildMatchEntriesParams): MatchField[] {
+    const { entry, field, fieldName, fieldDef, contentTypes, locale, find, replace, caseSensitive = false } = params;
+
     const value = field[locale];
 
     const results = Array.isArray(value)
@@ -134,15 +126,9 @@ export class ContentfulService {
   /**
    * Searches for entries matching the find criteria
    */
-  async searchEntries(
-    contentTypeIds: string[],
-    contentTypes: ContentType[],
-    locale: string,
-    find: string,
-    replace: string,
-    caseSensitive: boolean = false,
-    searchAllFields: boolean = false,
-  ): Promise<MatchField[]> {
+  async searchEntries(params: SearchEntriesParams): Promise<MatchField[]> {
+    const { contentTypeIds, contentTypes, locale, find, replace, caseSensitive = false, searchAllFields = false } = params;
+
     const allMatches: MatchField[] = [];
 
     for (const contentTypeId of contentTypeIds) {
@@ -164,7 +150,17 @@ export class ContentfulService {
             const fieldDef = contentTypes.find((ct) => ct.sys.id === entry.sys.contentType.sys.id)?.fields.find((f: FieldDefinition) => f.id === fieldName);
 
             if (!fieldDef || isReferenceField(fieldDef)) continue;
-            const matches = this.buildMatchEntries(entry, entry.fields[fieldName], fieldName, fieldDef, contentTypes, locale, find, replace, caseSensitive);
+            const matches = this.buildMatchEntries({
+              entry,
+              field: entry.fields[fieldName],
+              fieldName,
+              fieldDef,
+              contentTypes,
+              locale,
+              find,
+              replace,
+              caseSensitive,
+            });
 
             if (caseSensitive) {
               // Filter matches that don't match case
