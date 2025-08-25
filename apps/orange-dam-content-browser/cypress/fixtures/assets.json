@@ -1,0 +1,33 @@
+{
+  "assets": [
+    {
+      "id": "test-asset-1",
+      "url": "https://example.com/test-image.jpg",
+      "title": "Test Image Asset",
+      "contentType": "image/jpeg",
+      "size": 102400,
+      "extraFields": {
+        "CoreField.TitleWithFallback": "Test Image Asset",
+        "CoreField.LargeSizePreview": "https://example.com/test-image-large.jpg",
+        "CoreField.DocType": "Image",
+        "Document.Identifier": "test-image-123",
+        "CoreField.Extension": "jpg"
+      }
+    },
+    {
+      "id": "test-asset-2",
+      "url": "https://example.com/test-video.mp4",
+      "title": "Test Video Asset",
+      "contentType": "video/mp4",
+      "size": 2048000,
+      "extraFields": {
+        "CoreField.TitleWithFallback": "Test Video Asset",
+        "CoreField.LargeSizePreview": "https://example.com/test-video-thumbnail.jpg",
+        "CoreField.DocType": "Video",
+        "Document.Identifier": "test-video-456",
+        "CoreField.Extension": "mp4",
+        "ScrubUrl": "https://example.com/test-video-scrub.mp4"
+      }
+    }
+  ]
+}
