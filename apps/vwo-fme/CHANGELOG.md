@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.10](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.9...vwo-fme-v1.0.10) (2025-08-25)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.37.0 to 4.39.0 in /apps/vwo-fme in the production-dependencies group ([#6025](https://github.com/contentful/marketplace-partner-apps/issues/6025)) ([639e733](https://github.com/contentful/marketplace-partner-apps/commit/639e7337c57735ffc240006fb837c47ce487c2cd))
+* **deps:** bump @contentful/app-sdk from 4.39.0 to 4.40.0 in /apps/vwo-fme in the production-dependencies group ([#6054](https://github.com/contentful/marketplace-partner-apps/issues/6054)) ([f55253f](https://github.com/contentful/marketplace-partner-apps/commit/f55253ff4f039026704625761fdad60896817413))
+* **deps:** bump @contentful/app-sdk from 4.40.0 to 4.41.0 in /apps/vwo-fme in the production-dependencies group ([#6069](https://github.com/contentful/marketplace-partner-apps/issues/6069)) ([9ebb11a](https://github.com/contentful/marketplace-partner-apps/commit/9ebb11a7e94c63c60549a00c2c879d7ef4e03748))
+* **deps:** bump @contentful/app-sdk from 4.41.0 to 4.41.1 in /apps/vwo-fme in the production-dependencies group ([#6183](https://github.com/contentful/marketplace-partner-apps/issues/6183)) ([0873ce8](https://github.com/contentful/marketplace-partner-apps/commit/0873ce85c28e70a16531318ab32d720d6b249e7d))
+* VWO bug - fix orgid [INTEG-3018] ([#6066](https://github.com/contentful/marketplace-partner-apps/issues/6066)) ([c1512ef](https://github.com/contentful/marketplace-partner-apps/commit/c1512ef1a3b7df36f656556c89287f7aeeca9465))
+* vwo fix getting app action [INTEG-3018] ([#6167](https://github.com/contentful/marketplace-partner-apps/issues/6167)) ([53da564](https://github.com/contentful/marketplace-partner-apps/commit/53da564a4106749ba3bf71649c818308c9cea1e6))
+
 ## [1.0.9](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.8...vwo-fme-v1.0.9) (2025-08-01)
 
 
