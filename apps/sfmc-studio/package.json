@@ -25,11 +25,11 @@
   "dependencies": {
     "@ant-design/plots": "^2.6.3",
     "@contentful/app-scripts": "^1.32.2",
-    "@contentful/app-sdk": "^4.41.0",
+    "@contentful/app-sdk": "^4.41.1",
     "@contentful/f36-components": "^4.81.1",
     "@contentful/react-apps-toolkit": "^1.2.16",
     "@reduxjs/toolkit": "^2.8.2",
-    "antd": "^5.27.0",
+    "antd": "^5.27.1",
     "axios": "^1.11.0",
     "crypto-js": "^4.2.0",
     "currency-symbol-map": "^5.1.0",
@@ -41,7 +41,7 @@
     "jspdf": "^3.0.1",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
-    "next": "^15.4.6",
+    "next": "^15.5.0",
     "prettier": "^3.6.2",
     "react": "^18",
     "react-dom": "^18",
@@ -53,8 +53,8 @@
     "sass": "^1.90.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.28.0",
-    "@babel/preset-env": "^7.28.0",
+    "@babel/core": "^7.28.3",
+    "@babel/preset-env": "^7.28.3",
     "@babel/preset-react": "^7.27.1",
     "@babel/preset-typescript": "^7.27.1",
     "@testing-library/jest-dom": "5.16.5",
@@ -67,7 +67,7 @@
     "@types/redux-mock-store": "^1.5.0",
     "babel-jest": "^30.0.5",
     "eslint": "^9.33.0",
-    "eslint-config-next": "15.4.6",
+    "eslint-config-next": "15.5.0",
     "jest": "30.0.5",
     "jest-environment-jsdom": "30.0.5",
     "typescript": "^5"

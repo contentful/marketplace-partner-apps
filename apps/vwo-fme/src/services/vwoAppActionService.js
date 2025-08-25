@@ -1,5 +1,5 @@
 import { createClient } from 'contentful-management';
-import { globalConstants, isMarketplaceVersion, APP_ORGANIZATION_ID } from '../utils';
+import { globalConstants } from '../utils';
 
 class VwoAppActionService {
   constructor(sdk) {
@@ -23,11 +23,7 @@ class VwoAppActionService {
    */
   async initialize() {
     try {
-      const isMarketplace = isMarketplaceVersion({ appId: this.sdk.ids.app });
-      const appActions = await this.cma.appAction.getMany({
-        organizationId: isMarketplace ? APP_ORGANIZATION_ID : this.sdk.ids.organization,
-        appDefinitionId: this.sdk.ids.app,
-      });
+      const appActions = await this.cma.appAction.getManyForEnvironment({});
 
       const appAction = appActions.items.find((action) => action.name === globalConstants.VWO_APP_ACTION_NAME);
 
