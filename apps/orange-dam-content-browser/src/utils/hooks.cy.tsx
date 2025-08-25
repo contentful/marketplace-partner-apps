@@ -21,34 +21,9 @@ const FileInfoTestComponent = ({ url }: { url: string }) => {
   );
 };
 
-// Test component to execute useDefaultCBSConfig hook
-const CBSConfigTestComponent = () => {
-  const config = useDefaultCBSConfig();
-  
-  React.useEffect(() => {
-    // This test validates that the hook actually executes and returns data
-    console.log('Config received:', config);
-  }, [config]);
-
-  return (
-    <div data-testid="cbs-config-test">
-      <span data-testid="config-validated">Config logic validated</span>
-      <span data-testid="config-content">{JSON.stringify(config)}</span>
-    </div>
-  );
-};
 
 describe('Hooks utilities', () => {
   describe('useDesignSystem hook execution', () => {
-    beforeEach(() => {
-      // Mock WebFont globally within each test
-      cy.window().then((win) => {
-        (win as any).WebFont = {
-          load: cy.stub().as('webFontLoad')
-        };
-      });
-    });
-
     it('should execute WebFont loading and script injection', () => {
       mount(<DesignSystemTestComponent />);
 
@@ -56,36 +31,13 @@ describe('Hooks utilities', () => {
       cy.get('[data-testid="design-system-test"]').should('exist');
     });
 
-    it('should validate WebFont configuration structure', () => {
-      const expectedFontFamilies = [
-        'Fira Code',
-        'Fira Mono', 
-        'Fira Sans',
-        'Fira Sans Condensed',
-        'Fira Sans Extra Condensed'
-      ];
-
-      expectedFontFamilies.forEach(family => {
-        expect(family).to.be.a('string');
-        expect(family).to.include('Fira');
-      });
-
-      expect(expectedFontFamilies).to.have.length(5);
-    });
-
-    it('should validate design system script configuration', () => {
-      const scriptConfig = {
-        src: 'https://design-system.orangelogic.com/entry.1.0.212.js',
-        type: 'module',
-        location: 'head'
-      };
-
-      expect(scriptConfig.src).to.be.a('string');
-      expect(scriptConfig.src).to.match(/^https:\/\//);
-      expect(scriptConfig.src).to.include('orangelogic.com');
-      expect(scriptConfig.src).to.include('entry.');
-      expect(scriptConfig.type).to.equal('module');
-      expect(scriptConfig.location).to.equal('head');
+    it('should inject design system script into document head', () => {
+      mount(<DesignSystemTestComponent />);
+      cy.get('head script[src*="design-system.orangelogic.com"]')
+        .should('exist')
+        .and('have.attr', 'type', 'module')
+        .and('have.attr', 'src')
+        .and('match', /entry\.1\.0\.298\.js$/);
     });
   });
 
@@ -204,28 +156,16 @@ describe('Hooks utilities', () => {
 
     it('should handle different content types correctly', () => {
       const contentTypeTests = [
-        { contentType: 'image/jpeg', expectedType: 'image' },
-        { contentType: 'image/png', expectedType: 'image' },
-        { contentType: 'image/gif', expectedType: 'image' },
-        { contentType: 'video/mp4', expectedType: 'video' },
-        { contentType: 'video/webm', expectedType: 'video' },
-        { contentType: 'video/mov', expectedType: 'video' },
-        { contentType: 'application/pdf', expectedType: 'unknown' },
-        { contentType: 'text/plain', expectedType: 'unknown' },
-        { contentType: '', expectedType: 'unknown' }
+        { url: 'https://example.com/test.jpg', contentType: 'image/jpeg', expectedType: 'image' },
+        { url: 'https://example.com/test.png', contentType: 'image/png', expectedType: 'image' },
+        { url: 'https://example.com/test.mp4', contentType: 'video/mp4', expectedType: 'video' },
+        { url: 'https://example.com/test.pdf', contentType: 'application/pdf', expectedType: 'unknown' }
       ];
 
-      contentTypeTests.forEach(({ contentType, expectedType }) => {
-        let actualType: string;
-        if (contentType.startsWith('image/')) {
-          actualType = 'image';
-        } else if (contentType.startsWith('video/')) {
-          actualType = 'video';
-        } else {
-          actualType = 'unknown';
-        }
-
-        expect(actualType).to.equal(expectedType);
+      contentTypeTests.forEach(({ url, contentType, expectedType }) => {
+        cy.intercept('HEAD', url, { headers: { 'Content-Type': contentType } });
+        mount(<FileInfoTestComponent url={url} />);
+        cy.get('[data-testid="asset-type"]').should('contain', expectedType);
       });
     });
 
@@ -267,29 +207,15 @@ describe('Hooks utilities', () => {
 
     it('should extract filename from URL as fallback', () => {
       const urlTests = [
-        {
-          url: 'https://example.com/path/to/file.jpg',
-          expectedFilename: 'file.jpg'
-        },
-        {
-          url: 'https://example.com/document.pdf',
-          expectedFilename: 'document.pdf'
-        },
-        {
-          url: 'https://cdn.example.com/assets/images/photo.png',
-          expectedFilename: 'photo.png'
-        },
-        {
-          url: 'https://example.com/file%20with%20spaces.txt',
-          expectedFilename: 'file%20with%20spaces.txt'
-        }
+        { url: 'https://example.com/path/to/file.jpg', expected: 'file.jpg' },
+        { url: 'https://example.com/document.pdf', expected: 'document.pdf' },
+        { url: 'https://cdn.example.com/assets/images/photo.png', expected: 'photo.png' }
       ];
 
-      urlTests.forEach(({ url, expectedFilename }) => {
-        const urlObj = new URL(url);
-        const extractedFilename = urlObj.pathname.substring(urlObj.pathname.lastIndexOf('/') + 1);
-        
-        expect(extractedFilename).to.equal(expectedFilename);
+      urlTests.forEach(({ url, expected }) => {
+        cy.intercept('HEAD', url, { headers: {} }); // No Content-Disposition header
+        mount(<FileInfoTestComponent url={url} />);
+        cy.get('[data-testid="file-name"]').should('contain', expected);
       });
     });
 

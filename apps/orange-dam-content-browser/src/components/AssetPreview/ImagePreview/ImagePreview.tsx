@@ -30,6 +30,11 @@ const ImagePreview: FC<Props> = ({
   onError,
   onLoaded,
 }) => {
+  /**
+   * HTML Image Element can only display certain image extensions (ALLOWED_IMAGE_EXTENSIONS).
+   * We need to ensure the image URL has a valid extension by replacing it with a default one if necessary.
+   * The DAM (Digital Asset Management) will handle the actual image processing if the requested extension changed.
+   */
   const imageUrl = useMemo(() => {
     const imageExtension = /\.(?<Extension>\w{3,4})($|\?)/?.exec(url)?.groups?.Extension
     if (!imageExtension || !ALLOWED_IMAGE_EXTENSIONS.includes(imageExtension)) {
@@ -45,6 +50,7 @@ const ImagePreview: FC<Props> = ({
       alt={alt}
       onLoad={onLoaded}
       onError={onError}
+      object-fit="contain"
     />
   );
 };

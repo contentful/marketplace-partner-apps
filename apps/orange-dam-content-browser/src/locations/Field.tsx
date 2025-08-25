@@ -44,7 +44,7 @@ const Field = () => {
           return
         }
       }
-      setError("Unknown error occured. Your file might not be imported correctly.");
+      setError("Unknown error occurred. Your file might not be imported correctly.");
       console.error(error);
     }
   }

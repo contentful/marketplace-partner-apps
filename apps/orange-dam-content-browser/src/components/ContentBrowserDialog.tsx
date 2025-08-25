@@ -1,15 +1,18 @@
 import { useDefaultCBSConfig } from '@/utils/hooks';
 import { DialogAppSDK } from '@contentful/app-sdk';
-import { /* useCMA, */ useSDK } from '@contentful/react-apps-toolkit';
+import { useSDK } from '@contentful/react-apps-toolkit';
 import { useEffect } from 'react';
 
 const ContentBrowserDialog = () => {
   const sdk = useSDK<DialogAppSDK>();
   const defaultConfig = useDefaultCBSConfig();
 
-  console.log(sdk.parameters, defaultConfig);
-
   useEffect(() => {
+    console.info('Content Browser Dialog initialized with parameters:', {
+      sdkParameters: sdk.parameters,
+      defaultConfig: defaultConfig
+    });
+
     window.OrangeDAMContentBrowser.open({
       ...defaultConfig,
       onAssetSelected: (assets) => {

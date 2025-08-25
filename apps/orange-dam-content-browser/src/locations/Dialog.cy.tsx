@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 import React from 'react'
 import { DialogsInitiator } from '@/types'
+import { getDialogType } from './Dialog'
 
 // Test the Dialog component logic and types
 describe('Dialog Component', () => {
@@ -88,32 +89,16 @@ describe('Dialog Component', () => {
   })
 
   it('should handle parameter validation logic', () => {
-    const validateParameters = (params: any) => {
-      if (!params.invocation || 
-          typeof params.invocation !== 'object' || 
-          !('initiator' in params.invocation) ||
-          !params.invocation.initiator ||
-          params.invocation.initiator === DialogsInitiator.AssetImporter) {
-        return 'content-browser'
-      }
-
-      if (params.invocation.initiator === DialogsInitiator.AssetCard) {
-        return 'metadata-viewer'
-      }
-
-      return 'unknown'
-    }
-
-    // Test various scenarios
-    expect(validateParameters({ invocation: null })).to.equal('content-browser')
-    expect(validateParameters({ invocation: undefined })).to.equal('content-browser')
-    expect(validateParameters({ invocation: {} })).to.equal('content-browser')
-    expect(validateParameters({ 
+    // Test various scenarios using the imported helper
+    expect(getDialogType({ invocation: null })).to.equal('content-browser')
+    expect(getDialogType({ invocation: undefined })).to.equal('content-browser')
+    expect(getDialogType({ invocation: {} })).to.equal('content-browser')
+    expect(getDialogType({ 
       invocation: { 
         initiator: DialogsInitiator.AssetImporter 
       } 
     })).to.equal('content-browser')
-    expect(validateParameters({ 
+    expect(getDialogType({ 
       invocation: { 
         initiator: DialogsInitiator.AssetCard 
       } 
