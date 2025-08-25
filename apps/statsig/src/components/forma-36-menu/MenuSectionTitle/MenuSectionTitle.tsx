@@ -2,8 +2,7 @@ import React from 'react';
 
 import type { ExpandProps } from '@contentful/f36-core';
 import { Caption, CaptionProps } from '@contentful/f36-typography';
-import { cx } from 'emotion';
-
+import { cx } from '@emotion/css';
 import { getMenuSectionTitleStyles } from './MenuSectionTitle.styles';
 
 export type MenuSectionTitleProps = CaptionProps;
@@ -23,8 +22,7 @@ export const MenuSectionTitle = (props: ExpandProps<MenuSectionTitleProps>) => {
       testId={testId}
       className={cx(styles, className)}
       marginBottom="none"
-      {...otherProps}
-    >
+      {...otherProps}>
       {children}
     </Caption>
   );

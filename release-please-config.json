@@ -44,6 +44,9 @@
     "apps/imageHotspotCreator": {
       "release-type": "node"
     },
+    "apps/imagekit": {
+      "release-type": "node"
+    },
     "apps/intershop": {
       "release-type": "node"
     },
@@ -69,6 +72,9 @@
       "release-type": "node"
     },
     "apps/transifex": {
+      "release-type": "node"
+    },
+    "apps/translationstudio": {
       "release-type": "node"
     },
     "apps/uploadcare": {

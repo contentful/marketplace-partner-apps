@@ -5,14 +5,14 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { Box, Flex, Button, IconButton, Text } from '@contentful/f36-components';
 import Editor from '@monaco-editor/react';
 import * as monaco from 'monaco-editor';
-import { ArrowsOutThinIcon, WarningOctagon } from '@src/assets';
+import { ArrowsOutThinIcon, WarningOctagon } from '@/assets';
 import tokens from '@contentful/f36-tokens';
-import LottieEditorHeader from '@src/components/content-entry/LottieEditorHeader';
+import LottieEditorHeader from '@/components/content-entry/LottieEditorHeader';
 import { styles } from './LottiePreviewField.styles';
 import { css, cx } from 'emotion';
-import JsonEditorModal from '@src/components/modals/JsonEditorModal';
-import LottiePreviewModal from '@src/components/modals/LottiePreviewModal';
-import { LottieJSON } from '@src/locations/Field';
+import JsonEditorModal from '@/components/modals/JsonEditorModal';
+import LottiePreviewModal from '@/components/modals/LottiePreviewModal';
+import { LottieJSON } from '@/locations/Field';
 
 type Props = {
   lottieJson: LottieJSON | Record<string, unknown>;

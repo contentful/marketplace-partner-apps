@@ -118,7 +118,7 @@ function ConfigScreen() {
     {
       type: 'plain',
       defaults: {
-        environmentId: sdk.ids.environmentAlias ?? sdk.ids.environment,
+        environmentId: sdk.ids.environment,
         spaceId: sdk.ids.space,
       },
     },

@@ -5,7 +5,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { TextInput } from '@contentful/f36-components';
 import { SearchIcon } from '@contentful/f36-icons';
 import tokens from '@contentful/f36-tokens';
-import { css } from 'emotion';
+import { css } from '@emotion/css';
 import get from 'lodash/get';
 
 import { ContentType } from '../../types';
@@ -52,14 +52,8 @@ type CreateEntryMenuTriggerChildProps = {
   isOpen: boolean;
   isSelecting: boolean;
 };
-export type CreateEntryMenuTriggerChild = (
-  props: CreateEntryMenuTriggerChildProps,
-) => React.ReactElement;
-export type CreateCustomEntryMenuItems = ({
-  closeMenu,
-}: {
-  closeMenu: () => void;
-}) => React.ReactElement;
+export type CreateEntryMenuTriggerChild = (props: CreateEntryMenuTriggerChildProps) => React.ReactElement;
+export type CreateCustomEntryMenuItems = ({ closeMenu }: { closeMenu: () => void }) => React.ReactElement;
 
 interface ICreateEntryMenuTrigger {
   contentTypes: ContentType[];
@@ -133,7 +127,7 @@ export const CreateEntryMenuTrigger = ({
       res
         .then(
           () => setSelecting(false),
-          () => setSelecting(false),
+          () => setSelecting(false)
         )
         .catch(console.error);
     }
@@ -163,10 +157,7 @@ export const CreateEntryMenuTrigger = ({
   const isSearchable = contentTypes.length > MAX_ITEMS_WITHOUT_SEARCH;
   const maxDropdownHeight = suggestedContentTypeId ? 300 : 250;
   const suggestedContentType = contentTypes.find((ct) => ct.sys.id === suggestedContentTypeId);
-  const filteredContentTypes = contentTypes.filter(
-    (ct) =>
-      !searchInput || get(ct, 'name', 'Untitled').toLowerCase().includes(searchInput.toLowerCase()),
-  );
+  const filteredContentTypes = contentTypes.filter((ct) => !searchInput || get(ct, 'name', 'Untitled').toLowerCase().includes(searchInput.toLowerCase()));
 
   return (
     <span className={styles.wrapper} ref={wrapper} data-test-id={testId}>
@@ -176,8 +167,7 @@ export const CreateEntryMenuTrigger = ({
         isOpen={isOpen}
         onClose={closeMenu}
         onOpen={handleMenuOpen}
-        {...menuProps}
-      >
+        {...menuProps}>
         <Menu.Trigger>{children({ isOpen, isSelecting })}</Menu.Trigger>
 
         {isOpen && (
@@ -189,8 +179,7 @@ export const CreateEntryMenuTrigger = ({
               maxHeight: `${maxDropdownHeight}px`,
             }}
             ref={menuListRef}
-            testId="add-entry-menu"
-          >
+            testId="add-entry-menu">
             {Boolean(customDropdownItems) && (
               <>
                 {customDropdownItems}
@@ -227,11 +216,7 @@ export const CreateEntryMenuTrigger = ({
             {!searchInput && <Menu.SectionTitle>{contentTypesLabel}</Menu.SectionTitle>}
             {filteredContentTypes.length ? (
               filteredContentTypes.map((contentType, i) => (
-                <Menu.Item
-                  testId="contentType"
-                  key={`${get(contentType, 'name')}-${i}`}
-                  onClick={() => handleSelect(contentType)}
-                >
+                <Menu.Item testId="contentType" key={`${get(contentType, 'name')}-${i}`} onClick={() => handleSelect(contentType)}>
                   {get(contentType, 'name', 'Untitled')}
                 </Menu.Item>
               ))
