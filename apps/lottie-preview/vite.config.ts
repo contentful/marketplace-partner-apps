@@ -11,7 +11,7 @@ export default defineConfig(() => ({
   plugins: [react(), svgr()],
   resolve: {
     alias: {
-      '@src': path.resolve(__dirname, 'src'), // Absolute path to src
+      '@': path.resolve(__dirname, 'src'),
     },
   },
   test: {

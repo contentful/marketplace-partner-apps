@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as monaco from 'monaco-editor';
 import { Button, Modal, Box } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
 import { css, cx } from 'emotion';
 import Editor from '@monaco-editor/react';
-import { LottieJSON } from '@src/locations/Field';
-import { styles } from '@src/components/modals/JsonEditorModal.styles';
-import { styles as fieldStyles } from '@src/components/field/LottiePreviewField.styles';
+import { LottieJSON } from '@/locations/Field';
+import { styles } from '@/components/modals/JsonEditorModal.styles';
+import { styles as fieldStyles } from '@/components/field/LottiePreviewField.styles';
 
 type Props = {
   showJsonModal: boolean;

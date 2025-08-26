@@ -1,15 +1,15 @@
 {
   "name": "convox",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "private": true,
   "dependencies": {
-    "@contentful/app-sdk": "4.29.7",
-    "@contentful/f36-components": "4.80.4",
+    "@contentful/app-sdk": "4.37.0",
+    "@contentful/f36-components": "4.81.1",
     "@contentful/f36-icons": "^4.29.1",
     "@contentful/f36-tokens": "4.2.0",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "^11.13.4",
-    "contentful-management": "10.46.4",
+    "contentful-management": "11.54.4",
     "emotion": "10.0.27",
     "lodash.debounce": "^4.0.8",
     "react": "18.3.1",
@@ -28,20 +28,20 @@
     "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./dist --organization-id $TEST_ORG_ID --definition-id 7eGpCOsocOhTH3OIMCXBPf --token $TEST_CMA_TOKEN"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.19.1",
-    "@testing-library/react": "14.0.0",
+    "@contentful/app-scripts": "2.5.5",
+    "@testing-library/react": "16.3.0",
     "@types/lodash.debounce": "^4.0.9",
-    "@typescript-eslint/eslint-plugin": "^6.19.1",
-    "@typescript-eslint/parser": "^6.19.1",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^8.38.0",
     "@types/node": "^20",
     "@types/react": "18.3.1",
     "@types/react-dom": "18.3.0",
-    "@vitejs/plugin-react": "4.6.0",
+    "@vitejs/plugin-react": "4.7.0",
     "eslint": "^8.56.0",
     "eslint-plugin-react": "^7.37.5",
-    "typescript": "5.8.3",
+    "typescript": "5.9.2",
     "vite": "4.5.5",
-    "vitest": "0.32.4",
+    "vitest": "3.2.4",
     "happy-dom": "^17.5.6"
   }
 }

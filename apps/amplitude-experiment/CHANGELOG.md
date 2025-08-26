@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.1.4](https://github.com/contentful/marketplace-partner-apps/compare/amplitude-contentful-v1.1.3...amplitude-contentful-v1.1.4) (2025-08-01)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.36.0 to 4.37.0 in /apps/amplitude-experiment in the production-dependencies group ([#5940](https://github.com/contentful/marketplace-partner-apps/issues/5940)) ([a0ccfca](https://github.com/contentful/marketplace-partner-apps/commit/a0ccfcaee7fba7408f36f288d7071808924dcf21))
+* **deps:** bump @contentful/f36-components from 4.80.5 to 4.81.1 in /apps/amplitude-experiment in the production-dependencies group ([#5865](https://github.com/contentful/marketplace-partner-apps/issues/5865)) ([e958347](https://github.com/contentful/marketplace-partner-apps/commit/e958347565ce41c4a08cc8c982a0e14244482d7e))
+* **deps:** bump the production-dependencies group in /apps/amplitude-experiment with 2 updates ([#5814](https://github.com/contentful/marketplace-partner-apps/issues/5814)) ([bebeb96](https://github.com/contentful/marketplace-partner-apps/commit/bebeb968be5dc9c7ef24bb82675b1447e19a5eec))
+
+## [1.1.3](https://github.com/contentful/marketplace-partner-apps/compare/amplitude-contentful-v1.1.2...amplitude-contentful-v1.1.3) (2025-07-28)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-components from 4.80.4 to 4.80.5 in /apps/amplitude-experiment in the production-dependencies group ([#5470](https://github.com/contentful/marketplace-partner-apps/issues/5470)) ([f08c546](https://github.com/contentful/marketplace-partner-apps/commit/f08c546fa0cbe38cc0138f19f33933dec44ae4d3))
+* **deps:** bump axios from 1.10.0 to 1.11.0 in /apps/amplitude-experiment ([#5712](https://github.com/contentful/marketplace-partner-apps/issues/5712)) ([228ab24](https://github.com/contentful/marketplace-partner-apps/commit/228ab24a3d123b7ae506e4520546295138d5c8dc))
+* **deps:** bump contentful-management from 11.53.0 to 11.54.0 in /apps/amplitude-experiment in the production-dependencies group ([#5265](https://github.com/contentful/marketplace-partner-apps/issues/5265)) ([06e90cc](https://github.com/contentful/marketplace-partner-apps/commit/06e90cc7c60b4529fd8d715836d0d59de657b75c))
+* **deps:** bump contentful-management from 11.54.0 to 11.54.1 in /apps/amplitude-experiment in the production-dependencies group ([#5359](https://github.com/contentful/marketplace-partner-apps/issues/5359)) ([22703bc](https://github.com/contentful/marketplace-partner-apps/commit/22703bcd5a6adc1db9c4cbe7eade21a5a2b2039b))
+* **deps:** bump form-data from 4.0.3 to 4.0.4 in /apps/amplitude-experiment ([#5670](https://github.com/contentful/marketplace-partner-apps/issues/5670)) ([c4b6dea](https://github.com/contentful/marketplace-partner-apps/commit/c4b6deac7f807e48cee3dc8cffd46c6c88de7b12))
+* **deps:** bump the production-dependencies group in /apps/amplitude-experiment with 5 updates ([#5045](https://github.com/contentful/marketplace-partner-apps/issues/5045)) ([ca996c4](https://github.com/contentful/marketplace-partner-apps/commit/ca996c4763e0299d06635c62ac9b885e05c28e30))
+* update to node v20 [INTEG-2829] ([#5318](https://github.com/contentful/marketplace-partner-apps/issues/5318)) ([fdc406d](https://github.com/contentful/marketplace-partner-apps/commit/fdc406d9328bc6279abb658dcf5a1bf28795a449))
+
 ## [1.1.2](https://github.com/contentful/marketplace-partner-apps/compare/amplitude-contentful-v1.1.1...amplitude-contentful-v1.1.2) (2025-07-09)
 
 
