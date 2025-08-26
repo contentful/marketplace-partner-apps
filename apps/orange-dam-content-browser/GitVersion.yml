@@ -1,0 +1,18 @@
+mode: Mainline
+assembly-versioning-scheme: MajorMinor
+assembly-file-versioning-scheme: MajorMinorPatchTag
+assembly-informational-format: '{InformationalVersion}'
+branches:
+  main:
+    tag: ci
+    increment: None
+    regex: ^master$|^tags/
+  feature:
+    regex: ^dev/
+  hotfix:
+    regex: ^fix/
+  support:
+    regex: ^stable/
+  pull-request:
+    increment: None
+    tag: pr
