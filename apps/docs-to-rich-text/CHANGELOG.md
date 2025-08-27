@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.4](https://github.com/contentful/marketplace-partner-apps/compare/docs-to-rich-text-v1.2.3...docs-to-rich-text-v1.2.4) (2025-08-27)
+
+
+### Bug Fixes
+
+* roll back field editor rich text package update in docs to rich text app [INTEG-3004] ([#6292](https://github.com/contentful/marketplace-partner-apps/issues/6292)) ([1677f6f](https://github.com/contentful/marketplace-partner-apps/commit/1677f6f6842f371fb055197adc02818bb49c3348))
+
 ## [1.2.3](https://github.com/contentful/marketplace-partner-apps/compare/docs-to-rich-text-v1.2.2...docs-to-rich-text-v1.2.3) (2025-08-01)
 
 
