@@ -1,0 +1,13 @@
+{
+  "functions": [
+    {
+      "id": "appeventHandler",
+      "name": "Default Values",
+      "description": "Responds to Entry create event and applies default values based on a given set of fields.",
+      "path": "functions/appeventHandler.js",
+      "entryFile": "functions/appeventHandler.ts",
+      "allowNetworks": [],
+      "accepts": ["appevent.handler"]
+    }
+  ]
+}
