@@ -129,6 +129,34 @@ export function Thumbnail({ asset, isDisabled, onDelete, onReplace }: Props) {
     window.open(consoleUrl, '_blank');
   }, [consoleUrl]);
 
+  const pad = (n: number): string => {
+    return n < 10 ? `0${n}` : `${n}`;
+  };
+  const playbackDuration = useCallback((asset: CloudinaryAsset) => {
+    const originalDuration = asset.duration || 0;
+
+    const rawTransformation = asset.raw_transformation;
+    let duration = originalDuration;
+    if (rawTransformation) {
+      // Check if raw_transformation includes start (so_) or end (eo_) offsets and calculate duration accordingly
+      // Regex to match so_ (start offset) and eo_ (end offset)
+      const soMatch = rawTransformation.match(/so_([0-9.]+)/);
+      const eoMatch = rawTransformation.match(/eo_([0-9.]+)/);
+
+      if (soMatch || eoMatch) {
+        const so = soMatch ? parseFloat(soMatch[1]) : 0;
+        const eo = eoMatch ? parseFloat(eoMatch[1]) : originalDuration;
+        if (!isNaN(so) && !isNaN(eo) && eo > so) {
+          duration = eo - so;
+        }
+      }
+    }
+    const minutes = Math.floor(duration / 60);
+    const seconds = Math.floor(duration % 60);
+
+    return `${pad(minutes)}:${pad(seconds)}`;
+  }, []);
+
   return (
     <div ref={setNodeRef}>
       <AssetCard
@@ -160,7 +188,7 @@ export function Thumbnail({ asset, isDisabled, onDelete, onReplace }: Props) {
             Preview
           </MenuItem>,
 
-          <MenuDivider key="divider" />,
+          <MenuDivider key="divider2" />,
           <Menu.SectionTitle key="file-information-title">File information</Menu.SectionTitle>,
           <MenuItem key="file-information" css={styles.fileInformation.menuItem} isDisabled>
             <dl css={styles.fileInformation.dl}>
@@ -172,8 +200,19 @@ export function Thumbnail({ asset, isDisabled, onDelete, onReplace }: Props) {
                   <dd>{asset.format}</dd>
                 </>
               )}
-              <dt>Size:</dt>
-              <dd>{fileSize(asset.bytes).human('jedec')}</dd>
+              {asset.resource_type === 'image' && (
+                <>
+                  <dt>Size:</dt>
+                  <dd>{fileSize(asset.bytes).human('jedec')}</dd>
+                </>
+              )}
+              {asset.resource_type === 'video' && (
+                <>
+                  <dt>Playback Duration:</dt>
+                  <dd>{playbackDuration(asset)}</dd>
+                </>
+              )}
+
               {asset.width && asset.height && (
                 <>
                   <dt>Dimensions:</dt>

@@ -50,7 +50,7 @@ const VideoEditorDialog = () => {
         // allow local instances of the dialog to override the configuration maxFiles parameter
         editorRef.current.update({
           video: {
-            transformation: [{ rawTransformation: asset.raw_transformation }],
+            transformation: [{ rawTransformation: asset.original_raw_transformation }],
             steps: ['trim'],
           },
 
@@ -85,7 +85,7 @@ const VideoEditorDialog = () => {
             onClick={() => {
               editorRef.current?.triggerExport();
             }}>
-            Save
+            Update
           </Button>
         </Stack>
       )}

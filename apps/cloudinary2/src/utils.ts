@@ -46,6 +46,7 @@ export function extractAsset(asset: MediaLibraryResultAsset): CloudinaryAsset {
       original_url: res.url,
       original_secure_url: res.secure_url,
       original_raw_transformation: res.raw_transformation,
+      original_transformed_url: asset.derived[0].url,
       url: asset.derived[0].url,
       secure_url: asset.derived[0].secure_url,
       raw_transformation: asset.derived[0].raw_transformation,

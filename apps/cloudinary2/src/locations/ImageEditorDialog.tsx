@@ -68,7 +68,7 @@ const ImageEditorDialog = () => {
           layoutStyle: 'single',
           layout: 'tabs',
           image: {
-            transformation: [{ rawTransformation: asset.raw_transformation }],
+            transformation: [{ rawTransformation: asset.original_raw_transformation }],
             steps,
             resizeAndCrop: {
               toggleAspectRatio: true,
@@ -101,7 +101,7 @@ const ImageEditorDialog = () => {
             messages: {
               en_US: {
                 footer: {
-                  export: 'Save',
+                  export: 'Update',
                 },
               },
             },
