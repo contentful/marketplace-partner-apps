@@ -33,7 +33,7 @@
     "axios": "^1.11.0",
     "crypto-js": "^4.2.0",
     "currency-symbol-map": "^5.1.0",
-    "dayjs": "^1.11.13",
+    "dayjs": "^1.11.14",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "html-react-parser": "^5.2.6",
