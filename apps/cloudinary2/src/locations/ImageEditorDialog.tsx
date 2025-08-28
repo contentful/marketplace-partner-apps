@@ -48,10 +48,21 @@ const ImageEditorDialog = () => {
         const configurationParams = sdk.parameters.installation;
 
         // samples/logo,samples/man-portrait
-        const steps = ['resizeAndCrop', 'textOverlays'];
-        if (installationParams.imageEditorOverlays.length > 0) {
+        const steps = ['resizeAndCrop'];
+        const overlays = installationParams.imageEditorOverlays.map((pid) => {
+          return {
+            publicId: pid,
+            label: pid,
+            transformation: [],
+            placementOptions: ['top_left', 'top_right', 'bottom_left', 'bottom_right'],
+          };
+        });
+
+        if (overlays.length > 0) {
           steps.push('imageOverlay');
         }
+        steps.push('textOverlays');
+
         // allow local instances of the dialog to override the configuration maxFiles parameter
         editorRef.current.update({
           layoutStyle: 'single',
@@ -79,14 +90,7 @@ const ImageEditorDialog = () => {
               ],
             },
             imageOverlay: {
-              overlays: installationParams.imageEditorOverlays.map((pid) => {
-                return {
-                  publicId: pid,
-                  label: pid,
-                  transformation: [],
-                  placementOptions: ['top_left', 'top_right', 'bottom_left', 'bottom_right', 'middle'],
-                };
-              }),
+              overlays,
             },
             textOverlays: {
               presets: ['heading', 'subtitle', 'body', 'caption'],
