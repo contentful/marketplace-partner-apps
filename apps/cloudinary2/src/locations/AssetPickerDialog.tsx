@@ -17,8 +17,7 @@ const styles = {
 const AssetPickerDialog = () => {
   const sdk = useSDK<DialogAppSDK<AppInstallationParameters>>();
   const invocationParams = sdk.parameters.invocation as Record<string, unknown>;
-
-  const filter = invocationParams.filter as string;
+  const expression = invocationParams.expression as string;
 
   /**
    * Initialization is triggered using the div's ref to ensure the container exists in the DOM
@@ -55,7 +54,6 @@ const AssetPickerDialog = () => {
           transformations.push({ quality: configurationParams.quality });
         }
         sdk.window.updateHeight(window.outerHeight);
-        const expression = filter ? { expression: `resource_type:${filter}` } : undefined;
         const options = {
           cloud_name: configurationParams.cloudName,
           api_key: configurationParams.apiKey,
@@ -65,7 +63,7 @@ const AssetPickerDialog = () => {
           inline_container: `#${container.id}`,
           remove_header: true,
           default_transformations: [transformations],
-          search: expression,
+          search: { expression },
 
           integration: {
             platform: 'contentful',

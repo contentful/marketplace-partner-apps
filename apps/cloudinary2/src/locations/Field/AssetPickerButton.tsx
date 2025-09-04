@@ -22,10 +22,13 @@ interface Props {
 export function AssetPickerButton({ onNewAssetsAdded, isDisabled }: Props) {
   const sdk = useSDK();
   const resourceType = sdk.parameters.instance.resourceType as ResourceTypeFilter;
+  const searchFilter = sdk.parameters.instance.searchFilter as string;
   const action = sdk.parameters.installation.showUploadButton === 'true' ? `Select or upload an Asset` : `Select an Asset`;
   const handleDialogOpenClick = useCallback(
     async (type?: string) => {
-      const filter = type ? { filter: String(type) } : undefined;
+      let expression = type ? `resource_type:${type}` : ``;
+      expression = `${expression} ${searchFilter}`;
+
       const result: MediaLibraryResult | undefined = await sdk.dialogs.openCurrentApp({
         position: 'center',
         title: `${action} on Cloudinary`,
@@ -33,7 +36,7 @@ export function AssetPickerButton({ onNewAssetsAdded, isDisabled }: Props) {
         shouldCloseOnEscapePress: true,
         width: 1400,
         parameters: {
-          ...filter,
+          expression,
         },
       });
 
