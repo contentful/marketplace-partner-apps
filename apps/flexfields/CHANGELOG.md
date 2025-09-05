@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.2](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.3.1...thrillworks-flex-fields-app-v1.3.2) (2025-09-05)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.37.0 to 4.39.0 in /apps/flexfields in the production-dependencies group ([#6000](https://github.com/contentful/marketplace-partner-apps/issues/6000)) ([05375a7](https://github.com/contentful/marketplace-partner-apps/commit/05375a7fee73f03c50a6c0b050f68f1985dea75c))
+* **deps:** bump @contentful/app-sdk from 4.39.0 to 4.40.0 in /apps/flexfields in the production-dependencies group ([#6055](https://github.com/contentful/marketplace-partner-apps/issues/6055)) ([df7e94f](https://github.com/contentful/marketplace-partner-apps/commit/df7e94f012df3350a04877bb1c3a05b62872269d))
+* **deps:** bump @contentful/app-sdk from 4.40.0 to 4.41.0 in /apps/flexfields in the production-dependencies group ([#6107](https://github.com/contentful/marketplace-partner-apps/issues/6107)) ([db8eba0](https://github.com/contentful/marketplace-partner-apps/commit/db8eba0bdad17e124607bcd32a066f785d33123e))
+
 ## [1.3.1](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.3.0...thrillworks-flex-fields-app-v1.3.1) (2025-08-01)
 
 
