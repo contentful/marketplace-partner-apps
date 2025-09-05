@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.5](https://github.com/contentful/marketplace-partner-apps/compare/docs-to-rich-text-v1.2.4...docs-to-rich-text-v1.2.5) (2025-09-05)
+
+
+### Bug Fixes
+
+* **deps:** bump @udecode/plate-core and @contentful/field-editor-rich-text in /apps/docs-to-rich-text ([#6296](https://github.com/contentful/marketplace-partner-apps/issues/6296)) ([53422fa](https://github.com/contentful/marketplace-partner-apps/commit/53422fa602cc5329f4153ca9f53bda23992c4d53))
+* **deps:** bump @udecode/plate-media and @contentful/field-editor-rich-text in /apps/docs-to-rich-text ([#6295](https://github.com/contentful/marketplace-partner-apps/issues/6295)) ([a853ae3](https://github.com/contentful/marketplace-partner-apps/commit/a853ae35fa93d70fb7c311ad004705c8cfcef8b4))
+
 ## [1.2.4](https://github.com/contentful/marketplace-partner-apps/compare/docs-to-rich-text-v1.2.3...docs-to-rich-text-v1.2.4) (2025-08-27)
 
 
