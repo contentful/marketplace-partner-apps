@@ -28,7 +28,7 @@
     "@contentful/react-apps-toolkit": "^1.2.16",
     "next": ">=15.5.2",
     "react": ">=18.3.1",
-    "serve": "^14.2.4"
+    "serve": "^14.2.5"
   },
   "devDependencies": {
     "@contentful/app-scripts": "^2.5.5",
