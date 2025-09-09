@@ -1,10 +1,11 @@
+import { FieldAppSDK } from '@contentful/app-sdk';
 import { Button, ButtonGroup, IconButton, Menu } from '@contentful/f36-components';
 import { ArrowDownIcon, AssetIcon, VideoIcon } from '@contentful/f36-icons';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { css } from '@emotion/react';
 import { useCallback } from 'react';
 import logo from '../../assets/logo.svg';
-import { CloudinaryAsset, MediaLibraryResult, ResourceTypeFilter } from '../../types';
+import { AppInstallationParameters, CloudinaryAsset, MediaLibraryResult, ResourceTypeFilter } from '../../types';
 import { extractAsset } from '../../utils';
 const styles = {
   logo: css({
@@ -20,14 +21,32 @@ interface Props {
 }
 
 export function AssetPickerButton({ onNewAssetsAdded, isDisabled }: Props) {
-  const sdk = useSDK();
+  const sdk = useSDK<FieldAppSDK<AppInstallationParameters>>();
   const resourceType = sdk.parameters.instance.resourceType as ResourceTypeFilter;
-  const searchFilter = sdk.parameters.instance.searchFilter as string;
+  const searchFilterTemplate = (sdk.parameters.instance.searchFilter || '') as string;
+
+  const binding = {
+    entry: sdk.entry,
+  };
+  function evaluator(template: string, context: Record<string, unknown>) {
+    try {
+      return new Function(...Object.keys(context), 'return `' + template + '`;')(...Object.values(context));
+    } catch (error) {
+      // show error notification to the user
+      sdk.notifier.error(`Invalid field configuration ${template}\n${error}`);
+      console.error(error);
+      return template;
+    }
+  }
+
   const action = sdk.parameters.installation.showUploadButton === 'true' ? `Select or upload an Asset` : `Select an Asset`;
   const handleDialogOpenClick = useCallback(
     async (type?: string) => {
       let expression = type ? `resource_type:${type}` : ``;
-      expression = `${expression} ${searchFilter}`;
+      const hasBooleanOperator = searchFilterTemplate.match(/^\s*(AND|OR).*$/);
+      const defaultBooleanOperator = hasBooleanOperator ? '' : 'AND';
+      const searchFilter = evaluator(searchFilterTemplate, binding);
+      expression = `${expression} ${defaultBooleanOperator} ${searchFilter}`;
 
       const result: MediaLibraryResult | undefined = await sdk.dialogs.openCurrentApp({
         position: 'center',
@@ -51,14 +70,16 @@ export function AssetPickerButton({ onNewAssetsAdded, isDisabled }: Props) {
   );
   if (resourceType === 'image') {
     return (
-      <Button
-        startIcon={<img src={logo} alt="Logo" css={styles.logo} />}
-        variant="secondary"
-        size="small"
-        onClick={() => handleDialogOpenClick('image')}
-        isDisabled={isDisabled}>
-        Select an Image
-      </Button>
+      <>
+        <Button
+          startIcon={<img src={logo} alt="Logo" css={styles.logo} />}
+          variant="secondary"
+          size="small"
+          onClick={() => handleDialogOpenClick('image')}
+          isDisabled={isDisabled}>
+          Select an Image
+        </Button>
+      </>
     );
   } else if (resourceType === 'video') {
     return (
