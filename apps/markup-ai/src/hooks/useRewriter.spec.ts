@@ -12,7 +12,14 @@ vi.mock('./useFieldChecks', () => ({
         fieldId: 'fieldA',
         originalValue: 'orig',
         isChecking: false,
-        checkResponse: { rewrite: 'new text' },
+        checkResponse: {
+          // Minimal rewrite response shape for accept suggestion
+          rewrite: {
+            text: 'new text',
+            // scores are not used by the hook in this test, provide minimal shape
+            scores: { quality: { score: 0 }, analysis: {} },
+          },
+        },
         error: null,
         lastUpdated: Date.now(),
         hasRewriteResult: false,

@@ -4,7 +4,7 @@ import Dialog from './Dialog';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { mockSdk } from '../../../test/mocks/mockSdk';
 import * as rewriterService from '../../services/rewriterService';
-import { Status } from '@markupai/toolkit';
+import { IssueCategory, Status } from '@markupai/toolkit';
 
 // Mock the SDK
 vi.mock('@contentful/react-apps-toolkit', () => ({
@@ -19,56 +19,129 @@ describe('Dialog', () => {
       originalValue: 'Original text',
       isChecking: false,
       checkResponse: {
-        rewrite: 'Improved text',
-        scores: {
-          quality: {
-            score: 75,
-            grammar: { score: 80, issues: 0 },
-            style_guide: { score: 70, issues: 0 },
-            terminology: { score: 0, issues: 0 },
+        workflow: {
+          id: 'rewrites-3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          type: 'rewrites',
+          api_version: '1.0.0',
+          generated_at: '2025-01-15T15:12:45Z',
+          status: Status.Completed,
+          webhook_response: {
+            url: 'https://api.example.com/webhook',
+            status_code: 200,
           },
-          analysis: {
-            clarity: {
-              score: 60,
-              word_count: 0,
-              sentence_count: 0,
-              average_sentence_length: 0,
-              flesch_reading_ease: 0,
-              vocabulary_complexity: 0,
-              sentence_complexity: 0,
+        },
+        config: {
+          dialect: 'american_english',
+          style_guide: {
+            style_guide_type: 'chicago',
+            style_guide_id: 'sg-7b8c9d0e-1f2a-3b4c-5d6e-7f8a9b0c1d2e',
+          },
+          tone: 'academic',
+        },
+        original: {
+          issues: [
+            {
+              original: 'recieve',
+              position: {
+                start_index: 42,
+              },
+              subcategory: 'spelling',
+              suggestion: 'receive',
+              category: IssueCategory.Grammar,
             },
-            tone: { score: 65, informality: 0, liveliness: 0, informality_alignment: 0, liveliness_alignment: 0 },
-          },
-        },
-        rewrite_scores: {
-          quality: {
-            score: 90,
-            grammar: { score: 95, issues: 0 },
-            style_guide: { score: 88, issues: 0 },
-            terminology: { score: 0, issues: 0 },
-          },
-          analysis: {
-            clarity: {
-              score: 85,
-              word_count: 0,
-              sentence_count: 0,
-              average_sentence_length: 0,
-              flesch_reading_ease: 0,
-              vocabulary_complexity: 0,
-              sentence_complexity: 0,
+            {
+              original: 'data',
+              position: {
+                start_index: 156,
+              },
+              subcategory: 'word_choice',
+              suggestion: 'information',
+              category: IssueCategory.Grammar,
             },
-            tone: { score: 80, informality: 0, liveliness: 0, informality_alignment: 0, liveliness_alignment: 0 },
+            {
+              original: 'ok',
+              position: {
+                start_index: 203,
+              },
+              subcategory: 'capitalization',
+              suggestion: 'OK',
+              category: IssueCategory.Consistency,
+            },
+          ],
+          scores: {
+            quality: {
+              score: 75,
+              grammar: {
+                score: 85,
+                issues: 2,
+              },
+              consistency: {
+                score: 70,
+                issues: 3,
+              },
+              terminology: {
+                score: 95,
+                issues: 1,
+              },
+            },
+            analysis: {
+              clarity: {
+                score: 68,
+                flesch_reading_ease: 45.2,
+                sentence_complexity: 42.5,
+                vocabulary_complexity: 38.7,
+                sentence_count: 4,
+                word_count: 52,
+                average_sentence_length: 13,
+              },
+              tone: {
+                score: 72,
+                informality: 35.8,
+                liveliness: 28.4,
+                informality_alignment: 112.5,
+                liveliness_alignment: 94.3,
+              },
+            },
           },
         },
-        issues: [],
-        status: Status.Completed,
-        style_guide_id: 'default',
-        check_options: {
-          style_guide: { style_guide_type: 'default', style_guide_id: 'default' },
-          dialect: 'en-US',
-          tone: 'neutral',
+        rewrite: {
+          text: 'The updated document maintains clarity while following style guidelines. Information flows logically from introduction through supporting details. Technical terms are defined appropriately. The conclusion summarizes key points effectively.',
+          scores: {
+            quality: {
+              score: 98,
+              grammar: {
+                score: 100,
+                issues: 0,
+              },
+              consistency: {
+                score: 95,
+                issues: 1,
+              },
+              terminology: {
+                score: 100,
+                issues: 0,
+              },
+            },
+            analysis: {
+              clarity: {
+                score: 82,
+                flesch_reading_ease: 52.8,
+                sentence_complexity: 35.2,
+                vocabulary_complexity: 41.3,
+                sentence_count: 4,
+                word_count: 48,
+                average_sentence_length: 12,
+              },
+              tone: {
+                score: 88,
+                informality: 32.1,
+                liveliness: 30.6,
+                informality_alignment: 102.4,
+                liveliness_alignment: 98.7,
+              },
+            },
+          },
         },
-        workflow_id: 'dummy-workflow-id',
       },
       error: null,
       lastUpdated: Date.now(),
@@ -140,56 +213,129 @@ describe('Dialog', () => {
       originalValue: '',
       isChecking: false,
       checkResponse: {
-        rewrite: '',
-        scores: {
-          quality: {
-            score: 0,
-            grammar: { score: 0, issues: 0 },
-            style_guide: { score: 0, issues: 0 },
-            terminology: { score: 0, issues: 0 },
+        workflow: {
+          id: 'rewrites-3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          type: 'rewrites',
+          api_version: '1.0.0',
+          generated_at: '2025-01-15T15:12:45Z',
+          status: Status.Completed,
+          webhook_response: {
+            url: 'https://api.example.com/webhook',
+            status_code: 200,
           },
-          analysis: {
-            clarity: {
-              score: 0,
-              word_count: 0,
-              sentence_count: 0,
-              average_sentence_length: 0,
-              flesch_reading_ease: 0,
-              vocabulary_complexity: 0,
-              sentence_complexity: 0,
+        },
+        config: {
+          dialect: 'american_english',
+          style_guide: {
+            style_guide_type: 'chicago',
+            style_guide_id: 'sg-7b8c9d0e-1f2a-3b4c-5d6e-7f8a9b0c1d2e',
+          },
+          tone: 'academic',
+        },
+        original: {
+          issues: [
+            {
+              original: 'recieve',
+              position: {
+                start_index: 42,
+              },
+              subcategory: 'spelling',
+              suggestion: 'receive',
+              category: IssueCategory.Grammar,
             },
-            tone: { score: 0, informality: 0, liveliness: 0, informality_alignment: 0, liveliness_alignment: 0 },
-          },
-        },
-        rewrite_scores: {
-          quality: {
-            score: 0,
-            grammar: { score: 0, issues: 0 },
-            style_guide: { score: 0, issues: 0 },
-            terminology: { score: 0, issues: 0 },
-          },
-          analysis: {
-            clarity: {
-              score: 0,
-              word_count: 0,
-              sentence_count: 0,
-              average_sentence_length: 0,
-              flesch_reading_ease: 0,
-              vocabulary_complexity: 0,
-              sentence_complexity: 0,
+            {
+              original: 'data',
+              position: {
+                start_index: 156,
+              },
+              subcategory: 'word_choice',
+              suggestion: 'information',
+              category: IssueCategory.Grammar,
             },
-            tone: { score: 0, informality: 0, liveliness: 0, informality_alignment: 0, liveliness_alignment: 0 },
+            {
+              original: 'ok',
+              position: {
+                start_index: 203,
+              },
+              subcategory: 'capitalization',
+              suggestion: 'OK',
+              category: IssueCategory.Consistency,
+            },
+          ],
+          scores: {
+            quality: {
+              score: 75,
+              grammar: {
+                score: 85,
+                issues: 2,
+              },
+              consistency: {
+                score: 70,
+                issues: 3,
+              },
+              terminology: {
+                score: 95,
+                issues: 1,
+              },
+            },
+            analysis: {
+              clarity: {
+                score: 68,
+                flesch_reading_ease: 45.2,
+                sentence_complexity: 42.5,
+                vocabulary_complexity: 38.7,
+                sentence_count: 4,
+                word_count: 52,
+                average_sentence_length: 13,
+              },
+              tone: {
+                score: 72,
+                informality: 35.8,
+                liveliness: 28.4,
+                informality_alignment: 112.5,
+                liveliness_alignment: 94.3,
+              },
+            },
           },
         },
-        issues: [],
-        status: Status.Completed,
-        style_guide_id: 'default',
-        check_options: {
-          style_guide: { style_guide_type: 'default', style_guide_id: 'default' },
-          dialect: 'en-US',
-          tone: 'neutral',
+        rewrite: {
+          text: '',
+          scores: {
+            quality: {
+              score: 98,
+              grammar: {
+                score: 100,
+                issues: 0,
+              },
+              consistency: {
+                score: 95,
+                issues: 1,
+              },
+              terminology: {
+                score: 100,
+                issues: 0,
+              },
+            },
+            analysis: {
+              clarity: {
+                score: 82,
+                flesch_reading_ease: 52.8,
+                sentence_complexity: 35.2,
+                vocabulary_complexity: 41.3,
+                sentence_count: 4,
+                word_count: 48,
+                average_sentence_length: 12,
+              },
+              tone: {
+                score: 88,
+                informality: 32.1,
+                liveliness: 30.6,
+                informality_alignment: 102.4,
+                liveliness_alignment: 98.7,
+              },
+            },
+          },
         },
-        workflow_id: 'dummy-workflow-id',
       },
       error: null,
       lastUpdated: Date.now(),

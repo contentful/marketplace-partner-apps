@@ -1,12 +1,12 @@
-import { StyleAnalysisRewriteResp, StyleAnalysisSuccessResp, StyleScores } from '@markupai/toolkit';
+import { StyleScores } from '@markupai/toolkit';
 
-export type MetricKey = 'clarity' | 'grammar' | 'style_guide' | 'tone' | 'terminology';
+export type MetricKey = 'clarity' | 'grammar' | 'consistency' | 'tone' | 'terminology';
 
-export const METRIC_ORDER: readonly MetricKey[] = ['grammar', 'style_guide', 'terminology', 'clarity', 'tone'] as const;
+export const METRIC_ORDER: readonly MetricKey[] = ['grammar', 'consistency', 'terminology', 'clarity', 'tone'] as const;
 
 export const METRIC_LABEL_KEYS: Record<MetricKey, string> = {
   grammar: 'grammar',
-  style_guide: 'style_guide',
+  consistency: 'consistency',
   terminology: 'terminology',
   clarity: 'clarity',
   tone: 'tone',
@@ -16,7 +16,7 @@ export type MetricDataMap = {
   clarity: StyleScores['analysis']['clarity'];
   tone: StyleScores['analysis']['tone'];
   grammar: StyleScores['quality']['grammar'];
-  style_guide: StyleScores['quality']['style_guide'];
+  consistency: StyleScores['quality']['consistency'];
   terminology: StyleScores['quality']['terminology'];
 };
 
@@ -49,9 +49,7 @@ export function getMetricDetails<K extends MetricKey>(
   }
 }
 
-export type AnyScores = StyleAnalysisSuccessResp['scores'] | StyleAnalysisRewriteResp['rewrite_scores'];
-
-export function getMetricScore(scores: AnyScores | undefined, key: MetricKey): number {
+export function getMetricScore(scores: StyleScores | undefined, key: MetricKey): number {
   if (!scores) return 0;
   switch (key) {
     case 'clarity':
@@ -60,8 +58,8 @@ export function getMetricScore(scores: AnyScores | undefined, key: MetricKey): n
       return Number(scores.analysis?.tone?.score ?? 0);
     case 'grammar':
       return Number(scores.quality?.grammar?.score ?? 0);
-    case 'style_guide':
-      return Number(scores.quality?.style_guide?.score ?? 0);
+    case 'consistency':
+      return Number(scores.quality?.consistency?.score ?? 0);
     case 'terminology':
       return Number(scores.quality?.terminology?.score ?? 0);
     default:
@@ -69,13 +67,13 @@ export function getMetricScore(scores: AnyScores | undefined, key: MetricKey): n
   }
 }
 
-export function getMetricIssues(scores: AnyScores | undefined, key: MetricKey): number | undefined {
+export function getMetricIssues(scores: StyleScores | undefined, key: MetricKey): number | undefined {
   if (!scores) return undefined;
   switch (key) {
     case 'grammar':
       return scores.quality?.grammar?.issues;
-    case 'style_guide':
-      return scores.quality?.style_guide?.issues;
+    case 'consistency':
+      return scores.quality?.consistency?.issues;
     case 'terminology':
       return scores.quality?.terminology?.issues;
     default:
@@ -84,7 +82,7 @@ export function getMetricIssues(scores: AnyScores | undefined, key: MetricKey): 
 }
 
 export function getMetricDataSource(
-  scores: AnyScores | undefined,
+  scores: StyleScores | undefined,
   key: MetricKey,
 ): MetricDataMap[MetricKey] | undefined {
   if (!scores) return undefined;
@@ -95,8 +93,8 @@ export function getMetricDataSource(
       return scores.analysis?.tone as MetricDataMap['tone'];
     case 'grammar':
       return scores.quality?.grammar as MetricDataMap['grammar'];
-    case 'style_guide':
-      return scores.quality?.style_guide as MetricDataMap['style_guide'];
+    case 'consistency':
+      return scores.quality?.consistency as MetricDataMap['consistency'];
     case 'terminology':
       return scores.quality?.terminology as MetricDataMap['terminology'];
     default:

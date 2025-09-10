@@ -16,47 +16,104 @@ vi.mock('@contentful/react-apps-toolkit', async () => {
   };
 });
 
-const mockScores = {
-  quality: {
-    score: 85,
-    grammar: { score: 90, issues: 1 },
-    style_guide: { score: 80, issues: 2 },
-    terminology: { score: 0, issues: 0 },
-  },
-  analysis: {
-    clarity: {
-      score: 70,
-      word_count: 10,
-      sentence_count: 2,
-      average_sentence_length: 5,
-      flesch_reading_ease: 80,
-      vocabulary_complexity: 0.5,
-      sentence_complexity: 1.0,
-    },
-    tone: { score: 60, informality: 0.3, liveliness: 0.4 },
-  },
-};
-
 const mockCheckResponse: StyleAnalysisSuccessResp = {
-  status: Status.Completed,
-  style_guide_id: '123',
-  workflow_id: 'dummy-workflow-id',
-  scores: mockScores as unknown as StyleAnalysisSuccessResp['scores'],
-  issues: [
-    {
-      original: 'string',
-      char_index: 0,
-      subcategory: 'sva_pronoun',
-      category: IssueCategory.Grammar,
+  workflow: {
+    id: 'chk-2b5f8d3a-9c7e-4f2b-a8d1-6e9c3f7b4a2d',
+    type: 'checks',
+    api_version: '1.0.0',
+    generated_at: '2025-01-15T14:22:33Z',
+    status: Status.Completed,
+    webhook_response: {
+      url: 'https://api.example.com/webhook',
+      status_code: 200,
     },
-  ],
-  check_options: {
+  },
+  config: {
+    dialect: 'canadian_english',
     style_guide: {
       style_guide_type: 'ap',
-      style_guide_id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+      style_guide_id: 'sg-8d4e5f6a-2b3c-4d5e-6f7a-8b9c0d1e2f3a',
     },
-    dialect: 'american_english',
-    tone: 'academic',
+    tone: 'conversational',
+  },
+  original: {
+    issues: [
+      {
+        original: 'therefor',
+        position: {
+          start_index: 89,
+        },
+        subcategory: 'spelling',
+        category: IssueCategory.Grammar,
+      },
+      {
+        original: 'leverage',
+        position: {
+          start_index: 156,
+        },
+        subcategory: 'vocabulary',
+        category: IssueCategory.Grammar,
+      },
+      {
+        original: 'going forward',
+        position: {
+          start_index: 234,
+        },
+        subcategory: 'word_choice',
+        category: IssueCategory.Tone,
+      },
+      {
+        original: 'email',
+        position: {
+          start_index: 312,
+        },
+        subcategory: 'punctuation',
+        category: IssueCategory.Consistency,
+      },
+      {
+        original: 'towards',
+        position: {
+          start_index: 405,
+        },
+        subcategory: 'word_choice',
+        category: IssueCategory.Consistency,
+      },
+    ],
+    scores: {
+      quality: {
+        score: 72,
+        grammar: {
+          score: 95,
+          issues: 1,
+        },
+        consistency: {
+          score: 80,
+          issues: 2,
+        },
+        terminology: {
+          score: 100,
+          issues: 0,
+        },
+      },
+      analysis: {
+        clarity: {
+          score: 64,
+          flesch_reading_ease: 51.4,
+          sentence_complexity: 38.9,
+          vocabulary_complexity: 45.6,
+          sentence_count: 6,
+          word_count: 112,
+          average_sentence_length: 18.7,
+        },
+        tone: {
+          score: 78,
+          informality: 38.2,
+          liveliness: 33.9,
+          informality_alignment: 115.8,
+          liveliness_alignment: 106.4,
+        },
+      },
+    },
   },
 };
 
@@ -121,7 +178,8 @@ describe('FieldCheckCard', () => {
       />,
     );
     expect(screen.getByTestId('field-name')).toHaveTextContent('Test Field');
-    expect(screen.getByTestId('field-score')).toHaveTextContent('85');
+    // quality score comes from original.scores.quality.score in the new structure
+    expect(screen.getByTestId('field-score')).toHaveTextContent('72');
   });
 
   it('shows right chevron when collapsed', () => {
@@ -183,7 +241,7 @@ describe('FieldCheckCard', () => {
     expect(screen.getByText(/Analysis/i)).toBeInTheDocument();
     expect(screen.getByText(/Clarity/i)).toBeInTheDocument();
     expect(screen.getByText(/Grammar/i)).toBeInTheDocument();
-    expect(screen.getByText(/Style Guide/i)).toBeInTheDocument();
+    expect(screen.getByText(/Consistency/i)).toBeInTheDocument();
     expect(screen.getByText(/Tone/i)).toBeInTheDocument();
   });
 
@@ -222,7 +280,13 @@ describe('FieldCheckCard', () => {
       ...mockFieldCheck,
       checkResponse: {
         ...mockFieldCheck.checkResponse,
-        scores: { ...mockScores, quality: { ...mockScores.quality, score: 0 } },
+        original: {
+          ...mockCheckResponse.original,
+          scores: {
+            ...mockCheckResponse.original.scores,
+            quality: { ...mockCheckResponse.original.scores.quality, score: 0 },
+          },
+        },
       } as unknown as FieldCheck['checkResponse'],
     };
     renderWithSDK(

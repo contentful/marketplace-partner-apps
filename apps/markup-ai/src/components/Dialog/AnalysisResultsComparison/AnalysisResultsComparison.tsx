@@ -1,13 +1,13 @@
 import React from 'react';
 import { Container } from './AnalysisResultsComparison.styles';
 import { ComparisonCard } from '../ComparisonCard/ComparisonCard';
-import { StyleAnalysisRewriteResp, StyleAnalysisSuccessResp } from '@markupai/toolkit';
+import { StyleScores } from '@markupai/toolkit';
 import { useTranslation } from '../../../contexts/LocalizationContext';
 import { METRIC_ORDER, METRIC_LABEL_KEYS, getMetricScore, MetricKey } from '../../../constants/metrics';
 
 interface AnalysisResultsComparisonProps {
-  initial: StyleAnalysisSuccessResp['scores'];
-  improved: StyleAnalysisRewriteResp['rewrite_scores'];
+  initial: StyleScores;
+  improved: StyleScores;
 }
 
 export const AnalysisResultsComparison: React.FC<AnalysisResultsComparisonProps> = ({ initial, improved }) => {

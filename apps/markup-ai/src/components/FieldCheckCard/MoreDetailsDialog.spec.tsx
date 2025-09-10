@@ -51,11 +51,22 @@ describe('MoreDetailsDialog', () => {
       parameters: {
         invocation: {
           checkResponse: {
-            scores: mockScores,
-            check_options: {
-              style_guide: { style_guide_type: 'ap' },
+            workflow: {
+              id: 'chk-1',
+              type: 'checks',
+              api_version: '1.0.0',
+              generated_at: '2025-01-15T14:22:33Z',
+              status: 'completed',
+              webhook_response: { url: 'https://api.example.com/webhook', status_code: 200 },
+            },
+            config: {
+              style_guide: { style_guide_type: 'ap', style_guide_id: 'sg-1' },
               dialect: 'american_english',
-              tone: 'formal',
+              tone: 'professional',
+            },
+            original: {
+              issues: [],
+              scores: mockScores,
             },
           },
         },
@@ -64,14 +75,15 @@ describe('MoreDetailsDialog', () => {
     await renderWithLocalization(<MoreDetailsDialog />);
     expect(screen.getByText('Clarity')).toBeInTheDocument();
     expect(screen.getByText('Grammar')).toBeInTheDocument();
-    expect(screen.getAllByText('Style Guide')).toHaveLength(2); // One in config, one in metrics
+    expect(screen.getAllByText('Style Guide')).toHaveLength(1);
+    expect(screen.getAllByText('Consistency')).toHaveLength(1);
     expect(screen.getAllByText('Tone')).toHaveLength(2); // One in config, one in metrics
     expect(screen.getByText('Terminology')).toBeInTheDocument();
 
     // Check Analysis Configuration section (no title, just the values)
     expect(screen.getByText('AP')).toBeInTheDocument();
     expect(screen.getByText('American English')).toBeInTheDocument();
-    expect(screen.getByText('Formal')).toBeInTheDocument();
+    expect(screen.getByText('Professional')).toBeInTheDocument();
 
     // No section title label anymore
   });
@@ -81,19 +93,30 @@ describe('MoreDetailsDialog', () => {
       parameters: {
         invocation: {
           checkResponse: {
-            scores: {
-              quality: {
-                score: 0,
-                grammar: { score: 50, issues: 0 },
-                style_guide: { score: 0, issues: 0 },
-                terminology: { score: 0, issues: 0 },
-              },
-              analysis: {},
+            workflow: {
+              id: 'chk-2',
+              type: 'checks',
+              api_version: '1.0.0',
+              generated_at: '2025-01-15T14:22:33Z',
+              status: 'completed',
+              webhook_response: { url: 'https://api.example.com/webhook', status_code: 200 },
             },
-            check_options: {
-              style_guide: { style_guide_type: undefined },
+            config: {
+              style_guide: { style_guide_type: undefined, style_guide_id: undefined },
               dialect: undefined,
               tone: undefined,
+            },
+            original: {
+              issues: [],
+              scores: {
+                quality: {
+                  score: 0,
+                  grammar: { score: 50, issues: 0 },
+                  style_guide: { score: 0, issues: 0 },
+                  terminology: { score: 0, issues: 0 },
+                },
+                analysis: {},
+              },
             },
           },
         },

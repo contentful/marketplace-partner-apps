@@ -112,11 +112,11 @@ const Dialog = () => {
     );
   } else if (result) {
     if (result.checkResponse) {
-      const improvedScores = 'rewrite_scores' in result.checkResponse ? result.checkResponse.rewrite_scores : null;
+      const improvedScores = 'rewrite' in result.checkResponse ? result.checkResponse.rewrite.scores : null;
       console.log('Dialog - improvedScores:', improvedScores);
-      console.log('workflow_id:', result.checkResponse.workflow_id);
+      console.log('workflow_id:', result.checkResponse.workflow.id);
       if (improvedScores) {
-        const initialScores = 'scores' in result.checkResponse ? result.checkResponse.scores : null;
+        const initialScores = 'original' in result.checkResponse ? result.checkResponse.original.scores : null;
         content = (
           <>
             <DialogHeader>
@@ -126,7 +126,7 @@ const Dialog = () => {
             {initialScores && <AnalysisResultsComparison initial={initialScores} improved={improvedScores} />}
             <ContentDiff
               original={parameters.original}
-              improved={'rewrite' in result.checkResponse ? result.checkResponse.rewrite : ''}
+              improved={'rewrite' in result.checkResponse ? result.checkResponse.rewrite.text : ''}
               originalScore={parameters.originalScore ?? 0}
               improvedScore={improvedScores.quality.score}
               previewFormat={parameters.previewFormat ?? 'markdown'}
@@ -153,9 +153,7 @@ const Dialog = () => {
             disabled={loading || !!error || !result}
             showRewriteAgain={!!result && !loading && !error}
             workflowId={
-              result?.checkResponse && 'workflow_id' in result.checkResponse
-                ? result.checkResponse.workflow_id
-                : undefined
+              result?.checkResponse && 'workflow' in result.checkResponse ? result.checkResponse.workflow.id : undefined
             }
           />
         </ActionsWrapper>

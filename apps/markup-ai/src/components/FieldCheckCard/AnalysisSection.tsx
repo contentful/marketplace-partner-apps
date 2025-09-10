@@ -10,13 +10,13 @@ import {
   BarFill,
   Title,
 } from './AnalysisSection.styles';
-import { StyleAnalysisSuccessResp } from '@markupai/toolkit';
+import { StyleScores } from '@markupai/toolkit';
 import { getScoreColorString, formatScoreForDisplay } from '../../utils/scoreColors';
 import { useTranslation } from '../../contexts/LocalizationContext';
 import { METRIC_ORDER, METRIC_LABEL_KEYS, getMetricScore as readScore, MetricKey } from '../../constants/metrics';
 
 interface AnalysisSectionProps {
-  scores?: StyleAnalysisSuccessResp['scores'];
+  scores?: StyleScores;
   onMoreDetails?: () => void; // Add this prop
 }
 

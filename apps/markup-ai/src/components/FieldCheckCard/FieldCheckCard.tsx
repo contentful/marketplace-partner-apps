@@ -74,14 +74,17 @@ export const FieldCheckCard: React.FC<FieldCheckCardProps> = ({
           {isExpanded ? <ChevronDownIcon size="small" /> : <ChevronRightIcon size="small" />}
         </ChevronWrapper>
         <FieldName data-testid="field-name">{fieldName}</FieldName>
-        <ScoreBox data-testid="field-score" background={getScoreColor(checkResponse.scores.quality.score).background}>
-          {formatScoreForDisplay(checkResponse.scores.quality.score)}
+        <ScoreBox
+          data-testid="field-score"
+          background={getScoreColor(checkResponse.original.scores.quality.score).background}
+        >
+          {formatScoreForDisplay(checkResponse.original.scores.quality.score)}
         </ScoreBox>
       </HeaderFlex>
       {isExpanded && (
         <>
           <AnalysisSection
-            scores={checkResponse.scores}
+            scores={checkResponse.original.scores}
             onMoreDetails={handleMoreDetails}
             data-testid="analysis-section"
           />

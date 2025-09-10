@@ -26,7 +26,7 @@ import {
   BottomActions,
   CopyWorkflowIdButton,
 } from './MoreDetailsDialog.styles';
-import { StyleAnalysisSuccessResp, StyleAnalysisRewriteResp } from '@markupai/toolkit';
+import { StyleAnalysisSuccessResp, StyleAnalysisRewriteResp, StyleScores } from '@markupai/toolkit';
 import { useTranslation } from '../../contexts/LocalizationContext';
 import { CopyIcon, CheckCircleIcon } from '@contentful/f36-icons';
 
@@ -39,7 +39,6 @@ import {
   getMetricIssues,
   getMetricScore,
   MetricDataMap,
-  AnyScores,
   MetricKey,
 } from '../../constants/metrics';
 
@@ -52,7 +51,8 @@ type TranslatableConfigKey = (typeof CONFIG_KEYS)[keyof typeof CONFIG_KEYS];
 
 const CLARITY_KEY: MetricKey = 'clarity';
 const TONE_KEY: MetricKey = 'tone';
-const ISSUE_METRIC_KEYS: ReadonlySet<MetricKey> = new Set<MetricKey>(['grammar', 'style_guide', 'terminology']);
+
+const ISSUE_METRIC_KEYS: ReadonlySet<MetricKey> = new Set<MetricKey>(['grammar', 'consistency', 'terminology']);
 
 export const MoreDetailsDialog: React.FC = () => {
   useAutoResizer();
@@ -63,11 +63,11 @@ export const MoreDetailsDialog: React.FC = () => {
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
 
-  const scores = useMemo<AnyScores | undefined>(
+  const scores = useMemo<StyleScores | undefined>(
     () =>
-      'rewrite_scores' in checkResponse
-        ? (checkResponse as StyleAnalysisRewriteResp).rewrite_scores
-        : (checkResponse as StyleAnalysisSuccessResp).scores,
+      'rewrite' in checkResponse
+        ? (checkResponse as StyleAnalysisRewriteResp).rewrite.scores
+        : (checkResponse as StyleAnalysisSuccessResp).original.scores,
     [checkResponse],
   );
 
@@ -114,22 +114,19 @@ export const MoreDetailsDialog: React.FC = () => {
               <AnalysisConfigItem>
                 <AnalysisConfigLabel>{t('style_guide_type')}</AnalysisConfigLabel>
                 <AnalysisConfigValue>
-                  {getConfigDisplayValue(
-                    CONFIG_KEYS.style_guide,
-                    checkResponse.check_options.style_guide.style_guide_type,
-                  )}
+                  {getConfigDisplayValue(CONFIG_KEYS.style_guide, checkResponse.config.style_guide.style_guide_type)}
                 </AnalysisConfigValue>
               </AnalysisConfigItem>
               <AnalysisConfigItem>
                 <AnalysisConfigLabel>{t('dialect')}</AnalysisConfigLabel>
                 <AnalysisConfigValue>
-                  {getConfigDisplayValue(CONFIG_KEYS.dialect, checkResponse.check_options.dialect)}
+                  {getConfigDisplayValue(CONFIG_KEYS.dialect, checkResponse.config.dialect)}
                 </AnalysisConfigValue>
               </AnalysisConfigItem>
               <AnalysisConfigItem>
                 <AnalysisConfigLabel>{t('tone')}</AnalysisConfigLabel>
                 <AnalysisConfigValue>
-                  {getConfigDisplayValue(CONFIG_KEYS.tone, checkResponse.check_options.tone)}
+                  {getConfigDisplayValue(CONFIG_KEYS.tone, checkResponse.config.tone)}
                 </AnalysisConfigValue>
               </AnalysisConfigItem>
             </AnalysisConfigGrid>
@@ -194,10 +191,10 @@ export const MoreDetailsDialog: React.FC = () => {
           );
         })}
         <BottomActions>
-          {'workflow_id' in checkResponse && checkResponse.workflow_id && (
+          {'workflow' in checkResponse && checkResponse.workflow.id && (
             <CopyWorkflowIdButton
               onClick={async () => {
-                const id = checkResponse.workflow_id!;
+                const id = checkResponse.workflow.id!;
                 try {
                   await navigator.clipboard.writeText(id);
                 } catch {

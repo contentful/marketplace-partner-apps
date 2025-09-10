@@ -41,7 +41,7 @@ const Sidebar: React.FC = () => {
     const fieldCheck = fieldChecks[fieldId];
     if (!fieldCheck) return;
     const originalAnalysisResult = fieldCheck.checkResponse;
-    const originalScore = originalAnalysisResult?.scores?.quality.score ?? null;
+    const originalScore = originalAnalysisResult?.original.scores?.quality.score ?? null;
     const field = sdk.entry.fields[fieldId];
     const previewFormat = field?.type === 'RichText' ? 'html' : 'markdown';
     const result = await sdk.dialogs.openCurrent({

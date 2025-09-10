@@ -103,7 +103,7 @@ export const useRewriter = (sdk: SidebarAppSDK) => {
       cooldownFieldsRef.current.add(fieldId);
 
       try {
-        await setFieldValue(fieldId, rewriteResponse.rewrite);
+        await setFieldValue(fieldId, rewriteResponse.rewrite.text);
         removeCheck(fieldId);
 
         // Set timeout to remove field from cooldown after COOLDOWN_DURATION

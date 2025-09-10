@@ -15,12 +15,31 @@ vi.mock('../../hooks/useRewriter', () => ({
   useRewriter: vi.fn(),
 }));
 
-const mockScores = {
-  quality: { score: 85 },
-  clarity: { score: 70 },
-  grammar: { score: 90 },
-  style_guide: { score: 80 },
-  tone: { score: 60 },
+const mockOriginalScores = {
+  quality: {
+    score: 72,
+    grammar: { score: 90, issues: 1 },
+    consistency: { score: 80, issues: 2 },
+    terminology: { score: 100, issues: 0 },
+  },
+  analysis: {
+    clarity: {
+      score: 64,
+      flesch_reading_ease: 51.4,
+      sentence_complexity: 38.9,
+      vocabulary_complexity: 45.6,
+      sentence_count: 6,
+      word_count: 112,
+      average_sentence_length: 18.7,
+    },
+    tone: {
+      score: 78,
+      informality: 38.2,
+      liveliness: 33.9,
+      informality_alignment: 115.8,
+      liveliness_alignment: 106.4,
+    },
+  },
 };
 
 const mockFieldCheck = {
@@ -28,8 +47,23 @@ const mockFieldCheck = {
   originalValue: 'Original test content',
   isChecking: false,
   checkResponse: {
-    suggestedValue: 'Improved test content',
-    scores: mockScores,
+    workflow: {
+      id: 'chk-1',
+      type: 'checks',
+      api_version: '1.0.0',
+      generated_at: '2025-01-15T14:22:33Z',
+      status: 'completed',
+      webhook_response: { url: 'https://api.example.com/webhook', status_code: 200 },
+    },
+    config: {
+      dialect: 'american_english',
+      style_guide: { style_guide_type: 'ap', style_guide_id: 'sg-1' },
+      tone: 'neutral',
+    },
+    original: {
+      issues: [],
+      scores: mockOriginalScores,
+    },
   },
   rewriteResponse: null,
   error: null,
@@ -225,12 +259,12 @@ describe('Sidebar', () => {
       ...mockFieldCheck,
       checkResponse: {
         ...mockFieldCheck.checkResponse,
-        scores: {
-          quality: { score: 0 },
-          clarity: { score: 0 },
-          grammar: { score: 0 },
-          style_guide: { score: 0 },
-          tone: { score: 0 },
+        original: {
+          ...mockFieldCheck.checkResponse.original,
+          scores: {
+            ...mockOriginalScores,
+            quality: { ...mockOriginalScores.quality, score: 0 },
+          },
         },
       },
     };

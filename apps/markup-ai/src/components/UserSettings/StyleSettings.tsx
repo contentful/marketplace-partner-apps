@@ -3,6 +3,7 @@ import { Paragraph, Select, FormControl, Note, Spinner, Button, Text } from '@co
 import styled from '@emotion/styled';
 import { fetchAdminConstants, fetchStyleGuides } from '../../services/apiService';
 import { Constants, StyleGuides } from '@markupai/toolkit';
+import { DEFAULTS } from '../../utils/userSettings';
 
 const Wrapper = styled.div`
   padding: 5px;
@@ -68,6 +69,22 @@ export const StyleSettings: React.FC<StyleSettingsProps> = ({
   const toneOptions = useMemo(() => constants?.tones ?? [], [constants]);
   const styleGuideOptions = useMemo(() => styleGuides ?? [], [styleGuides]);
   const [showErrors, setShowErrors] = useState(false);
+
+  // Ensure a default style guide is selected once options are loaded
+  useEffect(() => {
+    if (!styleGuideOptions || styleGuideOptions.length === 0) return;
+
+    // If current value matches an option exactly, do nothing
+    if (styleGuide && styleGuideOptions.some((sg) => sg.id === styleGuide)) return;
+
+    const preferred =
+      styleGuideOptions.find((sg) => sg.id.toLowerCase() === DEFAULTS.styleGuide) ||
+      styleGuideOptions.find((sg) => sg.name?.toLowerCase() === DEFAULTS.styleGuide);
+
+    if (preferred) {
+      onStyleGuideChange(preferred.id);
+    }
+  }, [styleGuideOptions, styleGuide, onStyleGuideChange]);
 
   if (loading && !constants && !styleGuides) {
     return (

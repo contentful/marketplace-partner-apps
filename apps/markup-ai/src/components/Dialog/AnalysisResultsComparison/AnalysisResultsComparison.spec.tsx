@@ -6,7 +6,7 @@ const mockInitialScores = {
   quality: {
     score: 70,
     grammar: { score: 75, issues: 2 },
-    style_guide: { score: 65, issues: 3 },
+    consistency: { score: 65, issues: 3 },
     terminology: { score: 0, issues: 0 },
   },
   analysis: {
@@ -33,7 +33,7 @@ const mockImprovedScores = {
   quality: {
     score: 85,
     grammar: { score: 90, issues: 1 },
-    style_guide: { score: 85, issues: 2 },
+    consistency: { score: 85, issues: 2 },
     terminology: { score: 0, issues: 0 },
   },
   analysis: {
@@ -61,7 +61,7 @@ describe('AnalysisResultsComparison', () => {
     render(<AnalysisResultsComparison initial={mockInitialScores} improved={mockImprovedScores} />);
     expect(screen.getByText('Clarity')).toBeInTheDocument();
     expect(screen.getByText('Grammar')).toBeInTheDocument();
-    expect(screen.getByText('Style Guide')).toBeInTheDocument();
+    expect(screen.getByText('Consistency')).toBeInTheDocument();
     expect(screen.getByText('Tone')).toBeInTheDocument();
   });
 
@@ -91,7 +91,7 @@ describe('AnalysisResultsComparison', () => {
       quality: {
         score: 0,
         grammar: { score: 0, issues: 0 },
-        style_guide: { score: 0, issues: 0 },
+        consistency: { score: 0, issues: 0 },
         terminology: { score: 0, issues: 0 },
       },
       analysis: {
@@ -111,7 +111,7 @@ describe('AnalysisResultsComparison', () => {
       quality: {
         score: 0,
         grammar: { score: 0, issues: 0 },
-        style_guide: { score: 0, issues: 0 },
+        consistency: { score: 0, issues: 0 },
         terminology: { score: 0, issues: 0 },
       },
       analysis: {

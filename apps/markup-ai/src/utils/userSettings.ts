@@ -12,9 +12,9 @@ const STORAGE_KEYS = {
   styleGuide: 'markupai.styleGuide',
 } as const;
 
-const DEFAULTS = {
+export const DEFAULTS = {
   dialect: 'american_english',
-  tone: 'formal',
+  tone: 'professional',
   styleGuide: 'microsoft',
 } as const;
 
