@@ -89,6 +89,9 @@
     "apps/wix": {
       "release-type": "node"
     },
+    "apps/markup-ai": {
+      "release-type": "node"
+    },
     "apps/xillio-transcreate": {
       "release-type": "node"
     }
