@@ -1,0 +1,80 @@
+{
+  "name": "markup-ai-contentful-app",
+  "version": "0.1.7",
+  "private": false,
+  "type": "module",
+  "dependencies": {
+    "@codemirror/lang-html": "^6.4.9",
+    "@codemirror/lang-markdown": "^6.3.4",
+    "@codemirror/merge": "^6.10.2",
+    "@codemirror/state": "^6.5.2",
+    "@codemirror/view": "^6.38.2",
+    "@contentful/app-sdk": "^4.41.2",
+    "@contentful/f36-components": "4.81.1",
+    "@contentful/f36-tokens": "5.1.0",
+    "@contentful/react-apps-toolkit": "1.2.16",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@markupai/toolkit": "0.2.1",
+    "contentful-management": "11.54.4",
+    "diff": "^8.0.2",
+    "dompurify": "^3.2.6",
+    "i18next": "^25.5.2",
+    "markdown-it": "^14.1.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "install-ci": "npm ci",
+    "build": "npm run type-check && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "format": "prettier . --write",
+    "test": "vitest --run",
+    "test:coverage": "vitest --run --coverage",
+    "type-check": "tsc --noEmit",
+    "create-app-definition": "contentful-app-scripts create-app-definition",
+    "add-locations": "contentful-app-scripts add-locations",
+    "upload": "contentful-app-scripts upload --bundle-dir ./build",
+    "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@contentful/app-scripts": "^2.5.5",
+    "@eslint/js": "^9.35.0",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "^24.3.1",
+    "@types/react": "^18.3.24",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^5.0.2",
+    "@vitest/coverage-v8": "^3.2.4",
+    "cross-env": "10.0.0",
+    "eslint": "^9.35.0",
+    "jsdom": "^26.1.0",
+    "prettier": "3.6.2",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.43.0",
+    "vite": "^7.1.5",
+    "vitest": "^3.2.4"
+  },
+  "homepage": "."
+}
