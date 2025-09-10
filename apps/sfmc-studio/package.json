@@ -23,17 +23,17 @@
     "coverage": "jest --coverage --silent --json --outputFile=jest-output.json"
   },
   "dependencies": {
-    "@ant-design/plots": "^2.6.3",
+    "@ant-design/plots": "^2.6.4",
     "@contentful/app-scripts": "^1.32.2",
-    "@contentful/app-sdk": "^4.41.1",
+    "@contentful/app-sdk": "^4.41.2",
     "@contentful/f36-components": "^4.81.1",
     "@contentful/react-apps-toolkit": "^1.2.16",
-    "@reduxjs/toolkit": "^2.8.2",
-    "antd": "^5.27.1",
+    "@reduxjs/toolkit": "^2.9.0",
+    "antd": "^5.27.3",
     "axios": "^1.11.0",
     "crypto-js": "^4.2.0",
     "currency-symbol-map": "^5.1.0",
-    "dayjs": "^1.11.15",
+    "dayjs": "^1.11.18",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "html-react-parser": "^5.2.6",
@@ -50,10 +50,10 @@
     "redux-mock-store": "^1.5.5",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^3.1.0",
-    "sass": "^1.91.0"
+    "sass": "^1.92.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.28.3",
+    "@babel/core": "^7.28.4",
     "@babel/preset-env": "^7.28.3",
     "@babel/preset-react": "^7.27.1",
     "@babel/preset-typescript": "^7.27.1",
@@ -65,11 +65,11 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/redux-mock-store": "^1.5.0",
-    "babel-jest": "^30.1.1",
-    "eslint": "^9.34.0",
+    "babel-jest": "^30.1.2",
+    "eslint": "^9.35.0",
     "eslint-config-next": "15.5.2",
-    "jest": "30.1.1",
-    "jest-environment-jsdom": "30.1.1",
+    "jest": "30.1.3",
+    "jest-environment-jsdom": "30.1.2",
     "typescript": "^5"
   }
 }
