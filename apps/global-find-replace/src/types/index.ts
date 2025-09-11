@@ -16,6 +16,7 @@ export interface FieldDefinition {
   type: string;
   items?: {
     type: string;
+    linkType?: string;
   };
 }
 

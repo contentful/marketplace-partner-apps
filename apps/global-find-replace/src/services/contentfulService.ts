@@ -133,55 +133,90 @@ export class ContentfulService {
 
     for (const contentTypeId of contentTypeIds) {
       let skip = 0;
-      const limit = 1000;
+      let limit = 1000;
       let hasMore = true;
 
+      const select = this.getSelectFields(contentTypes, contentTypeId);
+
       while (hasMore) {
-        const query: any = { content_type: contentTypeId, limit, skip };
+        const query: any = { content_type: contentTypeId, limit, skip, select };
         if (!searchAllFields) {
           query.query = find;
         }
-        const response = await this.sdk.cma.entry.getMany({
-          query,
-        });
 
-        for (const entry of response.items) {
-          for (const fieldName in entry.fields) {
-            const fieldDef = contentTypes.find((ct) => ct.sys.id === entry.sys.contentType.sys.id)?.fields.find((f: FieldDefinition) => f.id === fieldName);
+        try {
+          const response = await this.sdk.cma.entry.getMany({
+            query,
+          });
 
-            if (!fieldDef || isReferenceField(fieldDef)) continue;
-            const matches = this.buildMatchEntries({
-              entry,
-              field: entry.fields[fieldName],
-              fieldName,
-              fieldDef,
-              contentTypes,
-              locale,
-              find,
-              replace,
-              caseSensitive,
-            });
-
-            if (caseSensitive) {
-              // Filter matches that don't match case
-              const caseSensitiveMatches = matches.filter((match) => {
-                const val = match.original;
-                if (typeof val !== 'string') return false;
-                return val.includes(find); // This will do a case-sensitive match
-              });
-              allMatches.push(...caseSensitiveMatches);
-            } else {
-              allMatches.push(...matches);
-            }
+          allMatches.push(...this.processEntries(response, contentTypes, locale, find, replace, caseSensitive));
+          skip += limit;
+          hasMore = response.items.length === limit;
+        } catch (error: any) {
+          if (error.message.includes('Response size too big') && limit > 75) {
+            limit = limit / 2;
+          } else {
+            throw error;
           }
         }
-
-        skip += limit;
-        hasMore = response.items.length === limit;
       }
     }
 
     return allMatches;
+  }
+
+  private getSelectFields(contentTypes: ContentType[], contentTypeId: string): string {
+    const select = ['sys'];
+
+    const contentType = contentTypes.find((ct) => ct.sys.id === contentTypeId);
+    if (!contentType) return select.join(',');
+
+    const validFieldTypes = ['Integer', 'Number', 'Boolean', 'Date', 'Object', 'RichText', 'Text', 'Symbol', 'Location'];
+
+    for (const field of contentType.fields) {
+      if (validFieldTypes.includes(field.type) || (field.type === 'Array' && field.items?.linkType !== 'Asset' && field.items?.linkType !== 'Entry')) {
+        select.push(`fields.${field.id}`);
+      }
+    }
+
+    return select.join(',');
+  }
+
+  private processEntries(response: any, contentTypes: ContentType[], locale: string, find: string, replace: string, caseSensitive: boolean): MatchField[] {
+    const results: MatchField[] = [];
+
+    for (const entry of response.items) {
+      for (const fieldName in entry.fields) {
+        const fieldDef = contentTypes.find((ct) => ct.sys.id === entry.sys.contentType.sys.id)?.fields.find((f: FieldDefinition) => f.id === fieldName);
+
+        if (!fieldDef || isReferenceField(fieldDef)) continue;
+        const matches = this.buildMatchEntries({
+          entry,
+          field: entry.fields[fieldName],
+          fieldName,
+          fieldDef,
+          contentTypes,
+          locale,
+          find,
+          replace,
+          caseSensitive,
+        });
+
+        if (caseSensitive) {
+          // Filter matches that don't match case
+          const caseSensitiveMatches = matches.filter((match) => {
+            const val = match.original;
+            if (typeof val !== 'string') return false;
+            return val.includes(find); // This will do a case-sensitive match
+          });
+          results.push(...caseSensitiveMatches);
+        } else {
+          results.push(...matches);
+        }
+      }
+    }
+
+    return results;
   }
 
   /**
