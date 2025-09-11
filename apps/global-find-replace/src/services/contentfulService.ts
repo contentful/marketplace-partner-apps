@@ -1,6 +1,8 @@
 import { PageAppSDK } from '@contentful/app-sdk';
-import { ContentType, Entry, MatchField, FieldDefinition, BuildMatchEntriesParams, SearchEntriesParams } from '../types';
+import { ContentType, Entry, MatchField, FieldDefinition, BuildMatchEntriesParams, SearchEntriesParams, ApplyResult, UpdateEntryParams } from '../types';
 import { replaceFieldValueByType, isReferenceField } from '../utils/fieldProcessors';
+import * as Sentry from '@sentry/react';
+import { EntryProps } from 'contentful-management';
 
 export class ContentfulService {
   constructor(private sdk: PageAppSDK) {}
@@ -239,11 +241,52 @@ export class ContentfulService {
   }
 
   /**
-   * Updates a single entry with the new value
+   * Applies field updates to a single entry and publishes
    */
-  async updateEntry(entryUpdates: MatchField[], contentTypes: ContentType[], locale: string, publishAfterUpdate: boolean): Promise<void> {
+  async applyEntryUpdates(entryUpdates: MatchField[], contentTypes: ContentType[], locale: string, publishAfterUpdate: boolean): Promise<ApplyResult> {
     const entryId = entryUpdates[0].entryId;
-    const fullEntry = await this.sdk.cma.entry.get({ entryId });
+    const fullEntry: EntryProps = await this.sdk.cma.entry.get({ entryId });
+    let updatedEntry;
+
+    try {
+      updatedEntry = await this.updateEntry({ entryUpdates, contentTypes, fullEntry, locale, entryId });
+    } catch (err: any) {
+      Sentry.captureException(err);
+      return {
+        updateSuccess: false,
+        publishSuccess: false,
+        errorMessage: 'Update failed',
+      };
+    }
+
+    if (publishAfterUpdate) {
+      try {
+        await this.sdk.cma.entry.publish({ entryId: updatedEntry.sys.id }, updatedEntry);
+      } catch (err: any) {
+        if (err?.message?.includes('notResolvable') || err?.message?.includes('UnresolvedLinks')) {
+          return {
+            updateSuccess: true,
+            publishSuccess: false,
+            errorMessage: 'Publish skipped due to unresolved links',
+          };
+        }
+        Sentry.captureException(err);
+        return {
+          updateSuccess: true,
+          publishSuccess: false,
+          errorMessage: 'Publish failed',
+        };
+      }
+    }
+
+    return {
+      updateSuccess: true,
+      publishSuccess: publishAfterUpdate,
+    };
+  }
+
+  private async updateEntry(request: UpdateEntryParams) {
+    const { entryUpdates, contentTypes, fullEntry, locale, entryId } = request;
 
     for (const entryUpdate of entryUpdates) {
       const fieldDef = contentTypes
@@ -263,19 +306,7 @@ export class ContentfulService {
       }
     }
 
-    const updated = await this.sdk.cma.entry.update({ entryId }, fullEntry);
-
-    if (publishAfterUpdate) {
-      try {
-        await this.sdk.cma.entry.publish({ entryId: updated.sys.id }, updated);
-      } catch (err: any) {
-        if (err?.message?.includes('notResolvable') || err?.message?.includes('UnresolvedLinks')) {
-          console.warn(`Skipping publish of ${updated.sys.id} due to unresolved links`);
-          return;
-        }
-        throw err;
-      }
-    }
+    return await this.sdk.cma.entry.update({ entryId }, fullEntry);
   }
 
   /**
