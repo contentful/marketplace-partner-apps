@@ -190,14 +190,22 @@ export const useFindReplace = () => {
 
     for (const [entryId, entryArray] of Object.entries(groupedUpdates)) {
       try {
-        await contentfulService.current.updateEntry(entryArray, state.contentTypes, state.locale, state.publishAfterUpdate);
+        const result = await contentfulService.current.applyEntryUpdates(entryArray, state.contentTypes, state.locale, state.publishAfterUpdate);
+        entryArray.forEach((e) => {
+          e.updateSuccess = result.updateSuccess;
+          e.publishSuccess = result.publishSuccess;
+          e.errorMessage = result.errorMessage;
+        });
         applied.push(...entryArray);
         setState((prev) => ({ ...prev, processedCount: applied.length }));
       } catch (error) {
         console.error(`Failed to update entry ${entryId}:`, error);
         sentrySpan.recordException(error);
         sentrySpan.setStatus({ code: 2 });
-        throw error;
+        entryArray.forEach((e) => {
+          e.updateSuccess = false;
+          e.errorMessage = 'err message';
+        });
       }
     }
 

@@ -2,6 +2,8 @@
  * Type definitions for the Find & Replace utility
  */
 
+import { EntryProps } from 'contentful-management';
+
 export interface ContentType {
   sys: {
     id: string;
@@ -42,6 +44,15 @@ export interface MatchField {
   updated: string;
   index?: number;
   diffLines: DiffLine[];
+  updateSuccess: boolean;
+  publishSuccess: boolean;
+  errorMessage?: string | null;
+}
+
+export interface ApplyResult {
+  updateSuccess: boolean;
+  publishSuccess: boolean;
+  errorMessage?: string | null;
 }
 
 export interface SearchFilters {
@@ -108,4 +119,12 @@ export interface SearchEntriesParams {
   replace: string;
   caseSensitive?: boolean;
   searchAllFields?: boolean;
+}
+
+export interface UpdateEntryParams {
+  entryUpdates: MatchField[];
+  contentTypes: ContentType[];
+  fullEntry: EntryProps;
+  locale: string;
+  entryId: string;
 }

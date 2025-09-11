@@ -26,7 +26,7 @@ export const ResultsControls: React.FC<ResultsControlsProps> = ({
       isDisabled={selectedCount === 0 || applyingChanges || formModifiedSinceSearch}
       onClick={onApplyChanges}
       isLoading={applyingChanges}>
-      Apply changes to {selectedCount} {selectedCount === 1 ? 'entry' : 'entries'}
+      Apply changes to {selectedCount} {selectedCount === 1 ? 'field' : 'fields'}
     </Button>
   );
 
