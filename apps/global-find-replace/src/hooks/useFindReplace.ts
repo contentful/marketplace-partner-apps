@@ -119,7 +119,7 @@ export const useFindReplace = () => {
 
       const initialSelection = matches.reduce(
         (acc, item) => {
-          acc[item.id] = true;
+          acc[item.fullId] = true;
           return acc;
         },
         {} as Record<string, boolean>,
@@ -157,7 +157,7 @@ export const useFindReplace = () => {
   const handleSelectAll = (checked: boolean) => {
     const updated = state.fields.reduce(
       (acc, entry) => {
-        acc[entry.id] = checked;
+        acc[entry.fullId] = checked;
         return acc;
       },
       {} as Record<string, boolean>,
@@ -173,7 +173,7 @@ export const useFindReplace = () => {
       op: 'ui.action',
     });
 
-    const selectedEntries = state.fields.filter((e) => state.selectedEntries[e.id]);
+    const selectedEntries = state.fields.filter((e) => state.selectedEntries[e.fullId]);
     if (selectedEntries.length === 0) return;
 
     setState((prev) => ({ ...prev, applyingChanges: true }));
@@ -222,21 +222,21 @@ export const useFindReplace = () => {
   // Computed values
   const totalPages = Math.ceil(state.fields.length / state.pageSize);
   const sortedEntries = [...state.fields].sort((a, b) => {
-    const byContentType = a.contentType.localeCompare(b.contentType);
+    const byContentType = a.entryContentTypeId.localeCompare(b.entryContentTypeId);
     if (byContentType !== 0) return byContentType;
 
-    const byField = a.field.localeCompare(b.field);
+    const byField = a.id.localeCompare(b.id);
     if (byField !== 0) return byField;
 
-    const nameA = a.name?.toLowerCase?.() || a.entryId;
-    const nameB = b.name?.toLowerCase?.() || b.entryId;
+    const nameA = a.entryTitle?.toLowerCase?.() || a.entryId;
+    const nameB = b.entryTitle?.toLowerCase?.() || b.entryId;
     return nameA.localeCompare(nameB);
   });
 
   const currentPageEntries = sortedEntries.slice(state.currentPage * state.pageSize, (state.currentPage + 1) * state.pageSize);
 
-  const allSelected = state.fields.length > 0 && state.fields.every((entry) => state.selectedEntries[entry.id]);
-  const selectedCount = state.fields.filter((entry) => state.selectedEntries[entry.id]).length;
+  const allSelected = state.fields.length > 0 && state.fields.every((entry) => state.selectedEntries[entry.fullId]);
+  const selectedCount = state.fields.filter((entry) => state.selectedEntries[entry.fullId]).length;
 
   return {
     state,

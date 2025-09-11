@@ -127,7 +127,7 @@ const FindReplaceApp: React.FC = () => {
             />
 
             <ResultsTable
-              entries={currentPageEntries}
+              fields={currentPageEntries}
               selectedEntries={state.selectedEntries}
               allSelected={allSelected}
               isLoading={state.applyingChanges}
