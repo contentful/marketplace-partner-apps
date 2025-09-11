@@ -3,7 +3,7 @@ import { useSDK } from '@contentful/react-apps-toolkit';
 import { PageAppSDK } from '@contentful/app-sdk';
 import { ContentfulService } from '../services/contentfulService';
 import { AppState, MatchField, SearchFilters } from '../types';
-import posthog from 'posthog-js';
+import * as Sentry from '@sentry/react';
 import _ from 'lodash';
 
 export const useFindReplace = () => {
@@ -43,12 +43,6 @@ export const useFindReplace = () => {
   });
   useEffect(() => {
     const initializeData = async () => {
-      posthog.identify(sdk.ids.organization);
-      // Capture initial pageview
-      posthog.capture('$pageview', {
-        page: 'Search',
-      });
-
       const locales = contentfulService.current.getLocales();
       const contentTypes = await contentfulService.current.getContentTypes();
 
@@ -64,19 +58,6 @@ export const useFindReplace = () => {
 
     initializeData();
   }, []);
-
-  // Track page view changes
-  useEffect(() => {
-    if (state.showSummary) {
-      posthog.capture('$pageview', {
-        page: 'Change Summary',
-      });
-    } else if (state.fields.length > 0) {
-      posthog.capture('$pageview', {
-        page: 'Search Results',
-      });
-    }
-  }, [state.showSummary, state.fields.length]);
 
   // Update search filters
   const updateFilters = (filters: Partial<SearchFilters>) => {
@@ -108,10 +89,23 @@ export const useFindReplace = () => {
     if (!state.find.trim()) return;
 
     setState((prev) => ({ ...prev, searching: true, fields: [], currentPage: 0 }));
-    posthog.capture('search');
+    const sentrySpan = Sentry.startInactiveSpan({
+      name: 'ui.search',
+      op: 'ui.action',
+    });
 
     try {
       const contentTypeIds = state.selectedContentTypes.length ? state.selectedContentTypes : state.contentTypes.map((ct) => ct.sys.id);
+
+      sentrySpan.setAttributes({
+        'search.contentTypeIds': contentTypeIds,
+        'search.locale': state.locale,
+        'search.find': state.find,
+        'search.replace': state.replace,
+        'search.caseSensitive': state.caseSensitive,
+        'search.searchAllFields': state.includeAllFields,
+        'search.spaceId': state.spaceId,
+      });
 
       const matches = await contentfulService.current.searchEntries({
         contentTypeIds: contentTypeIds,
@@ -139,8 +133,12 @@ export const useFindReplace = () => {
       }));
     } catch (error) {
       console.error('Search failed:', error);
+      sentrySpan.recordException(error);
+      sentrySpan.setStatus({ code: 2 });
+      throw error;
     } finally {
       setState((prev) => ({ ...prev, searching: false }));
+      sentrySpan.end();
     }
   };
 
@@ -170,16 +168,25 @@ export const useFindReplace = () => {
 
   // Handle apply changes
   const handleApplyChanges = async () => {
+    const sentrySpan = Sentry.startInactiveSpan({
+      name: 'ui.apply',
+      op: 'ui.action',
+    });
+
     const selectedEntries = state.fields.filter((e) => state.selectedEntries[e.id]);
     if (selectedEntries.length === 0) return;
 
     setState((prev) => ({ ...prev, applyingChanges: true }));
     const applied: MatchField[] = [];
 
-    posthog.capture('apply-changes');
-
     // Group selectedEntries by entryId
     const groupedUpdates = _.groupBy(selectedEntries, 'entryId');
+
+    sentrySpan.setAttributes({
+      'apply.fieldCount': selectedEntries.length,
+      'apply.entryCount': Object.keys(groupedUpdates).length,
+      'search.spaceId': state.spaceId,
+    });
 
     for (const [entryId, entryArray] of Object.entries(groupedUpdates)) {
       try {
@@ -188,6 +195,9 @@ export const useFindReplace = () => {
         setState((prev) => ({ ...prev, processedCount: applied.length }));
       } catch (error) {
         console.error(`Failed to update entry ${entryId}:`, error);
+        sentrySpan.recordException(error);
+        sentrySpan.setStatus({ code: 2 });
+        throw error;
       }
     }
 
@@ -197,6 +207,8 @@ export const useFindReplace = () => {
       showSummary: true,
       applyingChanges: false,
     }));
+
+    sentrySpan.end();
   };
 
   // Computed values
