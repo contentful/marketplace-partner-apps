@@ -35,7 +35,7 @@ export const SummaryView: React.FC<SummaryViewProps> = ({ appliedChanges, publis
               Entries Updated:
             </Flex>
             <Flex justifyContent="flex-start" flexGrow={1} marginLeft="spacing2Xs">
-              {new Set(appliedChanges.filter((f) => f.updateSuccess).map((c) => c.name)).size}
+              {new Set(appliedChanges.filter((f) => f.updateSuccess).map((c) => c.entryTitle)).size}
             </Flex>
           </Flex>
           <Flex flexDirection="row" justifyContent="space-between" marginBottom="spacingXs">
@@ -81,9 +81,9 @@ export const SummaryView: React.FC<SummaryViewProps> = ({ appliedChanges, publis
         <TableBody>
           {appliedChanges.map((change, i) => (
             <TableRow key={i}>
-              <TableCell>{change.contentType}</TableCell>
+              <TableCell>{change.entryContentTypeName}</TableCell>
+              <TableCell>{change.entryTitle}</TableCell>
               <TableCell>{change.name}</TableCell>
-              <TableCell>{change.field}</TableCell>
               <TableCell style={{ color: change.updateSuccess ? 'green' : 'red' }}>{change.updateSuccess ? 'Success' : change.errorMessage}</TableCell>
               <TableCell style={{ color: publishColor(change) }}>{publishText(change)}</TableCell>
             </TableRow>

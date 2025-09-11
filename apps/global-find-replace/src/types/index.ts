@@ -16,6 +16,7 @@ export interface ContentType {
 export interface FieldDefinition {
   id: string;
   type: string;
+  name: string;
   items?: {
     type: string;
     linkType?: string;
@@ -36,10 +37,12 @@ export interface Entry {
 
 export interface MatchField {
   id: string;
+  fullId: string;
   name: string;
-  contentType: string;
+  entryTitle: string;
+  entryContentTypeId: string;
+  entryContentTypeName: string;
   entryId: string;
-  field: string;
   original: string;
   updated: string;
   index?: number;
@@ -102,7 +105,6 @@ export interface DiffLine {
 export interface BuildMatchEntriesParams {
   entry: Entry;
   field: any;
-  fieldName: string;
   fieldDef: FieldDefinition;
   contentTypes: ContentType[];
   locale: string;

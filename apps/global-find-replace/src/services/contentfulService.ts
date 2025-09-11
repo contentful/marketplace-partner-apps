@@ -18,7 +18,7 @@ export class ContentfulService {
   /**
    * Gets the display name for an entry
    */
-  private getEntryDisplayName(entry: Entry, contentTypes: ContentType[], locale: string): string {
+  private getEntryTitle(entry: Entry, contentTypes: ContentType[], locale: string): string {
     const contentType = contentTypes.find((ct) => ct.sys.id === entry.sys.contentType.sys.id);
     const titleField = contentType?.displayField;
 
@@ -33,7 +33,7 @@ export class ContentfulService {
    * Builds match entries for a given entry and field
    */
   private buildMatchEntries(params: BuildMatchEntriesParams): MatchField[] {
-    const { entry, field, fieldName, fieldDef, contentTypes, locale, find, replace, caseSensitive = false } = params;
+    const { entry, field, fieldDef, contentTypes, locale, find, replace, caseSensitive = false } = params;
 
     const value = field[locale];
 
@@ -46,17 +46,21 @@ export class ContentfulService {
           .filter(Boolean)
       : [replaceFieldValueByType(value, fieldDef, find, replace, caseSensitive)].filter(Boolean);
 
+    const contentType = contentTypes.find((ct) => ct.sys.id === entry.sys.contentType.sys.id);
+
     // Filter out results where the final updated value is invalid for the field type
     const validResults = results.filter((r: any) => {
       return this.isValidValueForField(r.updated, fieldDef);
     });
 
     return validResults.map((r: any) => ({
-      id: `${entry.sys.id}:${fieldName}${r.index !== undefined ? `:${r.index}` : ''}`,
-      name: this.getEntryDisplayName(entry, contentTypes, locale),
-      contentType: entry.sys.contentType.sys.id,
+      fullId: `${entry.sys.id}:${fieldDef.id}${r.index !== undefined ? `:${r.index}` : ''}`,
+      entryTitle: this.getEntryTitle(entry, contentTypes, locale),
+      entryContentTypeId: entry.sys.contentType.sys.id,
+      entryContentTypeName: contentType?.name,
       entryId: entry.sys.id,
-      field: fieldName,
+      id: fieldDef.id,
+      name: fieldDef.name,
       ...r,
     }));
   }
@@ -188,14 +192,12 @@ export class ContentfulService {
     const results: MatchField[] = [];
 
     for (const entry of response.items) {
-      for (const fieldName in entry.fields) {
-        const fieldDef = contentTypes.find((ct) => ct.sys.id === entry.sys.contentType.sys.id)?.fields.find((f: FieldDefinition) => f.id === fieldName);
-
+      for (const fieldId in entry.fields) {
+        const fieldDef = contentTypes.find((ct) => ct.sys.id === entry.sys.contentType.sys.id)?.fields.find((f: FieldDefinition) => f.id === fieldId);
         if (!fieldDef || isReferenceField(fieldDef)) continue;
         const matches = this.buildMatchEntries({
           entry,
-          field: entry.fields[fieldName],
-          fieldName,
+          field: entry.fields[fieldId],
           fieldDef,
           contentTypes,
           locale,
@@ -289,20 +291,18 @@ export class ContentfulService {
     const { entryUpdates, contentTypes, fullEntry, locale, entryId } = request;
 
     for (const entryUpdate of entryUpdates) {
-      const fieldDef = contentTypes
-        .find((ct) => ct.sys.id === fullEntry.sys.contentType.sys.id)
-        ?.fields.find((f: FieldDefinition) => f.id === entryUpdate.field);
+      const fieldDef = contentTypes.find((ct) => ct.sys.id === fullEntry.sys.contentType.sys.id)?.fields.find((f: FieldDefinition) => f.id === entryUpdate.id);
 
       if (!fieldDef) {
-        throw new Error(`Field definition not found for ${entryUpdate.field}`);
+        throw new Error(`Field definition not found for ${entryUpdate.id}`);
       }
 
       const valueToSet = this.castValue(entryUpdate.updated, fieldDef);
 
-      if (entryUpdate.index !== undefined && Array.isArray(fullEntry.fields[entryUpdate.field][locale])) {
-        fullEntry.fields[entryUpdate.field][locale][entryUpdate.index] = valueToSet;
+      if (entryUpdate.index !== undefined && Array.isArray(fullEntry.fields[entryUpdate.id][locale])) {
+        fullEntry.fields[entryUpdate.id][locale][entryUpdate.index] = valueToSet;
       } else {
-        fullEntry.fields[entryUpdate.field][locale] = valueToSet;
+        fullEntry.fields[entryUpdate.id][locale] = valueToSet;
       }
     }
 
