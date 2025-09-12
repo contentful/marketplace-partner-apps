@@ -30,5 +30,5 @@
   "apps/hugging-face": "1.1.4",
   "apps/translationstudio": "1.0.2",
   "apps/deep-clone": "1.1.0",
-  "apps/imagekit": "1.0.0"
+  "apps/imagekit": "1.0.1"
 }
