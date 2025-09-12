@@ -1,6 +1,8 @@
 import { PageAppSDK } from '@contentful/app-sdk';
-import { ContentType, Entry, MatchField, FieldDefinition, BuildMatchEntriesParams, SearchEntriesParams } from '../types';
+import { ContentType, Entry, MatchField, FieldDefinition, BuildMatchEntriesParams, SearchEntriesParams, ApplyResult, UpdateEntryParams } from '../types';
 import { replaceFieldValueByType, isReferenceField } from '../utils/fieldProcessors';
+import * as Sentry from '@sentry/react';
+import { EntryProps } from 'contentful-management';
 
 export class ContentfulService {
   constructor(private sdk: PageAppSDK) {}
@@ -16,7 +18,7 @@ export class ContentfulService {
   /**
    * Gets the display name for an entry
    */
-  private getEntryDisplayName(entry: Entry, contentTypes: ContentType[], locale: string): string {
+  private getEntryTitle(entry: Entry, contentTypes: ContentType[], locale: string): string {
     const contentType = contentTypes.find((ct) => ct.sys.id === entry.sys.contentType.sys.id);
     const titleField = contentType?.displayField;
 
@@ -31,7 +33,7 @@ export class ContentfulService {
    * Builds match entries for a given entry and field
    */
   private buildMatchEntries(params: BuildMatchEntriesParams): MatchField[] {
-    const { entry, field, fieldName, fieldDef, contentTypes, locale, find, replace, caseSensitive = false } = params;
+    const { entry, field, fieldDef, contentTypes, locale, find, replace, caseSensitive = false } = params;
 
     const value = field[locale];
 
@@ -44,17 +46,21 @@ export class ContentfulService {
           .filter(Boolean)
       : [replaceFieldValueByType(value, fieldDef, find, replace, caseSensitive)].filter(Boolean);
 
+    const contentType = contentTypes.find((ct) => ct.sys.id === entry.sys.contentType.sys.id);
+
     // Filter out results where the final updated value is invalid for the field type
     const validResults = results.filter((r: any) => {
       return this.isValidValueForField(r.updated, fieldDef);
     });
 
     return validResults.map((r: any) => ({
-      id: `${entry.sys.id}:${fieldName}${r.index !== undefined ? `:${r.index}` : ''}`,
-      name: this.getEntryDisplayName(entry, contentTypes, locale),
-      contentType: entry.sys.contentType.sys.id,
+      fullId: `${entry.sys.id}:${fieldDef.id}${r.index !== undefined ? `:${r.index}` : ''}`,
+      entryTitle: this.getEntryTitle(entry, contentTypes, locale),
+      entryContentTypeId: entry.sys.contentType.sys.id,
+      entryContentTypeName: contentType?.name,
       entryId: entry.sys.id,
-      field: fieldName,
+      id: fieldDef.id,
+      name: fieldDef.name,
       ...r,
     }));
   }
@@ -133,55 +139,88 @@ export class ContentfulService {
 
     for (const contentTypeId of contentTypeIds) {
       let skip = 0;
-      const limit = 1000;
+      let limit = 1000;
       let hasMore = true;
 
+      const select = this.getSelectFields(contentTypes, contentTypeId);
+
       while (hasMore) {
-        const query: any = { content_type: contentTypeId, limit, skip };
+        const query: any = { content_type: contentTypeId, limit, skip, select };
         if (!searchAllFields) {
           query.query = find;
         }
-        const response = await this.sdk.cma.entry.getMany({
-          query,
-        });
 
-        for (const entry of response.items) {
-          for (const fieldName in entry.fields) {
-            const fieldDef = contentTypes.find((ct) => ct.sys.id === entry.sys.contentType.sys.id)?.fields.find((f: FieldDefinition) => f.id === fieldName);
+        try {
+          const response = await this.sdk.cma.entry.getMany({
+            query,
+          });
 
-            if (!fieldDef || isReferenceField(fieldDef)) continue;
-            const matches = this.buildMatchEntries({
-              entry,
-              field: entry.fields[fieldName],
-              fieldName,
-              fieldDef,
-              contentTypes,
-              locale,
-              find,
-              replace,
-              caseSensitive,
-            });
-
-            if (caseSensitive) {
-              // Filter matches that don't match case
-              const caseSensitiveMatches = matches.filter((match) => {
-                const val = match.original;
-                if (typeof val !== 'string') return false;
-                return val.includes(find); // This will do a case-sensitive match
-              });
-              allMatches.push(...caseSensitiveMatches);
-            } else {
-              allMatches.push(...matches);
-            }
+          allMatches.push(...this.processEntries(response, contentTypes, locale, find, replace, caseSensitive));
+          skip += limit;
+          hasMore = response.items.length === limit;
+        } catch (error: any) {
+          if (error.message.includes('Response size too big') && limit > 75) {
+            limit = limit / 2;
+          } else {
+            throw error;
           }
         }
-
-        skip += limit;
-        hasMore = response.items.length === limit;
       }
     }
 
     return allMatches;
+  }
+
+  private getSelectFields(contentTypes: ContentType[], contentTypeId: string): string {
+    const select = ['sys'];
+
+    const contentType = contentTypes.find((ct) => ct.sys.id === contentTypeId);
+    if (!contentType) return select.join(',');
+
+    const validFieldTypes = ['Integer', 'Number', 'Boolean', 'Date', 'Object', 'RichText', 'Text', 'Symbol', 'Location'];
+
+    for (const field of contentType.fields) {
+      if (validFieldTypes.includes(field.type) || (field.type === 'Array' && field.items?.linkType !== 'Asset' && field.items?.linkType !== 'Entry')) {
+        select.push(`fields.${field.id}`);
+      }
+    }
+
+    return select.join(',');
+  }
+
+  private processEntries(response: any, contentTypes: ContentType[], locale: string, find: string, replace: string, caseSensitive: boolean): MatchField[] {
+    const results: MatchField[] = [];
+
+    for (const entry of response.items) {
+      for (const fieldId in entry.fields) {
+        const fieldDef = contentTypes.find((ct) => ct.sys.id === entry.sys.contentType.sys.id)?.fields.find((f: FieldDefinition) => f.id === fieldId);
+        if (!fieldDef || isReferenceField(fieldDef)) continue;
+        const matches = this.buildMatchEntries({
+          entry,
+          field: entry.fields[fieldId],
+          fieldDef,
+          contentTypes,
+          locale,
+          find,
+          replace,
+          caseSensitive,
+        });
+
+        if (caseSensitive) {
+          // Filter matches that don't match case
+          const caseSensitiveMatches = matches.filter((match) => {
+            const val = match.original;
+            if (typeof val !== 'string') return false;
+            return val.includes(find); // This will do a case-sensitive match
+          });
+          results.push(...caseSensitiveMatches);
+        } else {
+          results.push(...matches);
+        }
+      }
+    }
+
+    return results;
   }
 
   /**
@@ -204,43 +243,70 @@ export class ContentfulService {
   }
 
   /**
-   * Updates a single entry with the new value
+   * Applies field updates to a single entry and publishes
    */
-  async updateEntry(entryUpdates: MatchField[], contentTypes: ContentType[], locale: string, publishAfterUpdate: boolean): Promise<void> {
+  async applyEntryUpdates(entryUpdates: MatchField[], contentTypes: ContentType[], locale: string, publishAfterUpdate: boolean): Promise<ApplyResult> {
     const entryId = entryUpdates[0].entryId;
-    const fullEntry = await this.sdk.cma.entry.get({ entryId });
+    const fullEntry: EntryProps = await this.sdk.cma.entry.get({ entryId });
+    let updatedEntry;
+
+    try {
+      updatedEntry = await this.updateEntry({ entryUpdates, contentTypes, fullEntry, locale, entryId });
+    } catch (err: any) {
+      Sentry.captureException(err);
+      return {
+        updateSuccess: false,
+        publishSuccess: false,
+        errorMessage: 'Update failed',
+      };
+    }
+
+    if (publishAfterUpdate) {
+      try {
+        await this.sdk.cma.entry.publish({ entryId: updatedEntry.sys.id }, updatedEntry);
+      } catch (err: any) {
+        if (err?.message?.includes('notResolvable') || err?.message?.includes('UnresolvedLinks')) {
+          return {
+            updateSuccess: true,
+            publishSuccess: false,
+            errorMessage: 'Publish skipped due to unresolved links',
+          };
+        }
+        Sentry.captureException(err);
+        return {
+          updateSuccess: true,
+          publishSuccess: false,
+          errorMessage: 'Publish failed',
+        };
+      }
+    }
+
+    return {
+      updateSuccess: true,
+      publishSuccess: publishAfterUpdate,
+    };
+  }
+
+  private async updateEntry(request: UpdateEntryParams) {
+    const { entryUpdates, contentTypes, fullEntry, locale, entryId } = request;
 
     for (const entryUpdate of entryUpdates) {
-      const fieldDef = contentTypes
-        .find((ct) => ct.sys.id === fullEntry.sys.contentType.sys.id)
-        ?.fields.find((f: FieldDefinition) => f.id === entryUpdate.field);
+      const fieldDef = contentTypes.find((ct) => ct.sys.id === fullEntry.sys.contentType.sys.id)?.fields.find((f: FieldDefinition) => f.id === entryUpdate.id);
 
       if (!fieldDef) {
-        throw new Error(`Field definition not found for ${entryUpdate.field}`);
+        throw new Error(`Field definition not found for ${entryUpdate.id}`);
       }
 
       const valueToSet = this.castValue(entryUpdate.updated, fieldDef);
 
-      if (entryUpdate.index !== undefined && Array.isArray(fullEntry.fields[entryUpdate.field][locale])) {
-        fullEntry.fields[entryUpdate.field][locale][entryUpdate.index] = valueToSet;
+      if (entryUpdate.index !== undefined && Array.isArray(fullEntry.fields[entryUpdate.id][locale])) {
+        fullEntry.fields[entryUpdate.id][locale][entryUpdate.index] = valueToSet;
       } else {
-        fullEntry.fields[entryUpdate.field][locale] = valueToSet;
+        fullEntry.fields[entryUpdate.id][locale] = valueToSet;
       }
     }
 
-    const updated = await this.sdk.cma.entry.update({ entryId }, fullEntry);
-
-    if (publishAfterUpdate) {
-      try {
-        await this.sdk.cma.entry.publish({ entryId: updated.sys.id }, updated);
-      } catch (err: any) {
-        if (err?.message?.includes('notResolvable') || err?.message?.includes('UnresolvedLinks')) {
-          console.warn(`Skipping publish of ${updated.sys.id} due to unresolved links`);
-          return;
-        }
-        throw err;
-      }
-    }
+    return await this.sdk.cma.entry.update({ entryId }, fullEntry);
   }
 
   /**

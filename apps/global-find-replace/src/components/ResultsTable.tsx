@@ -6,7 +6,7 @@ import { MatchField } from '../types';
 import { DiffViewer } from './DiffViewer';
 
 interface ResultsTableProps {
-  entries: MatchField[];
+  fields: MatchField[];
   selectedEntries: Record<string, boolean>;
   allSelected: boolean;
   isLoading?: boolean;
@@ -19,7 +19,7 @@ interface ResultsTableProps {
 }
 
 export const ResultsTable: React.FC<ResultsTableProps> = ({
-  entries,
+  fields,
   selectedEntries,
   allSelected,
   isLoading = false,
@@ -68,25 +68,25 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
         </TableRow>
       </TableHead>
       <TableBody>
-        {entries.map((entry) => (
-          <TableRow key={entry.id}>
+        {fields.map((field) => (
+          <TableRow key={field.fullId}>
             <TableCell>
-              <Checkbox isChecked={selectedEntries[entry.id]} onChange={() => onEntrySelectionChange(entry.id)} />
+              <Checkbox isChecked={selectedEntries[field.fullId]} onChange={() => onEntrySelectionChange(field.fullId)} />
             </TableCell>
-            <TableCell>{entry.contentType}</TableCell>
+            <TableCell>{field.entryContentTypeName}</TableCell>
             <TableCell>
               <TextLink
                 icon={<ExternalLinkIcon />}
                 alignIcon="end"
-                href={`https://app.contentful.com/spaces/${spaceId}/environments/${environment}/entries/${entry.entryId}`}
+                href={`https://app.contentful.com/spaces/${spaceId}/environments/${environment}/entries/${field.entryId}`}
                 target="_blank"
                 rel="noopener noreferrer">
-                {entry.name}
+                {field.entryTitle}
               </TextLink>
             </TableCell>
-            <TableCell>{entry.field}</TableCell>
+            <TableCell>{field.name}</TableCell>
             <TableCell>
-              <DiffViewer diffLines={entry.diffLines} />
+              <DiffViewer diffLines={field.diffLines} />
             </TableCell>
           </TableRow>
         ))}
