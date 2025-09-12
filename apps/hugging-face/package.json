@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@contentful/app-scripts": "^2.5.5",
-    "@contentful/f36-tokens": "^4.2.0",
+    "@contentful/f36-tokens": "^5.1.0",
     "@eslint/js": "^9.34.0",
     "@huggingface/inference": "^4.7.1",
     "@testing-library/react": "^16.3.0",
