@@ -1,6 +1,6 @@
 {
   "name": "eppo-contentful-app",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "private": true,
   "scripts": {
     "start": "cross-env BROWSER=none NODE_ENV=development PORT=3001 react-scripts start",
