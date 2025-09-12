@@ -10,7 +10,7 @@
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "^11.13.4",
     "contentful-management": "11.54.4",
-    "emotion": "10.0.27",
+    "emotion": "11.0.0",
     "lodash.debounce": "^4.0.8",
     "react": "18.3.1",
     "react-dom": "18.3.1"
