@@ -11,7 +11,7 @@ import { useCallback, useMemo } from 'react';
 import logo from '../../assets/logo.svg';
 import { VALID_IMAGE_FORMATS } from '../../constants';
 import { AppInstallationParameters, CloudinaryAsset, MediaLibraryResult } from '../../types';
-import { extractAsset } from '../../utils';
+import { extractAsset, mediaLibraryFilter } from '../../utils';
 
 const styles = {
   dragHandle: css({
@@ -106,6 +106,7 @@ export function Thumbnail({ asset, isDisabled, onDelete, onReplace }: Props) {
         dialog: 'medial-library',
         filter: asset.resource_type,
         maxFiles: 1,
+        expression: mediaLibraryFilter(asset.resource_type, sdk),
       },
     });
 
@@ -118,7 +119,11 @@ export function Thumbnail({ asset, isDisabled, onDelete, onReplace }: Props) {
   }, [sdk.dialogs]);
 
   const onPreview = useCallback(() => {
-    window.open(asset.secure_url, '_blank');
+    let url = asset.secure_url;
+    if (asset.resource_type === 'video') {
+      url = url.replace('f_auto', 'f_mp4');
+    }
+    window.open(url, '_blank');
   }, [asset.secure_url]);
 
   const consoleUrl = `https://console.cloudinary.com/console/media_library/query_search?q=${encodeURIComponent(

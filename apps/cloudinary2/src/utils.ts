@@ -1,5 +1,6 @@
+import { FieldAppSDK } from '@contentful/app-sdk';
 import { pick } from 'lodash';
-import { CloudinaryAsset, MediaLibraryResultAsset } from './types';
+import { AppInstallationParameters, CloudinaryAsset, MediaLibraryResultAsset } from './types';
 
 export function loadScript(src: string) {
   return new Promise<void>((resolve, reject) => {
@@ -54,4 +55,30 @@ export function extractAsset(asset: MediaLibraryResultAsset): CloudinaryAsset {
   }
 
   return res;
+}
+
+function evaluator(template: string, context: Record<string, unknown>, sdk: FieldAppSDK) {
+  try {
+    return new Function(...Object.keys(context), 'return `' + template + '`;')(...Object.values(context));
+  } catch (error) {
+    // show error notification to the user
+    sdk.notifier.error(`Invalid field configuration ${template}\n${error}`);
+    console.error(error);
+    return template;
+  }
+}
+
+export function mediaLibraryFilter(type: string, sdk: FieldAppSDK<AppInstallationParameters>) {
+  let expression = type ? `resource_type:${type}` : ``;
+  const searchFilterTemplate = (sdk.parameters.instance.searchFilter || '') as string;
+
+  const binding = {
+    entry: sdk.entry,
+  };
+
+  const shouldAppendImplicitAndOperator = searchFilterTemplate.match(/^\s*(AND|OR).*$/) || !searchFilterTemplate;
+  const defaultBooleanOperator = shouldAppendImplicitAndOperator ? '' : ' AND ';
+  const searchFilter = ` ${evaluator(searchFilterTemplate, binding, sdk)}`;
+  expression = `${expression}${defaultBooleanOperator}${searchFilter}`;
+  return expression;
 }

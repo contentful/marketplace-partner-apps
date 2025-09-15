@@ -6,7 +6,7 @@ import { css } from '@emotion/react';
 import { useCallback } from 'react';
 import logo from '../../assets/logo.svg';
 import { AppInstallationParameters, CloudinaryAsset, MediaLibraryResult, ResourceTypeFilter } from '../../types';
-import { extractAsset } from '../../utils';
+import { extractAsset, mediaLibraryFilter } from '../../utils';
 const styles = {
   logo: css({
     display: 'block',
@@ -23,31 +23,12 @@ interface Props {
 export function AssetPickerButton({ onNewAssetsAdded, isDisabled }: Props) {
   const sdk = useSDK<FieldAppSDK<AppInstallationParameters>>();
   const resourceType = sdk.parameters.instance.resourceType as ResourceTypeFilter;
-  const searchFilterTemplate = (sdk.parameters.instance.searchFilter || '') as string;
-
-  const binding = {
-    entry: sdk.entry,
-  };
-  function evaluator(template: string, context: Record<string, unknown>) {
-    try {
-      return new Function(...Object.keys(context), 'return `' + template + '`;')(...Object.values(context));
-    } catch (error) {
-      // show error notification to the user
-      sdk.notifier.error(`Invalid field configuration ${template}\n${error}`);
-      console.error(error);
-      return template;
-    }
-  }
 
   const action = sdk.parameters.installation.showUploadButton === 'true' ? `Select or upload an Asset` : `Select an Asset`;
   const handleDialogOpenClick = useCallback(
     async (type?: string) => {
-      let expression = type ? `resource_type:${type}` : ``;
-      const hasBooleanOperator = searchFilterTemplate.match(/^\s*(AND|OR).*$/);
-      const defaultBooleanOperator = hasBooleanOperator ? '' : 'AND';
-      const searchFilter = evaluator(searchFilterTemplate, binding);
-      expression = `${expression} ${defaultBooleanOperator} ${searchFilter}`;
-
+      console.log({ type });
+      const expression = mediaLibraryFilter(type || '', sdk);
       const result: MediaLibraryResult | undefined = await sdk.dialogs.openCurrentApp({
         position: 'center',
         title: `${action} on Cloudinary`,
@@ -89,7 +70,7 @@ export function AssetPickerButton({ onNewAssetsAdded, isDisabled }: Props) {
         size="small"
         onClick={() => handleDialogOpenClick('video')}
         isDisabled={isDisabled}>
-        Select an Video
+        Select a Video
       </Button>
     );
   } else if (resourceType === 'all') {
