@@ -176,7 +176,7 @@ export function Thumbnail({ asset, isDisabled, onDelete, onReplace }: Props) {
         size="small"
         actions={[
           <MenuItem key="edit" as="button" onClick={handleEdit}>
-            Edit
+            Edit <span style={{ fontSize: '8px' }}>(Beta)</span>
           </MenuItem>,
           <MenuItem key="replace" onClick={handleReplace} isDisabled={isDisabled}>
             Replace
