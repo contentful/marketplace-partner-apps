@@ -1,4 +1,4 @@
-import { FieldAppSDK } from '@contentful/app-sdk';
+import { FieldAppSDK, SerializedJSONValue } from '@contentful/app-sdk';
 import { Button, ButtonGroup, IconButton, Menu } from '@contentful/f36-components';
 import { ArrowDownIcon, AssetIcon, VideoIcon } from '@contentful/f36-icons';
 import { useSDK } from '@contentful/react-apps-toolkit';
@@ -27,17 +27,18 @@ export function AssetPickerButton({ onNewAssetsAdded, isDisabled }: Props) {
   const action = sdk.parameters.installation.showUploadButton === 'true' ? `Select or upload an Asset` : `Select an Asset`;
   const handleDialogOpenClick = useCallback(
     async (type?: string) => {
-      console.log({ type });
       const expression = mediaLibraryFilter(type || '', sdk);
+      const parameters: SerializedJSONValue = {};
+      if (expression) {
+        parameters.expression = expression;
+      }
       const result: MediaLibraryResult | undefined = await sdk.dialogs.openCurrentApp({
         position: 'center',
         title: `${action} on Cloudinary`,
         shouldCloseOnOverlayClick: true,
         shouldCloseOnEscapePress: true,
         width: 1400,
-        parameters: {
-          expression,
-        },
+        parameters,
       });
 
       if (!result) {

@@ -1,4 +1,4 @@
-import { FieldAppSDK } from '@contentful/app-sdk';
+import { FieldAppSDK, SerializedJSONValue } from '@contentful/app-sdk';
 import { AssetCard, DateTime, DragHandle, Menu, MenuDivider, MenuItem } from '@contentful/f36-components';
 import tokens from '@contentful/f36-tokens';
 import { useSDK } from '@contentful/react-apps-toolkit';
@@ -95,6 +95,15 @@ export function Thumbnail({ asset, isDisabled, onDelete, onReplace }: Props) {
 
   const handleReplace = useCallback(async () => {
     const title = asset.resource_type === 'video' ? 'Replace Video' : 'Replace Image';
+    const parameters: SerializedJSONValue = {
+      dialog: 'medial-library',
+      filter: asset.resource_type,
+      maxFiles: 1,
+    };
+    const expression = mediaLibraryFilter(asset.resource_type, sdk);
+    if (expression) {
+      parameters.expression = expression;
+    }
     const result: MediaLibraryResult | undefined = await sdk.dialogs.openCurrentApp({
       position: 'center',
       title: title,
@@ -102,12 +111,7 @@ export function Thumbnail({ asset, isDisabled, onDelete, onReplace }: Props) {
       shouldCloseOnEscapePress: true,
       width: 1400,
 
-      parameters: {
-        dialog: 'medial-library',
-        filter: asset.resource_type,
-        maxFiles: 1,
-        expression: mediaLibraryFilter(asset.resource_type, sdk),
-      },
+      parameters,
     });
 
     if (!result) {

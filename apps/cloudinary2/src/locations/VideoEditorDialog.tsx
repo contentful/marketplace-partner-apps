@@ -20,7 +20,7 @@ const styles = {
 const VideoEditorDialog = () => {
   const sdk = useSDK<DialogAppSDK<AppInstallationParameters>>();
   const [widgetLoaded, setWidgetLoaded] = useState(false);
-  const editorRef = useRef<MediaEditorWidget>();
+  const editorRef = useRef<MediaEditorWidget>(undefined);
   const invocationParams = sdk.parameters.invocation as Record<string, unknown>;
   const asset = invocationParams.asset as CloudinaryAsset;
 

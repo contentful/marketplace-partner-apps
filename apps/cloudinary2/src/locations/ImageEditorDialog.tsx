@@ -18,7 +18,7 @@ const styles = {
 
 const ImageEditorDialog = () => {
   const sdk = useSDK<DialogAppSDK<AppInstallationParameters>>();
-  const editorRef = useRef<MediaEditorWidget>();
+  const editorRef = useRef<MediaEditorWidget>(undefined);
   const installationParams = sdk.parameters.installation;
   const invocationParams = sdk.parameters.invocation as Record<string, unknown>;
   const asset = invocationParams.asset as CloudinaryAsset;
