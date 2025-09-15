@@ -1,14 +1,14 @@
 {
   "name": "amplitude-contentful",
-  "version": "1.1.2",
+  "version": "1.1.4",
   "private": true,
   "dependencies": {
-    "@contentful/app-sdk": "^4.29.7",
-    "@contentful/f36-components": "4.80.5",
+    "@contentful/app-sdk": "^4.41.1",
+    "@contentful/f36-components": "4.81.1",
     "@contentful/f36-tokens": "4.2.0",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "^11.13.5",
-    "contentful-management": "11.54.1",
+    "contentful-management": "11.54.4",
     "lodash": "^4.17.21",
     "react": "18.3.1",
     "react-dom": "18.3.1"
@@ -40,18 +40,18 @@
     ]
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.27.0",
-    "@testing-library/jest-dom": "5.17.0",
+    "@contentful/app-scripts": "2.5.5",
+    "@testing-library/jest-dom": "6.8.0",
     "@testing-library/react": "^14.1.2",
     "@types/lodash": "^4.17.20",
     "@types/node": "^20",
     "@types/react": "18.3.10",
     "@types/react-dom": "18.3.0",
-    "@vitejs/plugin-react": "^4.6.0",
+    "@vitejs/plugin-react": "^4.7.0",
     "happy-dom": "^17.2.2",
-    "typescript": "4.9.5",
-    "vite": "^6.3.5",
-    "vitest": "^2.1.1"
+    "typescript": "5.9.2",
+    "vite": "^7.1.5",
+    "vitest": "^3.2.4"
   },
   "homepage": "."
 }

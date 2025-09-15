@@ -1,0 +1,49 @@
+.heading {
+  text-decoration: none;
+  font-weight: 600;
+  position: relative;
+  transition: all 0.3s ease;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.heading a {
+  text-decoration: none;
+  color: inherit;
+  /* Inherit color from .heading */
+  color: #6c63ff;
+  /* Brand-ish purple */
+}
+
+.heading a:hover {
+  color: #4a3dff;
+  text-shadow: 0 0 1px rgba(108, 99, 255, 0.3);
+}
+
+.pageContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+}
+
+.footer {
+  margin-top: 25px;
+  margin-bottom: 15px;
+}
+
+.bottomControlsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-top: 15px;
+}
+
+.bottomLeft {
+  position: absolute;
+  left: 20px;
+}

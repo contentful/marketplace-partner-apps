@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.3.1](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.3.0...thrillworks-flex-fields-app-v1.3.1) (2025-08-01)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-layout from 5.0.0-alpha.18 to 5.0.0-alpha.22 in /apps/flexfields ([#5950](https://github.com/contentful/marketplace-partner-apps/issues/5950)) ([be368e1](https://github.com/contentful/marketplace-partner-apps/commit/be368e165c1049ea43176e723e60e2dce90e2516))
+* **deps:** bump the production-dependencies group in /apps/flexfields with 3 updates ([#5949](https://github.com/contentful/marketplace-partner-apps/issues/5949)) ([cedbe28](https://github.com/contentful/marketplace-partner-apps/commit/cedbe28addc6432ea30194c91dd1559435301c87))
+* **deps:** bump the production-dependencies group in /apps/flexfields with 4 updates ([#5802](https://github.com/contentful/marketplace-partner-apps/issues/5802)) ([94a8eeb](https://github.com/contentful/marketplace-partner-apps/commit/94a8eebe228a0678f1f19416a044ca92444a7c0a))
+
+## [1.3.0](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.11...thrillworks-flex-fields-app-v1.3.0) (2025-07-28)
+
+
+### Features
+
+* use new Forma 36 Layout component [UFO-1877] ([#5544](https://github.com/contentful/marketplace-partner-apps/issues/5544)) ([6b1e4f0](https://github.com/contentful/marketplace-partner-apps/commit/6b1e4f06e002d9597cd401ed34a5351a3a9ef6d6))
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.10.0 to 1.11.0 in /apps/flexfields ([#5691](https://github.com/contentful/marketplace-partner-apps/issues/5691)) ([9ca8c35](https://github.com/contentful/marketplace-partner-apps/commit/9ca8c357c836e9142652a0cfe60e53f665da297a))
+* **deps:** bump form-data from 4.0.3 to 4.0.4 in /apps/flexfields ([#5658](https://github.com/contentful/marketplace-partner-apps/issues/5658)) ([50eb1fe](https://github.com/contentful/marketplace-partner-apps/commit/50eb1fe112259bb263fb92b27ec89356d901f4cd))
+* **deps:** bump the production-dependencies group in /apps/flexfields with 2 updates ([#5432](https://github.com/contentful/marketplace-partner-apps/issues/5432)) ([dbca928](https://github.com/contentful/marketplace-partner-apps/commit/dbca928b835112c8ce3f3981e31c842610757904))
+* **deps:** bump the production-dependencies group in /apps/flexfields with 2 updates ([#5499](https://github.com/contentful/marketplace-partner-apps/issues/5499)) ([92ae5e1](https://github.com/contentful/marketplace-partner-apps/commit/92ae5e1c78831197e2b89c70a414631bf6650693))
+
 ## [1.2.11](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.2.10...thrillworks-flex-fields-app-v1.2.11) (2025-07-02)
 
 

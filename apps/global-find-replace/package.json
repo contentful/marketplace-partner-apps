@@ -1,0 +1,51 @@
+{
+  "name": "global-find-replace",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@contentful/app-sdk": "4.41.1",
+    "@contentful/f36-components": "^4.81.1",
+    "@contentful/f36-icons": "^4.29.1",
+    "@contentful/f36-tokens": "4.2.0",
+    "@contentful/react-apps-toolkit": "1.2.16",
+    "@contentful/rich-text-plain-text-renderer": "^17.1.0",
+    "@emotion/css": "^11.13.5",
+    "contentful-management": "11.54.4",
+    "diff": "^8.0.2",
+    "emotion": "11.0.0",
+    "happy-dom": "^18.0.1",
+    "lodash": "^4.17.21",
+    "posthog-js": "^1.260.3",
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
+  },
+  "scripts": {
+    "start": "vite --port 3001",
+    "install-ci": "npm ci",
+    "build": "tsc && vite build",
+    "test": "vitest",
+    "lint": "eslint src",
+    "create-app-definition": "contentful-app-scripts create-app-definition",
+    "add-locations": "contentful-app-scripts add-locations",
+    "format": "npx prettier --write src",
+    "upload": "contentful-app-scripts upload --bundle-dir ./dist",
+    "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./dist  --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN"
+  },
+  "devDependencies": {
+    "@contentful/app-scripts": "^2.5.5",
+    "@eslint/js": "^9.34.0",
+    "@testing-library/react": "16.3.0",
+    "@types/lodash": "^4.17.20",
+    "@types/node": "24.3.0",
+    "@types/react": "19.1.11",
+    "@types/react-dom": "19.1.8",
+    "@vitejs/plugin-react": "5.0.1",
+    "eslint": "^9.34.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "typescript": "5.9.2",
+    "typescript-eslint": "^8.41.0",
+    "vite": "7.1.3",
+    "vitest": "3.2.4"
+  }
+}

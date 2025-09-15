@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.0.9](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.8...vwo-fme-v1.0.9) (2025-08-01)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.35.0 to 4.36.0 in /apps/vwo-fme in the production-dependencies group ([#5780](https://github.com/contentful/marketplace-partner-apps/issues/5780)) ([c444500](https://github.com/contentful/marketplace-partner-apps/commit/c444500209c70074a3db9f55de79c207127a8f22))
+* **deps:** bump @contentful/app-sdk from 4.36.0 to 4.37.0 in /apps/vwo-fme in the production-dependencies group ([#5944](https://github.com/contentful/marketplace-partner-apps/issues/5944)) ([d9afa2d](https://github.com/contentful/marketplace-partner-apps/commit/d9afa2dffeee776ac76536beacfce6a0589669cd))
+* **deps:** bump @contentful/f36-components from 4.80.5 to 4.81.1 in /apps/vwo-fme in the production-dependencies group ([#5861](https://github.com/contentful/marketplace-partner-apps/issues/5861)) ([0ecf92d](https://github.com/contentful/marketplace-partner-apps/commit/0ecf92db3ea0df95846e882a4c160fbf7d1f2687))
+* **deps:** bump contentful-management from 10.46.4 to 11.54.4 in /apps/vwo-fme ([#5836](https://github.com/contentful/marketplace-partner-apps/issues/5836)) ([83c3d19](https://github.com/contentful/marketplace-partner-apps/commit/83c3d196747c3fe68ad3b9a08725a6cc9003e092))
+
+## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.7...vwo-fme-v1.0.8) (2025-07-28)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.29.7 to 4.31.0 in /apps/vwo-fme in the production-dependencies group ([#5579](https://github.com/contentful/marketplace-partner-apps/issues/5579)) ([9edadbd](https://github.com/contentful/marketplace-partner-apps/commit/9edadbdf1fc16bdb64651c428d163d19f5e911cc))
+* **deps:** bump @contentful/app-sdk from 4.31.0 to 4.32.0 in /apps/vwo-fme in the production-dependencies group ([#5587](https://github.com/contentful/marketplace-partner-apps/issues/5587)) ([ac2a46f](https://github.com/contentful/marketplace-partner-apps/commit/ac2a46f061304e7265f6391845094b599886a7ac))
+* **deps:** bump @contentful/app-sdk from 4.32.0 to 4.33.0 in /apps/vwo-fme in the production-dependencies group ([#5634](https://github.com/contentful/marketplace-partner-apps/issues/5634)) ([627ee5b](https://github.com/contentful/marketplace-partner-apps/commit/627ee5be1724766183660d6d13251484b9696282))
+* **deps:** bump @contentful/app-sdk from 4.33.0 to 4.34.0 in /apps/vwo-fme in the production-dependencies group ([#5677](https://github.com/contentful/marketplace-partner-apps/issues/5677)) ([3fb09a2](https://github.com/contentful/marketplace-partner-apps/commit/3fb09a2961442e5d08caa4b95caf8cc44c52e0fb))
+* **deps:** bump @contentful/app-sdk from 4.34.0 to 4.35.0 in /apps/vwo-fme in the production-dependencies group ([#5754](https://github.com/contentful/marketplace-partner-apps/issues/5754)) ([6420d0d](https://github.com/contentful/marketplace-partner-apps/commit/6420d0d5b910b9cadf990a0299150cd279cca243))
+* **deps:** bump @contentful/f36-components from 4.80.4 to 4.80.5 in /apps/vwo-fme in the production-dependencies group ([#5439](https://github.com/contentful/marketplace-partner-apps/issues/5439)) ([f2dbdc7](https://github.com/contentful/marketplace-partner-apps/commit/f2dbdc7147095af61f16697ea26523b3eec46352))
+* **deps:** bump axios from 1.10.0 to 1.11.0 in /apps/vwo-fme ([#5710](https://github.com/contentful/marketplace-partner-apps/issues/5710)) ([2da95a2](https://github.com/contentful/marketplace-partner-apps/commit/2da95a21ba9415561fc6635cf6a32403856c833d))
+* **deps:** bump form-data in /apps/vwo-fme ([#5637](https://github.com/contentful/marketplace-partner-apps/issues/5637)) ([8ec3ce7](https://github.com/contentful/marketplace-partner-apps/commit/8ec3ce7c306436c1ca4ce39f7af26899fea9d5b9))
+* **deps:** bump on-headers and compression in /apps/vwo-fme ([#5615](https://github.com/contentful/marketplace-partner-apps/issues/5615)) ([3f34b11](https://github.com/contentful/marketplace-partner-apps/commit/3f34b115f3c7b3f3a3173379d71c00d28e9eeb55))
+
 ## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.6...vwo-fme-v1.0.7) (2025-07-02)
 
 
