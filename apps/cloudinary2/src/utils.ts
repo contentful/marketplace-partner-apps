@@ -68,8 +68,12 @@ function evaluator(template: string, context: Record<string, unknown>, sdk: Fiel
   }
 }
 
+/*
+ * To open the media library dialog with a scoped search filter you should pass the resource type (image, video) and the sdk instance (to get the instance parameters)
+ * The function returns a string filter expression, or undefined if the expression is empty
+ */
 export function mediaLibraryFilter(type: string, sdk: FieldAppSDK<AppInstallationParameters>) {
-  let expression = type ? `resource_type:${type}` : ``;
+  let expression = type !== '' ? `resource_type:${type}` : ``;
   const searchFilterTemplate = (sdk.parameters.instance.searchFilter || '') as string;
 
   const binding = {
@@ -80,5 +84,8 @@ export function mediaLibraryFilter(type: string, sdk: FieldAppSDK<AppInstallatio
   const defaultBooleanOperator = shouldAppendImplicitAndOperator ? '' : ' AND ';
   const searchFilter = ` ${evaluator(searchFilterTemplate, binding, sdk)}`;
   expression = `${expression}${defaultBooleanOperator}${searchFilter}`;
+  if (expression.trim() === '') {
+    return undefined;
+  }
   return expression;
 }
