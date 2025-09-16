@@ -14,7 +14,7 @@
     "@mui/material": "^5.18.0",
     "@emotion/css": "^11.13.5",
     "@mui/styled-engine-sc": "^5.12.0",
-    "axios": "^1.11.0",
+    "axios": "^1.12.0",
     "clone-deep": "^4.0.1",
     "contentful": "^10.15.1",
     "contentful-management": "11.54.4",
@@ -69,7 +69,7 @@
     "jsdoc": "^4.0.4",
     "typescript": "4.9.5",
     "happy-dom": "^17.2.2",
-    "vite": "^7.1.1",
+    "vite": "^7.1.5",
     "vitest": "^3.2.4"
   },
   "homepage": ".",
