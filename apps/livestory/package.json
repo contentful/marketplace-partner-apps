@@ -8,7 +8,7 @@
     "@contentful/f36-tokens": "4.2.0",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "11.13.5",
-    "contentful-management": "10.46.4",
+    "contentful-management": "11.57.3",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "superagent": "^10.2.3"
