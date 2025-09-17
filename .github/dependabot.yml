@@ -246,6 +246,7 @@ updates:
     directory: '/apps/docs-to-rich-text'
     ignore:
       - dependency-name: '@contentful/app-sdk'
+      - dependency-name: '@contentful/field-editor-rich-text'
       - dependency-name: '@types/node'
         versions:
           - '>18.15.3'
