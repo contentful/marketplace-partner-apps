@@ -40,7 +40,7 @@
     "eslint": "^8.56.0",
     "eslint-plugin-react": "^7.37.5",
     "typescript": "5.9.2",
-    "vite": "4.5.5",
+    "vite": "7.1.6",
     "vitest": "3.2.4",
     "happy-dom": "^17.5.6"
   }
