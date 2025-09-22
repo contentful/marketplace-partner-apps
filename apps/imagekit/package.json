@@ -45,7 +45,7 @@
     "@types/lodash": "^4.17.20"
   },
   "scripts": {
-    "install-ci": "npm ci",
+    "install-ci": "npm install",
     "start": "vite",
     "build": "rm -rf build && tsc && vite build",
     "test": "vitest run --passWithNoTests",
