@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "^4.17.1",
-    "@contentful/dam-app-base": "^2.0.0",
+    "@contentful/dam-app-base": "^3.0.9",
     "@contentful/f36-components": "4.81.1",
     "@contentful/react-apps-toolkit": "^1.2.16",
     "@dnd-kit/core": "^6.3.1",
@@ -15,8 +15,8 @@
     "@imagekit/react": "^5.0.1",
     "file-size": "^1.0.0",
     "imagekit-media-library-widget": "^2.1.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
