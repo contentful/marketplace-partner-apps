@@ -49,14 +49,14 @@
     "@types/node": "^20",
     "@types/react": "17.0.2",
     "@types/react-dom": "17.0.2",
-    "@typescript-eslint/eslint-plugin": "^8.44.0",
+    "@typescript-eslint/eslint-plugin": "^8.44.1",
     "@typescript-eslint/parser": "^8.18.0",
     "@vitejs/plugin-react": "^4.7.0",
     "@vitest/browser": "^2.1.8",
     "happy-dom": "^17.2.2",
     "playwright": "^1.55.0",
     "typescript": "5.4.3",
-    "vite": "^7.1.6",
+    "vite": "^7.1.7",
     "vitest": "^2.0.5"
   },
   "overrides": {
