@@ -222,7 +222,7 @@ describe('FieldCheckCard', () => {
       />,
     );
     const header = screen.getByTestId('field-header');
-    fireEvent.click(header!);
+    fireEvent.click(header);
     expect(onToggleExpand).toHaveBeenCalledWith('test-field');
   });
 
