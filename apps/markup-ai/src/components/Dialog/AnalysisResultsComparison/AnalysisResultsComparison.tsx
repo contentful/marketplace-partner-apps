@@ -3,7 +3,7 @@ import { Container } from './AnalysisResultsComparison.styles';
 import { ComparisonCard } from '../ComparisonCard/ComparisonCard';
 import { StyleScores } from '@markupai/toolkit';
 import { useTranslation } from '../../../contexts/LocalizationContext';
-import { METRIC_ORDER, METRIC_LABEL_KEYS, getMetricScore, MetricKey } from '../../../constants/metrics';
+import { METRIC_ORDER, METRIC_LABEL_KEYS, getMetricScore } from '../../../constants/metrics';
 
 interface AnalysisResultsComparisonProps {
   initial: StyleScores;
@@ -23,8 +23,8 @@ export const AnalysisResultsComparison: React.FC<AnalysisResultsComparisonProps>
         <ComparisonCard
           key={key}
           label={label}
-          initialValue={getMetricScore(initialScores, key as MetricKey)}
-          improvedValue={getMetricScore(improvedScores, key as MetricKey)}
+          initialValue={getMetricScore(initialScores, key)}
+          improvedValue={getMetricScore(improvedScores, key)}
         />
       ))}
     </Container>

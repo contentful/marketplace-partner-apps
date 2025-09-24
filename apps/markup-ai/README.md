@@ -20,6 +20,23 @@ npm run dev
 
 The app will be available at `http://localhost:3000`
 
+### Selecting Markup AI environment in local dev
+
+You can switch the Markup AI platform target without changing source code using Vite env vars:
+
+- `VITE_MARKUPAI_URL` — explicit API base URL. Takes precedence when set.
+- `VITE_MARKUPAI_ENV` — one of `dev`, `stage`, or `prod` (default).
+
+Examples (create `.env`):
+
+```bash
+# Use explicit URL (highest priority)
+VITE_MARKUPAI_URL=https://api.dev.markup.ai
+
+# Or select by environment name
+VITE_MARKUPAI_ENV=dev
+```
+
 ## Testing
 
 To run tests:

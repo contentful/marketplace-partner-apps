@@ -31,7 +31,7 @@ describe('SettingsModal', () => {
 
   it('updates API key input and triggers save handler', () => {
     render(<SettingsModal {...baseProps} />);
-    const input = screen.getByPlaceholderText('Enter your API key') as HTMLInputElement;
+    const input = screen.getByPlaceholderText('Enter your API key');
     fireEvent.change(input, { target: { value: 'abc' } });
     fireEvent.click(screen.getByText('Save API Key'));
     expect(baseProps.onApiKeyChange).toHaveBeenCalledWith('abc');

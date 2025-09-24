@@ -28,7 +28,7 @@ import {
 } from './MoreDetailsDialog.styles';
 import { StyleAnalysisSuccessResp, StyleAnalysisRewriteResp, StyleScores } from '@markupai/toolkit';
 import { useTranslation } from '../../contexts/LocalizationContext';
-import { CopyIcon, CheckCircleIcon } from '@contentful/f36-icons';
+import { CopySimpleIcon, CheckCircleIcon } from '@contentful/f36-icons';
 
 import { getScoreColorString, getScoreColorStringSoft } from '../../utils/scoreColors';
 import {
@@ -64,10 +64,7 @@ export const MoreDetailsDialog: React.FC = () => {
   const [copied, setCopied] = useState(false);
 
   const scores = useMemo<StyleScores | undefined>(
-    () =>
-      'rewrite' in checkResponse
-        ? (checkResponse as StyleAnalysisRewriteResp).rewrite.scores
-        : (checkResponse as StyleAnalysisSuccessResp).original.scores,
+    () => ('rewrite' in checkResponse ? checkResponse.rewrite.scores : checkResponse.original.scores),
     [checkResponse],
   );
 
@@ -194,7 +191,7 @@ export const MoreDetailsDialog: React.FC = () => {
           {'workflow' in checkResponse && checkResponse.workflow.id && (
             <CopyWorkflowIdButton
               onClick={async () => {
-                const id = checkResponse.workflow.id!;
+                const id = checkResponse.workflow.id;
                 try {
                   await navigator.clipboard.writeText(id);
                 } catch {
@@ -207,7 +204,7 @@ export const MoreDetailsDialog: React.FC = () => {
               title="Copy workflow id"
               data-testid="copy-workflow-id-button"
             >
-              {copied ? <CheckCircleIcon size="small" /> : <CopyIcon size="small" />}
+              {copied ? <CheckCircleIcon size="small" /> : <CopySimpleIcon size="small" />}
               Workflow ID
             </CopyWorkflowIdButton>
           )}

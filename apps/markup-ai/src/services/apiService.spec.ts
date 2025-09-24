@@ -7,6 +7,15 @@ vi.mock('@markupai/toolkit', () => ({
   styleRewrite: vi.fn(async (args: unknown) => ({ ok: true, args })),
   getAdminConstants: vi.fn(async () => ({ dialects: ['en-US'], tones: ['neutral'] })),
   listStyleGuides: vi.fn(async () => [{ id: 'default', name: 'Default' }]),
+  PlatformType: {
+    Environment: 'environment',
+    Url: 'url',
+  },
+  Environment: {
+    Dev: 'dev',
+    Stage: 'stage',
+    Prod: 'prod',
+  },
 }));
 
 import { styleCheck, styleRewrite, getAdminConstants, listStyleGuides } from '@markupai/toolkit';
@@ -54,7 +63,75 @@ describe('apiService', () => {
 
   it('fetchStyleGuides calls underlying SDK with apiKey', async () => {
     const res = await fetchStyleGuides(validConfig);
-    expect(listStyleGuides).toHaveBeenCalledWith({ apiKey: 'k' });
+    expect(listStyleGuides).toHaveBeenCalledWith(
+      expect.objectContaining({ apiKey: 'k', platform: expect.any(Object) }),
+    );
     expect(res[0]).toHaveProperty('id');
+  });
+
+  describe('platform resolution via env', () => {
+    it('uses explicit URL when VITE_MARKUPAI_URL is set', async () => {
+      vi.stubEnv('VITE_MARKUPAI_URL', 'https://api.dev.markup.ai');
+      vi.stubEnv('VITE_MARKUPAI_ENV', 'prod'); // should be ignored
+
+      await fetchStyleGuides(validConfig);
+
+      expect(listStyleGuides).toHaveBeenCalledWith(
+        expect.objectContaining({
+          apiKey: 'k',
+          platform: { type: 'url', value: 'https://api.dev.markup.ai' },
+        }),
+      );
+      vi.unstubAllEnvs();
+    });
+
+    it('uses environment when VITE_MARKUPAI_ENV=dev', async () => {
+      vi.unstubAllEnvs();
+      vi.stubEnv('VITE_MARKUPAI_URL', '');
+      vi.stubEnv('VITE_MARKUPAI_ENV', 'dev');
+
+      await fetchStyleGuides(validConfig);
+
+      expect(listStyleGuides).toHaveBeenCalledWith(
+        expect.objectContaining({
+          apiKey: 'k',
+          platform: { type: 'environment', value: 'dev' },
+        }),
+      );
+      vi.unstubAllEnvs();
+    });
+
+    it('maps VITE_MARKUPAI_ENV=stg to stage', async () => {
+      vi.unstubAllEnvs();
+      vi.stubEnv('VITE_MARKUPAI_URL', '');
+      vi.stubEnv('VITE_MARKUPAI_ENV', 'stg');
+
+      await fetchStyleGuides(validConfig);
+
+      expect(listStyleGuides).toHaveBeenCalledWith(
+        expect.objectContaining({
+          apiKey: 'k',
+          platform: { type: 'environment', value: 'stage' },
+        }),
+      );
+      vi.unstubAllEnvs();
+    });
+
+    it('defaults to prod when no env vars are set', async () => {
+      vi.unstubAllEnvs();
+      // ensure both are empty strings so URL branch is skipped and env is blank
+      vi.stubEnv('VITE_MARKUPAI_URL', '');
+      vi.stubEnv('VITE_MARKUPAI_ENV', '');
+
+      await fetchStyleGuides(validConfig);
+
+      expect(listStyleGuides).toHaveBeenCalledWith(
+        expect.objectContaining({
+          apiKey: 'k',
+          platform: { type: 'environment', value: 'prod' },
+        }),
+      );
+      vi.unstubAllEnvs();
+    });
   });
 });

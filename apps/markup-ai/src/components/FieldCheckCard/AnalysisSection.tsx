@@ -13,7 +13,7 @@ import {
 import { StyleScores } from '@markupai/toolkit';
 import { getScoreColorString, formatScoreForDisplay } from '../../utils/scoreColors';
 import { useTranslation } from '../../contexts/LocalizationContext';
-import { METRIC_ORDER, METRIC_LABEL_KEYS, getMetricScore as readScore, MetricKey } from '../../constants/metrics';
+import { METRIC_ORDER, METRIC_LABEL_KEYS, getMetricScore as readScore } from '../../constants/metrics';
 
 interface AnalysisSectionProps {
   scores?: StyleScores;
@@ -48,7 +48,7 @@ export const AnalysisSection: React.FC<AnalysisSectionProps & { 'data-testid'?: 
         )}
       </Row>
       {metrics.map(({ key, label }) => {
-        const value = readScore(scores, key as MetricKey);
+        const value = readScore(scores, key);
         const color = getScoreColorString(value);
         return (
           <MetricGroup key={key}>
