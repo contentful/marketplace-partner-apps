@@ -1,0 +1,39 @@
+.reactMarkDown {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6em;
+  color: #333;
+}
+
+.reactMarkDown ul {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  list-style: disc outside none;
+}
+
+.reactMarkDown ul li {
+  margin-left: 2em;
+  display: list-item;
+  text-align: -webkit-match-parent;
+}
+
+.reactMarkDown ol li {
+  margin-left: 2em;
+  display: list-item;
+  text-align: -webkit-match-parent;
+}
+
+.reactMarkDown p {
+  line-height: 1.6; /* Adjust the value as needed for more or less spacing */
+  padding-bottom: inherit;
+}
+
+.reactMarkDown h1,
+.reactMarkDown h2,
+.reactMarkDown h3,
+.reactMarkDown h4,
+.reactMarkDown h5,
+.reactMarkDown h6 {
+  line-height: 1.2; /* Adjust the value as needed */
+  padding-bottom: inherit;
+}
