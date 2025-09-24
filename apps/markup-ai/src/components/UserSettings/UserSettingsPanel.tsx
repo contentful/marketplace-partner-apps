@@ -3,7 +3,7 @@ import { useSDK } from '@contentful/react-apps-toolkit';
 import { SidebarAppSDK } from '@contentful/app-sdk';
 import styled from '@emotion/styled';
 import { Tooltip, IconButton } from '@contentful/f36-components';
-import { CloseIcon } from '@contentful/f36-icons';
+import { XIcon } from '@contentful/f36-icons';
 import StyleSettings from './StyleSettings';
 
 const Panel = styled.div`
@@ -67,7 +67,7 @@ export const UserSettingsPanel: React.FC<UserSettingsPanelProps> = ({
 }) => {
   useSDK<SidebarAppSDK>();
   const [showCloseTooltip, setShowCloseTooltip] = useState(false);
-  const isConfigComplete = !!(dialect && tone && styleGuide);
+  const isConfigComplete = !!(dialect && styleGuide);
 
   if (!isOpen && !forceOpen) return null;
 
@@ -79,14 +79,14 @@ export const UserSettingsPanel: React.FC<UserSettingsPanelProps> = ({
         </TabsBar>
         {!forceOpen && onClose && (
           <Tooltip
-            content="Please select Style Guide, Dialect, and Tone before closing"
+            content="Please select Style Guide and Dialect before closing"
             isVisible={showCloseTooltip && !isConfigComplete}
           >
             <IconButton
               aria-label="Close settings"
               size="small"
               variant="transparent"
-              icon={<CloseIcon />}
+              icon={<XIcon />}
               onClick={() => {
                 if (!isConfigComplete) {
                   setShowCloseTooltip(true);

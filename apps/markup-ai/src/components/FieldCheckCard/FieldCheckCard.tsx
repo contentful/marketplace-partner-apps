@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@contentful/f36-components';
-import { ChevronDownIcon, ChevronRightIcon } from '@contentful/f36-icons';
+import { CaretDownIcon, CaretRightIcon } from '@contentful/f36-icons';
 import { FieldCheck } from '../../types/content';
 import { LoadingState } from '../LoadingState/LoadingState';
 import {
@@ -70,9 +70,7 @@ export const FieldCheckCard: React.FC<FieldCheckCardProps> = ({
   return (
     <CardWrapper data-expanded={isExpanded}>
       <HeaderFlex data-clickable data-testid="field-header" onClick={() => onToggleExpand(fieldId)}>
-        <ChevronWrapper>
-          {isExpanded ? <ChevronDownIcon size="small" /> : <ChevronRightIcon size="small" />}
-        </ChevronWrapper>
+        <ChevronWrapper>{isExpanded ? <CaretDownIcon size="small" /> : <CaretRightIcon size="small" />}</ChevronWrapper>
         <FieldName data-testid="field-name">{fieldName}</FieldName>
         <ScoreBox
           data-testid="field-score"

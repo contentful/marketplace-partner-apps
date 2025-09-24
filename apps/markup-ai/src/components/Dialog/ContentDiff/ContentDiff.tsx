@@ -134,8 +134,8 @@ export const ContentDiff: React.FC<ContentDiffProps> = ({
                 const from = posImproved;
                 const to = from + text.length;
                 if (from !== to) {
-                  const leadingWs = (text.match(/^\s+/) || [''])[0].length;
-                  const trailingWs = (text.match(/\s+$/) || [''])[0].length;
+                  const leadingWs = (/^\s+/.exec(text) || [''])[0].length;
+                  const trailingWs = (/\s+$/.exec(text) || [''])[0].length;
                   const localStart = leadingWs;
                   const localEnd = text.length - trailingWs;
                   if (localEnd > localStart) {
@@ -154,8 +154,8 @@ export const ContentDiff: React.FC<ContentDiffProps> = ({
                 const from = posOriginal;
                 const to = from + text.length;
                 if (from !== to) {
-                  const leadingWs = (text.match(/^\s+/) || [''])[0].length;
-                  const trailingWs = (text.match(/\s+$/) || [''])[0].length;
+                  const leadingWs = (/^\s+/.exec(text) || [''])[0].length;
+                  const trailingWs = (/\s+$/.exec(text) || [''])[0].length;
                   const localStart = leadingWs;
                   const localEnd = text.length - trailingWs;
                   if (localEnd > localStart) {
