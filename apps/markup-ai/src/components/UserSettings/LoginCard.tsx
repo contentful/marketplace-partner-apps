@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card, Flex, Heading, Paragraph, TextInput, Button, Note } from '@contentful/f36-components';
-import { LockIcon } from '@contentful/f36-icons';
+import { LockSimpleIcon } from '@contentful/f36-icons';
 import styled from '@emotion/styled';
 
 const Wrapper = styled.div`
@@ -22,7 +22,7 @@ export const LoginCard: React.FC<LoginCardProps> = ({ initialApiKey = '', onSave
       <Card>
         <Flex flexDirection="column" gap="spacingM">
           <Flex alignItems="center" gap="spacingS">
-            <LockIcon variant="muted" />
+            <LockSimpleIcon variant="muted" />
             <Heading as="h3">Markup AI Login</Heading>
           </Flex>
           <Paragraph>Enter your Markup AI API key to enable content analysis and rewriting in this sidebar.</Paragraph>

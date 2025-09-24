@@ -13,7 +13,12 @@ export const ComparisonCard: React.FC<ComparisonCardProps> = ({ label, initialVa
   // For increase: 0 degrees (pointing up-right)
   // For decrease: 90 degrees (pointing down-right)
   // For no change: 45 degrees (pointing right)
-  const rotation = diff > 0 ? 0 : diff < 0 ? 90 : 45;
+  const getRotation = (diff: number) => {
+    if (diff > 0) return 0;
+    if (diff < 0) return 90;
+    return 45;
+  };
+  const rotation = getRotation(diff);
 
   return (
     <Card>
