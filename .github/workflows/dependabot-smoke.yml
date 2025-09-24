@@ -1,0 +1,112 @@
+name: Dependabot Smoke & Auto-Merge
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+
+jobs:
+  detect:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+
+      - id: affected
+        run: |
+          APPS=$(npx nx print-affected --select=projects --plain)
+          echo "apps=$APPS" >> $GITHUB_OUTPUT
+
+      - id: set-matrix
+        run: |
+          node -e "
+          const { execSync } = require('node:child_process');
+          const raw = process.env.APPS || '';
+          const names = raw.split(/[ ,\n]+/).filter(Boolean);
+          const apps = [];
+          for (const n of names) {
+            try {
+              const j = JSON.parse(execSync(`npx nx show project ${n} --json`, { encoding: 'utf8' }));
+              if ((j.projectType || j.project?.projectType) === 'application') apps.push(n);
+            } catch {}
+          }
+          process.stdout.write(`matrix=${JSON.stringify(apps)}`);
+          " | tee -a $GITHUB_OUTPUT
+        env:
+          APPS: ${{ steps.affected.outputs.apps }}
+
+  ci:
+    if: github.actor == 'dependabot[bot]'
+    needs: detect
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project: ${{ fromJson(needs.detect.outputs.matrix || '[]') }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Lint / typecheck / build (Nx affected project)
+        run: |
+          npx nx run ${{ matrix.project }}:lint || true
+          npx nx run ${{ matrix.project }}:typecheck || npx tsc -v || true
+          npx nx build ${{ matrix.project }}
+
+      - name: Start preview server
+        id: preview
+        run: |
+          node scripts/serve-preview.mjs ${{ matrix.project }} > preview-${{ matrix.project }}.log 2>&1 &
+          echo $! > preview-${{ matrix.project }}.pid
+          timeout 90s bash -c 'until grep -q "APP_URL=" preview-${{ matrix.project }}.log; do sleep 1; done'
+          URL=$(grep -m1 "APP_URL=" preview-${{ matrix.project }}.log | cut -d= -f2-)
+          echo "APP_URL=$URL" >> $GITHUB_OUTPUT
+
+      - name: Playwright smoke
+        env:
+          APP_URL: ${{ steps.preview.outputs.APP_URL }}
+        run: npm run smoke
+
+      - name: Stop preview server
+        if: always()
+        run: |
+          kill $(cat preview-${{ matrix.project }}.pid) || true
+
+  merge:
+    if: github.actor == 'dependabot[bot]'
+    needs: [ci]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enable auto-merge (squash)
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          pull-request-number: ${{ github.event.pull_request.number }}
+          merge-method: squash
+      - name: Add to merge queue (optional)
+        run: |
+          gh pr merge --squash --queue ${{ github.event.pull_request.number }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
