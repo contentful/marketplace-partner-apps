@@ -18,7 +18,7 @@ const Sidebar: React.FC = () => {
   const { settings, updateDialect, updateTone, updateStyleGuide } = useUserSettings();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   // API key now comes from installation; only per-user preferences are local
-  const isConfigComplete = !!(settings.dialect && settings.tone && settings.styleGuide);
+  const isConfigComplete = !!(settings.dialect && settings.styleGuide);
   const [forcePanel, setForcePanel] = useState<boolean>(() => !isConfigComplete);
 
   useEffect(() => {

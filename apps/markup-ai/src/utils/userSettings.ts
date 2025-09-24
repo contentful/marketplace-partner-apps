@@ -14,7 +14,6 @@ const STORAGE_KEYS = {
 
 export const DEFAULTS = {
   dialect: 'american_english',
-  tone: 'professional',
   styleGuide: 'microsoft',
 } as const;
 
@@ -25,7 +24,7 @@ export function getUserSettings(): UserSettings {
   return {
     apiKey: localStorage.getItem(STORAGE_KEYS.apiKey),
     dialect: localStorage.getItem(STORAGE_KEYS.dialect) || DEFAULTS.dialect,
-    tone: localStorage.getItem(STORAGE_KEYS.tone) || DEFAULTS.tone,
+    tone: localStorage.getItem(STORAGE_KEYS.tone),
     styleGuide: localStorage.getItem(STORAGE_KEYS.styleGuide) || DEFAULTS.styleGuide,
   };
 }
@@ -34,9 +33,6 @@ export function ensureDefaultUserSettings() {
   if (typeof window === 'undefined') return;
   if (!localStorage.getItem(STORAGE_KEYS.dialect)) {
     localStorage.setItem(STORAGE_KEYS.dialect, DEFAULTS.dialect);
-  }
-  if (!localStorage.getItem(STORAGE_KEYS.tone)) {
-    localStorage.setItem(STORAGE_KEYS.tone, DEFAULTS.tone);
   }
   if (!localStorage.getItem(STORAGE_KEYS.styleGuide)) {
     localStorage.setItem(STORAGE_KEYS.styleGuide, DEFAULTS.styleGuide);
