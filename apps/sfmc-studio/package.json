@@ -23,7 +23,7 @@
     "coverage": "jest --coverage --silent --json --outputFile=jest-output.json"
   },
   "dependencies": {
-    "@ant-design/plots": "^2.6.4",
+    "@ant-design/plots": "^2.6.5",
     "@contentful/app-scripts": "^1.32.2",
     "@contentful/app-sdk": "^4.44.1",
     "@contentful/f36-components": "^4.81.1",
@@ -41,7 +41,7 @@
     "jspdf": "^3.0.3",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
-    "next": "^15.5.3",
+    "next": "^15.5.4",
     "prettier": "^3.6.2",
     "react": "^18",
     "react-dom": "^18",
@@ -50,7 +50,7 @@
     "redux-mock-store": "^1.5.5",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^3.1.0",
-    "sass": "^1.93.1"
+    "sass": "^1.93.2"
   },
   "devDependencies": {
     "@babel/core": "^7.28.4",
