@@ -25,7 +25,7 @@
   "dependencies": {
     "@ant-design/plots": "^2.6.5",
     "@contentful/app-scripts": "^1.32.2",
-    "@contentful/app-sdk": "^4.44.1",
+    "@contentful/app-sdk": "^4.45.0",
     "@contentful/f36-components": "^4.81.1",
     "@contentful/react-apps-toolkit": "^1.2.16",
     "@reduxjs/toolkit": "^2.9.0",
