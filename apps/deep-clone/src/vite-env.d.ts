@@ -4,4 +4,5 @@ export type AppParameters = {
   cloneText: string;
   cloneTextBefore: boolean;
   automaticRedirect: boolean;
+  reusableEntryTags: string[];
 };

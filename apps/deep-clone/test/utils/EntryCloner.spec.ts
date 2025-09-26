@@ -9,6 +9,7 @@ vi.mock('@contentful/app-sdk', () => ({
 }));
 
 const setReferencesCount = vi.fn();
+const setReusableEntriesCount = vi.fn();
 const setClonesCount = vi.fn();
 const setUpdatesCount = vi.fn();
 
@@ -23,8 +24,18 @@ describe('EntryCloner', () => {
       cloneText: '[CLONE]',
       cloneTextBefore: true,
       automaticRedirect: true,
+      reusableEntryTags: [],
     };
-    entryCloner = new EntryCloner(mockCma as any, mockParameters, 'main-entry-id', setReferencesCount, setClonesCount, setUpdatesCount);
+    entryCloner = new EntryCloner(
+      mockCma as any,
+      mockParameters,
+      'main-entry-id',
+      [],
+      setReferencesCount,
+      setReusableEntriesCount,
+      setClonesCount,
+      setUpdatesCount
+    );
   });
 
   describe('Clone entry with reference field', () => {
