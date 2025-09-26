@@ -21,7 +21,7 @@ vi.mock('@contentful/react-apps-toolkit', () => ({
 
 vi.mock('../../src/utils/EntryCloner', () => {
   return {
-    default: vi.fn().mockImplementation((cma, parameters, entryId, setReferencesCount, setClonesCount, setUpdatesCount) => ({
+    default: vi.fn().mockImplementation((cma, parameters, entryId, reusableTagIds, setReferencesCount, setReusableEntriesCount, setClonesCount, setUpdatesCount) => ({
       cloneEntry: vi.fn().mockImplementation(async () => {
         setReferencesCount(2);
         setClonesCount(2);
@@ -38,6 +38,7 @@ vi.mock('../../src/utils/useInstallationParameters', () => ({
     cloneText: 'Copy',
     cloneTextBefore: true,
     automaticRedirect: true,
+    reusableEntryTags: [],
   }),
 }));
 
@@ -76,6 +77,7 @@ describe('Sidebar component', () => {
       cloneText: 'Updated',
       cloneTextBefore: false,
       automaticRedirect: false,
+      reusableEntryTags: [],
     });
 
     const { getByText } = render(<Sidebar />);
