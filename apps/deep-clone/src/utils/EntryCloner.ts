@@ -50,18 +50,12 @@ class EntryCloner {
 
   async getReferencesQty(): Promise<number> {
     await this.findReferences(this.entryId);
-    // Only count entries that will be cloned (not reusable entries)
     return Object.keys(this.references).length;
   }
 
   async getReusableEntriesQty(): Promise<number> {
     await this.findReferences(this.entryId);
     return Object.keys(this.reusableEntries).length;
-  }
-
-  async getTotalReferencesQty(): Promise<number> {
-    await this.findReferences(this.entryId);
-    return Object.keys(this.references).length + Object.keys(this.reusableEntries).length;
   }
 
   private async findReferences(entryId: string): Promise<void> {
