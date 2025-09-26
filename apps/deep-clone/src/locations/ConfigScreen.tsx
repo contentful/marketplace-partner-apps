@@ -28,7 +28,7 @@ function ConfigScreen() {
     })();
   }, [sdk]);
 
-    const onConfigure = useCallback(async () => {
+  const onConfigure = useCallback(async () => {
     if (!parameters.cloneText?.trim()) {
       sdk.notifier.error('The app configuration was not saved. Please try again.');
       return false;
