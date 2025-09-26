@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.5](https://github.com/contentful/marketplace-partner-apps/compare/hugging-face-v1.1.4...hugging-face-v1.1.5) (2025-09-26)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.37.0 to 4.39.0 in /apps/hugging-face in the production-dependencies group ([#5986](https://github.com/contentful/marketplace-partner-apps/issues/5986)) ([b81a047](https://github.com/contentful/marketplace-partner-apps/commit/b81a047eb517414c8c2842860992c496ade3f1c7))
+* **deps:** bump @contentful/app-sdk from 4.39.0 to 4.40.0 in /apps/hugging-face in the production-dependencies group ([#6045](https://github.com/contentful/marketplace-partner-apps/issues/6045)) ([ed3e9ad](https://github.com/contentful/marketplace-partner-apps/commit/ed3e9ad17ce92a28edda5274f6680048f22f26cb))
+* **deps:** bump @contentful/app-sdk from 4.40.0 to 4.41.0 in /apps/hugging-face in the production-dependencies group ([#6083](https://github.com/contentful/marketplace-partner-apps/issues/6083)) ([68d59fc](https://github.com/contentful/marketplace-partner-apps/commit/68d59fc60e6abcad0de7b2aae964529cabce856d))
+* **deps:** bump @contentful/app-sdk from 4.41.0 to 4.41.1 in /apps/hugging-face in the production-dependencies group ([#6187](https://github.com/contentful/marketplace-partner-apps/issues/6187)) ([5db02da](https://github.com/contentful/marketplace-partner-apps/commit/5db02da4fa97b7790ff8308f292801b275b79601))
+* **deps:** bump @testing-library/jest-dom from 6.6.4 to 6.7.0 in /apps/hugging-face in the production-dependencies group ([#6156](https://github.com/contentful/marketplace-partner-apps/issues/6156)) ([5284078](https://github.com/contentful/marketplace-partner-apps/commit/52840785b067b6318dda430273d9a1e8bb0aae9b))
+* **deps:** bump @testing-library/jest-dom from 6.7.0 to 6.8.0 in /apps/hugging-face in the production-dependencies group ([#6248](https://github.com/contentful/marketplace-partner-apps/issues/6248)) ([21ab377](https://github.com/contentful/marketplace-partner-apps/commit/21ab377327be11fe509fae192a97965e30be678e))
+* **deps:** bump axios from 1.11.0 to 1.12.0 in /apps/hugging-face ([#6525](https://github.com/contentful/marketplace-partner-apps/issues/6525)) ([688904e](https://github.com/contentful/marketplace-partner-apps/commit/688904e0178db8495ce1e8ab54463fc1e11298e3))
+
 ## [1.1.4](https://github.com/contentful/marketplace-partner-apps/compare/hugging-face-v1.1.3...hugging-face-v1.1.4) (2025-08-01)
 
 
