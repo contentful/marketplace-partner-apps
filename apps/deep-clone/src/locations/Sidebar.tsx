@@ -12,6 +12,7 @@ function Sidebar() {
   useAutoResizer();
 
   const [referencesCount, setReferencesCount] = useState<number>(0);
+  const [reusableEntriesCount, setReusableEntriesCount] = useState<number>(0);
   const [clonesCount, setClonesCount] = useState<number>(0);
   const [updatesCount, setUpdatesCount] = useState<number>(0);
   const [countdown, setCountdown] = useState<number>(0);
@@ -43,6 +44,7 @@ function Sidebar() {
     setIsFinished(false);
     setIsRedirecting(false);
     setReferencesCount(0);
+    setReusableEntriesCount(0);
     setClonesCount(0);
     setUpdatesCount(0);
   };
@@ -51,11 +53,18 @@ function Sidebar() {
     resetState();
     setIsConfirming(true);
     await sdk.entry.save();
-    const cloner = new EntryCloner(sdk.cma, parameters, sdk.ids.entry, setReferencesCount, setClonesCount, setUpdatesCount);
+    const cloner = new EntryCloner(sdk.cma, parameters, sdk.ids.entry, parameters.reusableEntryTags || [], setReferencesCount, setReusableEntriesCount, setClonesCount, setUpdatesCount);
     const referencesQty = await cloner.getReferencesQty();
+    const reusableQty = await cloner.getReusableEntriesQty();
+    
+    let confirmMessage = `Are you sure you want to clone this entry? This will create ${referencesQty} new ${referencesQty === 1 ? 'entry' : 'entries'}.`;
+    if (reusableQty > 0) {
+      confirmMessage += ` ${reusableQty} ${reusableQty === 1 ? 'entry' : 'entries'} will be reused (not cloned).`;
+    }
+    
     const confirmation = await sdk.dialogs.openConfirm({
       title: 'Clone entry',
-      message: `Are you sure you want to clone this entry? This will create ${referencesQty} new entries.`,
+      message: confirmMessage,
     });
     if (!confirmation) {
       resetState();
@@ -91,7 +100,10 @@ function Sidebar() {
       <Stack spacing="spacing2Xs" flexDirection="column" alignItems="start">
         {(isConfirming || isCloning || isRedirecting || isFinished) && (
           <Text fontColor="gray500" fontWeight="fontWeightMedium">
-            {`Found ${referencesCount} ${referencesCount === 1 ? 'reference' : 'references'}.`}
+            {reusableEntriesCount > 0 
+              ? `Found ${referencesCount + reusableEntriesCount} ${referencesCount + reusableEntriesCount === 1 ? 'reference' : 'references'} (${referencesCount} to clone, ${reusableEntriesCount} to reuse).`
+              : `Found ${referencesCount} ${referencesCount === 1 ? 'reference' : 'references'}.`
+            }
           </Text>
         )}
         {(isCloning || isRedirecting || isFinished) && (
