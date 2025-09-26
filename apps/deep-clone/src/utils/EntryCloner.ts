@@ -72,7 +72,9 @@ class EntryCloner {
     let entry;
     try {
       entry = await this.cma.entry.get({ entryId: entryId });
-    } catch (error) {}
+    } catch (error) {
+      console.warn(`Error fetching entry with ID ${entryId}`, error);
+    }
 
     if (entry !== undefined) {
       const shouldReuse = await this.shouldReuseEntry(entry);
