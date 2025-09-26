@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/imagekit-contentful-v1.0.1...imagekit-contentful-v1.1.0) (2025-09-26)
+
+
+### Features
+
+* Imagekit app updates [INTEG-3155] ([#6615](https://github.com/contentful/marketplace-partner-apps/issues/6615)) ([6304362](https://github.com/contentful/marketplace-partner-apps/commit/63043622b625cfbfd58de13b8625b14e9075b17a))
+
 ## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/imagekit-contentful-v1.0.0...imagekit-contentful-v1.0.1) (2025-09-16)
 
 
