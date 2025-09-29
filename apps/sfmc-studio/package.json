@@ -23,9 +23,9 @@
     "coverage": "jest --coverage --silent --json --outputFile=jest-output.json"
   },
   "dependencies": {
-    "@ant-design/plots": "^2.6.4",
+    "@ant-design/plots": "^2.6.5",
     "@contentful/app-scripts": "^1.32.2",
-    "@contentful/app-sdk": "^4.44.1",
+    "@contentful/app-sdk": "^4.45.0",
     "@contentful/f36-components": "^4.81.1",
     "@contentful/react-apps-toolkit": "^1.2.16",
     "@reduxjs/toolkit": "^2.9.0",
@@ -41,7 +41,7 @@
     "jspdf": "^3.0.3",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
-    "next": "^15.5.3",
+    "next": "^15.5.4",
     "prettier": "^3.6.2",
     "react": "^18",
     "react-dom": "^18",
@@ -50,7 +50,7 @@
     "redux-mock-store": "^1.5.5",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^3.1.0",
-    "sass": "^1.93.0"
+    "sass": "^1.93.2"
   },
   "devDependencies": {
     "@babel/core": "^7.28.4",
@@ -65,11 +65,11 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/redux-mock-store": "^1.5.0",
-    "babel-jest": "^30.1.2",
-    "eslint": "^9.35.0",
-    "eslint-config-next": "15.5.3",
-    "jest": "30.1.3",
-    "jest-environment-jsdom": "30.1.2",
+    "babel-jest": "^30.2.0",
+    "eslint": "^9.36.0",
+    "eslint-config-next": "15.5.4",
+    "jest": "30.2.0",
+    "jest-environment-jsdom": "30.2.0",
     "typescript": "^5"
   }
 }

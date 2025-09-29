@@ -88,7 +88,7 @@ const ConfigScreen = () => {
   }, [sdk]);
 
   const mediaQualityOptions = [
-    { label: 'Auto', value: 'auto' },
+    { label: 'Default ImageKit Setting', value: '' },
     ...Array.from({ length: 10 }, (_, i) => ({
       label: `${(i + 1) * 10}`,
       value: `${(i + 1) * 10}`,
@@ -240,7 +240,7 @@ const ConfigScreen = () => {
                       </Select.Option>
                     ))}
                   </Select>
-                  <FormControl.HelpText>This quality setting will be applied to all assets selected from the Media Library Widget. (Default: <code style={codeBlockStyle}>Auto</code> i.e. use ImageKit's default quality settings)</FormControl.HelpText>
+                  <FormControl.HelpText>This quality setting will be applied to all assets selected from the Media Library Widget. (Default: Use ImageKit's default quality settings which can be configured from the <a href="https://imagekit.io/dashboard/settings/images" target="_blank">ImageKit Dashboard</a>.)</FormControl.HelpText>
                 </FormControl>
               </Form>
 
@@ -281,7 +281,7 @@ const ConfigScreen = () => {
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e, e.target.value)}
                     placeholder="e.g. image"
                   />
-                  <FormControl.HelpText>Set this to show only specific types of files when the Media Library Widget is opened. Supported options are <code style={codeBlockStyle}>"image" | "video" | "cssJs" | "others"</code>. (Leave this blank to show all types of files which is the default behavior)</FormControl.HelpText>
+                  <FormControl.HelpText>Set this to show only specific types of files when the Media Library Widget is opened. Supported options are <code style={codeBlockStyle}>"images" | "videos" | "cssJs" | "others"</code>. (Leave this blank to show all types of files which is the default behavior)</FormControl.HelpText>
                 </FormControl>
 
                 <FormControl marginTop="spacingM">

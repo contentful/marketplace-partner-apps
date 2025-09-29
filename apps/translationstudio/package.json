@@ -22,11 +22,11 @@
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./out --organization-id ${DEFINITIONS_ORG_ID} --definition-id 7FSju5TTAttraHZZr7Xfcr --token ${CONTENTFUL_CMA_TOKEN}"
   },
   "dependencies": {
-    "@contentful/app-sdk": "^4.44.1",
+    "@contentful/app-sdk": "^4.45.0",
     "@contentful/f36-components": "^4.81.1",
     "@contentful/f36-tokens": "^4.2.0",
     "@contentful/react-apps-toolkit": "^1.2.16",
-    "next": ">=15.5.3",
+    "next": ">=15.5.4",
     "react": ">=18.3.1",
     "serve": "^14.2.5"
   },
@@ -37,9 +37,9 @@
     "@types/node": "22.14.0",
     "@types/react": ">=16.8",
     "eslint": "^9.36.0",
-    "eslint-config-next": "^15.5.3",
-    "jest": "^30.1.3",
-    "jest-environment-jsdom": "^30.1.2",
+    "eslint-config-next": "^15.5.4",
+    "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.2.0",
     "typescript": "5.9.2"
   }
 }
