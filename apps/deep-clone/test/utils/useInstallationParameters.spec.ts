@@ -19,6 +19,7 @@ describe('useInstallationParameters', () => {
             cloneText: 'Custom Copy',
             cloneTextBefore: false,
             automaticRedirect: false,
+            reusableEntryTags: [],
           },
         },
       ],
@@ -32,6 +33,7 @@ describe('useInstallationParameters', () => {
       cloneText: 'Copy',
       cloneTextBefore: true,
       automaticRedirect: true,
+      reusableEntryTags: [],
     });
 
     await waitFor(() => {
@@ -39,6 +41,7 @@ describe('useInstallationParameters', () => {
         cloneText: 'Custom Copy',
         cloneTextBefore: false,
         automaticRedirect: false,
+        reusableEntryTags: [],
       });
     });
 
@@ -58,6 +61,7 @@ describe('useInstallationParameters', () => {
         cloneText: 'Copy',
         cloneTextBefore: true,
         automaticRedirect: true,
+        reusableEntryTags: [],
       });
     });
 

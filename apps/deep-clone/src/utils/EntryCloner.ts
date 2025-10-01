@@ -7,27 +7,34 @@ type ReferenceMap = Record<string, EntryProps>;
 class EntryCloner {
   private references: ReferenceMap = {};
   private clones: ReferenceMap = {};
+  private reusableEntries: ReferenceMap = {};
   private contentTypes: { [id: string]: ContentTypeProps } = {};
   private updates: number = 0;
   private parameters: AppParameters;
   private cma: CMAClient;
   private entryId: string;
   private setReferencesCount: (count: number) => void;
+  private setReusableEntriesCount: (count: number) => void;
   private setClonesCount: (count: number) => void;
   private setUpdatesCount: (count: number) => void;
+  private reusableTagIds: string[] = [];
 
   constructor(
     cma: CMAClient,
     parameters: AppParameters,
     entryId: string,
+    reusableTagIds: string[],
     setReferencesCount: (count: number) => void,
+    setReusableEntriesCount: (count: number) => void,
     setClonesCount: (count: number) => void,
     setUpdatesCount: (count: number) => void
   ) {
     this.cma = cma;
     this.parameters = parameters;
     this.entryId = entryId;
+    this.reusableTagIds = reusableTagIds;
     this.setReferencesCount = setReferencesCount;
+    this.setReusableEntriesCount = setReusableEntriesCount;
     this.setClonesCount = setClonesCount;
     this.setUpdatesCount = setUpdatesCount;
   }
@@ -46,19 +53,34 @@ class EntryCloner {
     return Object.keys(this.references).length;
   }
 
+  async getReusableEntriesQty(): Promise<number> {
+    await this.findReferences(this.entryId);
+    return Object.keys(this.reusableEntries).length;
+  }
+
   private async findReferences(entryId: string): Promise<void> {
-    if (this.references[entryId]) {
+    if (this.references[entryId] || this.reusableEntries[entryId]) {
       return;
     }
 
     let entry;
     try {
       entry = await this.cma.entry.get({ entryId: entryId });
-    } catch (error) {} // Deleted entries are not found
+    } catch (error) {
+      console.warn(`Error fetching entry with ID ${entryId}`, error);
+    }
 
     if (entry !== undefined) {
-      this.references[entryId] = entry;
+      const shouldReuse = await this.shouldReuseEntry(entry);
+
+      if (shouldReuse) {
+        this.reusableEntries[entryId] = entry;
+      } else {
+        this.references[entryId] = entry;
+      }
+
       this.setReferencesCount(Object.keys(this.references).length);
+      this.setReusableEntriesCount(Object.keys(this.reusableEntries).length);
 
       for (const fieldName in entry.fields) {
         const field = entry.fields[fieldName];
@@ -69,6 +91,20 @@ class EntryCloner {
         }
       }
     }
+  }
+
+  private async shouldReuseEntry(entry: EntryProps): Promise<boolean> {
+    if (!this.reusableTagIds || this.reusableTagIds.length === 0) {
+      return false;
+    }
+
+    if (entry.metadata?.tags && entry.metadata.tags.length > 0) {
+      const entryTagIds = entry.metadata.tags.map((tag: any) => tag.sys.id);
+      const hasReusableTag = this.reusableTagIds.some((tagId) => entryTagIds.includes(tagId));
+      return hasReusableTag;
+    }
+
+    return false;
   }
 
   private async createClones(): Promise<void> {
@@ -157,6 +193,11 @@ class EntryCloner {
       if (clone !== undefined) {
         fieldValue.sys.id = clone.sys.id;
         return true;
+      }
+
+      const reusableEntry = this.reusableEntries[fieldValue.sys.id];
+      if (reusableEntry !== undefined) {
+        return false;
       }
     }
 
