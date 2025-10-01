@@ -88,15 +88,15 @@ export function getMetricDataSource(
   if (!scores) return undefined;
   switch (key) {
     case 'clarity':
-      return scores.analysis?.clarity as MetricDataMap['clarity'];
+      return scores.analysis?.clarity;
     case 'tone':
-      return scores.analysis?.tone as MetricDataMap['tone'];
+      return scores.analysis?.tone;
     case 'grammar':
-      return scores.quality?.grammar as MetricDataMap['grammar'];
+      return scores.quality?.grammar;
     case 'consistency':
-      return scores.quality?.consistency as MetricDataMap['consistency'];
+      return scores.quality?.consistency;
     case 'terminology':
-      return scores.quality?.terminology as MetricDataMap['terminology'];
+      return scores.quality?.terminology;
     default:
       return undefined;
   }

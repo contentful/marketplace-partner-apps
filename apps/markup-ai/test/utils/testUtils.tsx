@@ -12,6 +12,16 @@ vi.mock('@markupai/toolkit', () => ({
       changeLanguage: vi.fn(),
     }),
   },
+  // minimal enums used by code under test
+  PlatformType: {
+    Environment: 'environment',
+    Url: 'url',
+  },
+  Environment: {
+    Dev: 'dev',
+    Stage: 'stage',
+    Prod: 'prod',
+  },
   Status: {
     Completed: 'completed',
     Failed: 'failed',
@@ -22,6 +32,8 @@ vi.mock('@markupai/toolkit', () => ({
     Style: 'style',
     Terminology: 'terminology',
   },
+  // no-op listStyleGuides default mock for component tests that import via apiService
+  listStyleGuides: vi.fn(async () => [{ id: 'default', name: 'Default' }]),
 }));
 
 interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {

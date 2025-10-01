@@ -145,7 +145,7 @@ const extractTextFromRichText = (value: string | Document | null | undefined): s
 
   // Handle rich text document structure
   if (typeof value === 'object' && value !== null && 'nodeType' in value && value.nodeType === BLOCKS.DOCUMENT) {
-    const { html } = convertToHtml(value as Document);
+    const { html } = convertToHtml(value);
     return html;
   }
 
@@ -172,7 +172,7 @@ const updateNodeAtPath = (doc: Document, path: number[], newValue: string): Docu
   }
 
   if (targetNode.nodeType === 'text') {
-    (targetNode as Text).value = newValue;
+    targetNode.value = newValue;
   } else {
     throw new Error(`Invalid node type at path: expected text node, got ${targetNode.nodeType}`);
   }

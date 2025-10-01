@@ -1,6 +1,6 @@
 import React from 'react';
 import { Note, IconButton, Flex } from '@contentful/f36-components';
-import { CloseIcon } from '@contentful/f36-icons';
+import { XIcon } from '@contentful/f36-icons';
 
 interface ErrorCardProps {
   message: string;
@@ -16,7 +16,7 @@ export const ErrorCard: React.FC<ErrorCardProps> = ({ message, onClose }) => {
           variant="transparent"
           size="small"
           aria-label="Close error message"
-          icon={<CloseIcon />}
+          icon={<XIcon />}
           onClick={onClose}
         />
       </Flex>
