@@ -19,7 +19,7 @@
     "contentful-management": "11.60.3",
     "diff": "^8.0.2",
     "dompurify": "^3.2.7",
-    "i18next": "^25.5.2",
+    "i18next": "^25.5.3",
     "markdown-it": "^14.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
