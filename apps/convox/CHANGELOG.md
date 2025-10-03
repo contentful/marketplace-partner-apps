@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/convox-v1.0.3...convox-v1.0.4) (2025-10-03)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.11.0 to 1.12.0 in /apps/convox ([#6535](https://github.com/contentful/marketplace-partner-apps/issues/6535)) ([33ff761](https://github.com/contentful/marketplace-partner-apps/commit/33ff7615ab58f3dc06b27e436edbfe704ea6e450))
+
 ## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/convox-v1.0.2...convox-v1.0.3) (2025-08-01)
 
 
