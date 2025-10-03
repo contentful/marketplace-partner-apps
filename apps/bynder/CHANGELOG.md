@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.20](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.1.19...bynder-assets-v1.1.20) (2025-10-03)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.11.0 to 1.12.0 in /apps/bynder ([#6538](https://github.com/contentful/marketplace-partner-apps/issues/6538)) ([9ad2250](https://github.com/contentful/marketplace-partner-apps/commit/9ad2250e49ac7b3912b8757fc153eb335f1cd9fe))
+
 ## [1.1.19](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.1.18...bynder-assets-v1.1.19) (2025-07-28)
 
 
