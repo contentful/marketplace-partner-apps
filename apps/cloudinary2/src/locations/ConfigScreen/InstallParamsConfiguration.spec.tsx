@@ -14,6 +14,7 @@ const installationParameters: AppInstallationParameters = {
   quality: 'auto:good',
   startFolder: 'start folder',
   showUploadButton: 'true',
+  imageEditorOverlays: [],
 };
 
 const backendParameters: BackendParameters = {
