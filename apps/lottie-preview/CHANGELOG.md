@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.7...lottie-preview-v1.1.0) (2025-10-03)
+
+
+### Features
+
+* Deep clone: Add confirmation modal [INTEG-3005] ([#5985](https://github.com/contentful/marketplace-partner-apps/issues/5985)) ([ddb8614](https://github.com/contentful/marketplace-partner-apps/commit/ddb861406f7a970de62dec93e36c2dcd4a8800fd))
+* official release version of deep-clone is now set to 1.0.1 [INTEG-3003] ([#5908](https://github.com/contentful/marketplace-partner-apps/issues/5908)) ([1dd642d](https://github.com/contentful/marketplace-partner-apps/commit/1dd642da5e75c43746d179cedfe6ef9ca5d98d94))
+
+
+### Bug Fixes
+
+* Deep clone improvements [] ([#5906](https://github.com/contentful/marketplace-partner-apps/issues/5906)) ([0c99ebf](https://github.com/contentful/marketplace-partner-apps/commit/0c99ebf547d88ddf161ffaae06673e50f41d1738))
+
 ## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.6...lottie-preview-v1.0.7) (2025-07-02)
 
 
