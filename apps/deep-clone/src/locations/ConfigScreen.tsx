@@ -5,14 +5,17 @@ import { AppParameters } from '../vite-env';
 import { ConfigAppSDK } from '@contentful/app-sdk';
 import { styles } from './ConfigScreen.styles';
 import ContentTypeMultiSelect, { ContentType } from '../components/ContentTypeMultiSelect';
+import TagMultiSelect, { Tag } from '../components/TagMultiSelect';
 
 function ConfigScreen() {
   const [parameters, setParameters] = useState<AppParameters>({
     cloneText: 'Copy',
     cloneTextBefore: true,
     automaticRedirect: true,
+    reusableEntryTags: [],
   });
   const [selectedContentTypes, setSelectedContentTypes] = useState<ContentType[]>([]);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const sdk = useSDK<ConfigAppSDK>();
 
   useEffect(() => {
@@ -30,6 +33,7 @@ function ConfigScreen() {
       sdk.notifier.error('The app configuration was not saved. Please try again.');
       return false;
     }
+    
     const editorInterface = selectedContentTypes.reduce((acc, contentType) => {
       return {
         ...acc,
@@ -39,11 +43,16 @@ function ConfigScreen() {
       };
     }, {});
 
+    const updatedParameters = {
+      ...parameters,
+      reusableEntryTags: selectedTags.map(tag => tag.id),
+    };
+
     return {
-      parameters,
+      parameters: updatedParameters,
       targetState: { EditorInterface: { ...editorInterface } },
     };
-  }, [parameters, selectedContentTypes]);
+  }, [parameters, selectedContentTypes, selectedTags]);
 
   useEffect(() => {
     sdk.app.onConfigure(onConfigure);
@@ -68,7 +77,19 @@ function ConfigScreen() {
           Content types
         </Paragraph>
         <ContentTypeMultiSelect selectedContentTypes={selectedContentTypes} setSelectedContentTypes={setSelectedContentTypes} sdk={sdk} cma={sdk.cma} />
+        
+        <Subheading marginTop="spacing2Xl" marginBottom="spacing2Xs">
+          Reusable Entry Tags
+        </Subheading>
+        <Paragraph marginBottom="spacingXs">
+          Select which tags should be applied to reusable entries during cloning. Entries with these tags will be referenced instead of cloned.
+        </Paragraph>
+        <Paragraph fontWeight="fontWeightDemiBold" marginBottom="spacingXs">
+          Tags
+        </Paragraph>
 
+        <TagMultiSelect selectedTags={selectedTags} setSelectedTags={setSelectedTags} sdk={sdk} cma={sdk.cma} />
+        
         <Subheading marginTop="spacing2Xl" marginBottom="spacingL">
           Naming
         </Subheading>

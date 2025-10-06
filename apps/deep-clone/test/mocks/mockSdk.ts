@@ -20,6 +20,7 @@ const mockSdk = {
       cloneText: 'Copy',
       cloneTextBefore: true,
       automaticRedirect: true,
+      reusableEntryTags: [],
     },
   },
   entry: {
