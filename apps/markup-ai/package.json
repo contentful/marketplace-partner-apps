@@ -8,7 +8,7 @@
     "@codemirror/lang-markdown": "^6.4.0",
     "@codemirror/merge": "^6.11.0",
     "@codemirror/state": "^6.5.2",
-    "@codemirror/view": "^6.38.4",
+    "@codemirror/view": "^6.38.5",
     "@contentful/app-sdk": "^4.45.0",
     "@contentful/f36-components": "4.81.1",
     "@contentful/f36-tokens": "5.1.0",
