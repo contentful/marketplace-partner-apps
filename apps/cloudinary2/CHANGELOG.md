@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.0](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.2.1...cloudinary-assets-v1.3.0) (2025-10-08)
+
+
+### Features
+
+* cld media editing and filters [CLD-6128] ([#6128](https://github.com/contentful/marketplace-partner-apps/issues/6128)) ([b4f4f41](https://github.com/contentful/marketplace-partner-apps/commit/b4f4f412addb2a46053b81d74d7ba7ae5505205b))
+
+
+### Bug Fixes
+
+* bug with url construction of cloudinary assets [INTEG-3024] ([#6129](https://github.com/contentful/marketplace-partner-apps/issues/6129)) ([1953fe3](https://github.com/contentful/marketplace-partner-apps/commit/1953fe3cf75a5780a886fd4e704fddbe832cc077))
+* **deps:** bump axios from 1.11.0 to 1.12.0 in /apps/cloudinary2 ([#6536](https://github.com/contentful/marketplace-partner-apps/issues/6536)) ([ba83c48](https://github.com/contentful/marketplace-partner-apps/commit/ba83c48ce040e08d7fd26ace21adabae37765129))
+
 ## [1.2.1](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.2.0...cloudinary-assets-v1.2.1) (2025-08-01)
 
 
