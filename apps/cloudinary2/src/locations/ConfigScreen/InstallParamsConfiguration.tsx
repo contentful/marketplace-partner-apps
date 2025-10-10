@@ -1,4 +1,4 @@
-import { Checkbox, Form, FormControl, TextLink } from '@contentful/f36-components';
+import { Checkbox, Form, TextLink } from '@contentful/f36-components';
 import { ExternalLinkTrimmedIcon } from '@contentful/f36-icons';
 import { useCallback } from 'react';
 import { SelectField } from '../../components/SelectField';
@@ -6,6 +6,7 @@ import { TextField } from '../../components/TextField';
 import { DEFAULT_APP_INSTALLATION_PARAMETERS } from '../../constants';
 import { AppInstallationParameters } from '../../types';
 import { BackendConfiguration } from './BackendConfiguration';
+import { FieldWrapper } from '../../components/FieldWrapper';
 
 const MAX_FILES_UPPER_LIMIT = 1000;
 
@@ -136,22 +137,20 @@ export function InstallParamsConfiguration(props: Props) {
         value={parameters.format}
         onChange={(value) => onParameterChange('format', value)}
       />
-      <Checkbox
-        isChecked={parameters.showUploadButton === 'true'}
-        value={'showUploadButton'}
-        onChange={(event) => onParameterChange('showUploadButton', event.currentTarget.checked ? 'true' : 'false')}>
-        Show Upload Button
-      </Checkbox>
 
-      <FormControl.HelpText>
-        Enable or disable the upload functionality. When checked, users will see an Upload button that allows them to add assets directly to your library. When
-        unchecked, the upload option will be hidden, preventing any new assets from being added manually. This setting is useful when you want to restrict asset
-        input to predefined sources only.
-      </FormControl.HelpText>
+      <FieldWrapper description="Enable or disable the upload functionality. When checked, users will see an Upload button that allows them to add assets directly to your library. When unchecked, the upload option will be hidden, preventing any new assets from being added manually. This setting is useful when you want to restrict asset input to predefined sources only.">
+        <Checkbox
+          isChecked={parameters.showUploadButton === 'true'}
+          value={'showUploadButton'}
+          onChange={(event) => onParameterChange('showUploadButton', event.currentTarget.checked ? 'true' : 'false')}>
+          Show Upload Button
+        </Checkbox>
+      </FieldWrapper>
+
       <TextField
         testId="config-imageEditorOverlays"
         name="Image editor overlays"
-        description={`public ids for image editor overlays`}
+        description="Public ids for image editor overlays"
         value={parameters.imageEditorOverlays?.join(',')}
         onChange={(value) => {
           const overlays = value
