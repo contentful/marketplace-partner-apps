@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.3.0...cloudinary-assets-v1.3.1) (2025-10-10)
+
+
+### Bug Fixes
+
+* **cloudinary2:** image editor overlays bug fix [ZEND-7047] ([#6750](https://github.com/contentful/marketplace-partner-apps/issues/6750)) ([c6e76f2](https://github.com/contentful/marketplace-partner-apps/commit/c6e76f2e5c7c45c77a865e021731cb74d9b96acb))
+
 ## [1.3.0](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.2.1...cloudinary-assets-v1.3.0) (2025-10-08)
 
 
