@@ -49,14 +49,15 @@ const ImageEditorDialog = () => {
 
         // samples/logo,samples/man-portrait
         const steps = ['resizeAndCrop'];
-        const overlays = installationParams.imageEditorOverlays.map((pid) => {
-          return {
-            publicId: pid,
-            label: pid,
-            transformation: [],
-            placementOptions: ['top_left', 'top_right', 'bottom_left', 'bottom_right'],
-          };
-        });
+        const overlays =
+          installationParams.imageEditorOverlays?.map((pid) => {
+            return {
+              publicId: pid,
+              label: pid,
+              transformation: [],
+              placementOptions: ['top_left', 'top_right', 'bottom_left', 'bottom_right'],
+            };
+          }) || [];
 
         if (overlays.length > 0) {
           steps.push('imageOverlay');
