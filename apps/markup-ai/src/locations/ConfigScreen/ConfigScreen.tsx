@@ -3,7 +3,7 @@ import { ConfigAppSDK } from '@contentful/app-sdk';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { Box, Spinner } from '@contentful/f36-components';
 import { ApiKeyTab } from './ApiKeyTab';
-import { fetchStyleGuides } from '../../services/apiService';
+import { useApiService } from '../../hooks/useApiService';
 import {
   ConfigScreenWrapper,
   ContentArea,
@@ -24,6 +24,10 @@ export const ConfigScreen = () => {
   const [parameters, setParameters] = useState<AppInstallationParameters>({});
   const [loading, setLoading] = useState(true);
   const [apiKeyError, setApiKeyError] = useState<string | undefined>(undefined);
+
+  // Use the API service for validation
+  const config = parameters.apiKey ? { apiKey: parameters.apiKey } : undefined;
+  const { fetchStyleGuides } = useApiService(config || { apiKey: '' });
 
   useEffect(() => {
     (async () => {
@@ -47,7 +51,8 @@ export const ConfigScreen = () => {
     }
 
     try {
-      await fetchStyleGuides({ apiKey: parameters.apiKey });
+      // Test the API key by trying to fetch style guides
+      await fetchStyleGuides();
     } catch {
       const message = 'Invalid API key. Please verify and try again.';
       setApiKeyError(message);

@@ -1,4 +1,4 @@
-import { checkContent, contentRewrite } from './apiService';
+import { useApiService } from '../hooks/useApiService';
 import type { FieldCheck, FieldCheckMap, RewriterConfig } from '../types/content';
 import { MAX_FIELD_CHECKS } from '../constants/app';
 
@@ -37,74 +37,104 @@ export const updateFieldCheck = (
   return newChecks;
 };
 
-export const contentCheck = async (fieldId: string, content: string, config: RewriterConfig): Promise<FieldCheck> => {
-  console.log('Checking content:', {
-    fieldId,
-    content,
-    contentType: typeof content,
-    contentLength: content.length,
-  });
+// Hook-based rewriter service that uses React Query internally
+export function useRewriterService(config: RewriterConfig) {
+  const { checkContent, contentRewrite } = useApiService(config);
 
-  try {
-    const result = await checkContent(content, config);
-    console.log('Check result:', result);
-    return {
+  const contentCheck = async (fieldId: string, content: string): Promise<FieldCheck> => {
+    console.log('Checking content:', {
       fieldId,
-      originalValue: content,
-      isChecking: false,
-      checkResponse: result,
-      error: null,
-      lastUpdated: Date.now(),
-      hasRewriteResult: false,
-      checkConfig: config,
-    };
-  } catch (error) {
-    console.error('Error checking content:', error);
-    return {
-      fieldId,
-      originalValue: content,
-      isChecking: false,
-      checkResponse: null,
-      error: error instanceof Error ? error.message : 'An error occurred while checking content',
-      lastUpdated: Date.now(),
-      hasRewriteResult: false,
-      checkConfig: config,
-    };
-  }
-};
+      content,
+      contentType: typeof content,
+      contentLength: content.length,
+    });
 
-export const rewriteContent = async (fieldId: string, content: string, config: RewriterConfig): Promise<FieldCheck> => {
-  console.log('Rewriting content:', {
-    fieldId,
-    content,
-    contentType: typeof content,
-    contentLength: content.length,
-  });
+    try {
+      const result = await checkContent(content);
+      console.log('Check result:', result);
+      return {
+        fieldId,
+        originalValue: content,
+        isChecking: false,
+        checkResponse: {
+          ...result,
+          original: result.original
+            ? {
+                scores: result.original.scores,
+              }
+            : undefined,
+        },
+        error: null,
+        lastUpdated: Date.now(),
+        hasRewriteResult: false,
+        checkConfig: config,
+      };
+    } catch (error) {
+      console.error('Error checking content:', error);
+      return {
+        fieldId,
+        originalValue: content,
+        isChecking: false,
+        checkResponse: null,
+        error: error instanceof Error ? error.message : 'An error occurred while checking content',
+        lastUpdated: Date.now(),
+        hasRewriteResult: false,
+        checkConfig: config,
+      };
+    }
+  };
 
-  try {
-    const result = await contentRewrite(content, config);
-    console.log('Rewrite result:', result);
-    return {
+  const rewriteContent = async (fieldId: string, content: string): Promise<FieldCheck> => {
+    console.log('Rewriting content:', {
       fieldId,
-      originalValue: content,
-      isChecking: false,
-      checkResponse: result,
-      error: null,
-      hasRewriteResult: true,
-      lastUpdated: Date.now(),
-      checkConfig: config,
-    };
-  } catch (error) {
-    console.error('Error rewriting content:', error);
-    return {
-      fieldId,
-      originalValue: content,
-      isChecking: false,
-      checkResponse: null,
-      hasRewriteResult: false,
-      error: error instanceof Error ? error.message : 'An error occurred while rewriting content',
-      lastUpdated: Date.now(),
-      checkConfig: config,
-    };
-  }
-};
+      content,
+      contentType: typeof content,
+      contentLength: content.length,
+    });
+
+    try {
+      const result = await contentRewrite(content);
+      console.log('Rewrite result:', result);
+      return {
+        fieldId,
+        originalValue: content,
+        isChecking: false,
+        checkResponse: {
+          ...result,
+          original: result.original
+            ? {
+                scores: result.original.scores,
+              }
+            : undefined,
+          rewrite: result.rewrite
+            ? {
+                text: result.rewrite.text,
+                scores: result.rewrite.scores,
+              }
+            : undefined,
+        },
+        error: null,
+        hasRewriteResult: true,
+        lastUpdated: Date.now(),
+        checkConfig: config,
+      };
+    } catch (error) {
+      console.error('Error rewriting content:', error);
+      return {
+        fieldId,
+        originalValue: content,
+        isChecking: false,
+        checkResponse: null,
+        hasRewriteResult: false,
+        error: error instanceof Error ? error.message : 'An error occurred while rewriting content',
+        lastUpdated: Date.now(),
+        checkConfig: config,
+      };
+    }
+  };
+
+  return {
+    contentCheck,
+    rewriteContent,
+  };
+}

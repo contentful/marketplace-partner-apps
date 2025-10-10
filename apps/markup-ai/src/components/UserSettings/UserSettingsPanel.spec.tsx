@@ -36,9 +36,9 @@ describe('UserSettingsPanel', () => {
     expect(onClose).not.toHaveBeenCalled();
   });
 
-  it('closes when config is complete', () => {
+  it('closes when config is complete without requiring tone', () => {
     const onClose = vi.fn();
-    render(<UserSettingsPanel {...baseProps} onClose={onClose} dialect="en-US" tone="neutral" styleGuide="default" />);
+    render(<UserSettingsPanel {...baseProps} onClose={onClose} dialect="en-US" tone={null} styleGuide="default" />);
     const closeBtn = screen.getByLabelText('Close settings');
     fireEvent.click(closeBtn);
     expect(onClose).toHaveBeenCalled();
