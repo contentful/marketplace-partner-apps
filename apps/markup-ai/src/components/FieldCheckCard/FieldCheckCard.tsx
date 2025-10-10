@@ -74,15 +74,15 @@ export const FieldCheckCard: React.FC<FieldCheckCardProps> = ({
         <FieldName data-testid="field-name">{fieldName}</FieldName>
         <ScoreBox
           data-testid="field-score"
-          background={getScoreColor(checkResponse.original.scores.quality.score).background}
+          background={getScoreColor(checkResponse.original?.scores?.quality?.score || 0).background}
         >
-          {formatScoreForDisplay(checkResponse.original.scores.quality.score)}
+          {formatScoreForDisplay(checkResponse.original?.scores?.quality?.score || 0)}
         </ScoreBox>
       </HeaderFlex>
       {isExpanded && (
         <>
           <AnalysisSection
-            scores={checkResponse.original.scores}
+            scores={checkResponse.original?.scores ?? undefined}
             onMoreDetails={handleMoreDetails}
             data-testid="analysis-section"
           />

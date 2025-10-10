@@ -11,7 +11,7 @@ import {
 
 export function useUserSettings() {
   const [settings, setSettings] = useState<UserSettings>(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof globalThis !== 'undefined') {
       ensureDefaultUserSettings();
     }
     return getUserSettings();
@@ -19,8 +19,8 @@ export function useUserSettings() {
 
   useEffect(() => {
     const onStorage = () => setSettings(getUserSettings());
-    window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
+    globalThis.addEventListener('storage', onStorage);
+    return () => globalThis.removeEventListener('storage', onStorage);
   }, []);
 
   const updateApiKey = useCallback((apiKey: string | null) => {

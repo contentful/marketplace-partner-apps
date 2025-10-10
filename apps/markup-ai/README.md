@@ -61,6 +61,12 @@ npm run build
 
 The build output will be in the `build` directory.
 
+## API Client
+
+The [@hey-api/openapi-ts](https://heyapi.dev/) package is used to auto-generate the files in `src/api-client`.
+
+DO NOT EDIT THESE FILES DIRECTLY. Instead, with your local dev server running, run `npm openapi-ts` to re-generate the client when you need to make updates.
+
 ## License
 
 This project is licensed under the Apache-2.0 License - see the LICENSE file for details.

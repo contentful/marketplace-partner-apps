@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Paragraph, Select, FormControl, Note, Spinner, Button, Text } from '@contentful/f36-components';
 import styled from '@emotion/styled';
-import { fetchAdminConstants, fetchStyleGuides } from '../../services/apiService';
-import { Constants, StyleGuides } from '@markupai/toolkit';
+import { useApiService } from '../../hooks/useApiService';
 import { DEFAULTS } from '../../utils/userSettings';
 
 const Wrapper = styled.div`
@@ -36,39 +35,17 @@ export const StyleSettings: React.FC<StyleSettingsProps> = ({
   onStyleGuideChange,
   onSaveAndClose,
 }) => {
-  const [constants, setConstants] = useState<Constants | null>(null);
-  const [styleGuides, setStyleGuidesData] = useState<StyleGuides | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    if (!apiKey) return;
-    async function load() {
-      try {
-        setLoading(true);
-        setError(null);
-        const [c, sg] = await Promise.all([fetchAdminConstants({ apiKey }), fetchStyleGuides({ apiKey })]);
-        if (!cancelled) {
-          setConstants(c);
-          setStyleGuidesData(sg);
-        }
-      } catch {
-        if (!cancelled) setError('Failed to load settings options');
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    }
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, [apiKey]);
+  const config = { apiKey };
+  const { constants, styleGuides, constantsLoading, styleGuidesLoading, constantsError, styleGuidesError } =
+    useApiService(config);
 
   const dialectOptions = useMemo(() => constants?.dialects ?? [], [constants]);
   const toneOptions = useMemo(() => constants?.tones ?? [], [constants]);
   const styleGuideOptions = useMemo(() => styleGuides ?? [], [styleGuides]);
   const [showErrors, setShowErrors] = useState(false);
+
+  const loading = constantsLoading || styleGuidesLoading;
+  const error = constantsError || styleGuidesError;
 
   // Ensure a default style guide is selected once options are loaded
   useEffect(() => {
@@ -98,7 +75,7 @@ export const StyleSettings: React.FC<StyleSettingsProps> = ({
     return (
       <Wrapper>
         <Note variant="negative" title="Error">
-          {error}
+          {error.message}
         </Note>
       </Wrapper>
     );
