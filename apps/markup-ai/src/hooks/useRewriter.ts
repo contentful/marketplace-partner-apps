@@ -4,15 +4,15 @@ import { DEBOUNCE_DELAY } from '../constants/app';
 import { useFieldChecks } from './useFieldChecks';
 import { useTimeouts } from './useTimeouts';
 import { useFieldSubscriptions } from './useFieldSubscriptions';
-import { contentCheck, rewriteContent } from '../services/rewriterService';
+import { useRewriterService } from '../services/rewriterService';
 import { getUserSettings } from '../utils/userSettings';
-import { StyleAnalysisRewriteResp, StyleAnalysisSuccessResp } from '@markupai/toolkit';
+import { RewriteResponse, StyleCheckResponse } from '../api-client';
 
 // Type guard to check if response is a rewrite response
 const isRewriteResponse = (
-  response: StyleAnalysisSuccessResp | StyleAnalysisRewriteResp | null,
-): response is StyleAnalysisRewriteResp => {
-  return response !== null && 'rewrite' in response;
+  response: StyleCheckResponse | RewriteResponse | null | undefined,
+): response is RewriteResponse => {
+  return response !== null && response !== undefined && 'rewrite' in response;
 };
 
 export const useRewriter = (sdk: SidebarAppSDK) => {
@@ -25,25 +25,36 @@ export const useRewriter = (sdk: SidebarAppSDK) => {
   const { setTimeout, clearAllTimeouts } = useTimeouts();
   const { setFieldValue } = useFieldSubscriptions(sdk, () => {});
 
+  // Get the API configuration
+  const { dialect, tone, styleGuide } = getUserSettings();
+  const apiKey = sdk.parameters.installation.apiKey;
+  const config = {
+    apiKey: apiKey || '',
+    dialect: dialect || undefined,
+    tone: tone || undefined,
+    styleGuide: styleGuide || undefined,
+  };
+
+  // Use the hook-based rewriter service
+  const { contentCheck, rewriteContent } = useRewriterService(config);
+
   const handleContentCheck = useCallback(
     async (fieldId: string, content: string) => {
+      if (!content || content.trim().length === 0) {
+        console.log('Skipping content check for empty content:', fieldId);
+        removeCheck(fieldId);
+        return;
+      }
+
       updateCheck(fieldId, { isChecking: true, error: null });
 
-      const { dialect, tone, styleGuide } = getUserSettings();
-      const apiKey = sdk.parameters.installation.apiKey;
       if (!apiKey) {
         updateCheck(fieldId, { isChecking: false });
         return;
       }
-      const config = {
-        apiKey: apiKey || '',
-        dialect: dialect || undefined,
-        tone: tone || undefined,
-        styleGuide: styleGuide || undefined,
-      };
 
       try {
-        const result = await contentCheck(fieldId, content, config);
+        const result = await contentCheck(fieldId, content);
         updateCheck(fieldId, result);
       } catch (error) {
         console.error('Error checking content:', error);
@@ -52,7 +63,7 @@ export const useRewriter = (sdk: SidebarAppSDK) => {
         });
       }
     },
-    [updateCheck],
+    [updateCheck, removeCheck, apiKey, contentCheck],
   );
 
   const handleFieldChange = useCallback(
@@ -92,7 +103,7 @@ export const useRewriter = (sdk: SidebarAppSDK) => {
   );
 
   const handleAcceptSuggestion = useCallback(
-    async (fieldId: string, rewriteResponseOverride?: StyleAnalysisRewriteResp) => {
+    async (fieldId: string, rewriteResponseOverride?: RewriteResponse) => {
       const fieldCheck = fieldChecks[fieldId];
       const rewriteResponse = rewriteResponseOverride || fieldCheck?.checkResponse;
       if (!isRewriteResponse(rewriteResponse) || !rewriteResponse.rewrite) return;
@@ -103,7 +114,7 @@ export const useRewriter = (sdk: SidebarAppSDK) => {
       cooldownFieldsRef.current.add(fieldId);
 
       try {
-        await setFieldValue(fieldId, rewriteResponse.rewrite.text);
+        await setFieldValue(fieldId, rewriteResponse.rewrite?.text || '');
         removeCheck(fieldId);
 
         // Set timeout to remove field from cooldown after COOLDOWN_DURATION
@@ -137,21 +148,13 @@ export const useRewriter = (sdk: SidebarAppSDK) => {
 
       updateCheck(fieldId, { isChecking: true, error: null });
 
-      const { dialect, tone, styleGuide } = getUserSettings();
-      const apiKey = sdk.parameters.installation.apiKey;
       if (!apiKey) {
         updateCheck(fieldId, { isChecking: false });
         return;
       }
-      const config = {
-        apiKey: apiKey || '',
-        dialect: dialect || undefined,
-        tone: tone || undefined,
-        styleGuide: styleGuide || undefined,
-      };
 
       try {
-        const result = await rewriteContent(fieldId, fieldCheck.originalValue, config);
+        const result = await rewriteContent(fieldId, fieldCheck.originalValue);
         updateCheck(fieldId, result);
       } catch (error) {
         console.error('Error rewriting content:', error);
@@ -160,7 +163,7 @@ export const useRewriter = (sdk: SidebarAppSDK) => {
         });
       }
     },
-    [fieldChecks, updateCheck],
+    [fieldChecks, updateCheck, apiKey, rewriteContent],
   );
 
   const setOnFieldChange = useCallback((callback: (fieldId: string) => void) => {

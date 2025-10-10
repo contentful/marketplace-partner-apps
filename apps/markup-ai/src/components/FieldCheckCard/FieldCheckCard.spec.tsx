@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '../../../test/utils/testUtils';
 import { FieldCheckCard } from './FieldCheckCard';
 import { FieldCheck } from '../../types/content';
-import { IssueCategory, Status, StyleAnalysisSuccessResp } from '@markupai/toolkit';
+import { Dialects, StyleCheckResponse, StyleGuides, Tones, WorkflowStatus } from '../../api-client/types.gen';
 import { mockSdk } from '../../../test/mocks/mockSdk';
 
 // Mock useSDK to always return mockSdk
@@ -16,102 +16,38 @@ vi.mock('@contentful/react-apps-toolkit', async () => {
   };
 });
 
-const mockCheckResponse: StyleAnalysisSuccessResp = {
+const mockCheckResponse: StyleCheckResponse = {
   workflow: {
     id: 'chk-2b5f8d3a-9c7e-4f2b-a8d1-6e9c3f7b4a2d',
     type: 'checks',
     api_version: '1.0.0',
     generated_at: '2025-01-15T14:22:33Z',
-    status: Status.Completed,
-    webhook_response: {
-      url: 'https://api.example.com/webhook',
-      status_code: 200,
-    },
+    status: WorkflowStatus.COMPLETED,
   },
   config: {
-    dialect: 'canadian_english',
-    style_guide: {
-      style_guide_type: 'ap',
-      style_guide_id: 'sg-8d4e5f6a-2b3c-4d5e-6f7a-8b9c0d1e2f3a',
-    },
-    tone: 'conversational',
+    dialect: Dialects.CANADIAN_ENGLISH,
+    style_guide: { style_guide_type: StyleGuides.AP, style_guide_id: 'sg-8d4e5f6a-2b3c-4d5e-6f7a-8b9c0d1e2f3a' },
+    tone: Tones.CONVERSATIONAL,
   },
   original: {
-    issues: [
-      {
-        original: 'therefor',
-        position: {
-          start_index: 89,
-        },
-        subcategory: 'spelling',
-        category: IssueCategory.Grammar,
-      },
-      {
-        original: 'leverage',
-        position: {
-          start_index: 156,
-        },
-        subcategory: 'vocabulary',
-        category: IssueCategory.Grammar,
-      },
-      {
-        original: 'going forward',
-        position: {
-          start_index: 234,
-        },
-        subcategory: 'word_choice',
-        category: IssueCategory.Tone,
-      },
-      {
-        original: 'email',
-        position: {
-          start_index: 312,
-        },
-        subcategory: 'punctuation',
-        category: IssueCategory.Consistency,
-      },
-      {
-        original: 'towards',
-        position: {
-          start_index: 405,
-        },
-        subcategory: 'word_choice',
-        category: IssueCategory.Consistency,
-      },
-    ],
     scores: {
       quality: {
-        score: 72,
-        grammar: {
-          score: 95,
-          issues: 1,
-        },
-        consistency: {
-          score: 80,
-          issues: 2,
-        },
-        terminology: {
-          score: 100,
-          issues: 0,
-        },
+        score: 80,
+        grammar: { score: 85, issues: 2 },
+        consistency: { score: 75, issues: 1 },
+        terminology: { score: 90, issues: 0 },
       },
       analysis: {
         clarity: {
-          score: 64,
-          flesch_reading_ease: 51.4,
-          sentence_complexity: 38.9,
-          vocabulary_complexity: 45.6,
-          sentence_count: 6,
-          word_count: 112,
-          average_sentence_length: 18.7,
+          score: 70,
+          word_count: 100,
+          sentence_count: 10,
+          average_sentence_length: 10,
+          flesch_reading_ease: 60,
+          vocabulary_complexity: 50,
+          sentence_complexity: 50,
         },
-        tone: {
-          score: 78,
-          informality: 38.2,
-          liveliness: 33.9,
-          informality_alignment: 115.8,
-          liveliness_alignment: 106.4,
-        },
+        tone: { score: 60, informality: 50, liveliness: 70, informality_alignment: 0, liveliness_alignment: 0 },
       },
     },
   },
@@ -179,7 +115,7 @@ describe('FieldCheckCard', () => {
     );
     expect(screen.getByTestId('field-name')).toHaveTextContent('Test Field');
     // quality score comes from original.scores.quality.score in the new structure
-    expect(screen.getByTestId('field-score')).toHaveTextContent('72');
+    expect(screen.getByTestId('field-score')).toHaveTextContent('80');
   });
 
   it('shows right chevron when collapsed', () => {
@@ -283,8 +219,8 @@ describe('FieldCheckCard', () => {
         original: {
           ...mockCheckResponse.original,
           scores: {
-            ...mockCheckResponse.original.scores,
-            quality: { ...mockCheckResponse.original.scores.quality, score: 0 },
+            ...mockCheckResponse.original?.scores,
+            quality: { ...mockCheckResponse.original?.scores?.quality, score: 0 },
           },
         },
       } as unknown as FieldCheck['checkResponse'],

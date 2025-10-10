@@ -1,13 +1,13 @@
 import React from 'react';
 import { Container } from './AnalysisResultsComparison.styles';
 import { ComparisonCard } from '../ComparisonCard/ComparisonCard';
-import { StyleScores } from '@markupai/toolkit';
 import { useTranslation } from '../../../contexts/LocalizationContext';
 import { METRIC_ORDER, METRIC_LABEL_KEYS, getMetricScore } from '../../../constants/metrics';
+import { ScoreOutput } from '../../../api-client';
 
 interface AnalysisResultsComparisonProps {
-  initial: StyleScores;
-  improved: StyleScores;
+  initial: ScoreOutput;
+  improved: ScoreOutput;
 }
 
 export const AnalysisResultsComparison: React.FC<AnalysisResultsComparisonProps> = ({ initial, improved }) => {

@@ -36,7 +36,7 @@ export const DialogActions: React.FC<DialogActionsProps> = ({
       // no-op fallback; clipboard might be unavailable in some contexts
     }
     setCopied(true);
-    window.setTimeout(() => setCopied(false), 1200);
+    globalThis.setTimeout(() => setCopied(false), 1200);
   };
 
   return (

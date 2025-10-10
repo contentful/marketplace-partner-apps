@@ -3,362 +3,291 @@ import { render, screen, fireEvent, waitFor } from '../../../test/utils/testUtil
 import Dialog from './Dialog';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { mockSdk } from '../../../test/mocks/mockSdk';
-import * as rewriterService from '../../services/rewriterService';
-import { IssueCategory, Status } from '@markupai/toolkit';
+import { WorkflowStatus } from '../../api-client/types.gen';
 
 // Mock the SDK
 vi.mock('@contentful/react-apps-toolkit', () => ({
   useSDK: vi.fn(),
 }));
 
+// Mock the rewriter service
+vi.mock('../../services/rewriterService', () => ({
+  useRewriterService: vi.fn(() => ({
+    rewriteContent: vi.fn(),
+  })),
+}));
+
+import { useRewriterService } from '../../services/rewriterService';
+
 describe('Dialog', () => {
+  const mockContentCheck = vi.fn();
+  const mockRewriteContent = vi.fn();
+  const mockSdkInstance = {
+    ...mockSdk,
+    parameters: {
+      invocation: {
+        fieldId: 'field1',
+        original: 'Original text',
+        originalScore: 75,
+        startRewrite: true,
+        previewFormat: 'markdown' as const,
+      },
+      installation: {
+        apiKey: 'dummy-key',
+      },
+    },
+  };
+
+  const mockFieldCheck = {
+    fieldId: 'field1',
+    originalValue: 'Original text',
+    isChecking: false,
+    checkResponse: {
+      workflow_id: 'workflow-123',
+      status: WorkflowStatus.COMPLETED,
+      original: {
+        scores: {
+          quality: { score: 75 },
+          analysis: { clarity: { score: 70 } },
+        },
+      },
+      rewrite: {
+        text: 'Improved text',
+        scores: {
+          quality: { score: 85 },
+          analysis: { clarity: { score: 80 } },
+        },
+      },
+      workflow: {
+        id: 'workflow-123',
+        status: 'completed',
+      },
+      config: {
+        dialect: 'american_english',
+        tone: 'professional',
+        style_guide: 'default',
+      },
+    },
+    error: null,
+    lastUpdated: Date.now(),
+    hasRewriteResult: true,
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.spyOn(rewriterService, 'rewriteContent').mockResolvedValue({
-      fieldId: 'field1',
-      originalValue: 'Original text',
-      isChecking: false,
-      checkResponse: {
-        workflow: {
-          id: 'rewrites-3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          type: 'rewrites',
-          api_version: '1.0.0',
-          generated_at: '2025-01-15T15:12:45Z',
-          status: Status.Completed,
-          webhook_response: {
-            url: 'https://api.example.com/webhook',
-            status_code: 200,
-          },
-        },
-        config: {
-          dialect: 'american_english',
-          style_guide: {
-            style_guide_type: 'chicago',
-            style_guide_id: 'sg-7b8c9d0e-1f2a-3b4c-5d6e-7f8a9b0c1d2e',
-          },
-          tone: 'academic',
-        },
-        original: {
-          issues: [
-            {
-              original: 'recieve',
-              position: {
-                start_index: 42,
-              },
-              subcategory: 'spelling',
-              suggestion: 'receive',
-              category: IssueCategory.Grammar,
-            },
-            {
-              original: 'data',
-              position: {
-                start_index: 156,
-              },
-              subcategory: 'word_choice',
-              suggestion: 'information',
-              category: IssueCategory.Grammar,
-            },
-            {
-              original: 'ok',
-              position: {
-                start_index: 203,
-              },
-              subcategory: 'capitalization',
-              suggestion: 'OK',
-              category: IssueCategory.Consistency,
-            },
-          ],
-          scores: {
-            quality: {
-              score: 75,
-              grammar: {
-                score: 85,
-                issues: 2,
-              },
-              consistency: {
-                score: 70,
-                issues: 3,
-              },
-              terminology: {
-                score: 95,
-                issues: 1,
-              },
-            },
-            analysis: {
-              clarity: {
-                score: 68,
-                flesch_reading_ease: 45.2,
-                sentence_complexity: 42.5,
-                vocabulary_complexity: 38.7,
-                sentence_count: 4,
-                word_count: 52,
-                average_sentence_length: 13,
-              },
-              tone: {
-                score: 72,
-                informality: 35.8,
-                liveliness: 28.4,
-                informality_alignment: 112.5,
-                liveliness_alignment: 94.3,
-              },
-            },
-          },
-        },
-        rewrite: {
-          text: 'The updated document maintains clarity while following style guidelines. Information flows logically from introduction through supporting details. Technical terms are defined appropriately. The conclusion summarizes key points effectively.',
-          scores: {
-            quality: {
-              score: 98,
-              grammar: {
-                score: 100,
-                issues: 0,
-              },
-              consistency: {
-                score: 95,
-                issues: 1,
-              },
-              terminology: {
-                score: 100,
-                issues: 0,
-              },
-            },
-            analysis: {
-              clarity: {
-                score: 82,
-                flesch_reading_ease: 52.8,
-                sentence_complexity: 35.2,
-                vocabulary_complexity: 41.3,
-                sentence_count: 4,
-                word_count: 48,
-                average_sentence_length: 12,
-              },
-              tone: {
-                score: 88,
-                informality: 32.1,
-                liveliness: 30.6,
-                informality_alignment: 102.4,
-                liveliness_alignment: 98.7,
-              },
-            },
-          },
-        },
-      },
-      error: null,
-      lastUpdated: Date.now(),
-      hasRewriteResult: true,
+    (useSDK as Mock).mockReturnValue(mockSdkInstance);
+    vi.mocked(useRewriterService).mockReturnValue({
+      contentCheck: mockContentCheck,
+      rewriteContent: mockRewriteContent,
     });
-    (useSDK as Mock).mockReturnValue({
-      ...mockSdk,
-      parameters: {
-        invocation: {
-          fieldId: 'field1',
-          original: 'Original text',
-          originalScore: 75,
-          startRewrite: true,
-        },
-        installation: {
-          apiKey: 'dummy-key',
-          dialect: 'en-US',
-          tone: 'neutral',
-          styleGuide: 'default',
-        },
+
+    // Mock localStorage
+    Object.defineProperty(globalThis, 'localStorage', {
+      value: {
+        getItem: vi.fn((key: string) => {
+          if (key === 'markupai.dialect') return 'american_english';
+          if (key === 'markupai.tone') return 'professional';
+          if (key === 'markupai.styleGuide') return 'default';
+          return null;
+        }),
+        setItem: vi.fn(),
+        removeItem: vi.fn(),
       },
+      writable: true,
     });
   });
 
-  it('renders the dialog with all sections', async () => {
+  it('renders loading state when startRewrite is true', async () => {
+    mockRewriteContent.mockImplementation(() => new Promise(() => {})); // Never resolves
+
     render(<Dialog />);
-    expect(await screen.findByText('Improvement Summary')).toBeInTheDocument();
-    expect(await screen.findByText('Accept & Insert')).toBeInTheDocument();
-    expect(await screen.findByText('Reject & Close')).toBeInTheDocument();
+
+    expect(screen.getByText('Markup AI is rewriting the content')).toBeInTheDocument();
+    expect(mockRewriteContent).toHaveBeenCalledWith('field1', 'Original text');
   });
 
-  it('renders the action buttons', async () => {
+  it('renders error state when rewrite fails', async () => {
+    const errorMessage = 'Rewrite failed';
+    mockRewriteContent.mockRejectedValue(new Error(errorMessage));
+
     render(<Dialog />);
-    expect(await screen.findByText('Reject & Close')).toBeInTheDocument();
-    expect(await screen.findByText('Accept & Insert')).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByText(errorMessage)).toBeInTheDocument();
+    });
+    expect(screen.getByText('Retry')).toBeInTheDocument();
+  });
+
+  it('renders success state with improvement summary when rewrite succeeds', async () => {
+    mockRewriteContent.mockResolvedValue(mockFieldCheck);
+
+    render(<Dialog />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Improvement Summary')).toBeInTheDocument();
+    });
+    expect(screen.getByText('Accept & Insert')).toBeInTheDocument();
+    expect(screen.getByText('Reject & Close')).toBeInTheDocument();
   });
 
   it('calls SDK close with correct parameters on accept', async () => {
+    mockRewriteContent.mockResolvedValue(mockFieldCheck);
+
     render(<Dialog />);
-    const acceptButton = await screen.findByText('Accept & Insert');
-    await waitFor(() => expect(acceptButton).not.toBeDisabled());
-    fireEvent.click(acceptButton);
+
     await waitFor(() => {
-      expect(mockSdk.close).toHaveBeenCalledWith(expect.objectContaining({ accepted: true }));
+      expect(screen.getByText('Accept & Insert')).toBeInTheDocument();
+    });
+
+    const acceptButton = screen.getByText('Accept & Insert');
+    fireEvent.click(acceptButton);
+
+    expect(mockSdk.close).toHaveBeenCalledWith({
+      accepted: true,
+      value: mockFieldCheck.checkResponse.rewrite,
+      fieldId: 'field1',
+      rewriteResponse: mockFieldCheck.checkResponse,
     });
   });
 
   it('calls SDK close with correct parameters on reject', async () => {
+    mockRewriteContent.mockResolvedValue(mockFieldCheck);
+
     render(<Dialog />);
+
     await waitFor(() => {
       expect(screen.getByText('Reject & Close')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByText('Reject & Close'));
-    await waitFor(() => {
-      expect(mockSdk.close).toHaveBeenCalledWith({ accepted: false });
-    });
+
+    const rejectButton = screen.getByText('Reject & Close');
+    fireEvent.click(rejectButton);
+
+    expect(mockSdk.close).toHaveBeenCalledWith({ accepted: false });
   });
 
-  it('updates window height when content changes', async () => {
+  it('handles rewrite again button click', async () => {
+    mockRewriteContent.mockResolvedValue(mockFieldCheck);
+
     render(<Dialog />);
+
     await waitFor(() => {
-      expect(mockSdk.window.updateHeight).toHaveBeenCalled();
+      expect(screen.getByText('Improvement Summary')).toBeInTheDocument();
+    });
+
+    const rewriteAgainButton = screen.getByText('Retry');
+    fireEvent.click(rewriteAgainButton);
+
+    expect(mockRewriteContent).toHaveBeenCalledTimes(2);
+  });
+
+  it('handles retry button click in error state', async () => {
+    const errorMessage = 'Rewrite failed';
+    mockRewriteContent.mockRejectedValue(new Error(errorMessage));
+
+    render(<Dialog />);
+
+    await waitFor(() => {
+      expect(screen.getByText(errorMessage)).toBeInTheDocument();
+    });
+
+    const retryButton = screen.getByText('Retry');
+    fireEvent.click(retryButton);
+
+    expect(mockRewriteContent).toHaveBeenCalledTimes(2);
+  });
+
+  it('updates window height when loading state changes', async () => {
+    mockRewriteContent.mockImplementation(() => new Promise(() => {})); // Never resolves
+
+    render(<Dialog />);
+
+    expect(mockSdk.window.updateHeight).toHaveBeenCalled();
+  });
+
+  it('handles case when no rewrite result is received', async () => {
+    const fieldCheckWithoutRewrite = {
+      ...mockFieldCheck,
+      hasRewriteResult: false,
+      checkResponse: null,
+    };
+    mockRewriteContent.mockResolvedValue(fieldCheckWithoutRewrite);
+
+    render(<Dialog />);
+
+    await waitFor(() => {
+      expect(screen.getByText('No rewrite result received')).toBeInTheDocument();
     });
   });
 
-  it('renders ContentDiff without error when original or improved is empty', async () => {
-    vi.spyOn(rewriterService, 'rewriteContent').mockResolvedValue({
-      fieldId: 'field1',
-      originalValue: '',
-      isChecking: false,
-      checkResponse: {
-        workflow: {
-          id: 'rewrites-3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          type: 'rewrites',
-          api_version: '1.0.0',
-          generated_at: '2025-01-15T15:12:45Z',
-          status: Status.Completed,
-          webhook_response: {
-            url: 'https://api.example.com/webhook',
-            status_code: 200,
-          },
-        },
-        config: {
-          dialect: 'american_english',
-          style_guide: {
-            style_guide_type: 'chicago',
-            style_guide_id: 'sg-7b8c9d0e-1f2a-3b4c-5d6e-7f8a9b0c1d2e',
-          },
-          tone: 'academic',
-        },
-        original: {
-          issues: [
-            {
-              original: 'recieve',
-              position: {
-                start_index: 42,
-              },
-              subcategory: 'spelling',
-              suggestion: 'receive',
-              category: IssueCategory.Grammar,
-            },
-            {
-              original: 'data',
-              position: {
-                start_index: 156,
-              },
-              subcategory: 'word_choice',
-              suggestion: 'information',
-              category: IssueCategory.Grammar,
-            },
-            {
-              original: 'ok',
-              position: {
-                start_index: 203,
-              },
-              subcategory: 'capitalization',
-              suggestion: 'OK',
-              category: IssueCategory.Consistency,
-            },
-          ],
-          scores: {
-            quality: {
-              score: 75,
-              grammar: {
-                score: 85,
-                issues: 2,
-              },
-              consistency: {
-                score: 70,
-                issues: 3,
-              },
-              terminology: {
-                score: 95,
-                issues: 1,
-              },
-            },
-            analysis: {
-              clarity: {
-                score: 68,
-                flesch_reading_ease: 45.2,
-                sentence_complexity: 42.5,
-                vocabulary_complexity: 38.7,
-                sentence_count: 4,
-                word_count: 52,
-                average_sentence_length: 13,
-              },
-              tone: {
-                score: 72,
-                informality: 35.8,
-                liveliness: 28.4,
-                informality_alignment: 112.5,
-                liveliness_alignment: 94.3,
-              },
-            },
-          },
-        },
-        rewrite: {
-          text: '',
-          scores: {
-            quality: {
-              score: 98,
-              grammar: {
-                score: 100,
-                issues: 0,
-              },
-              consistency: {
-                score: 95,
-                issues: 1,
-              },
-              terminology: {
-                score: 100,
-                issues: 0,
-              },
-            },
-            analysis: {
-              clarity: {
-                score: 82,
-                flesch_reading_ease: 52.8,
-                sentence_complexity: 35.2,
-                vocabulary_complexity: 41.3,
-                sentence_count: 4,
-                word_count: 48,
-                average_sentence_length: 12,
-              },
-              tone: {
-                score: 88,
-                informality: 32.1,
-                liveliness: 30.6,
-                informality_alignment: 102.4,
-                liveliness_alignment: 98.7,
-              },
-            },
-          },
-        },
-      },
-      error: null,
-      lastUpdated: Date.now(),
-      hasRewriteResult: true,
+  it('handles case when rewrite response is missing', async () => {
+    const fieldCheckWithoutResponse = {
+      ...mockFieldCheck,
+      checkResponse: null,
+    };
+    mockRewriteContent.mockResolvedValue(fieldCheckWithoutResponse);
+
+    render(<Dialog />);
+
+    await waitFor(() => {
+      expect(screen.getByText('No rewrite result received')).toBeInTheDocument();
     });
-    (useSDK as Mock).mockReturnValue({
-      ...mockSdk,
+  });
+
+  it('handles non-Error exceptions', async () => {
+    mockRewriteContent.mockRejectedValue('String error');
+
+    render(<Dialog />);
+
+    await waitFor(() => {
+      expect(screen.getByText('An error occurred while rewriting content')).toBeInTheDocument();
+    });
+  });
+
+  it('does not start rewrite when startRewrite is false', () => {
+    const sdkWithoutStartRewrite = {
+      ...mockSdkInstance,
       parameters: {
+        ...mockSdkInstance.parameters,
         invocation: {
-          fieldId: 'field1',
-          original: '',
-          originalScore: 0,
-          startRewrite: true,
-        },
-        installation: {
-          apiKey: 'dummy-key',
-          dialect: 'en-US',
-          tone: 'neutral',
-          styleGuide: 'default',
+          ...mockSdkInstance.parameters.invocation,
+          startRewrite: false,
         },
       },
-    });
+    };
+    (useSDK as Mock).mockReturnValue(sdkWithoutStartRewrite);
+
     render(<Dialog />);
-    expect(await screen.findByText('Improvement Summary')).toBeInTheDocument();
+
+    expect(mockRewriteContent).not.toHaveBeenCalled();
+  });
+
+  it('uses localStorage values for configuration', () => {
+    render(<Dialog />);
+
+    expect(globalThis.localStorage.getItem).toHaveBeenCalledWith('markupai.dialect');
+    expect(globalThis.localStorage.getItem).toHaveBeenCalledWith('markupai.tone');
+    expect(globalThis.localStorage.getItem).toHaveBeenCalledWith('markupai.styleGuide');
+  });
+
+  it('handles missing fieldId gracefully', async () => {
+    const sdkWithoutFieldId = {
+      ...mockSdkInstance,
+      parameters: {
+        ...mockSdkInstance.parameters,
+        invocation: {
+          ...mockSdkInstance.parameters.invocation,
+          fieldId: undefined,
+        },
+      },
+    };
+    (useSDK as Mock).mockReturnValue(sdkWithoutFieldId);
+
+    mockRewriteContent.mockRejectedValue(new Error('Field ID is required'));
+
+    render(<Dialog />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Field ID is required')).toBeInTheDocument();
+    });
   });
 });

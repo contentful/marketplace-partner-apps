@@ -12,7 +12,6 @@ export default defineConfig({
         manualChunks: {
           react: ['react', 'react-dom'],
           contentful: ['@contentful/app-sdk', '@contentful/react-apps-toolkit', '@contentful/f36-components'],
-          markup: ['@markupai/toolkit'],
         },
       },
     },

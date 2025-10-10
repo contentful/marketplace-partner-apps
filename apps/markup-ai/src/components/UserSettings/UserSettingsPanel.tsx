@@ -90,7 +90,7 @@ export const UserSettingsPanel: React.FC<UserSettingsPanelProps> = ({
               onClick={() => {
                 if (!isConfigComplete) {
                   setShowCloseTooltip(true);
-                  window.setTimeout(() => setShowCloseTooltip(false), 2000);
+                  globalThis.setTimeout(() => setShowCloseTooltip(false), 2000);
                   return;
                 }
                 onClose();
