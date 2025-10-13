@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.0.0](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.1.18...bynder-assets-v2.0.0) (2025-10-13)
+
+### Features
+
+* **External References**
+The app supports Contentful's External References feature, allowing you to query the latest snapshot of stored Bynder assets via GraphQL. This enables you to retrieve up-to-date asset information directly from Bynder.
+* **Asset Tracker**
+The Asset Tracker feature automatically syncs Bynder asset usage information with Contentful entries. When enabled, it tracks when Bynder assets are used in Contentful entries and maintains this usage data in Bynder's Asset Usage API.
+
+
 ## [1.1.19](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.1.18...bynder-assets-v1.1.19) (2025-07-28)
 
 
