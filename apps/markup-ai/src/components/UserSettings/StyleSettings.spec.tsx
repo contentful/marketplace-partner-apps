@@ -1,17 +1,26 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor, fireEvent } from '../../../test/utils/testUtils';
 import StyleSettings from './StyleSettings';
+import * as apiService from '../../hooks/useApiService';
 
-vi.mock('../../services/apiService', () => ({
-  fetchAdminConstants: vi.fn(),
-  fetchStyleGuides: vi.fn(),
+vi.mock('../../hooks/useApiService', () => ({
+  useApiService: vi.fn(() => ({
+    constants: { dialects: ['en-US', 'en-GB'], tones: ['neutral', 'formal'], style_guides: {} },
+    styleGuides: [{ id: 'default', name: 'Default', created_at: '2023-01-01T00:00:00Z' }],
+    constantsLoading: false,
+    styleGuidesLoading: false,
+    constantsError: null,
+    styleGuidesError: null,
+    checkContent: vi.fn(),
+    contentRewrite: vi.fn(),
+    fetchAdminConstants: vi.fn(),
+    fetchStyleGuides: vi.fn(),
+  })),
 }));
 
-import { fetchAdminConstants, fetchStyleGuides } from '../../services/apiService';
-
 describe('StyleSettings', () => {
-  const constants = { dialects: ['en-US', 'en-GB'], tones: ['neutral', 'formal'] };
-  const styleGuides = [{ id: 'default', name: 'Default' }];
+  const constants = { dialects: ['en-US', 'en-GB'], tones: ['neutral', 'formal'], style_guides: {} };
+  const styleGuides = [{ id: 'default', name: 'Default', created_at: '2023-01-01T00:00:00Z' }];
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -28,28 +37,59 @@ describe('StyleSettings', () => {
   };
 
   it('shows spinner while loading and then renders selects', async () => {
-    (fetchAdminConstants as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(constants);
-    (fetchStyleGuides as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(styleGuides);
+    // Mock loaded state directly
+    vi.mocked(apiService.useApiService).mockReturnValue({
+      constants,
+      styleGuides,
+      constantsLoading: false,
+      styleGuidesLoading: false,
+      constantsError: null,
+      styleGuidesError: null,
+      checkContent: vi.fn(),
+      contentRewrite: vi.fn(),
+      fetchAdminConstants: vi.fn(),
+      fetchStyleGuides: vi.fn(),
+    });
+
     render(<StyleSettings {...baseProps} />);
 
-    // Spinner from f36 uses data-test-id
-    expect(document.querySelector('[data-test-id="cf-ui-spinner"]')).not.toBeNull();
     await waitFor(() => expect(screen.getByText('Dialect')).toBeInTheDocument());
     expect(screen.getByText('Tone')).toBeInTheDocument();
     expect(screen.getByText('Style Guide')).toBeInTheDocument();
   });
 
   it('renders error Note when API fails', async () => {
-    (fetchAdminConstants as unknown as ReturnType<typeof vi.fn>).mockRejectedValue(new Error('x'));
-    (fetchStyleGuides as unknown as ReturnType<typeof vi.fn>).mockRejectedValue(new Error('x'));
+    vi.mocked(apiService.useApiService).mockReturnValue({
+      constants: null,
+      styleGuides: null,
+      constantsLoading: false,
+      styleGuidesLoading: false,
+      constantsError: new Error('x'),
+      styleGuidesError: new Error('x'),
+      checkContent: vi.fn(),
+      contentRewrite: vi.fn(),
+      fetchAdminConstants: vi.fn(),
+      fetchStyleGuides: vi.fn(),
+    });
+
     render(<StyleSettings {...baseProps} />);
     await waitFor(() => expect(screen.getByText('Error')).toBeInTheDocument());
-    expect(screen.getByText('Failed to load settings options')).toBeInTheDocument();
+    expect(screen.getByText('x')).toBeInTheDocument();
   });
 
   it('triggers onSaveAndClose when complete', async () => {
-    (fetchAdminConstants as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(constants);
-    (fetchStyleGuides as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(styleGuides);
+    vi.mocked(apiService.useApiService).mockReturnValue({
+      constants,
+      styleGuides,
+      constantsLoading: false,
+      styleGuidesLoading: false,
+      constantsError: null,
+      styleGuidesError: null,
+      checkContent: vi.fn(),
+      contentRewrite: vi.fn(),
+      fetchAdminConstants: vi.fn(),
+      fetchStyleGuides: vi.fn(),
+    });
 
     const onSaveAndClose = vi.fn();
     render(

@@ -1,15 +1,15 @@
 export const SCORE_COLORS = {
   neutral: '#E7EBEE',
-  low: '#FFA2A2',
-  medium: '#F6F068',
-  high: '#78FD86',
+  low: '#DA294A',
+  medium: '#FFD960',
+  high: '#5DB057',
 };
 
 export const SCORE_COLORS_SOFT = {
   neutral: '#E7EBEE',
-  low: '#fcd9e4',
-  medium: '#fff7c5',
-  high: '#caffc9',
+  low: '#FFB1B2',
+  medium: '#FFE993',
+  high: '#9ED696',
 };
 
 // Utility to get color and neutral state for a given score

@@ -119,7 +119,7 @@ const mockSdk: MockSDK = {
       },
       improvedAnalysis: {
         avg_sentence_length: 12.3,
-        avg_word_length: 4.0,
+        avg_word_length: 4,
         complexity_score: 85.2,
         readability_score: 90.1,
         sentence_count: 12,

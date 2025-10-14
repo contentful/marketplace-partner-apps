@@ -29,8 +29,8 @@ describe('index.tsx', () => {
 
   it('renders localhost warning in development top window', async () => {
     (process.env as unknown as Record<string, string>).NODE_ENV = 'development';
-    Object.defineProperty(window, 'top', { value: window, writable: true });
-    Object.defineProperty(window, 'self', { value: window, writable: true });
+    Object.defineProperty(globalThis, 'top', { value: globalThis, writable: true });
+    Object.defineProperty(globalThis, 'self', { value: globalThis, writable: true });
     document.getElementById('root')!.innerHTML = '';
     // Re-import to trigger render again
     vi.resetModules();

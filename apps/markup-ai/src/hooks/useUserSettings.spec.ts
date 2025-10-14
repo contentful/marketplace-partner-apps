@@ -10,7 +10,7 @@ describe('useUserSettings', () => {
   it('initializes with defaults and updates values', () => {
     const { result } = renderHook(() => useUserSettings());
     expect(result.current.settings.dialect).toBeTruthy();
-
+    expect(result.current.settings.tone).toBeNull();
     act(() => result.current.updateApiKey('abc'));
     expect(result.current.settings.apiKey).toBe('abc');
 

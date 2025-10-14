@@ -14,29 +14,25 @@ const STORAGE_KEYS = {
 
 export const DEFAULTS = {
   dialect: 'american_english',
-  tone: 'professional',
   styleGuide: 'microsoft',
 } as const;
 
 export function getUserSettings(): UserSettings {
-  if (typeof window === 'undefined') {
+  if (typeof globalThis === 'undefined') {
     return { apiKey: null, dialect: null, tone: null, styleGuide: null };
   }
   return {
     apiKey: localStorage.getItem(STORAGE_KEYS.apiKey),
     dialect: localStorage.getItem(STORAGE_KEYS.dialect) || DEFAULTS.dialect,
-    tone: localStorage.getItem(STORAGE_KEYS.tone) || DEFAULTS.tone,
+    tone: localStorage.getItem(STORAGE_KEYS.tone),
     styleGuide: localStorage.getItem(STORAGE_KEYS.styleGuide) || DEFAULTS.styleGuide,
   };
 }
 
 export function ensureDefaultUserSettings() {
-  if (typeof window === 'undefined') return;
+  if (typeof globalThis === 'undefined') return;
   if (!localStorage.getItem(STORAGE_KEYS.dialect)) {
     localStorage.setItem(STORAGE_KEYS.dialect, DEFAULTS.dialect);
-  }
-  if (!localStorage.getItem(STORAGE_KEYS.tone)) {
-    localStorage.setItem(STORAGE_KEYS.tone, DEFAULTS.tone);
   }
   if (!localStorage.getItem(STORAGE_KEYS.styleGuide)) {
     localStorage.setItem(STORAGE_KEYS.styleGuide, DEFAULTS.styleGuide);
@@ -44,7 +40,7 @@ export function ensureDefaultUserSettings() {
 }
 
 export function setApiKey(apiKey: string | null) {
-  if (typeof window === 'undefined') return;
+  if (typeof globalThis === 'undefined') return;
   if (apiKey) {
     localStorage.setItem(STORAGE_KEYS.apiKey, apiKey);
   } else {
@@ -54,7 +50,7 @@ export function setApiKey(apiKey: string | null) {
 }
 
 export function setDialect(dialect: string | null) {
-  if (typeof window === 'undefined') return;
+  if (typeof globalThis === 'undefined') return;
   if (dialect) {
     localStorage.setItem(STORAGE_KEYS.dialect, dialect);
   } else {
@@ -64,7 +60,7 @@ export function setDialect(dialect: string | null) {
 }
 
 export function setTone(tone: string | null) {
-  if (typeof window === 'undefined') return;
+  if (typeof globalThis === 'undefined') return;
   if (tone) {
     localStorage.setItem(STORAGE_KEYS.tone, tone);
   } else {
@@ -74,7 +70,7 @@ export function setTone(tone: string | null) {
 }
 
 export function setStyleGuide(styleGuide: string | null) {
-  if (typeof window === 'undefined') return;
+  if (typeof globalThis === 'undefined') return;
   if (styleGuide) {
     localStorage.setItem(STORAGE_KEYS.styleGuide, styleGuide);
   } else {
@@ -84,7 +80,7 @@ export function setStyleGuide(styleGuide: string | null) {
 }
 
 export function clearAllUserSettings() {
-  if (typeof window === 'undefined') return;
+  if (typeof globalThis === 'undefined') return;
   localStorage.removeItem(STORAGE_KEYS.apiKey);
   localStorage.removeItem(STORAGE_KEYS.dialect);
   localStorage.removeItem(STORAGE_KEYS.tone);
@@ -95,7 +91,7 @@ export function clearAllUserSettings() {
 function dispatchStorageEvent() {
   try {
     // Notify listeners in the same tab
-    window.dispatchEvent(new StorageEvent('storage'));
+    globalThis.dispatchEvent(new StorageEvent('storage'));
   } catch {
     // no-op
   }

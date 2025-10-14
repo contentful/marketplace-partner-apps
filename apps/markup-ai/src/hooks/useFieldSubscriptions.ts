@@ -3,6 +3,8 @@ import { SidebarAppSDK } from '@contentful/app-sdk';
 import { isTextField } from '../types/content';
 import { Document, Block, Inline, Text, BLOCKS, INLINES, MARKS } from '@contentful/rich-text-types';
 
+type RichTextNode = Block | Inline | Text;
+
 interface TextNodeWithId {
   node: Text;
   path: number[];
@@ -13,7 +15,7 @@ const generateNodeId = (path: number[]): string => {
   return `node-${path.join('-')}`;
 };
 
-const isValidNode = (node: Block | Inline | Text): boolean => {
+const isValidNode = (node: RichTextNode): boolean => {
   if (!node || typeof node !== 'object') return false;
   if (!('nodeType' in node)) return false;
   return true;
@@ -23,7 +25,7 @@ const convertToHtml = (doc: Document): { html: string; nodeMap: Map<string, Text
   const nodeMap = new Map<string, TextNodeWithId>();
   let htmlContent = '';
 
-  const processNode = (node: Block | Inline | Text, path: number[] = []): string => {
+  const processNode = (node: RichTextNode, path: number[] = []): string => {
     if (!isValidNode(node)) {
       return '';
     }
@@ -35,7 +37,7 @@ const convertToHtml = (doc: Document): { html: string; nodeMap: Map<string, Text
       // Apply marks to the text
       let text = node.value;
       if (node.marks && node.marks.length > 0) {
-        node.marks.forEach((mark) => {
+        for (const mark of node.marks) {
           switch (mark.type) {
             case MARKS.BOLD:
               text = `<strong>${text}</strong>`;
@@ -58,7 +60,7 @@ const convertToHtml = (doc: Document): { html: string; nodeMap: Map<string, Text
             default:
               console.warn('Unknown mark type:', mark.type);
           }
-        });
+        }
       }
 
       return `<span id="${id}">${text}</span>`;
@@ -145,7 +147,7 @@ const extractTextFromRichText = (value: string | Document | null | undefined): s
 
   // Handle rich text document structure
   if (typeof value === 'object' && value !== null && 'nodeType' in value && value.nodeType === BLOCKS.DOCUMENT) {
-    const { html } = convertToHtml(value as Document);
+    const { html } = convertToHtml(value);
     return html;
   }
 
@@ -156,7 +158,7 @@ const extractTextFromRichText = (value: string | Document | null | undefined): s
 const updateNodeAtPath = (doc: Document, path: number[], newValue: string): Document => {
   const newDoc = JSON.parse(JSON.stringify(doc)) as Document;
 
-  let current: { content: (Block | Inline | Text)[] } = newDoc;
+  let current: { content: RichTextNode[] } = newDoc;
   for (let i = 0; i < path.length - 1; i++) {
     const nextNode = current.content[path[i]];
     if (!nextNode || !('content' in nextNode)) {
@@ -165,14 +167,14 @@ const updateNodeAtPath = (doc: Document, path: number[], newValue: string): Docu
     current = nextNode;
   }
 
-  const lastIndex = path[path.length - 1];
+  const lastIndex = path.at(-1)!;
   const targetNode = current.content[lastIndex];
   if (!targetNode) {
     throw new Error(`Invalid path: no node found at index ${lastIndex}`);
   }
 
   if (targetNode.nodeType === 'text') {
-    (targetNode as Text).value = newValue;
+    targetNode.value = newValue;
   } else {
     throw new Error(`Invalid node type at path: expected text node, got ${targetNode.nodeType}`);
   }
@@ -213,7 +215,7 @@ const createRichTextDocument = (text: string, originalDoc?: Document): Document 
   let updatedDoc = originalDoc;
 
   const updatedSpans = tempDiv.querySelectorAll('span[id]');
-  updatedSpans.forEach((span) => {
+  for (const span of updatedSpans) {
     const id = span.id;
     const node = nodeMap.get(id);
     if (node) {
@@ -223,7 +225,7 @@ const createRichTextDocument = (text: string, originalDoc?: Document): Document 
         console.error(`Error updating node ${id}:`, error);
       }
     }
-  });
+  }
 
   return updatedDoc;
 };
@@ -271,7 +273,9 @@ export const useFieldSubscriptions = (
       });
 
     return () => {
-      subscriptions.forEach((unsubscribe) => unsubscribe());
+      for (const unsubscribe of subscriptions) {
+        unsubscribe();
+      }
       initialValuesRef.current.clear();
       fieldTypesRef.current = {};
       originalDocumentsRef.current = {};
