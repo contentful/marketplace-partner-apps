@@ -6,10 +6,10 @@ version: 2
 updates:
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -38,10 +38,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -70,10 +70,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -104,10 +104,10 @@ updates:
       - 'contentful-owned'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -136,10 +136,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -168,10 +168,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -203,10 +203,10 @@ updates:
       - 'contentful-owned'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -235,10 +235,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -269,10 +269,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -301,10 +301,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -333,10 +333,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -365,10 +365,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -397,10 +397,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -429,10 +429,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -461,10 +461,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -493,10 +493,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -525,10 +525,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -557,10 +557,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -590,10 +590,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -622,10 +622,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -654,10 +654,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -686,10 +686,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -720,10 +720,10 @@ updates:
       - 'contentful-owned'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -752,10 +752,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -784,10 +784,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -816,10 +816,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -848,10 +848,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -883,10 +883,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -915,10 +915,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -947,10 +947,10 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
@@ -979,15 +979,15 @@ updates:
           - '*'
   - package-ecosystem: npm
     schedule:
-      interval: daily
+      interval: monthly
       time: '03:00'
       timezone: Etc/UTC
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 7
     commit-message:
       prefix: 'fix'
       prefix-development: 'chore'
       include: 'scope'
-    directory: '/apps/xilio-transcreate'
+    directory: '/apps/xillio-transcreate'
     ignore:
       - dependency-name: '@types/node'
         versions:
