@@ -68,7 +68,7 @@
     "esbuild": "^0.25.8",
     "jsdoc": "^4.0.4",
     "typescript": "4.9.5",
-    "happy-dom": "^17.2.2",
+    "happy-dom": "^20.0.1",
     "vite": "^7.1.5",
     "vitest": "^3.2.4"
   },
