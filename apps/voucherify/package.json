@@ -34,7 +34,7 @@
     "@vitejs/plugin-react": "^4.7.0",
     "eslint": "^9.34.0",
     "eslint-plugin-react": "~7.37.5",
-    "happy-dom": "^17.3.0",
+    "happy-dom": "^20.0.1",
     "vite": "^7.1.5",
     "vitest": "^3.2.4"
   },
