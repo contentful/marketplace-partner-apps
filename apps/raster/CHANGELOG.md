@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.10](https://github.com/contentful/marketplace-partner-apps/compare/raster-v1.0.9...raster-v1.0.10) (2025-10-15)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.11.0 to 1.12.0 in /apps/raster ([#6516](https://github.com/contentful/marketplace-partner-apps/issues/6516)) ([2ac3f3d](https://github.com/contentful/marketplace-partner-apps/commit/2ac3f3d12bd7ddffeb6120085f5326ae17066eb4))
+
 ## [1.0.9](https://github.com/contentful/marketplace-partner-apps/compare/raster-v1.0.8...raster-v1.0.9) (2025-08-01)
 
 
