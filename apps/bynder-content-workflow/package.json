@@ -8,7 +8,7 @@
     "@contentful/f36-tokens": "4.2.0",
     "@contentful/field-editor-rich-text": "^4.10.0",
     "@contentful/react-apps-toolkit": "1.2.16",
-    "@contentful/rich-text-html-renderer": "^16.3.0",
+    "@contentful/rich-text-html-renderer": "^17.1.0",
     "camelcase": "^8.0.0",
     "constate": "^3.3.3",
     "contentful-management": "11.54.4",
