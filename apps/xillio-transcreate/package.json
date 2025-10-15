@@ -29,7 +29,7 @@
     "react-hook-form": "^7.48.2"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.10.2",
+    "@contentful/app-scripts": "2.5.5",
     "@eslint/js": "^9.9.0",
     "@storybook/addon-essentials": "^8.3.1",
     "@storybook/addon-interactions": "^8.3.1",
