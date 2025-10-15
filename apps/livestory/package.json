@@ -38,18 +38,18 @@
   },
   "devDependencies": {
     "@contentful/app-scripts": "2.5.5",
-    "@testing-library/jest-dom": "6.6.4",
+    "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.0",
-    "@tsconfig/create-react-app": "2.0.6",
+    "@tsconfig/create-react-app": "2.0.8",
     "@types/jest": "29.5.14",
     "@types/node": "^20",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "@types/superagent": "^8.1.9",
     "@vitejs/plugin-react": "^4.7.0",
-    "cross-env": "10.0.0",
-    "typescript": "5.9.2",
-    "vite": "^7.1.5",
+    "cross-env": "10.1.0",
+    "typescript": "5.9.3",
+    "vite": "^7.1.10",
     "vitest": "^3.2.4"
   },
   "homepage": "."
