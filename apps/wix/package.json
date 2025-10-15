@@ -34,7 +34,7 @@
     "@types/react": "19.1.12",
     "@types/react-dom": "19.1.9",
     "@vitejs/plugin-react": "4.7.0",
-    "happy-dom": "20.0.1",
+    "happy-dom": "20.0.2",
     "jsdom": "^26.1.0",
     "prettier": "3.6.2",
     "typescript": "5.9.2",
