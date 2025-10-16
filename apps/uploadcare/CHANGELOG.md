@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.29](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.28...uploadcare-contentful-app-v1.0.29) (2025-10-16)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.37.0 to 4.39.0 in /apps/uploadcare in the production-dependencies group ([#6001](https://github.com/contentful/marketplace-partner-apps/issues/6001)) ([a8fcd32](https://github.com/contentful/marketplace-partner-apps/commit/a8fcd32cc194c33c0d45e026a8ebf3a1984be6bb))
+* **deps:** bump @contentful/app-sdk from 4.39.0 to 4.40.0 in /apps/uploadcare in the production-dependencies group ([#6042](https://github.com/contentful/marketplace-partner-apps/issues/6042)) ([8ba91cc](https://github.com/contentful/marketplace-partner-apps/commit/8ba91cc1015fbdfc2f7c3498149aacebd68f628b))
+* **deps:** bump @contentful/app-sdk from 4.40.0 to 4.41.0 in /apps/uploadcare in the production-dependencies group ([#6080](https://github.com/contentful/marketplace-partner-apps/issues/6080)) ([db04d37](https://github.com/contentful/marketplace-partner-apps/commit/db04d37d16eb1c24099cfbdcc5ac8e526d4c8ba8))
+* **deps:** bump @contentful/app-sdk from 4.41.0 to 4.41.1 in /apps/uploadcare in the production-dependencies group ([#6180](https://github.com/contentful/marketplace-partner-apps/issues/6180)) ([4fcac50](https://github.com/contentful/marketplace-partner-apps/commit/4fcac50d89d072289a4941d8ee56b185c9a14766))
+* **deps:** bump axios from 1.11.0 to 1.12.0 in /apps/uploadcare ([#6510](https://github.com/contentful/marketplace-partner-apps/issues/6510)) ([c93157b](https://github.com/contentful/marketplace-partner-apps/commit/c93157b53f09bc00bf56976fbd11cbddebed7381))
+
 ## [1.0.28](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.27...uploadcare-contentful-app-v1.0.28) (2025-08-01)
 
 
