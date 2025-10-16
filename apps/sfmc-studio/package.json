@@ -10,7 +10,7 @@
     "fix-paths": "node fix-paths.js",
     "clean-paths": "LC_ALL=C.UTF-8 find out -type f -exec sed -i '' -e 's|/_next|./_next|g' {} +",
     "start": "next start",
-    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./next --organization-id ${DEFINITIONS_ORG_ID} --definition-id 4kk0CWKMz2hDS2amuVelsV --token ${CONTENTFUL_CMA_TOKEN}",
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./out --organization-id ${DEFINITIONS_ORG_ID} --definition-id 4kk0CWKMz2hDS2amuVelsV --token ${CONTENTFUL_CMA_TOKEN}",
     "export": "npx serve out -p 3005",
     "lint": "next lint",
     "test": "jest --ci",
