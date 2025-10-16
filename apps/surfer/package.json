@@ -1,6 +1,6 @@
 {
   "name": "surfer-contentful-app",
-  "version": "1.0.33",
+  "version": "1.0.34",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "4.45.0",
