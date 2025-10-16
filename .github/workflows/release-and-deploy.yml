@@ -10,6 +10,8 @@ permissions:
 
 name: Release and deploy apps
 jobs:
+  # Step 1: Check for apps that need releases
+  # Creates release PRs and tags when conventional commits are detected
   release-please:
     runs-on: ubuntu-latest
     steps:
@@ -21,8 +23,13 @@ jobs:
           default-branch: main
           release-type: node
     outputs:
+      # Boolean: true if any releases were created
       releases_created: ${{ steps.release.outputs.releases_created }}
 
+  # Step 2: Build and deploy only changed apps
+  # This job has two paths based on whether releases were created:
+  # - Production path: deploys released apps to production
+  # - Staging path: deploys changed apps to staging for testing
   build-and-deploy:
     needs: release-please
     runs-on: ubuntu-latest
@@ -35,19 +42,72 @@ jobs:
       TEST_ORG_ID: ${{ secrets.TEST_ORG_ID }}
       TEST_CMA_TOKEN: ${{ secrets.TEST_CMA_TOKEN }}
     steps:
+      # Checkout with full git history so Lerna can detect which apps have changed
+      # This enables --since flags to work correctly for smart builds
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Setup Node.js with npm caching enabled
+      # The cache speeds up npm ci by reusing node_modules from previous runs
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'npm'
+
+      # Restore Nx build cache to skip rebuilding unchanged code
+      # Nx caches build outputs (dist/build folders) based on file hashes
+      # This can reduce build time from minutes to seconds for unchanged apps
+      - name: Restore Nx cache
+        uses: actions/cache@v4
+        with:
+          path: /tmp/nxcache
+          key: nx-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            nx-${{ runner.os }}-
+
+      # Install root-level dependencies (lerna, nx, etc.)
+      # Required before we can run lerna commands
       - name: Install root-level project
         run: npm ci
-      - name: Install apps
-        run: npm run install-apps:deploy
-      - name: Build apps
-        run: npm run build-apps:deploy
+
+      # PRODUCTION PATH: Only install/build apps that were actually released
+      # Uses --since HEAD~1 to detect which packages changed in the release commit
+      - name: Install released apps
+        if: ${{ needs.release-please.outputs.releases_created }}
+        run: |
+          echo "Installing apps that changed in this release"
+          npx lerna run install-ci --since HEAD~1 --concurrency=5
+
+      - name: Build released apps
+        if: ${{ needs.release-please.outputs.releases_created }}
+        run: |
+          echo "Building apps that changed in this release"
+          # Nx cache will skip rebuilding if source files haven't changed
+          npx lerna run build --since HEAD~1 --concurrency=5
+
+      # STAGING PATH: Install/build only apps that changed since last commit
+      # Uses Lerna's --since flag to detect changes via git history
+      # This path runs for non-release commits (e.g., dependabot PRs)
+      - name: Install changed apps (staging)
+        if: ${{ !needs.release-please.outputs.releases_created }}
+        run: npm run install-apps  # Uses --since main
+
+      - name: Build changed apps (staging)
+        if: ${{ !needs.release-please.outputs.releases_created }}
+        run: npm run build-apps  # Uses --since main
+
+      # Deploy to staging environment (test deployments)
+      # Only runs when no releases were created (non-release commits)
       - name: Deploy apps (staging)
         if: ${{ !needs.release-please.outputs.releases_created }}
-        run: npm run deploy:staging
+        run: |
+          npx lerna run deploy:staging --since HEAD~1 --concurrency=3
+
+      # Deploy to production environment (live deployments)
+      # Only runs when releases were created by release-please
       - name: Deploy apps (production)
         if: ${{ needs.release-please.outputs.releases_created }}
-        run: npm run deploy:production
+        run: |
+          echo "Deploying apps that were released"
+          npx lerna run deploy --since HEAD~1 --concurrency=3
