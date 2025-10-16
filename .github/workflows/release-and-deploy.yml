@@ -25,8 +25,6 @@ jobs:
     outputs:
       # Boolean: true if any releases were created
       releases_created: ${{ steps.release.outputs.releases_created }}
-      # Comma-separated list of app paths that were released (e.g., "apps/bynder,apps/wix")
-      paths_released: ${{ steps.release.outputs.paths_released }}
 
   # Step 2: Build and deploy only changed apps
   # This job has two paths based on whether releases were created:
@@ -74,25 +72,19 @@ jobs:
         run: npm ci
 
       # PRODUCTION PATH: Only install/build apps that were actually released
-      # This uses release-please's output to determine which apps need deployment
-      # Significantly faster than installing/building all 33+ apps
+      # Uses --since HEAD~1 to detect which packages changed in the release commit
       - name: Install released apps
         if: ${{ needs.release-please.outputs.releases_created }}
         run: |
-          PATHS="${{ needs.release-please.outputs.paths_released }}"
-          if [ -n "$PATHS" ]; then
-            echo "Released paths: $PATHS"
-            npx lerna run install-ci --scope="{$PATHS}" --concurrency=5
-          fi
+          echo "Installing apps that changed in this release"
+          npx lerna run install-ci --since HEAD~1 --concurrency=5
 
       - name: Build released apps
         if: ${{ needs.release-please.outputs.releases_created }}
         run: |
-          PATHS="${{ needs.release-please.outputs.paths_released }}"
-          if [ -n "$PATHS" ]; then
-            # Nx cache will skip rebuilding if source files haven't changed
-            npx lerna run build --scope="{$PATHS}" --concurrency=5
-          fi
+          echo "Building apps that changed in this release"
+          # Nx cache will skip rebuilding if source files haven't changed
+          npx lerna run build --since HEAD~1 --concurrency=5
 
       # STAGING PATH: Install/build only apps that changed since last commit
       # Uses Lerna's --since flag to detect changes via git history
@@ -117,7 +109,5 @@ jobs:
       - name: Deploy apps (production)
         if: ${{ needs.release-please.outputs.releases_created }}
         run: |
-          PATHS="${{ needs.release-please.outputs.paths_released }}"
-          if [ -n "$PATHS" ]; then
-            npx lerna run deploy --scope="{$PATHS}" --concurrency=3
-          fi
+          echo "Deploying apps that were released"
+          npx lerna run deploy --since HEAD~1 --concurrency=3
