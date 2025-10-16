@@ -91,11 +91,15 @@ jobs:
       # This path runs for non-release commits (e.g., dependabot PRs)
       - name: Install changed apps (staging)
         if: ${{ !needs.release-please.outputs.releases_created }}
-        run: npm run install-apps  # Uses --since main
+        run: |
+          echo "Installing apps that changed since last commit"
+          npx lerna run install-ci --since HEAD~1 --concurrency=5
 
       - name: Build changed apps (staging)
         if: ${{ !needs.release-please.outputs.releases_created }}
-        run: npm run build-apps  # Uses --since main
+        run: |
+          echo "Building apps that changed since last commit"
+          npx lerna run build --since HEAD~1 --concurrency=5
 
       # Deploy to staging environment (test deployments)
       # Only runs when no releases were created (non-release commits)
