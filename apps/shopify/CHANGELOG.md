@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.1.6](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.1.5...shopify-sku-v2.1.6) (2025-10-16)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.11.0 to 1.12.0 in /apps/shopify ([#6515](https://github.com/contentful/marketplace-partner-apps/issues/6515)) ([c04d6e9](https://github.com/contentful/marketplace-partner-apps/commit/c04d6e9aecaec8f2122945afcf5a9dc00e4e5d5e))
+* **deps:** bump core-js from 3.44.0 to 3.45.0 in /apps/shopify in the production-dependencies group ([#6004](https://github.com/contentful/marketplace-partner-apps/issues/6004)) ([c974c2c](https://github.com/contentful/marketplace-partner-apps/commit/c974c2ce399aa790ac960210c76de856ee42e249))
+* **deps:** bump core-js from 3.45.0 to 3.45.1 in /apps/shopify in the production-dependencies group ([#6233](https://github.com/contentful/marketplace-partner-apps/issues/6233)) ([6c957d1](https://github.com/contentful/marketplace-partner-apps/commit/6c957d132309301e4710c2c1118a791457ca1da8))
+* **deps:** bump core-js from 3.45.1 to 3.46.0 in /apps/shopify in the production-dependencies group ([#6823](https://github.com/contentful/marketplace-partner-apps/issues/6823)) ([11ee73b](https://github.com/contentful/marketplace-partner-apps/commit/11ee73b8d1a68b6a90d68b036fe89f153a42ae05))
+
 ## [2.1.5](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.1.4...shopify-sku-v2.1.5) (2025-08-01)
 
 
