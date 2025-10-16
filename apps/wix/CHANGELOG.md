@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.23](https://github.com/contentful/marketplace-partner-apps/compare/wix-contentful-app-v1.0.22...wix-contentful-app-v1.0.23) (2025-10-15)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.37.0 to 4.39.0 in /apps/wix in the production-dependencies group ([#5998](https://github.com/contentful/marketplace-partner-apps/issues/5998)) ([df960a1](https://github.com/contentful/marketplace-partner-apps/commit/df960a14b43cbe5597b5c862e347f144325df282))
+* **deps:** bump @contentful/app-sdk from 4.39.0 to 4.40.0 in /apps/wix in the production-dependencies group ([#6043](https://github.com/contentful/marketplace-partner-apps/issues/6043)) ([52c16ee](https://github.com/contentful/marketplace-partner-apps/commit/52c16ee80c4aa1876974a3bd3c45c0a4e4b0265f))
+* **deps:** bump @contentful/app-sdk from 4.41.0 to 4.41.1 in /apps/wix in the production-dependencies group ([#6192](https://github.com/contentful/marketplace-partner-apps/issues/6192)) ([9bb2150](https://github.com/contentful/marketplace-partner-apps/commit/9bb2150a2a79f87d449b32d0fe0dc3b5365983e6))
+* **deps:** bump axios from 1.11.0 to 1.12.0 in /apps/wix ([#6508](https://github.com/contentful/marketplace-partner-apps/issues/6508)) ([f35256b](https://github.com/contentful/marketplace-partner-apps/commit/f35256bcad9818b779425385b7a4eba410c5f893))
+* **deps:** bump the production-dependencies group in /apps/wix with 2 updates ([#6171](https://github.com/contentful/marketplace-partner-apps/issues/6171)) ([8399aff](https://github.com/contentful/marketplace-partner-apps/commit/8399aff6c463869056811175582e10165b71ce4d))
+* **deps:** bump the production-dependencies group in /apps/wix with 2 updates ([#6263](https://github.com/contentful/marketplace-partner-apps/issues/6263)) ([0c2349b](https://github.com/contentful/marketplace-partner-apps/commit/0c2349b68ff3706f40417d46a4a605c6011c7c47))
+* **deps:** bump the production-dependencies group in /apps/wix with 3 updates ([#6108](https://github.com/contentful/marketplace-partner-apps/issues/6108)) ([de0b91d](https://github.com/contentful/marketplace-partner-apps/commit/de0b91db390f5af71b965d079a1dbc277d8ea855))
+
 ## [1.0.22](https://github.com/contentful/marketplace-partner-apps/compare/wix-contentful-app-v1.0.21...wix-contentful-app-v1.0.22) (2025-08-01)
 
 
