@@ -16,11 +16,11 @@
     "prettier": "2.8.8"
   },
   "scripts": {
-    "test-apps": "lerna run test --concurrency=1 --stream --since main --sort",
-    "build-apps": "lerna run build --concurrency=1 --stream --since main --sort",
-    "build-apps:deploy": "lerna run build --concurrency=1 --stream --sort",
-    "install-apps": "lerna run install-ci --concurrency=1 --stream --since main --sort",
-    "install-apps:deploy": "lerna run install-ci --concurrency=1 --stream --sort",
+    "test-apps": "lerna run test --concurrency=1 --stream --since main",
+    "build-apps": "lerna run build --concurrency=1 --stream --since main",
+    "build-apps:deploy": "lerna run build --concurrency=1 --stream",
+    "install-apps": "lerna run install-ci --concurrency=1 --stream --since main",
+    "install-apps:deploy": "lerna run install-ci --concurrency=1 --stream",
     "deploy:staging": "lerna run deploy:staging --concurrency=3",
     "deploy:production": "lerna run deploy --concurrency=3",
     "prepare": "husky install"

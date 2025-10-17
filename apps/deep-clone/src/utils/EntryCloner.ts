@@ -54,7 +54,9 @@ class EntryCloner {
     let entry;
     try {
       entry = await this.cma.entry.get({ entryId: entryId });
-    } catch (error) {} // Deleted entries are not found
+    } catch (_error) {
+      // Deleted entries are not found
+    }
 
     if (entry !== undefined) {
       this.references[entryId] = entry;
@@ -105,10 +107,13 @@ class EntryCloner {
 
       if (cloneWasUpdated) {
         try {
+          // Fetch the latest version of the entry to avoid version mismatch
+          const latestClone = await this.cma.entry.get({ entryId: clone.sys.id });
+
           await this.cma.entry.update(
-            { entryId: clone.sys.id },
+            { entryId: latestClone.sys.id },
             {
-              sys: { ...clone.sys, version: clone.sys.version },
+              sys: { ...latestClone.sys, version: latestClone.sys.version },
               fields: clone.fields,
             }
           );
