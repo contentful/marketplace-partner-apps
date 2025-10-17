@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.1](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.3.0...transifex-contentful-app-v1.3.1) (2025-10-17)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.41.0 to 4.41.1 in /apps/transifex in the production-dependencies group ([#6182](https://github.com/contentful/marketplace-partner-apps/issues/6182)) ([60a4db5](https://github.com/contentful/marketplace-partner-apps/commit/60a4db538e56fe19ff92b6fb7c69b038f0c7cb50))
+* **deps:** bump axios from 1.11.0 to 1.12.0 in /apps/transifex ([#6507](https://github.com/contentful/marketplace-partner-apps/issues/6507)) ([b4330bc](https://github.com/contentful/marketplace-partner-apps/commit/b4330bc1b8123cbe53836504895c9bc1f95e2a68))
+* **deps:** bump eslint from 9.32.0 to 9.33.0 in /apps/transifex in the production-dependencies group ([#6120](https://github.com/contentful/marketplace-partner-apps/issues/6120)) ([824ace9](https://github.com/contentful/marketplace-partner-apps/commit/824ace9c9d1b1a97905939b094a2efc7d1c2d008))
+* **deps:** bump eslint from 9.33.0 to 9.34.0 in /apps/transifex in the production-dependencies group ([#6252](https://github.com/contentful/marketplace-partner-apps/issues/6252)) ([dd5ee37](https://github.com/contentful/marketplace-partner-apps/commit/dd5ee377f63c2d3b907b427470c27154f96917bf))
+
 ## [1.3.0](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.2.14...transifex-contentful-app-v1.3.0) (2025-08-08)
 
 
