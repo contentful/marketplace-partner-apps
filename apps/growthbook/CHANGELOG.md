@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.7](https://github.com/contentful/marketplace-partner-apps/compare/growthbook-contentful-app-v1.2.6...growthbook-contentful-app-v1.2.7) (2025-10-17)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.37.0 to 4.39.0 in /apps/growthbook in the production-dependencies group ([#6016](https://github.com/contentful/marketplace-partner-apps/issues/6016)) ([eb29ed4](https://github.com/contentful/marketplace-partner-apps/commit/eb29ed4a9b09e64e96ef6a5bd042203ac0c9d1a0))
+* **deps:** bump @contentful/app-sdk from 4.40.0 to 4.41.0 in /apps/growthbook in the production-dependencies group ([#6089](https://github.com/contentful/marketplace-partner-apps/issues/6089)) ([eed336a](https://github.com/contentful/marketplace-partner-apps/commit/eed336a1352dcf7e3a1ad54057d9b5b750a63e14))
+* **deps:** bump axios from 1.11.0 to 1.12.0 in /apps/growthbook ([#6526](https://github.com/contentful/marketplace-partner-apps/issues/6526)) ([e348e56](https://github.com/contentful/marketplace-partner-apps/commit/e348e5618f6d5080f8133bac566b6a2250f6c52c))
+* **deps:** bump next from 15.4.7 to 15.5.0 in /apps/growthbook in the production-dependencies group ([#6210](https://github.com/contentful/marketplace-partner-apps/issues/6210)) ([84968e5](https://github.com/contentful/marketplace-partner-apps/commit/84968e5ca3bfe262301d47eaf1e1445133836881))
+* **deps:** bump next from 15.5.0 to 15.5.2 in /apps/growthbook in the production-dependencies group ([#6290](https://github.com/contentful/marketplace-partner-apps/issues/6290)) ([0374390](https://github.com/contentful/marketplace-partner-apps/commit/037439026d90c9bcebeb6ed40495abb4438fea4c))
+* **deps:** bump the production-dependencies group in /apps/growthbook with 2 updates ([#6178](https://github.com/contentful/marketplace-partner-apps/issues/6178)) ([38c7dcf](https://github.com/contentful/marketplace-partner-apps/commit/38c7dcfb842197b8a82ce51fb302a97a34365a33))
+* **deps:** bump the production-dependencies group in /apps/growthbook with 3 updates ([#6050](https://github.com/contentful/marketplace-partner-apps/issues/6050)) ([6cb37b7](https://github.com/contentful/marketplace-partner-apps/commit/6cb37b7789c9e0808453baba8c35acb83828cf28))
+
 ## [1.2.6](https://github.com/contentful/marketplace-partner-apps/compare/growthbook-contentful-app-v1.2.5...growthbook-contentful-app-v1.2.6) (2025-08-01)
 
 
