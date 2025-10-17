@@ -23,6 +23,9 @@
     "apps/convox": {
       "release-type": "node"
     },
+    "apps/deep-clone": {
+      "release-type": "node"
+    },
     "apps/docs-to-rich-text": {
       "release-type": "node"
     },
