@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.7](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.6...sfmc-studio-v1.2.7) (2025-10-17)
+
+
+### Bug Fixes
+
+* deploy script for sfmc-studio [] ([#6908](https://github.com/contentful/marketplace-partner-apps/issues/6908)) ([e4a45c7](https://github.com/contentful/marketplace-partner-apps/commit/e4a45c77421a7aa88f4c664b94300560fb64a878))
+
 ## [1.2.6](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.5...sfmc-studio-v1.2.6) (2025-10-15)
 
 
