@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.7...lottie-preview-v1.1.0) (2025-10-20)
+
+
+### Features
+
+* Deep clone: Add confirmation modal [INTEG-3005] ([#5985](https://github.com/contentful/marketplace-partner-apps/issues/5985)) ([ddb8614](https://github.com/contentful/marketplace-partner-apps/commit/ddb861406f7a970de62dec93e36c2dcd4a8800fd))
+
+
+### Bug Fixes
+
+* CircleCI apps-checks [] ([#6910](https://github.com/contentful/marketplace-partner-apps/issues/6910)) ([306a012](https://github.com/contentful/marketplace-partner-apps/commit/306a0128887986d6c8b91941cfb5d70af70ba6ab))
+
 ## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.6...lottie-preview-v1.0.7) (2025-07-02)
 
 
