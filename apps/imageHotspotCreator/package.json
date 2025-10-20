@@ -62,7 +62,7 @@
     "@types/node": "^20",
     "@types/react": "18.3.8",
     "@types/react-dom": "18.3.0",
-    "@vitejs/plugin-react": "^4.7.0",
+    "@vitejs/plugin-react": "^5.0.4",
     "better-docs": "^2.7.2",
     "dotenv": "^17.2.1",
     "esbuild": "^0.25.8",
