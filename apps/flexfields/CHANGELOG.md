@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.3](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.3.2...thrillworks-flex-fields-app-v1.3.3) (2025-10-20)
+
+
+### Bug Fixes
+
+* **deps:** bump vite in /apps/flexfields ([#6920](https://github.com/contentful/marketplace-partner-apps/issues/6920)) ([901a818](https://github.com/contentful/marketplace-partner-apps/commit/901a818ace46075728ebd8838b0f8228a2d3029b))
+
 ## [1.3.2](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.3.1...thrillworks-flex-fields-app-v1.3.2) (2025-10-16)
 
 
