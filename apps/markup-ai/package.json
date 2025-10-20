@@ -1,6 +1,6 @@
 {
   "name": "markup-ai-contentful-app",
-  "version": "0.1.7",
+  "version": "1.0.0",
   "private": false,
   "type": "module",
   "dependencies": {
