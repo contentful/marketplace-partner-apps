@@ -101,7 +101,7 @@ Configure how selected media assets are delivered:
 | Setting | Description | Default | Example |
 |---------|-------------|---------|---------|
 | **Default Transformation** | Transformation string applied to all selected assets | None | `w-400,h-300,c-maintain_ratio` |
-| **Media Quality** | Quality level for image compression | `auto` | `80`, `auto` |
+| **Media Quality** | Quality level for image compression | Uses ImageKit Defaults | `80`, `70` |
 
 #### Widget Settings
 
@@ -160,7 +160,7 @@ Control the media library widget's initial state:
 
 ### Community Support
 
-- **GitHub Issues**: Report bugs or request features in our [GitHub repository](https://github.com/your-org/imagekit-contentful/issues)
+- **GitHub Issues**: Report bugs or request features in our [GitHub repository](https://github.com/imagekit-developer/imagekit-contentful-app/issues)
 - **Documentation**: Check our comprehensive documentation above
 - **StackOverflow**: Tag questions with `imagekit` and `contentful`
 

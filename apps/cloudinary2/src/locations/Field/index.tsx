@@ -1,11 +1,11 @@
 import { FieldAppSDK } from '@contentful/app-sdk';
 import { GlobalStyles, Stack } from '@contentful/f36-components';
 import { useAutoResizer, useFieldValue, useSDK } from '@contentful/react-apps-toolkit';
+import { css, Global } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import { AppInstallationParameters, CloudinaryAsset } from '../../types';
-import { OpenDialogButton } from './OpenDialogButton';
+import { AssetPickerButton } from './AssetPickerButton';
 import { Thumbnails } from './Thumbnails';
-import { css, Global } from '@emotion/react';
 
 const globalStyles = css`
   html {
@@ -28,20 +28,31 @@ const Field = () => {
 
   const canAddAssets = assets.length < sdk.parameters.installation.maxFiles && editingEnabled;
 
+  const onNewAssetsAdded = (newAssets: CloudinaryAsset[]) => {
+    setAssets([...assets, ...newAssets]);
+  };
+
   return (
     <>
       <Global styles={globalStyles} />
       <GlobalStyles />
       <Stack spacing="spacingM" flexDirection="column" alignItems="flex-start">
-        {assets.length > 0 && <Thumbnails assets={assets} onChange={(asset) => {
-          if (asset.length === 0) {
-            return sdk.field.removeValue()
-          } else {
-            return setAssets(asset)
-          }
-          
-        }} isDisabled={!editingEnabled} />}
-        <OpenDialogButton isDisabled={!canAddAssets} onNewAssetsAdded={(newAssets) => setAssets([...assets, ...newAssets])} />
+        {assets.length > 0 && (
+          <Thumbnails
+            assets={assets}
+            onChange={(asset) => {
+              if (asset.length === 0) {
+                return sdk.field.removeValue();
+              } else {
+                return setAssets(asset);
+              }
+            }}
+            isDisabled={!editingEnabled}
+          />
+        )}
+        <Stack spacing="spacingM">
+          <AssetPickerButton isDisabled={!canAddAssets} onNewAssetsAdded={onNewAssetsAdded} />
+        </Stack>
       </Stack>
     </>
   );

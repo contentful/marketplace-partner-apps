@@ -1,5 +1,4 @@
-import { render } from '@testing-library/react';
-import { within } from '@testing-library/dom';
+import { render, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ContentTypeProps } from 'contentful-management';
 import { noop } from 'lodash';

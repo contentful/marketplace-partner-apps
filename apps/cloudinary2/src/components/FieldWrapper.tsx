@@ -2,7 +2,7 @@ import { Flex, FormControl } from '@contentful/f36-components';
 import { PropsWithChildren, ReactNode, useId } from 'react';
 
 interface Props {
-  name: string;
+  name?: string;
   description: ReactNode;
   counter?: boolean;
 }
@@ -10,7 +10,7 @@ interface Props {
 export function FieldWrapper({ name, description, counter = false, children }: PropsWithChildren<Props>) {
   return (
     <FormControl id={useId()}>
-      <FormControl.Label>{name}</FormControl.Label>
+      {name && <FormControl.Label>{name}</FormControl.Label>}
       {children}
 
       <Flex justifyContent="space-between">

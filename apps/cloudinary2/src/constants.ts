@@ -9,6 +9,7 @@ export const DEFAULT_APP_INSTALLATION_PARAMETERS: AppInstallationParameters = {
   format: 'auto',
   installationUuid: '',
   showUploadButton: 'true',
+  imageEditorOverlays: [],
 };
 export const DEFAULT_BACKEND_PARAMETERS: BackendParameters = {
   apiSecret: '',

@@ -4,9 +4,6 @@ import { setup } from '@contentful/dam-app-base';
 import logo from './logo.svg';
 
 const CTA = 'Select a file on Bynder';
-
-// DOCS POINT TO THIS BASE URL BUT LOGIN TO BYNDER BREAKS WITHOUT THE CLOUDFRONT BASE URL
-// const BYNDER_BASE_URL = 'https://ucv.bynder.com';
 const BYNDER_BASE_URL = 'https://d8ejoa1fys2rk.cloudfront.net';
 const BYNDER_SDK_URL = `${BYNDER_BASE_URL}/5.0.5/modules/compactview/bynder-compactview-5-latest.js`;
 
@@ -82,7 +79,7 @@ function makeThumbnail(resource) {
 function prepareBynderHTML() {
   return `
     <div class="dialog-container">
-      <div id="bynder-compactview" style="overflow-x:auto; width:100%;" />
+      <div id="bynder-compactview" style="overflow-x:auto;width:100%;" />
     </div>      
   `;
 }
@@ -134,7 +131,26 @@ function checkMessageEvent(e) {
 
 function renderDialog(sdk) {
   const config = sdk.parameters.invocation;
-  const { assetTypes, bynderURL, compactViewMode } = config;
+  const { assetTypes, bynderURL, compactViewMode, modeOverrideFields } = config;
+
+  // --- Bynder Mode Override Logic ---
+  // 1. Parse override field list (comma-separated, trimmed)
+  // 2. Get current field machine name
+  // 3. If field is in override list, use opposite mode; else use default
+  // 4. Valid modes: 'MultiSelect', 'SingleSelectFile'
+  let effectiveMode = compactViewMode ?? 'MultiSelect';
+  if (modeOverrideFields && typeof sdk.ids.field === 'string') {
+    // Remove all whitespace before splitting
+    const overrideList = modeOverrideFields
+      .replace(/\s+/g, '')
+      .split(',')
+      .filter(Boolean);
+    const fieldMachineName = sdk.ids.field;
+    if (overrideList.includes(fieldMachineName)) {
+      // Switch to the opposite mode
+      effectiveMode = (compactViewMode === 'MultiSelect' ? 'SingleSelectFile' : 'MultiSelect');
+    }
+  }
 
   let types = [];
   if (!assetTypes) {
@@ -168,7 +184,7 @@ function renderDialog(sdk) {
   script.addEventListener('load', () => {
     window.BynderCompactView.open({
       language: 'en_US',
-      mode: compactViewMode ?? 'MultiSelect',
+      mode: effectiveMode,
       assetTypes: types,
       portal: { url: bynderURL, editable: true },
       assetFieldSelection: FIELD_SELECTION,
@@ -195,7 +211,8 @@ async function openDialog(sdk, _currentValue, config) {
     shouldCloseOnOverlayClick: true,
     shouldCloseOnEscapePress: true,
     parameters,
-    width: 1400,
+    width: 'fullWidth',
+    minHeight: '80vh'
   });
 
   if (!Array.isArray(result)) {
@@ -233,7 +250,6 @@ function validateParameters({ bynderURL, assetTypes }) {
   if (!isAssetTypesValid) {
     return `Only valid asset types may be selected: ${validAssetTypes.join(',')}`;
   }
-
   return null;
 }
 
@@ -290,6 +306,14 @@ setup({
       required: true,
     },
     {
+      id: 'modeOverrideFields',
+      name: 'Compact View Mode Override for Fields',
+      type: 'Symbol',
+      description:
+        'Comma-separated list of field machine names to override the default mode. If default is MultiSelect, these fields will use SingleSelectFile, and vice versa.',
+      required: false,
+    },
+    {
       id: 'prefillSelectedAssets',
       name: 'Prefill Selected Assets',
       type: 'List',
@@ -297,6 +321,20 @@ setup({
       default: 'No',
       description: 'Determines whether the selected assets will be prefilled when opening the asset picker.',
     },
+    {
+      id: 'clientId',
+      type: 'Symbol',
+      name: 'Bynder Client ID',
+      description: 'The OAuth2 client ID for Bynder API access (required for external references and asset tracker).',
+      required: false,
+    },
+    {
+      id: 'clientSecret',
+      type: 'Symbol',
+      name: 'Bynder Client Secret',
+      description: 'The OAuth2 client secret for Bynder API access (required for external references and asset tracker).',
+      required: false,
+    }
   ],
   makeThumbnail,
   renderDialog,

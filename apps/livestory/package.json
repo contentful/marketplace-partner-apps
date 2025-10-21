@@ -1,9 +1,9 @@
 {
   "name": "ls-contentful-app",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "private": true,
   "dependencies": {
-    "@contentful/app-sdk": "^4.41.0",
+    "@contentful/app-sdk": "^4.45.0",
     "@contentful/f36-components": "4.81.1",
     "@contentful/f36-tokens": "4.2.0",
     "@contentful/react-apps-toolkit": "1.2.16",
@@ -49,7 +49,7 @@
     "@vitejs/plugin-react": "^4.7.0",
     "cross-env": "10.0.0",
     "typescript": "5.9.2",
-    "vite": "^7.1.5",
+    "vite": "^7.1.11",
     "vitest": "^3.2.4"
   },
   "homepage": "."

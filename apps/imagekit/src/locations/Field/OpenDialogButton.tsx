@@ -30,7 +30,7 @@ export function OpenDialogButton({ onNewAssetsAdded, isDisabled }: Props) {
     const defaultTransformation = sdk.parameters.installation.defaultTransformation;
     const transformation: Transformation[] = defaultTransformation ? [{ raw: defaultTransformation }] : [];
 
-    if (sdk.parameters.installation.mediaQuality !== 'auto') {
+    if (sdk.parameters.installation.mediaQuality !== '') {
       transformation.push({
         quality: sdk.parameters.installation.mediaQuality,
       });

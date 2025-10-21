@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.23](https://github.com/contentful/marketplace-partner-apps/compare/intershop-connector-v1.0.22...intershop-connector-v1.0.23) (2025-10-16)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.37.0 to 4.39.0 in /apps/intershop in the production-dependencies group ([#6002](https://github.com/contentful/marketplace-partner-apps/issues/6002)) ([5b5e7e2](https://github.com/contentful/marketplace-partner-apps/commit/5b5e7e2b87ea93ecb8595992906d8230d9b522a9))
+* **deps:** bump @contentful/app-sdk from 4.39.0 to 4.40.0 in /apps/intershop in the production-dependencies group ([#6048](https://github.com/contentful/marketplace-partner-apps/issues/6048)) ([0af934a](https://github.com/contentful/marketplace-partner-apps/commit/0af934a60cd14052d3bcd352217e73913aca67ec))
+* **deps:** bump @contentful/app-sdk from 4.40.0 to 4.41.0 in /apps/intershop in the production-dependencies group ([#6075](https://github.com/contentful/marketplace-partner-apps/issues/6075)) ([9ee66b0](https://github.com/contentful/marketplace-partner-apps/commit/9ee66b0c9a4e45b3661de3ba62a270d5d00ba5d3))
+* **deps:** bump @contentful/app-sdk from 4.41.0 to 4.41.1 in /apps/intershop in the production-dependencies group ([#6184](https://github.com/contentful/marketplace-partner-apps/issues/6184)) ([fe2efdb](https://github.com/contentful/marketplace-partner-apps/commit/fe2efdb303ca47fe74bc76de571aa612017fb143))
+* **deps:** bump axios from 1.11.0 to 1.12.0 in /apps/intershop ([#6521](https://github.com/contentful/marketplace-partner-apps/issues/6521)) ([3605631](https://github.com/contentful/marketplace-partner-apps/commit/36056311e73e7eb6995c5d11d6b2c183b2c651be))
+
 ## [1.0.22](https://github.com/contentful/marketplace-partner-apps/compare/intershop-connector-v1.0.21...intershop-connector-v1.0.22) (2025-08-01)
 
 

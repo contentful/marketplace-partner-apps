@@ -16,6 +16,9 @@ jobs:
           name: Install root dependencies
           command: npm install
       - run:
+          name: List changed packages
+          command: npx lerna ls --since main --all 2>&1 | tee changed-packages.txt
+      - run:
           name: Install apps dependencies
           command: npm run install-apps
       - run:

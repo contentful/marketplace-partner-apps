@@ -13,7 +13,7 @@
     "contentful-management": "11.54.4",
     "diff": "^8.0.2",
     "emotion": "11.0.0",
-    "happy-dom": "^18.0.1",
+    "happy-dom": "^20.0.2",
     "lodash": "^4.17.21",
     "posthog-js": "^1.260.3",
     "react": "19.1.1",
@@ -45,7 +45,7 @@
     "eslint-plugin-prettier": "^5.5.4",
     "typescript": "5.9.2",
     "typescript-eslint": "^8.41.0",
-    "vite": "7.1.3",
+    "vite": "7.1.11",
     "vitest": "3.2.4"
   }
 }
