@@ -45,7 +45,7 @@ export function AssetPickerButton({ onNewAssetsAdded, isDisabled }: Props) {
         return;
       }
 
-      const assetsToPersist = result.assets.map((asset)=>extractAsset(asset, sdk.parameters.instance.profile));
+      const assetsToPersist = result.assets.map((asset)=>extractAsset(asset, sdk.parameters.instance.customAttributes));
       onNewAssetsAdded(assetsToPersist);
     },
     [onNewAssetsAdded, sdk.dialogs],

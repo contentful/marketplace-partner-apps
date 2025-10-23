@@ -38,12 +38,12 @@ const FIELDS_TO_PERSIST = [
   'raw_transformation',
 ] as const;
 
-export function extractAsset(asset: MediaLibraryResultAsset, profileRaw?: string): CloudinaryAsset {
+export function extractAsset(asset: MediaLibraryResultAsset, customAttributesRaw?: string): CloudinaryAsset {
   let res = pick(asset, FIELDS_TO_PERSIST) as CloudinaryAsset;
-  // if we have a derived images, we replace the URL with the derived URL and store the origianl URL seperatly
-  let profile: Record<string, unknown> | undefined = undefined;
+  // if we have a derived images, we replace the URL with the derived URL and store the original URL separately
+  let customAttributes: Record<string, unknown> | undefined = undefined;
   try {
-    profile = JSON.parse(String(profileRaw));
+    customAttributes = JSON.parse(String(customAttributesRaw));
   } catch (error) {
     console.error(error);
   }
@@ -57,8 +57,8 @@ export function extractAsset(asset: MediaLibraryResultAsset, profileRaw?: string
       url: asset.derived[0].url,
       secure_url: asset.derived[0].secure_url,
       raw_transformation: asset.derived[0].raw_transformation,
-      profile_raw: profileRaw,
-      profile: profile,
+      custom_attributes_raw: customAttributesRaw,
+      custom_attributes: customAttributes,
     };
   }
 
