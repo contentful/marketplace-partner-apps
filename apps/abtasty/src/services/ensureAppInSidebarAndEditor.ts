@@ -54,6 +54,7 @@ export async function ensureAppInSidebarAndEditor(sdk: ConfigAppSDK, contentType
     sdk.cma.editorInterface.get({ spaceId, environmentId, contentTypeId });
 
   const buildPayload = (ei: EditorInterfaceProps): EditorInterfaceProps => {
+    // Editors: place l'app en premier, force disabled=false, et désactive l'éditeur par défaut
     const existingEditors = asArray(ei.editors as Widget[]);
     const editorsSansAppEtDefault = existingEditors.filter(
       (w) =>
@@ -69,11 +70,14 @@ export async function ensureAppInSidebarAndEditor(sdk: ConfigAppSDK, contentType
       ...editorsSansAppEtDefault,
     ]).map((w) => (w.widgetNamespace === 'app' && w.widgetId === appId ? { ...w, disabled: false } : w));
 
+    // Sidebar: si vide, partir des defaults, puis s'assurer que l'app est présente et activée
     const baseSidebar = asArray(ei.sidebar as Widget[]);
     const sidebarStart = baseSidebar.length ? baseSidebar : (DEFAULT_SIDEBAR as unknown as Widget[]);
 
     const sidebar = uniqByKey<Widget>([
+      // App en première position
       { widgetNamespace: 'app', widgetId: appId, disabled: false },
+      // Puis le reste de la sidebar en retirant toute occurrence de l'app
       ...sidebarStart.filter((w) => !(w.widgetNamespace === 'app' && w.widgetId === appId)),
     ]).map((w) => (w.widgetNamespace === 'app' && w.widgetId === appId ? { ...w, disabled: false } : w));
 
@@ -98,6 +102,7 @@ export async function ensureAppInSidebarAndEditor(sdk: ConfigAppSDK, contentType
         .includes('version');
     if (!is409) throw e;
 
+    // Re-fetch puis réappliquer avec la sys à jour
     ei = await getEI();
     payload = buildPayload(ei);
     await sdk.cma.editorInterface.update({ spaceId, environmentId, contentTypeId }, payload);
