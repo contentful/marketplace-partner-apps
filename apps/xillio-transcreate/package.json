@@ -16,7 +16,7 @@
     "test": "echo \"TODO: run tests on CI\""
   },
   "dependencies": {
-    "@contentful/app-sdk": "4.22.0",
+    "@contentful/app-sdk": "4.45.0",
     "@contentful/f36-components": "4.45.0",
     "@contentful/f36-icons": "^4.27.0",
     "@contentful/f36-tokens": "4.0.2",
@@ -26,7 +26,7 @@
     "contentful-management": "10.38.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hook-form": "^7.48.2"
+    "react-hook-form": "^7.65.0"
   },
   "devDependencies": {
     "@contentful/app-scripts": "1.10.2",
