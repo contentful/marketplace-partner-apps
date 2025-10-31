@@ -23,17 +23,17 @@
     "coverage": "jest --coverage --silent --json --outputFile=jest-output.json"
   },
   "dependencies": {
-    "@ant-design/plots": "^2.6.5",
+    "@ant-design/plots": "^2.6.6",
     "@contentful/app-scripts": "^1.32.2",
     "@contentful/app-sdk": "^4.45.0",
     "@contentful/f36-components": "^4.81.1",
     "@contentful/react-apps-toolkit": "^1.2.16",
-    "@reduxjs/toolkit": "^2.9.0",
-    "antd": "^5.27.5",
-    "axios": "^1.12.2",
+    "@reduxjs/toolkit": "^2.9.2",
+    "antd": "^5.27.6",
+    "axios": "^1.13.1",
     "crypto-js": "^4.2.0",
     "currency-symbol-map": "^5.1.0",
-    "dayjs": "^1.11.18",
+    "dayjs": "^1.11.19",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "html-react-parser": "^5.2.7",
@@ -50,7 +50,7 @@
     "redux-mock-store": "^1.5.5",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^3.1.0",
-    "sass": "^1.93.2"
+    "sass": "^1.93.3"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",
