@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.7...lottie-preview-v1.0.8) (2025-10-31)
+
+
+### Bug Fixes
+
+* CircleCI apps-checks [] ([#6910](https://github.com/contentful/marketplace-partner-apps/issues/6910)) ([306a012](https://github.com/contentful/marketplace-partner-apps/commit/306a0128887986d6c8b91941cfb5d70af70ba6ab))
+* **deps:** bump the production-dependencies group in /apps/lottie-preview with 2 updates ([#6976](https://github.com/contentful/marketplace-partner-apps/issues/6976)) ([4595c46](https://github.com/contentful/marketplace-partner-apps/commit/4595c461f8d1929e468c3dc25be3818f67cf679c))
+
 ## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.6...lottie-preview-v1.0.7) (2025-07-02)
 
 
