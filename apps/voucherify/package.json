@@ -19,14 +19,14 @@
     "@emotion/css": "11.13.5",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
-    "axios": "1.12.2",
+    "axios": "1.13.1",
     "http-status-codes": "2.3.0",
     "lodash": "4.17.21",
     "prop-types": "15.8.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-hook-form": "7.65.0",
-    "react-router-dom": "7.9.4"
+    "react-router-dom": "7.9.5"
   },
   "devDependencies": {
     "@contentful/app-scripts": "1.32.0",
