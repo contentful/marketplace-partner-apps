@@ -1,7 +1,7 @@
 // src/components/EntryEditor/types.ts
 
 import { EditorAppSDK } from '@contentful/app-sdk';
-import { FlagMode, RolloutStrategy, VariationType, VariationValue } from '../../types/launchdarkly';
+import { FlagMode, VariationType, VariationValue } from '../../types/launchdarkly';
 
 // Add Contentful Reference type
 export interface ContentfulReference {
