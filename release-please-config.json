@@ -2,6 +2,9 @@
   "pull-request-title-pattern": "chore: release ${component} ${version}",
   "separate-pull-requests": true,
   "packages": {
+    "apps/abtasty": {
+      "release-type": "node"
+    },
     "apps/adapt-essentials-asset-fields": {
       "release-type": "node"
     },
