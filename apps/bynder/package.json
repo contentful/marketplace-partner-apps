@@ -3,7 +3,7 @@
   "version": "1.2.0",
   "private": true,
   "devDependencies": {
-    "@contentful/app-scripts": "^2.5.5",
+    "@contentful/app-scripts": "^2.5.6",
     "@jest/globals": "^30.2.0",
     "@types/jest": "^30.0.0",
     "@types/node-fetch": "^2.6.13",
