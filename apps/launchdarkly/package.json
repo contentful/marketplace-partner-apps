@@ -6,7 +6,7 @@
   "scripts": {
     "start": "cross-env BROWSER=none NODE_ENV=development PORT=3000 react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --watchAll=false --passWithNoTests",
     "lint": "eslint src --ext .ts,.tsx",
     "install-ci": "npm ci",
     "eject": "react-scripts eject",
