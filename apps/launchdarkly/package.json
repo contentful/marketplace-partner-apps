@@ -1,12 +1,13 @@
 {
   "name": "launchdarkly-contentful-app",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:9050",
   "scripts": {
     "start": "cross-env BROWSER=none NODE_ENV=development PORT=3000 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "lint": "react-scripts lint",
     "install-ci": "npm ci",
     "eject": "react-scripts eject",
     "create-app-definition": "contentful-app-scripts create-app-definition",
