@@ -87,6 +87,10 @@ export async function createAbTastyContainerContentType({ sdk }: props) {
 
     await ensureAppInSidebarAndEditor(sdk, CONTENT_TYPE_ID);
   } catch (e: any) {
+    // app throws this error on first install but then it's created so we can ignore it
+    if (e.code === 'NotFound' && e.message.includes('AppDefinition does not exist')) {
+      return;
+    }
     console.log('Error creating content type: ', e.message || e.toString(), e.stack);
     sdk.notifier.error('Error creating content type: ' + (e.message || e.toString()));
   }
