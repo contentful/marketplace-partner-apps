@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.2](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.3.1...cloudinary-assets-v1.3.2) (2025-11-01)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group in /apps/cloudinary2 with 3 updates ([#6965](https://github.com/contentful/marketplace-partner-apps/issues/6965)) ([b19f871](https://github.com/contentful/marketplace-partner-apps/commit/b19f871369427c29d6f136d0d6a9ebb5ca7f88f9))
+
 ## [1.3.1](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.3.0...cloudinary-assets-v1.3.1) (2025-10-10)
 
 
