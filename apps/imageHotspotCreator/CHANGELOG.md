@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.29](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.28...image-hotspot-creator-v1.0.29) (2025-11-01)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group in /apps/imageHotspotCreator with 3 updates ([#6973](https://github.com/contentful/marketplace-partner-apps/issues/6973)) ([0feb38c](https://github.com/contentful/marketplace-partner-apps/commit/0feb38c94a167ca80cd0279ee70ed7739762c7cb))
+
 ## [1.0.28](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.27...image-hotspot-creator-v1.0.28) (2025-10-16)
 
 
