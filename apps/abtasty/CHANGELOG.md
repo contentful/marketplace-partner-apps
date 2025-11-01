@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/contentful/marketplace-partner-apps/compare/abtasty-v1.1.0...abtasty-v1.1.1) (2025-11-01)
+
+
+### Bug Fixes
+
+* ignore app def not found error [] ([#7127](https://github.com/contentful/marketplace-partner-apps/issues/7127)) ([af30622](https://github.com/contentful/marketplace-partner-apps/commit/af30622be7a523341f436d5a2d4aba83ce37f4f0))
+
 ## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/abtasty-v1.0.0...abtasty-v1.1.0) (2025-10-31)
 
 
