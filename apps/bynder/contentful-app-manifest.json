@@ -7,7 +7,7 @@
             "path": "functions/external-ref.js",
             "entryFile": "functions/external-ref.ts",
             "allowNetworks": [
-                "*.bynder.com"
+                "*"
             ],
             "accepts": [
                 "graphql.field.mapping",
@@ -21,7 +21,7 @@
             "path": "functions/asset-tracker.js",
             "entryFile": "functions/asset-tracker.ts",
             "allowNetworks": [
-                "*.bynder.com"
+                "*"
             ],
             "accepts": [
                 "appevent.handler"
