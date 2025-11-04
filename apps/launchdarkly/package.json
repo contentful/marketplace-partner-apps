@@ -13,7 +13,7 @@
     "install-ci": "npm ci",
     "create-app-definition": "contentful-app-scripts create-app-definition",
     "upload": "contentful-app-scripts upload --bundle-dir ./build",
-    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id ${CONTENTFUL_APP_DEF_ID} --token ${CONTENTFUL_CMA_TOKEN}"
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 3xJRrW0VKT07cHgalFjHOi --token ${CONTENTFUL_CMA_TOKEN}"
   },
   "dependencies": {
     "@contentful/app-sdk": "^4.41.2",
