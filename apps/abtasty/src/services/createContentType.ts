@@ -2,11 +2,11 @@ import { ConfigAppSDK } from '@contentful/app-sdk';
 import { CONTENT_TYPE_ID } from '@/constants';
 import { ensureAppInSidebarAndEditor } from '@/services/ensureAppInSidebarAndEditor';
 
-type props = {
+type Props = {
   sdk: ConfigAppSDK;
 };
 
-export async function createAbTastyContainerContentType({ sdk }: props) {
+export async function createAbTastyContainerContentType({ sdk }: Props) {
   try {
     const contentType = await sdk.cma.contentType.createWithId(
       {

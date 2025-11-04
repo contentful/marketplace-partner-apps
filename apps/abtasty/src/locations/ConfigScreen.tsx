@@ -17,6 +17,7 @@ import {
 import Typography from '@mui/material/Typography';
 import { ConfigCard } from '@/components/ConfigCard';
 import { CONTENT_TYPE_ID } from '@/constants';
+<<<<<<< Updated upstream
 import { LoadingCard } from '@/components/LoadingCard';
 import { LoginCard } from '@/components/LoginCard';
 import { AccountSelector } from '@/components/AccountSelector';
@@ -24,6 +25,16 @@ import { EnvironmentSelector } from '@/components/EnvironmentSelector';
 import { ContentTypeModal } from '@/components/ContentTypeModal';
 import { useAbTastyOAuth } from '@/hook/useAbTastyOAuth';
 import { getToken } from '@/utils/getToken';
+=======
+import { LoadingCard } from '@/components/ConfigScreen/LoadingCard';
+import { LoginCard } from '@/components/ConfigScreen/LoginCard';
+import { AccountSelector } from '@/components/ConfigScreen/AccountSelector';
+import { EnvironmentSelector } from '@/components/ConfigScreen/EnvironmentSelector';
+import { ContentTypeModal } from '@/components/ConfigScreen/ContentTypeModal';
+import { useAbTastyOAuth } from '@/hooks/useAbTastyOAuth';
+import { getToken, updateToken } from '@/utils/getToken';
+import { CustomButton } from '@/components/ui/CustomButton';
+>>>>>>> Stashed changes
 
 export interface AppInstallationParameters {
   user_id?: string;
@@ -64,6 +75,16 @@ const ConfigScreen = () => {
 
   const onConfigure = useCallback(async () => {
     const currentState = await sdk.app.getCurrentState();
+
+    if(!user) {
+      sdk.notifier.error('You must be connected to your AB Tasty account to use this application.');
+      return false;
+    }
+
+    if (!selectedAccount || !selectedEnvironment) {
+      sdk.notifier.error('You must configure your application with an account and an environment before you can use it.');
+      return false;
+    }
 
     const cleanParameters: AppInstallationParameters = {
       content_type: parameters.content_type,
@@ -143,17 +164,6 @@ const ConfigScreen = () => {
         setToken(lsToken);
       }
 
-      const selectedAccountId = currentParameters?.flagship_account?.account_id;
-      const selectedEnvId = currentParameters?.flagship_env?.id;
-
-      if (accounts && selectedAccountId) {
-        const maybeAccount = accounts.find((acc) => acc.account_id === selectedAccountId) ?? null;
-        setSelectedAccount(maybeAccount || null);
-
-        const maybeEnv = maybeAccount?.account_environments.find((env) => env.id === selectedEnvId);
-        setSelectedEnvironment(maybeEnv);
-      }
-
       const savedCtId = currentParameters?.content_type?.id;
       if (savedCtId) {
         setSelectedContentType(savedCtId);
@@ -163,7 +173,22 @@ const ConfigScreen = () => {
     };
 
     init();
-  }, [sdk, accounts, token]);
+  }, [sdk, token]);
+
+  useEffect(() => {
+    if (!parameters.flagship_account?.account_id || !accounts) return;
+
+    const selectedAccountId = parameters.flagship_account.account_id;
+    const selectedEnvId = parameters.flagship_env?.id;
+
+    const maybeAccount = accounts.find((acc) => acc.account_id === selectedAccountId) ?? null;
+    setSelectedAccount(maybeAccount || null);
+
+    if (maybeAccount && selectedEnvId) {
+      const maybeEnv = maybeAccount.account_environments.find((env) => env.id === selectedEnvId);
+      setSelectedEnvironment(maybeEnv);
+    }
+  }, [accounts, parameters]);
 
   useEffect(() => {
     // Persiste le token dans le localStorage dès qu'il est disponible/mis à jour

@@ -7,8 +7,16 @@ import { useQuery } from '@tanstack/react-query';
 import { getCampaignsOptions } from '@/queries/getCampaignsOptions';
 import { useEffect, useState } from 'react';
 import { getToken } from '@/utils/getToken';
+<<<<<<< Updated upstream
 import { Chip, Skeleton, Divider, Box } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+=======
+import { LoadingState } from '@/components/Common/LoadingState';
+import { useLocalStorageSync } from '@/hooks/useLocalStorageSync';
+import { CampaignDetails } from '@/components/Sidebar/CampaignDetails';
+import { EmptyStateSidebar } from '@/components/Common/EmptyStates';
+
+>>>>>>> Stashed changes
 
 const Sidebar = () => {
     const sdk = useSDK<SidebarAppSDK>();
