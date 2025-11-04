@@ -1,0 +1,31 @@
+{
+    "functions": [
+        {
+            "id": "BynderAPI",
+            "name": "Bynder Function",
+            "description": "This function pulls the asset information from Bynder via APIs",
+            "path": "functions/external-ref.js",
+            "entryFile": "functions/external-ref.ts",
+            "allowNetworks": [
+                "*.bynder.com"
+            ],
+            "accepts": [
+                "graphql.field.mapping",
+                "graphql.query"
+            ]
+        },
+        {
+            "id": "BynderAppEventHandler",
+            "name": "Bynder - App Event Handler",
+            "description": "This function handles the App Events for entries having bynder fields.",
+            "path": "functions/asset-tracker.js",
+            "entryFile": "functions/asset-tracker.ts",
+            "allowNetworks": [
+                "*.bynder.com"
+            ],
+            "accepts": [
+                "appevent.handler"
+            ]
+        }
+    ]
+}
