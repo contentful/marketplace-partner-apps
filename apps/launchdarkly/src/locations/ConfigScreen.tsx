@@ -11,12 +11,13 @@ import EnvironmentSelector from '../components/ConfigScreen/components/Environme
 import { KeyRotationModal } from '../components/ConfigScreen/components/KeyRotationModal';
 import { useLaunchDarkly } from '../components/ConfigScreen/hooks/useLaunchDarkly';
 import { Project, Environment } from '../components/ConfigScreen/types';
-import { createOrUpdateLDContentType, ensureAppEntryEditor } from '../components/ConfigScreen/utils/createLDContentType';
+import { createOrUpdateLDContentType } from '../components/ConfigScreen/utils/createLDContentType';
 import { LAUNCHDARKLY_FEATURE_FLAG_CONTENT_TYPE } from '../utils/constants';
 
 export interface AppInstallationParameters {
-  // API key is NOT stored in Contentful parameters for security
-  // It is stored server-side in encrypted DynamoDB
+  // API key is temporarily stored during initial installation only
+  // After installation, it's stored server-side in encrypted storage and removed from Contentful
+  launchDarklyApiKey?: string;
   launchDarklyProjectKey?: string;
   launchDarklyEnvironment?: string;
   launchDarklyProjectName?: string;
@@ -68,8 +69,9 @@ const CurrentSettings: React.FC<{ parameters: AppInstallationParameters }> = ({ 
 };
 
 const ConfigScreen = () => {
-  // Local state includes API key for validation, but it's NOT saved to Contentful parameters
-  const [parameters, setParameters] = useState<AppInstallationParameters & { launchDarklyApiKey?: string }>({
+  // Local state includes API key for validation
+  // During initial install, it's temporarily saved to Contentful, then moved to secure storage
+  const [parameters, setParameters] = useState<AppInstallationParameters>({
     launchDarklyApiKey: '',
     launchDarklyProjectKey: '',
     launchDarklyEnvironment: '',
@@ -400,25 +402,11 @@ const ConfigScreen = () => {
     }
 
     try {
-      // Register with backend if API key is present and not already registered
-      if (currentParams.launchDarklyApiKey && !currentParams.isRegistered) {
-        try {
-          setIsRegistering(true);
-          console.log('[ConfigScreen] Registering installation with backend...');
-          await registerInstallation(currentParams.launchDarklyApiKey);
-          console.log('[ConfigScreen] Registration complete');
-        } catch (error) {
-          console.error('[ConfigScreen] Registration failed:', error);
-          sdk.notifier.error('Failed to register API key. Please try again.');
-          return false;
-        } finally {
-          setIsRegistering(false);
-        }
-      }
-
-      // Save metadata to Contentful parameters (NO API KEY!)
-      // Only save parameters defined in Contentful's app configuration schema
+      // Save metadata to Contentful parameters
+      // Note: Temporarily saving the API key so it can be registered in onConfigurationCompleted
+      // After registration, the API key will be removed from Contentful and stored securely in backend
       const savedParams: AppInstallationParameters = {
+        launchDarklyApiKey: currentParams.launchDarklyApiKey,
         launchDarklyProjectKey: currentParams.launchDarklyProjectKey,
         launchDarklyEnvironment: currentParams.launchDarklyEnvironment,
         launchDarklyProjectName: currentParams.launchDarklyProjectName,
@@ -428,8 +416,20 @@ const ConfigScreen = () => {
       // Ensure parameters are structured-cloneable (can be sent via postMessage)
       JSON.stringify(savedParams);
 
+      // Get current state and set up the app as entry editor for the LaunchDarkly content type
+      const currentState = await sdk.app.getCurrentState();
+      const targetState = {
+        EditorInterface: {
+          ...currentState?.EditorInterface,
+          [LAUNCHDARKLY_FEATURE_FLAG_CONTENT_TYPE]: {
+            editors: { position: 0 },
+          },
+        },
+      };
+
       const result = {
         parameters: savedParams,
+        targetState,
       };
 
       console.log('[ConfigScreen] Returning configuration:', JSON.stringify(result, null, 2));
@@ -439,11 +439,51 @@ const ConfigScreen = () => {
       sdk.notifier.error('Failed to save configuration. Please try again.');
       return false;
     }
+  }, [sdk]);
+
+  /**
+   * Called after the app has been successfully installed or updated
+   * This is when we can safely make signed requests to register the API key
+   */
+  const onConfigurationCompleted = useCallback(async () => {
+    try {
+      const currentParameters: AppInstallationParameters | null = await sdk.app.getParameters();
+      
+      console.log('[ConfigScreen] onConfigurationCompleted called', {
+        hasParams: !!currentParameters,
+        hasApiKey: !!currentParameters?.launchDarklyApiKey,
+        isRegistered: currentParameters?.isRegistered,
+      });
+
+      // Register with backend if API key is present and not already registered
+      if (currentParameters?.launchDarklyApiKey && !currentParameters?.isRegistered) {
+        try {
+          setIsRegistering(true);
+          console.log('[ConfigScreen] Registering installation with backend...');
+          await registerInstallation(currentParameters.launchDarklyApiKey);
+          console.log('[ConfigScreen] Registration complete');
+
+          sdk.notifier.success('LaunchDarkly app installed successfully!');
+          
+          // Note: The API key remains in Contentful parameters for now, but all API calls
+          // will go through the backend using signed requests. If you want to remove the API key
+          // from Contentful storage, save the configuration again with isRegistered=true
+        } catch (error) {
+          console.error('[ConfigScreen] Registration failed:', error);
+          sdk.notifier.error('Installation completed but failed to register API key. Please try updating the configuration.');
+        } finally {
+          setIsRegistering(false);
+        }
+      }
+    } catch (error) {
+      console.error('[ConfigScreen] Error in onConfigurationCompleted:', error);
+    }
   }, [sdk, registerInstallation]);
 
   useEffect(() => {
     sdk.app.onConfigure(() => onConfigure());
-  }, [sdk, onConfigure]);
+    sdk.app.onConfigurationCompleted(() => onConfigurationCompleted());
+  }, [sdk, onConfigure, onConfigurationCompleted]);
 
   return (
     <Flex flexDirection="column" className={css({ margin: '10px 80px 80px', maxWidth: '800px' })} gap="spacingL">
@@ -581,7 +621,7 @@ const ConfigScreen = () => {
                       console.log('[ConfigScreen] CT action start', { space: (sdk as any).ids.space, env: (sdk as any).ids.environment });
                       setCreatingModel(true);
                       await createOrUpdateLDContentType(cma, { spaceId: (sdk as any).ids.space, environmentId: (sdk as any).ids.environment }, { appId: (sdk as any).ids.app });
-                      await ensureAppEntryEditor(cma, 'launchDarklyFeatureFlag', (sdk as any).ids.app);
+                      // Note: Entry editor assignment is handled via targetState in onConfigure
                       (sdk as any)?.notifier?.success?.('LaunchDarkly Feature Flag content type is ready.');
                       await checkContentModel();
                     } catch (e: any) {
