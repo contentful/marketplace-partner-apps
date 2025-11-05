@@ -8,7 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest",
+    "test": "vitest run --passWithNoTests",
     "lint": "eslint src --ext .ts,.tsx",
     "install-ci": "npm install",
     "create-app-definition": "contentful-app-scripts create-app-definition",
