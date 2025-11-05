@@ -56,6 +56,9 @@
     "apps/intershop": {
       "release-type": "node"
     },
+    "apps/launchdarkly": {
+      "release-type": "node"
+    },
     "apps/livestory": {
       "release-type": "node"
     },
