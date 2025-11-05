@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "lint": "eslint src --ext .ts,.tsx",
-    "install-ci": "npm ci",
+    "install-ci": "npm install",
     "create-app-definition": "contentful-app-scripts create-app-definition",
     "upload": "contentful-app-scripts upload --bundle-dir ./build",
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 3xJRrW0VKT07cHgalFjHOi --token ${CONTENTFUL_CMA_TOKEN}"
