@@ -32,10 +32,10 @@
     "@contentful/app-scripts": "1.32.0",
     "@testing-library/react": "^16.3.0",
     "@vitejs/plugin-react": "^4.7.0",
-    "eslint": "^9.39.0",
+    "eslint": "^9.39.1",
     "eslint-plugin-react": "~7.37.5",
     "happy-dom": "^20.0.10",
-    "vite": "^7.1.12",
+    "vite": "^7.2.0",
     "vitest": "^3.2.4"
   },
   "browserslist": {
