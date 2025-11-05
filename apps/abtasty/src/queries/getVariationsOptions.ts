@@ -1,14 +1,14 @@
 import { INTEGRATION_API_URL } from '@/constants';
 import { Variation } from '@/types';
 
-type props = {
+type Props = {
   token: string;
   accountId: string;
   campaignId: string;
   variationGroupId: string;
 };
 
-export const getVariationsOptions = ({ token, accountId, campaignId, variationGroupId }: props) => {
+export const getVariationsOptions = ({ token, accountId, campaignId, variationGroupId }: Props) => {
   return {
     queryKey: ['getVariations', accountId, campaignId, variationGroupId],
     queryFn: async () => {
