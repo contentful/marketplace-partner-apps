@@ -8,8 +8,19 @@ vi.mock('@contentful/react-apps-toolkit', () => ({
   useSDK: vi.fn(),
 }));
 
-vi.mock('../../services/apiService', () => ({
-  fetchStyleGuides: vi.fn().mockResolvedValue({ items: [], total: 0 }),
+vi.mock('../../hooks/useApiService', () => ({
+  useApiService: vi.fn(() => ({
+    fetchStyleGuides: vi.fn().mockResolvedValue({ items: [], total: 0 }),
+    constants: null,
+    styleGuides: null,
+    constantsLoading: false,
+    styleGuidesLoading: false,
+    constantsError: null,
+    styleGuidesError: null,
+    checkContent: vi.fn(),
+    contentRewrite: vi.fn(),
+    fetchAdminConstants: vi.fn(),
+  })),
 }));
 
 describe('ConfigScreen', () => {
@@ -39,8 +50,8 @@ describe('ConfigScreen', () => {
     );
     const calls = (mockSdk.app.onConfigure as unknown as { mock: { calls: Array<[() => Promise<unknown>]> } }).mock
       .calls;
-    const handler = calls[calls.length - 1][0];
-    const res = await handler();
+    const handler = calls.at(-1)?.[0];
+    const res = await handler!();
     expect(mockSdk.app.getCurrentState).toHaveBeenCalled();
     // After initial effect, local parameters are set to the getParameters result
     expect(res).toEqual({ parameters: { apiKey: 'x' }, targetState: { some: 'state' } });

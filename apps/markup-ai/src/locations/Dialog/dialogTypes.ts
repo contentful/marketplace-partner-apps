@@ -1,4 +1,4 @@
-import { StyleScores } from '@markupai/toolkit';
+import { ScoreOutput } from '../../api-client';
 export interface RewriteDialogParams {
   startRewrite: boolean;
   fieldId: string;
@@ -7,5 +7,5 @@ export interface RewriteDialogParams {
 }
 
 export interface MoreDetailsDialogParams {
-  scores: StyleScores;
+  scores: ScoreOutput;
 }

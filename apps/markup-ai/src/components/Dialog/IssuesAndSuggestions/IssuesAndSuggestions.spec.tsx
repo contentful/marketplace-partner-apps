@@ -21,10 +21,10 @@ describe('IssuesAndSuggestions', () => {
   it('renders all goal scores', () => {
     render(<IssuesAndSuggestions goalScores={mockGoalScores} />);
 
-    mockGoalScores.forEach((goal) => {
+    for (const goal of mockGoalScores) {
       expect(screen.getByText(goal.label)).toBeInTheDocument();
       expect(screen.getByText(goal.score.toString())).toBeInTheDocument();
-    });
+    }
   });
 
   it('renders correct number of issue cards', () => {

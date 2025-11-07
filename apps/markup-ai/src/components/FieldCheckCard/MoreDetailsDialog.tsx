@@ -26,9 +26,9 @@ import {
   BottomActions,
   CopyWorkflowIdButton,
 } from './MoreDetailsDialog.styles';
-import { StyleAnalysisSuccessResp, StyleAnalysisRewriteResp, StyleScores } from '@markupai/toolkit';
+import { ScoreOutput, StyleCheckResponse, RewriteResponse } from '../../api-client';
 import { useTranslation } from '../../contexts/LocalizationContext';
-import { CopyIcon, CheckCircleIcon } from '@contentful/f36-icons';
+import { CopySimpleIcon, CheckCircleIcon } from '@contentful/f36-icons';
 
 import { getScoreColorString, getScoreColorStringSoft } from '../../utils/scoreColors';
 import {
@@ -58,18 +58,15 @@ export const MoreDetailsDialog: React.FC = () => {
   useAutoResizer();
   const sdk = useSDK<DialogAppSDK>();
   const { checkResponse } = sdk.parameters.invocation as unknown as {
-    checkResponse: StyleAnalysisSuccessResp | StyleAnalysisRewriteResp;
+    checkResponse: StyleCheckResponse | RewriteResponse;
   };
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
 
-  const scores = useMemo<StyleScores | undefined>(
-    () =>
-      'rewrite' in checkResponse
-        ? (checkResponse as StyleAnalysisRewriteResp).rewrite.scores
-        : (checkResponse as StyleAnalysisSuccessResp).original.scores,
-    [checkResponse],
-  );
+  const scores = useMemo<ScoreOutput | undefined>(() => {
+    const s = 'rewrite' in checkResponse ? checkResponse.rewrite?.scores : checkResponse.original?.scores;
+    return s ?? undefined;
+  }, [checkResponse]);
 
   type QualityScoreLike = { quality?: { score?: number } };
   const qualityScore = useMemo(() => Number((scores as QualityScoreLike | undefined)?.quality?.score ?? 0), [scores]);
@@ -114,19 +111,22 @@ export const MoreDetailsDialog: React.FC = () => {
               <AnalysisConfigItem>
                 <AnalysisConfigLabel>{t('style_guide_type')}</AnalysisConfigLabel>
                 <AnalysisConfigValue>
-                  {getConfigDisplayValue(CONFIG_KEYS.style_guide, checkResponse.config.style_guide.style_guide_type)}
+                  {getConfigDisplayValue(
+                    CONFIG_KEYS.style_guide,
+                    checkResponse.config?.style_guide?.style_guide_type || '',
+                  )}
                 </AnalysisConfigValue>
               </AnalysisConfigItem>
               <AnalysisConfigItem>
                 <AnalysisConfigLabel>{t('dialect')}</AnalysisConfigLabel>
                 <AnalysisConfigValue>
-                  {getConfigDisplayValue(CONFIG_KEYS.dialect, checkResponse.config.dialect)}
+                  {getConfigDisplayValue(CONFIG_KEYS.dialect, checkResponse.config?.dialect || '')}
                 </AnalysisConfigValue>
               </AnalysisConfigItem>
               <AnalysisConfigItem>
                 <AnalysisConfigLabel>{t('tone')}</AnalysisConfigLabel>
                 <AnalysisConfigValue>
-                  {getConfigDisplayValue(CONFIG_KEYS.tone, checkResponse.config.tone)}
+                  {getConfigDisplayValue(CONFIG_KEYS.tone, checkResponse.config?.tone || '')}
                 </AnalysisConfigValue>
               </AnalysisConfigItem>
             </AnalysisConfigGrid>
@@ -191,23 +191,25 @@ export const MoreDetailsDialog: React.FC = () => {
           );
         })}
         <BottomActions>
-          {'workflow' in checkResponse && checkResponse.workflow.id && (
+          {'workflow' in checkResponse && checkResponse.workflow?.id && (
             <CopyWorkflowIdButton
               onClick={async () => {
-                const id = checkResponse.workflow.id!;
-                try {
-                  await navigator.clipboard.writeText(id);
-                } catch {
-                  // no-op if clipboard not available
+                const id = checkResponse.workflow?.id;
+                if (id) {
+                  try {
+                    await navigator.clipboard.writeText(id);
+                  } catch {
+                    // no-op if clipboard not available
+                  }
+                  setCopied(true);
+                  globalThis.setTimeout(() => setCopied(false), 1200);
                 }
-                setCopied(true);
-                window.setTimeout(() => setCopied(false), 1200);
               }}
               aria-label="Copy workflow id"
               title="Copy workflow id"
               data-testid="copy-workflow-id-button"
             >
-              {copied ? <CheckCircleIcon size="small" /> : <CopyIcon size="small" />}
+              {copied ? <CheckCircleIcon size="small" /> : <CopySimpleIcon size="small" />}
               Workflow ID
             </CopyWorkflowIdButton>
           )}

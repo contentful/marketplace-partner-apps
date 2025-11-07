@@ -18,7 +18,7 @@ const Sidebar: React.FC = () => {
   const { settings, updateDialect, updateTone, updateStyleGuide } = useUserSettings();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   // API key now comes from installation; only per-user preferences are local
-  const isConfigComplete = !!(settings.dialect && settings.tone && settings.styleGuide);
+  const isConfigComplete = !!(settings.dialect && settings.styleGuide);
   const [forcePanel, setForcePanel] = useState<boolean>(() => !isConfigComplete);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const Sidebar: React.FC = () => {
     const fieldCheck = fieldChecks[fieldId];
     if (!fieldCheck) return;
     const originalAnalysisResult = fieldCheck.checkResponse;
-    const originalScore = originalAnalysisResult?.original.scores?.quality.score ?? null;
+    const originalScore = originalAnalysisResult?.original?.scores?.quality?.score ?? null;
     const field = sdk.entry.fields[fieldId];
     const previewFormat = field?.type === 'RichText' ? 'html' : 'markdown';
     const result = await sdk.dialogs.openCurrent({

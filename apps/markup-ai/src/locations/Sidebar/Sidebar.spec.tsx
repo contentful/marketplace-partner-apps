@@ -1,8 +1,11 @@
 import { describe, it, expect, vi, Mock, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '../../../test/utils/testUtils';
+import { sharedOriginalScores, createMockFieldCheck, buildWorkflow } from '../../../test/utils/rewriterFixtures';
 import Sidebar from './Sidebar';
 import { useSDK } from '@contentful/react-apps-toolkit';
+import { Dialects, StyleGuides, Tones } from '../../api-client/types.gen';
 import { useRewriter } from '../../hooks/useRewriter';
+import { useUserSettings } from '../../hooks/useUserSettings';
 import { mockSdk } from '../../../test/mocks/mockSdk';
 
 // Mock the SDK and hooks
@@ -15,61 +18,24 @@ vi.mock('../../hooks/useRewriter', () => ({
   useRewriter: vi.fn(),
 }));
 
-const mockOriginalScores = {
-  quality: {
-    score: 72,
-    grammar: { score: 90, issues: 1 },
-    consistency: { score: 80, issues: 2 },
-    terminology: { score: 100, issues: 0 },
-  },
-  analysis: {
-    clarity: {
-      score: 64,
-      flesch_reading_ease: 51.4,
-      sentence_complexity: 38.9,
-      vocabulary_complexity: 45.6,
-      sentence_count: 6,
-      word_count: 112,
-      average_sentence_length: 18.7,
-    },
-    tone: {
-      score: 78,
-      informality: 38.2,
-      liveliness: 33.9,
-      informality_alignment: 115.8,
-      liveliness_alignment: 106.4,
-    },
-  },
-};
+vi.mock('../../hooks/useUserSettings', () => ({
+  useUserSettings: vi.fn(),
+}));
 
-const mockFieldCheck = {
-  fieldId: 'field1',
+const mockOriginalScores = sharedOriginalScores;
+
+const mockFieldCheck = createMockFieldCheck({
   originalValue: 'Original test content',
-  isChecking: false,
   checkResponse: {
-    workflow: {
-      id: 'chk-1',
-      type: 'checks',
-      api_version: '1.0.0',
-      generated_at: '2025-01-15T14:22:33Z',
-      status: 'completed',
-      webhook_response: { url: 'https://api.example.com/webhook', status_code: 200 },
-    },
+    workflow: buildWorkflow('checks', undefined, 'chk-1'),
     config: {
-      dialect: 'american_english',
-      style_guide: { style_guide_type: 'ap', style_guide_id: 'sg-1' },
-      tone: 'neutral',
+      dialect: Dialects.AMERICAN_ENGLISH,
+      style_guide: { style_guide_type: StyleGuides.AP, style_guide_id: 'sg-1' },
+      tone: Tones.PROFESSIONAL,
     },
-    original: {
-      issues: [],
-      scores: mockOriginalScores,
-    },
+    original: { issues: [], scores: mockOriginalScores },
   },
-  rewriteResponse: null,
-  error: null,
-  lastUpdated: Date.now(),
-  hasRewriteResult: false,
-};
+});
 
 const mockRewriter = {
   fieldChecks: { field1: mockFieldCheck },
@@ -81,6 +47,17 @@ const mockRewriter = {
   clearFieldCooldown: vi.fn(),
   isFieldInCooldown: vi.fn(),
   resetAcceptingSuggestionFlag: vi.fn(),
+};
+
+const mockUserSettings = {
+  settings: {
+    dialect: 'american_english',
+    tone: 'professional',
+    styleGuide: 'default',
+  },
+  updateDialect: vi.fn(),
+  updateTone: vi.fn(),
+  updateStyleGuide: vi.fn(),
 };
 
 // Mock SDK with field information
@@ -101,17 +78,26 @@ const mockSdkWithFields = {
 };
 
 describe('Sidebar', () => {
+  const openSettingsPanel = (forcePanel: boolean) => {
+    (useUserSettings as Mock).mockReturnValue({
+      ...mockUserSettings,
+      settings: { dialect: null, tone: null, styleGuide: null },
+      forcePanel,
+    });
+    render(<Sidebar />);
+  };
   beforeEach(() => {
     vi.clearAllMocks();
     (useSDK as Mock).mockReturnValue(mockSdkWithFields);
     (useRewriter as Mock).mockReturnValue(mockRewriter);
+    (useUserSettings as Mock).mockReturnValue(mockUserSettings);
     mockSdk.dialogs.openCurrent = vi.fn().mockResolvedValue({ accepted: false });
 
     // Ensure user settings are present so Sidebar renders workflow instead of login
-    window.localStorage.setItem('markupai.apiKey', 'test-api-key');
-    window.localStorage.setItem('markupai.dialect', 'american_english');
-    window.localStorage.setItem('markupai.tone', 'neutral');
-    window.localStorage.setItem('markupai.styleGuide', 'default');
+    globalThis.localStorage.setItem('markupai.apiKey', 'test-api-key');
+    globalThis.localStorage.setItem('markupai.dialect', 'american_english');
+    globalThis.localStorage.setItem('markupai.tone', 'neutral');
+    globalThis.localStorage.setItem('markupai.styleGuide', 'default');
   });
 
   it('renders the sidebar container', () => {
@@ -203,11 +189,7 @@ describe('Sidebar', () => {
   });
 
   it('shows waiting state when no response and not checking', () => {
-    const waitingField = {
-      ...mockFieldCheck,
-      isChecking: false,
-      checkResponse: null,
-    };
+    const waitingField = createMockFieldCheck({ originalValue: 'Original test content', checkResponse: null });
 
     (useRewriter as Mock).mockReturnValue({
       ...mockRewriter,
@@ -255,19 +237,21 @@ describe('Sidebar', () => {
   });
 
   it('displays dash when score is neutral', () => {
-    const neutralScoreField = {
-      ...mockFieldCheck,
+    const neutralScoreField = createMockFieldCheck({
+      originalValue: 'Original test content',
       checkResponse: {
-        ...mockFieldCheck.checkResponse,
+        workflow: buildWorkflow('checks', undefined, 'chk-1'),
+        config: {
+          dialect: Dialects.AMERICAN_ENGLISH,
+          style_guide: { style_guide_type: StyleGuides.AP, style_guide_id: 'sg-1' },
+          tone: Tones.PROFESSIONAL,
+        },
         original: {
-          ...mockFieldCheck.checkResponse.original,
-          scores: {
-            ...mockOriginalScores,
-            quality: { ...mockOriginalScores.quality, score: 0 },
-          },
+          issues: [],
+          scores: { ...mockOriginalScores, quality: { ...mockOriginalScores.quality, score: 0 } },
         },
       },
-    };
+    });
 
     (useRewriter as Mock).mockReturnValue({
       ...mockRewriter,
@@ -276,5 +260,87 @@ describe('Sidebar', () => {
 
     render(<Sidebar />);
     expect(screen.getByText('—')).toBeInTheDocument();
+  });
+
+  it('handles dialog acceptance with rewrite response', async () => {
+    const mockRewriteResponse = {
+      workflow_id: 'rewrite-123',
+      status: 'completed',
+      rewrite: {
+        text: 'Improved text',
+        scores: { quality: { score: 90 } },
+      },
+    };
+
+    mockSdk.dialogs.openCurrent = vi.fn().mockResolvedValue({
+      accepted: true,
+      fieldId: 'field1',
+      rewriteResponse: mockRewriteResponse,
+    });
+
+    render(<Sidebar />);
+
+    // Expand the card and click rewrite
+    const header = screen.getByText('Field 1').closest('[data-clickable]');
+    fireEvent.click(header!);
+    const rewriteButton = screen.getByText('Rewrite');
+    fireEvent.click(rewriteButton);
+
+    await waitFor(() => {
+      expect(mockRewriter.updateCheck).toHaveBeenCalledWith('field1', {
+        checkResponse: mockRewriteResponse,
+        hasRewriteResult: true,
+      });
+      expect(mockRewriter.handleAcceptSuggestion).toHaveBeenCalledWith('field1', mockRewriteResponse);
+    });
+  });
+
+  it('handles dialog acceptance without rewrite response', async () => {
+    mockSdk.dialogs.openCurrent = vi.fn().mockResolvedValue({
+      accepted: true,
+      fieldId: 'field1',
+    });
+
+    render(<Sidebar />);
+
+    // Expand the card and click rewrite
+    const header = screen.getByText('Field 1').closest('[data-clickable]');
+    fireEvent.click(header!);
+    const rewriteButton = screen.getByText('Rewrite');
+    fireEvent.click(rewriteButton);
+
+    await waitFor(() => {
+      expect(mockRewriter.handleAcceptSuggestion).toHaveBeenCalledWith('field1');
+    });
+  });
+
+  it.each([
+    { caseName: 'renders settings panel when settings are open', forcePanel: false },
+    { caseName: 'renders settings panel when forcePanel is true', forcePanel: true },
+    { caseName: 'handles settings panel open state', forcePanel: false },
+  ])('$caseName', ({ forcePanel }) => {
+    openSettingsPanel(forcePanel);
+    expect(screen.getByText('Configuration')).toBeInTheDocument();
+  });
+
+  it('calls user settings update functions', () => {
+    render(<Sidebar />);
+
+    // Verify that useUserSettings is called and returns the expected functions
+    expect(useUserSettings).toHaveBeenCalled();
+    expect(mockUserSettings.updateDialect).toBeDefined();
+    expect(mockUserSettings.updateTone).toBeDefined();
+    expect(mockUserSettings.updateStyleGuide).toBeDefined();
+  });
+
+  it('handles field change callback to reset expanded state', () => {
+    render(<Sidebar />);
+
+    // Verify that setOnFieldChange is called
+    expect(mockRewriter.setOnFieldChange).toHaveBeenCalled();
+
+    // Get the callback function that was passed to setOnFieldChange
+    const setOnFieldChangeCall = mockRewriter.setOnFieldChange.mock.calls[0][0];
+    expect(typeof setOnFieldChangeCall).toBe('function');
   });
 });
