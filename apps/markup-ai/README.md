@@ -2,6 +2,8 @@
 
 A Contentful app that integrates Markup AI's content quality checking capabilities into the Contentful platform.
 
+The app can be installed from [marketplace](https://www.contentful.com/marketplace/markup-ai/)
+
 ## Setup
 
 1. Install dependencies:
