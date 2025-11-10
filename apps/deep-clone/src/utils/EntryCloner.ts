@@ -106,21 +106,28 @@ class EntryCloner {
       }
 
       if (cloneWasUpdated) {
-        try {
-          // Fetch the latest version of the entry to avoid version mismatch
-          const latestClone = await this.cma.entry.get({ entryId: clone.sys.id });
-
-          await this.cma.entry.update(
-            { entryId: latestClone.sys.id },
-            {
-              sys: { ...latestClone.sys, version: latestClone.sys.version },
-              fields: clone.fields,
+        let latestClone = clone;
+        for (let retryCount = 0; retryCount < 3; retryCount++) {
+          try {
+            await this.cma.entry.update(
+              { entryId: latestClone.sys.id },
+              {
+                sys: { ...latestClone.sys, version: latestClone.sys.version },
+                fields: clone.fields,
+              }
+            );
+            this.updates++;
+            this.setUpdatesCount(this.updates);
+            break;
+          } catch (error: any) {
+            if (error.code === 'VersionMismatch') {
+              console.warn('Error updating clone, retrying...', error);
+              latestClone = await this.cma.entry.get({ entryId: clone.sys.id });
+            } else {
+              console.warn('Error updating clone.', error);
+              break;
             }
-          );
-          this.updates++;
-          this.setUpdatesCount(this.updates);
-        } catch (error) {
-          console.warn('Error updating clone', error);
+          }
         }
       }
     });
