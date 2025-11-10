@@ -30,6 +30,14 @@ export async function createOrUpdateLDContentType(
         required: true,
         items: { type: 'Link', linkType: 'Entry' }
       },
+      {
+        id: 'meta',
+        name: 'Variation Metadata',
+        type: 'Object',
+        required: false,
+        localized: false,
+        validations: [],
+      },
       // Optional: editor tolerates if this field is absent
       // { id: 'mode', name: 'Mode', type: 'Symbol', required: false, localized: false }
     ]

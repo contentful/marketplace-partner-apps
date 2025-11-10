@@ -162,6 +162,8 @@ const ConfigScreen = () => {
       const cm = getField('contentMapping');
       const cmValid = cm && cm.type === 'Array' && cm.items && cm.items.type === 'Link' && cm.items.linkType === 'Entry';
       if (!cmValid) missing.push('contentMapping (Array of Entry links)');
+      const metaField = getField('meta');
+      if (!metaField || metaField.type !== 'Object') missing.push('meta (Object)');
       const displayFieldOk = ct?.displayField === 'name';
       if (!displayFieldOk) missing.push('displayField set to "name"');
 
@@ -180,6 +182,7 @@ const ConfigScreen = () => {
    */
   const registerInstallation = useCallback(async (apiKey: string) => {
     try {
+      console.log('[ConfigScreen] Creating signed request...');
       const { additionalHeaders } = await sdk.cma.appSignedRequest.create(
         { appDefinitionId: sdk.ids.app },
         {
@@ -189,12 +192,14 @@ const ConfigScreen = () => {
           body: JSON.stringify({ launchDarklyApiKey: apiKey }),
         },
       );
+      console.log('[ConfigScreen] Signed request headers:', additionalHeaders);
 
       // Determine backend URL
       const backendUrl = process.env.NODE_ENV === 'development' 
         ? 'http://localhost:9050'  // Local momi server
         : 'https://integrations.launchdarkly.com';  // Production
 
+      console.log('[ConfigScreen] Sending registration to:', `${backendUrl}/contentful/api/register`);
       const response = await fetch(`${backendUrl}/contentful/api/register`, {
         method: 'POST',
         headers: {
@@ -204,8 +209,17 @@ const ConfigScreen = () => {
         body: JSON.stringify({ launchDarklyApiKey: apiKey }),
       });
 
+      console.log('[ConfigScreen] Response status:', response.status, response.statusText);
+      
       if (!response.ok) {
-        const error = await response.json();
+        const responseText = await response.text();
+        console.error('[ConfigScreen] Error response body:', responseText);
+        let error;
+        try {
+          error = JSON.parse(responseText);
+        } catch {
+          error = { message: responseText };
+        }
         throw new Error(error.error || error.message || 'Failed to register installation');
       }
 
@@ -460,7 +474,10 @@ const ConfigScreen = () => {
         try {
           setIsRegistering(true);
           console.log('[ConfigScreen] Registering installation with backend...');
+          console.log('[ConfigScreen] Current parameters:', currentParameters);
+          console.log('[ConfigScreen] LaunchDarkly API key:', currentParameters.launchDarklyApiKey);
           await registerInstallation(currentParameters.launchDarklyApiKey);
+
           console.log('[ConfigScreen] Registration complete');
 
           sdk.notifier.success('LaunchDarkly app installed successfully!');

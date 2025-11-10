@@ -4,13 +4,18 @@ import { InfoCircleIcon } from '@contentful/f36-icons';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { EditorAppSDK } from '@contentful/app-sdk';
 import { useDebouncedCallback } from 'use-debounce';
-import { FlagFormState, EnhancedContentfulEntry } from '../types';
+import { FlagFormState, EnhancedContentfulEntry, ContentfulReference, EnhancedFlagFormState } from '../types';
 import { VariationContentSection } from './VariationContentSection';
 import { VariationsForm } from './VariationsForm';
 import { validateFlagData } from '../../../utils/validation';
 import { sanitizeFlagKey } from '../../../utils/validation';
 import { CreateFlagData, FeatureFlag } from '../../../types/launchdarkly';
-import { extractReferenceArrayContentMapping } from '../../../utils/contentMapping';
+import { buildVariationMetaMapping, extractReferenceArrayContentMapping, isMetaMappingEqual } from '../../../utils/contentMapping';
+
+type MetaFieldApi = {
+  getValue?: () => Record<string, string> | null | undefined;
+  setValue?: (value: Record<string, string>) => Promise<unknown>;
+};
 
 interface FlagDetailsSectionProps {
   formState: FlagFormState;
@@ -33,6 +38,7 @@ interface FlagDetailsSectionProps {
   createFlag: (projectKey: string, flagData: CreateFlagData) => Promise<FeatureFlag>;
   flagCreationLoading: boolean;
   onFlagCreated?: (flag: FeatureFlag) => void;
+  onFlagLocked?: () => void;
 }
 
 export const FlagDetailsSection: React.FC<FlagDetailsSectionProps> = ({
@@ -50,7 +56,8 @@ export const FlagDetailsSection: React.FC<FlagDetailsSectionProps> = ({
   configuredEnvironment,
   createFlag,
   flagCreationLoading,
-  onFlagCreated
+  onFlagCreated,
+  onFlagLocked
 }) => {
   const sdk = useSDK<EditorAppSDK>();
   const [flagCreated, setFlagCreated] = useState(false);
@@ -118,6 +125,35 @@ export const FlagDetailsSection: React.FC<FlagDetailsSectionProps> = ({
     
     return filtered;
   }, [launchDarklyFlags, search]);
+
+  const persistMetaField = useCallback(
+    async (
+      variations: FlagFormState['variations'],
+      contentSource: ContentfulReference[] | Record<number, EnhancedContentfulEntry>,
+    ): Promise<Record<string, string>> => {
+      const nextMeta = buildVariationMetaMapping(variations, contentSource);
+
+      // Keep React state in sync for downstream consumers (parity with Optimizely meta JSON).
+      onFormChange('meta', nextMeta);
+
+      const fieldsWithMeta = sdk.entry.fields as typeof sdk.entry.fields & { meta?: MetaFieldApi };
+      const metaField = fieldsWithMeta.meta;
+      if (metaField && typeof metaField.setValue === 'function') {
+        try {
+          const currentMeta =
+            typeof metaField.getValue === 'function' ? metaField.getValue() || {} : {};
+          if (!isMetaMappingEqual(currentMeta, nextMeta)) {
+            await metaField.setValue(nextMeta);
+          }
+        } catch (metaError) {
+          console.warn('[FlagDetailsSection] Failed to update meta field', metaError);
+        }
+      }
+
+      return nextMeta;
+    },
+    [onFormChange, sdk.entry.fields],
+  );
 
   useEffect(() => {
     if (launchDarklyFlags.length && formState.key) {
@@ -218,6 +254,9 @@ export const FlagDetailsSection: React.FC<FlagDetailsSectionProps> = ({
     
     setSaveStatus('saving');
     
+    // Lock flag creation immediately when user selects a flag
+    onFlagLocked?.();
+    
     // Update React state immediately (for UI feedback)
     onFormChange('existingFlagKey', flag.key);
     onFormChange('key', flag.key);
@@ -239,7 +278,13 @@ export const FlagDetailsSection: React.FC<FlagDetailsSectionProps> = ({
       if (validateBeforeSave('variations', flag.variations)) {
         await sdk.entry.fields.variations.setValue(flag.variations);
       }
-      await sdk.entry.fields.mode.setValue('existing');
+      // Note: mode is not persisted to Contentful, it's inferred from data on load
+      const rawMapping = sdk.entry.fields.contentMapping?.getValue?.();
+      const currentMapping = Array.isArray(rawMapping) ? (rawMapping as ContentfulReference[]) : [];
+      onFormChange('contentMapping', currentMapping);
+      
+      // Build meta from contentMapping (can use references directly, no need for enhanced data)
+      await persistMetaField(flag.variations, currentMapping);
       
       setSaveStatus('saved');
     } catch (error) {
@@ -260,27 +305,22 @@ export const FlagDetailsSection: React.FC<FlagDetailsSectionProps> = ({
     setSaveStatus('saving');
     
     // Update React state immediately
-    setEnhancedVariationContent(prev => {
-      // Only create a new object if this specific variation is actually changing
-      if (prev[variationIndex] === entryLink) {
-        return prev; // Return the same object reference
-      }
-      
-      // Create new object with only the changed variation
-      const newContent = { ...prev };
-      newContent[variationIndex] = entryLink;
-      return newContent;
-    });
+    const updatedContent = { ...enhancedVariationContent, [variationIndex]: entryLink };
+    setEnhancedVariationContent(updatedContent);
     
     // Auto-save to Contentful field with validation
     try {
-      const referenceArray = extractReferenceArrayContentMapping({
+      const updatedState = {
         ...formState,
-        enhancedVariationContent: { ...enhancedVariationContent, [variationIndex]: entryLink }
-      });
+        enhancedVariationContent: updatedContent
+      };
+      const referenceArray = extractReferenceArrayContentMapping(updatedState);
+      onFormChange('contentMapping', referenceArray as ContentfulReference[]);
       
       if (validateBeforeSave('contentMapping', referenceArray)) {
         await sdk.entry.fields.contentMapping.setValue(referenceArray);
+        // Build meta from enhancedVariationContent (same source as contentMapping)
+        await persistMetaField(formState.variations, updatedContent);
         setSaveStatus('saved');
       }
     } catch (error) {
@@ -288,32 +328,31 @@ export const FlagDetailsSection: React.FC<FlagDetailsSectionProps> = ({
       setSaveStatus('error');
       sdk.notifier.error('Failed to save content mapping. Please try again.');
     }
-  }, [setEnhancedVariationContent, formState, enhancedVariationContent, sdk.notifier, sdk.entry.fields.contentMapping]);
+  }, [setEnhancedVariationContent, formState, enhancedVariationContent, sdk.notifier, sdk.entry.fields.contentMapping, onFormChange, persistMetaField]);
 
   const handleRemoveVariationContent = useCallback(async (variationIndex: number) => {
     setSaveStatus('saving');
     
     // Update React state immediately
-    setEnhancedVariationContent(prev => {
-      // Only create a new object if this variation actually exists
-      if (!(variationIndex in prev)) {
-        return prev; // Return the same object reference
-      }
-      
-      const newContent = { ...prev };
-      delete newContent[variationIndex];
-      return newContent;
-    });
+    const updatedContent = { ...enhancedVariationContent };
+    if (variationIndex in updatedContent) {
+      delete updatedContent[variationIndex];
+    }
+    setEnhancedVariationContent(updatedContent);
     
     // Auto-save to Contentful field with validation
     try {
-      const referenceArray = extractReferenceArrayContentMapping({
+      const updatedState = {
         ...formState,
-        enhancedVariationContent: { ...enhancedVariationContent }
-      });
+        enhancedVariationContent: updatedContent
+      };
+      const referenceArray = extractReferenceArrayContentMapping(updatedState);
+      onFormChange('contentMapping', referenceArray as ContentfulReference[]);
       
       if (validateBeforeSave('contentMapping', referenceArray)) {
         await sdk.entry.fields.contentMapping.setValue(referenceArray);
+        // Build meta from enhancedVariationContent (same source as contentMapping)
+        await persistMetaField(formState.variations, updatedContent);
         setSaveStatus('saved');
       }
     } catch (error) {
@@ -321,7 +360,7 @@ export const FlagDetailsSection: React.FC<FlagDetailsSectionProps> = ({
       setSaveStatus('error');
       sdk.notifier.error('Failed to remove content mapping. Please try again.');
     }
-  }, [setEnhancedVariationContent, formState, enhancedVariationContent, sdk.notifier, sdk.entry.fields.contentMapping]);
+  }, [setEnhancedVariationContent, formState, enhancedVariationContent, sdk.notifier, sdk.entry.fields.contentMapping, onFormChange, persistMetaField]);
 
   // Handler for editing an entry
   const handleEditEntry = useCallback(async (entryId: string) => {
