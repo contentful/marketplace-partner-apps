@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/contentful/marketplace-partner-apps/compare/deep-clone-v1.2.0...deep-clone-v1.2.1) (2025-11-11)
+
+
+### Bug Fixes
+
+* Deep clone version mismatch error [MAPS-92] ([#7215](https://github.com/contentful/marketplace-partner-apps/issues/7215)) ([540fb7f](https://github.com/contentful/marketplace-partner-apps/commit/540fb7f80505c8bd3518756a237e8a9a811cd69a))
+
 ## [1.2.0](https://github.com/contentful/marketplace-partner-apps/compare/deep-clone-v1.1.0...deep-clone-v1.2.0) (2025-10-17)
 
 
