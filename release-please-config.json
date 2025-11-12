@@ -35,6 +35,9 @@
     "apps/flexfields": {
       "release-type": "node"
     },
+    "apps/global-find-replace": {
+      "release-type": "node"
+    },
     "apps/frontify": {
       "release-type": "node"
     },
