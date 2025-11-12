@@ -24,7 +24,7 @@ Content Auditor is a custom-built app designed to help content teams maintain a 
 
 1. Clone this repository:
 
-   git clone https://github.com/your-org/content-auditor.git
+   git clone https://github.com/Espire-Infolabs-India/marketplace-partner-apps.git
 
 2. Install dependencies:
 
