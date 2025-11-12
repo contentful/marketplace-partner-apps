@@ -138,26 +138,42 @@ const Page = () => {
     }
   };
 
-  const handleDeleteContentTypes = async () => {
-    for (const typeId of selectedContentTypes) {
-      try {
-        await fetch(
-          `https://api.contentful.com/spaces/${spaceId}/environments/${environmentId}/content_types/${typeId}`,
-          {
-            method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-      } catch (error) {
-        console.warn(`Failed to delete content type ${typeId}:`, error);
+const handleDeleteContentTypes = async () => {
+  for (const typeId of selectedContentTypes) {
+    try {
+      const unpublishRes = await fetch(
+        `https://api.contentful.com/spaces/${spaceId}/environments/${environmentId}/content_types/${typeId}/published`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (!unpublishRes.ok && unpublishRes.status !== 404) {
+        continue;
       }
+
+      await fetch(
+        `https://api.contentful.com/spaces/${spaceId}/environments/${environmentId}/content_types/${typeId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } catch {
     }
-    setSelectedContentTypes([]);
-    await handleGenerateUnusedContentTypeReport();
-  };
+  }
+
+  setSelectedContentTypes([]);
+  await handleGenerateUnusedContentTypeReport();
+};
+
+
 
   const toggleAssetSelection = (assetId: string) => {
     setSelectedAssets((prev) =>
