@@ -98,12 +98,12 @@ const GenerateEntryReport = ({
 
   const filteredEntries = entries
     .filter((entry) => {
-      const name = getDisplayName(entry).toLowerCase();
-      return name.includes(searchQuery.toLowerCase());
+      const name = getDisplayName(entry)?.toLowerCase();
+      return name.includes(searchQuery?.toLowerCase());
     })
     .sort((a, b) => {
-      const nameA = getDisplayName(a).toLowerCase();
-      const nameB = getDisplayName(b).toLowerCase();
+      const nameA = getDisplayName(a)?.toLowerCase();
+      const nameB = getDisplayName(b)?.toLowerCase();
       const dateA = new Date(a.sys.updatedAt).getTime();
       const dateB = new Date(b.sys.updatedAt).getTime();
 
