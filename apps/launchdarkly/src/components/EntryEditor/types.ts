@@ -25,15 +25,16 @@ export interface FlagFormState {
   mode: FlagMode;
   // Change to Reference Array - array index corresponds to variation index
   contentMapping: ContentfulReference[];
+  /**
+   * Lightweight variation → entry mapping for parity with Optimizely's meta field.
+   */
+  meta?: Record<string, string>;
 }
 
 // Extended SDK for flag management capabilities
+// Note: mode field is not in Contentful, it's inferred from data in React state
 export interface ExtendedEditorAppSDK extends EditorAppSDK {
-  entry: EditorAppSDK['entry'] & {
-    fields: EditorAppSDK['entry']['fields'] & {
-      mode: { getValue: () => FlagMode };
-    };
-  };
+  entry: EditorAppSDK['entry'];
   window: {
     startAutoResizer: () => void;
     stopAutoResizer: () => void;
