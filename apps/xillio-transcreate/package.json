@@ -16,7 +16,7 @@
     "test": "echo \"TODO: run tests on CI\""
   },
   "dependencies": {
-    "@contentful/app-sdk": "4.22.0",
+    "@contentful/app-sdk": "4.45.0",
     "@contentful/f36-components": "4.45.0",
     "@contentful/f36-icons": "^4.27.0",
     "@contentful/f36-tokens": "4.0.2",
@@ -26,11 +26,11 @@
     "contentful-management": "10.38.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hook-form": "^7.48.2"
+    "react-hook-form": "^7.65.0"
   },
   "devDependencies": {
     "@contentful/app-scripts": "1.10.2",
-    "@eslint/js": "^9.9.0",
+    "@eslint/js": "^9.38.0",
     "@storybook/addon-essentials": "^8.3.1",
     "@storybook/addon-interactions": "^8.3.1",
     "@storybook/addon-links": "^8.3.1",
@@ -38,19 +38,19 @@
     "@storybook/react": "^8.3.1",
     "@storybook/react-vite": "^8.3.1",
     "@storybook/test": "^8.3.1",
-    "@storybook/test-runner": "^0.19.1",
+    "@storybook/test-runner": "^0.24.1",
     "@testing-library/react": "14.0.0",
     "@types/node": "^20",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
-    "@vitejs/plugin-react": "4.0.1",
-    "eslint": "^9.9.0",
+    "@vitejs/plugin-react": "4.7.0",
+    "eslint": "^9.38.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "globals": "^15.9.0",
     "prettier": "^3.3.3",
     "storybook": "^8.3.1",
-    "typescript": "5.1.6",
-    "typescript-eslint": "^8.0.1",
-    "vite": "4.5.14"
+    "typescript": "5.9.3",
+    "typescript-eslint": "^8.46.2",
+    "vite": "7.1.12"
   }
 }

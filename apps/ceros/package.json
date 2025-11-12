@@ -3,13 +3,13 @@
   "version": "1.0.29",
   "private": true,
   "dependencies": {
-    "@contentful/app-sdk": "^4.29.7",
+    "@contentful/app-sdk": "^4.45.0",
     "@contentful/f36-components": "4.80.5",
     "@contentful/f36-tokens": "4.2.0",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "11.13.5",
-    "@extractus/oembed-extractor": "^4.0.8",
-    "contentful-management": "11.54.1",
+    "@extractus/oembed-extractor": "^4.0.9",
+    "contentful-management": "11.62.0",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
@@ -40,17 +40,17 @@
   },
   "devDependencies": {
     "@contentful/app-scripts": "1.32.0",
-    "@testing-library/jest-dom": "6.6.3",
+    "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "^16.3.0",
-    "@tsconfig/create-react-app": "2.0.6",
+    "@tsconfig/create-react-app": "2.0.8",
     "@types/jest": "29.5.14",
     "@types/node": "^20",
     "@types/react": "18.3.13",
     "@types/react-dom": "18.3.1",
     "@vitejs/plugin-react": "^4.6.0",
     "happy-dom": "^15.11.7",
-    "typescript": "^5.8.3",
-    "vite": "^5.4.11",
+    "typescript": "^5.9.3",
+    "vite": "^5.4.21",
     "vitest": "^3.2.4"
   },
   "homepage": "."

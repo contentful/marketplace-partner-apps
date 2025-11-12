@@ -1,9 +1,9 @@
 {
   "name": "ls-contentful-app",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "private": true,
   "dependencies": {
-    "@contentful/app-sdk": "^4.41.0",
+    "@contentful/app-sdk": "^4.45.0",
     "@contentful/f36-components": "4.81.1",
     "@contentful/f36-tokens": "4.2.0",
     "@contentful/react-apps-toolkit": "1.2.16",
@@ -37,19 +37,19 @@
     ]
   },
   "devDependencies": {
-    "@contentful/app-scripts": "2.5.5",
-    "@testing-library/jest-dom": "6.6.4",
+    "@contentful/app-scripts": "2.5.6",
+    "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.0",
-    "@tsconfig/create-react-app": "2.0.6",
+    "@tsconfig/create-react-app": "2.0.8",
     "@types/jest": "29.5.14",
     "@types/node": "^20",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "@types/superagent": "^8.1.9",
     "@vitejs/plugin-react": "^4.7.0",
-    "cross-env": "10.0.0",
-    "typescript": "5.9.2",
-    "vite": "^7.1.2",
+    "cross-env": "10.1.0",
+    "typescript": "5.9.3",
+    "vite": "^7.1.12",
     "vitest": "^3.2.4"
   },
   "homepage": "."

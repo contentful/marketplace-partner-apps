@@ -2,6 +2,9 @@
   "pull-request-title-pattern": "chore: release ${component} ${version}",
   "separate-pull-requests": true,
   "packages": {
+    "apps/abtasty": {
+      "release-type": "node"
+    },
     "apps/adapt-essentials-asset-fields": {
       "release-type": "node"
     },
@@ -21,6 +24,9 @@
       "release-type": "node"
     },
     "apps/convox": {
+      "release-type": "node"
+    },
+    "apps/deep-clone": {
       "release-type": "node"
     },
     "apps/docs-to-rich-text": {
@@ -48,6 +54,9 @@
       "release-type": "node"
     },
     "apps/intershop": {
+      "release-type": "node"
+    },
+    "apps/launchdarkly": {
       "release-type": "node"
     },
     "apps/livestory": {
@@ -87,6 +96,9 @@
       "release-type": "node"
     },
     "apps/wix": {
+      "release-type": "node"
+    },
+    "apps/markup-ai": {
       "release-type": "node"
     },
     "apps/xillio-transcreate": {

@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.28](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.27...image-hotspot-creator-v1.0.28) (2025-10-16)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.37.0 to 4.39.0 in /apps/imageHotspotCreator in the production-dependencies group ([#6003](https://github.com/contentful/marketplace-partner-apps/issues/6003)) ([f8167f5](https://github.com/contentful/marketplace-partner-apps/commit/f8167f566f90997492b727622783fabafd268707))
+* **deps:** bump @contentful/app-sdk from 4.39.0 to 4.40.0 in /apps/imageHotspotCreator in the production-dependencies group ([#6060](https://github.com/contentful/marketplace-partner-apps/issues/6060)) ([fb7c6af](https://github.com/contentful/marketplace-partner-apps/commit/fb7c6af87f29871065aa64ee0ded9ead78ac9650))
+* **deps:** bump @contentful/app-sdk from 4.40.0 to 4.41.0 in /apps/imageHotspotCreator in the production-dependencies group ([#6071](https://github.com/contentful/marketplace-partner-apps/issues/6071)) ([849fdff](https://github.com/contentful/marketplace-partner-apps/commit/849fdff1cece91e781e277cd95742afe02d06d78))
+* **deps:** bump axios from 1.11.0 to 1.12.0 in /apps/imageHotspotCreator ([#6524](https://github.com/contentful/marketplace-partner-apps/issues/6524)) ([e9839c7](https://github.com/contentful/marketplace-partner-apps/commit/e9839c7749ab903b87ff0a40c5a392ca194b4370))
+* **deps:** bump contentful from 10.15.1 to 11.8.6 in /apps/imageHotspotCreator [] ([#6772](https://github.com/contentful/marketplace-partner-apps/issues/6772)) ([246888c](https://github.com/contentful/marketplace-partner-apps/commit/246888c94e0059f57fb1512f3fb76964cf199d37))
+* **deps:** bump the production-dependencies group in /apps/imageHotspotCreator with 2 updates ([#6834](https://github.com/contentful/marketplace-partner-apps/issues/6834)) ([ec2fb43](https://github.com/contentful/marketplace-partner-apps/commit/ec2fb43656cdbfd07eb80cefe93cb8ad005051b1))
+
 ## [1.0.27](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.26...image-hotspot-creator-v1.0.27) (2025-08-01)
 
 

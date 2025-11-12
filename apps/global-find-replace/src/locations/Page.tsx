@@ -45,7 +45,7 @@ const FindReplaceApp: React.FC = () => {
   }
 
   if (state.showSummary) {
-    return <SummaryView appliedChanges={state.appliedChanges} onBackToSearch={() => resetState()} />;
+    return <SummaryView appliedChanges={state.appliedChanges} publishAfterUpdate={state.publishAfterUpdate} onBackToSearch={() => resetState()} />;
   }
 
   return (
@@ -127,7 +127,7 @@ const FindReplaceApp: React.FC = () => {
             />
 
             <ResultsTable
-              entries={currentPageEntries}
+              fields={currentPageEntries}
               selectedEntries={state.selectedEntries}
               allSelected={allSelected}
               isLoading={state.applyingChanges}
