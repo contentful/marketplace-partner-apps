@@ -26,6 +26,7 @@ import GenerateUnusedContentTypesReport from "../components/Reports/GenerateUnus
 
 const Page = () => {
   const sdk = useSDK<PageAppSDK>();
+  const defaultLocale = sdk?.locales?.default;
   const [accessToken, setAccessToken] = useState("");
   const [, setSpaceName] = useState("");
   const [spaceId, setSpaceId] = useState("");
@@ -304,6 +305,7 @@ const Page = () => {
                         setItemsPerPage(count);
                       }}
                       searchQuery={searchQuery}
+                      defaultLocale={defaultLocale}
                     />
                   ) : (
                     <NotFound />

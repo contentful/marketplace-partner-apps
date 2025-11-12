@@ -65,12 +65,12 @@ const GenerateUnusedContentTypesReport = ({
   return (
     <>
       <Heading className="h1" marginBottom="spacingM">
-        Unused Content Types
-        <Subheading>
+        Unused Content Types        
+      </Heading>
+      <Subheading>
           Identify content types with no associated entries and delete one or
           multiple types to keep your content model clean.
         </Subheading>
-      </Heading>
 
       <Flex justifyContent="space-between" marginBottom="spacingM">
         <Button

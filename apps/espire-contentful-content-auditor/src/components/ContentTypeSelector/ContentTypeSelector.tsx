@@ -31,11 +31,11 @@ const ContentTypeSelector = ({
     <Flex flexDirection="column" gap="spacingXs" alignItems="flex-start">
       <Heading className="h1">
         Unlinked Content Entries
-        <Subheading>
+      </Heading>
+      <Subheading>
           View entries of a selected content type that are not linked anywhere,
           with options to search, sort, and delete individually or in bulk.
         </Subheading>
-      </Heading>
       <Flex className="border content-type-wrap mb">
         <Box className="content-type-box">Content Type</Box>
         <Select

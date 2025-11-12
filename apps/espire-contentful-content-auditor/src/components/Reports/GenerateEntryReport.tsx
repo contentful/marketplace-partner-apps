@@ -44,6 +44,7 @@ type Props = {
   onPageChange: (page: number) => void;
   onItemsPerPageChange: (count: number) => void;
   searchQuery: string;
+  defaultLocale: string;
 };
 
 const GenerateEntryReport = ({
@@ -54,6 +55,7 @@ const GenerateEntryReport = ({
   onPageChange,
   onItemsPerPageChange,
   searchQuery,
+  defaultLocale,
 }: Props) => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [sortOrder, setSortOrder] = useState<
@@ -89,7 +91,7 @@ const GenerateEntryReport = ({
     for (const key in entry?.fields) {
       const value = entry?.fields[key];
       if (typeof value === "string") return value;
-      if (typeof value === "object" && value?.["en-US"]) return value["en-US"];
+      if (typeof value === "object" && value?.[defaultLocale]) return value[defaultLocale];
     }
     return entry?.sys?.id;
   };
@@ -257,7 +259,7 @@ const GenerateEntryReport = ({
                 {(() => {
                   const statusRaw = entry?.sys?.archivedAt
                     ? "archived"
-                    : entry.sys?.fieldStatus?.["*"]?.["en-US"] || "draft";
+                    : entry.sys?.fieldStatus?.["*"]?.[defaultLocale] || "draft";
                   const status = capitalizeFirst(statusRaw);
                   const variant = statusColorMap[statusRaw] ?? "default";
                   return <Badge variant={variant}>{status}</Badge>;
