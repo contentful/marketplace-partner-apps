@@ -97,10 +97,10 @@ export const ContentDiff: React.FC<ContentDiffProps> = ({
           textDecorationThickness: '2px',
         },
         '.cm-word-change-original': {
-          textDecorationColor: '#ef4540',
+          textDecorationColor: '#DA294A',
         },
         '.cm-word-change-improved': {
-          textDecorationColor: '#78FD86',
+          textDecorationColor: '#5DB057',
         },
       }),
     [],
@@ -134,10 +134,10 @@ export const ContentDiff: React.FC<ContentDiffProps> = ({
                 const from = posImproved;
                 const to = from + text.length;
                 if (from !== to) {
-                  const leadingWs = (text.match(/^\s+/) || [''])[0].length;
-                  const trailingWs = (text.match(/\s+$/) || [''])[0].length;
-                  const localStart = leadingWs;
-                  const localEnd = text.length - trailingWs;
+                  const leadingWhitespaces = text.length - text.trimStart().length;
+                  const trailingWhitespaces = text.length - text.trimEnd().length;
+                  const localStart = leadingWhitespaces;
+                  const localEnd = text.length - trailingWhitespaces;
                   if (localEnd > localStart) {
                     builder.add(
                       from + localStart,
@@ -154,10 +154,10 @@ export const ContentDiff: React.FC<ContentDiffProps> = ({
                 const from = posOriginal;
                 const to = from + text.length;
                 if (from !== to) {
-                  const leadingWs = (text.match(/^\s+/) || [''])[0].length;
-                  const trailingWs = (text.match(/\s+$/) || [''])[0].length;
-                  const localStart = leadingWs;
-                  const localEnd = text.length - trailingWs;
+                  const leadingWhitespaces = text.length - text.trimStart().length;
+                  const trailingWhitespaces = text.length - text.trimEnd().length;
+                  const localStart = leadingWhitespaces;
+                  const localEnd = text.length - trailingWhitespaces;
                   if (localEnd > localStart) {
                     builder.add(
                       from + localStart,
@@ -217,13 +217,13 @@ export const ContentDiff: React.FC<ContentDiffProps> = ({
     }
     // Remove any scroll listeners
     if (scrollCleanupRef.current.length) {
-      scrollCleanupRef.current.forEach((fn) => {
+      for (const fn of scrollCleanupRef.current) {
         try {
           fn();
         } catch {
           // no-op
         }
-      });
+      }
       scrollCleanupRef.current = [];
     }
     if (hostRef.current) {

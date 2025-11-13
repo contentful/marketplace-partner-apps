@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CopyIcon, CycleIcon, CheckCircleIcon } from '@contentful/f36-icons';
+import { CopySimpleIcon, RepeatIcon, CheckCircleIcon } from '@contentful/f36-icons';
 import {
   ActionsContainer,
   RejectButton,
@@ -36,7 +36,7 @@ export const DialogActions: React.FC<DialogActionsProps> = ({
       // no-op fallback; clipboard might be unavailable in some contexts
     }
     setCopied(true);
-    window.setTimeout(() => setCopied(false), 1200);
+    globalThis.setTimeout(() => setCopied(false), 1200);
   };
 
   return (
@@ -44,7 +44,7 @@ export const DialogActions: React.FC<DialogActionsProps> = ({
       <LeftActionsGroup>
         {showRewriteAgain && onRewriteAgain && (
           <RewriteAgainButton onClick={onRewriteAgain} data-testid="rewrite-again-button">
-            <CycleIcon size="small" />
+            <RepeatIcon size="small" />
             Retry
           </RewriteAgainButton>
         )}
@@ -55,7 +55,7 @@ export const DialogActions: React.FC<DialogActionsProps> = ({
             title="Copy workflow id"
             data-testid="copy-workflow-id-button"
           >
-            {copied ? <CheckCircleIcon size="small" /> : <CopyIcon size="small" />}
+            {copied ? <CheckCircleIcon size="small" /> : <CopySimpleIcon size="small" />}
             Workflow ID
           </CopyWorkflowIdButton>
         )}

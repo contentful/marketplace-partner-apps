@@ -28,29 +28,28 @@ describe('ComparisonCard', () => {
   it('renders the arrow with correct rotation for improvement', () => {
     const { container } = render(<ComparisonCard {...mockProps} />);
     const arrow = container.querySelector('svg');
-    expect(arrow).toHaveStyle({ transform: 'rotate(0deg)' });
+    expect(arrow!.getAttribute('style')).toContain('transform: rotate(0deg)');
   });
 
   it('renders the arrow with correct rotation for decrease', () => {
     const { container } = render(<ComparisonCard label="Grammar Score" initialValue={85.5} improvedValue={75.5} />);
     const arrow = container.querySelector('svg');
-    expect(arrow).toHaveStyle({ transform: 'rotate(90deg)' });
+    expect(arrow!.getAttribute('style')).toContain('transform: rotate(90deg)');
   });
 
   it('applies correct styling to card', () => {
     const { container } = render(<ComparisonCard {...mockProps} />);
     // The card is the root element with flex display and background color
     const card = container.firstChild as HTMLElement;
-    expect(card).toHaveStyle({
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      padding: '10px',
-      gap: '6px',
-      width: '100%',
-      height: 'auto',
-      background: '#f7f9fa',
-      borderRadius: '6px',
-    });
+
+    expect(card).toHaveStyleRule('display', 'flex');
+    expect(card).toHaveStyleRule('flex-direction', 'row');
+    expect(card).toHaveStyleRule('align-items', 'center');
+    expect(card).toHaveStyleRule('padding', '10px');
+    expect(card).toHaveStyleRule('gap', '6px');
+    expect(card).toHaveStyleRule('width', '100%');
+    expect(card).toHaveStyleRule('height', 'auto');
+    expect(card).toHaveStyleRule('background', '#f7f9fa');
+    expect(card).toHaveStyleRule('border-radius', '6px');
   });
 });

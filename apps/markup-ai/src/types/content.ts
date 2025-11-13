@@ -1,5 +1,5 @@
-import { StyleAnalysisRewriteResp, StyleAnalysisSuccessResp, StyleGuide, StyleGuides } from '@markupai/toolkit';
 import { EntryFieldAPI, FieldAPI } from '@contentful/app-sdk';
+import { RewriteResponse, StyleCheckResponse } from '../api-client';
 
 export const TEXT_FIELD_TYPES = ['Symbol', 'Text', 'RichText'] as const;
 export type TextFieldType = (typeof TEXT_FIELD_TYPES)[number];
@@ -26,7 +26,7 @@ export interface FieldCheck {
   fieldId: string;
   originalValue: string;
   isChecking: boolean;
-  checkResponse: StyleAnalysisSuccessResp | StyleAnalysisRewriteResp | null;
+  checkResponse: StyleCheckResponse | RewriteResponse | null | undefined;
   error: string | null;
   lastUpdated: number;
   hasRewriteResult: boolean;
@@ -45,9 +45,6 @@ export interface RewriterConfig {
 }
 
 export type PlatformConfig = RewriterConfig;
-
-// Re-export the style guide types for convenience
-export type { StyleGuide, StyleGuides };
 
 export const isTextField = (field: EntryFieldAPI | FieldAPI): boolean => {
   return TEXT_FIELD_TYPES.includes(field.type as TextFieldType);
