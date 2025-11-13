@@ -33,5 +33,6 @@
   "apps/translationstudio": "1.0.3",
   "apps/deep-clone": "1.2.1",
   "apps/imagekit": "1.0.1",
-  "apps/launchdarkly": "1.1.0"
+  "apps/launchdarkly": "1.1.0",
+  "apps/markup-ai": "1.0.0"
 }
