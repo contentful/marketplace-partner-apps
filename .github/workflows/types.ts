@@ -24,4 +24,22 @@ export interface ValidatorResult {
   warning?: string;
 }
 
+export interface CodeSuggester {
+  suggest: (options: ValidatorOptions, appDir: string) => Promise<CodeSuggestion | null>;
+}
+
+export interface CodeSuggestion {
+  category: string;
+  description: string;
+  hasChanges: boolean;
+  fileChanges: FileChange[];
+}
+
+export interface FileChange {
+  path: string;
+  description: string;
+  newContent?: string;
+  operation: 'create' | 'update' | 'delete';
+}
+
 export type PullRequestFile = components['schemas']['diff-entry'];
