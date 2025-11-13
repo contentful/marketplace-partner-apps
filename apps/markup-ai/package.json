@@ -80,5 +80,11 @@
     "vite": "^7.2.2",
     "vitest": "^3.2.4"
   },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-arm64-gnu": "^4.46.3",
+    "@rollup/rollup-linux-arm64-musl": "^4.46.3",
+    "@rollup/rollup-linux-x64-gnu": "^4.46.3",
+    "@rollup/rollup-linux-x64-musl": "^4.46.3"
+  },
   "homepage": "."
 }
