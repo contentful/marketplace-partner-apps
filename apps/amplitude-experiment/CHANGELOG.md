@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.6](https://github.com/contentful/marketplace-partner-apps/compare/amplitude-contentful-v1.1.5...amplitude-contentful-v1.1.6) (2025-11-15)
+
+
+### Bug Fixes
+
+* **deps:** bump contentful-management from 11.60.4 to 11.62.0 in /apps/amplitude-experiment in the production-dependencies group ([#6956](https://github.com/contentful/marketplace-partner-apps/issues/6956)) ([0d3ffd1](https://github.com/contentful/marketplace-partner-apps/commit/0d3ffd121e379cb90ecefe415a72cf33b92ab4f1))
+* **deps:** bump the production-dependencies group in /apps/amplitude-experiment with 2 updates ([#7218](https://github.com/contentful/marketplace-partner-apps/issues/7218)) ([e37ff2b](https://github.com/contentful/marketplace-partner-apps/commit/e37ff2b60098a1d42d6161c63d4e63960f2847c3))
+
 ## [1.1.5](https://github.com/contentful/marketplace-partner-apps/compare/amplitude-contentful-v1.1.4...amplitude-contentful-v1.1.5) (2025-10-16)
 
 
