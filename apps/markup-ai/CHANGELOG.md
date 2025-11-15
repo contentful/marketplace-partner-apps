@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/markup-ai-contentful-app-v1.0.0...markup-ai-contentful-app-v1.0.1) (2025-11-15)
+
+
+### Bug Fixes
+
+* **deps:** bump js-yaml from 4.1.0 to 4.1.1 in /apps/markup-ai ([#7341](https://github.com/contentful/marketplace-partner-apps/issues/7341)) ([455bf05](https://github.com/contentful/marketplace-partner-apps/commit/455bf056230d2a8f7bd78137fd5bb1e5997fb46d))
+
 ## 1.0.0 (2025-11-13)
 
 
