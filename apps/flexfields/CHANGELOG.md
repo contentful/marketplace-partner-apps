@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.3](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.3.2...thrillworks-flex-fields-app-v1.3.3) (2025-11-15)
+
+
+### Bug Fixes
+
+* **deps:** bump js-yaml from 4.1.0 to 4.1.1 in /apps/flexfields ([#7344](https://github.com/contentful/marketplace-partner-apps/issues/7344)) ([5b83c8f](https://github.com/contentful/marketplace-partner-apps/commit/5b83c8f08458664d23811b4301972c76fcbd6180))
+* **deps:** bump the production-dependencies group in /apps/flexfields with 5 updates ([#7003](https://github.com/contentful/marketplace-partner-apps/issues/7003)) ([d427148](https://github.com/contentful/marketplace-partner-apps/commit/d427148811000b47989154fffd0401de3a1ed74b))
+* **deps:** bump validator from 13.15.15 to 13.15.20 in /apps/flexfields ([#6950](https://github.com/contentful/marketplace-partner-apps/issues/6950)) ([b9c3c6d](https://github.com/contentful/marketplace-partner-apps/commit/b9c3c6d1445fc08ecb58aea3ad2cf9fcf9125eed))
+* **deps:** bump vite in /apps/flexfields ([#6920](https://github.com/contentful/marketplace-partner-apps/issues/6920)) ([901a818](https://github.com/contentful/marketplace-partner-apps/commit/901a818ace46075728ebd8838b0f8228a2d3029b))
+
 ## [1.3.2](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.3.1...thrillworks-flex-fields-app-v1.3.2) (2025-10-16)
 
 
