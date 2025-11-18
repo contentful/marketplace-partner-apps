@@ -1,13 +1,13 @@
 import { INTEGRATION_API_URL } from '@/constants';
 import { Campaign } from '@/types';
 
-type props = {
+type Props = {
   token: string;
   projectId: string;
   accountId: string;
 };
 
-export const getCampaignsOptions = ({ token, accountId, projectId }: props) => ({
+export const getCampaignsOptions = ({ token, accountId, projectId }: Props) => ({
   queryKey: ['getCampaigns', accountId, projectId],
   queryFn: async () => {
     const response = await fetch(
