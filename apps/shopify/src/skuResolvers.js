@@ -10,6 +10,7 @@ import { validateParameters } from './utils/validation';
 import { previewsToProductVariants } from './dataTransformer';
 import { SHOPIFY_API_VERSION, SHOPIFY_ENTITY_LIMIT } from './constants';
 import { convertStringToBase64, convertBase64ToString, convertCollectionToBase64, convertProductToBase64 } from './utils/base64';
+import { retryWithBackoff } from './utils/retry';
 
 export async function makeShopifyClient(config) {
   const validationError = validateParameters(config);
@@ -30,17 +31,44 @@ const graphqlRequest = async (config, query) => {
   const { apiEndpoint, storefrontAccessToken } = config;
   const url = `https://${removeHttpsAndTrailingSlash(apiEndpoint)}/api/${SHOPIFY_API_VERSION}/graphql`;
 
-  const response = await window.fetch(url, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'x-shopify-storefront-access-token': storefrontAccessToken,
-    },
-    body: JSON.stringify({ query }),
-  });
+  return retryWithBackoff(async () => {
+    const response = await window.fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-shopify-storefront-access-token': storefrontAccessToken,
+      },
+      body: JSON.stringify({ query }),
+    });
 
-  return await response.json();
+    if (!response.ok) {
+      const error = new Error(`HTTP error! status: ${response.status}`);
+      error.status = response.status;
+      error.response = response;
+      throw error;
+    }
+
+    const data = await response.json();
+
+    // Check for GraphQL errors in the response
+    if (data.errors && Array.isArray(data.errors) && data.errors.length > 0) {
+      const error = new Error(`GraphQL errors: ${JSON.stringify(data.errors)}`);
+      error.errors = data.errors;
+      // Check if any errors are retryable
+      const hasRetryableError = data.errors.some((err) => {
+        const code = err.extensions?.code;
+        return code === 'THROTTLED' || code === 'INTERNAL_SERVER_ERROR';
+      });
+      if (hasRetryableError) {
+        throw error;
+      }
+      // Non-retryable GraphQL errors (like validation errors) should still throw
+      throw error;
+    }
+
+    return data;
+  });
 };
 
 const paginateGraphQLRequest = async (config, ids, queryFunction) => {
@@ -52,7 +80,31 @@ const paginateGraphQLRequest = async (config, ids, queryFunction) => {
     requests.push(graphqlRequest(config, query));
   }
 
-  return (await Promise.all(requests)).flatMap((res) => res.data.nodes);
+  // Use Promise.allSettled to handle partial failures gracefully
+  const results = await Promise.allSettled(requests);
+  const successfulResults = [];
+  const errors = [];
+
+  results.forEach((result, index) => {
+    if (result.status === 'fulfilled') {
+      successfulResults.push(result.value);
+    } else {
+      console.error(`Request batch ${index} failed:`, result.reason);
+      errors.push(result.reason);
+    }
+  });
+
+  // If all requests failed, throw an error
+  if (successfulResults.length === 0 && errors.length > 0) {
+    throw new Error(`All requests failed. Last error: ${errors[errors.length - 1].message}`);
+  }
+
+  // If some requests failed, log a warning but continue with successful results
+  if (errors.length > 0) {
+    console.warn(`${errors.length} out of ${requests.length} request batches failed. Continuing with partial results.`);
+  }
+
+  return successfulResults.flatMap((res) => res.data?.nodes || []);
 };
 
 // GraphQL query for fetching products by IDs
@@ -207,20 +259,58 @@ export const fetchProductPreviews = async (skus, config) => {
       const currentIdPage = validIds.slice(i, i + (SHOPIFY_ENTITY_LIMIT - 1));
       const query = productQuery(currentIdPage);
 
-      requests.push(shopifyClient.request(query));
+      // Wrap each request with retry logic
+      requests.push(
+        retryWithBackoff(async () => {
+          const response = await shopifyClient.request(query);
+
+          // Check for GraphQL errors
+          if (response.errors && Array.isArray(response.errors) && response.errors.length > 0) {
+            const error = new Error(`GraphQL errors: ${JSON.stringify(response.errors)}`);
+            error.errors = response.errors;
+            // Check if errors are retryable
+            const hasRetryableError = response.errors.some((err) => {
+              const code = err.extensions?.code;
+              return code === 'THROTTLED' || code === 'INTERNAL_SERVER_ERROR';
+            });
+            if (hasRetryableError) {
+              throw error;
+            }
+            // Non-retryable errors should still throw
+            throw error;
+          }
+
+          return response;
+        })
+      );
     }
 
-    const responses = await Promise.all(requests);
+    // Use Promise.allSettled to handle partial failures gracefully
+    const results = await Promise.allSettled(requests);
+    const successfulResponses = [];
+    const errors = [];
 
-    // Check for GraphQL errors
-    responses.forEach((response, index) => {
-      if (response.errors) {
-        console.error(`GraphQL errors in response ${index}:`, response.errors);
-        throw new Error(`GraphQL errors: ${JSON.stringify(response.errors)}`);
+    results.forEach((result, index) => {
+      if (result.status === 'fulfilled') {
+        successfulResponses.push(result.value);
+      } else {
+        console.error(`Product preview request batch ${index} failed:`, result.reason);
+        errors.push(result.reason);
       }
     });
 
-    const products = responses.flatMap((response) => response.data.nodes).filter(identity);
+    // If all requests failed, throw an error
+    if (successfulResponses.length === 0 && errors.length > 0) {
+      const lastError = errors[errors.length - 1];
+      throw new Error(`Failed to fetch product previews: ${lastError.message}`);
+    }
+
+    // If some requests failed, log a warning but continue with successful results
+    if (errors.length > 0) {
+      console.warn(`${errors.length} out of ${requests.length} product preview request batches failed. Continuing with partial results.`);
+    }
+
+    const products = successfulResponses.flatMap((response) => response.data?.nodes || []).filter(identity);
 
     // Transform the GraphQL response to match the old Buy SDK format
     const transformedProducts = products

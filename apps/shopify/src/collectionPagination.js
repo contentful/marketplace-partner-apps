@@ -1,6 +1,7 @@
 import { collectionDataTransformer } from './dataTransformer';
 import BasePagination from './basePagination';
 import { convertCollectionToBase64 } from './utils/base64';
+import { retryWithBackoff } from './utils/retry';
 
 const makePagination = async (sdk) => {
   const pagination = new BasePagination({
@@ -56,7 +57,27 @@ const makePagination = async (sdk) => {
         query: queryStr,
       };
 
-      const response = await this.shopifyClient.request(query, { variables });
+      const response = await retryWithBackoff(async () => {
+        const result = await this.shopifyClient.request(query, { variables });
+
+        // Check for GraphQL errors
+        if (result.errors && Array.isArray(result.errors) && result.errors.length > 0) {
+          const error = new Error(`GraphQL errors: ${JSON.stringify(result.errors)}`);
+          error.errors = result.errors;
+          // Check if errors are retryable
+          const hasRetryableError = result.errors.some((err) => {
+            const code = err.extensions?.code;
+            return code === 'THROTTLED' || code === 'INTERNAL_SERVER_ERROR';
+          });
+          if (hasRetryableError) {
+            throw error;
+          }
+          // Non-retryable errors should still throw
+          throw error;
+        }
+
+        return result;
+      });
 
       // Update cursor for next page
       if (response.data.collections.pageInfo.hasNextPage) {

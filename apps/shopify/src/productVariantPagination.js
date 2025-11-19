@@ -4,6 +4,7 @@ import sortBy from 'lodash/sortBy';
 import { productVariantDataTransformer, productsToVariantsTransformer } from './dataTransformer';
 import { makeShopifyClient } from './skuResolvers';
 import { convertProductToBase64 } from './utils/base64';
+import { retryWithBackoff } from './utils/retry';
 
 const PER_PAGE = 20;
 
@@ -164,7 +165,27 @@ class Pagination {
       query: queryStr,
     };
 
-    const response = await this.shopifyClient.request(query, { variables });
+    const response = await retryWithBackoff(async () => {
+      const result = await this.shopifyClient.request(query, { variables });
+
+      // Check for GraphQL errors
+      if (result.errors && Array.isArray(result.errors) && result.errors.length > 0) {
+        const error = new Error(`GraphQL errors: ${JSON.stringify(result.errors)}`);
+        error.errors = result.errors;
+        // Check if errors are retryable
+        const hasRetryableError = result.errors.some((err) => {
+          const code = err.extensions?.code;
+          return code === 'THROTTLED' || code === 'INTERNAL_SERVER_ERROR';
+        });
+        if (hasRetryableError) {
+          throw error;
+        }
+        // Non-retryable errors should still throw
+        throw error;
+      }
+
+      return result;
+    });
 
     // Update cursor and hasNextPage for next pagination
     const pageInfo = response.data.products.pageInfo;
@@ -279,7 +300,27 @@ class Pagination {
       query: queryStr,
     };
 
-    const response = await this.shopifyClient.request(query, { variables });
+    const response = await retryWithBackoff(async () => {
+      const result = await this.shopifyClient.request(query, { variables });
+
+      // Check for GraphQL errors
+      if (result.errors && Array.isArray(result.errors) && result.errors.length > 0) {
+        const error = new Error(`GraphQL errors: ${JSON.stringify(result.errors)}`);
+        error.errors = result.errors;
+        // Check if errors are retryable
+        const hasRetryableError = result.errors.some((err) => {
+          const code = err.extensions?.code;
+          return code === 'THROTTLED' || code === 'INTERNAL_SERVER_ERROR';
+        });
+        if (hasRetryableError) {
+          throw error;
+        }
+        // Non-retryable errors should still throw
+        throw error;
+      }
+
+      return result;
+    });
 
     // Update cursor and hasNextPage for next pagination
     const pageInfo = response.data.products.pageInfo;
