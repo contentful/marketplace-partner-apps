@@ -1,6 +1,6 @@
 import React from 'react';
 import { IconButton, Tooltip } from '@contentful/f36-components';
-import { SettingsIcon } from '@contentful/f36-icons';
+import { GearSixIcon } from '@contentful/f36-icons';
 
 type SettingsButtonProps = {
   onClick: () => void;
@@ -13,7 +13,7 @@ export const SettingsButton: React.FC<SettingsButtonProps> = ({ onClick }) => {
         aria-label="Open settings"
         size="small"
         variant="transparent"
-        icon={<SettingsIcon />}
+        icon={<GearSixIcon />}
         onClick={onClick}
       />
     </Tooltip>

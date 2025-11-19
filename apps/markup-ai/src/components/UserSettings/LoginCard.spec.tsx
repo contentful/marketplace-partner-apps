@@ -18,7 +18,7 @@ describe('LoginCard', () => {
     const onSave = vi.fn();
     render(<LoginCard onSave={onSave} />);
 
-    const input = screen.getByPlaceholderText('Enter your API key') as HTMLInputElement;
+    const input = screen.getByPlaceholderText('Enter your API key');
     fireEvent.change(input, { target: { value: 'test-key' } });
     const saveBtn = screen.getByRole('button', { name: 'Save & Continue' });
     expect(saveBtn).not.toBeDisabled();

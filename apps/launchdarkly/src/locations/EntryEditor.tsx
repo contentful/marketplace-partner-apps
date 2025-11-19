@@ -22,8 +22,6 @@ const EntryEditor = () => {
   const { error, handleError } = useErrorState('EntryEditor');
   const [enhancedVariationContent, setEnhancedVariationContent] = useState<Record<number, EnhancedContentfulEntry>>({});
   
-  // Add state to track if we have existing content mappings
-  const [hasExistingMappings, setHasExistingMappings] = useState(false);
   // Track whether a flag has already been created/selected for this entry
   const [flagCreationLocked, setFlagCreationLocked] = useState(false);
   
@@ -31,6 +29,7 @@ const EntryEditor = () => {
   const [formState, setFormState] = useState<FlagFormState>({
     variations: [],
     contentMapping: [], // Change to array
+    meta: {},
     name: '',
     key: '',
     description: '',
@@ -103,8 +102,9 @@ const EntryEditor = () => {
         
         // Check if there are existing content mappings
         const existingContentMappings = fields.contentMapping?.getValue() || [];
-        const hasMappings = Array.isArray(existingContentMappings) && existingContentMappings.length > 0;
-        setHasExistingMappings(hasMappings);
+
+        const metaField = (fields as { meta?: { getValue?: () => Record<string, string> | null } }).meta;
+        const existingMeta = typeof metaField?.getValue === 'function' ? metaField.getValue() || {} : {};
   
         // Helper function to infer variation type from variations data
         const inferVariationType = (variations: Array<{ value: unknown; name: string }>): VariationType => {
@@ -141,19 +141,25 @@ const EntryEditor = () => {
         const savedState: FlagFormState = {
           variations: variations,
           contentMapping: existingContentMappings, // Keep as Reference Array for storage
+          meta: existingMeta,
           name: fields.name?.getValue() || '',
           key: fields.key?.getValue() || '',
           description: fields.description?.getValue() || '',
           projectKey: projectKey, // Use configured project key
           variationType: inferVariationType(variations),
           defaultVariation: 0, // Always 0, not persisted to Contentful
-          // Auto-set mode to 'existing' if there are existing mappings, otherwise use saved mode or null
-          mode: hasMappings ? 'existing' : (fields.mode?.getValue() || null)
+          // Infer mode from data: if flag key exists, must be 'existing'
+          mode: null // Will be set below after checking hasFlagKey
         };
 
         // If there is already a flag key stored on the entry, lock out create mode
         const hasFlagKey = !!savedState.key && savedState.key.trim().length > 0;
         setFlagCreationLocked(hasFlagKey);
+        
+        // Set mode to 'existing' if flag is selected (key exists)
+        if (hasFlagKey) {
+          savedState.mode = 'existing';
+        }
 
         // Convert simple mapping to enhanced content with rich metadata
         const enhancedContent: Record<number, EnhancedContentfulEntry> = {};
@@ -239,6 +245,7 @@ const EntryEditor = () => {
     const defaultState: FlagFormState = {
       variations: [],
       contentMapping: [], // Change to empty array
+      meta: {},
       name: '',
       key: '',
       description: '',
@@ -332,13 +339,13 @@ const EntryEditor = () => {
             <Box paddingLeft="spacingM" paddingRight="spacingM">
               <Heading marginBottom='spacing2Xs'>LaunchDarkly Flag Management</Heading>
               <Text fontColor="gray600">
-                {hasExistingMappings 
-                  ? 'Manage your existing content mappings for this entry.'
+                {flagCreationLocked 
+                  ? 'Manage your content mappings for this flag.'
                   : 'Create a new feature flag or link an existing one to this entry.'
                 }
               </Text>
               
-              {!hasExistingMappings && (
+              {!flagCreationLocked && (
                 <Card padding="default" style={{ backgroundColor: '#f0f9ff', border: '2px solid #3b82f6', marginTop: '16px' }}>
                   <Text fontColor="gray700" fontSize="fontSizeS">
                     <strong>Note:</strong> Feature flags are the basis for <strong>Experimentation</strong> in LaunchDarkly. If you need more information about Experiments in LaunchDarkly, see our documentation here: <a href="https://docs.launchdarkly.com/docs/experiments" target="_blank" rel="noopener noreferrer" style={{ color: '#3b82f6', textDecoration: 'underline' }}>https://docs.launchdarkly.com/docs/experiments</a>
@@ -348,8 +355,8 @@ const EntryEditor = () => {
             </Box>
           </Card>
 
-          {/* Mode Selection - only show if no existing mappings */}
-          {!hasExistingMappings && (
+          {/* Mode Selection - only show if flag not yet selected */}
+          {!flagCreationLocked && (
             <ModeSelection
               flagMode={formState.mode}
               onModeChange={handleModeChange}
@@ -361,8 +368,8 @@ const EntryEditor = () => {
             />
           )}
 
-          {/* Show flag details if mode is selected OR if we have existing mappings */}
-          {(formState.mode || hasExistingMappings) && (
+          {/* Show flag details if mode is selected OR if flag is locked */}
+          {(formState.mode || flagCreationLocked) && (
             <FlagDetailsSection
               formState={formState}
               launchDarklyFlags={launchDarklyFlags || []}
@@ -378,6 +385,7 @@ const EntryEditor = () => {
               configuredEnvironment={configuredEnvironment}
               createFlag={createFlag}
               flagCreationLoading={flagCreationLoading}
+              onFlagLocked={() => setFlagCreationLocked(true)}
               onFlagCreated={(flag) => {
                 // Clear validation errors when flag is created successfully
                 setValidationErrors({});
@@ -425,8 +433,7 @@ const EntryEditor = () => {
                     await fields.name?.setValue(flag.name || formState.name);
                     await fields.description?.setValue(flag.description || formState.description);
                     await fields.variations?.setValue(flag.variations || formState.variations);
-                    // Optional: store mode for completeness if field exists (applies on reload)
-                    try { await (fields as any).mode?.setValue('existing'); } catch {}
+                    // Note: mode is not persisted to Contentful, it's inferred from data on load
                     await sdk.entry.save();
                   } catch (e) {
                     console.error('[EntryEditor] Failed to persist created flag fields to entry', e);

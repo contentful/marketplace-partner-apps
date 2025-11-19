@@ -11,8 +11,8 @@ interface LocalizationContextType {
 const LocalizationContext = createContext<LocalizationContextType | null>(null);
 
 interface LocalizationProviderProps {
-  children: ReactNode;
-  defaultLocale?: string;
+  readonly children: ReactNode;
+  readonly defaultLocale?: string;
 }
 
 export function LocalizationProvider({ children, defaultLocale = 'en' }: LocalizationProviderProps) {

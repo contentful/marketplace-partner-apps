@@ -14,7 +14,7 @@ import {
   CompanyLogo,
 } from './Dialog.styles';
 import { LoadingState } from '../../components/LoadingState/LoadingState';
-import { rewriteContent } from '../../services/rewriterService';
+import { useRewriterService } from '../../services/rewriterService';
 import { Button } from '@contentful/f36-components';
 import { FieldCheck } from '../../types/content';
 
@@ -34,20 +34,24 @@ const Dialog = () => {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<FieldCheck | null>(null);
 
+  // API key from installation, per-user preferences from local storage
+  const stored = globalThis.localStorage;
+  const apiKey = sdk.parameters.installation.apiKey || '';
+  const dialect = stored.getItem('markupai.dialect') || undefined;
+  const tone = stored.getItem('markupai.tone') || undefined;
+  const styleGuide = stored.getItem('markupai.styleGuide') || undefined;
+  const config = { apiKey, dialect, tone, styleGuide };
+
+  // Use the hook-based rewriter service
+  const { rewriteContent } = useRewriterService(config);
+
   const triggerRewrite = useCallback(async () => {
     setLoading(true);
     setError(null);
     setResult(null);
     try {
-      // API key from installation, per-user preferences from local storage
-      const stored = window.localStorage;
-      const apiKey = sdk.parameters.installation.apiKey || '';
-      const dialect = stored.getItem('markupai.dialect') || undefined;
-      const tone = stored.getItem('markupai.tone') || undefined;
-      const styleGuide = stored.getItem('markupai.styleGuide') || undefined;
-      const config = { apiKey, dialect, tone, styleGuide };
       // Call rewrite service
-      const rewrite = await rewriteContent(parameters.fieldId!, parameters.original, config);
+      const rewrite = await rewriteContent(parameters.fieldId!, parameters.original);
       if (!rewrite || !rewrite.hasRewriteResult || !rewrite.checkResponse) {
         throw new Error('No rewrite result received');
       }
@@ -61,7 +65,7 @@ const Dialog = () => {
     } finally {
       setLoading(false);
     }
-  }, [parameters.fieldId, parameters.original]);
+  }, [parameters.fieldId, parameters.original, rewriteContent]);
 
   useEffect(() => {
     if (parameters.startRewrite) {
@@ -74,7 +78,7 @@ const Dialog = () => {
   }, [loading]);
 
   const handleAccept = () => {
-    if (result && result.checkResponse && 'rewrite' in result.checkResponse) {
+    if (result?.checkResponse && 'rewrite' in result.checkResponse && result.checkResponse.rewrite) {
       console.log('result.checkResponse', result.checkResponse);
       sdk.close({
         accepted: true,
@@ -92,59 +96,61 @@ const Dialog = () => {
     triggerRewrite();
   };
 
-  let content = null;
-  if (loading) {
-    content = (
-      <CenteredContent>
-        <LoadingState message="Markup AI is rewriting the content" />
-      </CenteredContent>
-    );
-  } else if (error) {
-    content = (
-      <CenteredContent>
-        <div style={{ textAlign: 'center', padding: 32 }}>
-          <div style={{ color: '#D14343', marginBottom: 16, fontWeight: 500 }}>{error}</div>
-          <Button variant="secondary" onClick={triggerRewrite}>
-            Retry
-          </Button>
-        </div>
-      </CenteredContent>
-    );
-  } else if (result) {
-    if (result.checkResponse) {
-      const improvedScores = 'rewrite' in result.checkResponse ? result.checkResponse.rewrite.scores : null;
-      console.log('Dialog - improvedScores:', improvedScores);
-      console.log('workflow_id:', result.checkResponse.workflow.id);
-      if (improvedScores) {
-        const initialScores = 'original' in result.checkResponse ? result.checkResponse.original.scores : null;
-        content = (
-          <>
-            <DialogHeader>
-              <DialogTitle>Improvement Summary</DialogTitle>
-              <CompanyLogo src="logos/markup_Logo_Horz_Coral.svg" alt="Markup AI" />
-            </DialogHeader>
-            {initialScores && <AnalysisResultsComparison initial={initialScores} improved={improvedScores} />}
-            <ContentDiff
-              original={parameters.original}
-              improved={'rewrite' in result.checkResponse ? result.checkResponse.rewrite.text : ''}
-              originalScore={parameters.originalScore ?? 0}
-              improvedScore={improvedScores.quality.score}
-              previewFormat={parameters.previewFormat ?? 'markdown'}
-            />
-          </>
-        );
-      } else {
-        content = null;
-      }
-    } else {
-      content = null;
+  const renderContent = () => {
+    if (loading) {
+      return (
+        <CenteredContent>
+          <LoadingState message="Markup AI is rewriting the content" />
+        </CenteredContent>
+      );
     }
-  }
+    if (error) {
+      return (
+        <CenteredContent>
+          <div style={{ textAlign: 'center', padding: 32 }}>
+            <div style={{ color: '#D14343', marginBottom: 16, fontWeight: 500 }}>{error}</div>
+            <Button variant="secondary" onClick={triggerRewrite}>
+              Retry
+            </Button>
+          </div>
+        </CenteredContent>
+      );
+    }
+    const checkResponse = result?.checkResponse;
+    if (!checkResponse) return null;
+    const rewrite = 'rewrite' in checkResponse ? checkResponse.rewrite : undefined;
+    const improvedScores = rewrite?.scores ?? null;
+    if (!improvedScores) return null;
+    const initialScores = 'original' in checkResponse ? (checkResponse.original?.scores ?? null) : null;
+    console.log('Dialog - improvedScores:', improvedScores);
+    console.log('workflow_id:', checkResponse.workflow?.id);
+    return (
+      <>
+        <DialogHeader>
+          <DialogTitle>Improvement Summary</DialogTitle>
+          <CompanyLogo src="logos/markup_Logo_Horz_Coral.svg" alt="Markup AI" />
+        </DialogHeader>
+        {initialScores && <AnalysisResultsComparison initial={initialScores} improved={improvedScores} />}
+        <ContentDiff
+          original={parameters.original}
+          improved={rewrite?.text ?? ''}
+          originalScore={parameters.originalScore ?? 0}
+          improvedScore={improvedScores.quality?.score ?? 0}
+          previewFormat={parameters.previewFormat ?? 'markdown'}
+        />
+      </>
+    );
+  };
+
+  const workflowId =
+    result?.checkResponse && 'workflow' in result.checkResponse && result.checkResponse.workflow
+      ? result.checkResponse.workflow.id
+      : undefined;
 
   return (
     <DialogContainer $fixedHeight={loading}>
       <DialogContent>
-        {content}
+        {renderContent()}
         <ActionsWrapper>
           <DialogActions
             onReject={handleReject}
@@ -152,9 +158,7 @@ const Dialog = () => {
             onRewriteAgain={handleRewriteAgain}
             disabled={loading || !!error || !result}
             showRewriteAgain={!!result && !loading && !error}
-            workflowId={
-              result?.checkResponse && 'workflow' in result.checkResponse ? result.checkResponse.workflow.id : undefined
-            }
+            workflowId={workflowId}
           />
         </ActionsWrapper>
       </DialogContent>

@@ -18,7 +18,7 @@ describe('userSettings utils', () => {
     ensureDefaultUserSettings();
     const s = getUserSettings();
     expect(s.dialect).toBeTruthy();
-    expect(s.tone).toBeTruthy();
+    expect(s.tone).toBeNull();
     expect(s.styleGuide).toBeTruthy();
   });
 

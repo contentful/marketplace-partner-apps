@@ -19,7 +19,7 @@
     "@contentful/dam-app-base": "^3.0.9",
     "@contentful/node-apps-toolkit": "^3.15.0",
     "graphql-scalars": "^1.25.0",
-    "graphql-yoga": "^5.16.1",
+    "graphql-yoga": "^5.16.2",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/launchdarkly-contentful-app-v1.0.0...launchdarkly-contentful-app-v1.1.0) (2025-11-12)
+
+
+### Features
+
+* add variation meta field ([#7214](https://github.com/contentful/marketplace-partner-apps/issues/7214)) ([2083d21](https://github.com/contentful/marketplace-partner-apps/commit/2083d21b66af96838b25b8888c36db04f3929142))
+
 ## 1.0.0 (2025-11-05)
 
 
