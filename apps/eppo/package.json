@@ -29,7 +29,7 @@
     ]
   },
   "dependencies": {
-    "@contentful/app-sdk": "^4.39.0",
+    "@contentful/app-sdk": "^4.45.0",
     "@contentful/f36-components": "^4.81.1",
     "@contentful/f36-core": "^4.68.1",
     "@contentful/f36-icons": "^4.29.1",
@@ -39,7 +39,7 @@
     "@contentful/f36-utils": "^4.24.3",
     "@contentful/field-editor-reference": "^5.31.2",
     "@contentful/field-editor-shared": "^1.6.1",
-    "@contentful/mimetype": "^2.6.0",
+    "@contentful/mimetype": "^2.6.1",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/modifiers": "^7.0.0",
@@ -61,11 +61,11 @@
   },
   "devDependencies": {
     "@babel/preset-flow": "^7.27.1",
-    "@contentful/app-scripts": "2.5.5",
+    "@contentful/app-scripts": "2.5.6",
     "@testing-library/jest-dom": "5.17.0",
     "@testing-library/react": "14.3.1",
     "@testing-library/user-event": "^14.6.1",
-    "@tsconfig/create-react-app": "2.0.6",
+    "@tsconfig/create-react-app": "2.0.8",
     "@types/jest": "^29.5.14",
     "@types/lodash": "4.17.20",
     "@types/node": "^20",
@@ -73,10 +73,10 @@
     "@types/react-dom": "18.3.1",
     "cross-env": "7.0.3",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.5.3",
+    "eslint-plugin-prettier": "^5.5.4",
     "jest": "^29.7.0",
     "prettier": "^3.6.0",
-    "ts-jest": "^29.4.1",
+    "ts-jest": "^29.4.5",
     "typescript": "4.9.5"
   },
   "homepage": "."

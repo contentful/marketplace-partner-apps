@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/imagekit-contentful-v1.0.0...imagekit-contentful-v1.0.1) (2025-09-16)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.11.0 to 1.12.0 in /apps/imagekit ([#6523](https://github.com/contentful/marketplace-partner-apps/issues/6523)) ([1481c92](https://github.com/contentful/marketplace-partner-apps/commit/1481c92e67761fa7427c6b5003899b51173713e9))
+
 ## 1.0.0 (2025-08-20)
 
 

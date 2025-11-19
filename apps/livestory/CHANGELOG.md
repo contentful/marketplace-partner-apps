@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/ls-contentful-app-v1.0.6...ls-contentful-app-v1.0.7) (2025-10-16)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.37.0 to 4.39.0 in /apps/livestory in the production-dependencies group ([#6006](https://github.com/contentful/marketplace-partner-apps/issues/6006)) ([1eb1f1e](https://github.com/contentful/marketplace-partner-apps/commit/1eb1f1efef6fee70b07b58d0c13f7c2f978f57a9))
+* **deps:** bump @contentful/app-sdk from 4.39.0 to 4.40.0 in /apps/livestory in the production-dependencies group ([#6059](https://github.com/contentful/marketplace-partner-apps/issues/6059)) ([4e336e7](https://github.com/contentful/marketplace-partner-apps/commit/4e336e7796d7d80aaeb3a2d998a5eae134472729))
+* **deps:** bump @contentful/app-sdk from 4.40.0 to 4.41.0 in /apps/livestory in the production-dependencies group ([#6073](https://github.com/contentful/marketplace-partner-apps/issues/6073)) ([4f3be6a](https://github.com/contentful/marketplace-partner-apps/commit/4f3be6ab01c59a43a4e5a62674dca621ded1df50))
+* **deps:** bump @contentful/app-sdk from 4.41.0 to 4.45.0 in /apps/livestory in the production-dependencies group ([#6822](https://github.com/contentful/marketplace-partner-apps/issues/6822)) ([b285945](https://github.com/contentful/marketplace-partner-apps/commit/b28594584bf2a28aada7258e568bbcf99122a211))
+* **deps:** bump axios from 1.11.0 to 1.12.0 in /apps/livestory ([#6520](https://github.com/contentful/marketplace-partner-apps/issues/6520)) ([f24564d](https://github.com/contentful/marketplace-partner-apps/commit/f24564d0d86b4ca32f10f54912d9b7acb64a40ca))
+
 ## [1.0.6](https://github.com/contentful/marketplace-partner-apps/compare/ls-contentful-app-v1.0.5...ls-contentful-app-v1.0.6) (2025-08-01)
 
 

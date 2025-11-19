@@ -54,7 +54,9 @@ class EntryCloner {
     let entry;
     try {
       entry = await this.cma.entry.get({ entryId: entryId });
-    } catch (error) {} // Deleted entries are not found
+    } catch (_error) {
+      // Deleted entries are not found
+    }
 
     if (entry !== undefined) {
       this.references[entryId] = entry;
@@ -104,18 +106,28 @@ class EntryCloner {
       }
 
       if (cloneWasUpdated) {
-        try {
-          await this.cma.entry.update(
-            { entryId: clone.sys.id },
-            {
-              sys: { ...clone.sys, version: clone.sys.version },
-              fields: clone.fields,
+        let latestClone = clone;
+        for (let retryCount = 0; retryCount < 3; retryCount++) {
+          try {
+            await this.cma.entry.update(
+              { entryId: latestClone.sys.id },
+              {
+                sys: { ...latestClone.sys, version: latestClone.sys.version },
+                fields: clone.fields,
+              }
+            );
+            this.updates++;
+            this.setUpdatesCount(this.updates);
+            break;
+          } catch (error: any) {
+            if (error.code === 'VersionMismatch') {
+              console.warn('Error updating clone, retrying...', error);
+              latestClone = await this.cma.entry.get({ entryId: clone.sys.id });
+            } else {
+              console.warn('Error updating clone.', error);
+              break;
             }
-          );
-          this.updates++;
-          this.setUpdatesCount(this.updates);
-        } catch (error) {
-          console.warn('Error updating clone', error);
+          }
         }
       }
     });

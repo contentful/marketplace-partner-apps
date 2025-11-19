@@ -3,16 +3,16 @@
   "version": "1.0.12",
   "private": true,
   "dependencies": {
-    "@contentful/app-sdk": "4.37.0",
+    "@contentful/app-sdk": "4.45.0",
     "@contentful/f36-components": "4.81.1",
     "@contentful/f36-tokens": "4.2.0",
-    "@contentful/field-editor-rich-text": "^4.10.0",
+    "@contentful/field-editor-rich-text": "^4.16.0",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@contentful/rich-text-html-renderer": "^16.3.0",
     "camelcase": "^8.0.0",
     "constate": "^3.3.3",
-    "contentful-management": "11.54.4",
-    "contentful-rich-text-html-parser": "^1.8.2",
+    "contentful-management": "11.62.0",
+    "contentful-rich-text-html-parser": "^1.8.6",
     "emotion": "10.0.27",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -39,9 +39,9 @@
     "@types/showdown": "^2.0.6",
     "@types/uuid": "^9.0.8",
     "@vitejs/plugin-react": "4.7.0",
-    "happy-dom": "18.0.1",
-    "typescript": "5.8.3",
-    "vite": "^5.0.0",
+    "happy-dom": "20.0.10",
+    "typescript": "5.9.3",
+    "vite": "^5.4.21",
     "vitest": "3.2.4"
   }
 }
