@@ -1,9 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import type { EditorAppSDK } from '@contentful/app-sdk';
 
 type EntryType = { id: string; name: string };
-
-type Variation = { id: string; name: string; allocation: number };
 
 type Params = {
   sdk: EditorAppSDK;
@@ -11,7 +9,6 @@ type Params = {
   env: { id: string; name: string };
   selectedCampaign: { id: string; name: string } | null;
   selectedProject: { id: string; name: string } | null;
-  variations?: Variation[];
 };
 
 export const useEntrySummaries = ({ sdk, entries, env, selectedCampaign, selectedProject }: Params) => {
@@ -23,7 +20,7 @@ export const useEntrySummaries = ({ sdk, entries, env, selectedCampaign, selecte
     Record<string, { id: string; contentTypeId?: string; contentTypeName?: string; entryName?: string }>
   >({});
 
-  const loadEntrySummary = async (entryId: string) => {
+  const loadEntrySummary = useCallback(async (entryId: string) => {
     try {
       const entry: any = await sdk.cma.entry.get({ entryId });
       const contentTypeId: string | undefined = entry?.sys?.contentType?.sys?.id;
@@ -33,13 +30,14 @@ export const useEntrySummaries = ({ sdk, entries, env, selectedCampaign, selecte
         ...prev,
         [entryId]: { id: entryId, contentTypeId, contentTypeName, entryName },
       }));
-    } catch {
+    } catch (err) {
+      console.error(`Failed to load entry summary for ${entryId}:`, err);
       setEntrySummaries((prev) => ({
         ...prev,
         [entryId]: { id: entryId },
       }));
     }
-  };
+  }, [sdk.cma.entry, sdk.locales.default, entries]);
 
   useEffect(() => {
     const field = sdk.entry.fields['meta'];
@@ -60,20 +58,21 @@ export const useEntrySummaries = ({ sdk, entries, env, selectedCampaign, selecte
     try {
       const initial = field?.getValue?.() as Record<string, string> | undefined;
       preload(initial);
-    } catch {
-      // no-op
+    } catch (err) {
+      console.error('Failed to get initial meta field value:', err);
     }
 
     return () => {
       if (typeof detach === 'function') detach();
     };
-  }, [sdk, entries, sdk.entry.fields]);
+  }, [sdk.entry.fields, loadEntrySummary, entrySummaries]);
 
   const handleOpenLinkedEntry = async (entryId: string) => {
     try {
       await sdk.navigator.openEntry(entryId, { slideIn: true });
-    } catch {
-      // no-op
+    } catch (err) {
+      console.error(`Failed to open entry ${entryId}:`, err);
+      sdk.notifier.error('Failed to open entry');
     }
   };
 
@@ -106,7 +105,7 @@ export const useEntrySummaries = ({ sdk, entries, env, selectedCampaign, selecte
     const entryId = currentMeta[variationKey];
     if (!entryId) return;
 
-    const { [variationKey]: _removed, ...rest } = currentMeta;
+    const { [variationKey]: _, ...rest } = currentMeta;
     sdk.entry.fields['meta']?.setValue(rest);
 
     const currentVariations = sdk.entry.fields['variations']?.getValue() || [];
