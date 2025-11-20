@@ -1,52 +1,25 @@
 ---
-name: 'release-please dependency-only auto-merge'
+name: 'release-please auto-rebase'
 
 "on":
   pull_request:
     types: [opened, synchronize]
 
 jobs:
-  auto-merge-dependency-releases:
+  auto-rebase-release-prs:
     permissions:
       contents: write
       id-token: write
       pull-requests: write
     runs-on: ubuntu-latest
     # Only run on Release Please PRs with "chore: release" title
+    # This workflow automatically rebases Release Please PRs to keep them up-to-date
+    # Human review and merge is still required
     if: |
       github.actor == 'github-actions[bot]' &&
       startsWith(github.event.pull_request.title, 'chore: release')
     steps:
-      - name: Check if release contains only dependency updates
-        id: check-dependencies
-        run: |
-          PR_BODY="${{ github.event.pull_request.body }}"
-
-          # Check for sections that should NOT be present in dependency-only releases
-          if echo "$PR_BODY" | grep -E "### (Features|Performance Improvements|Reverts|Documentation)" -i; then
-            echo "Found non-dependency sections, skipping auto-merge"
-            echo "is-dependency-only=false" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
-          # Check for breaking changes
-          if echo "$PR_BODY" | grep -E "BREAKING CHANGE" -i; then
-            echo "Found breaking changes, skipping auto-merge"
-            echo "is-dependency-only=false" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
-          # Positive check: ensure we have dependency-related entries
-          if echo "$PR_BODY" | grep -E "\*\*deps\*\*:" -i; then
-            echo "Found dependency updates, proceeding with auto-merge"
-            echo "is-dependency-only=true" >> $GITHUB_OUTPUT
-          else
-            echo "No dependency updates found, skipping auto-merge"
-            echo "is-dependency-only=false" >> $GITHUB_OUTPUT
-          fi
-
       - name: Check if PR is from fork
-        if: steps.check-dependencies.outputs.is-dependency-only == 'true'
         shell: bash
         run: |
           if [ "${{ github.event.pull_request.head.repo.fork }}" == "true" ]; then
@@ -55,7 +28,6 @@ jobs:
           fi
 
       - name: Retrieve github token
-        if: steps.check-dependencies.outputs.is-dependency-only == 'true'
         id: vault
         uses: hashicorp/vault-action@v2.4.3
         with:
@@ -67,44 +39,79 @@ jobs:
           secrets: |
             github/token/${{ github.event.repository.name }}-dependabot token | GITHUB_MERGE_TOKEN ;
 
-      - name: Approve PR
-        if: steps.check-dependencies.outputs.is-dependency-only == 'true'
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.vault.outputs.GITHUB_MERGE_TOKEN }}
+          fetch-depth: 0
+
+      - name: Configure git
+        run: |
+          git config user.name "contentful-automation[bot]"
+          git config user.email "contentful-automation[bot]@users.noreply.github.com"
+
+      - name: Rebase PR if needed
+        id: rebase
+        continue-on-error: true
+        shell: bash
+        run: |
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          PR_BRANCH="${{ github.event.pull_request.head.ref }}"
+          BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
+          
+          echo "Checking if rebase is needed for PR #$PR_NUMBER"
+          
+          # Fetch latest from base branch
+          git fetch origin "$BASE_BRANCH" --quiet
+          
+          # Fetch the PR branch
+          git fetch origin "$PR_BRANCH" --quiet
+          git checkout "$PR_BRANCH"
+          
+          # Check if rebase is needed by comparing commits
+          BASE_SHA=$(git rev-parse "origin/$BASE_BRANCH")
+          MERGE_BASE=$(git merge-base "$BASE_SHA" HEAD)
+          
+          if [ "$MERGE_BASE" != "$BASE_SHA" ]; then
+            echo "Rebase needed: branch is behind base. Attempting automatic rebase..."
+            if git rebase "$BASE_SHA"; then
+              echo "Rebase successful, pushing..."
+              if git push origin "$PR_BRANCH" --force-with-lease; then
+                echo "Rebase completed and pushed successfully"
+                echo "rebase_success=true" >> $GITHUB_OUTPUT
+                echo "rebase_needed=true" >> $GITHUB_OUTPUT
+              else
+                echo "Failed to push rebased branch"
+                echo "rebase_success=false" >> $GITHUB_OUTPUT
+                echo "rebase_needed=true" >> $GITHUB_OUTPUT
+                exit 1
+              fi
+            else
+              echo "Rebase failed due to conflicts. Manual intervention may be required."
+              git rebase --abort 2>/dev/null || true
+              echo "rebase_success=false" >> $GITHUB_OUTPUT
+              echo "rebase_needed=true" >> $GITHUB_OUTPUT
+              exit 1
+            fi
+          else
+            echo "No rebase needed: branch is up to date with base"
+            echo "rebase_needed=false" >> $GITHUB_OUTPUT
+            echo "rebase_success=true" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GH_TOKEN: ${{ steps.vault.outputs.GITHUB_MERGE_TOKEN }}
+
+      - name: Add comment after rebase
+        if: |
+          steps.rebase.outputs.rebase_needed == 'true' &&
+          steps.rebase.outputs.rebase_success == 'true'
         uses: actions/github-script@v7
         with:
           github-token: ${{ steps.vault.outputs.GITHUB_MERGE_TOKEN }}
           script: |
-            const opts = github.rest.pulls.listReviews.endpoint.merge({
-              pull_number: context.payload.pull_request.number,
+            await github.rest.issues.createComment({
               owner: context.payload.repository.owner.login,
               repo: context.payload.repository.name,
+              issue_number: context.payload.pull_request.number,
+              body: '✅ **Automated rebase completed**\n\nThis PR has been automatically rebased onto the latest base branch and is ready for review. All checks should complete shortly.'
             });
-
-            const reviews = await github.paginate(opts);
-
-            const ourReview = reviews.find(
-              (review) =>
-                review.state === "APPROVED" && review.user && review.user.login === "contentful-automation[bot]"
-            );
-
-            if (ourReview) {
-              console.log(
-                `The user "${ourReview.user.login}" has already approved and requested this PR is merged, exiting`
-              );
-            } else {
-              await github.rest.pulls.createReview({
-                owner: context.payload.repository.owner.login,
-                repo: context.payload.repository.name,
-                pull_number: context.payload.pull_request.number,
-                event: 'APPROVE',
-                body: 'Auto-approving dependency-only release'
-              });
-            }
-
-      - name: Enable auto merge
-        if: steps.check-dependencies.outputs.is-dependency-only == 'true'
-        shell: bash
-        run: |
-          echo "Auto merging dependency-only release PR"
-          gh pr merge --auto ${{ github.event.pull_request.html_url }}
-        env:
-          GH_TOKEN: ${{ steps.vault.outputs.GITHUB_MERGE_TOKEN }}
