@@ -58,20 +58,20 @@ jobs:
           PR_NUMBER="${{ github.event.pull_request.number }}"
           PR_BRANCH="${{ github.event.pull_request.head.ref }}"
           BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
-          
+
           echo "Checking if rebase is needed for PR #$PR_NUMBER"
-          
+
           # Fetch latest from base branch
           git fetch origin "$BASE_BRANCH" --quiet
-          
+
           # Fetch the PR branch
           git fetch origin "$PR_BRANCH" --quiet
           git checkout "$PR_BRANCH"
-          
+
           # Check if rebase is needed by comparing commits
           BASE_SHA=$(git rev-parse "origin/$BASE_BRANCH")
           MERGE_BASE=$(git merge-base "$BASE_SHA" HEAD)
-          
+
           if [ "$MERGE_BASE" != "$BASE_SHA" ]; then
             echo "Rebase needed: branch is behind base. Attempting automatic rebase..."
             if git rebase "$BASE_SHA"; then
@@ -113,5 +113,7 @@ jobs:
               owner: context.payload.repository.owner.login,
               repo: context.payload.repository.name,
               issue_number: context.payload.pull_request.number,
-              body: '✅ **Automated rebase completed**\n\nThis PR has been automatically rebased onto the latest base branch and is ready for review. All checks should complete shortly.'
+              body: '✅ **Automated rebase completed**\n\n' +
+                    'This PR has been automatically rebased onto the latest base branch ' +
+                    'and is ready for review. All checks should complete shortly.'
             });
