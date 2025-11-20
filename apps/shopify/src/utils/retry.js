@@ -131,7 +131,7 @@ export const retryWithBackoff = async (fn, options = {}) => {
         delay = Math.min(retryAfterDelay, maxDelay);
       } else {
         // Exponential backoff
-        delay = Math.min(delay * backoffMultiplier, maxDelay);
+        delay = Math.min(initialDelay * Math.pow(backoffMultiplier, attempt), maxDelay);
       }
 
       console.warn(`Request failed (attempt ${attempt + 1}/${maxRetries + 1}), retrying in ${delay}ms...`, error.message || error);
