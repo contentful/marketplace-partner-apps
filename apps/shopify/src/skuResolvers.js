@@ -50,23 +50,6 @@ const graphqlRequest = async (config, query) => {
     }
 
     const data = await response.json();
-
-    // Check for GraphQL errors in the response
-    if (data.errors && Array.isArray(data.errors) && data.errors.length > 0) {
-      const error = new Error(`GraphQL errors: ${JSON.stringify(data.errors)}`);
-      error.errors = data.errors;
-      // Check if any errors are retryable
-      const hasRetryableError = data.errors.some((err) => {
-        const code = err.extensions?.code;
-        return code === 'THROTTLED' || code === 'INTERNAL_SERVER_ERROR';
-      });
-      if (hasRetryableError) {
-        throw error;
-      }
-      // Non-retryable GraphQL errors (like validation errors) should still throw
-      throw error;
-    }
-
     return data;
   });
 };
@@ -80,7 +63,7 @@ const paginateGraphQLRequest = async (config, ids, queryFunction) => {
     requests.push(graphqlRequest(config, query));
   }
 
-  // Use Promise.allSettled to handle partial failures gracefully
+  // Handle partial failures gracefully
   const results = await Promise.allSettled(requests);
   const successfulResults = [];
   const errors = [];
@@ -262,30 +245,12 @@ export const fetchProductPreviews = async (skus, config) => {
       // Wrap each request with retry logic
       requests.push(
         retryWithBackoff(async () => {
-          const response = await shopifyClient.request(query);
-
-          // Check for GraphQL errors
-          if (response.errors && Array.isArray(response.errors) && response.errors.length > 0) {
-            const error = new Error(`GraphQL errors: ${JSON.stringify(response.errors)}`);
-            error.errors = response.errors;
-            // Check if errors are retryable
-            const hasRetryableError = response.errors.some((err) => {
-              const code = err.extensions?.code;
-              return code === 'THROTTLED' || code === 'INTERNAL_SERVER_ERROR';
-            });
-            if (hasRetryableError) {
-              throw error;
-            }
-            // Non-retryable errors should still throw
-            throw error;
-          }
-
-          return response;
+          return await shopifyClient.request(query);
         })
       );
     }
 
-    // Use Promise.allSettled to handle partial failures gracefully
+    // Handle partial failures gracefully
     const results = await Promise.allSettled(requests);
     const successfulResponses = [];
     const errors = [];

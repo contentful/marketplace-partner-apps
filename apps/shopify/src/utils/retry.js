@@ -26,19 +26,11 @@ const isRetryableError = (error) => {
     return true;
   }
 
-  // Check for HTTP status codes
-  if (error.status || error.statusCode) {
-    const status = error.status || error.statusCode;
+  // Check for HTTP status codes (combines error.status, error.statusCode, and error.response.status)
+  const status = error.status || error.statusCode || error.response?.status;
+  if (status) {
     // Retry on 429 (rate limit), 500, 502, 503, 504
     return status === 429 || (status >= 500 && status < 600);
-  }
-
-  // Check response object (for fetch API errors)
-  if (error.response) {
-    const status = error.response.status || error.response.statusCode;
-    if (status) {
-      return status === 429 || (status >= 500 && status < 600);
-    }
   }
 
   // Check for GraphQL errors that might be transient
@@ -81,6 +73,22 @@ const getRetryAfterDelay = (error) => {
 };
 
 /**
+ * Handles GraphQL response errors by throwing appropriate errors for retry logic
+ *
+ * @param {Object} result - The GraphQL response result
+ * @throws {Error} - Throws an error with attached GraphQL errors if any exist
+ */
+export const handleGraphQLErrors = (result) => {
+  if (!result) return;
+  const hasGraphQLErrors = result.errors && Array.isArray(result.errors) && result.errors.length > 0;
+  if (hasGraphQLErrors) {
+    const error = new Error(`GraphQL errors: ${JSON.stringify(result.errors)}`);
+    error.errors = result.errors;
+    throw error;
+  }
+};
+
+/**
  * Retries a function with exponential backoff
  *
  * @param {Function} fn - The async function to retry
@@ -100,7 +108,10 @@ export const retryWithBackoff = async (fn, options = {}) => {
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
-      return await fn();
+      const result = await fn();
+      // Check for GraphQL errors in the result
+      handleGraphQLErrors(result);
+      return result;
     } catch (error) {
       lastError = error;
 
