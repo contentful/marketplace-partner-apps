@@ -93,7 +93,7 @@ export const handleGraphQLErrors = (result) => {
  *
  * @param {Function} fn - The async function to retry
  * @param {Object} options - Retry options
- * @param {number} options.maxRetries - Maximum number of retry attempts (default: 3)
+ * @param {number} options.maxRetries - Maximum number of attempts (including initial attempt) (default: 3)
  * @param {number} options.initialDelay - Initial delay in milliseconds (default: 1000)
  * @param {number} options.maxDelay - Maximum delay in milliseconds (default: 10000)
  * @param {number} options.backoffMultiplier - Multiplier for exponential backoff (default: 2)
@@ -106,7 +106,7 @@ export const retryWithBackoff = async (fn, options = {}) => {
   let lastError;
   let delay = initialDelay;
 
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
       const result = await fn();
       // Check for GraphQL errors in the result
@@ -116,7 +116,7 @@ export const retryWithBackoff = async (fn, options = {}) => {
       lastError = error;
 
       // Don't retry if we've exhausted all attempts
-      if (attempt >= maxRetries) {
+      if (attempt >= maxRetries - 1) {
         break;
       }
 
@@ -134,7 +134,7 @@ export const retryWithBackoff = async (fn, options = {}) => {
         delay = Math.min(initialDelay * Math.pow(backoffMultiplier, attempt), maxDelay);
       }
 
-      console.warn(`Request failed (attempt ${attempt + 1}/${maxRetries + 1}), retrying in ${delay}ms...`, error.message || error);
+      console.warn(`Request failed (attempt ${attempt + 1}/${maxRetries}), retrying in ${delay}ms...`, error.message || error);
 
       await sleep(delay);
     }
