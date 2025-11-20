@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.2.0](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.1.6...shopify-sku-v2.2.0) (2025-11-20)
+
+
+### Features
+
+* **request retry:** implement retry logic for GraphQL requests to shopify [ZEND-7254] ([#7369](https://github.com/contentful/marketplace-partner-apps/issues/7369)) ([e4564c8](https://github.com/contentful/marketplace-partner-apps/commit/e4564c8df162b5db5b3d42a4384821b203c7b38b))
+
+
+### Bug Fixes
+
+* **deps:** bump js-yaml in /apps/shopify ([#7361](https://github.com/contentful/marketplace-partner-apps/issues/7361)) ([d887520](https://github.com/contentful/marketplace-partner-apps/commit/d887520a362202ba1011b3707de030bb856623a2))
+
 ## [2.1.6](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.1.5...shopify-sku-v2.1.6) (2025-10-16)
 
 
