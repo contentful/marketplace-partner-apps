@@ -11,6 +11,7 @@ import {
   Flex,
   Spinner,
   Subheading,
+  ModalConfirm,
 } from "@contentful/f36-components";
 import { useState } from "react";
 import PaginationControl from "../../locations/PaginationWithTotal";
@@ -32,7 +33,7 @@ const GenerateUnusedContentTypesReport = ({
 }: Props) => {
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(20);
-
+  const [showConfirm, setShowConfirm] = useState(false);
   if (isLoading) {
     return (
       <Flex justifyContent="center" alignItems="center" padding="spacingL">
@@ -73,10 +74,24 @@ const GenerateUnusedContentTypesReport = ({
         </Subheading>
 
       <Flex justifyContent="space-between" marginBottom="spacingM">
+         <ModalConfirm
+          isShown={showConfirm}
+          onConfirm={() => {
+            handleDeleteTypes();
+            setShowConfirm(false);
+          }}
+          onCancel={() => setShowConfirm(false)}
+          title="Confirm Delete"
+          intent="negative"
+          confirmLabel="Yes, Delete"
+          cancelLabel="No"
+        >
+          Are you sure you want to delete the selected <strong>Content Type</strong>? This action cannot be undone.
+        </ModalConfirm>
         <Button
           variant="negative"
           isDisabled={selectedTypes.length === 0}
-          onClick={handleDeleteTypes}
+          onClick={() => setShowConfirm(true)}
         >
           <span className="flex-design align-item-center">Delete Selected</span>
         </Button>

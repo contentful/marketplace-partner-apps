@@ -11,6 +11,7 @@ import {
   Menu,
   MenuItem,
   Popover,
+  ModalConfirm,
 } from "@contentful/f36-components";
 import { ChevronDownIcon, ChevronUpIcon } from "@contentful/f36-icons";
 import { useState } from "react";
@@ -62,7 +63,8 @@ const GenerateEntryReport = ({
     "nameAsc" | "nameDesc" | "newest" | "oldest"
   >("newest");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+ // ✅ confirmation dialog state
+  const [showConfirm, setShowConfirm] = useState(false);
   const toggleSelect = (checked: boolean, entryId: string) => {
     setSelectedIds(
       checked
@@ -185,11 +187,24 @@ const GenerateEntryReport = ({
             </Menu>
           </Popover.Content>
         </Popover>
-
+ <ModalConfirm
+  isShown={showConfirm}
+  onConfirm={() => {
+    handleDeleteClick();
+    setShowConfirm(false);
+  }}
+  onCancel={() => setShowConfirm(false)}
+  title="Confirm Delete"
+  intent="negative"
+  confirmLabel="Yes, Delete"
+  cancelLabel="No"
+>
+  Are you sure you want to delete the selected <strong>Entries</strong>? This action cannot be undone.
+</ModalConfirm>
         <Button
           variant="negative"
           isDisabled={selectedIds.length === 0}
-          onClick={handleDeleteClick}
+          onClick={() => setShowConfirm(true)}
         >
           <span className="flex-design align-item-center">Delete Selected</span>
         </Button>
