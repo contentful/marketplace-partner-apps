@@ -11,6 +11,7 @@ import { previewsToProductVariants } from './dataTransformer';
 import { SHOPIFY_API_VERSION, SHOPIFY_ENTITY_LIMIT } from './constants';
 import { convertStringToBase64, convertBase64ToString, convertCollectionToBase64, convertProductToBase64 } from './utils/base64';
 import { retryWithBackoff } from './utils/retry';
+import { createFallbackPreview } from './utils/fallback';
 
 export async function makeShopifyClient(config) {
   const validationError = validateParameters(config);
@@ -211,17 +212,12 @@ export const fetchCollectionPreviews = async (skus, config) => {
       const collection = collections.find((collection) => collection?.id === convertStringToBase64(validId));
       return collection
         ? collectionDataTransformer(collection, config.apiEndpoint)
-        : {
-            sku: convertStringToBase64(validId),
-            isMissing: true,
-            image: '',
-            id: convertStringToBase64(validId),
-            name: '',
-          };
+        : createFallbackPreview(convertStringToBase64(validId));
     });
   } catch (error) {
-    console.error('Error in fetchCollectionPreviews:', error);
-    throw error;
+    console.error('Error in fetchCollectionPreviews, returning fallback data:', error);
+    // Return fallback data for all SKUs
+    return skus.map(createFallbackPreview);
   }
 };
 
@@ -264,10 +260,10 @@ export const fetchProductPreviews = async (skus, config) => {
       }
     });
 
-    // If all requests failed, throw an error
+    // If all requests failed, log warning and return fallback data
     if (successfulResponses.length === 0 && errors.length > 0) {
-      const lastError = errors[errors.length - 1];
-      throw new Error(`Failed to fetch product previews: ${lastError.message}`);
+      console.warn(`All product preview requests failed. Returning fallback data for ${skus.length} products.`);
+      return skus.map(createFallbackPreview);
     }
 
     // If some requests failed, log a warning but continue with successful results
@@ -302,17 +298,12 @@ export const fetchProductPreviews = async (skus, config) => {
 
       return product
         ? productDataTransformer(product, config.apiEndpoint)
-        : {
-            sku: convertStringToBase64(validId),
-            isMissing: true,
-            image: '',
-            id: convertStringToBase64(validId),
-            name: '',
-          };
+        : createFallbackPreview(convertStringToBase64(validId));
     });
   } catch (error) {
-    console.error('Error in fetchProductPreviews:', error);
-    throw error;
+    console.error('Error in fetchProductPreviews, returning fallback data:', error);
+    // Return fallback data for all SKUs
+    return skus.map(createFallbackPreview);
   }
 };
 
@@ -375,12 +366,13 @@ export const fetchProductVariantPreviews = async (skus, config) => {
     const missingVariants = difference(
       skus,
       variantPreviews.map((variant) => variant.sku)
-    ).map((sku) => ({ sku, isMissing: true, name: '', image: '' }));
+    ).map(createFallbackPreview);
 
     return [...variantPreviews, ...missingVariants];
   } catch (error) {
-    console.error('Error in fetchProductVariantPreviews:', error);
-    throw error;
+    console.error('Error in fetchProductVariantPreviews, returning fallback data:', error);
+    // Return fallback data for all SKUs
+    return skus.map(createFallbackPreview);
   }
 };
 
