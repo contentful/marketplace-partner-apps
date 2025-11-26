@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getCampaignsOptions } from '@/queries/getCampaignsOptions';
 import { getToken } from '@/utils/getToken';
 import { LoadingState } from '@/components/Common/LoadingState';
-import { useLocalStorageSync } from '@/hook/useLocalStorageSync';
+import { useLocalStorageSync } from '@/hooks/useLocalStorageSync';
 import { CampaignDetails } from '@/components/Sidebar/CampaignDetails';
 import { EmptyStateSidebar } from '@/components/Common/EmptyStates';
 

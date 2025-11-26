@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/contentful/marketplace-partner-apps/compare/global-find-replace-v0.2.0...global-find-replace-v0.2.1) (2025-11-20)
+
+
+### Bug Fixes
+
+* **deps:** bump js-yaml from 4.1.0 to 4.1.1 in /apps/global-find-replace ([#7342](https://github.com/contentful/marketplace-partner-apps/issues/7342)) ([d62275b](https://github.com/contentful/marketplace-partner-apps/commit/d62275b4de0ab4735d82d008efb75edcbed70940))
+
 ## [0.2.0](https://github.com/contentful/marketplace-partner-apps/compare/global-find-replace-v0.1.0...global-find-replace-v0.2.0) (2025-11-12)
 
 

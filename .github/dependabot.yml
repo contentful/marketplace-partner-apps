@@ -36,6 +36,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -68,6 +70,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -100,6 +104,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -134,6 +140,8 @@ updates:
           - '*'
     labels:
       - 'contentful-owned'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -166,6 +174,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -198,6 +208,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -233,6 +245,8 @@ updates:
           - '*'
     labels:
       - 'contentful-owned'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -265,6 +279,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -298,6 +314,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -330,6 +348,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -362,6 +382,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -394,6 +416,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -426,6 +450,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -458,6 +484,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -490,6 +518,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -522,6 +552,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -554,6 +586,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -586,6 +620,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -618,6 +654,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -650,6 +688,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -683,6 +723,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -715,6 +757,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -747,6 +791,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -779,6 +825,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -813,6 +861,8 @@ updates:
           - '*'
     labels:
       - 'contentful-owned'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -845,6 +895,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -877,6 +929,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -909,6 +963,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -941,6 +997,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -976,6 +1034,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -1008,6 +1068,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -1040,6 +1102,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -1072,6 +1136,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -1104,3 +1170,6 @@ updates:
           - patch
         patterns:
           - '*'
+
+    cooldown:
+      default-days: 15

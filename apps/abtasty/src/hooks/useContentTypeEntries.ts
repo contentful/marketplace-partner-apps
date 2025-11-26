@@ -14,11 +14,17 @@ export const useContentTypeEntries = (sdk: EditorAppSDK, contentTypeId?: string 
       try {
         const ct = await sdk.cma.contentType.get({ contentTypeId });
         return [{ id: ct.sys.id, name: ct.name as string }] as EntryType[];
-      } catch {
-        const contentTypes = await sdk.cma.contentType.getMany({});
-        return contentTypes.items
-          .filter((e) => e.sys.id === contentTypeId)
-          .map((e) => ({ id: e.sys.id, name: e.name as string })) as EntryType[];
+      } catch (err) {
+        console.error(`Failed to get content type ${contentTypeId}, trying getMany:`, err);
+        try {
+          const contentTypes = await sdk.cma.contentType.getMany({});
+          return contentTypes.items
+            .filter((e) => e.sys.id === contentTypeId)
+            .map((e) => ({ id: e.sys.id, name: e.name as string })) as EntryType[];
+        } catch (fallbackErr) {
+          console.error('Failed to get content types:', fallbackErr);
+          return [] as EntryType[];
+        }
       }
     },
   });
