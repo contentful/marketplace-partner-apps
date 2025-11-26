@@ -62,7 +62,7 @@
     "@contentful/app-scripts": "^2.5.6",
     "@emotion/jest": "^11.14.2",
     "@eslint/js": "^9.39.1",
-    "@hey-api/openapi-ts": "0.87.0",
+    "@hey-api/openapi-ts": "0.87.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@types/markdown-it": "^14.1.2",
