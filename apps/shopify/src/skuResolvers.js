@@ -28,12 +28,30 @@ export async function makeShopifyClient(config) {
   });
 }
 
+/**
+ * Gets the fetch function available in the current environment.
+ * Works in both browser and Node.js environments.
+ */
+const getFetch = () => {
+  // Node.js 18+ has global fetch
+  if (typeof fetch !== 'undefined') {
+    return fetch;
+  }
+  // Browser environment
+  if (typeof window !== 'undefined' && window.fetch) {
+    return window.fetch;
+  }
+  // Fallback: throw error if fetch is not available
+  throw new Error('Fetch API is not available in this environment');
+};
+
 const graphqlRequest = async (config, query) => {
   const { apiEndpoint, storefrontAccessToken } = config;
   const url = `https://${removeHttpsAndTrailingSlash(apiEndpoint)}/api/${SHOPIFY_API_VERSION}/graphql`;
 
   return retryWithBackoff(async () => {
-    const response = await window.fetch(url, {
+    const fetchFn = getFetch();
+    const response = await fetchFn(url, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -210,9 +228,7 @@ export const fetchCollectionPreviews = async (skus, config) => {
 
     return validIds.map((validId) => {
       const collection = collections.find((collection) => collection?.id === convertStringToBase64(validId));
-      return collection
-        ? collectionDataTransformer(collection, config.apiEndpoint)
-        : createFallbackPreview(convertStringToBase64(validId));
+      return collection ? collectionDataTransformer(collection, config.apiEndpoint) : createFallbackPreview(convertStringToBase64(validId));
     });
   } catch (error) {
     console.error('Error in fetchCollectionPreviews, returning fallback data:', error);
@@ -296,9 +312,7 @@ export const fetchProductPreviews = async (skus, config) => {
     return validIds.map((validId) => {
       const product = transformedProducts.find((product) => product?.id === convertStringToBase64(validId));
 
-      return product
-        ? productDataTransformer(product, config.apiEndpoint)
-        : createFallbackPreview(convertStringToBase64(validId));
+      return product ? productDataTransformer(product, config.apiEndpoint) : createFallbackPreview(convertStringToBase64(validId));
     });
   } catch (error) {
     console.error('Error in fetchProductPreviews, returning fallback data:', error);
@@ -401,7 +415,7 @@ export const filterAndDecodeValidIds = (skus, skuType) => {
   const validIds = skus
     .map((sku) => {
       try {
-        // If not valid base64 window.atob will throw
+        // If not valid base64, convertBase64ToString will return null
         const decodedId = convertBase64ToString(sku);
         return decodedId;
       } catch (error) {
