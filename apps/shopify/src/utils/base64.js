@@ -1,16 +1,46 @@
+/**
+ * Converts a base64 string to a regular string.
+ * Works in both browser and Node.js environments.
+ */
 export const convertBase64ToString = (str) => {
   try {
-    const decodedId = window.atob(str);
-    return decodedId;
+    // Node.js environment
+    if (typeof Buffer !== 'undefined') {
+      return Buffer.from(str, 'base64').toString('utf-8');
+    }
+    // Browser environment
+    if (typeof window !== 'undefined' && window.atob) {
+      return window.atob(str);
+    }
+    // Fallback: try global atob (available in some environments)
+    if (typeof atob !== 'undefined') {
+      return atob(str);
+    }
+    return null;
   } catch (error) {
     return null;
   }
 };
 
+/**
+ * Converts a regular string to a base64 string.
+ * Works in both browser and Node.js environments.
+ */
 export const convertStringToBase64 = (str) => {
   try {
-    const undecodedId = window.btoa(str);
-    return undecodedId;
+    // Node.js environment
+    if (typeof Buffer !== 'undefined') {
+      return Buffer.from(str, 'utf-8').toString('base64');
+    }
+    // Browser environment
+    if (typeof window !== 'undefined' && window.btoa) {
+      return window.btoa(str);
+    }
+    // Fallback: try global btoa (available in some environments)
+    if (typeof btoa !== 'undefined') {
+      return btoa(str);
+    }
+    return null;
   } catch (error) {
     return null;
   }
