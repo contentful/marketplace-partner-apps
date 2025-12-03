@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.7](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.6...sfmc-studio-v1.2.7) (2025-12-03)
+
+
+### Bug Fixes
+
+* deploy script for sfmc-studio [] ([#6908](https://github.com/contentful/marketplace-partner-apps/issues/6908)) ([e4a45c7](https://github.com/contentful/marketplace-partner-apps/commit/e4a45c77421a7aa88f4c664b94300560fb64a878))
+* **deps:** bump js-yaml in /apps/sfmc-studio ([#7359](https://github.com/contentful/marketplace-partner-apps/issues/7359)) ([09bab83](https://github.com/contentful/marketplace-partner-apps/commit/09bab837a3101302b5f6494a0b440d5d35c99844))
+* **deps:** bump the production-dependencies group across 1 directory with 4 updates ([#7426](https://github.com/contentful/marketplace-partner-apps/issues/7426)) ([95c153e](https://github.com/contentful/marketplace-partner-apps/commit/95c153ef3125d7d42952aa6f86b235c3a635a0cd))
+* **deps:** bump the production-dependencies group across 1 directory with 6 updates ([#7116](https://github.com/contentful/marketplace-partner-apps/issues/7116)) ([5fd1e09](https://github.com/contentful/marketplace-partner-apps/commit/5fd1e09b122597b6bd6b6610e8366262b52d5f1c))
+* **deps:** bump the production-dependencies group in /apps/sfmc-studio with 3 updates ([#7265](https://github.com/contentful/marketplace-partner-apps/issues/7265)) ([6887ea8](https://github.com/contentful/marketplace-partner-apps/commit/6887ea8f44421d14ed1f4fbdc93b40ca0cb4a0d6))
+* **deps:** bump the production-dependencies group in /apps/sfmc-studio with 4 updates ([#7182](https://github.com/contentful/marketplace-partner-apps/issues/7182)) ([d776f31](https://github.com/contentful/marketplace-partner-apps/commit/d776f31628fd41a6407c75386fbda96c4faf0765))
+
 ## [1.2.6](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.5...sfmc-studio-v1.2.6) (2025-10-15)
 
 
