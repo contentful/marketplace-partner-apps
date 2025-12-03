@@ -26,7 +26,7 @@
     "@ant-design/plots": "^2.6.6",
     "@contentful/app-scripts": "^1.32.2",
     "@contentful/app-sdk": "^4.47.0",
-    "@contentful/f36-components": "^4.81.1",
+    "@contentful/f36-components": "^5.8.1",
     "@contentful/react-apps-toolkit": "^1.2.16",
     "@reduxjs/toolkit": "^2.10.1",
     "antd": "^5.29.1",
