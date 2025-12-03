@@ -12,11 +12,11 @@ jobs:
       id-token: write
       pull-requests: write
     runs-on: ubuntu-latest
-    # Only run on Release Please PRs with "chore: release" title
-    if: |
-      github.actor == 'github-actions[bot]' &&
-      startsWith(github.event.pull_request.title, 'chore: release')
     steps:
+      - name: Debug OIDC Claims
+        uses: steve-todorov/oidc-debugger-action@v1
+        with:
+          audience: '${{ github.server_url }}/${{ github.repository }}'
       - name: Check if release contains only dependency updates
         id: check-dependencies
         run: |
