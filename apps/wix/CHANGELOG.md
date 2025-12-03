@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.24](https://github.com/contentful/marketplace-partner-apps/compare/wix-contentful-app-v1.0.23...wix-contentful-app-v1.0.24) (2025-12-03)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group in /apps/wix with 6 updates ([#7007](https://github.com/contentful/marketplace-partner-apps/issues/7007)) ([39e3c6e](https://github.com/contentful/marketplace-partner-apps/commit/39e3c6e181126063bd18869f0e39ad02fa250658))
+
 ## [1.0.23](https://github.com/contentful/marketplace-partner-apps/compare/wix-contentful-app-v1.0.22...wix-contentful-app-v1.0.23) (2025-10-15)
 
 
