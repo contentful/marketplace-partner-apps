@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.5](https://github.com/contentful/marketplace-partner-apps/compare/hugging-face-v1.1.4...hugging-face-v1.1.5) (2025-12-03)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.11.0 to 1.12.0 in /apps/hugging-face ([#6525](https://github.com/contentful/marketplace-partner-apps/issues/6525)) ([688904e](https://github.com/contentful/marketplace-partner-apps/commit/688904e0178db8495ce1e8ab54463fc1e11298e3))
+* **deps:** bump js-yaml from 4.1.0 to 4.1.1 in /apps/hugging-face ([#7348](https://github.com/contentful/marketplace-partner-apps/issues/7348)) ([4c32076](https://github.com/contentful/marketplace-partner-apps/commit/4c32076582829f3fb1fb7d8f657b281e1ed98e7f))
+* **deps:** bump the production-dependencies group in /apps/hugging-face with 2 updates ([#6828](https://github.com/contentful/marketplace-partner-apps/issues/6828)) ([893dea9](https://github.com/contentful/marketplace-partner-apps/commit/893dea918b0d37b79fe6ee038996d624a5af142b))
+
 ## [1.1.4](https://github.com/contentful/marketplace-partner-apps/compare/hugging-face-v1.1.3...hugging-face-v1.1.4) (2025-08-01)
 
 
