@@ -79,8 +79,7 @@ export function InstallParamsConfiguration(props: Props) {
       <TextField
         testId="config-startFolder"
         name="Starting folder"
-        description="Relative path to the folder which the Cloudinary Media Library will automatically browse to. Leave blank to open the root folder."
-        placeholder="e.g. images, images/products"
+        description="A path to a folder which the Cloudinary Media Library will automatically browse to on load."
         value={parameters.startFolder}
         onChange={(value) => onParameterChange('startFolder', value)}
         isRequired
