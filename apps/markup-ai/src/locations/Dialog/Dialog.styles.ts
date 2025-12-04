@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 
 export const DialogContainer = styled.div<{ $fixedHeight?: boolean }>`
   width: 100%;
@@ -7,9 +7,9 @@ export const DialogContainer = styled.div<{ $fixedHeight?: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  height: ${({ $fixedHeight }) => ($fixedHeight ? '400px' : 'auto')};
-  min-height: ${({ $fixedHeight }) => ($fixedHeight ? '400px' : 'auto')};
-  max-height: ${({ $fixedHeight }) => ($fixedHeight ? '400px' : 'none')};
+  height: ${({ $fixedHeight }) => ($fixedHeight ? "400px" : "auto")};
+  min-height: ${({ $fixedHeight }) => ($fixedHeight ? "400px" : "auto")};
+  max-height: ${({ $fixedHeight }) => ($fixedHeight ? "400px" : "none")};
 `;
 
 export const DialogContent = styled.div`
@@ -31,7 +31,7 @@ export const DialogHeader = styled.div`
 `;
 
 export const DialogTitle = styled.div`
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-weight: 600;
   font-size: 20px;
   line-height: 32px;

@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 
 export const ContentDiffWrapper = styled.div`
   display: flex;
@@ -27,7 +27,7 @@ export const ContentHeader = styled.div`
 `;
 
 export const ContentTitle = styled.span`
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-weight: 600;
   font-size: 16px;
   line-height: 100%;
@@ -52,7 +52,7 @@ export const ScoreBadge = styled.span<{ background: string }>`
 `;
 
 export const ScoreText = styled.span`
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 12px;
@@ -70,7 +70,7 @@ export const ScoreText = styled.span`
 `;
 
 export const ScoreNumber = styled.span`
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
@@ -96,10 +96,10 @@ export const ContentText = styled.div`
 `;
 
 export const DiffText = styled.span<{ isRemoved?: boolean; isAdded?: boolean }>`
-  text-decoration: ${(props) => (props.isRemoved ? 'line-through' : 'none')};
-  color: ${(props) => (props.isRemoved ? '#FF707D' : 'inherit')};
-  background: ${(props) => (props.isAdded ? '#EAF9E8' : 'none')};
-  font-weight: ${(props) => (props.isAdded ? 500 : 'normal')};
+  text-decoration: ${(props) => (props.isRemoved ? "line-through" : "none")};
+  color: ${(props) => (props.isRemoved ? "#FF707D" : "inherit")};
+  background: ${(props) => (props.isAdded ? "#EAF9E8" : "none")};
+  font-weight: ${(props) => (props.isAdded ? 500 : "normal")};
 `;
 
 export const MergeContainer = styled.div`
@@ -110,11 +110,11 @@ export const MergeContainer = styled.div`
 `;
 
 export const MergeHost = styled.div<{ $hidden?: boolean; $heightPx?: number }>`
-  height: ${({ $heightPx }) => ($heightPx ? `${$heightPx}px` : '400px')};
+  height: ${({ $heightPx }) => ($heightPx === undefined ? "400px" : `${String($heightPx)}px`)};
   border: 1px solid #e7ebee;
   border-radius: 8px;
   overflow: hidden;
-  display: ${({ $hidden }) => ($hidden ? 'none' : 'block')};
+  display: ${({ $hidden }) => ($hidden ? "none" : "block")};
   /* Ensure the merge view and internal editors stretch and scroll */
   .cm-mergeView {
     height: 100%;
@@ -171,7 +171,7 @@ export const PaneHeader = styled.div`
 `;
 
 export const PaneLabel = styled.span`
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-weight: 600;
   font-size: 16px;
   line-height: 100%;

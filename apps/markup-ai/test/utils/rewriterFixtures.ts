@@ -1,7 +1,7 @@
 // Shared test fixtures and builders to reduce duplication across rewriter tests
 
-import { ScoreOutput, WorkflowInfo, WorkflowStatus } from '../../src/api-client';
-import type { FieldCheck } from '../../src/types/content';
+import { ScoreOutput, WorkflowInfo, WorkflowStatus } from "../../src/api-client";
+import type { FieldCheck } from "../../src/types/content";
 
 export type UnknownRecord = Record<string, unknown>;
 
@@ -33,17 +33,17 @@ export const sharedOriginalScores: ScoreOutput = {
 };
 
 export function buildWorkflow(
-  type: WorkflowInfo['type'],
+  type: WorkflowInfo["type"],
   status: WorkflowStatus = WorkflowStatus.COMPLETED,
-  id: string = 'workflow-123',
+  id: string = "workflow-123",
 ): WorkflowInfo {
   return { id, status, type };
 }
 
 export function createMockFieldCheck(overrides?: Partial<FieldCheck>): FieldCheck {
   return {
-    fieldId: 'field1',
-    originalValue: 'orig',
+    fieldId: "field1",
+    originalValue: "orig",
     isChecking: false,
     checkResponse: null,
     error: null,

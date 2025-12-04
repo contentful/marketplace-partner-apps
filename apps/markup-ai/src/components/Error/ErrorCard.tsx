@@ -1,6 +1,6 @@
-import React from 'react';
-import { Note, IconButton, Flex } from '@contentful/f36-components';
-import { XIcon } from '@contentful/f36-icons';
+import React from "react";
+import { Note, IconButton, Flex } from "@contentful/f36-components";
+import { XIcon } from "@contentful/f36-icons";
 
 interface ErrorCardProps {
   message: string;
@@ -9,7 +9,7 @@ interface ErrorCardProps {
 
 export const ErrorCard: React.FC<ErrorCardProps> = ({ message, onClose }) => {
   return (
-    <Note variant="negative" style={{ marginBottom: '8px' }} data-testid="error-note">
+    <Note variant="negative" style={{ marginBottom: "8px" }} data-testid="error-note">
       <Flex justifyContent="space-between" alignItems="center">
         <span>{message}</span>
         <IconButton
