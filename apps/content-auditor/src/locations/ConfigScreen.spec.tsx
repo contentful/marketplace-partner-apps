@@ -16,7 +16,11 @@ describe('Config Screen component', () => {
     await mockSdk.app.onConfigure.mock.calls[0][0]();
 
     expect(
-      getByText('Welcome to your contentful app. This is your config page.')
+      getByText('Content Auditor Configuration')
+    ).toBeInTheDocument();
+    
+    expect(
+      getByText(/The Content Auditor app helps you identify and clean up unused content/)
     ).toBeInTheDocument();
   });
 });
