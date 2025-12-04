@@ -14,10 +14,9 @@ interface Props {
 
   inputProps?: Pick<TextInputProps, 'max' | 'min'>;
   testId: string;
-  placeholder?: string;
 }
 
-export function TextField({ name, description, value, onChange, isRequired = false, type, inputProps, testId, placeholder }: Props) {
+export function TextField({ name, description, value, onChange, isRequired = false, type, inputProps, testId }: Props) {
   return (
     <FieldWrapper name={name} description={description} counter>
       <TextInput
@@ -28,7 +27,6 @@ export function TextField({ name, description, value, onChange, isRequired = fal
         isRequired={isRequired}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
         testId={testId}
         {...inputProps}
       />
