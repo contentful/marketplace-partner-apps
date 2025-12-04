@@ -29,7 +29,7 @@ When a PR is opened that introduces a new app, a [GitHub action](.github/workflo
   - `lint`
     - Runs a script to lint your app's code. This is a required script to ensure code quality and consistency, and it is recommended to use [ESLlint](https://eslint.org/) in your app. See the Cloudinary app for an example [ESLint configuration](apps/cloudinary2/.eslintrc.json).
 
-- Ensure that the package version number in your `package.json` file is below 1.0.0. The version of 1.0.0 is reserved for initial release.
+- Ensure that the package version number in your `package.json` file is below 1.0.0. The version of 1.0.0 is reserved for initial releases.
 
 - Have a `LICENSE` file at the root of your app directory with a valid open source license agreement.
 
