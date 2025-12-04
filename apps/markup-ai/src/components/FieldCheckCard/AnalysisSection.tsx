@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   SectionWrapper,
   Row,
@@ -9,21 +9,25 @@ import {
   BarTrack,
   BarFill,
   Title,
-} from './AnalysisSection.styles';
-import { ScoreOutput } from '../../api-client';
-import { getScoreColorString, formatScoreForDisplay } from '../../utils/scoreColors';
-import { useTranslation } from '../../contexts/LocalizationContext';
-import { METRIC_ORDER, METRIC_LABEL_KEYS, getMetricScore as readScore } from '../../constants/metrics';
+} from "./AnalysisSection.styles";
+import { ScoreOutput } from "../../api-client";
+import { getScoreColorString, formatScoreForDisplay } from "../../utils/scoreColors";
+import { useTranslation } from "../../contexts/LocalizationContext";
+import {
+  METRIC_ORDER,
+  METRIC_LABEL_KEYS,
+  getMetricScore as readScore,
+} from "../../constants/metrics";
 
 interface AnalysisSectionProps {
   scores?: ScoreOutput;
   onMoreDetails?: () => void; // Add this prop
 }
 
-export const AnalysisSection: React.FC<AnalysisSectionProps & { 'data-testid'?: string }> = ({
+export const AnalysisSection: React.FC<AnalysisSectionProps & { "data-testid"?: string }> = ({
   scores,
   onMoreDetails,
-  'data-testid': dataTestId,
+  "data-testid": dataTestId,
 }) => {
   const { t } = useTranslation();
   const metrics = METRIC_ORDER.map((key) => ({ key, label: t(METRIC_LABEL_KEYS[key]) }));
@@ -35,11 +39,11 @@ export const AnalysisSection: React.FC<AnalysisSectionProps & { 'data-testid'?: 
         {onMoreDetails && (
           <a
             style={{
-              marginLeft: 'auto',
+              marginLeft: "auto",
               fontSize: 12,
-              color: '#1976d2',
-              cursor: 'pointer',
-              textDecoration: 'underline',
+              color: "#1976d2",
+              cursor: "pointer",
+              textDecoration: "underline",
             }}
             onClick={onMoreDetails}
           >

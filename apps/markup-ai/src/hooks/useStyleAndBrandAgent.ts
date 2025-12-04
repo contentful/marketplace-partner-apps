@@ -1,33 +1,37 @@
-'use client';
+"use client";
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import {
-  internalGetAdminConstantsOptions,
+  getAdminConstantsOptions,
   styleGuidesListStyleGuidesOptions,
   styleRewritesCreateStyleRewriteMutation,
   styleRewritesGetStyleRewriteOptions,
   styleChecksCreateStyleCheckMutation,
   styleChecksGetStyleCheckOptions,
-} from '../api-client/@tanstack/react-query.gen';
+} from "../api-client/@tanstack/react-query.gen";
 
 // Types are inferred from generated helpers; no explicit typings needed here.
-import { useApiClient } from './useApiClient';
-import type { PlatformConfig } from '../types/content';
+import { useApiClient } from "./useApiClient";
+import type { PlatformConfig } from "../types/content";
 
 export function useGetAdminConstants(config?: PlatformConfig) {
   const client = useApiClient(config);
+  const enabled = Boolean(config?.apiKey);
   return useQuery({
-    ...internalGetAdminConstantsOptions({ client }),
+    ...getAdminConstantsOptions({ client }),
     staleTime: 5 * 60 * 1000,
+    enabled,
   });
 }
 
 export function useListStyleGuides(config?: PlatformConfig) {
   const client = useApiClient(config);
+  const enabled = Boolean(config?.apiKey);
   return useQuery({
     ...styleGuidesListStyleGuidesOptions({ client }),
     staleTime: 60 * 1000,
+    enabled,
   });
 }
 
@@ -36,7 +40,7 @@ export function useCreateStyleRewrite(config?: PlatformConfig) {
   return useMutation({
     ...styleRewritesCreateStyleRewriteMutation({ client }),
     onError: (error) => {
-      console.error('Style rewrite error:', error);
+      console.error("Style rewrite error:", error);
     },
   });
 }
@@ -46,13 +50,13 @@ export function useGetStyleRewrite(workflowId?: string, config?: PlatformConfig)
   return useQuery({
     ...styleRewritesGetStyleRewriteOptions({
       client,
-      path: { workflow_id: workflowId || '' },
+      path: { workflow_id: workflowId || "" },
     }),
     enabled: !!workflowId,
     refetchInterval: (query) => {
       const data = query.state.data as { workflow?: { status?: string } } | undefined;
-      const status = data?.workflow?.status ? String(data.workflow.status).toLowerCase() : undefined;
-      return status === 'running' ? 2000 : false;
+      const status = data?.workflow?.status ? data.workflow.status.toLowerCase() : undefined;
+      return status === "running" ? 2000 : false;
     },
     refetchIntervalInBackground: true,
   });
@@ -64,7 +68,7 @@ export function useCreateStyleSuggestion(config?: PlatformConfig) {
   return useMutation({
     ...styleChecksCreateStyleCheckMutation({ client }),
     onError: (error) => {
-      console.error('Style suggestion error:', error);
+      console.error("Style suggestion error:", error);
     },
   });
 }
@@ -79,13 +83,13 @@ export function useGetStyleCheck(workflowId?: string, config?: PlatformConfig) {
   return useQuery({
     ...styleChecksGetStyleCheckOptions({
       client,
-      path: { workflow_id: workflowId || '' },
+      path: { workflow_id: workflowId || "" },
     }),
     enabled: !!workflowId,
     refetchInterval: (query) => {
       const data = query.state.data as { workflow?: { status?: string } } | undefined;
-      const status = data?.workflow?.status ? String(data.workflow.status).toLowerCase() : undefined;
-      return status === 'running' ? 2000 : false;
+      const status = data?.workflow?.status ? data.workflow.status.toLowerCase() : undefined;
+      return status === "running" ? 2000 : false;
     },
     refetchIntervalInBackground: true,
   });

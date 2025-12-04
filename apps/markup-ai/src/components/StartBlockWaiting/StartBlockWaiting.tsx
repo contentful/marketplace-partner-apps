@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from '@emotion/styled';
-import { Text } from '@contentful/f36-components';
+import React from "react";
+import styled from "@emotion/styled";
+import { Text } from "@contentful/f36-components";
 
 const Container = styled.div`
   display: flex;
@@ -40,7 +40,11 @@ const StartBlockWaiting: React.FC = () => {
         <IconWrapper data-testid="icon-wrapper">
           <LogoImage src="logos/markup_Logo_Horz_Coral.svg" alt="Markup AI Logo" />
         </IconWrapper>
-        <Text fontSize="fontSizeM" fontWeight="fontWeightMedium" style={{ color: '#5A657C', textAlign: 'center' }}>
+        <Text
+          fontSize="fontSizeM"
+          fontWeight="fontWeightMedium"
+          style={{ color: "#5A657C", textAlign: "center" }}
+        >
           Waiting for user to write, add, or update content
         </Text>
       </Wrapper>
