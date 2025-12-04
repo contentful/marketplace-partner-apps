@@ -23,6 +23,9 @@
     "apps/cloudinary2": {
       "release-type": "node"
     },
+    "apps/content-auditor": {
+      "release-type": "node"
+    },
     "apps/convox": {
       "release-type": "node"
     },
