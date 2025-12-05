@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   Button,
   Box,
@@ -54,6 +54,7 @@ const Page = () => {
     "entry"
   );
   const [searchQuery, setSearchQuery] = useState("");
+  const hasAutoLoadedRef = useRef(false);
 
   useEffect(() => {
     const initialize = async () => {
@@ -87,6 +88,41 @@ const Page = () => {
     };
     fetchTypes();
   }, [accessToken, spaceId, environmentId]);
+
+  useEffect(() => {
+    // Auto-load report when selectedContentType is initially set
+    if (
+      selectedContentType &&
+      activeReport === "entry" &&
+      accessToken &&
+      spaceId &&
+      environmentId &&
+      !fetchingTypes &&
+      !isGeneratingEntryReport &&
+      unusedEntries.length === 0 &&
+      !hasAutoLoadedRef.current
+    ) {
+      hasAutoLoadedRef.current = true;
+      handleEntryReportSelect(selectedContentType);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    selectedContentType,
+    activeReport,
+    accessToken,
+    spaceId,
+    environmentId,
+    fetchingTypes,
+    isGeneratingEntryReport,
+    unusedEntries.length,
+  ]);
+
+  // Reset auto-load flag when switching reports or when content types are reset
+  useEffect(() => {
+    if (activeReport !== "entry") {
+      hasAutoLoadedRef.current = false;
+    }
+  }, [activeReport]);
 
   const resetReports = () => {
     setUnusedEntries([]);
