@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.8](https://github.com/contentful/marketplace-partner-apps/compare/growthbook-contentful-app-v1.2.7...growthbook-contentful-app-v1.2.8) (2025-12-05)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.46.0 to 4.47.0 in /apps/growthbook in the production-dependencies group ([#7442](https://github.com/contentful/marketplace-partner-apps/issues/7442)) ([5c30bc1](https://github.com/contentful/marketplace-partner-apps/commit/5c30bc186012a7e88070062673fe28dc948ce2d3))
+
 ## [1.2.7](https://github.com/contentful/marketplace-partner-apps/compare/growthbook-contentful-app-v1.2.6...growthbook-contentful-app-v1.2.7) (2025-12-03)
 
 
