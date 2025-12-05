@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/content-auditor-v1.0.0...content-auditor-v1.0.1) (2025-12-05)
+
+
+### Bug Fixes
+
+* content auditor auto load and cma link [INTEG-3152] ([#7518](https://github.com/contentful/marketplace-partner-apps/issues/7518)) ([a7e6879](https://github.com/contentful/marketplace-partner-apps/commit/a7e687999ce429509bfbc622bb60959eadf7247d))
+
 ## 1.0.0 (2025-12-05)
 
 
