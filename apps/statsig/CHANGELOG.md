@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.1.8](https://github.com/contentful/marketplace-partner-apps/compare/statsig-v1.1.7...statsig-v1.1.8) (2025-12-05)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/field-editor-reference from 6.10.2 to 6.10.3 in /apps/statsig in the production-dependencies group ([#6323](https://github.com/contentful/marketplace-partner-apps/issues/6323)) ([df0fb8a](https://github.com/contentful/marketplace-partner-apps/commit/df0fb8a03643a6c279c1a1ae30bb73f3dc25efe1))
+* **deps:** bump @contentful/field-editor-reference from 6.10.7 to 6.11.0 in /apps/statsig in the production-dependencies group ([#6418](https://github.com/contentful/marketplace-partner-apps/issues/6418)) ([4d7f61c](https://github.com/contentful/marketplace-partner-apps/commit/4d7f61ca7bd662a3e2d65ce4c59936d59fa623fd))
+* **deps:** bump @contentful/field-editor-reference from 6.16.0 to 6.17.0 in /apps/statsig in the production-dependencies group ([#7445](https://github.com/contentful/marketplace-partner-apps/issues/7445)) ([2d0884f](https://github.com/contentful/marketplace-partner-apps/commit/2d0884fb0422be221ad83035b3d18bf010cfd49b))
+* **deps:** bump axios from 1.11.0 to 1.12.0 in /apps/statsig ([#6514](https://github.com/contentful/marketplace-partner-apps/issues/6514)) ([394c21d](https://github.com/contentful/marketplace-partner-apps/commit/394c21de4cc846d15b2d0dd4e3a7dc5a5781aa05))
+* **deps:** bump express from 4.21.2 to 4.22.1 in /apps/statsig ([#7416](https://github.com/contentful/marketplace-partner-apps/issues/7416)) ([f8bd764](https://github.com/contentful/marketplace-partner-apps/commit/f8bd7648702b8b6d1aa153195f8800b2320e3f5a))
+* **deps:** bump js-yaml in /apps/statsig ([#7363](https://github.com/contentful/marketplace-partner-apps/issues/7363)) ([f70233c](https://github.com/contentful/marketplace-partner-apps/commit/f70233c99f57b913f36bc37b8ef1c8d55019c6f6))
+* **deps:** bump the production-dependencies group in /apps/statsig with 2 updates ([#6396](https://github.com/contentful/marketplace-partner-apps/issues/6396)) ([192b462](https://github.com/contentful/marketplace-partner-apps/commit/192b462f31ee730bf27227c7a904f1fcb0b0a9c9))
+* **deps:** bump the production-dependencies group in /apps/statsig with 3 updates ([#6979](https://github.com/contentful/marketplace-partner-apps/issues/6979)) ([fb005df](https://github.com/contentful/marketplace-partner-apps/commit/fb005df34bee574fa3dfb50eb95d6e390aaee1c1))
+* **deps:** bump the production-dependencies group in /apps/statsig with 3 updates ([#7233](https://github.com/contentful/marketplace-partner-apps/issues/7233)) ([89b9623](https://github.com/contentful/marketplace-partner-apps/commit/89b96238903a06b8754db7cecd7f30f8140d15f6))
+* **deps:** bump the production-dependencies group in /apps/statsig with 3 updates ([#7395](https://github.com/contentful/marketplace-partner-apps/issues/7395)) ([ee05a30](https://github.com/contentful/marketplace-partner-apps/commit/ee05a305f746ee8c0b0005df4af18ed60fc820aa))
+
 ## [1.1.7](https://github.com/contentful/marketplace-partner-apps/compare/statsig-v1.1.6...statsig-v1.1.7) (2025-08-05)
 
 
