@@ -10,7 +10,7 @@
     "@contentful/react-apps-toolkit": "1.2.16",
     "@contentful/rich-text-plain-text-renderer": "^17.1.6",
     "@emotion/css": "^11.13.5",
-    "@sentry/react": "^10.25.0",
+    "@sentry/react": "^10.26.0",
     "contentful-management": "11.63.1",
     "diff": "^8.0.2",
     "emotion": "11.0.0",
