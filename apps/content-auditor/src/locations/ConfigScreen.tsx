@@ -6,6 +6,8 @@ import {
   Paragraph,
   Flex,
   TextInput,
+  List,
+  TextLink,
 } from "@contentful/f36-components";
 import { css } from "emotion";
 import { useSDK } from "@contentful/react-apps-toolkit";
@@ -56,19 +58,25 @@ const ConfigScreen = () => {
           The Content Auditor app helps you identify and clean up unused content in your Contentful space. 
           It can find:
         </Paragraph>
-        <Paragraph style={{marginBottom:'8px', marginLeft:'16px'}}>
-          • <strong>Unlinked Content Entries</strong> - Entries that aren't referenced by any other content
-        </Paragraph>
-        <Paragraph style={{marginBottom:'8px', marginLeft:'16px'}}>
-          • <strong>Unused Media Assets</strong> - Images and files that aren't used in any entries
-        </Paragraph>
-        <Paragraph style={{marginBottom:'20px', marginLeft:'16px'}}>
-          • <strong>Unused Content Types</strong> - Content types with no associated entries
-        </Paragraph>
+        <List style={{marginBottom:'20px'}}>
+          <List.Item>
+            <strong>Unlinked Content Entries</strong> - Entries that aren't referenced by any other content
+          </List.Item>
+          <List.Item>
+            <strong>Unused Media Assets</strong> - Images and files that aren't used in any entries
+          </List.Item>
+          <List.Item>
+            <strong>Unused Content Types</strong> - Content types with no associated entries
+          </List.Item>
+        </List>
         <Paragraph style={{marginBottom:'20px'}}>
           To get started, please provide your Content Management API (CMA) token. 
           This token allows the app to read and manage content in your space. 
-          You can generate a CMA token in your Contentful space settings under <strong>Settings → API → Content management tokens</strong>.
+          You can generate a CMA token by clicking your profile icon, then going to Account Settings &gt; CMA Tokens, or visit the{' '}
+          <TextLink href="/account/profile/cma_tokens" target="_blank">
+            CMA Tokens page
+          </TextLink>
+          {' '}directly.
         </Paragraph>
 
         <TextInput
