@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   Button,
   Box,
   Flex,
   Spinner,
   Tooltip,
+  Notification,
 } from "@contentful/f36-components";
 import { PageAppSDK } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
@@ -53,6 +54,7 @@ const Page = () => {
     "entry"
   );
   const [searchQuery, setSearchQuery] = useState("");
+  const hasAutoLoadedRef = useRef(false);
 
   useEffect(() => {
     const initialize = async () => {
@@ -86,6 +88,41 @@ const Page = () => {
     };
     fetchTypes();
   }, [accessToken, spaceId, environmentId]);
+
+  useEffect(() => {
+    // Auto-load report when selectedContentType is initially set
+    if (
+      selectedContentType &&
+      activeReport === "entry" &&
+      accessToken &&
+      spaceId &&
+      environmentId &&
+      !fetchingTypes &&
+      !isGeneratingEntryReport &&
+      unusedEntries.length === 0 &&
+      !hasAutoLoadedRef.current
+    ) {
+      hasAutoLoadedRef.current = true;
+      handleEntryReportSelect(selectedContentType);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    selectedContentType,
+    activeReport,
+    accessToken,
+    spaceId,
+    environmentId,
+    fetchingTypes,
+    isGeneratingEntryReport,
+    unusedEntries.length,
+  ]);
+
+  // Reset auto-load flag when switching reports or when content types are reset
+  useEffect(() => {
+    if (activeReport !== "entry") {
+      hasAutoLoadedRef.current = false;
+    }
+  }, [activeReport]);
 
   const resetReports = () => {
     setUnusedEntries([]);
@@ -139,6 +176,9 @@ const Page = () => {
   };
 
 const handleDeleteContentTypes = async () => {
+  let deletedCount = 0;
+  let errorCount = 0;
+
   for (const typeId of selectedContentTypes) {
     try {
       const unpublishRes = await fetch(
@@ -152,10 +192,11 @@ const handleDeleteContentTypes = async () => {
       );
 
       if (!unpublishRes.ok && unpublishRes.status !== 404) {
+        errorCount++;
         continue;
       }
 
-      await fetch(
+      const deleteRes = await fetch(
         `https://api.contentful.com/spaces/${spaceId}/environments/${environmentId}/content_types/${typeId}`,
         {
           method: "DELETE",
@@ -165,11 +206,32 @@ const handleDeleteContentTypes = async () => {
           },
         }
       );
-    } catch {
+
+      if (deleteRes.ok) {
+        deletedCount++;
+      } else {
+        errorCount++;
+      }
+    } catch (error) {
+      console.error(`Error deleting content type ${typeId}:`, error);
+      errorCount++;
     }
   }
 
   setSelectedContentTypes([]);
+  
+  if (deletedCount > 0) {
+    Notification.success(
+      `Successfully deleted ${deletedCount} content type${deletedCount > 1 ? "s" : ""}`
+    );
+  }
+  
+  if (errorCount > 0) {
+    Notification.error(
+      `Failed to delete ${errorCount} content type${errorCount > 1 ? "s" : ""}`
+    );
+  }
+
   await handleGenerateUnusedContentTypeReport();
 };
 
@@ -190,16 +252,24 @@ const handleDeleteContentTypes = async () => {
   };
 
   const handleDeleteAssets = () => {
+    const count = selectedAssets.length;
     deleteAssets(selectedAssets, accessToken, spaceId, environmentId, () => {
       setSelectedAssets([]);
+      Notification.success(
+        `Successfully deleted ${count} asset${count > 1 ? "s" : ""}`
+      );
       handleGenerateMediaReport();
     });
   };
 
   const handleDeleteEntries = (entryIds: string[]) => {
+    const count = entryIds.length;
     deleteEntries(entryIds, accessToken, spaceId, environmentId, () => {
       setUnusedEntries([]);
       setHasGenerated(false);
+      Notification.success(
+        `Successfully deleted ${count} entr${count > 1 ? "ies" : "y"}`
+      );
     });
   };
 

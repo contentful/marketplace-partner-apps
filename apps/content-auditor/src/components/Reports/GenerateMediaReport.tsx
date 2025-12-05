@@ -154,7 +154,7 @@ const GenerateMediaReport = ({
 
             const statusRaw = asset.sys.archivedAt
               ? "archived"
-              : asset.sys?.fieldStatus?.["*"]?.["en-US"];
+              : asset.sys?.fieldStatus?.["*"]?.["en-US"] || "draft";
 
             const status = capitalizeFirst(statusRaw);
 
