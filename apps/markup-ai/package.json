@@ -15,7 +15,7 @@
     "@contentful/react-apps-toolkit": "^1.2.16",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@markupai/toolkit": "0.3.3",
+    "@markupai/toolkit": "2.2.0",
     "@tanstack/react-query": "^5.90.6",
     "contentful-management": "11.63.0",
     "diff": "^8.0.2",
