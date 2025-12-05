@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.7...lottie-preview-v1.0.8) (2025-12-05)
+
+
+### Bug Fixes
+
+* CircleCI apps-checks [] ([#6910](https://github.com/contentful/marketplace-partner-apps/issues/6910)) ([306a012](https://github.com/contentful/marketplace-partner-apps/commit/306a0128887986d6c8b91941cfb5d70af70ba6ab))
+* **deps:** bump @lottiefiles/dotlottie-react from 0.17.6 to 0.17.7 in /apps/lottie-preview in the production-dependencies group ([#7228](https://github.com/contentful/marketplace-partner-apps/issues/7228)) ([1882e31](https://github.com/contentful/marketplace-partner-apps/commit/1882e31316c6714ba8c6513b61c5fdf9f9e73d1a))
+* **deps:** bump js-yaml from 4.1.0 to 4.1.1 in /apps/lottie-preview ([#7349](https://github.com/contentful/marketplace-partner-apps/issues/7349)) ([509cb6c](https://github.com/contentful/marketplace-partner-apps/commit/509cb6c5bfde72e26d6a9c8fcadde531c9b69f3e))
+* **deps:** bump the production-dependencies group in /apps/lottie-preview with 2 updates ([#6976](https://github.com/contentful/marketplace-partner-apps/issues/6976)) ([4595c46](https://github.com/contentful/marketplace-partner-apps/commit/4595c461f8d1929e468c3dc25be3818f67cf679c))
+
 ## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.6...lottie-preview-v1.0.7) (2025-07-02)
 
 
