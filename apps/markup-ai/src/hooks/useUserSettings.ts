@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from "react";
 import {
   getUserSettings,
   setApiKey,
@@ -7,20 +7,24 @@ import {
   setStyleGuide,
   UserSettings,
   ensureDefaultUserSettings,
-} from '../utils/userSettings';
+} from "../utils/userSettings";
 
 export function useUserSettings() {
   const [settings, setSettings] = useState<UserSettings>(() => {
-    if (typeof globalThis !== 'undefined') {
+    if (typeof globalThis !== "undefined") {
       ensureDefaultUserSettings();
     }
     return getUserSettings();
   });
 
   useEffect(() => {
-    const onStorage = () => setSettings(getUserSettings());
-    globalThis.addEventListener('storage', onStorage);
-    return () => globalThis.removeEventListener('storage', onStorage);
+    const onStorage = () => {
+      setSettings(getUserSettings());
+    };
+    globalThis.addEventListener("storage", onStorage);
+    return () => {
+      globalThis.removeEventListener("storage", onStorage);
+    };
   }, []);
 
   const updateApiKey = useCallback((apiKey: string | null) => {

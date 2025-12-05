@@ -1,7 +1,7 @@
-import { EntryFieldAPI, FieldAPI } from '@contentful/app-sdk';
-import { RewriteResponse, StyleCheckResponse } from '../api-client';
+import { EntryFieldAPI, FieldAPI } from "@contentful/app-sdk";
+import { RewriteResponse, StyleCheckResponse } from "../api-client";
 
-export const TEXT_FIELD_TYPES = ['Symbol', 'Text', 'RichText'] as const;
+export const TEXT_FIELD_TYPES = ["Symbol", "Text", "RichText"] as const;
 export type TextFieldType = (typeof TEXT_FIELD_TYPES)[number];
 
 export interface FieldChange {

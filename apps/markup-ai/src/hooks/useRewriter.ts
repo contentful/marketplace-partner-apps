@@ -1,18 +1,19 @@
-import { useCallback, useRef, useEffect } from 'react';
-import { SidebarAppSDK } from '@contentful/app-sdk';
-import { DEBOUNCE_DELAY } from '../constants/app';
-import { useFieldChecks } from './useFieldChecks';
-import { useTimeouts } from './useTimeouts';
-import { useFieldSubscriptions } from './useFieldSubscriptions';
-import { useRewriterService } from '../services/rewriterService';
-import { getUserSettings } from '../utils/userSettings';
-import { RewriteResponse, StyleCheckResponse } from '../api-client';
+import { useCallback, useRef, useEffect } from "react";
+import { SidebarAppSDK } from "@contentful/app-sdk";
+import { DEBOUNCE_DELAY } from "../constants/app";
+import { useFieldChecks } from "./useFieldChecks";
+import { useTimeouts } from "./useTimeouts";
+import { useFieldSubscriptions } from "./useFieldSubscriptions";
+import { useRewriterService } from "../services/rewriterService";
+import { getApiErrorMessage } from "../utils/errorMessage";
+import { getUserSettings } from "../utils/userSettings";
+import { RewriteResponse, StyleCheckResponse } from "../api-client";
 
 // Type guard to check if response is a rewrite response
 const isRewriteResponse = (
   response: StyleCheckResponse | RewriteResponse | null | undefined,
 ): response is RewriteResponse => {
-  return response !== null && response !== undefined && 'rewrite' in response;
+  return response !== null && response !== undefined && "rewrite" in response;
 };
 
 export const useRewriter = (sdk: SidebarAppSDK) => {
@@ -27,9 +28,10 @@ export const useRewriter = (sdk: SidebarAppSDK) => {
 
   // Get the API configuration
   const { dialect, tone, styleGuide } = getUserSettings();
-  const apiKey = sdk.parameters.installation.apiKey;
+  const apiKey = getUserSettings().apiKey || "";
+
   const config = {
-    apiKey: apiKey || '',
+    apiKey: apiKey || "",
     dialect: dialect || undefined,
     tone: tone || undefined,
     styleGuide: styleGuide || undefined,
@@ -41,7 +43,7 @@ export const useRewriter = (sdk: SidebarAppSDK) => {
   const handleContentCheck = useCallback(
     async (fieldId: string, content: string) => {
       if (!content || content.trim().length === 0) {
-        console.log('Skipping content check for empty content:', fieldId);
+        console.log("Skipping content check for empty content:", fieldId);
         removeCheck(fieldId);
         return;
       }
@@ -57,9 +59,9 @@ export const useRewriter = (sdk: SidebarAppSDK) => {
         const result = await contentCheck(fieldId, content);
         updateCheck(fieldId, result);
       } catch (error) {
-        console.error('Error checking content:', error);
+        console.error("Error checking content:", error);
         updateCheck(fieldId, {
-          error: error instanceof Error ? error.message : 'An error occurred while checking content',
+          error: getApiErrorMessage(error),
         });
       }
     },
@@ -69,17 +71,17 @@ export const useRewriter = (sdk: SidebarAppSDK) => {
   const handleFieldChange = useCallback(
     (fieldId: string, value: string) => {
       console.log(
-        'field change',
+        "field change",
         fieldId,
-        'cooldown:',
+        "cooldown:",
         cooldownFieldsRef.current.has(fieldId),
-        'accepting:',
+        "accepting:",
         isAcceptingSuggestionRef.current,
       );
 
       // Check if field is in cooldown period
       if (cooldownFieldsRef.current.has(fieldId)) {
-        console.log('field in cooldown, ignoring change', fieldId);
+        console.log("field in cooldown, ignoring change", fieldId);
         return;
       }
 
@@ -94,7 +96,7 @@ export const useRewriter = (sdk: SidebarAppSDK) => {
       setTimeout(
         fieldId,
         () => {
-          handleContentCheck(fieldId, value);
+          void handleContentCheck(fieldId, value);
         },
         DEBOUNCE_DELAY,
       );
@@ -105,7 +107,7 @@ export const useRewriter = (sdk: SidebarAppSDK) => {
   const handleAcceptSuggestion = useCallback(
     async (fieldId: string, rewriteResponseOverride?: RewriteResponse) => {
       const fieldCheck = fieldChecks[fieldId];
-      const rewriteResponse = rewriteResponseOverride || fieldCheck?.checkResponse;
+      const rewriteResponse = rewriteResponseOverride || fieldCheck.checkResponse;
       if (!isRewriteResponse(rewriteResponse) || !rewriteResponse.rewrite) return;
 
       isAcceptingSuggestionRef.current = true;
@@ -114,7 +116,7 @@ export const useRewriter = (sdk: SidebarAppSDK) => {
       cooldownFieldsRef.current.add(fieldId);
 
       try {
-        await setFieldValue(fieldId, rewriteResponse.rewrite?.text || '');
+        await setFieldValue(fieldId, rewriteResponse.rewrite.text || "");
         removeCheck(fieldId);
 
         // Set timeout to remove field from cooldown after COOLDOWN_DURATION
@@ -128,9 +130,10 @@ export const useRewriter = (sdk: SidebarAppSDK) => {
           COOLDOWN_DURATION,
         );
       } catch (error) {
-        console.error('Error accepting suggestion:', error);
+        console.error("Error accepting suggestion:", error);
         updateCheck(fieldId, {
-          error: error instanceof Error ? error.message : 'An error occurred while accepting suggestion',
+          error:
+            error instanceof Error ? error.message : "An error occurred while accepting suggestion",
         });
         // Remove from cooldown if there was an error
         cooldownFieldsRef.current.delete(fieldId);
@@ -143,8 +146,9 @@ export const useRewriter = (sdk: SidebarAppSDK) => {
 
   const handleRewrite = useCallback(
     async (fieldId: string) => {
+      if (!(fieldId in fieldChecks)) return;
       const fieldCheck = fieldChecks[fieldId];
-      if (!fieldCheck?.checkResponse) return;
+      if (!fieldCheck.checkResponse) return;
 
       updateCheck(fieldId, { isChecking: true, error: null });
 
@@ -157,9 +161,9 @@ export const useRewriter = (sdk: SidebarAppSDK) => {
         const result = await rewriteContent(fieldId, fieldCheck.originalValue);
         updateCheck(fieldId, result);
       } catch (error) {
-        console.error('Error rewriting content:', error);
+        console.error("Error rewriting content:", error);
         updateCheck(fieldId, {
-          error: error instanceof Error ? error.message : 'An error occurred while rewriting content',
+          error: getApiErrorMessage(error),
         });
       }
     },
@@ -182,7 +186,7 @@ export const useRewriter = (sdk: SidebarAppSDK) => {
 
   const clearFieldCooldown = useCallback((fieldId: string) => {
     cooldownFieldsRef.current.delete(fieldId);
-    console.log('manually cleared cooldown for field', fieldId);
+    console.log("manually cleared cooldown for field", fieldId);
   }, []);
 
   const isFieldInCooldown = useCallback((fieldId: string) => {
@@ -191,13 +195,15 @@ export const useRewriter = (sdk: SidebarAppSDK) => {
 
   const resetAcceptingSuggestionFlag = useCallback(() => {
     isAcceptingSuggestionRef.current = false;
-    console.log('manually reset accepting suggestion flag');
+    console.log("manually reset accepting suggestion flag");
   }, []);
 
   return {
     fieldChecks,
     handleAcceptSuggestion,
-    clearError: (fieldId: string) => updateCheck(fieldId, { error: null }),
+    clearError: (fieldId: string) => {
+      removeCheck(fieldId);
+    },
     handleRewrite,
     setOnFieldChange,
     updateCheck,
