@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.8](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.7...sfmc-studio-v1.2.8) (2025-12-05)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group in /apps/sfmc-studio with 2 updates ([#7448](https://github.com/contentful/marketplace-partner-apps/issues/7448)) ([1389ba8](https://github.com/contentful/marketplace-partner-apps/commit/1389ba8f0d509b1472fa89aab232ce91c315ed14))
+
 ## [1.2.7](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.6...sfmc-studio-v1.2.7) (2025-12-03)
 
 
