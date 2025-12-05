@@ -73,7 +73,7 @@ const ConfigScreen = () => {
           To get started, please provide your Content Management API (CMA) token. 
           This token allows the app to read and manage content in your space. 
           You can generate a CMA token by clicking your profile icon, then going to Account Settings &gt; CMA Tokens, or visit the{' '}
-          <TextLink href="/account/profile/cma_tokens" target="_blank">
+          <TextLink href={`https://app.contentful.com/spaces/${sdk.ids.space}/api/cma_tokens`} target="_blank">
             CMA Tokens page
           </TextLink>
           {' '}directly.
