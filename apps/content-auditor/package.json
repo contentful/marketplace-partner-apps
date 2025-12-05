@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@contentful/app-sdk": "^4.29.6",
+    "@contentful/app-sdk": "^4.47.0",
     "@contentful/f36-components": "4.79.1",
     "@contentful/f36-tokens": "4.2.0",
     "@contentful/react-apps-toolkit": "1.2.16",
-    "contentful": "^11.5.13",
+    "contentful": "^11.9.0",
     "contentful-management": "^10.46.4",
     "emotion": "10.0.27",
     "react": "18.3.1",
