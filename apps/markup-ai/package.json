@@ -54,7 +54,7 @@
     "contentful-management": "11.63.1",
     "diff": "8.0.2",
     "dompurify": "3.3.0",
-    "i18next": "25.7.1",
+    "i18next": "25.7.2",
     "markdown-it": "14.1.0",
     "react": "18.3.1",
     "react-dom": "18.3.1"
@@ -62,7 +62,7 @@
   "devDependencies": {
     "@contentful/app-scripts": "2.5.6",
     "@emotion/jest": "11.14.2",
-    "@hey-api/openapi-ts": "0.88.0",
+    "@hey-api/openapi-ts": "0.88.1",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.0",
     "@types/markdown-it": "14.1.2",
@@ -78,7 +78,7 @@
     "prettier-plugin-packagejson": "2.5.20",
     "typescript": "5.9.3",
     "typescript-eslint": "8.48.1",
-    "vite": "7.2.6",
+    "vite": "7.2.7",
     "vitest": "4.0.15"
   }
 }
