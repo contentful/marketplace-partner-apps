@@ -81,12 +81,6 @@ const CheckboxBranch = ({
         <Checkbox
           isChecked={isChecked}
           onChange={handleCheckboxOnClick}
-          isIndeterminate={
-            descendantBoxesChecked.length
-              ? descendantBoxesChecked.some((checked) => checked) &&
-                !descendantBoxesChecked.every((checked) => checked)
-              : false
-          }
         />
         <Flex
           onClick={handleLabelOnClick}

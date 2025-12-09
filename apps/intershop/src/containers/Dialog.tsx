@@ -2,20 +2,10 @@ import React, { useCallback, useEffect, useState } from "react";
 import DialogComponent from "../components/Dialog";
 import { Product } from "../types/Product";
 import { Category } from "../types/Category";
-import { CategoryJson } from "../types/CategoryJson";
 import { MappedProductJson } from "../types/MappedProductJson";
 import jsonMapper from "../utils/JsonMapper";
 import { Blueprint } from "../types/Blueprint";
 import { replaceChannelAndApplication } from "../utils/replace";
-
-interface SearchableCategoryJson extends CategoryJson {
-  [key: string]:
-    | string
-    | boolean
-    | Array<string>
-    | Array<CategoryJson>
-    | undefined;
-}
 
 interface CategoryMetaData {
   categoryPath: Array<string>;
@@ -55,7 +45,7 @@ interface Props {
   productBlueprint: Blueprint;
   productCategoryBlueprint: Blueprint;
   selectedProductSkus: Array<string>;
-  selectedCategories: Array<CategoryJson>;
+  selectedCategories: Array<string>;
   onSaveSubmit: () => void;
   onCategorySelect: (
     id: string,
@@ -112,23 +102,7 @@ const Dialog = ({
     {}
   );
 
-  const getSelectedCategoriesKey = useCallback(
-    <T extends boolean | string | Array<string> | Array<CategoryJson>>(
-      key: string,
-      categories: Array<SearchableCategoryJson>
-    ): T[] =>
-      categories.reduce<Array<T>>((acc, category) => {
-        acc.push(category[key] as T);
-        acc.push(
-          ...getSelectedCategoriesKey<T>(
-            key,
-            category.subcategories as Array<SearchableCategoryJson>
-          )
-        );
-        return acc;
-      }, []),
-    []
-  );
+  // No longer needed - selectedCategories is already a flat array of strings
 
   const mapCategories = useCallback(
     (categoriesToMap: Array<any>): Array<Category> =>
@@ -416,45 +390,18 @@ const Dialog = ({
   }, [updateSelectedProducts]);
 
   useEffect(() => {
-    const mapCategoryExcludedProducts = (categories: Array<CategoryJson>) =>
-      categories.reduce<CategoryExcludedProducts>(
-        (acc, { category_id: id, excluded_products: excludedProducts }) => {
-          if (excludedProducts) {
-            acc[id] = excludedProducts;
-          }
-          return acc;
-        },
-        {}
-      );
-
-    setSelectedCategoryIds(
-      getSelectedCategoriesKey<string>(
-        "category_id",
-        selectedCategories as Array<SearchableCategoryJson>
-      )
-    );
-    const excludedProducts = getSelectedCategoriesKey<Array<string>>(
-      "excluded_products",
-      selectedCategories as Array<SearchableCategoryJson>
-    ).reduce(
-      (acc, excludedProducts) => [...acc, ...(excludedProducts ?? [])],
-      []
-    );
-    setExcludedProductSkus(excludedProducts);
-    setExcludedCategoryProductSkus(
-      mapCategoryExcludedProducts(selectedCategories)
-    );
-  }, [getSelectedCategoriesKey, selectedCategories]);
+    // selectedCategories is now a flat array of category IDs
+    setSelectedCategoryIds(selectedCategories);
+    // No excluded products tracking needed with flat array
+    setExcludedProductSkus([]);
+    setExcludedCategoryProductSkus({});
+  }, [selectedCategories]);
 
   useEffect(() => {
     if (initialLoad && apiBase && context) {
       if (context === "category") {
-        setSelectedCategoryIds(
-          getSelectedCategoriesKey<string>(
-            "category_id",
-            selectedCategories as Array<SearchableCategoryJson>
-          )
-        );
+        // selectedCategories is already a flat array of IDs
+        setSelectedCategoryIds(selectedCategories);
         setSelectedCategoryIdsInitialized(true);
       } else {
         initializeSelectedProducts();
@@ -466,7 +413,6 @@ const Dialog = ({
     apiBase,
     imageType,
     context,
-    getSelectedCategoriesKey,
     initialLoad,
     initializeSelectedProducts,
     loadCategories,
