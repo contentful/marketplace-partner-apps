@@ -136,7 +136,7 @@ const Dialog = ({
 
         return {
           ...product,
-          image: `${image}`,
+          image,
           price: `$${price}`,
         };
       }),

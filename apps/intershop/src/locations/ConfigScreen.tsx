@@ -369,7 +369,7 @@ const ConfigScreen = () => {
         />
          <FormInputField
           label="Image Type (Parameter)"
-          helpText="The image parameter will be used to get the correct image"
+          helpText="The image parameter will be used to get the correct image, only add the letter f.e.: image@L --> Add L"
           value={parameters.imageType as string}
           onChange={(value) => updateParameters("imageType", value)}
         />

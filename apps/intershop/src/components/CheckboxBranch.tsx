@@ -24,7 +24,6 @@ const CheckboxBranch = ({
   id,
   text,
   childboxes,
-  //parentChecked = false,
   onCheckboxClick,
   onLabelClick,
 }: Props) => {

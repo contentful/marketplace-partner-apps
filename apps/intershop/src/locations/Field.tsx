@@ -143,7 +143,7 @@ const Field = () => {
           setProducts(
             mappedJsonElements.map(({ image, price, ...product }) => ({
               ...product,
-              image: `${image}`,
+              image,
               price: `$${price}`,
             }))
           )
