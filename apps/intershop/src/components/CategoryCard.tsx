@@ -28,6 +28,7 @@ const CategoryCard = ({
           flexDirection: "row-reverse",
           gap: "0.5rem",
           marginTop: 0,
+          margin: "1rem",
           "> div": {
             gap: 0,
           },
@@ -39,7 +40,7 @@ const CategoryCard = ({
       <CloseButton
         aria={aria}
         onClick={onClose}
-        style={{ position: "absolute", right: "0.5em", top: "0.5em" }}
+        style={{ position: "absolute", right: "10px", height: "24px" }}
       />
     )}
 

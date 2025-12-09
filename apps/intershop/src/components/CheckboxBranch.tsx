@@ -116,7 +116,7 @@ const CheckboxBranch = ({
                 {...box}
                 key={i}
                 depth={depth + 1}
-                parentChecked={isChecked}
+                //parentChecked={isChecked}
                 onCheckboxClick={onCheckboxClick}
                 onLabelClick={onLabelClick}
                 parentHasExpanded={isExpanded}
