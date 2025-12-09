@@ -184,6 +184,7 @@ const Dialog = () => {
     <DialogContainer
       apiBase={sdk.parameters.installation.apiBase}
       imageBase={sdk.parameters.installation.imageBase}
+      imageType={sdk.parameters.installation.imageType}
       categoryBlueprint={sdk.parameters.installation.categoryMapper}
       productBlueprint={sdk.parameters.installation.productMapper}
       productCategoryBlueprint={

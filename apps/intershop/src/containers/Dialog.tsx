@@ -46,10 +46,12 @@ interface Errors {
 
 interface Props {
   apiBase: string;
+  imageType: string;
   application: string;
   channel: string;
   context: string;
   imageBase: string;
+  imageType: string;
   categoryBlueprint: Blueprint;
   productBlueprint: Blueprint;
   productCategoryBlueprint: Blueprint;
@@ -72,6 +74,7 @@ interface Props {
 const Dialog = ({
   apiBase,
   imageBase,
+  imageType,
   categoryBlueprint,
   productBlueprint,
   productCategoryBlueprint,
@@ -160,7 +163,7 @@ const Dialog = ({
 
         return {
           ...product,
-          image: `${imageBase}${image}`,
+          image: `${image}`,
           price: `$${price}`,
         };
       }),
@@ -184,7 +187,7 @@ const Dialog = ({
         .then(({ elements }: any) =>
           elements.map((element: any) => jsonMapper(categoryBlueprint, element))
         ),
-    [apiBase, application, categoryBlueprint, channel]
+    [apiBase, imageType, application, categoryBlueprint, channel]
   );
 
   const fetchProducts = useCallback(
@@ -208,8 +211,8 @@ const Dialog = ({
           }/products?${amount ? `amount=${amount}` : ""}&${
             offset ? `offset=${offset}` : ""
           }&${
-            skus ? `SKU=${skus}` : ""
-          }&searchTerm=${searchTerm}&attrs=sku,manufacturer,image,defaultCategory,listPrice`,
+            skus ? `sku=${skus}` : ""
+          }&searchTerm=${searchTerm}&attrs=sku,manufacturer,image@${imageType},defaultCategory,listPrice`,
           { channel, application }
         )
       )
@@ -235,7 +238,7 @@ const Dialog = ({
           }));
           setProductsLoading(false);
         }),
-    [apiBase, application, channel, productBlueprint]
+    [apiBase, imageType, application, channel, productBlueprint]
   );
 
   const loadCategories = useCallback(() => {
@@ -462,6 +465,7 @@ const Dialog = ({
     }
   }, [
     apiBase,
+    imageType,
     context,
     getSelectedCategoriesKey,
     initialLoad,

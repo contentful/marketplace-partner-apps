@@ -119,10 +119,10 @@ const Field = () => {
   const loadProducts = useCallback(
     (skus: string, { ...filters }: FetchFilters) => {
       setLoading(true);
-      const { apiBase, productMapper, imageBase } = sdk.parameters.installation;
+      const { apiBase, productMapper, imageBase, imageType } = sdk.parameters.installation;
       fetch(
         replaceChannelAndApplication(
-          `${apiBase}/products?SKU=${skus}&attrs=sku,manufacturer,image,defaultCategory,listPrice`,
+          `${apiBase}/products?sku=${skus}&attrs=sku,manufacturer,image@${imageType},defaultCategory,listPrice`,
           { ...filters }
         )
       )
@@ -141,7 +141,7 @@ const Field = () => {
           setProducts(
             mappedJsonElements.map(({ image, price, ...product }) => ({
               ...product,
-              image: `${imageBase}${image}`,
+              image: `${image}`,
               price: `$${price}`,
             }))
           )

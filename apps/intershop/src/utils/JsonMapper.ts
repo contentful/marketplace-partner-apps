@@ -75,7 +75,6 @@ export default function jsonMapper(blueprint: Blueprint, toMapJson: any) {
     } else {
       value = getObjectValue(toMapJson, path);
     }
-
     result[key] = value;
   }
 
