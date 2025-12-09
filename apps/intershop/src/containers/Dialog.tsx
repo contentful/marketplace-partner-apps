@@ -117,16 +117,7 @@ const Dialog = ({
       key: string,
       categories: Array<SearchableCategoryJson>
     ): T[] =>
-      categories.reduce<Array<T>>((acc, category) => {
-        acc.push(category[key] as T);
-        acc.push(
-          ...getSelectedCategoriesKey<T>(
-            key,
-            category.subcategories as Array<SearchableCategoryJson>
-          )
-        );
-        return acc;
-      }, []),
+      categories.map(category => category[key] as T), // FLAT, no recursion!
     []
   );
 
@@ -355,22 +346,10 @@ const Dialog = ({
 
   const handleCategorySelect = useCallback(
     (id: string) => {
-      const makeSubCategoryTree = (id: string): any => {
-        const { subCategories } = categoriesMetaDeta[id];
-        return {
-          id,
-          subCategories: subCategories.map((subCategoryId) =>
-            makeSubCategoryTree(subCategoryId)
-          ),
-        };
-      };
-
-      const { categoryPath, subCategories } = categoriesMetaDeta[id];
-      onCategorySelect(
-        id,
-        categoryPath,
-        //subCategories.map((subCategoryId) => makeSubCategoryTree(subCategoryId))
-      );
+      // Only pass the selected category or subcategory, not the main category
+      const categoryMeta = categoriesMetaDeta[id];
+      if (!categoryMeta) return;
+      onCategorySelect(id, categoryMeta.categoryPath);
     },
     [categoriesMetaDeta, onCategorySelect]
   );

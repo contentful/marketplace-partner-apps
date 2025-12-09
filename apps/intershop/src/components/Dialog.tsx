@@ -87,12 +87,26 @@ const Dialog = ({
 
   const handleCategoryCheckboxSelect = useCallback(
     (id: string, selected: boolean) => {
+      // Find the full category/subcategory object by id
+      const findCategoryById = (categories, id) => {
+        for (const category of categories) {
+          if (category.id === id) return category;
+          if (category.subCategories && category.subCategories.length) {
+            const found = findCategoryById(category.subCategories, id);
+            if (found) return found;
+          }
+        }
+        return null;
+      };
+      const categoryObj = findCategoryById(categories, id);
       if (!selected) {
         handleCategorySelect(id);
       }
-      onCategorySelect(id);
+      if (categoryObj) {
+        onCategorySelect(categoryObj);
+      }
     },
-    [handleCategorySelect, onCategorySelect]
+    [handleCategorySelect, onCategorySelect, categories]
   );
 
   const handleSearchBoxChange = useCallback(
