@@ -267,17 +267,36 @@ const Field = () => {
     [sdk.field]
   );
 
-  // Render only the flat list of selected categories (no recursion, no parent path)
   const renderCategories = useCallback(
-    (categories: Array<Category>): Array<ReactElement<CategoryCardType>> =>
-      categories.map(({ title, id, image }: Category) => (
-        <CategoryCard
-          key={id}
-          thumbnailSrc={image ? `${sdk.parameters.installation.imageBase}${image}` : ""}
-          title={title}
-          onClose={() => handleOnCloseCategory(id, [])}
-        />
-      )),
+    (
+      categories: Array<Category>,
+      ancestorCategories: string = "",
+      ancestorCategoriesIds: Array<string> = []
+    ): Array<ReactElement<CategoryCardType>> =>
+      categories
+        .map(({ title, subCategories, id, totalProducts, image }: Category) =>
+          subCategories?.length ? (
+            renderCategories(
+              subCategories,
+              `${
+                ancestorCategories ? `${ancestorCategories} - ${title} ` : title
+              }`,
+              [...ancestorCategoriesIds, id]
+            )
+          ) : (
+            <CategoryCard
+              key={id}
+              thumbnailSrc={
+                image ? `${sdk.parameters.installation.imageBase}${image}` : ""
+              }
+              title={`${
+                ancestorCategories ? `${ancestorCategories} - ` : ""
+              } ${title}`}
+              onClose={() => handleOnCloseCategory(id, ancestorCategoriesIds)}
+            />
+          )
+        )
+        .flat(),
     [handleOnCloseCategory, sdk.parameters.installation.imageBase]
   );
 
@@ -354,14 +373,8 @@ const Field = () => {
         })
         .then((params) => {
           if (params?.data) {
-            let { products, categories, channel, application } =
+            const { products, categories, channel, application } =
               params.data as FieldJson;
-            // Ensure categories is a flat array of all selected categories/subcategories
-            if (Array.isArray(categories)) {
-              categories = categories.filter(cat => cat && cat.category_id);
-            } else {
-              categories = [];
-            }
             sdk.field.setValue({
               type: products.length
                 ? "products"
