@@ -46,7 +46,6 @@ interface Errors {
 
 interface Props {
   apiBase: string;
-  imageType: string;
   application: string;
   channel: string;
   context: string;
@@ -61,7 +60,7 @@ interface Props {
   onCategorySelect: (
     id: string,
     categoryPath: Array<string>,
-    subCategoryTree: Array<any>
+    //subCategoryTree: Array<any>
   ) => void;
   onProductSelect: (
     sku: string,
@@ -370,7 +369,7 @@ const Dialog = ({
       onCategorySelect(
         id,
         categoryPath,
-        subCategories.map((subCategoryId) => makeSubCategoryTree(subCategoryId))
+        //subCategories.map((subCategoryId) => makeSubCategoryTree(subCategoryId))
       );
     },
     [categoriesMetaDeta, onCategorySelect]

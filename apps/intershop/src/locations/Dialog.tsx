@@ -158,7 +158,7 @@ const Dialog = () => {
     (
       id: string,
       categoryPath: Array<string>,
-      subCategoryTree: Array<SubCategoryBranch>
+      //subCategoryTree: Array<SubCategoryBranch>
     ) => {
       setData((prevData) => ({
         ...prevData,
@@ -166,7 +166,7 @@ const Dialog = () => {
           searchId: id,
           categoryPath,
           nestedArray: prevData.categories,
-          subCategoryTree,
+          //subCategoryTree,
         }),
       }));
     },
