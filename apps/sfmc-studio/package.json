@@ -38,7 +38,7 @@
     "eslint-plugin-prettier": "^5.5.4",
     "html-react-parser": "^5.2.10",
     "html-to-image": "^1.11.13",
-    "jspdf": "^3.0.3",
+    "jspdf": "^3.0.4",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "next": "^15.5.7",
@@ -50,7 +50,7 @@
     "redux-mock-store": "^1.5.5",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^3.1.0",
-    "sass": "^1.94.1"
+    "sass": "^1.94.2"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",
