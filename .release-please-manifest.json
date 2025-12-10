@@ -31,7 +31,6 @@
   "apps/lottie-preview": "1.0.7",
   "apps/hugging-face": "1.1.5",
   "apps/translationstudio": "1.0.4",
-  "apps/deep-clone": "1.2.1",
   "apps/imagekit": "1.0.1",
   "apps/launchdarkly": "1.1.0",
   "apps/markup-ai": "1.0.0",
