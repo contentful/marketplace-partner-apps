@@ -116,8 +116,6 @@ const Field = () => {
     []
   );
 
-  // No longer needed - categories is now a flat array of IDs
-
   const loadProducts = useCallback(
     (skus: string, { ...filters }: FetchFilters) => {
       setLoading(true);

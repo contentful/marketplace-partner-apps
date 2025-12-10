@@ -60,7 +60,6 @@ const Dialog = () => {
     (
       id: string,
       categoryPath: Array<string>,
-      //subCategoryTree: Array<SubCategoryBranch>
     ) => {
       setData((prevData) => ({
         ...prevData,

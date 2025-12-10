@@ -50,7 +50,6 @@ interface Props {
   onCategorySelect: (
     id: string,
     categoryPath: Array<string>,
-    //subCategoryTree: Array<any>
   ) => void;
   onProductSelect: (
     sku: string,
@@ -101,8 +100,6 @@ const Dialog = ({
   const [productsCategory, setProductsCategory] = useState<ProductsCategory>(
     {}
   );
-
-  // No longer needed - selectedCategories is already a flat array of strings
 
   const mapCategories = useCallback(
     (categoriesToMap: Array<any>): Array<Category> =>
@@ -343,7 +340,6 @@ const Dialog = ({
       onCategorySelect(
         id,
         categoryPath,
-        //subCategories.map((subCategoryId) => makeSubCategoryTree(subCategoryId))
       );
     },
     [categoriesMetaDeta, onCategorySelect]
