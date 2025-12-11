@@ -16,16 +16,6 @@ const ignorePromise = (promise: Promise<unknown>): void => {
   void promise.catch(() => {});
 };
 
-async function advanceAndExpectReject(
-  promise: Promise<unknown>,
-  message: string,
-  ms: number,
-): Promise<void> {
-  const rejection = expect(promise).rejects.toThrow(message);
-  await vi.advanceTimersByTimeAsync(ms);
-  await rejection;
-}
-
 async function runWithFakeTimers<T>(fn: () => Promise<T>): Promise<T> {
   vi.useFakeTimers();
   try {
@@ -97,11 +87,21 @@ async function testWorkflowRejection(
     data: { workflow: { status: options.workflowStatus } },
   } as never);
 
-  vi.useFakeTimers();
-  const { result } = renderHook(() => useApiService(config));
-  const promise = methodCall(result);
-  await advanceAndExpectReject(promise, options.expectedError, options.timeoutMs);
-  vi.useRealTimers();
+  await runWithFakeTimers(async () => {
+    const { result } = renderHook(() => useApiService(config));
+    let promise: Promise<unknown> | undefined;
+    await act(async () => {
+      promise = methodCall(result);
+      await Promise.resolve();
+    });
+    if (!promise) throw new Error("Promise was not assigned");
+    // Attach rejection handler BEFORE advancing timers to avoid unhandled rejections
+    const rejection = expect(promise).rejects.toThrow(options.expectedError);
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(options.timeoutMs);
+    });
+    await rejection;
+  });
 }
 
 /**
