@@ -19,6 +19,7 @@ import { PlusCircleTrimmedIcon } from "@contentful/f36-icons";
 export interface AppInstallationParameters {
   apiBase: string;
   imageBase?: string;
+  imageType?: string;
   applications: Array<string>;
   channels: Array<string>;
   categoryMapper: Blueprint;
@@ -30,6 +31,7 @@ export interface AppInstallationParameters {
 const ConfigScreen = () => {
   const [parameters, setParameters] = useState<AppInstallationParameters>({
     apiBase: "",
+    imageType: "",
     applications: [],
     channels: [],
     categoryMapper: {
@@ -83,6 +85,7 @@ const ConfigScreen = () => {
       categoryPath: "",
     },
     imageBase: "",
+    imageType: "",
   });
 
   const [unvalidatedBlueprints, setUnvalidatedBlueprints] = useState<{
@@ -363,6 +366,12 @@ const ConfigScreen = () => {
           builds:"
           value={parameters.imageBase as string}
           onChange={(value) => updateParameters("imageBase", value)}
+        />
+         <FormInputField
+          label="Image Type (Parameter)"
+          helpText="The image parameter will be used to get the correct image, only add the letter f.e.: image@L --> Add L"
+          value={parameters.imageType as string}
+          onChange={(value) => updateParameters("imageType", value)}
         />
         <div>
           <Stack alignItems="end" spacing="spacingXs" marginBottom="spacingM">
