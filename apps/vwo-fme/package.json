@@ -1,6 +1,6 @@
 {
   "name": "vwo-fme",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "^4.47.0",
