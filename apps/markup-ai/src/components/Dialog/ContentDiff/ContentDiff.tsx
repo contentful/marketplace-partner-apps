@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { DialogAppSDK } from '@contentful/app-sdk';
-import { useSDK } from '@contentful/react-apps-toolkit';
-import { EditorState, StateField, RangeSetBuilder } from '@codemirror/state';
-import { Decoration, EditorView } from '@codemirror/view';
-import { MergeView } from '@codemirror/merge';
-import { markdown } from '@codemirror/lang-markdown';
-import { html as htmlLang } from '@codemirror/lang-html';
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { DialogAppSDK } from "@contentful/app-sdk";
+import { useSDK } from "@contentful/react-apps-toolkit";
+import { EditorState, StateField, RangeSetBuilder } from "@codemirror/state";
+import { Decoration, EditorView } from "@codemirror/view";
+import { MergeView, type DirectMergeConfig } from "@codemirror/merge";
+import { markdown } from "@codemirror/lang-markdown";
+import { html as htmlLang } from "@codemirror/lang-html";
 import {
   ContentDiffWrapper,
   ContentBlock,
@@ -22,19 +22,19 @@ import {
   PaneHeadersRow,
   PaneHeader,
   PaneLabel,
-} from './ContentDiff.styles';
-import { getScoreColor, formatScoreForDisplay } from '../../../utils/scoreColors';
-import { Switch } from '@contentful/f36-components';
-import DOMPurify from 'dompurify';
-import MarkdownIt from 'markdown-it';
-import { diffWordsWithSpace } from 'diff';
+} from "./ContentDiff.styles";
+import { formatScoreForDisplay, getScoreColorStringSoft } from "../../../utils/scoreColors";
+import { Switch } from "@contentful/f36-components";
+import DOMPurify from "dompurify";
+import MarkdownIt from "markdown-it";
+import { diffWordsWithSpace } from "diff";
 
 interface ContentDiffProps {
   original: string;
   improved: string;
   originalScore: number;
   improvedScore: number;
-  previewFormat?: 'markdown' | 'html';
+  previewFormat?: "markdown" | "html";
 }
 
 export const ContentDiff: React.FC<ContentDiffProps> = ({
@@ -42,14 +42,14 @@ export const ContentDiff: React.FC<ContentDiffProps> = ({
   improved,
   originalScore,
   improvedScore,
-  previewFormat = 'markdown',
+  previewFormat = "markdown",
 }) => {
   const sdk = useSDK<DialogAppSDK>();
   const hostRef = useRef<HTMLDivElement | null>(null);
   const mergeRef = useRef<MergeView | null>(null);
   const scrollCleanupRef = useRef<Array<() => void>>([]);
   const [showPreview, setShowPreview] = useState(false);
-  const [previewMode, setPreviewMode] = useState<'markdown' | 'html'>(previewFormat);
+  const [previewMode, setPreviewMode] = useState<"markdown" | "html">(previewFormat);
   // We preview the improved content directly (from API), not the merged editor content
 
   const md = useMemo(
@@ -82,42 +82,45 @@ export const ContentDiff: React.FC<ContentDiffProps> = ({
   const mergedTheme = useMemo(
     () =>
       EditorView.theme({
-        '&': { height: '100%' },
-        '.cm-scroller': { height: '100%', overflow: 'auto' },
-        '.cm-gutters': { height: '100%' },
-        '.cm-content, .cm-gutters': {
+        "&": { height: "100%" },
+        ".cm-scroller": { height: "100%", overflow: "auto" },
+        ".cm-gutters": { height: "100%" },
+        ".cm-content, .cm-gutters": {
           fontFamily:
             "'Geist Mono', Geist, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace",
-          fontSize: '0.9rem',
+          fontSize: "0.9rem",
         },
-        '.cm-word-change': {
-          textDecoration: 'underline',
-          textDecorationStyle: 'solid',
-          textUnderlineOffset: '3px',
-          textDecorationThickness: '2px',
+        ".cm-word-change": {
+          textDecoration: "underline",
+          textDecorationStyle: "solid",
+          textUnderlineOffset: "3px",
+          textDecorationThickness: "2px",
         },
-        '.cm-word-change-original': {
-          textDecorationColor: '#DA294A',
+        ".cm-word-change-original": {
+          textDecorationColor: "#DA294A",
         },
-        '.cm-word-change-improved': {
-          textDecorationColor: '#5DB057',
+        ".cm-word-change-improved": {
+          textDecorationColor: "#5DB057",
         },
       }),
     [],
   );
 
   // Build word-level underline decorations based on diffWords output
-  const wordDiff = useMemo(() => diffWordsWithSpace(original || '', improved || ''), [original, improved]);
+  const wordDiff = useMemo(
+    () => diffWordsWithSpace(original || "", improved || ""),
+    [original, improved],
+  );
 
   const wordChangeHighlighter = useMemo(() => {
-    const buildField = (side: 'original' | 'improved') =>
-      StateField.define<import('@codemirror/view').DecorationSet>({
+    const buildField = (side: "original" | "improved") =>
+      StateField.define<import("@codemirror/view").DecorationSet>({
         create() {
           const builder = new RangeSetBuilder<ReturnType<typeof Decoration.mark>>();
           let posOriginal = 0;
           let posImproved = 0;
           for (const part of wordDiff) {
-            const text = part.value ?? '';
+            const text = part.value;
             // Skip pure-whitespace tokens to avoid offset artifacts
             if (!text || /^\s+$/.test(text)) {
               if (part.added) posImproved += text.length;
@@ -130,7 +133,7 @@ export const ContentDiff: React.FC<ContentDiffProps> = ({
             }
             if (part.added) {
               // present only in improved
-              if (side === 'improved') {
+              if (side === "improved") {
                 const from = posImproved;
                 const to = from + text.length;
                 if (from !== to) {
@@ -142,7 +145,7 @@ export const ContentDiff: React.FC<ContentDiffProps> = ({
                     builder.add(
                       from + localStart,
                       Math.min(to, from + localEnd),
-                      Decoration.mark({ class: 'cm-word-change cm-word-change-improved' }),
+                      Decoration.mark({ class: "cm-word-change cm-word-change-improved" }),
                     );
                   }
                 }
@@ -150,7 +153,7 @@ export const ContentDiff: React.FC<ContentDiffProps> = ({
               posImproved += text.length;
             } else if (part.removed) {
               // present only in original
-              if (side === 'original') {
+              if (side === "original") {
                 const from = posOriginal;
                 const to = from + text.length;
                 if (from !== to) {
@@ -162,7 +165,7 @@ export const ContentDiff: React.FC<ContentDiffProps> = ({
                     builder.add(
                       from + localStart,
                       Math.min(to, from + localEnd),
-                      Decoration.mark({ class: 'cm-word-change cm-word-change-original' }),
+                      Decoration.mark({ class: "cm-word-change cm-word-change-original" }),
                     );
                   }
                 }
@@ -182,7 +185,7 @@ export const ContentDiff: React.FC<ContentDiffProps> = ({
         },
         provide: (f) => EditorView.decorations.from(f),
       });
-    return { originalField: buildField('original'), improvedField: buildField('improved') };
+    return { originalField: buildField("original"), improvedField: buildField("improved") };
   }, [wordDiff]);
   const buildExtensionsA = useMemo(
     () => [
@@ -227,7 +230,7 @@ export const ContentDiff: React.FC<ContentDiffProps> = ({
       scrollCleanupRef.current = [];
     }
     if (hostRef.current) {
-      hostRef.current.innerHTML = '';
+      hostRef.current.innerHTML = "";
     }
   };
 
@@ -235,15 +238,13 @@ export const ContentDiff: React.FC<ContentDiffProps> = ({
     if (!hostRef.current) return;
     destroyMerge();
     // Build editor options directly (safer than passing prebuilt states)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const options: any = {
+    const options: DirectMergeConfig = {
       a: { doc: initialMergedDoc, extensions: buildExtensionsA },
       b: { doc: improved, extensions: buildExtensionsB },
       parent: hostRef.current,
-      orientation: 'a-b',
-      // Disable built-in character-level change marks and revert controls
+      orientation: "a-b",
+      // Disable built-in character-level change marks
       highlightChanges: false,
-      revertControls: false,
       gutter: true,
     };
     // Construct merge view
@@ -264,8 +265,10 @@ export const ContentDiff: React.FC<ContentDiffProps> = ({
             }
             isSyncing = false;
           };
-          source.scrollDOM.addEventListener('scroll', handler);
-          return () => source.scrollDOM.removeEventListener('scroll', handler);
+          source.scrollDOM.addEventListener("scroll", handler);
+          return () => {
+            source.scrollDOM.removeEventListener("scroll", handler);
+          };
         };
         const offA = sync(aView, [bView]);
         const offB = sync(bView, [aView]);
@@ -283,7 +286,9 @@ export const ContentDiff: React.FC<ContentDiffProps> = ({
     } else {
       destroyMerge();
     }
-    return () => destroyMerge();
+    return () => {
+      destroyMerge();
+    };
   }, [original, improved, hasAnyContent, showPreview]);
 
   // Toggle behavior: when entering preview, destroy the merge editor.
@@ -320,8 +325,8 @@ export const ContentDiff: React.FC<ContentDiffProps> = ({
   }, [previewFormat]);
 
   const previewHtml = useMemo(() => {
-    const current = improved ?? '';
-    if (previewMode === 'markdown') {
+    const current = improved;
+    if (previewMode === "markdown") {
       const rendered = md.render(current);
       return DOMPurify.sanitize(rendered);
     }
@@ -336,7 +341,9 @@ export const ContentDiff: React.FC<ContentDiffProps> = ({
           <HeaderSide>
             <Switch
               isChecked={showPreview}
-              onChange={() => setShowPreview((v) => !v)}
+              onChange={() => {
+                setShowPreview((v) => !v);
+              }}
               aria-label="Toggle preview of improved content"
             >
               Preview
@@ -349,14 +356,14 @@ export const ContentDiff: React.FC<ContentDiffProps> = ({
             <PaneHeadersRow>
               <PaneHeader>
                 <PaneLabel>Original Content</PaneLabel>
-                <ScoreBadge background={getScoreColor(originalScore).background}>
+                <ScoreBadge background={getScoreColorStringSoft(originalScore)}>
                   <ScoreText>Score</ScoreText>
                   <ScoreNumber>{formatScoreForDisplay(originalScore)}</ScoreNumber>
                 </ScoreBadge>
               </PaneHeader>
               <PaneHeader>
                 <PaneLabel>Improved Content</PaneLabel>
-                <ScoreBadge background={getScoreColor(improvedScore).background}>
+                <ScoreBadge background={getScoreColorStringSoft(improvedScore)}>
                   <ScoreText>Score</ScoreText>
                   <ScoreNumber>{formatScoreForDisplay(improvedScore)}</ScoreNumber>
                 </ScoreBadge>
@@ -367,7 +374,7 @@ export const ContentDiff: React.FC<ContentDiffProps> = ({
           {!showPreview &&
             (!hasAnyContent ? (
               <PreviewContainer>
-                <div style={{ color: '#5A657C' }}>No content to compare.</div>
+                <div style={{ color: "#5A657C" }}>No content to compare.</div>
               </PreviewContainer>
             ) : (
               <MergeHost ref={hostRef} $hidden={false} $heightPx={computedHeight} />

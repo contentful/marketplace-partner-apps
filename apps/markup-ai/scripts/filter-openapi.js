@@ -3,27 +3,27 @@
 /* eslint-env node, es6 */
 /* global console, process */
 
-import fs from 'node:fs';
-import https from 'node:https';
-import http from 'node:http';
+import fs from "node:fs";
+import https from "node:https";
+import http from "node:http";
 
-const OPENAPI_URL = 'http://localhost:8000/docs/openapi.json';
-const OUTPUT_FILE = 'filtered-openapi.json';
-const INCLUDED_PATHS = ['/v1/style/', '/v1/internal/', '/v1/style-guides'];
+const OPENAPI_URL = "http://localhost:8000/docs/openapi.json";
+const OUTPUT_FILE = "filtered-openapi.json";
+const INCLUDED_PATHS = ["/v1/style/", "/v1/internal/", "/v1/style-guides"];
 
 function downloadOpenAPISpec(url) {
   return new Promise((resolve, reject) => {
-    const client = url.startsWith('https') ? https : http;
+    const client = url.startsWith("https") ? https : http;
 
     client
       .get(url, (response) => {
-        let data = '';
+        let data = "";
 
-        response.on('data', (chunk) => {
+        response.on("data", (chunk) => {
           data += chunk;
         });
 
-        response.on('end', () => {
+        response.on("end", () => {
           try {
             const spec = JSON.parse(data);
             resolve(spec);
@@ -32,7 +32,7 @@ function downloadOpenAPISpec(url) {
           }
         });
       })
-      .on('error', (error) => {
+      .on("error", (error) => {
         reject(new Error(`Failed to download OpenAPI spec: ${error.message}`));
       });
   });
@@ -42,7 +42,7 @@ function filterPaths(openapiSpec, includedPaths) {
   const filteredSpec = { ...openapiSpec };
 
   if (!filteredSpec.paths) {
-    console.warn('No paths found in OpenAPI spec');
+    console.warn("No paths found in OpenAPI spec");
     return filteredSpec;
   }
 
@@ -61,7 +61,7 @@ function filterPaths(openapiSpec, includedPaths) {
 
   const filteredPathCount = Object.keys(filteredPaths).length;
   console.log(`Filtered OpenAPI spec: ${originalPathCount} → ${filteredPathCount} paths`);
-  console.log(`Included paths: ${Object.keys(filteredPaths).join(', ')}`);
+  console.log(`Included paths: ${Object.keys(filteredPaths).join(", ")}`);
 
   return filteredSpec;
 }
@@ -70,14 +70,14 @@ try {
   console.log(`Downloading OpenAPI spec from ${OPENAPI_URL}...`);
   const openapiSpec = await downloadOpenAPISpec(OPENAPI_URL);
 
-  console.log('Filtering paths...');
+  console.log("Filtering paths...");
   const filteredSpec = filterPaths(openapiSpec, INCLUDED_PATHS);
 
   console.log(`Writing filtered spec to ${OUTPUT_FILE}...`);
   fs.writeFileSync(OUTPUT_FILE, JSON.stringify(filteredSpec, null, 2));
 
-  console.log('✅ OpenAPI spec filtered successfully!');
+  console.log("✅ OpenAPI spec filtered successfully!");
 } catch (error) {
-  console.error('❌ Error:', error.message);
+  console.error("❌ Error:", error.message);
   process.exit(1);
 }

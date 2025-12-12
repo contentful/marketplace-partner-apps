@@ -1,4 +1,4 @@
-import { ScoreOutput } from '../../api-client';
+import { ScoreOutput } from "../../api-client";
 export interface RewriteDialogParams {
   startRewrite: boolean;
   fieldId: string;

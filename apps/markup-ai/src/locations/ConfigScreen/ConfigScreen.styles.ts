@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 
 export const ConfigScreenWrapper = styled.div`
   display: flex;
@@ -55,7 +55,7 @@ export const TabButton = styled.button<{ isActive: boolean }>`
   border: none;
   outline: none;
   cursor: pointer;
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
@@ -64,45 +64,12 @@ export const TabButton = styled.button<{ isActive: boolean }>`
   padding: 8px 16px;
   width: 228px;
   height: 48px;
-  color: ${({ isActive }) => (isActive ? '#0059C8' : '#5A657C')};
-  border-bottom: ${({ isActive }) => (isActive ? '2px solid #0059C8' : 'none')};
+  color: ${({ isActive }) => (isActive ? "#0059C8" : "#5A657C")};
+  border-bottom: ${({ isActive }) => (isActive ? "2px solid #0059C8" : "none")};
   background: transparent;
   transition:
     color 0.2s,
     border-bottom 0.2s;
-`;
-
-export const ApiKeyTabWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  background: transparent;
-  color: #111b2b;
-`;
-
-export const ApiKeyInputRow = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
-  margin: 32px 0 0 0;
-  gap: 8px;
-`;
-
-export const ApiKeyLabel = styled.label`
-  font-family: 'Geist', sans-serif;
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 20px;
-  color: #111b2b;
-  margin-bottom: 4px;
-`;
-
-export const ApiKeyHelpText = styled.div`
-  margin-top: 32px;
-  font-family: 'Geist', sans-serif;
-  font-size: 14px;
-  color: #5a657c;
 `;
 
 export const StyleGuideTabWrapper = styled.div`
@@ -123,7 +90,7 @@ export const StyleGuideRow = styled.div`
 `;
 
 export const StyleGuideLabel = styled.label`
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
@@ -144,7 +111,7 @@ export const AppConfigHeader = styled.div`
 
 export const AppConfigTitle = styled.h2`
   width: 100%;
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 20px;
@@ -156,7 +123,7 @@ export const AppConfigTitle = styled.h2`
 
 export const AppConfigDescription = styled.p`
   width: 100%;
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;

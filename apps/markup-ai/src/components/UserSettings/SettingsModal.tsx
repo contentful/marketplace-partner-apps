@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, Paragraph, Button, Flex, FormControl, TextInput } from '@contentful/f36-components';
-import StyleSettings from './StyleSettings';
+import React, { useState, useEffect } from "react";
+import { Modal, Paragraph, Button, Flex, FormControl, TextInput } from "@contentful/f36-components";
+import StyleSettings from "./StyleSettings";
 
 type SettingsModalProps = {
   isOpen: boolean;
@@ -45,7 +45,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           <TextInput
             type="password"
             value={apiKeyInput}
-            onChange={(e) => setApiKeyInput(e.target.value)}
+            onChange={(e) => {
+              setApiKeyInput(e.target.value);
+            }}
             placeholder="Enter your API key"
           />
         </FormControl>
@@ -61,7 +63,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       </Modal.Content>
       <Modal.Controls>
         <Flex gap="spacingS">
-          <Button variant="secondary" onClick={() => onApiKeyChange(apiKeyInput)} isDisabled={!apiKeyInput}>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              onApiKeyChange(apiKeyInput);
+            }}
+            isDisabled={!apiKeyInput}
+          >
             Save API Key
           </Button>
           <Button variant="secondary" onClick={onApiKeyClear}>

@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 
 export const Card = styled.div`
   display: flex;
@@ -21,7 +21,7 @@ export const Label = styled.div`
   min-width: 0;
   flex: 1 1 0;
   height: 16px;
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-weight: 600;
   font-style: normal;
   font-size: 14px;
