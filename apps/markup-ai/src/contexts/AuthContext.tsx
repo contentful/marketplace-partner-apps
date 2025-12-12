@@ -54,72 +54,84 @@ export function AuthProvider({ children }: Readonly<AuthProviderProps>) {
   const { config: appConfig, isLoading: configLoading, error: configError } = useAppConfig();
 
   // Helper: Handle config errors and invalid config
-  const handleConfigError = useCallback(
-    (mounted: boolean, error?: string | null) => {
-      console.error("[Auth] Configuration error:", error);
-      setApiKey(null);
-      if (mounted) {
-        setState((s) => ({
-          ...s,
-          isLoading: false,
-          isAuthenticated: false,
-          token: null,
-          error: error || "Failed to load authentication configuration",
-        }));
-      }
-    },
-    [setState, setApiKey],
-  );
+  const handleConfigError = useCallback((mounted: boolean, error?: string | null) => {
+    console.error("[Auth] Configuration error:", error);
+    setApiKey(null);
+    if (mounted) {
+      setState((s) => ({
+        ...s,
+        isLoading: false,
+        isAuthenticated: false,
+        token: null,
+        error: error || "Failed to load authentication configuration",
+      }));
+    }
+  }, []);
 
   // Helper: Restore authenticated session
-  const restoreSession = useCallback(
-    async (auth0Client: Auth0Client, mounted: boolean) => {
-      let accessToken: string | null = null;
-      try {
-        const t = await auth0Client.getTokenSilently();
-        accessToken = t;
-      } catch {
-        // ignore; will remain null
-      }
-      const userInfo = await auth0Client.getUser();
-      if (accessToken) setApiKey(accessToken);
+  const restoreSession = useCallback(async (auth0Client: Auth0Client, mounted: boolean) => {
+    // Helper: Clear session when token is invalid/expired
+    const clearSession = () => {
+      clearAllUserSettings();
       if (mounted) {
         setState({
           isLoading: false,
-          isAuthenticated: true,
-          user: userInfo || null,
-          token: accessToken,
+          isAuthenticated: false,
+          user: null,
+          token: null,
           error: null,
         });
       }
-    },
-    [setState, setApiKey],
-  );
+    };
+
+    let accessToken: string | null = null;
+    try {
+      const t = await auth0Client.getTokenSilently();
+      accessToken = t;
+    } catch (err) {
+      // Token fetch failed - token is expired or invalid
+      console.warn("[Auth] Failed to restore session, token may be expired:", err);
+      clearSession();
+      return;
+    }
+
+    // Only proceed if we successfully got a valid token
+    if (!accessToken) {
+      clearSession();
+      return;
+    }
+
+    const userInfo = await auth0Client.getUser();
+    setApiKey(accessToken);
+    if (mounted) {
+      setState({
+        isLoading: false,
+        isAuthenticated: true,
+        user: userInfo || null,
+        token: accessToken,
+        error: null,
+      });
+    }
+  }, []);
 
   // Helper: Clear authentication state
-  const clearAuthState = useCallback(
-    (mounted: boolean) => {
-      setApiKey(null);
-      if (mounted) {
-        setState((s) => ({ ...s, isLoading: false, isAuthenticated: false }));
-      }
-    },
-    [setState, setApiKey],
-  );
+  const clearAuthState = useCallback((mounted: boolean) => {
+    setApiKey(null);
+    if (mounted) {
+      setState((s) => ({ ...s, isLoading: false, isAuthenticated: false }));
+    }
+  }, []);
 
   // Helper: Set authentication error state
-  const setAuthError = useCallback(
-    (mounted: boolean, error: unknown) => {
-      if (mounted) {
-        setState((s) => ({
-          ...s,
-          isLoading: false,
-          error: error instanceof Error ? error.message : String(error),
-        }));
-      }
-    },
-    [setState],
-  );
+  const setAuthError = useCallback((mounted: boolean, error: unknown) => {
+    if (mounted) {
+      setState((s) => ({
+        ...s,
+        isLoading: false,
+        error: error instanceof Error ? error.message : String(error),
+      }));
+    }
+  }, []);
 
   useEffect(() => {
     let mounted = true;

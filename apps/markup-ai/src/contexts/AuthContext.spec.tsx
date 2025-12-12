@@ -222,12 +222,9 @@ describe("AuthContext", () => {
     expect(userSettings.setApiKey).toHaveBeenCalledWith(mockToken);
   });
 
-  it("should restore authenticated session when token fetch fails", async () => {
-    const mockUser = { email: "test@example.com", sub: "user123" };
-
+  it("should clear session when token fetch fails (expired token)", async () => {
     mockAuthMethods.isAuthenticated.mockResolvedValue(true);
-    mockAuthMethods.getTokenSilently.mockRejectedValue(new Error("Token error"));
-    mockAuthMethods.getUser.mockResolvedValue(mockUser);
+    mockAuthMethods.getTokenSilently.mockRejectedValue(new Error("Token expired"));
 
     render(
       <AuthProvider>
@@ -239,10 +236,12 @@ describe("AuthContext", () => {
       expect(screen.getByTestId("loading")).toHaveTextContent("false");
     });
 
-    expect(screen.getByTestId("authenticated")).toHaveTextContent("true");
-    expect(screen.getByTestId("user-email")).toHaveTextContent("test@example.com");
+    // Should NOT be authenticated when token fetch fails (expired/invalid token)
+    expect(screen.getByTestId("authenticated")).toHaveTextContent("false");
+    expect(screen.getByTestId("user-email")).toHaveTextContent("no-email");
     expect(screen.getByTestId("token")).toHaveTextContent("no-token");
-    expect(userSettings.setApiKey).not.toHaveBeenCalled();
+    // Should clear localStorage when token is invalid
+    expect(userSettings.clearAllUserSettings).toHaveBeenCalled();
   });
 
   it("should handle initialization error", async () => {
