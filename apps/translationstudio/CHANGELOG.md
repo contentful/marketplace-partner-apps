@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.5](https://github.com/contentful/marketplace-partner-apps/compare/translationstudio-v1.0.4...translationstudio-v1.0.5) (2025-12-12)
+
+
+### Bug Fixes
+
+* **deps:** bump next from 16.0.7 to 16.0.9 in /apps/translationstudio ([#7521](https://github.com/contentful/marketplace-partner-apps/issues/7521)) ([afeb57e](https://github.com/contentful/marketplace-partner-apps/commit/afeb57e71d703c2a617c1f551ff12aa10ef27475))
+* **deps:** bump next from 16.0.9 to 16.0.10 in /apps/translationstudio ([#7526](https://github.com/contentful/marketplace-partner-apps/issues/7526)) ([989d489](https://github.com/contentful/marketplace-partner-apps/commit/989d4894410063e3e37f529f95bfeed476feaaf8))
+
 ## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/translationstudio-v1.0.3...translationstudio-v1.0.4) (2025-12-03)
 
 
