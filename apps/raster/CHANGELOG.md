@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.11](https://github.com/contentful/marketplace-partner-apps/compare/raster-v1.0.10...raster-v1.0.11) (2025-12-12)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.41.1 to 4.45.0 in /apps/raster in the production-dependencies group ([#6958](https://github.com/contentful/marketplace-partner-apps/issues/6958)) ([28fbb4e](https://github.com/contentful/marketplace-partner-apps/commit/28fbb4e7b3271176bcdedd4c9639a6865e3afcae))
+
 ## [1.0.10](https://github.com/contentful/marketplace-partner-apps/compare/raster-v1.0.9...raster-v1.0.10) (2025-10-15)
 
 
