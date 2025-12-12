@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.2.2](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.2.1...adapt-essentials-asset-fields-v1.2.2) (2025-12-12)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-layout from 5.0.0-alpha.24 to 5.1.0 in /apps/adapt-essentials-asset-fields in the production-dependencies group ([#6364](https://github.com/contentful/marketplace-partner-apps/issues/6364)) ([9ac1c41](https://github.com/contentful/marketplace-partner-apps/commit/9ac1c4115be7232357814323a86b33e11c5ad58c))
+* **deps:** bump axios from 1.11.0 to 1.12.0 in /apps/adapt-essentials-asset-fields ([#6543](https://github.com/contentful/marketplace-partner-apps/issues/6543)) ([b728de8](https://github.com/contentful/marketplace-partner-apps/commit/b728de862fb6439f4a4d67c742e9b53bca3a4b1f))
+* **deps:** bump js-yaml from 4.1.0 to 4.1.1 in /apps/adapt-essentials-asset-fields ([#7340](https://github.com/contentful/marketplace-partner-apps/issues/7340)) ([057d962](https://github.com/contentful/marketplace-partner-apps/commit/057d9624dfae55fdf851f6e2995eb99cb2388896))
+* **deps:** bump mdast-util-to-hast from 13.2.0 to 13.2.1 in /apps/adapt-essentials-asset-fields ([#7412](https://github.com/contentful/marketplace-partner-apps/issues/7412)) ([70eec27](https://github.com/contentful/marketplace-partner-apps/commit/70eec27e79d19d61864c5554addc28db29336473))
+* **deps:** bump the production-dependencies group in /apps/adapt-essentials-asset-fields with 3 updates ([#6977](https://github.com/contentful/marketplace-partner-apps/issues/6977)) ([b3942ff](https://github.com/contentful/marketplace-partner-apps/commit/b3942ffc3d7eb32a4f8831c2da6164bd0baa182e))
+
 ## [1.2.1](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.2.0...adapt-essentials-asset-fields-v1.2.1) (2025-08-01)
 
 
