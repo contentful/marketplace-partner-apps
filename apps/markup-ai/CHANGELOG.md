@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/markup-ai-contentful-app-v1.0.0...markup-ai-contentful-app-v1.1.0) (2025-12-15)
+
+
+### Features
+
+* markup-ai use OAuth based sign-in workflow [INTEG-3323] ([#7430](https://github.com/contentful/marketplace-partner-apps/issues/7430)) ([8e46b85](https://github.com/contentful/marketplace-partner-apps/commit/8e46b85ba7434536570f2cab5153ccf84f874f98))
+
+
+### Bug Fixes
+
+* **deps:** bump glob and @vitest/coverage-v8 in /apps/markup-ai ([#7354](https://github.com/contentful/marketplace-partner-apps/issues/7354)) ([a53a625](https://github.com/contentful/marketplace-partner-apps/commit/a53a625a210c5565881bc7362da4c4598306805c))
+* **deps:** bump js-yaml from 4.1.0 to 4.1.1 in /apps/markup-ai ([#7341](https://github.com/contentful/marketplace-partner-apps/issues/7341)) ([455bf05](https://github.com/contentful/marketplace-partner-apps/commit/455bf056230d2a8f7bd78137fd5bb1e5997fb46d))
+* **deps:** bump the production-dependencies group across 1 directory with 10 updates ([#7490](https://github.com/contentful/marketplace-partner-apps/issues/7490)) ([4de4e04](https://github.com/contentful/marketplace-partner-apps/commit/4de4e048352676ae97a08eed87304da1dd0c9b10))
+
 ## 1.0.0 (2025-11-13)
 
 
