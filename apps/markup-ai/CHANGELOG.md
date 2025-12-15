@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/contentful/marketplace-partner-apps/compare/markup-ai-contentful-app-v1.1.0...markup-ai-contentful-app-v1.1.1) (2025-12-15)
+
+
+### Bug Fixes
+
+* markupai deploy script [INTEG-3323] ([#7528](https://github.com/contentful/marketplace-partner-apps/issues/7528)) ([6c06aa9](https://github.com/contentful/marketplace-partner-apps/commit/6c06aa92db73f66868ccfc3e4bfcf4d54fee7bc9))
+
 ## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/markup-ai-contentful-app-v1.0.0...markup-ai-contentful-app-v1.1.0) (2025-12-15)
 
 
