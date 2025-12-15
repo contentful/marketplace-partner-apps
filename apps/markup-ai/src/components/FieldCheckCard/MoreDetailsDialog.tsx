@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from 'react';
-import { useSDK, useAutoResizer } from '@contentful/react-apps-toolkit';
-import { DialogAppSDK } from '@contentful/app-sdk';
+import React, { useMemo, useState } from "react";
+import { useSDK, useAutoResizer } from "@contentful/react-apps-toolkit";
+import { DialogAppSDK } from "@contentful/app-sdk";
 import {
   DialogContainer,
   DialogDivider,
@@ -25,12 +25,12 @@ import {
   IssuesNumber,
   BottomActions,
   CopyWorkflowIdButton,
-} from './MoreDetailsDialog.styles';
-import { ScoreOutput, StyleCheckResponse, RewriteResponse } from '../../api-client';
-import { useTranslation } from '../../contexts/LocalizationContext';
-import { CopySimpleIcon, CheckCircleIcon } from '@contentful/f36-icons';
+} from "./MoreDetailsDialog.styles";
+import { ScoreOutput, StyleCheckResponse, RewriteResponse } from "../../api-client";
+import { useTranslation } from "../../contexts/LocalizationContext";
+import { CopySimpleIcon, CheckCircleIcon } from "@contentful/f36-icons";
 
-import { getScoreColorString, getScoreColorStringSoft } from '../../utils/scoreColors';
+import { getScoreColorString, getScoreColorStringSoft } from "../../utils/scoreColors";
 import {
   METRIC_ORDER,
   METRIC_LABEL_KEYS,
@@ -40,19 +40,23 @@ import {
   getMetricScore,
   MetricDataMap,
   MetricKey,
-} from '../../constants/metrics';
+} from "../../constants/metrics";
 
 const CONFIG_KEYS = {
-  style_guide: 'style_guide',
-  dialect: 'dialect',
-  tone: 'tone',
+  style_guide: "style_guide",
+  dialect: "dialect",
+  tone: "tone",
 } as const;
 type TranslatableConfigKey = (typeof CONFIG_KEYS)[keyof typeof CONFIG_KEYS];
 
-const CLARITY_KEY: MetricKey = 'clarity';
-const TONE_KEY: MetricKey = 'tone';
+const CLARITY_KEY: MetricKey = "clarity";
+const TONE_KEY: MetricKey = "tone";
 
-const ISSUE_METRIC_KEYS: ReadonlySet<MetricKey> = new Set<MetricKey>(['grammar', 'consistency', 'terminology']);
+const ISSUE_METRIC_KEYS: ReadonlySet<MetricKey> = new Set<MetricKey>([
+  "grammar",
+  "consistency",
+  "terminology",
+]);
 
 export const MoreDetailsDialog: React.FC = () => {
   useAutoResizer();
@@ -64,12 +68,16 @@ export const MoreDetailsDialog: React.FC = () => {
   const [copied, setCopied] = useState(false);
 
   const scores = useMemo<ScoreOutput | undefined>(() => {
-    const s = 'rewrite' in checkResponse ? checkResponse.rewrite?.scores : checkResponse.original?.scores;
+    const s =
+      "rewrite" in checkResponse ? checkResponse.rewrite?.scores : checkResponse.original?.scores;
     return s ?? undefined;
   }, [checkResponse]);
 
   type QualityScoreLike = { quality?: { score?: number } };
-  const qualityScore = useMemo(() => Number((scores as QualityScoreLike | undefined)?.quality?.score ?? 0), [scores]);
+  const qualityScore = useMemo(
+    () => (scores as QualityScoreLike | undefined)?.quality?.score ?? 0,
+    [scores],
+  );
 
   const orderedMetrics = useMemo(
     () =>
@@ -82,7 +90,7 @@ export const MoreDetailsDialog: React.FC = () => {
 
   // Helper function to get display value for configuration items
   const getConfigDisplayValue = (key: TranslatableConfigKey, value: string | undefined): string => {
-    if (!value) return '-';
+    if (!value) return "-";
 
     // Handle special cases for better display
     switch (key) {
@@ -109,24 +117,24 @@ export const MoreDetailsDialog: React.FC = () => {
           <AnalysisConfigCard>
             <AnalysisConfigGrid>
               <AnalysisConfigItem>
-                <AnalysisConfigLabel>{t('style_guide_type')}</AnalysisConfigLabel>
+                <AnalysisConfigLabel>{t("style_guide_type")}</AnalysisConfigLabel>
                 <AnalysisConfigValue>
                   {getConfigDisplayValue(
                     CONFIG_KEYS.style_guide,
-                    checkResponse.config?.style_guide?.style_guide_type || '',
+                    checkResponse.config?.style_guide?.style_guide_type || "",
                   )}
                 </AnalysisConfigValue>
               </AnalysisConfigItem>
               <AnalysisConfigItem>
-                <AnalysisConfigLabel>{t('dialect')}</AnalysisConfigLabel>
+                <AnalysisConfigLabel>{t("dialect")}</AnalysisConfigLabel>
                 <AnalysisConfigValue>
-                  {getConfigDisplayValue(CONFIG_KEYS.dialect, checkResponse.config?.dialect || '')}
+                  {getConfigDisplayValue(CONFIG_KEYS.dialect, checkResponse.config?.dialect || "")}
                 </AnalysisConfigValue>
               </AnalysisConfigItem>
               <AnalysisConfigItem>
-                <AnalysisConfigLabel>{t('tone')}</AnalysisConfigLabel>
+                <AnalysisConfigLabel>{t("tone")}</AnalysisConfigLabel>
                 <AnalysisConfigValue>
-                  {getConfigDisplayValue(CONFIG_KEYS.tone, checkResponse.config?.tone || '')}
+                  {getConfigDisplayValue(CONFIG_KEYS.tone, checkResponse.config?.tone || "")}
                 </AnalysisConfigValue>
               </AnalysisConfigItem>
             </AnalysisConfigGrid>
@@ -155,33 +163,37 @@ export const MoreDetailsDialog: React.FC = () => {
               {/* Compact sub-details */}
               {metric.key === CLARITY_KEY && metricData && (
                 <MetricDetailsGrid>
-                  {getMetricDetails('clarity').map(({ key: detailKey, labelKey }) => {
-                    const clarity = metricData as MetricDataMap['clarity'];
+                  {getMetricDetails("clarity").map(({ key: detailKey, labelKey }) => {
+                    const clarity = metricData as MetricDataMap["clarity"];
+                    const displayValue = clarity ? String(clarity[detailKey]) : "-";
                     return (
                       <MetricDetailsRow key={`clarity-${String(detailKey)}`}>
                         <span>{t(labelKey)}</span>
-                        <span>{clarity?.[detailKey] ?? '-'}</span>
+                        <span>{displayValue}</span>
                       </MetricDetailsRow>
                     );
                   })}
                 </MetricDetailsGrid>
               )}
-              {ISSUE_METRIC_KEYS.has(metric.key) && metric.key !== CLARITY_KEY && metric.key !== TONE_KEY && (
-                <MetricDetailsGrid>
-                  <MetricDetailsRow>
-                    <span>Issues Detected</span>
-                    <IssuesNumber>{issuesCount ?? 0}</IssuesNumber>
-                  </MetricDetailsRow>
-                </MetricDetailsGrid>
-              )}
+              {ISSUE_METRIC_KEYS.has(metric.key) &&
+                metric.key !== CLARITY_KEY &&
+                metric.key !== TONE_KEY && (
+                  <MetricDetailsGrid>
+                    <MetricDetailsRow>
+                      <span>Issues Detected</span>
+                      <IssuesNumber>{issuesCount ?? 0}</IssuesNumber>
+                    </MetricDetailsRow>
+                  </MetricDetailsGrid>
+                )}
               {metric.key === TONE_KEY && metricData && (
                 <MetricDetailsGrid>
-                  {getMetricDetails('tone').map(({ key: detailKey, labelKey }) => {
-                    const tone = metricData as MetricDataMap['tone'];
+                  {getMetricDetails("tone").map(({ key: detailKey, labelKey }) => {
+                    const tone = metricData as MetricDataMap["tone"];
+                    const displayValue = tone ? String(tone[detailKey]) : "-";
                     return (
                       <MetricDetailsRow key={`tone-${String(detailKey)}`}>
                         <span>{t(labelKey)}</span>
-                        <span>{tone?.[detailKey] ?? '-'}</span>
+                        <span>{displayValue}</span>
                       </MetricDetailsRow>
                     );
                   })}
@@ -191,19 +203,19 @@ export const MoreDetailsDialog: React.FC = () => {
           );
         })}
         <BottomActions>
-          {'workflow' in checkResponse && checkResponse.workflow?.id && (
+          {"workflow" in checkResponse && checkResponse.workflow.id && (
             <CopyWorkflowIdButton
               onClick={async () => {
-                const id = checkResponse.workflow?.id;
-                if (id) {
-                  try {
-                    await navigator.clipboard.writeText(id);
-                  } catch {
-                    // no-op if clipboard not available
-                  }
-                  setCopied(true);
-                  globalThis.setTimeout(() => setCopied(false), 1200);
+                const id = checkResponse.workflow.id;
+                try {
+                  await navigator.clipboard.writeText(id);
+                } catch {
+                  // no-op if clipboard not available
                 }
+                setCopied(true);
+                globalThis.setTimeout(() => {
+                  setCopied(false);
+                }, 1_200);
               }}
               aria-label="Copy workflow id"
               title="Copy workflow id"

@@ -2,11 +2,135 @@
 
 export type ClientOptions = {
   baseUrl:
-    | 'https://api.markup.ai'
-    | 'https://api.stg.markup.ai'
-    | 'https://api.dev.markup.ai'
-    | 'http://localhost:8000'
+    | "https://api.markup.ai"
+    | "https://api.stg.markup.ai"
+    | "https://api.dev.markup.ai"
+    | "http://localhost:8000"
     | (string & {});
+};
+
+/**
+ * APIKeyCreate
+ *
+ * Model for creating a new API key.
+ */
+export type ApiKeyCreate = {
+  /**
+   * Name
+   *
+   * The name of the API key.
+   */
+  name: string;
+  /**
+   * Expires At
+   *
+   * The date and time the API key will expire.
+   */
+  expires_at?: string | null;
+};
+
+/**
+ * APIKeyRead
+ *
+ * Model for reading API key data. Contains only safe fields for security.
+ */
+export type ApiKeyRead = {
+  /**
+   * Name
+   *
+   * The name of the API key.
+   */
+  name: string;
+  /**
+   * Expires At
+   *
+   * The date and time the API key will expire.
+   */
+  expires_at?: string | null;
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Truncated Key
+   */
+  truncated_key: string;
+  /**
+   * Organization Id
+   */
+  organization_id: string;
+  /**
+   * Created At
+   */
+  created_at: string;
+  /**
+   * Created By
+   */
+  created_by: string | null;
+};
+
+/**
+ * APIKeyReadWithSecret
+ *
+ * Model for reading API key data including the secret key. Use with caution.
+ */
+export type ApiKeyReadWithSecret = {
+  /**
+   * Name
+   *
+   * The name of the API key.
+   */
+  name: string;
+  /**
+   * Expires At
+   *
+   * The date and time the API key will expire.
+   */
+  expires_at?: string | null;
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Truncated Key
+   */
+  truncated_key: string;
+  /**
+   * Organization Id
+   */
+  organization_id: string;
+  /**
+   * Created At
+   */
+  created_at: string;
+  /**
+   * Created By
+   */
+  created_by: string | null;
+  /**
+   * Key
+   */
+  key: string;
+};
+
+/**
+ * APIKeyUpdate
+ *
+ * Model for updating API key fields. All fields are optional.
+ */
+export type ApiKeyUpdate = {
+  /**
+   * Name
+   *
+   * The name of the API key.
+   */
+  name?: string | null;
+  /**
+   * Expires At
+   *
+   * The date and time the API key will expire.
+   */
+  expires_at?: string | null;
 };
 
 /**
@@ -40,94 +164,18 @@ export type AccountMetadata = {
  */
 export type AccountResponse = {
   organization: OrganizationResponseFull;
-  user_profile: HeliosOneApiSchemasSharedUserProfileResponse;
+  user_profile: UserProfileResponse;
 };
 
 /**
- * Analysis
+ * ActorType
  */
-export type Analysis = {
-  /**
-   * Clarity Score
-   */
-  clarity_score?: number | null;
-  /**
-   * Word Count
-   */
-  word_count?: number | null;
-  /**
-   * Sentence Count
-   */
-  sentence_count?: number | null;
-  /**
-   * Avg Word Length
-   */
-  avg_word_length?: number | null;
-  /**
-   * Avg Sentence Length
-   */
-  avg_sentence_length?: number | null;
-  /**
-   * Flesch Reading Ease
-   */
-  flesch_reading_ease?: number | null;
-  /**
-   * Flesch Kincaid Grade
-   */
-  flesch_kincaid_grade?: number | null;
-  /**
-   * Lexical Diversity
-   */
-  lexical_diversity?: number | null;
-  /**
-   * Vocabulary Complexity
-   */
-  vocabulary_complexity?: number | null;
-  /**
-   * Sentence Complexity
-   */
-  sentence_complexity?: number | null;
-  /**
-   * Estimated Reading Time
-   */
-  estimated_reading_time?: number | null;
-  /**
-   * Tone Score
-   */
-  tone_score?: number | null;
-  /**
-   * Informality Score
-   */
-  informality_score?: number | null;
-  /**
-   * Liveliness Score
-   */
-  liveliness_score?: number | null;
-  /**
-   * Informality Alignment
-   */
-  informality_alignment?: number | null;
-  /**
-   * Liveliness Alignment
-   */
-  liveliness_alignment?: number | null;
-  /**
-   * Target Informality
-   */
-  target_informality?: number | null;
-  /**
-   * Target Liveliness
-   */
-  target_liveliness?: number | null;
-  /**
-   * Informality Tolerance
-   */
-  informality_tolerance?: number | null;
-  /**
-   * Liveliness Tolerance
-   */
-  liveliness_tolerance?: number | null;
-};
+export enum ActorType {
+  USER = "user",
+  SYSTEM = "system",
+  STRIPE = "stripe",
+  ADMIN = "admin",
+}
 
 /**
  * AnalysisScore
@@ -138,145 +186,160 @@ export type AnalysisScore = {
 };
 
 /**
- * ApiKeyRequest
- */
-export type ApiKeyRequest = {
-  /**
-   * Name
-   */
-  name: string;
-};
-
-/**
- * ApiKeyResponse
- */
-export type ApiKeyResponse = {
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Truncated
-   */
-  truncated: string;
-  /**
-   * Expiry
-   */
-  expiry: string | null;
-  /**
-   * Created By
-   */
-  created_by: string | null;
-};
-
-/**
- * ApiKeyResponseFull
- */
-export type ApiKeyResponseFull = {
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Truncated
-   */
-  truncated: string;
-  /**
-   * Expiry
-   */
-  expiry: string | null;
-  /**
-   * Created By
-   */
-  created_by: string | null;
-  /**
-   * Key
-   */
-  key: string;
-};
-
-/**
  * AuthResponse
  */
 export type AuthResponse = {
   /**
    * Api Key Id
+   *
    * Contains the ID of the API key within our api_keys table
    */
   api_key_id?: string | null;
   /**
    * Email
+   *
    * Contains the email of the user who signed in with the API key
    */
   email?: string | null;
   /**
    * Id
+   *
    * Contains the source prefix and truncated key of the API key used to authenticate the user. Example: key|1234567890
    */
   id: string;
   /**
    * Org Id
+   *
    * Contains the ID of the organization to which the user belongs
    */
   org_id: string;
   /**
    * Org Name
+   *
    * Contains the name of the organization to which the user belongs
    */
   org_name: string;
   /**
    * Permissions
+   *
    * Contains the permissions assigned to the API key
    */
   permissions: Array<string>;
   /**
    * Tokens Used
+   *
    * Number of tokens the organization has used
    */
   tokens_used?: number | null;
   /**
    * Token Limit
+   *
    * Maximum number of tokens the organization can use
    */
   token_limit?: number | null;
+  /**
+   * Org Is Internal
+   *
+   * Whether the organization is an internal organization
+   */
+  org_is_internal?: boolean;
 };
 
 /**
- * AvailableStyleGuides
+ * BaseStyleGuideType
  */
-export enum AvailableStyleGuides {
-  AP = 'ap',
-  CHICAGO = 'chicago',
-  MICROSOFT = 'microsoft',
+export enum BaseStyleGuideType {
+  AP = "ap",
+  CHICAGO = "chicago",
+  MICROSOFT = "microsoft",
 }
 
 /**
- * Body_Demo Tool-submit_edit_workflow
+ * BatchStyleCheckRequestBody
  */
-export type BodyDemoToolSubmitEditWorkflow = {
+export type BatchStyleCheckRequestBody = {
   /**
-   * File
-   * The .txt file to process.
+   * The language variant you'd like us to use for analysis. Choose from American English, British English, or other supported dialects.
    */
-  file?: Blob | File | null;
+  dialect: Dialects;
   /**
-   * The intended dialect of the text to edit.
+   * The tone variation you're aiming for. Options include formal, academic, casual, and other tone variations to match your content goals.
    */
-  dialect?: Dialects;
+  tone?: Tones | null;
   /**
-   * The intended tone of the text to edit.
+   * Style Guide
+   *
+   * The style guide to follow for your content. You can use a style guide ID or choose from built-in options: `ap`, `chicago`, or `microsoft`.
    */
-  tone?: Tones;
+  style_guide: string;
   /**
-   * The intended style guide to use for the text to edit.
+   * Webhook Url
+   *
+   * A URL that results will be POSTed to once the process completes.
    */
-  style_guide?: AvailableStyleGuides;
+  webhook_url?: string | null;
   /**
-   * Url
-   * The URL to scrape.
+   * File Uploads
+   *
+   * The documents to analyze. Text (.txt), Markdown (.md), HTML (.html .htm), DITA (.dita, .xml), and PDF (.pdf) files are accepted. The max file size is 1.5 MB.
    */
-  url?: string;
+  file_uploads: Array<Blob | File>;
 };
+
+/**
+ * BatchStyleResponse
+ */
+export type BatchStyleResponse = {
+  /**
+   * Workflows
+   *
+   * List of workflow information for each workflow in the batch
+   */
+  workflows?: Array<WorkflowInfo> | null;
+};
+
+/**
+ * BatchStyleSuggestionRequestBody
+ */
+export type BatchStyleSuggestionRequestBody = {
+  /**
+   * The language variant you'd like us to use for analysis. Choose from American English, British English, or other supported dialects.
+   */
+  dialect: Dialects;
+  /**
+   * The tone variation you're aiming for. Options include formal, academic, casual, and other tone variations to match your content goals.
+   */
+  tone?: Tones | null;
+  /**
+   * Style Guide
+   *
+   * The style guide to follow for your content. You can use a style guide ID or choose from built-in options: `ap`, `chicago`, or `microsoft`.
+   */
+  style_guide: string;
+  /**
+   * Webhook Url
+   *
+   * A URL that results will be POSTed to once the process completes.
+   */
+  webhook_url?: string | null;
+  /**
+   * File Uploads
+   *
+   * The documents to analyze. Text (.txt), Markdown (.md), HTML (.html .htm), DITA (.dita, .xml), and PDF (.pdf) files are accepted. The max file size is 1.5 MB.
+   */
+  file_uploads: Array<Blob | File>;
+};
+
+/**
+ * BillingCycle
+ *
+ * Billing cycle enumeration
+ */
+export enum BillingCycle {
+  MONTHLY = "monthly",
+  YEARLY = "yearly",
+  ONE_TIME = "one_time",
+}
 
 /**
  * Body_Style Guides-update_style_guide
@@ -284,47 +347,158 @@ export type BodyDemoToolSubmitEditWorkflow = {
 export type BodyStyleGuidesUpdateStyleGuide = {
   /**
    * Name
+   *
    * The name of the style guide.
    */
-  name: string;
+  name?: string | null;
+  /**
+   * Terminology Domain Ids
+   *
+   * List of domain IDs to filter terminology searches by. NULL or empty list means no filtering.
+   */
+  terminology_domain_ids?: Array<string> | null;
 };
 
 /**
- * Body_Term Import/Export-import_actif_terms
+ * Body_Terminology-import_terminology
  */
-export type BodyTermImportExportImportActifTerms = {
+export type BodyTerminologyImportTerminology = {
   /**
    * File
-   * ACTIF XML file containing terminology data
+   *
+   * CSV or ACTIF XML file containing terminology data
    */
   file: Blob | File;
 };
 
 /**
- * Body_Term Import/Export-import_csv_terms
+ * BulkInvitationRequest
  */
-export type BodyTermImportExportImportCsvTerms = {
+export type BulkInvitationRequest = {
   /**
-   * File
-   * CSV file containing terminology data
+   * Invitations
+   *
+   * List of invitations (max 50)
    */
-  file: Blob | File;
+  invitations: Array<Invitation>;
+};
+
+/**
+ * BulkInvitationResponse
+ */
+export type BulkInvitationResponse = {
+  /**
+   * Succeeded
+   */
+  succeeded: Array<string>;
+  /**
+   * Failed
+   */
+  failed: Array<InvitationResult>;
+  /**
+   * Total
+   */
+  total: number;
+  /**
+   * Success Count
+   */
+  success_count: number;
+  /**
+   * Failure Count
+   */
+  failure_count: number;
+};
+
+/**
+ * CancelCancelationRequest
+ *
+ * Request model for canceling a cancel subscription request
+ */
+export type CancelCancelationRequest = {
+  /**
+   * Order Id
+   */
+  order_id: string;
+};
+
+/**
+ * CancelCancelationResponse
+ *
+ * Response model for canceling a cancel subscription request
+ */
+export type CancelCancelationResponse = {
+  /**
+   * Message
+   */
+  message: string;
+};
+
+/**
+ * CancelDowngradeRequest
+ *
+ * Request model for canceling a downgrade request
+ */
+export type CancelDowngradeRequest = {
+  /**
+   * Order Id
+   */
+  order_id?: string | null;
+};
+
+/**
+ * CancelDowngradeResponse
+ *
+ * Response model for canceling a downgrade request
+ */
+export type CancelDowngradeResponse = {
+  /**
+   * Message
+   */
+  message: string;
+};
+
+/**
+ * CancelSubscriptionRequest
+ *
+ * Request model for canceling a subscription
+ */
+export type CancelSubscriptionRequest = {
+  /**
+   * Order Id
+   */
+  order_id?: string | null;
+  /**
+   * Cancel Reason
+   */
+  cancel_reason?: string | null;
+};
+
+/**
+ * CancelSubscriptionResponse
+ *
+ * Response model for canceling a subscription
+ */
+export type CancelSubscriptionResponse = {
+  /**
+   * Message
+   */
+  message: string;
 };
 
 /**
  * ClarityCategory
  */
 export enum ClarityCategory {
-  SIMPLER_WORDS = 'Simpler Words',
-  COMPLEX_VERB_TENSES = 'Complex Verb Tenses',
-  HIDDEN_VERBS = 'Hidden Verbs',
-  DIRECT_STATEMENTS = 'Direct Statements',
-  PASSIVE_VOICE = 'Passive Voice',
-  PHRASAL_VERBS = 'Phrasal Verbs',
-  FORMAL_GRAMMAR_FORMS = 'Formal Grammar Forms',
-  UNNECESSARY_WORDS = 'Unnecessary Words',
-  SENTENCE_SPLITTING = 'Sentence Splitting',
-  CONCISE_WORDING = 'Concise Wording',
+  SIMPLER_WORDS = "Simpler Words",
+  COMPLEX_VERB_TENSES = "Complex Verb Tenses",
+  HIDDEN_VERBS = "Hidden Verbs",
+  DIRECT_STATEMENTS = "Direct Statements",
+  PASSIVE_VOICE = "Passive Voice",
+  PHRASAL_VERBS = "Phrasal Verbs",
+  FORMAL_GRAMMAR_FORMS = "Formal Grammar Forms",
+  UNNECESSARY_WORDS = "Unnecessary Words",
+  SENTENCE_SPLITTING = "Sentence Splitting",
+  CONCISE_WORDING = "Concise Wording",
 }
 
 /**
@@ -376,117 +550,11 @@ export type Color = {
 };
 
 /**
- * ConceptCreateRequest
- * Payload to create a new concept
- */
-export type ConceptCreateRequest = {
-  /**
-   * Guidance
-   */
-  guidance: string;
-};
-
-/**
- * ConceptResponse
- * DB-mapped representation of a concept (no terms).
- */
-export type ConceptResponse = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Guidance
-   */
-  guidance: string;
-  /**
-   * Created At
-   */
-  created_at: string;
-  /**
-   * Updated At
-   */
-  updated_at: string;
-  /**
-   * Created By
-   */
-  created_by?: string | null;
-  /**
-   * Updated By
-   */
-  updated_by?: string | null;
-};
-
-/**
- * ConceptResult
- */
-export type ConceptResult = {
-  /**
-   * Guidance
-   */
-  guidance: string;
-  /**
-   * Terms
-   */
-  terms: Array<TermItem>;
-  /**
-   * Matched Terms
-   */
-  matched_terms: Array<MatchedTerm>;
-};
-
-/**
- * ConceptUpdateRequest
- * Payload to update an existing concept
- */
-export type ConceptUpdateRequest = {
-  /**
-   * Guidance
-   */
-  guidance: string;
-};
-
-/**
- * ConceptWithTerms
- * Concept with all associated terms for term management UI
- */
-export type ConceptWithTerms = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Guidance
-   */
-  guidance: string;
-  /**
-   * Created At
-   */
-  created_at: string;
-  /**
-   * Updated At
-   */
-  updated_at: string;
-  /**
-   * Created By
-   */
-  created_by?: string | null;
-  /**
-   * Updated By
-   */
-  updated_by?: string | null;
-  /**
-   * Terms
-   */
-  terms: Array<TermDetail>;
-};
-
-/**
  * ConfigOptions
  */
 export type ConfigOptions = {
   dialect?: Dialects | null;
-  style_guide?: StyleGuide | null;
+  style_guide?: HeliosOneActivitiesEngineSharedModelsStyleGuide | null;
   tone?: Tones | null;
 };
 
@@ -494,15 +562,12 @@ export type ConfigOptions = {
  * ConsistencyCategory
  */
 export enum ConsistencyCategory {
-  CONSISTENT_PUNCTUATION = 'Consistent Punctuation',
-  CONSISTENT_CAPITALIZATION = 'Consistent Capitalization',
-  PREFERRED_SPELLING_AND_GRAMMAR = 'Preferred Spelling and Grammar',
-  'NUMBERS,_DATES,_AND_TIMES' = 'Numbers, Dates, and Times',
-  INCLUSIVE_LANGUAGE = 'Inclusive Language',
-  BRAND_VOICE = 'Brand Voice',
-  SPECIAL_STYLE_GUIDE_REQUIREMENTS = 'Special Style Guide Requirements',
-  CLARITY_AND_READABILITY = 'Clarity and Readability',
-  OTHER = 'other',
+  CONSISTENT_PUNCTUATION = "Consistent Punctuation",
+  CONSISTENT_CAPITALIZATION = "Consistent Capitalization",
+  "NUMBERS,_DATES,_AND_TIMES" = "Numbers, Dates, and Times",
+  INCLUSIVE_LANGUAGE = "Inclusive Language",
+  SPECIAL_STYLE_GUIDE_REQUIREMENTS = "Special Style Guide Requirements",
+  OTHER = "other",
 }
 
 /**
@@ -546,133 +611,41 @@ export type ConstantsResponse = {
 };
 
 /**
- * ContentMetrics
- */
-export type ContentMetrics = {
-  /**
-   * Text Statistics Counts
-   * Chunk-level counts needed to calculate text statistics
-   */
-  text_statistics_counts?: {
-    [key: string]: number;
-  };
-  /**
-   * Clarity Counts
-   * Chunk-level counts needed to calculate clarity scores
-   */
-  clarity_counts?: {
-    [key: string]: number;
-  };
-  /**
-   * Informality Counts
-   * Chunk-level counts needed to calculate informality scores
-   */
-  informality_counts?: {
-    [key: string]: number;
-  };
-  /**
-   * Liveliness Counts
-   * Chunk-level counts needed to calculate liveliness scores
-   */
-  liveliness_counts?: {
-    [key: string]: number;
-  };
-};
-
-/**
- * ContentQualityFeedback
- */
-export enum ContentQualityFeedback {
-  'EXCELLENT_CONTENT_QUALITY!_YOUR_TEXT_IS_CLEAR,_READABLE,_AND_WELL_STRUCTURED' = 'Excellent content quality! Your text is clear, readable, and well-structured.',
-  GOOD_CONTENT_QUALITY_YOUR_TEXT_IS_READABLE_BUT_HAS_ROOM_FOR_IMPROVEMENT = 'Good content quality. Your text is readable but has room for improvement.',
-  MODERATE_CONTENT_QUALITY_CONSIDER_REVISING_FOR_BETTER_READABILITY = 'Moderate content quality. Consider revising for better readability.',
-  LOW_CONTENT_QUALITY_THE_TEXT_NEEDS_SIGNIFICANT_REVISION_FOR_BETTER_READABILITY = 'Low content quality. The text needs significant revision for better readability.',
-}
-
-/**
- * ContentScorerActivityOutput
- */
-export type ContentScorerActivityOutput = {
-  /**
-   * Activity Name
-   */
-  activity_name?: string;
-  /**
-   * Cache Hit
-   * Whether the LLM response was cached
-   */
-  cache_hit?: boolean;
-  /**
-   * Msg Hash
-   * The hash of the messages used to run the activity
-   */
-  msg_hash?: string;
-  /**
-   * Error
-   * The error that occurred during the activity
-   */
-  error?: string | null;
-  /**
-   * Duration
-   * The duration of the activity in seconds
-   */
-  duration: number;
-  /**
-   * The parameters used to run the activity
-   */
-  parameters?: Parameters;
-  /**
-   * Repair Log
-   * The LLM output's JSON repair log for the activity
-   */
-  repair_log?: Array<{
-    [key: string]: string;
-  }>;
-  /**
-   * Run Id
-   * The Temporal workflow run ID
-   */
-  run_id: string;
-  analysis?: Analysis;
-  feedback?: ContentQualityFeedback | null;
-  /**
-   * Suggestions
-   */
-  suggestions?: Array<ContentSuggestions> | null;
-};
-
-/**
- * ContentSuggestions
- */
-export enum ContentSuggestions {
-  USE_SHORTER_SENTENCES_AND_SIMPLER_WORDS_TO_IMPROVE_READABILITY = 'Use shorter sentences and simpler words to improve readability.',
-  YOUR_TEXT_MAY_BE_TOO_COMPLEX_CONSIDER_SIMPLIFYING_VOCABULARY_AND_SENTENCE_STRUCTURE = 'Your text may be too complex. Consider simplifying vocabulary and sentence structure.',
-  YOUR_SENTENCES_ARE_QUITE_LONG_CONSIDER_BREAKING_THEM_INTO_SHORTER_ONES = 'Your sentences are quite long. Consider breaking them into shorter ones.',
-  YOUR_SENTENCES_ARE_VERY_SHORT_CONSIDER_COMBINING_SOME_FOR_BETTER_FLOW = 'Your sentences are very short. Consider combining some for better flow.',
-  YOUR_VOCABULARY_DIVERSITY_IS_LOW_TRY_USING_A_WIDER_RANGE_OF_WORDS = 'Your vocabulary diversity is low. Try using a wider range of words.',
-  YOUR_TEXT_IS_WELL_BALANCED_CONSIDER_PROOFREADING_FOR_MINOR_IMPROVEMENTS = 'Your text is well-balanced. Consider proofreading for minor improvements.',
-}
-
-/**
  * CooldownInfo
+ *
  * Cooldown information for an API key.
  */
 export type CooldownInfo = {
   /**
    * Api Key
+   *
    * The API key identifier
    */
   api_key: string;
   /**
    * Remaining Seconds
+   *
    * Remaining cooldown time in seconds
    */
   remaining_seconds: number;
   /**
    * Cooldown Type
+   *
    * Type of cooldown (increase/decrease)
    */
   cooldown_type: string;
+};
+
+/**
+ * CreateSubscriptionRequest
+ *
+ * Request model for creating a subscription
+ */
+export type CreateSubscriptionRequest = {
+  /**
+   * Product Price Id
+   */
+  product_price_id: string;
 };
 
 /**
@@ -693,29 +666,105 @@ export type CreatorResponse = {
  * Dialects
  */
 export enum Dialects {
-  AMERICAN_ENGLISH = 'american_english',
-  BRITISH_ENGLISH = 'british_english',
-  CANADIAN_ENGLISH = 'canadian_english',
+  AMERICAN_ENGLISH = "american_english",
+  BRITISH_ENGLISH = "british_english",
+  CANADIAN_ENGLISH = "canadian_english",
 }
 
 /**
- * EditStatusResponse
+ * DomainCreateRequest
  */
-export type EditStatusResponse = {
+export type DomainCreateRequest = {
   /**
-   * Workflow Id
+   * Name
    */
-  workflow_id: string;
-  status: WorkflowStatus;
+  name: string;
   /**
-   * Run Id
+   * Description
    */
-  run_id?: string | null;
-  result?: RewriteOutput | null;
+  description?: string | null;
+};
+
+/**
+ * DomainResponse
+ */
+export type DomainResponse = {
   /**
-   * Error Message
+   * Id
    */
-  error_message?: string | null;
+  id: string;
+  /**
+   * Name
+   */
+  name: string;
+  /**
+   * Description
+   */
+  description?: string | null;
+  /**
+   * Created At
+   */
+  created_at: string;
+  /**
+   * Updated At
+   */
+  updated_at: string;
+  /**
+   * Created By
+   */
+  created_by?: string | null;
+  /**
+   * Updated By
+   */
+  updated_by?: string | null;
+  /**
+   * Term Set Count
+   */
+  term_set_count?: number;
+};
+
+/**
+ * DomainSummary
+ */
+export type DomainSummary = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Name
+   */
+  name: string;
+};
+
+/**
+ * DomainUpdateRequest
+ */
+export type DomainUpdateRequest = {
+  /**
+   * Name
+   */
+  name?: string | null;
+  /**
+   * Description
+   */
+  description?: string | null;
+};
+
+/**
+ * EmailTestRequest
+ */
+export type EmailTestRequest = {
+  /**
+   * Template Name
+   */
+  template_name?: string;
+  /**
+   * Context
+   */
+  context?: {
+    [key: string]: string;
+  } | null;
 };
 
 /**
@@ -724,20 +773,74 @@ export type EditStatusResponse = {
 export type ErrorResponse = {
   /**
    * Detail
+   *
    * A description of the error that occurred.
    */
   detail: string;
   /**
    * Status
+   *
    * The HTTP status code generated by the server for this issue
    */
   status: number;
   /**
    * Request Id
+   *
    * A unique ID associated with the HTTP request.
    */
   request_id: string;
 };
+
+/**
+ * EventCategory
+ */
+export enum EventCategory {
+  SUBSCRIPTION = "subscription",
+  BILLING = "billing",
+  LIMITS = "limits",
+  SETTINGS = "settings",
+  PAYMENT = "payment",
+  PLAN = "plan",
+  USER_MANAGEMENT = "user_management",
+  API_USAGE = "api_usage",
+  ORGANIZATION = "organization",
+}
+
+/**
+ * EventType
+ */
+export enum EventType {
+  PENDING_DOWNGRADE = "pending_downgrade",
+  PENDING_UPGRADE = "pending_upgrade",
+  ORGANIZATION_CREATED_STRIPE_CUSTOMER = "organization_created_stripe_customer",
+  ORGANIZATION_CREATED_CHECKOUT_SESSION = "organization_created_checkout_session",
+  ORGANIZATION_UPDATED = "organization_updated",
+  ORGANIZATION_RESOURCES_UPDATED = "organization_resources_updated",
+  SUBSCRIPTION_CREATED = "subscription_created",
+  SUBSCRIPTION_UPDATED = "subscription_updated",
+  SUBSCRIPTION_DELETED = "subscription_deleted",
+  SUBSCRIPTION_CANCELLED = "subscription_cancelled",
+  SUBSCRIPTION_CANCEL_REQUESTED = "subscription_cancel_requested",
+  SUBSCRIPTION_CANCELLED_CANCELATION = "subscription_cancelled_cancelation",
+  SUBSCRIPTION_NOT_FOUND_ERROR = "subscription_not_found_error",
+  SUBSCRIPTION_CANCELLED_ERROR = "subscription_cancelled_error",
+  SUBSCRIPTION_CANCELLED_CANCELATION_ERROR = "subscription_cancelled_cancelation_error",
+  PLAN_UPGRADED = "plan_upgraded",
+  PLAN_DOWNGRADED = "plan_downgraded",
+  ACCOUNT_SUSPENDED = "account_suspended",
+  INCREASED_TERM_LIMIT = "increased_term_limit",
+  INCREASED_STYLE_GUIDE_LIMIT = "increased_style_guide_limit",
+  INCREASED_TOKEN_LIMIT = "increased_token_limit",
+  DECREASED_TERM_LIMIT = "decreased_term_limit",
+  DECREASED_STYLE_GUIDE_LIMIT = "decreased_style_guide_limit",
+  DECREASED_TOKEN_LIMIT = "decreased_token_limit",
+  PAYMENT_INITIATED = "payment_initiated",
+  PAYMENT_SUCCEEDED = "payment_succeeded",
+  PAYMENT_FAILED = "payment_failed",
+  PAYMENT_METHOD_ATTACHED = "payment_method_attached",
+  PAYMENT_SUCCEEDED_ERROR = "payment_succeeded_error",
+  TOKEN_RESET = "token_reset",
+}
 
 /**
  * FeedbackRequest
@@ -774,18 +877,6 @@ export type FeedbackRequest = {
 };
 
 /**
- * FinalScores
- */
-export type FinalScores = {
-  content_score?: ContentScorerActivityOutput | null;
-  issue_score?: IssueScores | null;
-  /**
-   * Quality Score
-   */
-  quality_score?: number | null;
-};
-
-/**
  * GlobalDefaultsResponse
  */
 export type GlobalDefaultsResponse = {
@@ -809,10 +900,6 @@ export type GlobalDefaultsResponse = {
    * Trial Period
    */
   trial_period: number;
-  /**
-   * Organization Status
-   */
-  organization_status: string;
 };
 
 /**
@@ -835,111 +922,21 @@ export type GlobalDefaultsUpdate = {
    * Trial Period
    */
   trial_period?: number | null;
-  /**
-   * Organization Status
-   */
-  organization_status?: string | null;
-};
-
-/**
- * GrammarActivityOutput
- */
-export type GrammarActivityOutput = {
-  /**
-   * Activity Name
-   */
-  activity_name?: string;
-  /**
-   * Cache Hit
-   * Whether the LLM response was cached
-   */
-  cache_hit?: boolean;
-  /**
-   * Msg Hash
-   * The hash of the messages used to run the activity
-   */
-  msg_hash?: string;
-  /**
-   * Error
-   * The error that occurred during the activity
-   */
-  error?: string | null;
-  /**
-   * Duration
-   * The duration of the activity in seconds
-   */
-  duration: number;
-  /**
-   * The parameters used to run the activity
-   */
-  parameters?: Parameters;
-  /**
-   * Repair Log
-   * The LLM output's JSON repair log for the activity
-   */
-  repair_log?: Array<{
-    [key: string]: string;
-  }>;
-  /**
-   * Run Id
-   * The Temporal workflow run ID
-   */
-  run_id: string;
-  /**
-   * Changes
-   */
-  changes: Array<GrammarChange>;
 };
 
 /**
  * GrammarCategory
  */
 export enum GrammarCategory {
-  GRAMMAR_AGREEMENT = 'Grammar Agreement',
-  PUNCTUATION = 'Punctuation',
-  CAPITALIZATION = 'Capitalization',
-  SPELLING = 'Spelling',
-  SENTENCE_STRUCTURE = 'Sentence Structure',
-  VERB_FORMS = 'Verb Forms',
-  CONTEXT_FIT = 'Context Fit',
-  OTHER = 'other',
+  GRAMMAR_AGREEMENT = "Grammar Agreement",
+  PUNCTUATION = "Punctuation",
+  CAPITALIZATION = "Capitalization",
+  SPELLING = "Spelling",
+  SENTENCE_STRUCTURE = "Sentence Structure",
+  VERB_FORMS = "Verb Forms",
+  CONTEXT_FIT = "Context Fit",
+  OTHER = "other",
 }
-
-/**
- * GrammarChange
- */
-export type GrammarChange = {
-  /**
-   * Original
-   * The original text
-   */
-  original: string;
-  /**
-   * Modified
-   * The modified text
-   */
-  modified: string;
-  /**
-   * Change Start Char Idx
-   * The start index of the change (calculated from context)
-   */
-  change_start_char_idx?: number;
-  /**
-   * Change Type
-   */
-  change_type?: 'grammar';
-  /**
-   * Context Before
-   * Text that appears before the original text
-   */
-  context_before?: string;
-  /**
-   * Context After
-   * Text that appears after the original text
-   */
-  context_after?: string;
-  category: GrammarCategory;
-};
 
 /**
  * GrammarScore
@@ -956,101 +953,6 @@ export type GrammarScore = {
 };
 
 /**
- * HeliosOneWorkflowOutput
- */
-export type HeliosOneWorkflowOutput = {
-  /**
-   * Created At
-   * The date and time the workflow was created
-   */
-  created_at: string;
-  /**
-   * Errors
-   * The errors that occurred during the workflow
-   */
-  errors?: Array<WorkflowError>;
-  /**
-   * The initial scores of the workflow
-   */
-  initial_scores?: InitialScores;
-  /**
-   * The final scores of the workflow
-   */
-  final_scores?: FinalScores;
-  /**
-   * The initial issue counts of the workflow
-   */
-  initial_issue_counts?: IssueCounts | null;
-  /**
-   * The final issue counts of the workflow
-   */
-  final_issue_counts?: IssueCounts | null;
-  /**
-   * The initial content metrics of the workflow
-   */
-  initial_content_metrics?: ContentMetrics | null;
-  /**
-   * The final content metrics of the workflow
-   */
-  final_content_metrics?: ContentMetrics | null;
-  /**
-   * Input File
-   * The path to the input file
-   */
-  input_file: string;
-  /**
-   * The parameters used to run the workflow
-   */
-  parameters?: Parameters;
-  /**
-   * Run Id
-   * The Temporal workflow run ID
-   */
-  run_id: string;
-  /**
-   * Workflow Id
-   * The Temporal workflow ID
-   */
-  workflow_id: string;
-  /**
-   * The result of the grammar activity
-   */
-  grammar_result?: GrammarActivityOutput | null;
-  /**
-   * The result of the merging activity
-   */
-  merging_result?: MergingActivityOutput | null;
-  /**
-   * The result of the parser activity
-   */
-  parser_result?: ParserResponse | null;
-  /**
-   * The result of the sentence length activity
-   */
-  sentence_length_result?: SentenceLengthActivityOutput | null;
-  /**
-   * The result of the sentence structure activity
-   */
-  sentence_structure_result?: SentenceStructureOutput | null;
-  /**
-   * The result of the simple vocabulary activity
-   */
-  simple_vocabulary_result?: SimpleVocabOutput | null;
-  /**
-   * The result of the tone activity
-   */
-  tone_result?: ToneCheckOutput | null;
-  /**
-   * The result of the style guide activity
-   */
-  style_guide_result?: StyleGuideOutput | null;
-  /**
-   * The result of the terminology activity
-   */
-  replace_terms_result?: TermReplaceActivityOutput | null;
-};
-
-/**
  * ImportSummary
  */
 export type ImportSummary = {
@@ -1059,33 +961,29 @@ export type ImportSummary = {
    */
   entries_processed?: number;
   /**
-   * Concepts Created
+   * Term Sets Created
    */
-  concepts_created?: number;
+  term_sets_created?: number;
   /**
-   * Concepts Deleted
+   * Term Sets Deleted
    */
-  concepts_deleted?: number;
+  term_sets_deleted?: number;
   /**
    * Terms Created Or Updated
    */
   terms_created_or_updated?: number;
   /**
+   * Domains Created
+   */
+  domains_created?: number;
+  /**
+   * Domains Deleted
+   */
+  domains_deleted?: number;
+  /**
    * Errors
    */
   errors?: Array<string>;
-};
-
-/**
- * InitialScores
- */
-export type InitialScores = {
-  content_score?: ContentScorerActivityOutput | null;
-  issue_score?: IssueScores | null;
-  /**
-   * Quality Score
-   */
-  quality_score?: number | null;
 };
 
 /**
@@ -1100,6 +998,24 @@ export type Invitation = {
    * Email
    */
   email: string;
+};
+
+/**
+ * InvitationResult
+ */
+export type InvitationResult = {
+  /**
+   * Email
+   */
+  email: string;
+  /**
+   * Success
+   */
+  success: boolean;
+  /**
+   * Error
+   */
+  error?: string | null;
 };
 
 /**
@@ -1126,6 +1042,7 @@ export type InvitedUser = {
 export type Issue = {
   /**
    * Original
+   *
    * The original text
    */
   original: string;
@@ -1135,9 +1052,15 @@ export type Issue = {
   position: Position;
   /**
    * Subcategory
+   *
    * The sub-category of the change
    */
-  subcategory: GrammarCategory | ClarityCategory | ToneCategory | ConsistencyCategory | TermReplaceCategory;
+  subcategory:
+    | GrammarCategory
+    | ClarityCategory
+    | ToneCategory
+    | ConsistencyCategory
+    | TermReplaceCategory;
   category: IssueCategory | null;
 };
 
@@ -1145,60 +1068,12 @@ export type Issue = {
  * IssueCategory
  */
 export enum IssueCategory {
-  CLARITY = 'clarity',
-  GRAMMAR = 'grammar',
-  CONSISTENCY = 'consistency',
-  TERMINOLOGY = 'terminology',
-  TONE = 'tone',
+  CLARITY = "clarity",
+  GRAMMAR = "grammar",
+  CONSISTENCY = "consistency",
+  TERMINOLOGY = "terminology",
+  TONE = "tone",
 }
-
-/**
- * IssueCounts
- */
-export type IssueCounts = {
-  /**
-   * Grammar Issues
-   */
-  grammar_issues?: number | null;
-  /**
-   * Style Guide Issues
-   */
-  style_guide_issues?: number | null;
-  /**
-   * Terminology Issues
-   */
-  terminology_issues?: number | null;
-};
-
-/**
- * IssueScores
- */
-export type IssueScores = {
-  /**
-   * Grammar Issues
-   */
-  grammar_issues?: number | null;
-  /**
-   * Style Guide Issues
-   */
-  style_guide_issues?: number | null;
-  /**
-   * Terminology Issues
-   */
-  terminology_issues?: number | null;
-  /**
-   * Grammar Score
-   */
-  grammar_score?: number | null;
-  /**
-   * Style Guide Score
-   */
-  style_guide_score?: number | null;
-  /**
-   * Terminology Score
-   */
-  terminology_score?: number | null;
-};
 
 /**
  * MatchedTerm
@@ -1225,54 +1100,119 @@ export type Member = {
 };
 
 /**
- * MergingActivityOutput
+ * OrderStatus
  */
-export type MergingActivityOutput = {
+export enum OrderStatus {
+  ACTIVE = "active",
+  PENDING = "pending",
+  CANCELED = "canceled",
+  CANCEL_REQUESTED = "cancel_requested",
+  UPGRADE_REQUESTED = "upgrade_requested",
+  DOWNGRADE_REQUESTED = "downgrade_requested",
+  FAILED = "failed",
+  PAST_DUE = "past_due",
+  UNPAID = "unpaid",
+  INCOMPLETE = "incomplete",
+  INCOMPLETE_EXPIRED = "incomplete_expired",
+}
+
+/**
+ * OrderType
+ */
+export enum OrderType {
+  RECURRING = "recurring",
+  ONETIME = "onetime",
+  UNLIMITED = "unlimited",
+}
+
+/**
+ * OrgEventHistory
+ */
+export type OrgEventHistory = {
   /**
-   * Activity Name
+   * Organization Id
+   *
+   * ID of the organization this event relates to
    */
-  activity_name?: string;
+  organization_id: string;
   /**
-   * Cache Hit
-   * Whether the LLM response was cached
+   * Actor Id
+   *
+   * ID of the admin or system user who triggered the event
    */
-  cache_hit?: boolean;
+  actor_id: string | null;
   /**
-   * Msg Hash
-   * The hash of the messages used to run the activity
+   * Type of actor
    */
-  msg_hash?: string;
+  actor_type: ActorType;
   /**
-   * Error
-   * The error that occurred during the activity
+   * Event Category
+   *
+   * Event category for grouping
    */
-  error?: string | null;
+  event_category: string;
   /**
-   * Duration
-   * The duration of the activity in seconds
+   * Event Type
+   *
+   * Specific event type (free-form for finer granularity)
    */
-  duration: number;
+  event_type: string;
   /**
-   * The parameters used to run the activity
+   * Title
+   *
+   * Short title for the event (e.g., 'Plan Upgraded', 'Term Limit Increased')
    */
-  parameters?: Parameters;
+  title: string;
   /**
-   * Repair Log
-   * The LLM output's JSON repair log for the activity
+   * Description
+   *
+   * Detailed description of what happened
    */
-  repair_log?: Array<{
-    [key: string]: string;
-  }>;
+  description: string;
   /**
-   * Run Id
-   * The Temporal workflow run ID
+   * Summary
+   *
+   * Brief summary for quick overview
    */
-  run_id: string;
+  summary?: string | null;
   /**
-   * Merged Text
-   * Text after applying all changes
+   * Modified Field Names
+   *
+   * Names of the modified fields
    */
-  merged_text: string;
+  modified_field_names?: Array<string> | null;
+  /**
+   * Old Values
+   *
+   * Previous snapshot before the change
+   */
+  old_values?: {
+    [key: string]: unknown;
+  } | null;
+  /**
+   * New Values
+   *
+   * New snapshot after the change
+   */
+  new_values?: {
+    [key: string]: unknown;
+  } | null;
+  /**
+   * Is Visible
+   *
+   * Whether this event should be visible in the frontend
+   */
+  is_visible?: boolean;
+  /**
+   * Created At
+   *
+   * When the event record was created
+   */
+  created_at?: string;
+  /**
+   * Id
+   */
+  id?: string;
 };
 
 /**
@@ -1355,6 +1295,10 @@ export type OrganizationRequest = {
    * Is Internal
    */
   is_internal?: boolean;
+  /**
+   * Is Acrolinx Classic
+   */
+  is_acrolinx_classic?: boolean;
 };
 
 /**
@@ -1410,6 +1354,10 @@ export type OrganizationResponse = {
    * Is Internal
    */
   is_internal: boolean;
+  /**
+   * Is Acrolinx Classic
+   */
+  is_acrolinx_classic: boolean;
   /**
    * Trial
    */
@@ -1470,10 +1418,6 @@ export type OrganizationResponseAdmin = {
   domain: string;
   created_by: CreatorResponse | null;
   /**
-   * Admins
-   */
-  admins?: Array<string> | null;
-  /**
    * Style Guides
    */
   style_guides?: number;
@@ -1489,6 +1433,10 @@ export type OrganizationResponseAdmin = {
    * Is Internal
    */
   is_internal: boolean;
+  /**
+   * Is Acrolinx Classic
+   */
+  is_acrolinx_classic: boolean;
   /**
    * Trial
    */
@@ -1549,10 +1497,6 @@ export type OrganizationResponseFull = {
   domain: string;
   created_by: CreatorResponse | null;
   /**
-   * Admins
-   */
-  admins?: Array<string> | null;
-  /**
    * Style Guides
    */
   style_guides?: number;
@@ -1564,6 +1508,14 @@ export type OrganizationResponseFull = {
    * Country
    */
   country: string | null;
+  /**
+   * Is Internal
+   */
+  is_internal: boolean;
+  /**
+   * Is Acrolinx Classic
+   */
+  is_acrolinx_classic: boolean;
   /**
    * Trial
    */
@@ -1580,41 +1532,49 @@ export type OrganizationResponseFull = {
 export type OrganizationSignupRequest = {
   /**
    * Display Name
+   *
    * Display name for the organization
    */
   display_name: string;
   /**
    * User Role
+   *
    * User role in the organization
    */
   user_role?: string | null;
   /**
    * Country
+   *
    * Country of the organization
    */
   country?: string | null;
   /**
    * First Name
+   *
    * First name of the user
    */
   first_name?: string | null;
   /**
    * Last Name
+   *
    * Last name of the user
    */
   last_name?: string | null;
   /**
    * Job Title
+   *
    * Job title of the user
    */
   job_title?: string | null;
   /**
    * Marketing Consent
+   *
    * User consent for marketing communications
    */
   marketing_consent?: boolean | null;
   /**
    * Captcha Response
+   *
    * CAPTCHA response
    */
   captcha_response: string;
@@ -1667,6 +1627,10 @@ export type OrganizationUpdate = {
    */
   expiration_days?: number | null;
   /**
+   * Expiration Date
+   */
+  expiration_date?: string | null;
+  /**
    * Trial
    */
   trial?: boolean | null;
@@ -1686,6 +1650,10 @@ export type OrganizationUpdate = {
    * Is Internal
    */
   is_internal?: boolean | null;
+  /**
+   * Is Acrolinx Classic
+   */
+  is_acrolinx_classic?: boolean | null;
 };
 
 /**
@@ -1700,22 +1668,101 @@ export type OriginalContent = {
 };
 
 /**
- * PaginatedConceptsResponse
- * Pageable response for concepts in term management UI
+ * Page[APIKeyRead]
  */
-export type PaginatedConceptsResponse = {
+export type PageApiKeyRead = {
   /**
-   * Concepts
+   * Items
    */
-  concepts: Array<ConceptWithTerms>;
+  items: Array<ApiKeyRead>;
+  /**
+   * Total Items
+   */
+  total_items: number;
+  /**
+   * Page
+   */
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+  /**
+   * Total Pages
+   *
+   * The total number of pages.
+   */
+  readonly total_pages: number;
+};
+
+/**
+ * Page[StyleGuide]
+ */
+export type PageStyleGuide = {
+  /**
+   * Items
+   */
+  items: Array<HeliosOneDatabaseModelsStyleGuideStyleGuide>;
+  /**
+   * Total Items
+   */
+  total_items: number;
+  /**
+   * Page
+   */
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+  /**
+   * Total Pages
+   *
+   * The total number of pages.
+   */
+  readonly total_pages: number;
+};
+
+/**
+ * Page[TermSetWithTerms]
+ */
+export type PageTermSetWithTerms = {
+  /**
+   * Items
+   */
+  items: Array<TermSetWithTerms>;
+  /**
+   * Total Items
+   */
+  total_items: number;
+  /**
+   * Page
+   */
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+  /**
+   * Total Pages
+   *
+   * The total number of pages.
+   */
+  readonly total_pages: number;
+};
+
+/**
+ * PaginatedDomainsResponse
+ */
+export type PaginatedDomainsResponse = {
+  /**
+   * Domains
+   */
+  domains: Array<DomainResponse>;
   /**
    * Total Count
    */
   total_count: number;
-  /**
-   * Total Unfiltered Concepts
-   */
-  total_unfiltered_concepts: number;
   /**
    * Page
    */
@@ -1753,92 +1800,35 @@ export type PaginatedOrganizationResponse = {
 };
 
 /**
- * Parameters
+ * PaginatedTermSetsResponse
+ *
+ * Pageable response for term sets in term management UI
  */
-export type Parameters = {
+export type PaginatedTermSetsResponse = {
   /**
-   * The dialect used for the activity
+   * Term Sets
    */
-  dialect?: Dialects | null;
+  term_sets: Array<TermSetWithTerms>;
   /**
-   * The tone used for the activity
+   * Total Count
    */
-  tone?: Tones | null;
+  total_count: number;
   /**
-   * The style guide used for the activity
+   * Total Unfiltered Term Sets
    */
-  style_guide?: StyleGuide | null;
+  total_unfiltered_term_sets: number;
   /**
-   * Max Words
-   * The maximum number of words allowed for the activity
+   * Page
    */
-  max_words?: number | null;
+  page: number;
   /**
-   * Replace Terms
-   * Formatted string of terms to replace for the activity
+   * Page Size
    */
-  replace_terms?: string | null;
+  page_size: number;
   /**
-   * Do Not Flag Terms
-   * Formatted string of terms to not flag for the activity
+   * Total Pages
    */
-  do_not_flag_terms?: string | null;
-  /**
-   * Context
-   * The context of the text in a structured document
-   */
-  context?: string | null;
-};
-
-/**
- * ParserResponse
- */
-export type ParserResponse = {
-  /**
-   * Activity Name
-   */
-  activity_name?: string;
-  /**
-   * Cache Hit
-   * Whether the LLM response was cached
-   */
-  cache_hit?: boolean;
-  /**
-   * Msg Hash
-   * The hash of the messages used to run the activity
-   */
-  msg_hash?: string;
-  /**
-   * Error
-   * The error that occurred during the activity
-   */
-  error?: string | null;
-  /**
-   * Duration
-   * The duration of the activity in seconds
-   */
-  duration: number;
-  /**
-   * The parameters used to run the activity
-   */
-  parameters?: Parameters;
-  /**
-   * Repair Log
-   * The LLM output's JSON repair log for the activity
-   */
-  repair_log?: Array<{
-    [key: string]: string;
-  }>;
-  /**
-   * Run Id
-   * The Temporal workflow run ID
-   */
-  run_id: string;
-  /**
-   * Extracted Text
-   * The extracted text from the file.
-   */
-  extracted_text: string;
+  total_pages: number;
 };
 
 /**
@@ -1847,9 +1837,99 @@ export type ParserResponse = {
 export type Position = {
   /**
    * Start Index
+   *
    * The start index of the issue in the text
    */
   start_index: number;
+};
+
+/**
+ * ProductPriceResponse
+ *
+ * Response model for product price data
+ */
+export type ProductPriceResponse = {
+  /**
+   * Product Price Id
+   */
+  product_price_id: string;
+  /**
+   * Product Id
+   */
+  product_id?: string | null;
+  /**
+   * Amount Cents
+   */
+  amount_cents: number;
+  /**
+   * Currency
+   */
+  currency: string;
+  /**
+   * Billing Cycle
+   */
+  billing_cycle?: string | null;
+  /**
+   * Version
+   */
+  version: number;
+  /**
+   * Active
+   */
+  active: boolean;
+};
+
+/**
+ * ProductType
+ */
+export enum ProductType {
+  PLAN = "plan",
+  ADDON = "addon",
+  FREE_ADDON = "free_addon",
+}
+
+/**
+ * ProductWithPricesResponse
+ *
+ * Response model for product with its prices
+ */
+export type ProductWithPricesResponse = {
+  /**
+   * Product Id
+   */
+  product_id: string;
+  /**
+   * Type
+   */
+  type: string;
+  /**
+   * Name
+   */
+  name: string;
+  /**
+   * Description
+   */
+  description: string | null;
+  /**
+   * Token Limit
+   */
+  token_limit: number;
+  /**
+   * Style Guide Limit
+   */
+  style_guide_limit: number;
+  /**
+   * Term Limit
+   */
+  term_limit: number;
+  /**
+   * Active
+   */
+  active: boolean;
+  /**
+   * Prices
+   */
+  prices?: Array<ProductPriceResponse>;
 };
 
 /**
@@ -1877,40 +1957,6 @@ export type RewriteContent = {
 };
 
 /**
- * RewriteOutput
- */
-export type RewriteOutput = {
-  /**
-   * Workflow Id
-   */
-  workflow_id?: string;
-  /**
-   * Errors
-   */
-  errors?: Array<WorkflowError>;
-  final_scores?: FinalScores | null;
-  initial_scores?: InitialScores | null;
-  webhook_response?: WebhookResponse | null;
-  /**
-   * Merged Text
-   */
-  merged_text: string;
-  /**
-   * Original Text
-   */
-  original_text: string;
-  /**
-   * Results
-   */
-  results: Array<HeliosOneWorkflowOutput>;
-  /**
-   * Total Doc Tokens
-   * The total number of tokens in the document
-   */
-  total_doc_tokens?: number;
-};
-
-/**
  * RewriteResponse
  */
 export type RewriteResponse = {
@@ -1926,301 +1972,6 @@ export type RewriteResponse = {
 export type ScoreOutput = {
   quality?: QualityScore | null;
   analysis?: AnalysisScore | null;
-};
-
-/**
- * SentenceLengthActivityOutput
- */
-export type SentenceLengthActivityOutput = {
-  /**
-   * Activity Name
-   */
-  activity_name?: string;
-  /**
-   * Cache Hit
-   * Whether the LLM response was cached
-   */
-  cache_hit?: boolean;
-  /**
-   * Msg Hash
-   * The hash of the messages used to run the activity
-   */
-  msg_hash?: string;
-  /**
-   * Error
-   */
-  error?: string | null;
-  /**
-   * Duration
-   * The duration of the activity in seconds
-   */
-  duration: number;
-  /**
-   * The parameters used to run the activity
-   */
-  parameters?: Parameters;
-  /**
-   * Repair Log
-   * The LLM output's JSON repair log for the activity
-   */
-  repair_log?: Array<{
-    [key: string]: string;
-  }>;
-  /**
-   * Run Id
-   */
-  run_id: string;
-  /**
-   * Changes
-   */
-  changes: Array<SentenceLengthChange>;
-  /**
-   * Text
-   */
-  text: string;
-};
-
-/**
- * SentenceLengthCategory
- */
-export enum SentenceLengthCategory {
-  UNNECESSARY_WORDS = 'Unnecessary Words',
-  SENTENCE_SPLITTING = 'Sentence Splitting',
-  CONCISE_WORDING = 'Concise Wording',
-  OTHER = 'other',
-}
-
-/**
- * SentenceLengthChange
- */
-export type SentenceLengthChange = {
-  /**
-   * Original
-   * The original text
-   */
-  original: string;
-  /**
-   * Modified
-   * The modified text
-   */
-  modified: string;
-  /**
-   * Change Start Char Idx
-   * The start index of the change (calculated from context)
-   */
-  change_start_char_idx?: number;
-  /**
-   * Change Type
-   */
-  change_type?: 'sentence_length';
-  /**
-   * Context Before
-   * Text that appears before the original text
-   */
-  context_before?: string;
-  /**
-   * Context After
-   * Text that appears after the original text
-   */
-  context_after?: string;
-  category: SentenceLengthCategory;
-};
-
-/**
- * SentenceStructureCategory
- */
-export enum SentenceStructureCategory {
-  COMPLEX_VERB_TENSES = 'Complex Verb Tenses',
-  HIDDEN_VERBS = 'Hidden Verbs',
-  DIRECT_STATEMENTS = 'Direct Statements',
-  PASSIVE_VOICE = 'Passive Voice',
-  PHRASAL_VERBS = 'Phrasal Verbs',
-  FORMAL_GRAMMAR_FORMS = 'Formal Grammar Forms',
-  OTHER = 'other',
-}
-
-/**
- * SentenceStructureChange
- */
-export type SentenceStructureChange = {
-  /**
-   * Original
-   * The original text
-   */
-  original: string;
-  /**
-   * Modified
-   * The modified text
-   */
-  modified: string;
-  /**
-   * Change Start Char Idx
-   * The start index of the change (calculated from context)
-   */
-  change_start_char_idx?: number;
-  /**
-   * Change Type
-   */
-  change_type?: 'sentence_structure';
-  /**
-   * Context Before
-   * Text that appears before the original text
-   */
-  context_before?: string;
-  /**
-   * Context After
-   * Text that appears after the original text
-   */
-  context_after?: string;
-  category: SentenceStructureCategory;
-};
-
-/**
- * SentenceStructureOutput
- */
-export type SentenceStructureOutput = {
-  /**
-   * Activity Name
-   */
-  activity_name?: string;
-  /**
-   * Cache Hit
-   * Whether the LLM response was cached
-   */
-  cache_hit?: boolean;
-  /**
-   * Msg Hash
-   * The hash of the messages used to run the activity
-   */
-  msg_hash?: string;
-  /**
-   * Error
-   */
-  error?: string | null;
-  /**
-   * Duration
-   * The duration of the activity in seconds
-   */
-  duration: number;
-  /**
-   * The parameters used to run the activity
-   */
-  parameters?: Parameters;
-  /**
-   * Repair Log
-   * The LLM output's JSON repair log for the activity
-   */
-  repair_log?: Array<{
-    [key: string]: string;
-  }>;
-  /**
-   * Run Id
-   */
-  run_id: string;
-  /**
-   * Changes
-   */
-  changes: Array<SentenceStructureChange>;
-  /**
-   * Text
-   */
-  text: string;
-};
-
-/**
- * SimpleVocabCategory
- */
-export enum SimpleVocabCategory {
-  SIMPLER_WORDS = 'Simpler Words',
-  OTHER = 'other',
-}
-
-/**
- * SimpleVocabChange
- */
-export type SimpleVocabChange = {
-  /**
-   * Original
-   * The original text
-   */
-  original: string;
-  /**
-   * Modified
-   * The modified text
-   */
-  modified: string;
-  /**
-   * Change Start Char Idx
-   * The start index of the change (calculated from context)
-   */
-  change_start_char_idx?: number;
-  /**
-   * Change Type
-   */
-  change_type?: 'simple_vocab';
-  /**
-   * Context Before
-   * Text that appears before the original text
-   */
-  context_before?: string;
-  /**
-   * Context After
-   * Text that appears after the original text
-   */
-  context_after?: string;
-  category: SimpleVocabCategory;
-};
-
-/**
- * SimpleVocabOutput
- */
-export type SimpleVocabOutput = {
-  /**
-   * Activity Name
-   */
-  activity_name?: string;
-  /**
-   * Cache Hit
-   * Whether the LLM response was cached
-   */
-  cache_hit?: boolean;
-  /**
-   * Msg Hash
-   * The hash of the messages used to run the activity
-   */
-  msg_hash?: string;
-  /**
-   * Error
-   */
-  error?: string | null;
-  /**
-   * Duration
-   * The duration of the activity in seconds
-   */
-  duration: number;
-  /**
-   * The parameters used to run the activity
-   */
-  parameters?: Parameters;
-  /**
-   * Repair Log
-   * The LLM output's JSON repair log for the activity
-   */
-  repair_log?: Array<{
-    [key: string]: string;
-  }>;
-  /**
-   * Run Id
-   */
-  run_id: string;
-  /**
-   * Text
-   */
-  text: string;
-  /**
-   * Changes
-   */
-  changes: Array<SimpleVocabChange>;
 };
 
 /**
@@ -2266,18 +2017,49 @@ export type StaffUpdate = {
 };
 
 /**
- * StartEditResponse
- * Response after successfully starting a rewrite workflow.
+ * StripeSubscriptionStatus
  */
-export type StartEditResponse = {
+export enum StripeSubscriptionStatus {
+  ACTIVE = "active",
+  CANCELED = "canceled",
+  NOT_STARTED = "not_started",
+  PAST_DUE = "past_due",
+  UNPAID = "unpaid",
+  INCOMPLETE = "incomplete",
+  INCOMPLETE_EXPIRED = "incomplete_expired",
+  TRIALING = "trialing",
+}
+
+/**
+ * StyleCheckRequestBody
+ */
+export type StyleCheckRequestBody = {
   /**
-   * Message
+   * The language variant you'd like us to use for analysis. Choose from American English, British English, or other supported dialects.
    */
-  message?: string;
+  dialect: Dialects;
   /**
-   * Workflow Id
+   * The tone variation you're aiming for. Options include formal, academic, casual, and other tone variations to match your content goals.
    */
-  workflow_id: string;
+  tone?: Tones | null;
+  /**
+   * Style Guide
+   *
+   * The style guide to follow for your content. You can use a style guide ID or choose from built-in options: `ap`, `chicago`, or `microsoft`.
+   */
+  style_guide: string;
+  /**
+   * Webhook Url
+   *
+   * A URL that results will be POSTed to once the process completes.
+   */
+  webhook_url?: string | null;
+  /**
+   * File Upload
+   *
+   * The document to analyze. Text (.txt), Markdown (.md), HTML (.html .htm), DITA (.dita, .xml), and PDF (.pdf) files are accepted. The max file size is 1.5 MB.
+   */
+  file_upload: Blob | File;
 };
 
 /**
@@ -2290,120 +2072,31 @@ export type StyleCheckResponse = {
 };
 
 /**
- * StyleGuide
- */
-export type StyleGuide = {
-  /**
-   * The type of style guide to use
-   */
-  style_guide_type?: StyleGuides | null;
-  /**
-   * Style Guide Id
-   * The ID of the style guide to use
-   */
-  style_guide_id?: string | null;
-};
-
-/**
- * StyleGuideChange
- */
-export type StyleGuideChange = {
-  /**
-   * Original
-   * The original text
-   */
-  original: string;
-  /**
-   * Modified
-   * The modified text
-   */
-  modified: string;
-  /**
-   * Change Start Char Idx
-   * The start index of the change (calculated from context)
-   */
-  change_start_char_idx?: number;
-  /**
-   * Change Type
-   */
-  change_type?: 'consistency';
-  /**
-   * Context Before
-   * Text that appears before the original text
-   */
-  context_before?: string;
-  /**
-   * Context After
-   * Text that appears after the original text
-   */
-  context_after?: string;
-  category: ConsistencyCategory;
-};
-
-/**
- * StyleGuideOutput
- */
-export type StyleGuideOutput = {
-  /**
-   * Activity Name
-   */
-  activity_name?: string;
-  /**
-   * Cache Hit
-   * Whether the LLM response was cached
-   */
-  cache_hit?: boolean;
-  /**
-   * Msg Hash
-   * The hash of the messages used to run the activity
-   */
-  msg_hash?: string;
-  /**
-   * Error
-   * The error that occurred during the activity
-   */
-  error?: string | null;
-  /**
-   * Duration
-   * The duration of the activity in seconds
-   */
-  duration: number;
-  /**
-   * The parameters used to run the activity
-   */
-  parameters?: Parameters;
-  /**
-   * Repair Log
-   * The LLM output's JSON repair log for the activity
-   */
-  repair_log?: Array<{
-    [key: string]: string;
-  }>;
-  /**
-   * Run Id
-   * The Temporal workflow run ID
-   */
-  run_id: string;
-  /**
-   * Changes
-   */
-  changes: Array<StyleGuideChange>;
-};
-
-/**
  * StyleGuideRequestBody
  */
 export type StyleGuideRequestBody = {
   /**
    * File Upload
+   *
    * The document to analyze. We accept PDF files (.pdf) up to 2 MB.
    */
   file_upload: Blob | File;
   /**
    * Name
+   *
    * A friendly name for your style guide to help you identify it later.
    */
   name: string;
+  /**
+   * The base style guide to extend (AP, Chicago, or Microsoft). If not provided, the style guide will be created from scratch.
+   */
+  base_style_guide?: BaseStyleGuideType | null;
+  /**
+   * Terminology Domain Ids
+   *
+   * List of domain IDs to filter terminology searches by. NULL or empty list means no filtering.
+   */
+  terminology_domain_ids?: Array<string> | null;
 };
 
 /**
@@ -2416,16 +2109,19 @@ export type StyleGuideResponse = {
   id: string;
   /**
    * Name
+   *
    * The name of the style guide.
    */
   name: string;
   /**
    * Created At
+   *
    * The UTC date and time the style guide was created.
    */
   created_at: string;
   /**
    * Created By
+   *
    * The ID of the user who created the style guide.
    */
   created_by: string;
@@ -2435,79 +2131,90 @@ export type StyleGuideResponse = {
   status: StyleGuideStatus;
   /**
    * Updated At
+   *
    * The UTC datetime that the style guide was last updated. If null, the style guide has never been updated.
    */
   updated_at?: string | null;
   /**
    * Updated By
+   *
    * The ID of the user who last updated the style guide. If null, the style guide has never been updated.
    */
   updated_by?: string | null;
   /**
    * Summary
+   *
    * User-friendly summary of the style guide's contents and characteristics
    */
   summary?: string | null;
+  /**
+   * The base style guide type that this style guide extends (AP, Chicago, or Microsoft).
+   */
+  base_style_guide_type?: BaseStyleGuideType | null;
+  /**
+   * Terminology Domain Ids
+   *
+   * List of domain IDs to filter terminology searches by. NULL or empty list means no filtering.
+   */
+  terminology_domain_ids?: Array<string> | null;
 };
 
 /**
  * StyleGuideStatus
  */
 export enum StyleGuideStatus {
-  RUNNING = 'running',
-  COMPLETED = 'completed',
-  FAILED = 'failed',
-  NOT_FOUND = 'not_found',
+  RUNNING = "running",
+  COMPLETED = "completed",
+  FAILED = "failed",
+  NOT_FOUND = "not_found",
 }
 
 /**
  * StyleGuides
  */
 export enum StyleGuides {
-  AP = 'ap',
-  CHICAGO = 'chicago',
-  MICROSOFT = 'microsoft',
-  STYLE_BRAND_IMPORTER = 'style_brand_importer',
+  AP = "ap",
+  CHICAGO = "chicago",
+  MICROSOFT = "microsoft",
+  STYLE_BRAND_IMPORTER = "style_brand_importer",
 }
-
-/**
- * StyleRequestBody
- */
-export type StyleRequestBody = {
-  /**
-   * File Upload
-   * The document to analyze. Text files (.txt), PDFs (.pdf), and Markdown files (.md) are accepted. The max file size is 1.5 MB
-   */
-  file_upload: Blob | File;
-  /**
-   * The language variant you'd like us to use for analysis. Choose from American English, British English, or other supported dialects.
-   */
-  dialect: Dialects;
-  /**
-   * The tone variation you're aiming for. Options include formal, academic, casual, and other tone variations to match your content goals.
-   */
-  tone?: Tones | null;
-  /**
-   * Style Guide
-   * The style guide to follow for your content. You can use a style guide ID or choose from built-in options: `ap`, `chicago`, or `microsoft`.
-   */
-  style_guide: string;
-  /**
-   * Webhook Url
-   * A URL that results will be POSTed to once the process completes.
-   */
-  webhook_url?: string | null;
-};
 
 /**
  * StyleRewriteRequestBody
  */
 export type StyleRewriteRequestBody = {
   /**
+   * The language variant you'd like us to use for analysis. Choose from American English, British English, or other supported dialects.
+   */
+  dialect: Dialects;
+  /**
+   * The tone variation you're aiming for. Options include formal, academic, casual, and other tone variations to match your content goals.
+   */
+  tone?: Tones | null;
+  /**
+   * Style Guide
+   *
+   * The style guide to follow for your content. You can use a style guide ID or choose from built-in options: `ap`, `chicago`, or `microsoft`.
+   */
+  style_guide: string;
+  /**
+   * Webhook Url
+   *
+   * A URL that results will be POSTed to once the process completes.
+   */
+  webhook_url?: string | null;
+  /**
    * File Upload
-   * The document to rewrite. Text files (.txt) and Markdown files (.md) are accepted. The max file size is 1.5 MB
+   *
+   * The document to rewrite. Text (.txt), Markdown (.md), HTML (.html .htm), and DITA (.dita, .xml) files are accepted. The max file size is 1.5 MB.
    */
   file_upload: Blob | File;
+};
+
+/**
+ * StyleSuggestionRequestBody
+ */
+export type StyleSuggestionRequestBody = {
   /**
    * The language variant you'd like us to use for analysis. Choose from American English, British English, or other supported dialects.
    */
@@ -2518,14 +2225,98 @@ export type StyleRewriteRequestBody = {
   tone?: Tones | null;
   /**
    * Style Guide
+   *
    * The style guide to follow for your content. You can use a style guide ID or choose from built-in options: `ap`, `chicago`, or `microsoft`.
    */
   style_guide: string;
   /**
    * Webhook Url
+   *
    * A URL that results will be POSTed to once the process completes.
    */
   webhook_url?: string | null;
+  /**
+   * File Upload
+   *
+   * The document to analyze. Text (.txt), Markdown (.md), HTML (.html .htm), DITA (.dita, .xml), and PDF (.pdf) files are accepted. The max file size is 1.5 MB.
+   */
+  file_upload: Blob | File;
+};
+
+/**
+ * SubscriptionLogResponse
+ *
+ * Response model for subscription log data
+ */
+export type SubscriptionLogResponse = {
+  /**
+   * Org Event History
+   */
+  org_event_history: Array<OrgEventHistory>;
+};
+
+/**
+ * SubscriptionResponse
+ *
+ * Response model for subscription data
+ */
+export type SubscriptionResponse = {
+  /**
+   * Order Id
+   */
+  order_id: string;
+  /**
+   * Organization Id
+   */
+  organization_id: string;
+  order_type: OrderType;
+  billing_cycle: BillingCycle;
+  order_status: OrderStatus;
+  /**
+   * Current Period Start
+   */
+  current_period_start: string;
+  /**
+   * Current Period End
+   */
+  current_period_end: string;
+  /**
+   * Cancel At Period End
+   */
+  cancel_at_period_end: boolean;
+  stripe_subscription_status: StripeSubscriptionStatus;
+  /**
+   * Cancel Reason
+   */
+  cancel_reason?: string | null;
+  /**
+   * Updated At
+   */
+  updated_at: string;
+  /**
+   * Amount
+   */
+  amount: number;
+  /**
+   * Currency
+   */
+  currency: string;
+  /**
+   * Product Name
+   */
+  product_name: string;
+  /**
+   * Product Type
+   */
+  product_type: string;
+  /**
+   * Created At
+   */
+  created_at: string;
+  /**
+   * Is Visible
+   */
+  is_visible: boolean;
 };
 
 /**
@@ -2534,6 +2325,7 @@ export type StyleRewriteRequestBody = {
 export type Suggestion = {
   /**
    * Original
+   *
    * The original text
    */
   original: string;
@@ -2543,11 +2335,18 @@ export type Suggestion = {
   position: Position;
   /**
    * Subcategory
+   *
    * The sub-category of the change
    */
-  subcategory: GrammarCategory | ClarityCategory | ToneCategory | ConsistencyCategory | TermReplaceCategory;
+  subcategory:
+    | GrammarCategory
+    | ClarityCategory
+    | ToneCategory
+    | ConsistencyCategory
+    | TermReplaceCategory;
   /**
    * Suggestion
+   *
    * The suggested replacement text
    */
   suggestion: string;
@@ -2576,7 +2375,8 @@ export type SuggestionResponse = {
 
 /**
  * TermCreateRequest
- * Payload to create a new term for a concept
+ *
+ * Payload to create a new term for a term set
  */
 export type TermCreateRequest = {
   /**
@@ -2588,6 +2388,7 @@ export type TermCreateRequest = {
 
 /**
  * TermDetail
+ *
  * Detailed term information for term management UI
  */
 export type TermDetail = {
@@ -2633,106 +2434,16 @@ export type TermItem = {
 };
 
 /**
- * TermReplaceActivityOutput
- */
-export type TermReplaceActivityOutput = {
-  /**
-   * Activity Name
-   */
-  activity_name?: string;
-  /**
-   * Cache Hit
-   * Whether the LLM response was cached
-   */
-  cache_hit?: boolean;
-  /**
-   * Msg Hash
-   * The hash of the messages used to run the activity
-   */
-  msg_hash?: string;
-  /**
-   * Error
-   * The error that occurred during the activity
-   */
-  error?: string | null;
-  /**
-   * Duration
-   * The duration of the activity in seconds
-   */
-  duration: number;
-  /**
-   * The parameters used to run the activity
-   */
-  parameters?: Parameters;
-  /**
-   * Repair Log
-   * The LLM output's JSON repair log for the activity
-   */
-  repair_log?: Array<{
-    [key: string]: string;
-  }>;
-  /**
-   * Run Id
-   * The Temporal workflow run ID
-   */
-  run_id: string;
-  /**
-   * Changes
-   */
-  changes: Array<TermReplaceChange>;
-  /**
-   * Has Terms
-   * Whether the text had terms to replace; we'll skip the LLM call if not
-   */
-  has_terms: boolean;
-};
-
-/**
  * TermReplaceCategory
  */
 export enum TermReplaceCategory {
-  TERMINOLOGY = 'Terminology',
-  OTHER = 'other',
+  TERMINOLOGY = "Terminology",
+  OTHER = "other",
 }
 
 /**
- * TermReplaceChange
- */
-export type TermReplaceChange = {
-  /**
-   * Original
-   * The original text
-   */
-  original: string;
-  /**
-   * Modified
-   * The modified text
-   */
-  modified: string;
-  /**
-   * Change Start Char Idx
-   * The start index of the change (calculated from context)
-   */
-  change_start_char_idx?: number;
-  /**
-   * Change Type
-   */
-  change_type?: 'replace_terms';
-  /**
-   * Context Before
-   * Text that appears before the original text
-   */
-  context_before?: string;
-  /**
-   * Context After
-   * Text that appears after the original text
-   */
-  context_after?: string;
-  category: TermReplaceCategory;
-};
-
-/**
  * TermResponse
+ *
  * DB-mapped representation of a term.
  */
 export type TermResponse = {
@@ -2764,17 +2475,145 @@ export type TermResponse = {
 };
 
 /**
+ * TermSetCreateRequest
+ *
+ * Payload to create a new term set
+ */
+export type TermSetCreateRequest = {
+  /**
+   * Instructions
+   */
+  instructions: string;
+  /**
+   * Terms
+   */
+  terms?: Array<TermCreateRequest> | null;
+  /**
+   * Domain Ids
+   */
+  domain_ids?: Array<string> | null;
+};
+
+/**
+ * TermSetResponse
+ *
+ * DB-mapped representation of a term set (no terms).
+ */
+export type TermSetResponse = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Instructions
+   */
+  instructions: string;
+  /**
+   * Created At
+   */
+  created_at: string;
+  /**
+   * Updated At
+   */
+  updated_at: string;
+  /**
+   * Created By
+   */
+  created_by?: string | null;
+  /**
+   * Updated By
+   */
+  updated_by?: string | null;
+};
+
+/**
+ * TermSetResult
+ */
+export type TermSetResult = {
+  /**
+   * Instructions
+   */
+  instructions: string;
+  /**
+   * Terms
+   */
+  terms: Array<TermItem>;
+  /**
+   * Matched Terms
+   */
+  matched_terms: Array<MatchedTerm>;
+};
+
+/**
+ * TermSetUpdateRequest
+ *
+ * Payload to update an existing term set
+ */
+export type TermSetUpdateRequest = {
+  /**
+   * Instructions
+   */
+  instructions?: string | null;
+  /**
+   * Domain Ids
+   */
+  domain_ids?: Array<string> | null;
+};
+
+/**
+ * TermSetWithTerms
+ *
+ * Term set with all associated terms for term management UI
+ */
+export type TermSetWithTerms = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Instructions
+   */
+  instructions: string;
+  /**
+   * Created At
+   */
+  created_at: string;
+  /**
+   * Updated At
+   */
+  updated_at: string;
+  /**
+   * Created By
+   */
+  created_by?: string | null;
+  /**
+   * Updated By
+   */
+  updated_by?: string | null;
+  /**
+   * Terms
+   */
+  terms: Array<TermDetail>;
+  /**
+   * Domains
+   */
+  domains?: Array<DomainSummary>;
+};
+
+/**
  * TermType
+ *
  * Represents the three types of terms in the terminology system.
  */
 export enum TermType {
-  PREFERRED = 'preferred',
-  DEPRECATED = 'deprecated',
-  CONTEXT_MATTERS = 'context_matters',
+  PREFERRED = "preferred",
+  DEPRECATED = "deprecated",
+  CONTEXT_MATTERS = "context_matters",
 }
 
 /**
  * TermUpdateRequest
+ *
  * Payload to update an existing term
  */
 export type TermUpdateRequest = {
@@ -2800,92 +2639,96 @@ export type TerminologyScore = {
 };
 
 /**
- * TerminologySearchRequest
- */
-export type TerminologySearchRequest = {
-  /**
-   * Text Chunk
-   */
-  text_chunk: string;
-};
-
-/**
  * TerminologySearchResponse
  */
 export type TerminologySearchResponse = {
   /**
    * Results
    */
-  results: Array<ConceptResult>;
+  results: Array<TermSetResult>;
 };
 
 /**
  * ThrottleConfig
+ *
  * Throttle configuration for an API key.
  */
 export type ThrottleConfig = {
   /**
    * Api Key
+   *
    * The API key identifier
    */
   api_key: string;
   /**
    * Tpm Limit
+   *
    * Tokens per minute limit
    */
   tpm_limit: number;
   /**
    * Tps Limit
+   *
    * Tokens per second limit
    */
   tps_limit: number;
   /**
    * Tps Burst Ms
+   *
    * TPS burst duration in milliseconds
    */
   tps_burst_ms: number;
   /**
    * Safety Margin
+   *
    * Safety margin as a decimal (0.1 = 10%)
    */
   safety_margin: number;
   /**
    * Lease Ttl Ms
+   *
    * Lease TTL in milliseconds
    */
   lease_ttl_ms: number;
   /**
    * Aimd Decrease Rate
+   *
    * AIMD decrease rate as a decimal
    */
   aimd_decrease_rate: number;
   /**
    * Aimd Increase Rate
+   *
    * AIMD increase rate as a decimal
    */
   aimd_increase_rate: number;
   /**
    * Aimd Clean Window Seconds
+   *
    * AIMD clean window in seconds
    */
   aimd_clean_window_seconds: number;
   /**
    * Ttl Seconds
+   *
    * Configuration TTL in seconds
    */
   ttl_seconds: number;
   /**
    * Ttl Minutes
+   *
    * Configuration TTL in minutes
    */
   ttl_minutes: number;
   /**
    * Gsu Tpm Percentage
+   *
    * Percentage of 1 GSU TPM capacity
    */
   gsu_tpm_percentage: number;
   /**
    * Gsu Tps Percentage
+   *
    * Percentage of 1 GSU TPS capacity
    */
   gsu_tps_percentage: number;
@@ -2893,21 +2736,25 @@ export type ThrottleConfig = {
 
 /**
  * ThrottleMetricsResponse
+ *
  * Response containing all throttle metrics.
  */
 export type ThrottleMetricsResponse = {
   /**
    * Configurations
+   *
    * List of all throttle configurations
    */
   configurations: Array<ThrottleConfig>;
   /**
    * Cooldowns
+   *
    * List of active cooldowns
    */
   cooldowns: Array<CooldownInfo>;
   /**
    * Summary
+   *
    * Summary statistics
    */
   summary: {
@@ -2915,6 +2762,7 @@ export type ThrottleMetricsResponse = {
   };
   /**
    * Timestamp
+   *
    * Timestamp of the metrics snapshot
    */
   timestamp: string;
@@ -2922,41 +2770,49 @@ export type ThrottleMetricsResponse = {
 
 /**
  * ThrottleResetRequest
+ *
  * Request to reset or update throttle configuration.
  */
 export type ThrottleResetRequest = {
   /**
    * Api Key
+   *
    * The API key to reset/update
    */
   api_key: string;
   /**
    * Gsu Percentage
+   *
    * Percentage of 1 GSU capacity (e.g., 1000 for 1000%)
    */
   gsu_percentage?: number;
   /**
    * Tpm Limit
+   *
    * Optional: Override TPM limit directly
    */
   tpm_limit?: number | null;
   /**
    * Tps Limit
+   *
    * Optional: Override TPS limit directly
    */
   tps_limit?: number | null;
   /**
    * Tps Burst Ms
+   *
    * Optional: Override TPS burst window in milliseconds (default: keeps existing or 5000)
    */
   tps_burst_ms?: number | null;
   /**
    * Clear Aimd State
+   *
    * Clear AIMD state (successes, 429 history)
    */
   clear_aimd_state?: boolean;
   /**
    * Reset Cooldowns
+   *
    * Reset increase/decrease cooldowns
    */
   reset_cooldowns?: boolean;
@@ -2964,46 +2820,55 @@ export type ThrottleResetRequest = {
 
 /**
  * ThrottleResetResponse
+ *
  * Response after resetting throttle configuration.
  */
 export type ThrottleResetResponse = {
   /**
    * Api Key
+   *
    * The API key that was reset
    */
   api_key: string;
   /**
    * Old Tpm Limit
+   *
    * Previous TPM limit
    */
   old_tpm_limit: number | null;
   /**
    * Old Tps Limit
+   *
    * Previous TPS limit
    */
   old_tps_limit: number | null;
   /**
    * New Tpm Limit
+   *
    * New TPM limit
    */
   new_tpm_limit: number;
   /**
    * New Tps Limit
+   *
    * New TPS limit
    */
   new_tps_limit: number;
   /**
    * Gsu Percentage
+   *
    * Percentage of 1 GSU capacity
    */
   gsu_percentage: number;
   /**
    * Aimd State Cleared
+   *
    * Whether AIMD state was cleared
    */
   aimd_state_cleared: boolean;
   /**
    * Cooldowns Reset
+   *
    * Whether cooldowns were reset
    */
   cooldowns_reset: boolean;
@@ -3011,11 +2876,13 @@ export type ThrottleResetResponse = {
 
 /**
  * ThrottleToggleRequest
+ *
  * Request to toggle rate limiting on/off.
  */
 export type ThrottleToggleRequest = {
   /**
    * Enabled
+   *
    * Whether to enable or disable rate limiting
    */
   enabled: boolean;
@@ -3023,21 +2890,25 @@ export type ThrottleToggleRequest = {
 
 /**
  * ThrottleToggleResponse
+ *
  * Response after toggling rate limiting.
  */
 export type ThrottleToggleResponse = {
   /**
    * Enabled
+   *
    * Current rate limiting state
    */
   enabled: boolean;
   /**
    * Previous State
+   *
    * Previous rate limiting state (None if not previously set)
    */
   previous_state: boolean | null;
   /**
    * Message
+   *
    * Confirmation message
    */
   message: string;
@@ -3047,108 +2918,13 @@ export type ThrottleToggleResponse = {
  * ToneCategory
  */
 export enum ToneCategory {
-  TONE_ALIGNED_WORDING = 'Tone-Aligned Wording',
-  TONE_SHAPING_STRUCTURE = 'Tone-Shaping Structure',
-  TONE_SIGNAL_PUNCTUATION = 'Tone-Signal Punctuation',
-  TRANSITIONS_AND_FLOW = 'Transitions and Flow',
-  ADDITIONAL_TONE_CHANGES = 'Additional Tone Changes',
-  OTHER = 'other',
+  TONE_ALIGNED_WORDING = "Tone-Aligned Wording",
+  TONE_SHAPING_STRUCTURE = "Tone-Shaping Structure",
+  TONE_SIGNAL_PUNCTUATION = "Tone-Signal Punctuation",
+  TRANSITIONS_AND_FLOW = "Transitions and Flow",
+  ADDITIONAL_TONE_CHANGES = "Additional Tone Changes",
+  OTHER = "other",
 }
-
-/**
- * ToneChange
- */
-export type ToneChange = {
-  /**
-   * Original
-   * The original text
-   */
-  original: string;
-  /**
-   * Modified
-   * The modified text
-   */
-  modified: string;
-  /**
-   * Change Start Char Idx
-   * The start index of the change (calculated from context)
-   */
-  change_start_char_idx?: number;
-  /**
-   * Change Type
-   */
-  change_type?: 'tone';
-  /**
-   * Context Before
-   * Text that appears before the original text
-   */
-  context_before?: string;
-  /**
-   * Context After
-   * Text that appears after the original text
-   */
-  context_after?: string;
-  /**
-   * The category of the change
-   */
-  category: ToneCategory;
-};
-
-/**
- * ToneCheckOutput
- */
-export type ToneCheckOutput = {
-  /**
-   * Activity Name
-   */
-  activity_name?: string;
-  /**
-   * Cache Hit
-   * Whether the LLM response was cached
-   */
-  cache_hit?: boolean;
-  /**
-   * Msg Hash
-   * The hash of the messages used to run the activity
-   */
-  msg_hash?: string;
-  /**
-   * Error
-   * The error that occurred during the activity
-   */
-  error?: string | null;
-  /**
-   * Duration
-   * The duration of the activity in seconds
-   */
-  duration: number;
-  /**
-   * The parameters used to run the activity
-   */
-  parameters?: Parameters;
-  /**
-   * Repair Log
-   * The LLM output's JSON repair log for the activity
-   */
-  repair_log?: Array<{
-    [key: string]: string;
-  }>;
-  /**
-   * Run Id
-   * The Temporal workflow run ID
-   */
-  run_id: string;
-  /**
-   * Changes
-   * Suggested changes to the text
-   */
-  changes: Array<ToneChange>;
-  /**
-   * Text
-   * The original text
-   */
-  text: string;
-};
 
 /**
  * ToneScore
@@ -3180,44 +2956,86 @@ export type ToneScore = {
  * Tones
  */
 export enum Tones {
-  ACADEMIC = 'academic',
-  CONFIDENT = 'confident',
-  CONVERSATIONAL = 'conversational',
-  EMPATHETIC = 'empathetic',
-  ENGAGING = 'engaging',
-  FRIENDLY = 'friendly',
-  PROFESSIONAL = 'professional',
-  TECHNICAL = 'technical',
+  ACADEMIC = "academic",
+  CONFIDENT = "confident",
+  CONVERSATIONAL = "conversational",
+  EMPATHETIC = "empathetic",
+  ENGAGING = "engaging",
+  FRIENDLY = "friendly",
+  PROFESSIONAL = "professional",
+  TECHNICAL = "technical",
 }
 
 /**
- * UserProfileRequest
+ * UpdateSubscriptionRequest
+ *
+ * Request model for updating a subscription
  */
-export type UserProfileRequest = {
+export type UpdateSubscriptionRequest = {
   /**
-   * Role
+   * New Product Price Id
    */
-  role?: string | null;
+  new_product_price_id: string;
+};
+
+/**
+ * UpdateSubscriptionResponse
+ *
+ * Response model for updating a subscription
+ */
+export type UpdateSubscriptionResponse = {
+  /**
+   * Order Id
+   */
+  order_id: string;
+  /**
+   * Organization Id
+   */
+  organization_id: string;
+  order_type: OrderType;
+  billing_cycle: BillingCycle;
+  order_status: OrderStatus;
+  /**
+   * Current Period Start
+   */
+  current_period_start: string;
+  /**
+   * Current Period End
+   */
+  current_period_end: string;
+  /**
+   * Cancel At Period End
+   */
+  cancel_at_period_end: boolean;
+  stripe_subscription_status: StripeSubscriptionStatus;
+  new_product?: ProductWithPricesResponse | null;
+  old_product?: ProductWithPricesResponse | null;
+};
+
+/**
+ * UserProfileResponse
+ */
+export type UserProfileResponse = {
   /**
    * First Name
    */
-  first_name?: string | null;
+  first_name: string | null;
   /**
    * Last Name
    */
-  last_name?: string | null;
-  /**
-   * Company
-   */
-  company?: string | null;
+  last_name: string | null;
   /**
    * Job Title
    */
-  job_title?: string | null;
+  job_title: string | null;
   /**
-   * Country
+   * User Role
    */
-  country?: string | null;
+  user_role: string | null;
+  /**
+   * Marketing Consent
+   */
+  marketing_consent: boolean | null;
 };
 
 /**
@@ -3240,26 +3058,31 @@ export type UserResponse = {
 export type ValidationErrorItem = {
   /**
    * Type
+   *
    * The type of error that occurred.
    */
   type: string;
   /**
    * Loc
+   *
    * The location of the error in the request.
    */
   loc: Array<unknown>;
   /**
    * Msg
+   *
    * A description of the error that occurred.
    */
   msg: string;
   /**
    * Input
+   *
    * The input that caused the error.
    */
   input?: unknown;
   /**
    * Ctx
+   *
    * Additional context about the error.
    */
   ctx?: {
@@ -3273,21 +3096,25 @@ export type ValidationErrorItem = {
 export type ValidationErrorResponse = {
   /**
    * Detail
+   *
    * A description of the error that occurred.
    */
   detail: string;
   /**
    * Status
+   *
    * The HTTP status code generated by the server for this issue
    */
   status: number;
   /**
    * Request Id
+   *
    * A unique ID associated with the HTTP request.
    */
   request_id: string;
   /**
    * Errors
+   *
    * Detailed field-specific errors
    */
   errors?: Array<ValidationErrorItem>;
@@ -3308,38 +3135,37 @@ export type WebhookResponse = {
 };
 
 /**
- * WorkflowError
- */
-export type WorkflowError = {
-  /**
-   * Error
-   * The error message
-   */
-  error: string;
-};
-
-/**
  * WorkflowInfo
  */
 export type WorkflowInfo = {
   /**
    * Id
+   *
    * Workflow ID
    */
   id: string;
   /**
    * Api Version
+   *
    * API version
    */
   api_version?: string;
   /**
+   * Filename
+   *
+   * The original name of the file passed into the workflow
+   */
+  filename?: string | null;
+  /**
    * Generated At
+   *
    * UTC timestamp when the result was generated
    */
   generated_at?: string | null;
   status?: WorkflowStatus;
   /**
    * Type
+   *
    * Workflow type: checks, suggestions, or rewrites
    */
   type: string;
@@ -3364,66 +3190,170 @@ export type WorkflowResponse = {
  * WorkflowStatus
  */
 export enum WorkflowStatus {
-  RUNNING = 'running',
-  COMPLETED = 'completed',
-  FAILED = 'failed',
-  NOT_FOUND = 'not_found',
+  RUNNING = "running",
+  COMPLETED = "completed",
+  FAILED = "failed",
+  NOT_FOUND = "not_found",
 }
 
 /**
- * UserProfileResponse
+ * StyleGuide
  */
-export type HeliosOneApiModulesUserMainUserProfileResponse = {
+export type HeliosOneActivitiesEngineSharedModelsStyleGuide = {
   /**
-   * Role
+   * The type of style guide to use
    */
-  role?: string | null;
+  style_guide_type?: StyleGuides | null;
   /**
-   * First Name
+   * Style Guide Id
+   *
+   * The ID of the style guide to use
    */
-  first_name?: string | null;
-  /**
-   * Last Name
-   */
-  last_name?: string | null;
-  /**
-   * Company
-   */
-  company?: string | null;
-  /**
-   * Job Title
-   */
-  job_title?: string | null;
-  /**
-   * Country
-   */
-  country?: string | null;
+  style_guide_id?: string | null;
 };
 
 /**
- * UserProfileResponse
+ * PaginatedInvitationsResponse
  */
-export type HeliosOneApiSchemasSharedUserProfileResponse = {
+export type HeliosOneApiModulesAdminMainPaginatedInvitationsResponse = {
   /**
-   * First Name
+   * Page
    */
-  first_name: string | null;
+  page: number;
   /**
-   * Last Name
+   * Page Size
    */
-  last_name: string | null;
+  page_size: number;
   /**
-   * Job Title
+   * Invitations
    */
-  job_title: string | null;
+  invitations: Array<InvitedUser>;
+};
+
+/**
+ * PaginatedMembersResponse
+ */
+export type HeliosOneApiModulesAdminMainPaginatedMembersResponse = {
   /**
-   * User Role
+   * Total
    */
-  user_role: string | null;
+  total: number | null;
   /**
-   * Marketing Consent
+   * Page
    */
-  marketing_consent: boolean | null;
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+  /**
+   * Members
+   */
+  members: Array<OrganizationMember>;
+};
+
+/**
+ * StyleGuide
+ */
+export type HeliosOneDatabaseModelsStyleGuideStyleGuide = {
+  /**
+   * Created By
+   *
+   * The ID of the user who created the style guide. For now, this is the user's email but will likely be a UUID in the future.
+   */
+  created_by: string;
+  /**
+   * Organization Id
+   *
+   * The ID of the organization that owns the style guide. NULL for system-provided guides.
+   */
+  organization_id?: string | null;
+  /**
+   * Created At
+   *
+   * The date and time the style guide was created.
+   */
+  created_at?: string | null;
+  /**
+   * Name
+   *
+   * A user-friendly name for the style guide.
+   */
+  name?: string;
+  /**
+   * Updated By
+   *
+   * The ID of the user who last updated the style guide. For now, this is the user's email but will likely be a UUID in the future.
+   */
+  updated_by?: string | null;
+  /**
+   * Updated At
+   *
+   * The date and time the style guide was last updated. If null, the style guide has never been updated.
+   */
+  updated_at?: string | null;
+  /**
+   * Deleted By
+   *
+   * The ID of the user who deleted the style guide. For now, this is the user's email but will likely be a UUID in the future.
+   */
+  deleted_by?: string | null;
+  /**
+   * Deleted At
+   *
+   * The date and time the style guide was deleted. If null, the style guide is not deleted.
+   */
+  deleted_at?: string | null;
+  /**
+   * The status of the submitted style guide.
+   */
+  status?: StyleGuideStatus;
+  /**
+   * The base style guide type (AP, Chicago, Microsoft) that this style guide extends
+   */
+  base_style_guide_type?: BaseStyleGuideType | null;
+  /**
+   * Id
+   */
+  id?: string;
+  /**
+   * Consistency Prompt
+   *
+   * Consistency prompt for capitalization, punctuation, numbers, and technical conventions
+   */
+  consistency_prompt?: string | null;
+  /**
+   * Tone Prompt
+   *
+   * Tone prompt for voice and inclusive language
+   */
+  tone_prompt?: string | null;
+  /**
+   * Clarity Sentence Structure Prompt
+   *
+   * Clarity sentence structure prompt for grammar and sentence construction
+   */
+  clarity_sentence_structure_prompt?: string | null;
+  /**
+   * Clarity Simple Vocabulary Prompt
+   *
+   * Clarity simple vocabulary prompt for word choice and vocabulary simplification
+   */
+  clarity_simple_vocabulary_prompt?: string | null;
+  /**
+   * Summary
+   *
+   * User-friendly summary of the style guide's contents and characteristics
+   */
+  summary?: string | null;
+};
+
+/**
+ * AccountResponse
+ */
+export type AccountResponseWritable = {
+  organization: OrganizationResponseFullWritable;
+  user_profile: UserProfileResponse;
 };
 
 /**
@@ -3432,6 +3362,7 @@ export type HeliosOneApiSchemasSharedUserProfileResponse = {
 export type IssueWritable = {
   /**
    * Original
+   *
    * The original text
    */
   original: string;
@@ -3441,9 +3372,15 @@ export type IssueWritable = {
   position: Position;
   /**
    * Subcategory
+   *
    * The sub-category of the change
    */
-  subcategory: GrammarCategory | ClarityCategory | ToneCategory | ConsistencyCategory | TermReplaceCategory;
+  subcategory:
+    | GrammarCategory
+    | ClarityCategory
+    | ToneCategory
+    | ConsistencyCategory
+    | TermReplaceCategory;
 };
 
 /**
@@ -3499,6 +3436,10 @@ export type OrganizationResponseWritable = {
    * Is Internal
    */
   is_internal: boolean;
+  /**
+   * Is Acrolinx Classic
+   */
+  is_acrolinx_classic: boolean;
 };
 
 /**
@@ -3551,10 +3492,6 @@ export type OrganizationResponseAdminWritable = {
   domain: string;
   created_by: CreatorResponse | null;
   /**
-   * Admins
-   */
-  admins?: Array<string> | null;
-  /**
    * Style Guides
    */
   style_guides?: number;
@@ -3570,6 +3507,10 @@ export type OrganizationResponseAdminWritable = {
    * Is Internal
    */
   is_internal: boolean;
+  /**
+   * Is Acrolinx Classic
+   */
+  is_acrolinx_classic: boolean;
 };
 
 /**
@@ -3622,10 +3563,6 @@ export type OrganizationResponseFullWritable = {
   domain: string;
   created_by: CreatorResponse | null;
   /**
-   * Admins
-   */
-  admins?: Array<string> | null;
-  /**
    * Style Guides
    */
   style_guides?: number;
@@ -3637,6 +3574,132 @@ export type OrganizationResponseFullWritable = {
    * Country
    */
   country: string | null;
+  /**
+   * Is Internal
+   */
+  is_internal: boolean;
+  /**
+   * Is Acrolinx Classic
+   */
+  is_acrolinx_classic: boolean;
+};
+
+/**
+ * OriginalContent
+ */
+export type OriginalContentWritable = {
+  /**
+   * Issues
+   */
+  issues?: Array<IssueWritable>;
+  scores?: ScoreOutput | null;
+};
+
+/**
+ * Page[APIKeyRead]
+ */
+export type PageApiKeyReadWritable = {
+  /**
+   * Items
+   */
+  items: Array<ApiKeyRead>;
+  /**
+   * Total Items
+   */
+  total_items: number;
+  /**
+   * Page
+   */
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+};
+
+/**
+ * Page[StyleGuide]
+ */
+export type PageStyleGuideWritable = {
+  /**
+   * Items
+   */
+  items: Array<HeliosOneDatabaseModelsStyleGuideStyleGuide>;
+  /**
+   * Total Items
+   */
+  total_items: number;
+  /**
+   * Page
+   */
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+};
+
+/**
+ * Page[TermSetWithTerms]
+ */
+export type PageTermSetWithTermsWritable = {
+  /**
+   * Items
+   */
+  items: Array<TermSetWithTerms>;
+  /**
+   * Total Items
+   */
+  total_items: number;
+  /**
+   * Page
+   */
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+};
+
+/**
+ * PaginatedOrganizationResponse
+ */
+export type PaginatedOrganizationResponseWritable = {
+  /**
+   * Total
+   */
+  total: number;
+  /**
+   * Page
+   */
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+  /**
+   * Organizations
+   */
+  organizations: Array<OrganizationResponseWritable>;
+};
+
+/**
+ * RewriteResponse
+ */
+export type RewriteResponseWritable = {
+  config?: ConfigOptions | null;
+  original?: SuggestionOriginalContentWritable | null;
+  rewrite?: RewriteContent | null;
+  workflow: WorkflowInfo;
+};
+
+/**
+ * StyleCheckResponse
+ */
+export type StyleCheckResponseWritable = {
+  config?: ConfigOptions | null;
+  original?: OriginalContentWritable | null;
+  workflow: WorkflowInfo;
 };
 
 /**
@@ -3645,6 +3708,7 @@ export type OrganizationResponseFullWritable = {
 export type SuggestionWritable = {
   /**
    * Original
+   *
    * The original text
    */
   original: string;
@@ -3654,80 +3718,48 @@ export type SuggestionWritable = {
   position: Position;
   /**
    * Subcategory
+   *
    * The sub-category of the change
    */
-  subcategory: GrammarCategory | ClarityCategory | ToneCategory | ConsistencyCategory | TermReplaceCategory;
+  subcategory:
+    | GrammarCategory
+    | ClarityCategory
+    | ToneCategory
+    | ConsistencyCategory
+    | TermReplaceCategory;
   /**
    * Suggestion
+   *
    * The suggested replacement text
    */
   suggestion: string;
 };
 
-export type InternalGetAdminConstantsData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: '/v1/internal/constants';
+/**
+ * SuggestionOriginalContent
+ */
+export type SuggestionOriginalContentWritable = {
+  /**
+   * Issues
+   */
+  issues?: Array<SuggestionWritable>;
+  scores?: ScoreOutput | null;
 };
 
-export type InternalGetAdminConstantsErrors = {
-  /**
-   * Unprocessable Entity
-   */
-  422: ValidationErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
+/**
+ * SuggestionResponse
+ */
+export type SuggestionResponseWritable = {
+  config?: ConfigOptions | null;
+  original?: SuggestionOriginalContentWritable | null;
+  workflow: WorkflowInfo;
 };
-
-export type InternalGetAdminConstantsError = InternalGetAdminConstantsErrors[keyof InternalGetAdminConstantsErrors];
-
-export type InternalGetAdminConstantsResponses = {
-  /**
-   * Successful Response
-   */
-  200: ConstantsResponse;
-};
-
-export type InternalGetAdminConstantsResponse =
-  InternalGetAdminConstantsResponses[keyof InternalGetAdminConstantsResponses];
-
-export type InternalSubmitFeedbackData = {
-  body: FeedbackRequest;
-  path?: never;
-  query?: never;
-  url: '/v1/internal/demo-feedback';
-};
-
-export type InternalSubmitFeedbackErrors = {
-  /**
-   * Unprocessable Entity
-   */
-  422: ValidationErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type InternalSubmitFeedbackError = InternalSubmitFeedbackErrors[keyof InternalSubmitFeedbackErrors];
-
-export type InternalSubmitFeedbackResponses = {
-  /**
-   * Successful Response
-   */
-  204: void;
-};
-
-export type InternalSubmitFeedbackResponse = InternalSubmitFeedbackResponses[keyof InternalSubmitFeedbackResponses];
 
 export type StyleGuidesListStyleGuidesData = {
   body?: never;
   path?: never;
   query?: never;
-  url: '/v1/style-guides';
+  url: "/v1/style-guides";
 };
 
 export type StyleGuidesListStyleGuidesErrors = {
@@ -3749,11 +3781,13 @@ export type StyleGuidesListStyleGuidesErrors = {
   500: ErrorResponse;
 };
 
-export type StyleGuidesListStyleGuidesError = StyleGuidesListStyleGuidesErrors[keyof StyleGuidesListStyleGuidesErrors];
+export type StyleGuidesListStyleGuidesError =
+  StyleGuidesListStyleGuidesErrors[keyof StyleGuidesListStyleGuidesErrors];
 
 export type StyleGuidesListStyleGuidesResponses = {
   /**
    * Response 200 Style Guides-List Style Guides
+   *
    * Successfully retrieved style guides.
    */
   200: Array<StyleGuideResponse>;
@@ -3766,7 +3800,7 @@ export type StyleGuidesCreateStyleGuideData = {
   body: StyleGuideRequestBody;
   path?: never;
   query?: never;
-  url: '/v1/style-guides';
+  url: "/v1/style-guides";
 };
 
 export type StyleGuidesCreateStyleGuideErrors = {
@@ -3778,6 +3812,10 @@ export type StyleGuidesCreateStyleGuideErrors = {
    * Forbidden
    */
   403: ErrorResponse;
+  /**
+   * A style guide with this name already exists
+   */
+  409: ErrorResponse;
   /**
    * The uploaded file exceeds the maximum allowed size.
    */
@@ -3810,12 +3848,13 @@ export type StyleGuidesDeleteStyleGuideData = {
   path: {
     /**
      * Style Guide Id
+     *
      * The ID of the style guide.
      */
     style_guide_id: string;
   };
   query?: never;
-  url: '/v1/style-guides/{style_guide_id}';
+  url: "/v1/style-guides/{style_guide_id}";
 };
 
 export type StyleGuidesDeleteStyleGuideErrors = {
@@ -3859,12 +3898,13 @@ export type StyleGuidesGetStyleGuideData = {
   path: {
     /**
      * Style Guide Id
+     *
      * The ID of the style guide.
      */
     style_guide_id: string;
   };
   query?: never;
-  url: '/v1/style-guides/{style_guide_id}';
+  url: "/v1/style-guides/{style_guide_id}";
 };
 
 export type StyleGuidesGetStyleGuideErrors = {
@@ -3890,7 +3930,8 @@ export type StyleGuidesGetStyleGuideErrors = {
   500: ErrorResponse;
 };
 
-export type StyleGuidesGetStyleGuideError = StyleGuidesGetStyleGuideErrors[keyof StyleGuidesGetStyleGuideErrors];
+export type StyleGuidesGetStyleGuideError =
+  StyleGuidesGetStyleGuideErrors[keyof StyleGuidesGetStyleGuideErrors];
 
 export type StyleGuidesGetStyleGuideResponses = {
   /**
@@ -3903,16 +3944,17 @@ export type StyleGuidesGetStyleGuideResponse =
   StyleGuidesGetStyleGuideResponses[keyof StyleGuidesGetStyleGuideResponses];
 
 export type StyleGuidesUpdateStyleGuideData = {
-  body: BodyStyleGuidesUpdateStyleGuide;
+  body?: BodyStyleGuidesUpdateStyleGuide;
   path: {
     /**
      * Style Guide Id
+     *
      * The ID of the style guide.
      */
     style_guide_id: string;
   };
   query?: never;
-  url: '/v1/style-guides/{style_guide_id}';
+  url: "/v1/style-guides/{style_guide_id}";
 };
 
 export type StyleGuidesUpdateStyleGuideErrors = {
@@ -3928,6 +3970,10 @@ export type StyleGuidesUpdateStyleGuideErrors = {
    * Style guide not found.
    */
   404: ErrorResponse;
+  /**
+   * A style guide with this name already exists
+   */
+  409: ErrorResponse;
   /**
    * Validation error.
    */
@@ -3952,10 +3998,10 @@ export type StyleGuidesUpdateStyleGuideResponse =
   StyleGuidesUpdateStyleGuideResponses[keyof StyleGuidesUpdateStyleGuideResponses];
 
 export type StyleChecksCreateStyleCheckData = {
-  body: StyleRequestBody;
+  body: StyleCheckRequestBody;
   path?: never;
   query?: never;
-  url: '/v1/style/checks';
+  url: "/v1/style/checks";
 };
 
 export type StyleChecksCreateStyleCheckErrors = {
@@ -4007,7 +4053,7 @@ export type StyleChecksGetStyleCheckData = {
     workflow_id: string;
   };
   query?: never;
-  url: '/v1/style/checks/{workflow_id}';
+  url: "/v1/style/checks/{workflow_id}";
 };
 
 export type StyleChecksGetStyleCheckErrors = {
@@ -4033,7 +4079,8 @@ export type StyleChecksGetStyleCheckErrors = {
   500: ErrorResponse;
 };
 
-export type StyleChecksGetStyleCheckError = StyleChecksGetStyleCheckErrors[keyof StyleChecksGetStyleCheckErrors];
+export type StyleChecksGetStyleCheckError =
+  StyleChecksGetStyleCheckErrors[keyof StyleChecksGetStyleCheckErrors];
 
 export type StyleChecksGetStyleCheckResponses = {
   /**
@@ -4045,11 +4092,106 @@ export type StyleChecksGetStyleCheckResponses = {
 export type StyleChecksGetStyleCheckResponse =
   StyleChecksGetStyleCheckResponses[keyof StyleChecksGetStyleCheckResponses];
 
-export type StyleSuggestionsCreateStyleSuggestionData = {
-  body: StyleRequestBody;
+export type StyleChecksCreateStyleCheckBatchData = {
+  body: BatchStyleCheckRequestBody;
   path?: never;
   query?: never;
-  url: '/v1/style/suggestions';
+  url: "/v1/style/batch-checks";
+};
+
+export type StyleChecksCreateStyleCheckBatchErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
+  /**
+   * The uploaded file exceeds the maximum allowed size.
+   */
+  413: ErrorResponse;
+  /**
+   * The request validation failed.
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Token limit exceeded.
+   */
+  429: ErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type StyleChecksCreateStyleCheckBatchError =
+  StyleChecksCreateStyleCheckBatchErrors[keyof StyleChecksCreateStyleCheckBatchErrors];
+
+export type StyleChecksCreateStyleCheckBatchResponses = {
+  /**
+   * Request accepted.
+   */
+  202: WorkflowResponse;
+};
+
+export type StyleChecksCreateStyleCheckBatchResponse =
+  StyleChecksCreateStyleCheckBatchResponses[keyof StyleChecksCreateStyleCheckBatchResponses];
+
+export type StyleChecksGetStyleCheckBatchData = {
+  body?: never;
+  path: {
+    /**
+     * Workflow Id
+     */
+    workflow_id: string;
+  };
+  query?: never;
+  url: "/v1/style/batch-checks/{workflow_id}";
+};
+
+export type StyleChecksGetStyleCheckBatchErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
+  /**
+   * The client attempted to poll or retrieve results for an ID that doesn't exist.
+   */
+  404: ErrorResponse;
+  /**
+   * The request validation failed.
+   */
+  422: ValidationErrorResponse;
+  /**
+   * An internal server error occurred while fetching the workflow result.
+   */
+  500: ErrorResponse;
+};
+
+export type StyleChecksGetStyleCheckBatchError =
+  StyleChecksGetStyleCheckBatchErrors[keyof StyleChecksGetStyleCheckBatchErrors];
+
+export type StyleChecksGetStyleCheckBatchResponses = {
+  /**
+   * Batch style check results.
+   */
+  200: BatchStyleResponse;
+};
+
+export type StyleChecksGetStyleCheckBatchResponse =
+  StyleChecksGetStyleCheckBatchResponses[keyof StyleChecksGetStyleCheckBatchResponses];
+
+export type StyleSuggestionsCreateStyleSuggestionData = {
+  body: StyleSuggestionRequestBody;
+  path?: never;
+  query?: never;
+  url: "/v1/style/suggestions";
 };
 
 export type StyleSuggestionsCreateStyleSuggestionErrors = {
@@ -4101,7 +4243,7 @@ export type StyleSuggestionsGetStyleSuggestionData = {
     workflow_id: string;
   };
   query?: never;
-  url: '/v1/style/suggestions/{workflow_id}';
+  url: "/v1/style/suggestions/{workflow_id}";
 };
 
 export type StyleSuggestionsGetStyleSuggestionErrors = {
@@ -4140,11 +4282,106 @@ export type StyleSuggestionsGetStyleSuggestionResponses = {
 export type StyleSuggestionsGetStyleSuggestionResponse =
   StyleSuggestionsGetStyleSuggestionResponses[keyof StyleSuggestionsGetStyleSuggestionResponses];
 
+export type StyleSuggestionsCreateStyleSuggestionBatchData = {
+  body: BatchStyleSuggestionRequestBody;
+  path?: never;
+  query?: never;
+  url: "/v1/style/batch-suggestions";
+};
+
+export type StyleSuggestionsCreateStyleSuggestionBatchErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
+  /**
+   * The uploaded file exceeds the maximum allowed size.
+   */
+  413: ErrorResponse;
+  /**
+   * The request validation failed.
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Token limit exceeded.
+   */
+  429: ErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type StyleSuggestionsCreateStyleSuggestionBatchError =
+  StyleSuggestionsCreateStyleSuggestionBatchErrors[keyof StyleSuggestionsCreateStyleSuggestionBatchErrors];
+
+export type StyleSuggestionsCreateStyleSuggestionBatchResponses = {
+  /**
+   * Request accepted.
+   */
+  202: WorkflowResponse;
+};
+
+export type StyleSuggestionsCreateStyleSuggestionBatchResponse =
+  StyleSuggestionsCreateStyleSuggestionBatchResponses[keyof StyleSuggestionsCreateStyleSuggestionBatchResponses];
+
+export type StyleSuggestionsGetStyleSuggestionBatchData = {
+  body?: never;
+  path: {
+    /**
+     * Workflow Id
+     */
+    workflow_id: string;
+  };
+  query?: never;
+  url: "/v1/style/batch-suggestions/{workflow_id}";
+};
+
+export type StyleSuggestionsGetStyleSuggestionBatchErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
+  /**
+   * The client attempted to poll or retrieve results for an ID that doesn't exist.
+   */
+  404: ErrorResponse;
+  /**
+   * The request validation failed.
+   */
+  422: ValidationErrorResponse;
+  /**
+   * An internal server error occurred while fetching the workflow result.
+   */
+  500: ErrorResponse;
+};
+
+export type StyleSuggestionsGetStyleSuggestionBatchError =
+  StyleSuggestionsGetStyleSuggestionBatchErrors[keyof StyleSuggestionsGetStyleSuggestionBatchErrors];
+
+export type StyleSuggestionsGetStyleSuggestionBatchResponses = {
+  /**
+   * Batch style suggestions results.
+   */
+  200: BatchStyleResponse;
+};
+
+export type StyleSuggestionsGetStyleSuggestionBatchResponse =
+  StyleSuggestionsGetStyleSuggestionBatchResponses[keyof StyleSuggestionsGetStyleSuggestionBatchResponses];
+
 export type StyleRewritesCreateStyleRewriteData = {
   body: StyleRewriteRequestBody;
   path?: never;
   query?: never;
-  url: '/v1/style/rewrites';
+  url: "/v1/style/rewrites";
 };
 
 export type StyleRewritesCreateStyleRewriteErrors = {
@@ -4196,7 +4433,7 @@ export type StyleRewritesGetStyleRewriteData = {
     workflow_id: string;
   };
   query?: never;
-  url: '/v1/style/rewrites/{workflow_id}';
+  url: "/v1/style/rewrites/{workflow_id}";
 };
 
 export type StyleRewritesGetStyleRewriteErrors = {
@@ -4228,6 +4465,7 @@ export type StyleRewritesGetStyleRewriteError =
 export type StyleRewritesGetStyleRewriteResponses = {
   /**
    * Response Style Rewrites-Get Style Rewrite
+   *
    * Rewrite results.
    */
   200: RewriteResponse;
@@ -4235,3 +4473,41 @@ export type StyleRewritesGetStyleRewriteResponses = {
 
 export type StyleRewritesGetStyleRewriteResponse =
   StyleRewritesGetStyleRewriteResponses[keyof StyleRewritesGetStyleRewriteResponses];
+
+export type GetAdminConstantsData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/v1/internal/constants";
+};
+
+export type GetAdminConstantsErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type GetAdminConstantsError = GetAdminConstantsErrors[keyof GetAdminConstantsErrors];
+
+export type GetAdminConstantsResponses = {
+  /**
+   * Successful Response
+   */
+  200: ConstantsResponse;
+};
+
+export type GetAdminConstantsResponse =
+  GetAdminConstantsResponses[keyof GetAdminConstantsResponses];

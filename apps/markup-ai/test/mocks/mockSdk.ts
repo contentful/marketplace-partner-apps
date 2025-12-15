@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi } from "vitest";
 
 interface MockSDK {
   app: {
@@ -77,7 +77,7 @@ const mockSdk: MockSDK = {
     getCurrentState: vi.fn(),
   },
   ids: {
-    app: 'test-app',
+    app: "test-app",
   },
   window: {
     updateHeight: vi.fn(),
@@ -91,8 +91,8 @@ const mockSdk: MockSDK = {
   close: vi.fn(),
   entry: {
     fields: {
-      field1: { name: 'Field 1' },
-      field2: { name: 'Field 2' },
+      field1: { name: "Field 1" },
+      field2: { name: "Field 2" },
     },
   },
   dialogs: {
@@ -100,13 +100,13 @@ const mockSdk: MockSDK = {
   },
   parameters: {
     invocation: {
-      original: 'Original text',
-      suggestion: 'Improved text',
+      original: "Original text",
+      suggestion: "Improved text",
       score: 95,
       originalScore: 75,
       goalScores: [
-        { label: 'Grammar', score: 90, color: '#008539', bar: '#E6F4EA' },
-        { label: 'Style', score: 85, color: '#FFB020', bar: '#FFF4E5' },
+        { label: "Grammar", score: 90, color: "#008539", bar: "#E6F4EA" },
+        { label: "Style", score: 85, color: "#FFB020", bar: "#FFF4E5" },
       ],
       analysis: {
         avg_sentence_length: 15.5,
@@ -126,13 +126,13 @@ const mockSdk: MockSDK = {
         vocabulary_score: 92.3,
         word_count: 148,
       },
-      analysisTime: '2 minutes ago',
+      analysisTime: "2 minutes ago",
     },
     installation: {
-      apiKey: 'test-api-key',
-      dialect: 'en-US',
-      tone: 'professional',
-      styleGuide: 'default',
+      apiKey: "test-api-key",
+      dialect: "en-US",
+      tone: "professional",
+      styleGuide: "default",
     },
   },
 };

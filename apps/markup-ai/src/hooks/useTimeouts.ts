@@ -1,19 +1,19 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback } from "react";
 
 export const useTimeouts = () => {
   const timeoutRefs = useRef<{ [key: string]: ReturnType<typeof globalThis.setTimeout> }>({});
 
   const setTimeout = useCallback((key: string, callback: () => void, delay: number) => {
-    if (timeoutRefs.current[key]) {
+    if (key in timeoutRefs.current) {
       globalThis.clearTimeout(timeoutRefs.current[key]);
     }
     timeoutRefs.current[key] = globalThis.setTimeout(callback, delay);
   }, []);
 
   const clearTimeout = useCallback((key: string) => {
-    if (timeoutRefs.current[key]) {
+    if (key in timeoutRefs.current) {
       globalThis.clearTimeout(timeoutRefs.current[key]);
-      delete timeoutRefs.current[key];
+      Reflect.deleteProperty(timeoutRefs.current, key);
     }
   }, []);
 
