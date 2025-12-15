@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
-import { DialogAppSDK } from '@contentful/app-sdk';
-import { useSDK } from '@contentful/react-apps-toolkit';
-import { AnalysisResultsComparison } from '../../components/Dialog/AnalysisResultsComparison/AnalysisResultsComparison';
-import { ContentDiff } from '../../components/Dialog/ContentDiff/ContentDiff';
-import { DialogActions } from '../../components/Dialog/DialogActions/DialogActions';
+import { useState, useEffect, useCallback } from "react";
+import { DialogAppSDK } from "@contentful/app-sdk";
+import { useSDK } from "@contentful/react-apps-toolkit";
+import { AnalysisResultsComparison } from "../../components/Dialog/AnalysisResultsComparison/AnalysisResultsComparison";
+import { ContentDiff } from "../../components/Dialog/ContentDiff/ContentDiff";
+import { DialogActions } from "../../components/Dialog/DialogActions/DialogActions";
 import {
   DialogContainer,
   DialogContent,
@@ -12,18 +12,18 @@ import {
   CenteredContent,
   ActionsWrapper,
   CompanyLogo,
-} from './Dialog.styles';
-import { LoadingState } from '../../components/LoadingState/LoadingState';
-import { useRewriterService } from '../../services/rewriterService';
-import { Button } from '@contentful/f36-components';
-import { FieldCheck } from '../../types/content';
+} from "./Dialog.styles";
+import { LoadingState } from "../../components/LoadingState/LoadingState";
+import { useRewriterService } from "../../services/rewriterService";
+import { Button } from "@contentful/f36-components";
+import { FieldCheck } from "../../types/content";
 
 interface DialogParameters {
   fieldId?: string;
   original: string;
   startRewrite?: boolean;
   originalScore?: number | null;
-  previewFormat?: 'markdown' | 'html';
+  previewFormat?: "markdown" | "html";
 }
 
 const Dialog = () => {
@@ -34,12 +34,11 @@ const Dialog = () => {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<FieldCheck | null>(null);
 
-  // API key from installation, per-user preferences from local storage
   const stored = globalThis.localStorage;
-  const apiKey = sdk.parameters.installation.apiKey || '';
-  const dialect = stored.getItem('markupai.dialect') || undefined;
-  const tone = stored.getItem('markupai.tone') || undefined;
-  const styleGuide = stored.getItem('markupai.styleGuide') || undefined;
+  const apiKey = stored.getItem("markupai.apiKey") || "";
+  const dialect = stored.getItem("markupai.dialect") || undefined;
+  const tone = stored.getItem("markupai.tone") || undefined;
+  const styleGuide = stored.getItem("markupai.styleGuide") || undefined;
   const config = { apiKey, dialect, tone, styleGuide };
 
   // Use the hook-based rewriter service
@@ -51,16 +50,19 @@ const Dialog = () => {
     setResult(null);
     try {
       // Call rewrite service
-      const rewrite = await rewriteContent(parameters.fieldId!, parameters.original);
-      if (!rewrite || !rewrite.hasRewriteResult || !rewrite.checkResponse) {
-        throw new Error('No rewrite result received');
+      if (!parameters.fieldId) {
+        throw new Error("Field ID is required");
+      }
+      const rewrite = await rewriteContent(parameters.fieldId, parameters.original);
+      if (!rewrite.hasRewriteResult || !rewrite.checkResponse) {
+        throw new Error("No rewrite result received");
       }
       setResult(rewrite);
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError('An error occurred while rewriting content');
+        setError("An error occurred while rewriting content");
       }
     } finally {
       setLoading(false);
@@ -69,7 +71,7 @@ const Dialog = () => {
 
   useEffect(() => {
     if (parameters.startRewrite) {
-      triggerRewrite();
+      void triggerRewrite();
     }
   }, []);
 
@@ -78,8 +80,12 @@ const Dialog = () => {
   }, [loading]);
 
   const handleAccept = () => {
-    if (result?.checkResponse && 'rewrite' in result.checkResponse && result.checkResponse.rewrite) {
-      console.log('result.checkResponse', result.checkResponse);
+    if (
+      result?.checkResponse &&
+      "rewrite" in result.checkResponse &&
+      result.checkResponse.rewrite
+    ) {
+      console.log("result.checkResponse", result.checkResponse);
       sdk.close({
         accepted: true,
         value: result.checkResponse.rewrite,
@@ -93,7 +99,7 @@ const Dialog = () => {
   };
 
   const handleRewriteAgain = () => {
-    triggerRewrite();
+    void triggerRewrite();
   };
 
   const renderContent = () => {
@@ -107,9 +113,14 @@ const Dialog = () => {
     if (error) {
       return (
         <CenteredContent>
-          <div style={{ textAlign: 'center', padding: 32 }}>
-            <div style={{ color: '#D14343', marginBottom: 16, fontWeight: 500 }}>{error}</div>
-            <Button variant="secondary" onClick={triggerRewrite}>
+          <div style={{ textAlign: "center", padding: 32 }}>
+            <div style={{ color: "#D14343", marginBottom: 16, fontWeight: 500 }}>{error}</div>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                void triggerRewrite();
+              }}
+            >
               Retry
             </Button>
           </div>
@@ -118,33 +129,37 @@ const Dialog = () => {
     }
     const checkResponse = result?.checkResponse;
     if (!checkResponse) return null;
-    const rewrite = 'rewrite' in checkResponse ? checkResponse.rewrite : undefined;
+    const rewrite = "rewrite" in checkResponse ? checkResponse.rewrite : undefined;
     const improvedScores = rewrite?.scores ?? null;
     if (!improvedScores) return null;
-    const initialScores = 'original' in checkResponse ? (checkResponse.original?.scores ?? null) : null;
-    console.log('Dialog - improvedScores:', improvedScores);
-    console.log('workflow_id:', checkResponse.workflow?.id);
+    const initialScores =
+      "original" in checkResponse ? (checkResponse.original?.scores ?? null) : null;
+    console.log("Dialog - improvedScores:", improvedScores);
+    console.log("workflow_id:", checkResponse.workflow.id);
     return (
       <>
         <DialogHeader>
           <DialogTitle>Improvement Summary</DialogTitle>
           <CompanyLogo src="logos/markup_Logo_Horz_Coral.svg" alt="Markup AI" />
         </DialogHeader>
-        {initialScores && <AnalysisResultsComparison initial={initialScores} improved={improvedScores} />}
+        {initialScores && (
+          <AnalysisResultsComparison initial={initialScores} improved={improvedScores} />
+        )}
         <ContentDiff
           original={parameters.original}
-          improved={rewrite?.text ?? ''}
+          improved={rewrite?.text ?? ""}
           originalScore={parameters.originalScore ?? 0}
           improvedScore={improvedScores.quality?.score ?? 0}
-          previewFormat={parameters.previewFormat ?? 'markdown'}
+          previewFormat={parameters.previewFormat ?? "markdown"}
         />
       </>
     );
   };
 
+  const checkResponse = result?.checkResponse;
   const workflowId =
-    result?.checkResponse && 'workflow' in result.checkResponse && result.checkResponse.workflow
-      ? result.checkResponse.workflow.id
+    checkResponse && "workflow" in checkResponse
+      ? (checkResponse.workflow as { id?: string } | undefined)?.id
       : undefined;
 
   return (

@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
-import { Text } from '@contentful/f36-components';
+import styled from "@emotion/styled";
+import { Text } from "@contentful/f36-components";
 
 export const SectionWrapper = styled.div`
   display: flex;
@@ -35,7 +35,7 @@ export const MetricRow = styled.div`
 `;
 
 export const Label = styled(Text)`
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-weight: 500;
   font-size: 12px;
   line-height: 24px;
@@ -46,7 +46,7 @@ export const Label = styled(Text)`
 `;
 
 export const Score = styled(Text)`
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-size: 12px;
   font-weight: 500;
   color: #111b2b;
@@ -80,11 +80,11 @@ export const ComplexityBar = styled.div`
 export const ComplexitySegment = styled.div<{ active: boolean }>`
   flex: 1;
   height: 4px;
-  background-color: ${(props) => (props.active ? '#40A0FF' : '#e7ebee')};
+  background-color: ${(props) => (props.active ? "#40A0FF" : "#e7ebee")};
 `;
 
 export const Title = styled(Text)`
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-weight: 700;
   font-size: 12px;
   line-height: 24px;

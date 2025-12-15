@@ -1,7 +1,7 @@
 // Simple and fast heuristic to detect likely HTML content in a string
 export function isLikelyHtmlString(content: string): boolean {
   const sample = content.trimStart().slice(0, 256).toLowerCase();
-  if (sample.startsWith('<!doctype html') || sample.startsWith('<html')) return true;
+  if (sample.startsWith("<!doctype html") || sample.startsWith("<html")) return true;
   // Common HTML tags early in documents
   return /<(head|body|title|div|span|p|h1|h2|h3|h4|h5|h6)\b/.test(sample);
 }

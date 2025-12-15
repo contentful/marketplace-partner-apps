@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect, useRef } from 'react';
+import { useCallback, useState, useEffect, useRef } from "react";
 import {
   useGetAdminConstants,
   useListStyleGuides,
@@ -6,10 +6,17 @@ import {
   useGetStyleCheck,
   useCreateStyleRewrite,
   useGetStyleRewrite,
-} from './useStyleAndBrandAgent';
-import type { PlatformConfig } from '../types/content';
-import { Dialects, RewriteResponse, StyleCheckResponse, Tones } from '../api-client/types.gen';
-import { isLikelyHtmlString, isLikelyMarkdownString } from '../utils/contentDetection';
+} from "./useStyleAndBrandAgent";
+import type { PlatformConfig } from "../types/content";
+import {
+  Dialects,
+  RewriteResponse,
+  StyleCheckResponse,
+  Tones,
+  WorkflowStatus,
+} from "../api-client/types.gen";
+import { isLikelyHtmlString, isLikelyMarkdownString } from "../utils/contentDetection";
+import { WORKFLOW_POLLING_INTERVAL, WORKFLOW_TIMEOUT } from "../constants/app";
 
 // Type mappings from the new API to maintain compatibility
 export type Constants = {
@@ -25,26 +32,61 @@ export type StyleGuides = Array<{
   updated_at?: string | null;
 }>;
 
-export function validateConfig(config: PlatformConfig | undefined): asserts config is PlatformConfig {
+export function validateConfig(
+  config: PlatformConfig | undefined,
+): asserts config is PlatformConfig {
   if (!config?.apiKey) {
-    throw new Error('Configuration is missing. Please configure the app first.');
+    throw new Error("Configuration is missing. Please configure the app first.");
   }
 }
 
 // Helper function to create a Blob from string content
 const createContentBlob = (content: string): File => {
-  let mimeType = 'text/plain';
-  let extension = '.txt';
+  let mimeType = "text/plain";
+  let extension = ".txt";
 
   if (isLikelyHtmlString(content)) {
-    mimeType = 'text/html';
-    extension = '.html';
+    mimeType = "text/html";
+    extension = ".html";
   } else if (isLikelyMarkdownString(content)) {
-    mimeType = 'text/markdown';
-    extension = '.md';
+    mimeType = "text/markdown";
+    extension = ".md";
   }
 
   return new File([content], `content${extension}`, { type: mimeType });
+};
+
+// Helper function for polling workflow completion
+const pollWorkflowCompletion = <T>(
+  resultRef: React.MutableRefObject<T | null>,
+  failedRef: React.MutableRefObject<boolean>,
+  clearWorkflowId: () => void,
+): Promise<T> => {
+  return new Promise((resolve, reject) => {
+    const cleanup = (
+      checkInterval: ReturnType<typeof setInterval>,
+      timeoutId: ReturnType<typeof setTimeout>,
+    ) => {
+      clearInterval(checkInterval);
+      clearTimeout(timeoutId);
+    };
+
+    const timeoutId = setTimeout(() => {
+      cleanup(checkInterval, timeoutId);
+      clearWorkflowId();
+      reject(new Error("Workflow timed out"));
+    }, WORKFLOW_TIMEOUT);
+
+    const checkInterval = setInterval(() => {
+      if (resultRef.current) {
+        cleanup(checkInterval, timeoutId);
+        resolve(resultRef.current);
+      } else if (failedRef.current) {
+        cleanup(checkInterval, timeoutId);
+        reject(new Error("Workflow failed"));
+      }
+    }, WORKFLOW_POLLING_INTERVAL);
+  });
 };
 
 // Hook-based service that uses React Query internally
@@ -55,12 +97,22 @@ export function useApiService(config: PlatformConfig) {
   // Use refs to track current results for the polling logic
   const checkResultRef = useRef<StyleCheckResponse | null>(null);
   const rewriteResultRef = useRef<RewriteResponse | null>(null);
+  const checkFailedRef = useRef<boolean>(false);
+  const rewriteFailedRef = useRef<boolean>(false);
 
   // Get admin constants
-  const { data: constantsData, isLoading: constantsLoading, error: constantsError } = useGetAdminConstants(config);
+  const {
+    data: constantsData,
+    isLoading: constantsLoading,
+    error: constantsError,
+  } = useGetAdminConstants(config);
 
   // Get style guides
-  const { data: styleGuidesData, isLoading: styleGuidesLoading, error: styleGuidesError } = useListStyleGuides(config);
+  const {
+    data: styleGuidesData,
+    isLoading: styleGuidesLoading,
+    error: styleGuidesError,
+  } = useListStyleGuides(config);
 
   // Create style check mutation
   const createStyleCheckMutation = useCreateStyleCheck(config);
@@ -87,21 +139,29 @@ export function useApiService(config: PlatformConfig) {
 
   // Watch for check query completion
   useEffect(() => {
-    if (checkQuery.data && checkQuery.data.workflow?.status === 'completed') {
+    if (checkQuery.data && checkQuery.data.workflow.status === WorkflowStatus.COMPLETED) {
       checkResultRef.current = checkQuery.data;
-    } else if (checkQuery.data && checkQuery.data.workflow?.status === 'failed') {
+      checkFailedRef.current = false;
+      setActiveCheckWorkflowId(null);
+    } else if (checkQuery.data && checkQuery.data.workflow.status === WorkflowStatus.FAILED) {
       checkResultRef.current = null;
+      checkFailedRef.current = true;
+      setActiveCheckWorkflowId(null);
     }
   }, [checkQuery.data, activeCheckWorkflowId]);
 
   // Watch for rewrite query completion
   useEffect(() => {
-    if (rewriteQuery.data && rewriteQuery.data.workflow?.status === 'completed') {
+    if (rewriteQuery.data && rewriteQuery.data.workflow.status === WorkflowStatus.COMPLETED) {
       rewriteResultRef.current = rewriteQuery.data;
-    } else if (rewriteQuery.data && rewriteQuery.data.workflow?.status === 'failed') {
+      rewriteFailedRef.current = false;
+      setActiveRewriteWorkflowId(null);
+    } else if (rewriteQuery.data && rewriteQuery.data.workflow.status === WorkflowStatus.FAILED) {
       rewriteResultRef.current = null;
+      rewriteFailedRef.current = true;
+      setActiveRewriteWorkflowId(null);
     }
-  }, [rewriteQuery.data]);
+  }, [rewriteQuery.data, activeRewriteWorkflowId]);
 
   // Simple async functions that use React Query internally
   const checkContent = useCallback(
@@ -113,33 +173,23 @@ export function useApiService(config: PlatformConfig) {
         const result = await createStyleCheckMutation.mutateAsync({
           body: {
             file_upload: fileBlob,
-            dialect: (config.dialect as Dialects) || Dialects.AMERICAN_ENGLISH,
-            tone: (config.tone as Tones) || null,
-            style_guide: config.styleGuide || '',
+            dialect: (config.dialect as Dialects | undefined) || Dialects.AMERICAN_ENGLISH,
+            tone: (config.tone as Tones | undefined) || null,
+            style_guide: config.styleGuide || "",
           },
         });
 
         // Set the workflow ID for polling
         setActiveCheckWorkflowId(result.workflow_id);
         checkResultRef.current = null; // Reset ref
+        checkFailedRef.current = false;
 
         // Wait for the workflow to complete
-        return new Promise((resolve, reject) => {
-          const checkInterval = setInterval(() => {
-            if (checkResultRef.current) {
-              clearInterval(checkInterval);
-              resolve(checkResultRef.current);
-            }
-          }, 1000); // Check every second
-
-          // Timeout after 1 minute
-          setTimeout(() => {
-            clearInterval(checkInterval);
-            reject(new Error('Workflow timed out'));
-          }, 60000);
+        return await pollWorkflowCompletion(checkResultRef, checkFailedRef, () => {
+          setActiveCheckWorkflowId(null);
         });
       } catch (error) {
-        console.error('Error checking content:', error);
+        console.error("Error checking content:", error);
         throw error;
       }
     },
@@ -152,68 +202,70 @@ export function useApiService(config: PlatformConfig) {
 
       try {
         const fileBlob = createContentBlob(content);
+        const requestBody = {
+          file_upload: fileBlob,
+          dialect: (config.dialect as Dialects | undefined) || Dialects.AMERICAN_ENGLISH,
+          tone: (config.tone as Tones | undefined) || null,
+          style_guide: config.styleGuide || "",
+        };
+
         const result = await createStyleRewriteMutation.mutateAsync({
-          body: {
-            file_upload: fileBlob,
-            dialect: (config.dialect as Dialects) || Dialects.AMERICAN_ENGLISH,
-            tone: (config.tone as Tones) || null,
-            style_guide: config.styleGuide || '',
-          },
+          body: requestBody,
         });
 
         // Set the workflow ID for polling
         setActiveRewriteWorkflowId(result.workflow_id);
         rewriteResultRef.current = null; // Reset ref
+        rewriteFailedRef.current = false;
 
         // Wait for the workflow to complete
-        return new Promise((resolve, reject) => {
-          const checkInterval = setInterval(() => {
-            if (rewriteResultRef.current) {
-              clearInterval(checkInterval);
-              resolve(rewriteResultRef.current);
-            }
-          }, 1000); // Check every second
-
-          // Timeout after 1 minute
-          setTimeout(() => {
-            clearInterval(checkInterval);
-            reject(new Error('Workflow timed out'));
-          }, 60000);
+        return await pollWorkflowCompletion(rewriteResultRef, rewriteFailedRef, () => {
+          setActiveRewriteWorkflowId(null);
         });
       } catch (error) {
-        console.error('Error rewriting content:', error);
+        console.error("Error rewriting content:", error);
         throw error;
       }
     },
     [config, createStyleRewriteMutation],
   );
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   const fetchAdminConstants = useCallback(async (): Promise<Constants> => {
-    validateConfig(config);
+    try {
+      validateConfig(config);
 
-    if (constantsError) {
-      throw constantsError;
+      if (constantsError) {
+        throw constantsError;
+      }
+
+      if (!constants) {
+        throw new Error("Constants not loaded");
+      }
+
+      return constants;
+    } catch (error: unknown) {
+      throw error instanceof Error ? error : new Error(String(error));
     }
-
-    if (!constants) {
-      throw new Error('Constants not loaded');
-    }
-
-    return constants;
   }, [config, constants, constantsError]);
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   const fetchStyleGuides = useCallback(async (): Promise<StyleGuides> => {
-    validateConfig(config);
+    try {
+      validateConfig(config);
 
-    if (styleGuidesError) {
-      throw styleGuidesError;
+      if (styleGuidesError) {
+        throw styleGuidesError;
+      }
+
+      if (!styleGuides) {
+        throw new Error("Style guides not loaded");
+      }
+
+      return styleGuides;
+    } catch (error: unknown) {
+      throw error instanceof Error ? error : new Error(String(error));
     }
-
-    if (!styleGuides) {
-      throw new Error('Style guides not loaded');
-    }
-
-    return styleGuides;
   }, [config, styleGuides, styleGuidesError]);
 
   return {

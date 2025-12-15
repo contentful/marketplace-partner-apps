@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '../../../../test/utils/testUtils';
-import { AnalysisResultsComparison } from './AnalysisResultsComparison';
+import { describe, it, expect } from "vitest";
+import { render, screen } from "../../../../test/utils/testUtils";
+import { AnalysisResultsComparison } from "./AnalysisResultsComparison";
 
 const mockInitialScores = {
   quality: {
@@ -56,29 +56,29 @@ const mockImprovedScores = {
   },
 };
 
-describe('AnalysisResultsComparison', () => {
-  it('renders all metric labels', () => {
+describe("AnalysisResultsComparison", () => {
+  it("renders all metric labels", () => {
     render(<AnalysisResultsComparison initial={mockInitialScores} improved={mockImprovedScores} />);
-    expect(screen.getByText('Clarity')).toBeInTheDocument();
-    expect(screen.getByText('Grammar')).toBeInTheDocument();
-    expect(screen.getByText('Consistency')).toBeInTheDocument();
-    expect(screen.getByText('Tone')).toBeInTheDocument();
+    expect(screen.getByText("Clarity")).toBeInTheDocument();
+    expect(screen.getByText("Grammar")).toBeInTheDocument();
+    expect(screen.getByText("Consistency")).toBeInTheDocument();
+    expect(screen.getByText("Tone")).toBeInTheDocument();
   });
 
-  it('renders correct improved and initial values', () => {
+  it("renders correct improved and initial values", () => {
     render(<AnalysisResultsComparison initial={mockInitialScores} improved={mockImprovedScores} />);
     // Improved values
-    expect(screen.getAllByText('80.00').length).toBe(2); // Improved clarity and tone
-    expect(screen.getByText('90.00')).toBeInTheDocument(); // Improved grammar
-    expect(screen.getByText('85.00')).toBeInTheDocument(); // Improved style_guide
+    expect(screen.getAllByText("80.00").length).toBe(2); // Improved clarity and tone
+    expect(screen.getByText("90.00")).toBeInTheDocument(); // Improved grammar
+    expect(screen.getByText("85.00")).toBeInTheDocument(); // Improved style_guide
     // Initial values
-    expect(screen.getByText('60.00')).toBeInTheDocument(); // Initial clarity
-    expect(screen.getByText('75.00')).toBeInTheDocument(); // Initial grammar
-    expect(screen.getByText('65.00')).toBeInTheDocument(); // Initial style_guide
-    expect(screen.getByText('55.00')).toBeInTheDocument(); // Initial tone
+    expect(screen.getByText("60.00")).toBeInTheDocument(); // Initial clarity
+    expect(screen.getByText("75.00")).toBeInTheDocument(); // Initial grammar
+    expect(screen.getByText("65.00")).toBeInTheDocument(); // Initial style_guide
+    expect(screen.getByText("55.00")).toBeInTheDocument(); // Initial tone
   });
 
-  it('applies correct styling to container', () => {
+  it("applies correct styling to container", () => {
     const { container } = render(
       <AnalysisResultsComparison initial={mockInitialScores} improved={mockImprovedScores} />,
     );
@@ -86,7 +86,7 @@ describe('AnalysisResultsComparison', () => {
     expect(wrapper).toBeInTheDocument();
   });
 
-  it('renders 0 for missing metrics without throwing', () => {
+  it("renders 0 for missing metrics without throwing", () => {
     const partialInitial = {
       quality: {
         score: 0,
@@ -104,7 +104,13 @@ describe('AnalysisResultsComparison', () => {
           vocabulary_complexity: 0,
           sentence_complexity: 0,
         },
-        tone: { score: 0, informality: 0, liveliness: 0, informality_alignment: 0, liveliness_alignment: 0 },
+        tone: {
+          score: 0,
+          informality: 0,
+          liveliness: 0,
+          informality_alignment: 0,
+          liveliness_alignment: 0,
+        },
       },
     };
     const partialImproved = {
@@ -124,13 +130,19 @@ describe('AnalysisResultsComparison', () => {
           vocabulary_complexity: 0,
           sentence_complexity: 0,
         },
-        tone: { score: 0, informality: 0, liveliness: 0, informality_alignment: 0, liveliness_alignment: 0 },
+        tone: {
+          score: 0,
+          informality: 0,
+          liveliness: 0,
+          informality_alignment: 0,
+          liveliness_alignment: 0,
+        },
       },
     };
     render(<AnalysisResultsComparison initial={partialInitial} improved={partialImproved} />);
-    expect(screen.getByText('10.00')).toBeInTheDocument(); // initial clarity
-    expect(screen.getByText('20.00')).toBeInTheDocument(); // improved clarity
+    expect(screen.getByText("10.00")).toBeInTheDocument(); // initial clarity
+    expect(screen.getByText("20.00")).toBeInTheDocument(); // improved clarity
     // Other metrics should render 0
-    expect(screen.getAllByText('0.00').length).toBeGreaterThan(0);
+    expect(screen.getAllByText("0.00").length).toBeGreaterThan(0);
   });
 });

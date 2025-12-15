@@ -1,8 +1,16 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Paragraph, Select, FormControl, Note, Spinner, Button, Text } from '@contentful/f36-components';
-import styled from '@emotion/styled';
-import { useApiService } from '../../hooks/useApiService';
-import { DEFAULTS } from '../../utils/userSettings';
+import React, { useEffect, useMemo, useState } from "react";
+import {
+  Paragraph,
+  Select,
+  FormControl,
+  Note,
+  Spinner,
+  Button,
+  Text,
+} from "@contentful/f36-components";
+import styled from "@emotion/styled";
+import { useApiService } from "../../hooks/useApiService";
+import { DEFAULTS } from "../../utils/userSettings";
 
 const Wrapper = styled.div`
   padding: 5px;
@@ -36,8 +44,14 @@ export const StyleSettings: React.FC<StyleSettingsProps> = ({
   onSaveAndClose,
 }) => {
   const config = { apiKey };
-  const { constants, styleGuides, constantsLoading, styleGuidesLoading, constantsError, styleGuidesError } =
-    useApiService(config);
+  const {
+    constants,
+    styleGuides,
+    constantsLoading,
+    styleGuidesLoading,
+    constantsError,
+    styleGuidesError,
+  } = useApiService(config);
 
   const dialectOptions = useMemo(() => constants?.dialects ?? [], [constants]);
   const toneOptions = useMemo(() => constants?.tones ?? [], [constants]);
@@ -49,14 +63,14 @@ export const StyleSettings: React.FC<StyleSettingsProps> = ({
 
   // Ensure a default style guide is selected once options are loaded
   useEffect(() => {
-    if (!styleGuideOptions || styleGuideOptions.length === 0) return;
+    if (styleGuideOptions.length === 0) return;
 
     // If current value matches an option exactly, do nothing
     if (styleGuide && styleGuideOptions.some((sg) => sg.id === styleGuide)) return;
 
     const preferred =
       styleGuideOptions.find((sg) => sg.id.toLowerCase() === DEFAULTS.styleGuide) ||
-      styleGuideOptions.find((sg) => sg.name?.toLowerCase() === DEFAULTS.styleGuide);
+      styleGuideOptions.find((sg) => sg.name.toLowerCase() === DEFAULTS.styleGuide);
 
     if (preferred) {
       onStyleGuideChange(preferred.id);
@@ -81,6 +95,16 @@ export const StyleSettings: React.FC<StyleSettingsProps> = ({
     );
   }
 
+  if (!apiKey) {
+    return (
+      <Wrapper>
+        <Note variant="primary" title="Sign in required">
+          Please sign in to load settings.
+        </Note>
+      </Wrapper>
+    );
+  }
+
   if (!constants || !styleGuides) {
     return (
       <Wrapper>
@@ -94,14 +118,16 @@ export const StyleSettings: React.FC<StyleSettingsProps> = ({
       <Controls>
         <FormControl>
           <FormControl.Label>
-            Dialect{' '}
+            Dialect{" "}
             <Text as="span" fontColor="red600">
               *
             </Text>
           </FormControl.Label>
           <Select
-            value={dialect || ''}
-            onChange={(e) => onDialectChange(e.target.value || null)}
+            value={dialect || ""}
+            onChange={(e) => {
+              onDialectChange(e.target.value || null);
+            }}
             isInvalid={showErrors && !dialect}
           >
             <Select.Option value="">Select</Select.Option>
@@ -115,7 +141,12 @@ export const StyleSettings: React.FC<StyleSettingsProps> = ({
 
         <FormControl>
           <FormControl.Label>Tone</FormControl.Label>
-          <Select value={tone || ''} onChange={(e) => onToneChange(e.target.value || null)}>
+          <Select
+            value={tone || ""}
+            onChange={(e) => {
+              onToneChange(e.target.value || null);
+            }}
+          >
             <Select.Option value="">None</Select.Option>
             {toneOptions.map((t) => (
               <Select.Option key={t} value={t}>
@@ -127,14 +158,16 @@ export const StyleSettings: React.FC<StyleSettingsProps> = ({
 
         <FormControl>
           <FormControl.Label>
-            Style Guide{' '}
+            Style Guide{" "}
             <Text as="span" fontColor="red600">
               *
             </Text>
           </FormControl.Label>
           <Select
-            value={styleGuide || ''}
-            onChange={(e) => onStyleGuideChange(e.target.value || null)}
+            value={styleGuide || ""}
+            onChange={(e) => {
+              onStyleGuideChange(e.target.value || null);
+            }}
             isInvalid={showErrors && !styleGuide}
           >
             <Select.Option value="">Select</Select.Option>

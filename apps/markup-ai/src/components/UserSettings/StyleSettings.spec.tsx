@@ -1,12 +1,12 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor, fireEvent } from '../../../test/utils/testUtils';
-import StyleSettings from './StyleSettings';
-import * as apiService from '../../hooks/useApiService';
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen, waitFor, fireEvent } from "../../../test/utils/testUtils";
+import StyleSettings from "./StyleSettings";
+import * as apiService from "../../hooks/useApiService";
 
-vi.mock('../../hooks/useApiService', () => ({
+vi.mock("../../hooks/useApiService", () => ({
   useApiService: vi.fn(() => ({
-    constants: { dialects: ['en-US', 'en-GB'], tones: ['neutral', 'formal'], style_guides: {} },
-    styleGuides: [{ id: 'default', name: 'Default', created_at: '2023-01-01T00:00:00Z' }],
+    constants: { dialects: ["en-US", "en-GB"], tones: ["neutral", "formal"], style_guides: {} },
+    styleGuides: [{ id: "default", name: "Default", created_at: "2023-01-01T00:00:00Z" }],
     constantsLoading: false,
     styleGuidesLoading: false,
     constantsError: null,
@@ -18,16 +18,20 @@ vi.mock('../../hooks/useApiService', () => ({
   })),
 }));
 
-describe('StyleSettings', () => {
-  const constants = { dialects: ['en-US', 'en-GB'], tones: ['neutral', 'formal'], style_guides: {} };
-  const styleGuides = [{ id: 'default', name: 'Default', created_at: '2023-01-01T00:00:00Z' }];
+describe("StyleSettings", () => {
+  const constants = {
+    dialects: ["en-US", "en-GB"],
+    tones: ["neutral", "formal"],
+    style_guides: {},
+  };
+  const styleGuides = [{ id: "default", name: "Default", created_at: "2023-01-01T00:00:00Z" }];
 
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   const baseProps = {
-    apiKey: 'k',
+    apiKey: "k",
     dialect: null as string | null,
     tone: null as string | null,
     styleGuide: null as string | null,
@@ -36,7 +40,7 @@ describe('StyleSettings', () => {
     onStyleGuideChange: vi.fn(),
   };
 
-  it('shows spinner while loading and then renders selects', async () => {
+  it("shows spinner while loading and then renders selects", async () => {
     // Mock loaded state directly
     vi.mocked(apiService.useApiService).mockReturnValue({
       constants,
@@ -53,19 +57,21 @@ describe('StyleSettings', () => {
 
     render(<StyleSettings {...baseProps} />);
 
-    await waitFor(() => expect(screen.getByText('Dialect')).toBeInTheDocument());
-    expect(screen.getByText('Tone')).toBeInTheDocument();
-    expect(screen.getByText('Style Guide')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("Dialect")).toBeInTheDocument();
+    });
+    expect(screen.getByText("Tone")).toBeInTheDocument();
+    expect(screen.getByText("Style Guide")).toBeInTheDocument();
   });
 
-  it('renders error Note when API fails', async () => {
+  it("renders error Note when API fails", async () => {
     vi.mocked(apiService.useApiService).mockReturnValue({
       constants: null,
       styleGuides: null,
       constantsLoading: false,
       styleGuidesLoading: false,
-      constantsError: new Error('x'),
-      styleGuidesError: new Error('x'),
+      constantsError: new Error("x"),
+      styleGuidesError: new Error("x"),
       checkContent: vi.fn(),
       contentRewrite: vi.fn(),
       fetchAdminConstants: vi.fn(),
@@ -73,11 +79,13 @@ describe('StyleSettings', () => {
     });
 
     render(<StyleSettings {...baseProps} />);
-    await waitFor(() => expect(screen.getByText('Error')).toBeInTheDocument());
-    expect(screen.getByText('x')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("Error")).toBeInTheDocument();
+    });
+    expect(screen.getByText("x")).toBeInTheDocument();
   });
 
-  it('triggers onSaveAndClose when complete', async () => {
+  it("triggers onSaveAndClose when complete", async () => {
     vi.mocked(apiService.useApiService).mockReturnValue({
       constants,
       styleGuides,
@@ -101,8 +109,8 @@ describe('StyleSettings', () => {
         onSaveAndClose={onSaveAndClose}
       />,
     );
-    await waitFor(() => screen.getByText('Dialect'));
-    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() => screen.getByText("Dialect"));
+    fireEvent.click(screen.getByRole("button", { name: "Save" }));
     expect(onSaveAndClose).toHaveBeenCalledTimes(1);
   });
 });

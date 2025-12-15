@@ -1,7 +1,7 @@
-import { useRef, useCallback, useEffect } from 'react';
-import { SidebarAppSDK } from '@contentful/app-sdk';
-import { isTextField } from '../types/content';
-import { Document, Block, Inline, Text, BLOCKS, INLINES, MARKS } from '@contentful/rich-text-types';
+import { useRef, useCallback, useEffect } from "react";
+import { SidebarAppSDK } from "@contentful/app-sdk";
+import { isTextField } from "../types/content";
+import { Document, Block, Inline, Text, BLOCKS, INLINES, MARKS } from "@contentful/rich-text-types";
 
 type RichTextNode = Block | Inline | Text;
 
@@ -12,33 +12,92 @@ interface TextNodeWithId {
 }
 
 const generateNodeId = (path: number[]): string => {
-  return `node-${path.join('-')}`;
+  return `node-${path.join("-")}`;
 };
 
 const isValidNode = (node: RichTextNode): boolean => {
-  if (!node || typeof node !== 'object') return false;
-  if (!('nodeType' in node)) return false;
+  if (typeof node !== "object") return false;
+  if (!("nodeType" in node)) return false;
   return true;
+};
+
+const wrapNodeWithTag = (node: Block | Inline, children: string, dataAttrs: string): string => {
+  switch (node.nodeType) {
+    case BLOCKS.PARAGRAPH:
+      return `<p ${dataAttrs}>${children}</p>`;
+    case BLOCKS.HEADING_1:
+      return `<h1 ${dataAttrs}>${children}</h1>`;
+    case BLOCKS.HEADING_2:
+      return `<h2 ${dataAttrs}>${children}</h2>`;
+    case BLOCKS.HEADING_3:
+      return `<h3 ${dataAttrs}>${children}</h3>`;
+    case BLOCKS.HEADING_4:
+      return `<h4 ${dataAttrs}>${children}</h4>`;
+    case BLOCKS.HEADING_5:
+      return `<h5 ${dataAttrs}>${children}</h5>`;
+    case BLOCKS.HEADING_6:
+      return `<h6 ${dataAttrs}>${children}</h6>`;
+    case BLOCKS.OL_LIST:
+      return `<ol ${dataAttrs}>${children}</ol>`;
+    case BLOCKS.UL_LIST:
+      return `<ul ${dataAttrs}>${children}</ul>`;
+    case BLOCKS.LIST_ITEM:
+      return `<li ${dataAttrs}>${children}</li>`;
+    case BLOCKS.QUOTE:
+      return `<blockquote ${dataAttrs}>${children}</blockquote>`;
+    case BLOCKS.HR:
+      return `<hr ${dataAttrs}/>`;
+    case BLOCKS.TABLE:
+      return `<table ${dataAttrs}>${children}</table>`;
+    case BLOCKS.TABLE_ROW:
+      return `<tr ${dataAttrs}>${children}</tr>`;
+    case BLOCKS.TABLE_CELL:
+      return `<td ${dataAttrs}>${children}</td>`;
+    case BLOCKS.TABLE_HEADER_CELL:
+      return `<th ${dataAttrs}>${children}</th>`;
+    case BLOCKS.EMBEDDED_ENTRY:
+      return `<div ${dataAttrs}>${children}</div>`;
+    case BLOCKS.EMBEDDED_ASSET:
+      return `<div ${dataAttrs}>${children}</div>`;
+    case BLOCKS.EMBEDDED_RESOURCE:
+      return `<div ${dataAttrs}>${children}</div>`;
+    case INLINES.HYPERLINK: {
+      const uri = (node.data as { uri?: string }).uri;
+      return `<a href="${uri || "#"}" ${dataAttrs}>${children}</a>`;
+    }
+    case INLINES.ENTRY_HYPERLINK:
+      return `<a href="#" ${dataAttrs}>${children}</a>`;
+    case INLINES.ASSET_HYPERLINK:
+      return `<a href="#" ${dataAttrs}>${children}</a>`;
+    case INLINES.EMBEDDED_ENTRY:
+      return `<span ${dataAttrs}>${children}</span>`;
+    case INLINES.EMBEDDED_RESOURCE:
+      return `<span ${dataAttrs}>${children}</span>`;
+    default:
+      console.warn("Unknown node type:", node.nodeType);
+      return children;
+  }
 };
 
 const convertToHtml = (doc: Document): { html: string; nodeMap: Map<string, TextNodeWithId> } => {
   const nodeMap = new Map<string, TextNodeWithId>();
-  let htmlContent = '';
+  let htmlContent = "";
 
   const processNode = (node: RichTextNode, path: number[] = []): string => {
     if (!isValidNode(node)) {
-      return '';
+      return "";
     }
 
-    if (node.nodeType === 'text') {
+    if (node.nodeType === "text") {
       const id = generateNodeId(path);
       nodeMap.set(id, { node, path, id });
 
       // Apply marks to the text
       let text = node.value;
-      if (node.marks && node.marks.length > 0) {
+      if (node.marks.length > 0) {
         for (const mark of node.marks) {
-          switch (mark.type) {
+          const markType = mark.type as (typeof MARKS)[keyof typeof MARKS];
+          switch (markType) {
             case MARKS.BOLD:
               text = `<strong>${text}</strong>`;
               break;
@@ -58,7 +117,7 @@ const convertToHtml = (doc: Document): { html: string; nodeMap: Map<string, Text
               text = `<sub>${text}</sub>`;
               break;
             default:
-              console.warn('Unknown mark type:', mark.type);
+              console.warn("Unknown mark type:", mark.type);
           }
         }
       }
@@ -66,93 +125,44 @@ const convertToHtml = (doc: Document): { html: string; nodeMap: Map<string, Text
       return `<span id="${id}">${text}</span>`;
     }
 
-    if ('content' in node && Array.isArray(node.content)) {
-      const children = node.content.map((child, index) => processNode(child, [...path, index])).join('');
+    if ("content" in node && Array.isArray(node.content)) {
+      const children = node.content
+        .map((child, index) => processNode(child, [...path, index]))
+        .join("");
 
       // Handle data attributes
-      const dataAttrs = Object.entries(node.data || {})
+      const dataAttrs = Object.entries(node.data)
         .map(([key, value]) => {
-          if (key === 'target' && value?.sys) {
-            return `data-${value.sys.linkType.toLowerCase()}-id="${value.sys.id}"`;
+          if (key === "target" && value && typeof value === "object" && "sys" in value) {
+            const sys = (value as { sys?: { linkType?: string; id?: string } }).sys;
+            if (sys?.linkType && sys.id) {
+              return `data-${sys.linkType.toLowerCase()}-id="${sys.id}"`;
+            }
           }
-          return `data-${key}="${value}"`;
+          const valueStr =
+            typeof value === "object" && value !== null ? JSON.stringify(value) : String(value);
+          return `data-${key}="${valueStr}"`;
         })
-        .join(' ');
+        .join(" ");
 
-      switch (node.nodeType) {
-        case BLOCKS.PARAGRAPH:
-          return `<p ${dataAttrs}>${children}</p>`;
-        case BLOCKS.HEADING_1:
-          return `<h1 ${dataAttrs}>${children}</h1>`;
-        case BLOCKS.HEADING_2:
-          return `<h2 ${dataAttrs}>${children}</h2>`;
-        case BLOCKS.HEADING_3:
-          return `<h3 ${dataAttrs}>${children}</h3>`;
-        case BLOCKS.HEADING_4:
-          return `<h4 ${dataAttrs}>${children}</h4>`;
-        case BLOCKS.HEADING_5:
-          return `<h5 ${dataAttrs}>${children}</h5>`;
-        case BLOCKS.HEADING_6:
-          return `<h6 ${dataAttrs}>${children}</h6>`;
-        case BLOCKS.OL_LIST:
-          return `<ol ${dataAttrs}>${children}</ol>`;
-        case BLOCKS.UL_LIST:
-          return `<ul ${dataAttrs}>${children}</ul>`;
-        case BLOCKS.LIST_ITEM:
-          return `<li ${dataAttrs}>${children}</li>`;
-        case BLOCKS.QUOTE:
-          return `<blockquote ${dataAttrs}>${children}</blockquote>`;
-        case BLOCKS.HR:
-          return `<hr ${dataAttrs}/>`;
-        case BLOCKS.TABLE:
-          return `<table ${dataAttrs}>${children}</table>`;
-        case BLOCKS.TABLE_ROW:
-          return `<tr ${dataAttrs}>${children}</tr>`;
-        case BLOCKS.TABLE_CELL:
-          return `<td ${dataAttrs}>${children}</td>`;
-        case BLOCKS.TABLE_HEADER_CELL:
-          return `<th ${dataAttrs}>${children}</th>`;
-        case BLOCKS.EMBEDDED_ENTRY:
-          return `<div ${dataAttrs}>${children}</div>`;
-        case BLOCKS.EMBEDDED_ASSET:
-          return `<div ${dataAttrs}>${children}</div>`;
-        case BLOCKS.EMBEDDED_RESOURCE:
-          return `<div ${dataAttrs}>${children}</div>`;
-        case INLINES.HYPERLINK:
-          return `<a href="${node.data.uri || '#'}" ${dataAttrs}>${children}</a>`;
-        case INLINES.ENTRY_HYPERLINK:
-          return `<a href="#" ${dataAttrs}>${children}</a>`;
-        case INLINES.ASSET_HYPERLINK:
-          return `<a href="#" ${dataAttrs}>${children}</a>`;
-        case INLINES.EMBEDDED_ENTRY:
-          return `<span ${dataAttrs}>${children}</span>`;
-        case INLINES.EMBEDDED_RESOURCE:
-          return `<span ${dataAttrs}>${children}</span>`;
-        default:
-          console.warn('Unknown node type:', node.nodeType);
-          return children;
-      }
+      return wrapNodeWithTag(node, children, dataAttrs);
     }
 
-    return '';
+    return "";
   };
 
-  htmlContent = doc.content.map((block, index) => processNode(block, [index])).join('\n');
-  return { html: htmlContent, nodeMap };
+  htmlContent = doc.content.map((block, index) => processNode(block, [index])).join("\n");
+  const fullHtml = `<!DOCTYPE html><html><body>${htmlContent}</body></html>`;
+  return { html: fullHtml, nodeMap };
 };
 
 const extractTextFromRichText = (value: string | Document | null | undefined): string => {
-  if (!value) return '';
-  if (typeof value === 'string') return value;
+  if (!value) return "";
+  if (typeof value === "string") return value;
 
-  // Handle rich text document structure
-  if (typeof value === 'object' && value !== null && 'nodeType' in value && value.nodeType === BLOCKS.DOCUMENT) {
-    const { html } = convertToHtml(value);
-    return html;
-  }
-
-  // Fallback for any other type
-  return String(value);
+  // Handle rich text document structure (value is Document at this point)
+  const { html } = convertToHtml(value);
+  return html;
 };
 
 const updateNodeAtPath = (doc: Document, path: number[], newValue: string): Document => {
@@ -161,19 +171,22 @@ const updateNodeAtPath = (doc: Document, path: number[], newValue: string): Docu
   let current: { content: RichTextNode[] } = newDoc;
   for (let i = 0; i < path.length - 1; i++) {
     const nextNode = current.content[path[i]];
-    if (!nextNode || !('content' in nextNode)) {
-      throw new Error(`Invalid path: node at index ${i} does not have content`);
+    if (!("content" in nextNode)) {
+      throw new Error(`Invalid path: node at index ${String(i)} does not have content`);
     }
     current = nextNode;
   }
 
-  const lastIndex = path.at(-1)!;
-  const targetNode = current.content[lastIndex];
-  if (!targetNode) {
-    throw new Error(`Invalid path: no node found at index ${lastIndex}`);
+  const lastIndex = path.at(-1);
+  if (lastIndex === undefined) {
+    throw new Error("Invalid path: path array is empty");
   }
+  if (lastIndex >= current.content.length) {
+    throw new Error(`Invalid path: no node found at index ${String(lastIndex)}`);
+  }
+  const targetNode = current.content[lastIndex];
 
-  if (targetNode.nodeType === 'text') {
+  if (targetNode.nodeType === "text") {
     targetNode.value = newValue;
   } else {
     throw new Error(`Invalid node type at path: expected text node, got ${targetNode.nodeType}`);
@@ -193,7 +206,7 @@ const createRichTextDocument = (text: string, originalDoc?: Document): Document 
           nodeType: BLOCKS.PARAGRAPH,
           content: [
             {
-              nodeType: 'text',
+              nodeType: "text",
               value: text,
               marks: [],
               data: {},
@@ -208,19 +221,19 @@ const createRichTextDocument = (text: string, originalDoc?: Document): Document 
   // Convert original document to HTML with unique IDs
   const { nodeMap } = convertToHtml(originalDoc);
 
-  const tempDiv = document.createElement('div');
+  const tempDiv = document.createElement("div");
   tempDiv.innerHTML = text;
 
   // Update the document based on the changes
   let updatedDoc = originalDoc;
 
-  const updatedSpans = tempDiv.querySelectorAll('span[id]');
+  const updatedSpans = tempDiv.querySelectorAll("span[id]");
   for (const span of updatedSpans) {
     const id = span.id;
     const node = nodeMap.get(id);
     if (node) {
       try {
-        updatedDoc = updateNodeAtPath(updatedDoc, node.path, span.textContent || '');
+        updatedDoc = updateNodeAtPath(updatedDoc, node.path, span.textContent || "");
       } catch (error) {
         console.error(`Error updating node ${id}:`, error);
       }
@@ -231,7 +244,7 @@ const createRichTextDocument = (text: string, originalDoc?: Document): Document 
 };
 
 export const useFieldSubscriptions = (
-  sdk: Pick<SidebarAppSDK, 'entry'>,
+  sdk: Pick<SidebarAppSDK, "entry">,
   onFieldChange: (fieldId: string, value: string) => void,
 ) => {
   const initialValuesRef = useRef<Set<string>>(new Set());
@@ -259,15 +272,22 @@ export const useFieldSubscriptions = (
         initialValuesRef.current.add(fieldId);
 
         // Store the original document structure for rich text fields
-        if (field.type === 'RichText') {
-          const value = field.getValue();
-          if (value && typeof value === 'object' && 'nodeType' in value && value.nodeType === BLOCKS.DOCUMENT) {
+        if (field.type === "RichText") {
+          const value = field.getValue() as unknown;
+          if (
+            value &&
+            typeof value === "object" &&
+            "nodeType" in value &&
+            (value as { nodeType: unknown }).nodeType === BLOCKS.DOCUMENT
+          ) {
             originalDocumentsRef.current[fieldId] = value as Document;
           }
         }
 
         return field.onValueChanged((value) => {
-          const textContent = extractTextFromRichText(value as string | Document | null | undefined);
+          const textContent = extractTextFromRichText(
+            value as string | Document | null | undefined,
+          );
           handleFieldChange(fieldId, textContent);
         });
       });
@@ -285,8 +305,8 @@ export const useFieldSubscriptions = (
 
   const setFieldValue = useCallback(
     async (fieldId: string, value: string) => {
+      if (!(fieldId in sdk.entry.fields)) return;
       const field = sdk.entry.fields[fieldId];
-      if (!field) return;
 
       // Skip if we've already processed this field
       if (processedFieldsRef.current.has(fieldId)) {
@@ -294,7 +314,7 @@ export const useFieldSubscriptions = (
       }
 
       const fieldType = fieldTypesRef.current[fieldId];
-      if (fieldType === 'RichText') {
+      if (fieldType === "RichText") {
         const originalDoc = originalDocumentsRef.current[fieldId];
         const richTextDoc = createRichTextDocument(value, originalDoc);
         await field.setValue(richTextDoc);

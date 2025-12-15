@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from "vitest";
 import {
   getUserSettings,
   ensureDefaultUserSettings,
@@ -7,14 +7,14 @@ import {
   setTone,
   setStyleGuide,
   clearAllUserSettings,
-} from './userSettings';
+} from "./userSettings";
 
-describe('userSettings utils', () => {
+describe("userSettings utils", () => {
   beforeEach(() => {
     localStorage.clear();
   });
 
-  it('ensures defaults and gets settings', () => {
+  it("ensures defaults and gets settings", () => {
     ensureDefaultUserSettings();
     const s = getUserSettings();
     expect(s.dialect).toBeTruthy();
@@ -22,13 +22,13 @@ describe('userSettings utils', () => {
     expect(s.styleGuide).toBeTruthy();
   });
 
-  it('sets and clears values', () => {
-    setApiKey('a');
-    setDialect('en-US');
-    setTone('neutral');
-    setStyleGuide('default');
+  it("sets and clears values", () => {
+    setApiKey("a");
+    setDialect("en-US");
+    setTone("neutral");
+    setStyleGuide("default");
     let s = getUserSettings();
-    expect(s.apiKey).toBe('a');
+    expect(s.apiKey).toBe("a");
 
     clearAllUserSettings();
     s = getUserSettings();
