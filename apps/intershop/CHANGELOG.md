@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.25](https://github.com/contentful/marketplace-partner-apps/compare/intershop-connector-v1.0.24...intershop-connector-v1.0.25) (2025-12-16)
+
+
+### Bug Fixes
+
+* Flat Category Selection Implementation & Update new api specs [] ([#7520](https://github.com/contentful/marketplace-partner-apps/issues/7520)) ([e603ef7](https://github.com/contentful/marketplace-partner-apps/commit/e603ef7a944f8d49f3145ec14642e8bab530fe9e))
+
 ## [1.0.24](https://github.com/contentful/marketplace-partner-apps/compare/intershop-connector-v1.0.23...intershop-connector-v1.0.24) (2025-12-03)
 
 
