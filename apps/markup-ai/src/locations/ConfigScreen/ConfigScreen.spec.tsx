@@ -9,43 +9,28 @@ vi.mock("@contentful/react-apps-toolkit", () => ({
   useSDK: vi.fn(),
 }));
 
-vi.mock("../../hooks/useApiService", () => ({
-  useApiService: vi.fn(() => ({
-    constants: null,
-    styleGuides: null,
-    constantsLoading: false,
-    styleGuidesLoading: false,
-    constantsError: null,
-    styleGuidesError: null,
-    checkContent: vi.fn(),
-    contentRewrite: vi.fn(),
-  })),
-}));
-
 describe("ConfigScreen", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     (useSDK as unknown as Mock).mockReturnValue(mockSdk);
-    mockSdk.app.getParameters.mockResolvedValue({});
     mockSdk.app.getCurrentState.mockResolvedValue({ some: "state" });
     mockSdk.app.onConfigure.mockReset();
   });
 
-  it("initializes parameters and calls setReady", async () => {
+  it("calls setReady on mount", async () => {
     act(() => {
       render(<ConfigScreen />);
     });
     await waitFor(() => {
-      expect(mockSdk.app.getParameters).toHaveBeenCalled();
+      expect(mockSdk.app.setReady).toHaveBeenCalled();
     });
-    expect(mockSdk.app.setReady).toHaveBeenCalled();
     expect(screen.getByText("Markup AI App")).toBeInTheDocument();
   });
 
   it("shows SSO configuration message", async () => {
     render(<ConfigScreen />);
     await waitFor(() => {
-      expect(mockSdk.app.getParameters).toHaveBeenCalled();
+      expect(mockSdk.app.setReady).toHaveBeenCalled();
     });
     expect(
       screen.getByText(
