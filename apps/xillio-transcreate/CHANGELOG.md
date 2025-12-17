@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/xillio-transcreate-v1.0.3...xillio-transcreate-v1.0.4) (2025-12-17)
+
+
+### Bug Fixes
+
+* **deps:** bump glob from 10.4.5 to 10.5.0 in /apps/xillio-transcreate ([#7368](https://github.com/contentful/marketplace-partner-apps/issues/7368)) ([f1c1070](https://github.com/contentful/marketplace-partner-apps/commit/f1c1070484e52d73722a453c484b0d7be05d35f5))
+* **deps:** bump the production-dependencies group in /apps/xillio-transcreate with 2 updates ([#6969](https://github.com/contentful/marketplace-partner-apps/issues/6969)) ([6adb9b3](https://github.com/contentful/marketplace-partner-apps/commit/6adb9b3837cae12b63bbc9a388a084315d03ba6b))
+
 ## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/xillio-transcreate-v1.0.2...xillio-transcreate-v1.0.3) (2025-07-02)
 
 
