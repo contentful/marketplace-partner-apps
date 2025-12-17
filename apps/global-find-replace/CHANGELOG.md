@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.3](https://github.com/contentful/marketplace-partner-apps/compare/global-find-replace-v0.2.2...global-find-replace-v0.2.3) (2025-12-17)
+
+
+### Bug Fixes
+
+* **deps:** bump @sentry/react from 10.25.0 to 10.26.0 in /apps/global-find-replace in the production-dependencies group ([#7443](https://github.com/contentful/marketplace-partner-apps/issues/7443)) ([b7171ca](https://github.com/contentful/marketplace-partner-apps/commit/b7171cab38f6a0b249f40bd13d47a1b20141f5e0))
+
 ## [0.2.2](https://github.com/contentful/marketplace-partner-apps/compare/global-find-replace-v0.2.1...global-find-replace-v0.2.2) (2025-12-03)
 
 
