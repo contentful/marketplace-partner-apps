@@ -29,7 +29,8 @@
     "add-locations": "contentful-app-scripts add-locations",
     "format": "npx prettier --write src",
     "upload": "contentful-app-scripts upload --bundle-dir ./dist",
-    "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./dist  --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN"
+    "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./dist  --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN",
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./dist --organization-id ${DEFINITIONS_ORG_ID} --definition-id 5XTeCQ0fBl6oLUc01eM5Mx --token ${CONTENTFUL_CMA_TOKEN}"
   },
   "devDependencies": {
     "@contentful/app-scripts": "^2.5.6",
