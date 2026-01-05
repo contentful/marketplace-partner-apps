@@ -39,12 +39,12 @@
     ]
   },
   "dependencies": {
-    "@auth0/auth0-spa-js": "2.10.0",
+    "@auth0/auth0-spa-js": "2.11.0",
     "@codemirror/lang-html": "6.4.11",
     "@codemirror/lang-markdown": "6.5.0",
     "@codemirror/merge": "6.11.2",
     "@codemirror/state": "6.5.2",
-    "@codemirror/view": "6.38.8",
+    "@codemirror/view": "6.39.4",
     "@contentful/app-sdk": "4.47.0",
     "@contentful/f36-components": "5.9.0",
     "@contentful/f36-tokens": "5.1.0",
@@ -52,10 +52,10 @@
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
     "@tanstack/react-query": "5.90.12",
-    "contentful-management": "11.63.1",
+    "contentful-management": "11.66.0",
     "diff": "8.0.2",
-    "dompurify": "3.3.0",
-    "i18next": "25.7.2",
+    "dompurify": "3.3.1",
+    "i18next": "25.7.3",
     "markdown-it": "14.1.0",
     "react": "18.3.1",
     "react-dom": "18.3.1"
