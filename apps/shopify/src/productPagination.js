@@ -1,6 +1,7 @@
 import { productDataTransformer } from './dataTransformer';
 import BasePagination from './basePagination';
 import { convertProductToBase64 } from './utils/base64';
+import { retryWithBackoff } from './utils/retry';
 
 const makePagination = async (sdk) => {
   const pagination = new BasePagination({
@@ -84,7 +85,9 @@ const makePagination = async (sdk) => {
         query: queryStr,
       };
 
-      const response = await this.shopifyClient.request(query, { variables });
+      const response = await retryWithBackoff(async () => {
+        return await this.shopifyClient.request(query, { variables });
+      });
 
       // Update cursor for next page
       if (response.data.products.pageInfo.hasNextPage) {

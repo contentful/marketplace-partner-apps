@@ -1,12 +1,12 @@
-import React from 'react';
-import { render, screen, act } from '@testing-library/react';
-import { vi, beforeEach, describe, it, expect } from 'vitest';
-import { MoreDetailsDialog } from './MoreDetailsDialog';
-import { LocalizationProvider } from '../../contexts/LocalizationContext';
-import type { DialogAppSDK } from '@contentful/app-sdk';
+import React from "react";
+import { render, screen, act } from "@testing-library/react";
+import { vi, beforeEach, describe, it, expect } from "vitest";
+import { MoreDetailsDialog } from "./MoreDetailsDialog";
+import { LocalizationProvider } from "../../contexts/LocalizationContext";
+import type { DialogAppSDK } from "@contentful/app-sdk";
 
 let mockUseSDKReturn: Partial<DialogAppSDK> = {};
-vi.mock('@contentful/react-apps-toolkit', () => ({
+vi.mock("@contentful/react-apps-toolkit", () => ({
   useSDK: () => mockUseSDKReturn,
   useAutoResizer: () => {},
 }));
@@ -33,36 +33,37 @@ const mockScores = {
 };
 
 // Helper function to render with LocalizationProvider wrapped in act
-const renderWithLocalization = async (component: React.ReactElement) => {
-  let result;
-  await act(async () => {
+const renderWithLocalization = (component: React.ReactElement) => {
+  let result: ReturnType<typeof render> | undefined;
+  act(() => {
     result = render(<LocalizationProvider>{component}</LocalizationProvider>);
   });
-  return result!;
+  if (!result) throw new Error("Render failed");
+  return result;
 };
 
 beforeEach(() => {
   mockUseSDKReturn = {};
 });
 
-describe('MoreDetailsDialog', () => {
-  it('renders all main metrics and sub-metrics', async () => {
+describe("MoreDetailsDialog", () => {
+  it("renders all main metrics and sub-metrics", () => {
     mockUseSDKReturn = {
       parameters: {
         invocation: {
           checkResponse: {
             workflow: {
-              id: 'chk-1',
-              type: 'checks',
-              api_version: '1.0.0',
-              generated_at: '2025-01-15T14:22:33Z',
-              status: 'completed',
-              webhook_response: { url: 'https://api.example.com/webhook', status_code: 200 },
+              id: "chk-1",
+              type: "checks",
+              api_version: "1.0.0",
+              generated_at: "2025-01-15T14:22:33Z",
+              status: "completed",
+              webhook_response: { url: "https://api.example.com/webhook", status_code: 200 },
             },
             config: {
-              style_guide: { style_guide_type: 'ap', style_guide_id: 'sg-1' },
-              dialect: 'american_english',
-              tone: 'professional',
+              style_guide: { style_guide_type: "ap", style_guide_id: "sg-1" },
+              dialect: "american_english",
+              tone: "professional",
             },
             original: {
               issues: [],
@@ -72,34 +73,34 @@ describe('MoreDetailsDialog', () => {
         },
       },
     } as unknown as Partial<DialogAppSDK>;
-    await renderWithLocalization(<MoreDetailsDialog />);
-    expect(screen.getByText('Clarity')).toBeInTheDocument();
-    expect(screen.getByText('Grammar')).toBeInTheDocument();
-    expect(screen.getAllByText('Style Guide')).toHaveLength(1);
-    expect(screen.getAllByText('Consistency')).toHaveLength(1);
-    expect(screen.getAllByText('Tone')).toHaveLength(2); // One in config, one in metrics
-    expect(screen.getByText('Terminology')).toBeInTheDocument();
+    renderWithLocalization(<MoreDetailsDialog />);
+    expect(screen.getByText("Clarity")).toBeInTheDocument();
+    expect(screen.getByText("Grammar")).toBeInTheDocument();
+    expect(screen.getAllByText("Style Guide")).toHaveLength(1);
+    expect(screen.getAllByText("Consistency")).toHaveLength(1);
+    expect(screen.getAllByText("Tone")).toHaveLength(2); // One in config, one in metrics
+    expect(screen.getByText("Terminology")).toBeInTheDocument();
 
     // Check Analysis Configuration section (no title, just the values)
-    expect(screen.getByText('AP')).toBeInTheDocument();
-    expect(screen.getByText('American English')).toBeInTheDocument();
-    expect(screen.getByText('Professional')).toBeInTheDocument();
+    expect(screen.getByText("AP")).toBeInTheDocument();
+    expect(screen.getByText("American English")).toBeInTheDocument();
+    expect(screen.getByText("Professional")).toBeInTheDocument();
 
     // No section title label anymore
   });
 
-  it('handles missing/partial data gracefully', async () => {
+  it("handles missing/partial data gracefully", () => {
     mockUseSDKReturn = {
       parameters: {
         invocation: {
           checkResponse: {
             workflow: {
-              id: 'chk-2',
-              type: 'checks',
-              api_version: '1.0.0',
-              generated_at: '2025-01-15T14:22:33Z',
-              status: 'completed',
-              webhook_response: { url: 'https://api.example.com/webhook', status_code: 200 },
+              id: "chk-2",
+              type: "checks",
+              api_version: "1.0.0",
+              generated_at: "2025-01-15T14:22:33Z",
+              status: "completed",
+              webhook_response: { url: "https://api.example.com/webhook", status_code: 200 },
             },
             config: {
               style_guide: { style_guide_type: undefined, style_guide_id: undefined },
@@ -122,10 +123,10 @@ describe('MoreDetailsDialog', () => {
         },
       },
     } as unknown as Partial<DialogAppSDK>;
-    await renderWithLocalization(<MoreDetailsDialog />);
-    expect(screen.getByText('Grammar')).toBeInTheDocument();
-    expect(screen.getByText('50')).toBeInTheDocument();
+    renderWithLocalization(<MoreDetailsDialog />);
+    expect(screen.getByText("Grammar")).toBeInTheDocument();
+    expect(screen.getByText("50")).toBeInTheDocument();
     // Should show dashes or empty for missing sub-metrics
-    expect(screen.getAllByText('-').length).toBeGreaterThan(0);
+    expect(screen.getAllByText("-").length).toBeGreaterThan(0);
   });
 });

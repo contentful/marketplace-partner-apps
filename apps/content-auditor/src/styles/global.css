@@ -1,0 +1,290 @@
+:root {
+  --border-color: #cfd9e0;
+  --link-hover-color: #e7ebee;
+  --bg-gray-light-color: rgb(247, 249, 250);
+  --bg-gray-color: #e7ebee;
+  --button-color: rgb(3, 111, 227);
+  --gray-primery: #5a657c;
+  --primery-text-color: #111b2b;
+  --main-font: "Geist Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  --table-head-text-color: rgb(90, 101, 124);
+  --table-body-text-color: rgb(65, 77, 99);
+  --table-body-first-text-color: rgb(65, 77, 99);
+}
+
+body {
+  font-family: var(--main-font);
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  max-width: 1920px;
+  box-shadow: rgba(25, 37, 50, 0.1) 0px 6px 16px -2px,
+    rgba(25, 37, 50, 0.15) 0px 3px 6px -3px;
+  border-radius: 10px 10px 0px 0px;
+  margin: 0px auto;
+  width: calc(100% - 2rem);
+  background-color: rgb(255, 255, 255);
+  min-height: 100vh;
+}
+
+.h1.css-pyd7rd {
+  font-size: 24px;
+  margin-bottom: 15px;
+  font-family: var(--main-font);
+  font-weight: 600;
+  color: var(--primery-text-color);
+}
+
+h3[data-test-id~="cf-ui-subheading"]{
+  font-size: 14px;
+  font-weight: 400;
+  margin-top: 4px;
+}
+
+.mb {
+  margin-bottom: 20px;
+}
+.mt-4 {
+  margin-top: 20px;
+}
+
+.hidden {
+  display: none;
+}
+.flex-design {
+  display: flex;
+}
+
+.flex-direction-row {
+  flex-direction: row;
+}
+
+.flex-direction-row-revese {
+  flex-direction:row-reverse;
+}
+
+.flex-direction {
+  flex-direction: column;
+}
+
+.align-item-center {
+  align-items: center;
+}
+
+.flex-item-left {
+  flex: 280px;
+  padding: 24px 16px 0px;
+  height: 100vh;
+}
+
+.flex-item-right {
+  flex: 100%;
+  padding: 20px 24px 12px;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.border {
+  border: var(--border-color) 1px solid;
+}
+
+.border-right {
+  border-right: var(--border-color) 1px solid;
+}
+
+.justify-content-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.title-no {
+  font-size: 30px;
+  font-weight: 600;
+  display: block;
+  padding: 20px 0;
+}
+
+.title-small {
+  font-size: 14px;
+  font-weight: 400;
+  display: block;
+  padding: 0px 0 20px;
+}
+
+.flex-direction {
+  flex-direction: column;
+}
+
+.h-400-page {
+  height: 88%;
+}
+
+.left-side-menu button[data-test-id~="cf-ui-button"] {
+  background-color: white;
+  color: black;
+  border-radius: 6px;
+  border: 0;
+  text-align: left;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  display: block;
+  box-shadow: none;
+  max-width: none;
+  padding: 6px 8px;
+  color: var(--table-body-text-color);
+  font-weight: 400;
+  min-height: 0;
+}
+
+.left-side-menu button svg {
+  fill: black;
+  margin-right: 3px;
+}
+
+.left-side-menu button.css-1arnxu4 {
+  color: #111b2b;
+}
+
+.left-side-menu button:hover {
+  background-color: var(--bg-gray-light-color);
+  color: var(--table-body-text-color);
+}
+
+.left-side-menu button.css-1arnxu4 {
+  background-color: var(--bg-gray-color);
+  font-weight: 500;
+}
+
+.content-type-box {
+  padding: 0;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  background-color: rgb(231, 235, 238);
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  justify-content: center;
+  color: rgb(65, 77, 99);
+  width: 151px;
+  line-height: 32px;
+}
+
+.content-type-wrap {
+  padding: 3px;
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: rgba(225, 228, 232, 0.2) 0px 2px 0px inset;
+  max-height: 40px;
+}
+
+.selectbox select[data-test-id~="cf-ui-select"] {
+  background-color: var(--button-color);
+  color: white;
+  border-radius: 8px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  font-weight: 400;
+  height: 33px;
+  padding: 0 30px 0 9px;
+  width: 151px;
+}
+
+.selectbox select[data-test-id~="cf-ui-select"] option {
+  background-color: white;
+  color: var(--table-head-text-color);
+  font-weight: 400;
+}
+
+.selectbox select[data-test-id~="cf-ui-select"] + svg {
+  fill: white;
+}
+
+table.css-1hz7skb {
+  box-shadow: none;
+}
+
+button[data-test-id~="cf-ui-button"],
+select[data-test-id~="cf-ui-select"] {
+  color: black;
+  font-size: 14px;
+  font-weight: 500;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  line-height: normal;
+  min-height: auto;
+  box-shadow: rgba(25, 37, 50, 0.08) 0px 1px 0px;
+}
+
+select[data-test-id~="cf-ui-select"] {
+  padding-right: 40px;
+}
+
+select[data-test-id~="cf-ui-select"] + svg {
+  right: 10px;
+}
+
+button[data-test-id~="cf-ui-button"] svg {
+  fill: black;
+  margin-right: 3px;
+}
+
+input.type-search {
+  border: 0;
+  box-shadow: none;
+  font-family: var(--main-font);
+  font-size: 14px;
+  padding: 0 9px;
+  min-height: 0;
+  line-height: normal;
+}
+
+table[data-test-id~="cf-ui-table"] th {
+  font-size: 12px;
+  color: var(--table-head-text-color);
+  font-family: var(--main-font);
+  font-weight: 500;
+  border-bottom: var(--border-color) 1px solid;
+  line-height: 16px;
+}
+
+table[data-test-id~="cf-ui-table"] td,
+table[data-test-id~="cf-ui-table"] tr:last-child td {
+  font-size: 14px;
+  font-family: var(--main-font);
+  color: var(--table-body-text-color);
+  font-weight: 500;
+  border-bottom: var(--border-color) 1px solid;
+  vertical-align: middle;
+  line-height: 20px;
+}
+table[data-test-id~="cf-ui-table"] tr:last-child td:first-child,
+table[data-test-id~="cf-ui-table"] tr:last-child td:last-child {
+  border-radius: 0;
+}
+
+table[data-test-id~="cf-ui-table"] tr td:nth-child(2) {
+  color: rgb(17, 27, 43);
+}
+
+label[data-test-id~="cf-ui-checkbox"] {
+  color: var(--gray-primery);
+}
+
+@media only screen and (max-width: 1199px) {
+  .content-type-box {
+    width: 199px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .flex-direction-row {
+    flex-direction: column;
+  }
+}

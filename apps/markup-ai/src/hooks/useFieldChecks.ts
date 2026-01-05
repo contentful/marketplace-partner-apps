@@ -1,6 +1,6 @@
-import { useState, useCallback } from 'react';
-import { FieldCheck, FieldCheckMap } from '../types/rewriter';
-import { createInitialFieldCheck, updateFieldCheck } from '../services/rewriterService';
+import { useState, useCallback } from "react";
+import { FieldCheck, FieldCheckMap } from "../types/rewriter";
+import { createInitialFieldCheck, updateFieldCheck } from "../services/rewriterService";
 
 export const useFieldChecks = () => {
   const [fieldChecks, setFieldChecks] = useState<FieldCheckMap>({});
@@ -10,13 +10,15 @@ export const useFieldChecks = () => {
   }, []);
 
   const createCheck = useCallback((fieldId: string, value: string) => {
-    setFieldChecks((prev) => updateFieldCheck(prev, fieldId, createInitialFieldCheck(fieldId, value)));
+    setFieldChecks((prev) =>
+      updateFieldCheck(prev, fieldId, createInitialFieldCheck(fieldId, value)),
+    );
   }, []);
 
   const removeCheck = useCallback((fieldId: string) => {
     setFieldChecks((prev) => {
       const newChecks = { ...prev };
-      delete newChecks[fieldId];
+      Reflect.deleteProperty(newChecks, fieldId);
       return newChecks;
     });
   }, []);

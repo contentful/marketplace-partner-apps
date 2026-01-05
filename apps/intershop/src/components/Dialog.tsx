@@ -289,8 +289,11 @@ const Dialog = ({
         <Button
           variant="primary"
           isDisabled={
-            selectedProducts.length === 0 &&
-            categories.every(({ selected }) => !selected)
+            withCategorySelector
+              ? !categories.some(function hasSelected(category): boolean {
+                  return category.selected || category.subCategories.some(hasSelected);
+                })
+              : selectedProducts.length === 0
           }
           onClick={onSaveSubmit}
         >

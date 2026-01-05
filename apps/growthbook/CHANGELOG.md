@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.7](https://github.com/contentful/marketplace-partner-apps/compare/growthbook-contentful-app-v1.2.6...growthbook-contentful-app-v1.2.7) (2025-12-03)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.41.1 to 4.45.0 in /apps/growthbook in the production-dependencies group ([#6957](https://github.com/contentful/marketplace-partner-apps/issues/6957)) ([eb72924](https://github.com/contentful/marketplace-partner-apps/commit/eb7292411ba2c0317cd7814d2c74d227634d4aa5))
+* **deps:** bump @contentful/app-sdk from 4.45.0 to 4.46.0 in /apps/growthbook in the production-dependencies group ([#7219](https://github.com/contentful/marketplace-partner-apps/issues/7219)) ([baafb2b](https://github.com/contentful/marketplace-partner-apps/commit/baafb2b94e61f0921a3bfd3bbd6cb5f9bf397632))
+* **deps:** bump @contentful/app-sdk from 4.46.0 to 4.47.0 in /apps/growthbook in the production-dependencies group ([#7388](https://github.com/contentful/marketplace-partner-apps/issues/7388)) ([10c7096](https://github.com/contentful/marketplace-partner-apps/commit/10c7096e150728450f9db9154302e3a9ae70cbce))
+* **deps:** bump @growthbook/growthbook from 1.6.1 to 1.6.2 in /apps/growthbook in the production-dependencies group ([#7101](https://github.com/contentful/marketplace-partner-apps/issues/7101)) ([0ed99ee](https://github.com/contentful/marketplace-partner-apps/commit/0ed99ee308f4d0a5bf702f5c68bcac14905b1f45))
+* **deps:** bump axios from 1.11.0 to 1.12.0 in /apps/growthbook ([#6526](https://github.com/contentful/marketplace-partner-apps/issues/6526)) ([e348e56](https://github.com/contentful/marketplace-partner-apps/commit/e348e5618f6d5080f8133bac566b6a2250f6c52c))
+* **deps:** bump glob from 10.4.5 to 10.5.0 in /apps/growthbook ([#7367](https://github.com/contentful/marketplace-partner-apps/issues/7367)) ([a7a36f0](https://github.com/contentful/marketplace-partner-apps/commit/a7a36f02d1eecfd681b27a51535a9d020ee9e072))
+* **deps:** bump next from 15.5.0 to 15.5.2 in /apps/growthbook in the production-dependencies group ([#6290](https://github.com/contentful/marketplace-partner-apps/issues/6290)) ([0374390](https://github.com/contentful/marketplace-partner-apps/commit/037439026d90c9bcebeb6ed40495abb4438fea4c))
+
 ## [1.2.6](https://github.com/contentful/marketplace-partner-apps/compare/growthbook-contentful-app-v1.2.5...growthbook-contentful-app-v1.2.6) (2025-08-01)
 
 

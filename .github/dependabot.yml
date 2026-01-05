@@ -14,6 +14,40 @@ updates:
       prefix: 'fix'
       prefix-development: 'chore'
       include: 'scope'
+    directory: '/apps/abtasty'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
+    groups:
+      production-dependencies:
+        applies-to: version-updates
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
+      dev-dependencies:
+        applies-to: version-updates
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
+    cooldown:
+      default-days: 15
+  - package-ecosystem: npm
+    schedule:
+      interval: monthly
+      time: '03:00'
+      timezone: Etc/UTC
+    open-pull-requests-limit: 7
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
     directory: '/apps/adapt-essentials-asset-fields'
     ignore:
       - dependency-name: '@types/node'
@@ -36,6 +70,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -68,6 +104,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -102,6 +140,8 @@ updates:
           - '*'
     labels:
       - 'contentful-owned'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -134,6 +174,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -166,6 +208,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -201,6 +245,42 @@ updates:
           - '*'
     labels:
       - 'contentful-owned'
+    cooldown:
+      default-days: 15
+  - package-ecosystem: npm
+    schedule:
+      interval: monthly
+      time: '03:00'
+      timezone: Etc/UTC
+    open-pull-requests-limit: 7
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
+    directory: '/apps/content-auditor'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
+    groups:
+      production-dependencies:
+        applies-to: version-updates
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
+      dev-dependencies:
+        applies-to: version-updates
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -233,6 +313,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -246,7 +328,6 @@ updates:
     directory: '/apps/docs-to-rich-text'
     ignore:
       - dependency-name: '@contentful/app-sdk'
-      - dependency-name: '@contentful/field-editor-rich-text'
       - dependency-name: '@types/node'
         versions:
           - '>18.15.3'
@@ -267,6 +348,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -299,6 +382,42 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
+  - package-ecosystem: npm
+    schedule:
+      interval: monthly
+      time: '03:00'
+      timezone: Etc/UTC
+    open-pull-requests-limit: 7
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
+    directory: '/apps/global-find-replace'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
+    groups:
+      production-dependencies:
+        applies-to: version-updates
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
+      dev-dependencies:
+        applies-to: version-updates
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -331,6 +450,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -363,6 +484,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -395,6 +518,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -427,6 +552,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -459,6 +586,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -491,6 +620,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -523,6 +654,42 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
+  - package-ecosystem: npm
+    schedule:
+      interval: monthly
+      time: '03:00'
+      timezone: Etc/UTC
+    open-pull-requests-limit: 7
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'chore'
+      include: 'scope'
+    directory: '/apps/launchdarkly'
+    ignore:
+      - dependency-name: '@types/node'
+        versions:
+          - '>18.15.3'
+    groups:
+      production-dependencies:
+        applies-to: version-updates
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
+      dev-dependencies:
+        applies-to: version-updates
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -555,6 +722,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -588,6 +757,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -620,6 +791,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -652,6 +825,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -684,6 +859,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -718,6 +895,8 @@ updates:
           - '*'
     labels:
       - 'contentful-owned'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -750,6 +929,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -782,6 +963,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -814,6 +997,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -846,6 +1031,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -881,6 +1068,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -913,6 +1102,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -945,6 +1136,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -977,6 +1170,8 @@ updates:
           - patch
         patterns:
           - '*'
+    cooldown:
+      default-days: 15
   - package-ecosystem: npm
     schedule:
       interval: monthly
@@ -1009,3 +1204,6 @@ updates:
           - patch
         patterns:
           - '*'
+
+    cooldown:
+      default-days: 15

@@ -4,6 +4,7 @@ import sortBy from 'lodash/sortBy';
 import { productVariantDataTransformer, productsToVariantsTransformer } from './dataTransformer';
 import { makeShopifyClient } from './skuResolvers';
 import { convertProductToBase64 } from './utils/base64';
+import { retryWithBackoff } from './utils/retry';
 
 const PER_PAGE = 20;
 
@@ -164,7 +165,9 @@ class Pagination {
       query: queryStr,
     };
 
-    const response = await this.shopifyClient.request(query, { variables });
+    const response = await retryWithBackoff(async () => {
+      return await this.shopifyClient.request(query, { variables });
+    });
 
     // Update cursor and hasNextPage for next pagination
     const pageInfo = response.data.products.pageInfo;
@@ -279,7 +282,9 @@ class Pagination {
       query: queryStr,
     };
 
-    const response = await this.shopifyClient.request(query, { variables });
+    const response = await retryWithBackoff(async () => {
+      return await this.shopifyClient.request(query, { variables });
+    });
 
     // Update cursor and hasNextPage for next pagination
     const pageInfo = response.data.products.pageInfo;

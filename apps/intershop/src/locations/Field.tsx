@@ -26,7 +26,6 @@ import ProductCard from "../components/ProductCard";
 import { FieldJson } from "../types/FieldJson";
 import { Product } from "../types/Product";
 import { Category } from "../types/Category";
-import { CategoryJson } from "../types/CategoryJson";
 import jsonMapper from "../utils/JsonMapper";
 import { MappedProductJson } from "../types/MappedProductJson";
 import { Blueprint } from "../types/Blueprint";
@@ -79,50 +78,51 @@ const Field = () => {
       categoriesToMap: Array<any>,
       filter: Array<string>,
       categoryBlueprint: Blueprint
-    ): Array<Category> =>
-      categoriesToMap
-        .filter(({ id }) => filter.includes(id))
-        .map(({ subCategories, ...category }) => ({
-          ...category,
-          subCategories: subCategories?.length
-            ? mapCategories(
-                subCategories.map((subCategory: any) =>
-                  jsonMapper(categoryBlueprint, subCategory)
-                ),
-                filter,
-                categoryBlueprint
-              )
-            : [],
-        })),
-    []
-  );
-
-  const groupCategories = useCallback(
-    (categories: Array<CategoryJson>) =>
-      categories.reduce<{ [key: string]: number }>(
-        (
-          acc,
-          { category_id: id, subcategories, excluded_products }: CategoryJson
-        ) => {
-          acc = {
-            ...acc,
-            [id]: excluded_products ? excluded_products.length : 0,
-            ...groupCategories(subcategories),
-          };
+    ): Array<Category> => {
+      // Recursively flatten the tree and return only categories matching the filter
+      const flattenCategories = (
+        categories: Array<any>,
+        ancestorPath: string = ""
+      ): Array<Category> => {
+        return categories.reduce<Array<Category>>((acc, category) => {
+          const { subCategories, ...rest } = category;
+          const fullPath = ancestorPath 
+            ? `${ancestorPath} - ${category.title}` 
+            : category.title;
+          
+          // If this category is in our filter, add it
+          if (filter.includes(category.id)) {
+            acc.push({
+              ...rest,
+              title: fullPath, // Include full path in the title
+              subCategories: [], // Don't need subcategories for display
+            });
+          }
+          
+          // Continue searching in subcategories
+          if (subCategories?.length) {
+            const mappedSubCategories = subCategories.map((subCategory: any) =>
+              jsonMapper(categoryBlueprint, subCategory)
+            );
+            acc.push(...flattenCategories(mappedSubCategories, fullPath));
+          }
+          
           return acc;
-        },
-        {}
-      ),
+        }, []);
+      };
+      
+      return flattenCategories(categoriesToMap);
+    },
     []
   );
 
   const loadProducts = useCallback(
     (skus: string, { ...filters }: FetchFilters) => {
       setLoading(true);
-      const { apiBase, productMapper, imageBase } = sdk.parameters.installation;
+      const { apiBase, productMapper, imageBase, imageType } = sdk.parameters.installation;
       fetch(
         replaceChannelAndApplication(
-          `${apiBase}/products?SKU=${skus}&attrs=sku,manufacturer,image,defaultCategory,listPrice`,
+          `${apiBase}/products?sku=${skus}&attrs=sku,manufacturer,image@${imageType},defaultCategory,listPrice`,
           { ...filters }
         )
       )
@@ -141,7 +141,7 @@ const Field = () => {
           setProducts(
             mappedJsonElements.map(({ image, price, ...product }) => ({
               ...product,
-              image: `${imageBase}${image}`,
+              image,
               price: `$${price}`,
             }))
           )
@@ -163,51 +163,9 @@ const Field = () => {
   );
 
   const removeCategoryFromField = useCallback(
-    (
-      id: string,
-      nestedArray: Array<CategoryJson>,
-      categoryPath: Array<string>
-    ) => {
-      const copyCategoryPath = [...categoryPath];
-      if (copyCategoryPath[copyCategoryPath.length - 1] === id) {
-        copyCategoryPath.pop();
-      }
-      const updatedArray = [...nestedArray];
-      let currentArray = updatedArray;
-
-      for (const pathId of copyCategoryPath) {
-        const foundIndex = currentArray.findIndex(
-          ({ category_id: categoryId }) => categoryId === pathId
-        );
-
-        if (foundIndex === -1) {
-          return updatedArray;
-        } else {
-          currentArray = currentArray[foundIndex].subcategories;
-        }
-      }
-
-      const exists = currentArray.some(
-        ({ category_id: categoryId }) => categoryId === id
-      );
-
-      if (exists) {
-        const searchIndex = currentArray.findIndex(
-          ({ category_id: categoryId }) => categoryId === id
-        );
-        if (searchIndex > -1) {
-          currentArray.splice(searchIndex, 1);
-
-          if (currentArray.length === 0 && copyCategoryPath.length) {
-            return removeCategoryFromField(
-              copyCategoryPath[copyCategoryPath.length - 1],
-              nestedArray,
-              copyCategoryPath
-            );
-          }
-        }
-      }
-      return updatedArray;
+    (id: string, categories: Array<string>) => {
+      // Simple filter - remove the specific category ID
+      return categories.filter(categoryId => categoryId !== id);
     },
     []
   );
@@ -229,11 +187,7 @@ const Field = () => {
   const handleOnCloseCategory = useCallback(
     (id: string, categoryPath: Array<string>) => {
       const { categories, ...data } = sdk.field.getValue();
-      const updatedCategories = removeCategoryFromField(
-        id,
-        categories,
-        categoryPath
-      );
+      const updatedCategories = removeCategoryFromField(id, categories);
       sdk.field.setValue({
         ...data,
         categories: updatedCategories,
@@ -268,35 +222,17 @@ const Field = () => {
   );
 
   const renderCategories = useCallback(
-    (
-      categories: Array<Category>,
-      ancestorCategories: string = "",
-      ancestorCategoriesIds: Array<string> = []
-    ): Array<ReactElement<CategoryCardType>> =>
-      categories
-        .map(({ title, subCategories, id, totalProducts, image }: Category) =>
-          subCategories?.length ? (
-            renderCategories(
-              subCategories,
-              `${
-                ancestorCategories ? `${ancestorCategories} - ${title} ` : title
-              }`,
-              [...ancestorCategoriesIds, id]
-            )
-          ) : (
-            <CategoryCard
-              key={id}
-              thumbnailSrc={
-                image ? `${sdk.parameters.installation.imageBase}${image}` : ""
-              }
-              title={`${
-                ancestorCategories ? `${ancestorCategories} - ` : ""
-              } ${title}`}
-              onClose={() => handleOnCloseCategory(id, ancestorCategoriesIds)}
-            />
-          )
-        )
-        .flat(),
+    (categories: Array<Category>): Array<ReactElement<CategoryCardType>> =>
+      categories.map(({ title, id, image }: Category) => (
+        <CategoryCard
+          key={id}
+          thumbnailSrc={
+            image ? `${sdk.parameters.installation.imageBase}${image}` : ""
+          }
+          title={title}
+          onClose={() => handleOnCloseCategory(id, [])}
+        />
+      )),
     [handleOnCloseCategory, sdk.parameters.installation.imageBase]
   );
 
@@ -342,19 +278,19 @@ const Field = () => {
   const loadData = useCallback(
     (
       products: Array<string>,
-      categories: Array<CategoryJson>,
+      categories: Array<string>,
       { ...filters }: FetchFilters
     ) => {
       setErrors({ products: [], categories: [] });
       if (products.length) {
         loadProducts(products.join("_or_"), { ...filters });
       } else if (categories.length) {
-        const categoriesMetadata = groupCategories(categories);
-        setCategoryTotalExcludedProducts(categoriesMetadata);
-        loadCategories(Object.keys(categoriesMetadata), { ...filters });
+        // categories is now a flat array of IDs
+        setCategoryTotalExcludedProducts({});
+        loadCategories(categories, { ...filters });
       }
     },
-    [groupCategories, loadCategories, loadProducts]
+    [loadCategories, loadProducts]
   );
 
   const openDialogue = useCallback(
@@ -493,7 +429,6 @@ const Field = () => {
   }, [
     applications.length,
     channels.length,
-    groupCategories,
     loadCategories,
     loadData,
     loadProducts,

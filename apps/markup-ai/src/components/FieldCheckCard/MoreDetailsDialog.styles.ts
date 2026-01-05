@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 
 export const DialogContainer = styled.div`
   display: flex;
@@ -33,7 +33,7 @@ export const DialogHeader = styled.div`
 `;
 
 export const DialogTitle = styled.div`
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-weight: 600;
   font-size: 16px;
   line-height: 21px;
@@ -86,7 +86,7 @@ export const QualityCard = styled.div<{ bg?: string }>`
   align-items: center;
   padding: 10px;
   border-radius: 8px;
-  background: ${(p) => p.bg || '#DFF2FF'};
+  background: ${(p) => p.bg || "#DFF2FF"};
   border: 1px solid #e7ebee;
   height: 76px; /* fixed to match right-side box */
   box-shadow:
@@ -95,7 +95,7 @@ export const QualityCard = styled.div<{ bg?: string }>`
 `;
 
 export const QualityTitle = styled.div`
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-weight: 600;
   font-size: 12px;
   color: #111b2b;
@@ -103,7 +103,7 @@ export const QualityTitle = styled.div`
 
 export const QualityValue = styled.div`
   margin-top: 4px;
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-weight: 800;
   font-size: 23px;
   line-height: 1;
@@ -111,7 +111,7 @@ export const QualityValue = styled.div`
 `;
 
 export const SectionTitle = styled.div`
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-weight: 600;
   font-size: 13px;
   color: #111b2b;
@@ -143,10 +143,10 @@ export const MetricHeader = styled.div`
 `;
 
 export const MetricScore = styled.div<{ color?: string }>`
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-size: 13px;
   font-weight: 700;
-  color: ${(p) => p.color || '#111b2b'};
+  color: ${(p) => p.color || "#111b2b"};
   min-width: 20px;
   text-align: right;
   margin-left: auto;
@@ -174,7 +174,7 @@ export const MetricDetailsRow = styled.div`
   align-items: center;
   column-gap: 8px;
   width: 100%;
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-size: 12px;
   color: #111b2b;
   margin-top: 2px;
@@ -190,7 +190,7 @@ export const MetricDetailsGrid = styled.div`
 `;
 
 export const MetricLabel = styled.span`
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-weight: 700;
   font-style: bold;
   font-size: 14px;
@@ -199,7 +199,7 @@ export const MetricLabel = styled.span`
 `;
 
 export const IssuesNumber = styled.span`
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-weight: 700;
   font-style: bold;
   font-size: 13px;
@@ -234,7 +234,7 @@ export const AnalysisConfigItem = styled.div`
 `;
 
 export const AnalysisConfigLabel = styled.span`
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-weight: 500;
   font-size: 12px;
   line-height: 16px;
@@ -244,7 +244,7 @@ export const AnalysisConfigLabel = styled.span`
 `;
 
 export const AnalysisConfigValue = styled.span`
-  font-family: 'Geist', sans-serif;
+  font-family: "Geist", sans-serif;
   font-weight: 600;
   font-size: 12px;
   line-height: 16px;

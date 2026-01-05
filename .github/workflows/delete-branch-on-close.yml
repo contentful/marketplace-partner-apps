@@ -6,6 +6,9 @@ name: Auto Merge and Delete Branch
     types:
       - closed
 
+permissions:
+  contents: write
+
 jobs:
   auto-merge-and-delete:
     runs-on: ubuntu-latest

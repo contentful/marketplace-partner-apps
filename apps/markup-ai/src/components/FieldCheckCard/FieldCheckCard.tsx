@@ -1,8 +1,8 @@
-import React from 'react';
-import { Button } from '@contentful/f36-components';
-import { ChevronDownIcon, ChevronRightIcon } from '@contentful/f36-icons';
-import { FieldCheck } from '../../types/content';
-import { LoadingState } from '../LoadingState/LoadingState';
+import React from "react";
+import { Button } from "@contentful/f36-components";
+import { CaretDownIcon, CaretRightIcon } from "@contentful/f36-icons";
+import { FieldCheck } from "../../types/content";
+import { LoadingState } from "../LoadingState/LoadingState";
 import {
   CardContainer,
   CardWrapper,
@@ -11,10 +11,10 @@ import {
   HeaderFlex,
   RewriteButtonBox,
   ScoreBox,
-} from './FieldCheckCard.styles';
-import { getScoreColor, formatScoreForDisplay } from '../../utils/scoreColors';
-import { AnalysisSection } from './AnalysisSection';
-import { useSDK } from '@contentful/react-apps-toolkit';
+} from "./FieldCheckCard.styles";
+import { formatScoreForDisplay, getScoreColorStringSoft } from "../../utils/scoreColors";
+import { AnalysisSection } from "./AnalysisSection";
+import { useSDK } from "@contentful/react-apps-toolkit";
 
 interface FieldCheckCardProps {
   fieldCheck: FieldCheck;
@@ -57,34 +57,39 @@ export const FieldCheckCard: React.FC<FieldCheckCardProps> = ({
   };
 
   const handleMoreDetails = () => {
-    if (!checkResponse) return;
-    sdk.dialogs.openCurrent({
+    void sdk.dialogs.openCurrent({
       width: 600,
-      title: 'More Details',
+      title: "More Details",
       parameters: {
-        checkResponse: JSON.parse(JSON.stringify(checkResponse)),
+        checkResponse: JSON.parse(JSON.stringify(checkResponse)) as typeof checkResponse,
       },
     });
   };
 
   return (
     <CardWrapper data-expanded={isExpanded}>
-      <HeaderFlex data-clickable data-testid="field-header" onClick={() => onToggleExpand(fieldId)}>
+      <HeaderFlex
+        data-clickable
+        data-testid="field-header"
+        onClick={() => {
+          onToggleExpand(fieldId);
+        }}
+      >
         <ChevronWrapper>
-          {isExpanded ? <ChevronDownIcon size="small" /> : <ChevronRightIcon size="small" />}
+          {isExpanded ? <CaretDownIcon size="small" /> : <CaretRightIcon size="small" />}
         </ChevronWrapper>
         <FieldName data-testid="field-name">{fieldName}</FieldName>
         <ScoreBox
           data-testid="field-score"
-          background={getScoreColor(checkResponse.original.scores.quality.score).background}
+          background={getScoreColorStringSoft(checkResponse.original?.scores?.quality?.score || 0)}
         >
-          {formatScoreForDisplay(checkResponse.original.scores.quality.score)}
+          {formatScoreForDisplay(checkResponse.original?.scores?.quality?.score || 0)}
         </ScoreBox>
       </HeaderFlex>
       {isExpanded && (
         <>
           <AnalysisSection
-            scores={checkResponse.original.scores}
+            scores={checkResponse.original?.scores ?? undefined}
             onMoreDetails={handleMoreDetails}
             data-testid="analysis-section"
           />
@@ -97,7 +102,7 @@ export const FieldCheckCard: React.FC<FieldCheckCardProps> = ({
               onClick={handleButtonClick}
               isDisabled={isChecking}
             >
-              {isChecking ? 'Rewriting' : 'Rewrite'}
+              {isChecking ? "Rewriting" : "Rewrite"}
             </Button>
           </RewriteButtonBox>
         </>

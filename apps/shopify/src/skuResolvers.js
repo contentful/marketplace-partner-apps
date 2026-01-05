@@ -10,6 +10,8 @@ import { validateParameters } from './utils/validation';
 import { previewsToProductVariants } from './dataTransformer';
 import { SHOPIFY_API_VERSION, SHOPIFY_ENTITY_LIMIT } from './constants';
 import { convertStringToBase64, convertBase64ToString, convertCollectionToBase64, convertProductToBase64 } from './utils/base64';
+import { retryWithBackoff } from './utils/retry';
+import { createFallbackPreview } from './utils/fallback';
 
 export async function makeShopifyClient(config) {
   const validationError = validateParameters(config);
@@ -26,21 +28,49 @@ export async function makeShopifyClient(config) {
   });
 }
 
+/**
+ * Gets the fetch function available in the current environment.
+ * Works in both browser and Node.js environments.
+ */
+const getFetch = () => {
+  // Node.js 18+ has global fetch
+  if (typeof fetch !== 'undefined') {
+    return fetch;
+  }
+  // Browser environment
+  if (typeof window !== 'undefined' && window.fetch) {
+    return window.fetch;
+  }
+  // Fallback: throw error if fetch is not available
+  throw new Error('Fetch API is not available in this environment');
+};
+
 const graphqlRequest = async (config, query) => {
   const { apiEndpoint, storefrontAccessToken } = config;
   const url = `https://${removeHttpsAndTrailingSlash(apiEndpoint)}/api/${SHOPIFY_API_VERSION}/graphql`;
 
-  const response = await window.fetch(url, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'x-shopify-storefront-access-token': storefrontAccessToken,
-    },
-    body: JSON.stringify({ query }),
-  });
+  return retryWithBackoff(async () => {
+    const fetchFn = getFetch();
+    const response = await fetchFn(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-shopify-storefront-access-token': storefrontAccessToken,
+      },
+      body: JSON.stringify({ query }),
+    });
 
-  return await response.json();
+    if (!response.ok) {
+      const error = new Error(`HTTP error! status: ${response.status}`);
+      error.status = response.status;
+      error.response = response;
+      throw error;
+    }
+
+    const data = await response.json();
+    return data;
+  });
 };
 
 const paginateGraphQLRequest = async (config, ids, queryFunction) => {
@@ -52,7 +82,31 @@ const paginateGraphQLRequest = async (config, ids, queryFunction) => {
     requests.push(graphqlRequest(config, query));
   }
 
-  return (await Promise.all(requests)).flatMap((res) => res.data.nodes);
+  // Handle partial failures gracefully
+  const results = await Promise.allSettled(requests);
+  const successfulResults = [];
+  const errors = [];
+
+  results.forEach((result, index) => {
+    if (result.status === 'fulfilled') {
+      successfulResults.push(result.value);
+    } else {
+      console.error(`Request batch ${index} failed:`, result.reason);
+      errors.push(result.reason);
+    }
+  });
+
+  // If all requests failed, throw an error
+  if (successfulResults.length === 0 && errors.length > 0) {
+    throw new Error(`All requests failed. Last error: ${errors[errors.length - 1].message}`);
+  }
+
+  // If some requests failed, log a warning but continue with successful results
+  if (errors.length > 0) {
+    console.warn(`${errors.length} out of ${requests.length} request batches failed. Continuing with partial results.`);
+  }
+
+  return successfulResults.flatMap((res) => res.data?.nodes || []);
 };
 
 // GraphQL query for fetching products by IDs
@@ -174,19 +228,12 @@ export const fetchCollectionPreviews = async (skus, config) => {
 
     return validIds.map((validId) => {
       const collection = collections.find((collection) => collection?.id === convertStringToBase64(validId));
-      return collection
-        ? collectionDataTransformer(collection, config.apiEndpoint)
-        : {
-            sku: convertStringToBase64(validId),
-            isMissing: true,
-            image: '',
-            id: convertStringToBase64(validId),
-            name: '',
-          };
+      return collection ? collectionDataTransformer(collection, config.apiEndpoint) : createFallbackPreview(convertStringToBase64(validId));
     });
   } catch (error) {
-    console.error('Error in fetchCollectionPreviews:', error);
-    throw error;
+    console.error('Error in fetchCollectionPreviews, returning fallback data:', error);
+    // Return fallback data for all SKUs
+    return skus.map(createFallbackPreview);
   }
 };
 
@@ -207,20 +254,40 @@ export const fetchProductPreviews = async (skus, config) => {
       const currentIdPage = validIds.slice(i, i + (SHOPIFY_ENTITY_LIMIT - 1));
       const query = productQuery(currentIdPage);
 
-      requests.push(shopifyClient.request(query));
+      // Wrap each request with retry logic
+      requests.push(
+        retryWithBackoff(async () => {
+          return await shopifyClient.request(query);
+        })
+      );
     }
 
-    const responses = await Promise.all(requests);
+    // Handle partial failures gracefully
+    const results = await Promise.allSettled(requests);
+    const successfulResponses = [];
+    const errors = [];
 
-    // Check for GraphQL errors
-    responses.forEach((response, index) => {
-      if (response.errors) {
-        console.error(`GraphQL errors in response ${index}:`, response.errors);
-        throw new Error(`GraphQL errors: ${JSON.stringify(response.errors)}`);
+    results.forEach((result, index) => {
+      if (result.status === 'fulfilled') {
+        successfulResponses.push(result.value);
+      } else {
+        console.error(`Product preview request batch ${index} failed:`, result.reason);
+        errors.push(result.reason);
       }
     });
 
-    const products = responses.flatMap((response) => response.data.nodes).filter(identity);
+    // If all requests failed, log warning and return fallback data
+    if (successfulResponses.length === 0 && errors.length > 0) {
+      console.warn(`All product preview requests failed. Returning fallback data for ${skus.length} products.`);
+      return skus.map(createFallbackPreview);
+    }
+
+    // If some requests failed, log a warning but continue with successful results
+    if (errors.length > 0) {
+      console.warn(`${errors.length} out of ${requests.length} product preview request batches failed. Continuing with partial results.`);
+    }
+
+    const products = successfulResponses.flatMap((response) => response.data?.nodes || []).filter(identity);
 
     // Transform the GraphQL response to match the old Buy SDK format
     const transformedProducts = products
@@ -245,19 +312,12 @@ export const fetchProductPreviews = async (skus, config) => {
     return validIds.map((validId) => {
       const product = transformedProducts.find((product) => product?.id === convertStringToBase64(validId));
 
-      return product
-        ? productDataTransformer(product, config.apiEndpoint)
-        : {
-            sku: convertStringToBase64(validId),
-            isMissing: true,
-            image: '',
-            id: convertStringToBase64(validId),
-            name: '',
-          };
+      return product ? productDataTransformer(product, config.apiEndpoint) : createFallbackPreview(convertStringToBase64(validId));
     });
   } catch (error) {
-    console.error('Error in fetchProductPreviews:', error);
-    throw error;
+    console.error('Error in fetchProductPreviews, returning fallback data:', error);
+    // Return fallback data for all SKUs
+    return skus.map(createFallbackPreview);
   }
 };
 
@@ -320,12 +380,13 @@ export const fetchProductVariantPreviews = async (skus, config) => {
     const missingVariants = difference(
       skus,
       variantPreviews.map((variant) => variant.sku)
-    ).map((sku) => ({ sku, isMissing: true, name: '', image: '' }));
+    ).map(createFallbackPreview);
 
     return [...variantPreviews, ...missingVariants];
   } catch (error) {
-    console.error('Error in fetchProductVariantPreviews:', error);
-    throw error;
+    console.error('Error in fetchProductVariantPreviews, returning fallback data:', error);
+    // Return fallback data for all SKUs
+    return skus.map(createFallbackPreview);
   }
 };
 
@@ -354,7 +415,7 @@ export const filterAndDecodeValidIds = (skus, skuType) => {
   const validIds = skus
     .map((sku) => {
       try {
-        // If not valid base64 window.atob will throw
+        // If not valid base64, convertBase64ToString will return null
         const decodedId = convertBase64ToString(sku);
         return decodedId;
       } catch (error) {

@@ -1,7 +1,7 @@
 ---
 name: "CodeQL Scan for GitHub Actions Workflows"
 
-on:
+"on":
   push:
     branches: [main]
     paths: ['.github/workflows/**']

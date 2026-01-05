@@ -75,7 +75,7 @@ export default class ConfigScreen extends React.Component {
           "required": false,
           "validations": [],
           "defaultValue": {
-            "en-US": "[VWO] FME Entry"
+            [this.props.sdk.locales.default]: '[VWO] FME Entry',
           },
           "disabled": false,
           "omitted": false
@@ -248,6 +248,9 @@ export default class ConfigScreen extends React.Component {
       return false;
     }
 
+    // Get current state of EditorInterface to avoid version mismatch errors
+    const currentState = await this.props.sdk.app.getCurrentState();
+
     return {
       parameters: {
         accessToken: config.accessToken,
@@ -255,6 +258,7 @@ export default class ConfigScreen extends React.Component {
       },
       targetState: {
         EditorInterface: {
+          ...currentState?.EditorInterface,
           [VARIATION_CONTAINER_ID]: { editor: true, sidebar: { position: 0 } }
         }
       },

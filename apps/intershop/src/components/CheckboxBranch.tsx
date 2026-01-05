@@ -24,7 +24,6 @@ const CheckboxBranch = ({
   id,
   text,
   childboxes,
-  parentChecked = false,
   onCheckboxClick,
   onLabelClick,
 }: Props) => {
@@ -81,12 +80,6 @@ const CheckboxBranch = ({
         <Checkbox
           isChecked={isChecked}
           onChange={handleCheckboxOnClick}
-          isIndeterminate={
-            descendantBoxesChecked.length
-              ? descendantBoxesChecked.some((checked) => checked) &&
-                !descendantBoxesChecked.every((checked) => checked)
-              : false
-          }
         />
         <Flex
           onClick={handleLabelOnClick}
@@ -123,7 +116,7 @@ const CheckboxBranch = ({
                 {...box}
                 key={i}
                 depth={depth + 1}
-                parentChecked={isChecked}
+                //parentChecked={isChecked}
                 onCheckboxClick={onCheckboxClick}
                 onLabelClick={onLabelClick}
                 parentHasExpanded={isExpanded}

@@ -1,5 +1,5 @@
-import React from 'react';
-import { formatScoreForDisplay } from '../../../utils/scoreColors';
+import React from "react";
+import { formatScoreForDisplay } from "../../../utils/scoreColors";
 
 export interface GoalScore {
   label: string;
@@ -17,11 +17,11 @@ export const IssuesAndSuggestions: React.FC<IssuesAndSuggestionsProps> = ({ goal
     <div
       className="issues-suggestions-wrapper"
       style={{
-        display: 'flex',
-        flexWrap: 'wrap',
+        display: "flex",
+        flexWrap: "wrap",
         gap: 8,
-        justifyContent: 'center',
-        width: '100%',
+        justifyContent: "center",
+        width: "100%",
       }}
     >
       {goalScores.map((goal) => (
@@ -32,33 +32,33 @@ export const IssuesAndSuggestions: React.FC<IssuesAndSuggestionsProps> = ({ goal
             background: goal.bar,
             border: `1px solid #E7EBEE`,
             borderRadius: 6,
-            padding: '10px 15px',
-            minWidth: '140px',
-            flex: '1 1 calc(50% - 4px)',
-            maxWidth: 'calc(50% - 4px)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
+            padding: "10px 15px",
+            minWidth: "140px",
+            flex: "1 1 calc(50% - 4px)",
+            maxWidth: "calc(50% - 4px)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <div
             style={{
-              color: '#111B2B',
+              color: "#111B2B",
               fontWeight: 500,
               fontSize: 12,
-              textAlign: 'center',
-              width: '100%',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
+              textAlign: "center",
+              width: "100%",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
             }}
           >
             {goal.label}
           </div>
           <div
             style={{
-              color: '#111B2B',
+              color: "#111B2B",
               fontWeight: 600,
               fontSize: 16,
               marginTop: 4,

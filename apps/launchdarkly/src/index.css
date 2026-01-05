@@ -1,0 +1,23 @@
+/* Contentful app styles */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  height: 100vh;
+  width: 100%;
+}
+
+/* Contentful Forma 36 overrides if needed */
+.f36-spacing--m {
+  margin: 16px;
+}
+
+.f36-spacing--s {
+  margin: 8px;
+}
