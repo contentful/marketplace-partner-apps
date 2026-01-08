@@ -1,5 +1,5 @@
 ---
-name: 'release-please dependency-only auto-merge'
+name: "release-please dependency-only auto-merge"
 
 "on":
   pull_request:
@@ -19,8 +19,9 @@ jobs:
     steps:
       - name: Check if release contains only dependency updates
         id: check-dependencies
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
         run: |
-          PR_BODY="${{ github.event.pull_request.body }}"
 
           # Check for sections that should NOT be present in dependency-only releases
           if echo "$PR_BODY" | grep -E "### (Features|Performance Improvements|Reverts|Documentation)" -i; then
@@ -103,8 +104,9 @@ jobs:
       - name: Enable auto merge
         if: steps.check-dependencies.outputs.is-dependency-only == 'true'
         shell: bash
-        run: |
-          echo "Auto merging dependency-only release PR"
-          gh pr merge --auto ${{ github.event.pull_request.html_url }}
         env:
           GH_TOKEN: ${{ steps.vault.outputs.GITHUB_MERGE_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          echo "Auto merging dependency-only release PR"
+          gh pr merge --auto "$PR_URL"

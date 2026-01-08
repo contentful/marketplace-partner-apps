@@ -1,7 +1,7 @@
 ---
-name: 'dependabot approve-and-request-merge'
+name: "dependabot approve-and-request-merge"
 
-'on': pull_request_target
+"on": pull_request_target
 
 jobs:
   worker:
@@ -16,7 +16,7 @@ jobs:
         id: dependabot-metadata
         uses: dependabot/fetch-metadata@v1
         with:
-          github-token: '${{ secrets.GITHUB_TOKEN }}'
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Check if PR is from fork
         if: steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major'
@@ -110,11 +110,13 @@ jobs:
       - name: Enable auto merge
         if: steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major'
         shell: bash
-        run: |
-          merge_method="$(echo ${{ steps.merge-type.outputs.result }} | tr -d '"')"
-          echo "Auto merging PR using method $merge_method"
-          gh pr merge "--$merge_method" --auto ${{ github.event.pull_request.html_url }}
         env:
           # Note: The GH_TOKEN env var is required for now, even though it
           # contradicts GH's documentation
           GH_TOKEN: ${{ steps.vault.outputs.GITHUB_MERGE_TOKEN }}
+          MERGE_METHOD: ${{ steps.merge-type.outputs.result }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          merge_method="$(echo "$MERGE_METHOD" | tr -d '"')"
+          echo "Auto merging PR using method $merge_method"
+          gh pr merge "--$merge_method" --auto "$PR_URL"
