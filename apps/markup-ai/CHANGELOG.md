@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.2](https://github.com/contentful/marketplace-partner-apps/compare/markup-ai-contentful-app-v1.1.1...markup-ai-contentful-app-v1.1.2) (2026-01-09)
+
+
+### Bug Fixes
+
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/markup-ai ([#7601](https://github.com/contentful/marketplace-partner-apps/issues/7601)) ([0f6753b](https://github.com/contentful/marketplace-partner-apps/commit/0f6753bf937af6768257188335c3069ab8d05549))
+* **deps:** bump the production-dependencies group in /apps/markup-ai with 5 updates ([#7559](https://github.com/contentful/marketplace-partner-apps/issues/7559)) ([f64e110](https://github.com/contentful/marketplace-partner-apps/commit/f64e1109389f7b652248e20d1c57d5e34f20d9a5))
+
 ## [1.1.1](https://github.com/contentful/marketplace-partner-apps/compare/markup-ai-contentful-app-v1.1.0...markup-ai-contentful-app-v1.1.1) (2025-12-15)
 
 
