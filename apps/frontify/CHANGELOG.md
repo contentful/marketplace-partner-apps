@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/frontify-assets-v1.0.3...frontify-assets-v1.0.4) (2026-01-09)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.11.0 to 1.12.0 in /apps/frontify ([#6528](https://github.com/contentful/marketplace-partner-apps/issues/6528)) ([a19f178](https://github.com/contentful/marketplace-partner-apps/commit/a19f178d1febc08cdd84d4c04878ac78682cec73))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/frontify ([#7593](https://github.com/contentful/marketplace-partner-apps/issues/7593)) ([a4ed3fb](https://github.com/contentful/marketplace-partner-apps/commit/a4ed3fbb6fa035ed71058f093eb8eb654fd4327a))
+
 ## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/frontify-assets-v1.0.2...frontify-assets-v1.0.3) (2025-07-28)
 
 
