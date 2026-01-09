@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.6](https://github.com/contentful/marketplace-partner-apps/compare/hugging-face-v1.1.5...hugging-face-v1.1.6) (2026-01-09)
+
+
+### Bug Fixes
+
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/hugging-face ([#7587](https://github.com/contentful/marketplace-partner-apps/issues/7587)) ([564318c](https://github.com/contentful/marketplace-partner-apps/commit/564318c3e2ff832e7c5f1c7817d36ce76b22f7bf))
+
 ## [1.1.5](https://github.com/contentful/marketplace-partner-apps/compare/hugging-face-v1.1.4...hugging-face-v1.1.5) (2025-12-03)
 
 
