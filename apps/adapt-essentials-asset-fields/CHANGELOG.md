@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.2](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.2.1...adapt-essentials-asset-fields-v1.2.2) (2026-01-09)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.11.0 to 1.12.0 in /apps/adapt-essentials-asset-fields ([#6543](https://github.com/contentful/marketplace-partner-apps/issues/6543)) ([b728de8](https://github.com/contentful/marketplace-partner-apps/commit/b728de862fb6439f4a4d67c742e9b53bca3a4b1f))
+* **deps:** bump js-yaml from 4.1.0 to 4.1.1 in /apps/adapt-essentials-asset-fields ([#7340](https://github.com/contentful/marketplace-partner-apps/issues/7340)) ([057d962](https://github.com/contentful/marketplace-partner-apps/commit/057d9624dfae55fdf851f6e2995eb99cb2388896))
+* **deps:** bump mdast-util-to-hast from 13.2.0 to 13.2.1 in /apps/adapt-essentials-asset-fields ([#7412](https://github.com/contentful/marketplace-partner-apps/issues/7412)) ([70eec27](https://github.com/contentful/marketplace-partner-apps/commit/70eec27e79d19d61864c5554addc28db29336473))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/adapt-essentials-asset-fields ([#7590](https://github.com/contentful/marketplace-partner-apps/issues/7590)) ([51f1856](https://github.com/contentful/marketplace-partner-apps/commit/51f1856a6f9a0349ed61c657aeb15196fca8007f))
+* **deps:** bump react-router and react-router-dom in /apps/adapt-essentials-asset-fields ([#7625](https://github.com/contentful/marketplace-partner-apps/issues/7625)) ([1ad82ad](https://github.com/contentful/marketplace-partner-apps/commit/1ad82adf32f4bc6ffb62bcbdeab65b088f1c6b3a))
+* **deps:** bump the production-dependencies group in /apps/adapt-essentials-asset-fields with 3 updates ([#6977](https://github.com/contentful/marketplace-partner-apps/issues/6977)) ([b3942ff](https://github.com/contentful/marketplace-partner-apps/commit/b3942ffc3d7eb32a4f8831c2da6164bd0baa182e))
+
 ## [1.2.1](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.2.0...adapt-essentials-asset-fields-v1.2.1) (2025-08-01)
 
 
