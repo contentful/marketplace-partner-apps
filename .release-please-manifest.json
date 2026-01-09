@@ -31,7 +31,7 @@
   "apps/lottie-preview": "1.0.7",
   "apps/hugging-face": "1.1.5",
   "apps/translationstudio": "1.0.4",
-  "apps/imagekit": "1.0.1",
+  "apps/imagekit": "1.1.0",
   "apps/launchdarkly": "1.1.0",
   "apps/markup-ai": "1.1.1",
   "apps/content-auditor": "1.0.0"
