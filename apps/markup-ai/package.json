@@ -74,11 +74,11 @@
     "@vitest/coverage-v8": "4.0.16",
     "cross-env": "10.1.0",
     "eslint": "9.39.2",
-    "jsdom": "27.3.0",
+    "jsdom": "27.4.0",
     "prettier": "3.7.4",
     "prettier-plugin-packagejson": "2.5.20",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.50.0",
+    "typescript-eslint": "8.50.1",
     "vite": "7.3.0",
     "vitest": "4.0.16"
   }
