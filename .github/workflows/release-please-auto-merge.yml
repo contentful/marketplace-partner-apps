@@ -19,9 +19,9 @@ jobs:
     steps:
       - name: Check if release contains only dependency updates
         id: check-dependencies
+        env:
+          PR_BODY: "${{ github.event.pull_request.body }}"
         run: |
-          PR_BODY="${{ github.event.pull_request.body }}"
-
           # Check for sections that should NOT be present in dependency-only releases
           if echo "$PR_BODY" | grep -E "### (Features|Performance Improvements|Reverts|Documentation)" -i; then
             echo "Found non-dependency sections, skipping auto-merge"

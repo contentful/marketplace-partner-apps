@@ -19,8 +19,8 @@ jobs:
       - name: Delete branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ github.event.pull_request.head.ref }}
         run: |
-          branch=${{ github.event.pull_request.head.ref }}
-          if [ "$branch" != "main" ]; then
-            git push origin --delete $branch
+          if [ "$BRANCH" != "main" ]; then
+            git push origin --delete $BRANCH
           fi
