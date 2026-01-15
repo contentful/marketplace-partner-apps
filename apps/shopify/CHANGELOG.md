@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.2](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.2.1...shopify-sku-v2.2.2) (2026-01-15)
+
+
+### Bug Fixes
+
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/shopify ([#7581](https://github.com/contentful/marketplace-partner-apps/issues/7581)) ([d78799e](https://github.com/contentful/marketplace-partner-apps/commit/d78799e3318cf9b122074e137b13a913ec4a8ef1))
+
 ## [2.2.1](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.2.0...shopify-sku-v2.2.1) (2025-12-02)
 
 
