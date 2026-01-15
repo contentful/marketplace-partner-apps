@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.3.2](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.3.1...cloudinary-assets-v1.3.2) (2026-01-15)
+
+
+### Bug Fixes
+
+* cloudinary start folder help text + placeholder [ZEND-7289] ([#7434](https://github.com/contentful/marketplace-partner-apps/issues/7434)) ([c4181c7](https://github.com/contentful/marketplace-partner-apps/commit/c4181c7610677d782a4d4bcea155f6d3c3276da0))
+* cloudinary-search-filter [CLD-1234] ([#7365](https://github.com/contentful/marketplace-partner-apps/issues/7365)) ([196095d](https://github.com/contentful/marketplace-partner-apps/commit/196095d48708a455b85c30f48cc8814040824511))
+* **deps:** bump contentful-management from 11.62.0 to 11.63.0 in /apps/cloudinary2 in the production-dependencies group ([#7221](https://github.com/contentful/marketplace-partner-apps/issues/7221)) ([cb56d27](https://github.com/contentful/marketplace-partner-apps/commit/cb56d2774f95550b2107fa6559a4aa8d74afe180))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/cloudinary2 ([#7579](https://github.com/contentful/marketplace-partner-apps/issues/7579)) ([91c6f9b](https://github.com/contentful/marketplace-partner-apps/commit/91c6f9b75fa15cbc7eab319e89707e4434ecd6d1))
+* **deps:** bump the production-dependencies group in /apps/cloudinary2 with 3 updates ([#6965](https://github.com/contentful/marketplace-partner-apps/issues/6965)) ([b19f871](https://github.com/contentful/marketplace-partner-apps/commit/b19f871369427c29d6f136d0d6a9ebb5ca7f88f9))
+
+
+### Reverts
+
+* clarify cloudinary starting folder syntax [ZEND-7289] ([#7433](https://github.com/contentful/marketplace-partner-apps/issues/7433)) ([97ea10c](https://github.com/contentful/marketplace-partner-apps/commit/97ea10ce0125363cefc1a9f4ef184b22a0f704cc))
+
 ## [1.3.2](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.3.1...cloudinary-assets-v1.3.2) (2025-12-03)
 
 
