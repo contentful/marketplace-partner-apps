@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.11](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.10...vwo-fme-v1.0.11) (2026-01-15)
+
+
+### Bug Fixes
+
+* **deps:** bump contentful-management from 11.63.1 to 11.66.0 in /apps/vwo-fme in the production-dependencies group ([#7544](https://github.com/contentful/marketplace-partner-apps/issues/7544)) ([6f5d142](https://github.com/contentful/marketplace-partner-apps/commit/6f5d14228cf49d85457b2cafbe22404caad786ec))
+* **deps:** bump qs and body-parser in /apps/vwo-fme ([#7572](https://github.com/contentful/marketplace-partner-apps/issues/7572)) ([1fdc5de](https://github.com/contentful/marketplace-partner-apps/commit/1fdc5de90d5f0c2a2dab5beae7f5a9d62ccf02e7))
+
 ## [1.0.10](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.9...vwo-fme-v1.0.10) (2025-12-17)
 
 
