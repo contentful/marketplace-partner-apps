@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.4](https://github.com/contentful/marketplace-partner-apps/compare/global-find-replace-v0.2.3...global-find-replace-v0.2.4) (2026-01-15)
+
+
+### Bug Fixes
+
+* **deps:** bump diff from 8.0.2 to 8.0.3 in /apps/global-find-replace ([#7714](https://github.com/contentful/marketplace-partner-apps/issues/7714)) ([d7759b2](https://github.com/contentful/marketplace-partner-apps/commit/d7759b2457898478b3f9aa85f7a54912cbc1355f))
+
 ## [0.2.3](https://github.com/contentful/marketplace-partner-apps/compare/global-find-replace-v0.2.2...global-find-replace-v0.2.3) (2025-12-17)
 
 
