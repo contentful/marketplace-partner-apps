@@ -69,7 +69,12 @@ const FIELD_SELECTION = `
 const validAssetTypes = ['image', 'audio', 'document', 'video'];
 
 function makeThumbnail(resource) {
-  const thumbnail = (resource.thumbnails && resource.thumbnails.webimage) || resource.src;
+  // Try thumbnail sources in order of preference
+  const thumbnail = 
+    resource.thumbnails?.thul ||
+    resource.thumbnails?.webimage ||
+    resource.src;
+
   const url = typeof thumbnail === 'string' ? thumbnail : undefined;
   const alt = `${resource.name} - ${resource.id}`;
 
@@ -91,7 +96,7 @@ function transformAsset(asset, selected) {
   };
 
   Object.entries(asset.files)
-    .filter(([name]) => !['webImage', 'thumbnail'].includes(name))
+    .filter(([name]) => !['webimage', 'thumbnail'].includes(name.toLowerCase()))
     .forEach(([key, value]) => (thumbnails[key] = value?.url));
 
   return {
@@ -114,7 +119,7 @@ function transformAsset(asset, selected) {
     limited: asset.isLimitedUse ? 1 : 0,
     isPublic: asset.isPublic ? 1 : 0,
     brandId: asset.brandId,
-    thumbnails: thumbnails,
+    thumbnails,
     original: asset.originalUrl,
     videoPreviewURLs: asset.previewUrls || [],
     textMetaproperties: asset.textMetaproperties || [],
