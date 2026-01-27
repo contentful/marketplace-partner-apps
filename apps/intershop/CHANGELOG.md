@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.26](https://github.com/contentful/marketplace-partner-apps/compare/intershop-connector-v1.0.25...intershop-connector-v1.0.26) (2026-01-27)
+
+
+### Bug Fixes
+
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/intershop ([#7588](https://github.com/contentful/marketplace-partner-apps/issues/7588)) ([6871558](https://github.com/contentful/marketplace-partner-apps/commit/6871558fc6c91b6e8219fab22347e12604211328))
+
 ## [1.0.25](https://github.com/contentful/marketplace-partner-apps/compare/intershop-connector-v1.0.24...intershop-connector-v1.0.25) (2025-12-16)
 
 
