@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.13](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.12...bynder-content-workflow-v1.0.13) (2026-01-27)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.11.0 to 1.12.0 in /apps/bynder-content-workflow ([#6541](https://github.com/contentful/marketplace-partner-apps/issues/6541)) ([16865ba](https://github.com/contentful/marketplace-partner-apps/commit/16865bacf16d0b4f25d4be949cede9993d667dcb))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/bynder-content-workflow ([#7575](https://github.com/contentful/marketplace-partner-apps/issues/7575)) ([277fef8](https://github.com/contentful/marketplace-partner-apps/commit/277fef8ac1ce5e87d9f82d0e6c1fb7c9c0583baa))
+* **deps:** bump the production-dependencies group in /apps/bynder-content-workflow with 4 updates ([#6980](https://github.com/contentful/marketplace-partner-apps/issues/6980)) ([497f668](https://github.com/contentful/marketplace-partner-apps/commit/497f66857700d8f4570d0a55d5919b67e7ea3eaf))
+* **deps:** bump validator from 13.15.15 to 13.15.20 in /apps/bynder-content-workflow ([#6949](https://github.com/contentful/marketplace-partner-apps/issues/6949)) ([48da4f3](https://github.com/contentful/marketplace-partner-apps/commit/48da4f3be5f4950b540dd33c8f98ecfa41181efa))
+* **deps:** bump validator from 13.15.20 to 13.15.23 in /apps/bynder-content-workflow ([#7422](https://github.com/contentful/marketplace-partner-apps/issues/7422)) ([186a1cf](https://github.com/contentful/marketplace-partner-apps/commit/186a1cfae6cd9947ee4e38adf1296417895fe63f))
+
 ## [1.0.12](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.11...bynder-content-workflow-v1.0.12) (2025-08-01)
 
 
