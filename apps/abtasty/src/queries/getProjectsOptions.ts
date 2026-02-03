@@ -1,12 +1,12 @@
 import { INTEGRATION_API_URL } from '@/constants';
 
-type props = {
+type Props = {
   token: string;
   environmentId: string;
   accountId: string;
 };
 
-export const getProjectOptions = ({ token, accountId, environmentId }: props) => {
+export const getProjectOptions = ({ token, accountId, environmentId }: Props) => {
   return {
     queryKey: ['folder.flagship', environmentId, accountId],
     queryFn: async () => {
