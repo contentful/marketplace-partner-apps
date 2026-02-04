@@ -249,7 +249,13 @@ describe('fetchProductPreviews', () => {
     const validProductId = Buffer.from('gid://shopify/Product/1').toString('base64');
     const mockSkus = [validProductId];
 
-    await expect(fetchProductPreviews(mockSkus, mockConfig)).rejects.toThrow('GraphQL errors');
+    const result = await fetchProductPreviews(mockSkus, mockConfig);
+    expect(result).toHaveLength(1);
+    expect(result[0]).toMatchObject({
+      isMissing: true,
+      name: '',
+      image: '',
+    });
   });
 
   it('should transform images from GraphQL format to Buy SDK format', async () => {

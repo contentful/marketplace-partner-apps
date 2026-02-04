@@ -28,7 +28,15 @@ const steps = ['Select experiment', 'Add content', 'Publish experimentation', 'S
 
 const Entry = () => {
   const sdk = useSDK<EditorAppSDK>();
+<<<<<<< feat/abtasty-app
   const { flagship_account: account, flagship_env: env, content_types: contentTypesAllowed } = sdk.parameters.installation;
+=======
+  const {
+    flagship_account: account,
+    flagship_env: env,
+    content_type: contentTypeAllowed,
+  } = sdk.parameters.installation;
+>>>>>>> main
 
   const token = getToken() || '';
 

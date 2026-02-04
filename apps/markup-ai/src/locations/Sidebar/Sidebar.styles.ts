@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
-import { Box } from '@contentful/f36-components';
+import styled from "@emotion/styled";
+import { Box } from "@contentful/f36-components";
 
 export const SidebarContainer = styled(Box)`
   width: 100%;

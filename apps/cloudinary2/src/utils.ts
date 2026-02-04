@@ -79,11 +79,15 @@ export function mediaLibraryFilter(type: string, sdk: FieldAppSDK<AppInstallatio
   const binding = {
     entry: sdk.entry,
   };
+  const hasSearchPrefix = !!expression;
+  const searchFilterIsEmpty = !!searchFilterTemplate;
+  const searchFilterStartsWithBooleanOperator = searchFilterTemplate.match(/^\s*(AND|OR).*$/) !== null;
+  const shouldAppendImplicitAndOperator = hasSearchPrefix && searchFilterIsEmpty && !searchFilterStartsWithBooleanOperator;
+  const defaultBooleanOperator = shouldAppendImplicitAndOperator ? ' AND ' : '';
 
-  const shouldAppendImplicitAndOperator = searchFilterTemplate.match(/^\s*(AND|OR).*$/) || !searchFilterTemplate;
-  const defaultBooleanOperator = shouldAppendImplicitAndOperator ? '' : ' AND ';
   const searchFilter = ` ${evaluator(searchFilterTemplate, binding, sdk)}`;
   expression = `${expression}${defaultBooleanOperator}${searchFilter}`;
+
   if (expression.trim() === '') {
     return undefined;
   }

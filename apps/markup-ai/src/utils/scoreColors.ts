@@ -1,30 +1,16 @@
 export const SCORE_COLORS = {
-  neutral: '#E7EBEE',
-  low: '#DA294A',
-  medium: '#FFD960',
-  high: '#5DB057',
+  neutral: "#E7EBEE",
+  low: "#DA294A",
+  medium: "#FFD960",
+  high: "#5DB057",
 };
 
 export const SCORE_COLORS_SOFT = {
-  neutral: '#E7EBEE',
-  low: '#FFB1B2',
-  medium: '#FFE993',
-  high: '#9ED696',
+  neutral: "#E7EBEE",
+  low: "#FFB1B2",
+  medium: "#FFE993",
+  high: "#9ED696",
 };
-
-// Utility to get color and neutral state for a given score
-export function getScoreColor(score: number): { background: string; isNeutral: boolean } {
-  const roundedScore = Math.round(score);
-  if (roundedScore === 0) {
-    return { background: SCORE_COLORS.neutral, isNeutral: true };
-  } else if (roundedScore > 0 && roundedScore < 60) {
-    return { background: SCORE_COLORS.low, isNeutral: false };
-  } else if (roundedScore >= 60 && roundedScore < 80) {
-    return { background: SCORE_COLORS.medium, isNeutral: false };
-  } else {
-    return { background: SCORE_COLORS.high, isNeutral: false };
-  }
-}
 
 // Simple function that returns just the color string based on score ranges
 export function getScoreColorString(score: number): string {
@@ -45,6 +31,6 @@ export function getScoreColorStringSoft(score: number): string {
 
 // Utility function to format score as integer for display
 export function formatScoreForDisplay(score: number): string {
-  if (score === 0) return '—';
+  if (score === 0) return "—";
   return Math.round(score).toString();
 }

@@ -6,6 +6,7 @@ type EntryType = {
   name: string;
 };
 
+<<<<<<< feat/abtasty-app
 export const useContentTypeEntries = (sdk: EditorAppSDK, contentTypeIds?: string[]): EntryType[] => {
   const { data: entries = [] } = useQuery({
     queryKey: ['contentTypes', sdk.ids.space, sdk.ids.environment, contentTypeIds],
@@ -29,6 +30,22 @@ export const useContentTypeEntries = (sdk: EditorAppSDK, contentTypeIds?: string
           const contentTypes = await sdk.cma.contentType.getMany({});
           return contentTypes.items
             .filter((e) => contentTypeIds.includes(e.sys.id))
+=======
+export const useContentTypeEntries = (sdk: EditorAppSDK, contentTypeId?: string | null): EntryType[] => {
+  const { data: entries = [] } = useQuery({
+    queryKey: ['contentTypes', sdk.ids.space, sdk.ids.environment, contentTypeId],
+    queryFn: async () => {
+      if (!contentTypeId) return [] as EntryType[];
+      try {
+        const ct = await sdk.cma.contentType.get({ contentTypeId });
+        return [{ id: ct.sys.id, name: ct.name as string }] as EntryType[];
+      } catch (err) {
+        console.error(`Failed to get content type ${contentTypeId}, trying getMany:`, err);
+        try {
+          const contentTypes = await sdk.cma.contentType.getMany({});
+          return contentTypes.items
+            .filter((e) => e.sys.id === contentTypeId)
+>>>>>>> main
             .map((e) => ({ id: e.sys.id, name: e.name as string })) as EntryType[];
         } catch (fallbackErr) {
           console.error('Failed to get content types:', fallbackErr);

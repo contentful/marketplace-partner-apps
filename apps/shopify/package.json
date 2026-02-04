@@ -1,6 +1,6 @@
 {
   "name": "@contentful/shopify-sku",
-  "version": "2.1.6",
+  "version": "2.2.1",
   "description": "Contentful app for importing Shopify products using the Storefront API",
   "private": true,
   "devDependencies": {

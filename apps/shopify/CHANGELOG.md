@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.2.1](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.2.0...shopify-sku-v2.2.1) (2025-12-02)
+
+
+### Bug Fixes
+
+* **shopify:** resolver functions return fallback data for errors [ZEND-7254] ([#7372](https://github.com/contentful/marketplace-partner-apps/issues/7372)) ([cd1fff2](https://github.com/contentful/marketplace-partner-apps/commit/cd1fff2fad3c76d1d0c3ecb0dc55629fa1fc0e1f))
+* **shopify:** server-side environments [ZEND-7254] ([#7419](https://github.com/contentful/marketplace-partner-apps/issues/7419)) ([8d0558c](https://github.com/contentful/marketplace-partner-apps/commit/8d0558ca8a494073c87d0d4476d7df5a48b272ba))
+
+## [2.2.0](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.1.6...shopify-sku-v2.2.0) (2025-11-20)
+
+
+### Features
+
+* **request retry:** implement retry logic for GraphQL requests to shopify [ZEND-7254] ([#7369](https://github.com/contentful/marketplace-partner-apps/issues/7369)) ([e4564c8](https://github.com/contentful/marketplace-partner-apps/commit/e4564c8df162b5db5b3d42a4384821b203c7b38b))
+
+
+### Bug Fixes
+
+* **deps:** bump js-yaml in /apps/shopify ([#7361](https://github.com/contentful/marketplace-partner-apps/issues/7361)) ([d887520](https://github.com/contentful/marketplace-partner-apps/commit/d887520a362202ba1011b3707de030bb856623a2))
+
 ## [2.1.6](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.1.5...shopify-sku-v2.1.6) (2025-10-16)
 
 

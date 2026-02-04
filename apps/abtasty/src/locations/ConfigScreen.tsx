@@ -159,7 +159,11 @@ const ConfigScreen = () => {
         setToken(lsToken);
       }
 
+<<<<<<< feat/abtasty-app
       const savedCtId = currentParameters?.content_types?.[0]?.id;
+=======
+      const savedCtId = currentParameters?.content_type?.id;
+>>>>>>> main
       if (savedCtId) {
         setSelectedContentType(savedCtId);
       }
@@ -169,6 +173,24 @@ const ConfigScreen = () => {
 
     init();
   }, [sdk, token]);
+<<<<<<< feat/abtasty-app
+=======
+
+  useEffect(() => {
+    if (!parameters.flagship_account?.account_id || !accounts) return;
+
+    const selectedAccountId = parameters.flagship_account.account_id;
+    const selectedEnvId = parameters.flagship_env?.id;
+
+    const maybeAccount = accounts.find((acc) => acc.account_id === selectedAccountId) ?? null;
+    setSelectedAccount(maybeAccount || null);
+
+    if (maybeAccount && selectedEnvId) {
+      const maybeEnv = maybeAccount.account_environments.find((env) => env.id === selectedEnvId);
+      setSelectedEnvironment(maybeEnv);
+    }
+  }, [accounts, parameters]);
+>>>>>>> main
 
   useEffect(() => {
     if (!parameters.flagship_account?.account_id || !accounts) return;

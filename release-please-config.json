@@ -23,10 +23,10 @@
     "apps/cloudinary2": {
       "release-type": "node"
     },
-    "apps/convox": {
+    "apps/content-auditor": {
       "release-type": "node"
     },
-    "apps/deep-clone": {
+    "apps/convox": {
       "release-type": "node"
     },
     "apps/docs-to-rich-text": {
@@ -96,9 +96,6 @@
       "release-type": "node"
     },
     "apps/vwo-fme": {
-      "release-type": "node"
-    },
-    "apps/wix": {
       "release-type": "node"
     },
     "apps/markup-ai": {

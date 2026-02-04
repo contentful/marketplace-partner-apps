@@ -1,6 +1,6 @@
 {
   "name": "intershop-connector",
-  "version": "1.0.23",
+  "version": "1.0.25",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "^4.46.0",
@@ -10,8 +10,8 @@
     "@contentful/react-apps-toolkit": "1.2.16",
     "@emotion/css": "^11.13.5",
     "contentful-management": "11.63.0",
-    "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react": "19.2.1",
+    "react-dom": "19.2.1"
   },
   "scripts": {
     "install-ci": "npm ci",
