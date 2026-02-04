@@ -20,6 +20,44 @@
             "accepts": [
                 "appevent.handler"
             ]
+        },
+        {
+            "id": "BynderRefreshAssets",
+            "name": "Bynder - Refresh Assets for All Locales",
+            "description": "This function refreshes Bynder asset data for all locales in an entry field to ensure consistent metadata (e.g., isPublic flag).",
+            "path": "functions/refresh-assets.js",
+            "entryFile": "functions/refresh-assets.ts",
+            "allowNetworks": [
+                "contentful.getbynder.com"
+            ],
+            "accepts": [
+                "appaction.call"
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "id": "refreshBynderAssets",
+            "name": "Refresh Bynder Assets for All Locales",
+            "type": "function-invocation",
+            "functionId": "BynderRefreshAssets",
+            "category": "Custom",
+            "parameters": [
+                {
+                    "id": "entryId",
+                    "type": "Symbol",
+                    "name": "Entry ID",
+                    "description": "The ID of the entry containing Bynder assets",
+                    "required": true
+                },
+                {
+                    "id": "fieldId",
+                    "type": "Symbol",
+                    "name": "Field ID",
+                    "description": "The ID of the field containing Bynder assets to refresh",
+                    "required": true
+                }
+            ]
         }
     ]
 }

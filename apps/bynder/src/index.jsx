@@ -335,6 +335,16 @@ setup({
       description: 'The OAuth2 client secret for Bynder API access (required for external references and asset tracker).',
       required: false,
     },
+    {
+      id: 'syncIsPublicAcrossLocales',
+      name: 'Sync isPublic Across Locales',
+      type: 'List',
+      value: 'Yes,No',
+      default: 'Yes',
+      description:
+        'When enabled (Yes), the isPublic flag will be synchronized across all locales to ensure consistent asset visibility. If an asset is public in one locale, it will be public in all locales. When disabled (No), each locale maintains its own isPublic value from Bynder.',
+      required: true,
+    },
   ],
   makeThumbnail,
   renderDialog,

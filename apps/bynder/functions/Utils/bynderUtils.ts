@@ -319,7 +319,7 @@ export const deleteAssetUsage = async (
  * @param {string} assetId - The asset ID to normalize
  * @returns {string} - Normalized UUID format
  */
-const normalizeAssetId = (assetId: string): string => {
+export const normalizeAssetId = (assetId: string): string => {
   // Remove any existing hyphens and convert to lowercase
   const cleanId = assetId.replace(/-/g, "").toLowerCase();
 
