@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.2](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.3.1...bynder-assets-v1.3.2) (2026-02-04)
+
+
+### Bug Fixes
+
+* **bynder:** fallback to original image if thumbnails unavailable [ZEND-7453] ([#7745](https://github.com/contentful/marketplace-partner-apps/issues/7745)) ([7b4d796](https://github.com/contentful/marketplace-partner-apps/commit/7b4d796d0547412f8201bd2bb07dad055dc75b47))
+
 ## [1.3.1](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.3.0...bynder-assets-v1.3.1) (2026-01-26)
 
 

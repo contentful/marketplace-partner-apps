@@ -70,10 +70,8 @@ const validAssetTypes = ['image', 'audio', 'document', 'video'];
 
 function makeThumbnail(resource) {
   // Try thumbnail sources in order of preference
-  const thumbnail = 
-    resource.thumbnails?.thul ||
-    resource.thumbnails?.webimage ||
-    resource.src;
+  // Use the original image if no other thumbnails are avilable
+  const thumbnail = resource.thumbnails?.thul || resource.thumbnails?.webimage || resource.src || resource.original;
 
   const url = typeof thumbnail === 'string' ? thumbnail : undefined;
   const alt = `${resource.name} - ${resource.id}`;
@@ -146,14 +144,11 @@ function renderDialog(sdk) {
   let effectiveMode = compactViewMode ?? 'MultiSelect';
   if (modeOverrideFields && typeof sdk.ids.field === 'string') {
     // Remove all whitespace before splitting
-    const overrideList = modeOverrideFields
-      .replace(/\s+/g, '')
-      .split(',')
-      .filter(Boolean);
+    const overrideList = modeOverrideFields.replace(/\s+/g, '').split(',').filter(Boolean);
     const fieldMachineName = sdk.ids.field;
     if (overrideList.includes(fieldMachineName)) {
       // Switch to the opposite mode
-      effectiveMode = (compactViewMode === 'MultiSelect' ? 'SingleSelectFile' : 'MultiSelect');
+      effectiveMode = compactViewMode === 'MultiSelect' ? 'SingleSelectFile' : 'MultiSelect';
     }
   }
 
@@ -217,7 +212,7 @@ async function openDialog(sdk, _currentValue, config) {
     shouldCloseOnEscapePress: true,
     parameters,
     width: 'fullWidth',
-    minHeight: '80vh'
+    minHeight: '80vh',
   });
 
   if (!Array.isArray(result)) {
