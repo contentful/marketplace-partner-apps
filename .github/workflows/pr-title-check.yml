@@ -4,6 +4,9 @@ name: PR Title Check
   pull_request:
     types: [opened, edited, synchronize]
 
+permissions:
+  contents: read
+
 jobs:
   check-title:
     if: ${{ github.actor != 'dependabot[bot]' }}

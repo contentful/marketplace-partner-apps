@@ -69,7 +69,10 @@ const FIELD_SELECTION = `
 const validAssetTypes = ['image', 'audio', 'document', 'video'];
 
 function makeThumbnail(resource) {
-  const thumbnail = (resource.thumbnails && resource.thumbnails.webimage) || resource.src;
+  // Try thumbnail sources in order of preference
+  // Use the original image if no other thumbnails are avilable
+  const thumbnail = resource.thumbnails?.thul || resource.thumbnails?.webimage || resource.src || resource.original;
+
   const url = typeof thumbnail === 'string' ? thumbnail : undefined;
   const alt = `${resource.name} - ${resource.id}`;
 
@@ -91,7 +94,7 @@ function transformAsset(asset, selected) {
   };
 
   Object.entries(asset.files)
-    .filter(([name]) => !['webImage', 'thumbnail'].includes(name))
+    .filter(([name]) => !['webimage', 'thumbnail'].includes(name.toLowerCase()))
     .forEach(([key, value]) => (thumbnails[key] = value?.url));
 
   return {
@@ -114,7 +117,7 @@ function transformAsset(asset, selected) {
     limited: asset.isLimitedUse ? 1 : 0,
     isPublic: asset.isPublic ? 1 : 0,
     brandId: asset.brandId,
-    thumbnails: thumbnails,
+    thumbnails,
     original: asset.originalUrl,
     videoPreviewURLs: asset.previewUrls || [],
     textMetaproperties: asset.textMetaproperties || [],
@@ -141,14 +144,11 @@ function renderDialog(sdk) {
   let effectiveMode = compactViewMode ?? 'MultiSelect';
   if (modeOverrideFields && typeof sdk.ids.field === 'string') {
     // Remove all whitespace before splitting
-    const overrideList = modeOverrideFields
-      .replace(/\s+/g, '')
-      .split(',')
-      .filter(Boolean);
+    const overrideList = modeOverrideFields.replace(/\s+/g, '').split(',').filter(Boolean);
     const fieldMachineName = sdk.ids.field;
     if (overrideList.includes(fieldMachineName)) {
       // Switch to the opposite mode
-      effectiveMode = (compactViewMode === 'MultiSelect' ? 'SingleSelectFile' : 'MultiSelect');
+      effectiveMode = compactViewMode === 'MultiSelect' ? 'SingleSelectFile' : 'MultiSelect';
     }
   }
 
@@ -212,7 +212,7 @@ async function openDialog(sdk, _currentValue, config) {
     shouldCloseOnEscapePress: true,
     parameters,
     width: 'fullWidth',
-    minHeight: '80vh'
+    minHeight: '80vh',
   });
 
   if (!Array.isArray(result)) {
@@ -334,7 +334,7 @@ setup({
       name: 'Bynder Client Secret',
       description: 'The OAuth2 client secret for Bynder API access (required for external references and asset tracker).',
       required: false,
-    }
+    },
   ],
   makeThumbnail,
   renderDialog,
