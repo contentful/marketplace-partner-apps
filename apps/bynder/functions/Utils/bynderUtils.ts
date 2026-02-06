@@ -18,7 +18,7 @@ const BYNDER_CONTENTFUL_INTEGRATION_ID = "ac534173-7ee1-493b-98b7-a6d88ce7a450";
  * Core Bynder asset fields that must be present to identify a Bynder asset
  * These are the essential fields that uniquely identify a Bynder asset
  */
-const CORE_BYNDER_FIELDS = [
+export const CORE_BYNDER_FIELDS = [
   "id",
   "name",
   "dateCreated",
@@ -334,6 +334,24 @@ export const normalizeAssetId = (assetId: string): string => {
 };
 
 /**
+ * Check if an object matches the Bynder asset schema
+ * An object is considered a Bynder asset if it has ALL core Bynder fields:
+ * id, name, dateCreated, dateModified, type, fileSize, extension,
+ * textMetaproperties, width, height, isPublic
+ *
+ * @param obj - The object to validate
+ * @returns true if the object has all required Bynder asset fields
+ */
+export const isBynderAsset = (obj: any): boolean => {
+  if (!obj || typeof obj !== "object") {
+    return false;
+  }
+
+  // Check that ALL core Bynder fields are present
+  return CORE_BYNDER_FIELDS.every((field) => obj.hasOwnProperty(field));
+};
+
+/**
  * Extract Bynder asset IDs from all JSON object fields in entry
  * Recursively searches through all fields to find objects with Bynder asset structure
  *
@@ -344,24 +362,6 @@ export const extractBynderAssetIds = (
   fields: Record<string, any>,
 ): string[] => {
   const assetIds: Set<string> = new Set();
-
-  /**
-   * Check if an object matches the Bynder asset schema
-   * An object is considered a Bynder asset if it has ALL core Bynder fields:
-   * id, name, dateCreated, dateModified, type, fileSize, extension,
-   * textMetaproperties, width, height, isPublic
-   *
-   * @param obj - The object to validate
-   * @returns true if the object has all required Bynder asset fields
-   */
-  const isBynderAsset = (obj: any): boolean => {
-    if (!obj || typeof obj !== "object") {
-      return false;
-    }
-
-    // Check that ALL core Bynder fields are present
-    return CORE_BYNDER_FIELDS.every((field) => obj.hasOwnProperty(field));
-  };
 
   /**
    * Recursively search for Bynder assets in any object structure
