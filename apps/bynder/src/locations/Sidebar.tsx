@@ -29,7 +29,6 @@ const Sidebar = () => {
 
   // Detect Bynder fields in the current entry
   useEffect(() => {
-    console.log('lastRefreshResult', lastRefreshResult);
     const detectBynderFields = () => {
       const fields: string[] = [];
       
@@ -115,7 +114,6 @@ const Sidebar = () => {
         },
       });
 
-      console.log('appActionCallResponse', JSON.parse(appActionCallResponse.response.body).errors);
 
       const body = JSON.parse(appActionCallResponse.response.body);
       if (body.success) {
@@ -128,7 +126,6 @@ const Sidebar = () => {
         // Reload the entry to show updated values
         window.location.reload();
       } else {
-        console.log('body', body);
         throw new Error(JSON.parse(appActionCallResponse.response.body).error || JSON.parse(appActionCallResponse.response.body).errors?.join(', ') || 'Failed to refresh assets');
       }
     } catch (error) {
