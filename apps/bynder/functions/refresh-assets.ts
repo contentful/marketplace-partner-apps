@@ -1,35 +1,12 @@
 import { createClient, CollectionProp, LocaleProps } from "contentful-management";
 import {
   normalizeAssetId,
+  isBynderAsset,
 } from "./Utils/bynderUtils";
 import {
   refreshMultipleAssets,
 } from "./Utils/assetRefreshUtils";
 import { BynderAuthConfig } from "./types";
-
-/**
- * Check if an object matches the Bynder asset schema
- */
-const CORE_BYNDER_FIELDS = [
-  "id",
-  "name",
-  "dateCreated",
-  "dateModified",
-  "type",
-  "fileSize",
-  "extension",
-  "textMetaproperties",
-  "width",
-  "height",
-  "isPublic",
-];
-
-function isBynderAsset(obj: any): boolean {
-  if (!obj || typeof obj !== "object") {
-    return false;
-  }
-  return CORE_BYNDER_FIELDS.every((field) => obj.hasOwnProperty(field));
-}
 
 /**
  * Extract assets from a field value (handles arrays and single objects)
@@ -312,7 +289,6 @@ export const handler = async (event: any, context: any) => {
     // Get locales from environment (fallback to space locales)
     const locales = await cma.locale.getMany({ spaceId: targetSpaceId, environmentId: targetEnvironmentId });
 
-    console.log("locales", locales);
     // Refresh assets for all locales
     const result = await refreshFieldAssetsForAllLocales(
       cma,
@@ -325,7 +301,6 @@ export const handler = async (event: any, context: any) => {
       syncIsPublicAcrossLocales
     );
 
-    console.log("result", result);
 
     if (result.success) {
       return {

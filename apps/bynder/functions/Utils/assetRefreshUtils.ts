@@ -1,41 +1,11 @@
 import { Asset } from "../types";
 import { getAsset, getBynderAccessToken } from "./bynderUtils";
 import { BynderAuthConfig } from "../types";
-
-/**
- * Fields that should be persisted when storing Bynder asset data
- * This matches the FIELDS_TO_PERSIST constant in index.jsx
- */
-const FIELDS_TO_PERSIST = [
-  'archive',
-  'brandId',
-  'copyright',
-  'dateCreated',
-  'dateModified',
-  'datePublished',
-  'description',
-  'extension',
-  'fileSize',
-  'height',
-  'id',
-  'isPublic',
-  'limited',
-  'name',
-  'orientation',
-  'original',
-  'thumbnails',
-  'type',
-  'watermarked',
-  'width',
-  'videoPreviewURLs',
-  'tags',
-  'selectedFile',
-  'textMetaproperties',
-];
+import { transformAsset } from "../../utils/transformAsset";
 
 /**
  * Transform Bynder API response to match the format stored in Contentful
- * This matches the transformAsset function logic from index.jsx
+ * Reuses the shared transformAsset utility function
  *
  * @param apiAsset - Raw asset data from Bynder API
  * @param existingAsset - Existing asset data from Contentful (to preserve selectedFile)
@@ -45,75 +15,11 @@ export function transformApiAssetToStoredFormat(
   apiAsset: any,
   existingAsset?: any
 ): any {
-  // Extract thumbnails from files object
-  const thumbnails: Record<string, string> = {};
-  
-  if (apiAsset.files) {
-    // Handle webImage and thumbnail specifically
-    if (apiAsset.files.webImage?.url) {
-      thumbnails.webimage = apiAsset.files.webImage.url;
-    }
-    if (apiAsset.files.thumbnail?.url) {
-      thumbnails.thul = apiAsset.files.thumbnail.url;
-    }
-    
-    // Add all other file types
-    Object.entries(apiAsset.files).forEach(([key, value]: [string, any]) => {
-      const lowerKey = key.toLowerCase();
-      if (!['webimage', 'thumbnail'].includes(lowerKey) && value?.url) {
-        thumbnails[key] = value.url;
-      }
-    });
-  } else if (apiAsset.thumbnails) {
-    // Fallback: use thumbnails object directly if files is not available
-    thumbnails.webimage = apiAsset.thumbnails.webimage || apiAsset.thumbnails.webImage;
-    thumbnails.thul = apiAsset.thumbnails.thul || apiAsset.thumbnails.thumbnail;
-  }
-
-  // Transform the asset to match stored format
-  const transformed: any = {
-    id: apiAsset.id || apiAsset.databaseId,
-    name: apiAsset.name || '',
-    type: (apiAsset.type || '').toLowerCase(),
-    fileSize: apiAsset.fileSize || 0,
-    description: apiAsset.description || null,
-    height: apiAsset.height || null,
-    width: apiAsset.width || null,
-    copyright: apiAsset.copyright || null,
-    extension: apiAsset.extensions || apiAsset.extension || [],
-    orientation: (apiAsset.orientation || '').toLowerCase(),
-    archive: apiAsset.isArchived || apiAsset.archive ? 1 : 0,
-    watermarked: apiAsset.isWatermarked || apiAsset.watermarked ? 1 : 0,
-    limited: apiAsset.isLimitedUse || apiAsset.limited ? 1 : 0,
-    isPublic: apiAsset.isPublic ? 1 : 0,
-    brandId: apiAsset.brandId || null,
-    thumbnails,
-    original: apiAsset.originalUrl || apiAsset.original || null,
-    videoPreviewURLs: apiAsset.previewUrls || apiAsset.videoPreviewURLs || [],
-    textMetaproperties: apiAsset.textMetaproperties || [],
-    tags: apiAsset.tags || [],
-    dateCreated: apiAsset.dateCreated || apiAsset.createdAt || '',
-    dateModified: apiAsset.dateModified || apiAsset.updatedAt || '',
-    datePublished: apiAsset.datePublished || apiAsset.publishedAt || null,
-    userCreated: apiAsset.createdBy || apiAsset.userCreated || null,
-    // Preserve selectedFile from existing asset if available
-    selectedFile: existingAsset?.selectedFile || null,
-  };
-
-  // Only include fields that should be persisted
-  const result: any = {};
-  FIELDS_TO_PERSIST.forEach((field) => {
-    if (transformed.hasOwnProperty(field)) {
-      result[field] = transformed[field];
-    }
+  return transformAsset(apiAsset, {
+    existingAsset,
+    filterFields: true, // Filter to FIELDS_TO_PERSIST only
+    addSrc: true, // Add src field for compatibility
   });
-
-  // Add src for compatibility (from thumbnails.webimage)
-  if (thumbnails.webimage) {
-    result.src = thumbnails.webimage;
-  }
-
-  return result;
 }
 
 /**
