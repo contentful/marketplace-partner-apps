@@ -22,7 +22,8 @@ import { EnvironmentSelector } from '@/components/ConfigScreen/EnvironmentSelect
 import { ContentTypeModal } from '@/components/ConfigScreen/ContentTypeModal';
 import { useAbTastyOAuth } from '@/hooks/useAbTastyOAuth';
 import { getToken, updateToken } from '@/utils/getToken';
-import { CustomButton } from '@/components/ui/CustomButton';
+import { CustomButton, CustomButtonDanger } from '@/components/ui/CustomButton';
+import { ensureAppInSidebarAndEditor } from '@/services/ensureAppInSidebarAndEditor';
 
 export interface AppInstallationParameters {
   user_id?: string;
@@ -34,23 +35,24 @@ export interface AppInstallationParameters {
     id?: string;
     name?: string;
   };
-  content_type?: {
+  content_types?: {
     id: string;
     referenceField: string[];
-  }
+  }[];
 }
 
 const ConfigScreen = () => {
   const [parameters, setParameters] = useState<AppInstallationParameters>({});
   const sdk = useSDK<ConfigAppSDK>();
 
-
   const [token, setToken] = useState<string>('');
+
+
   const [selectedAccount, setSelectedAccount] = useState<FlagshipAccount | null>(null);
   const [selectedEnvironment, setSelectedEnvironment] = useState<AccountEnvironment | undefined>(undefined);
   const [open, setOpen] = useState<boolean>(false);
 
-  const [selectedCtName, setSelectedCtName] = useState<string | null>(null);
+  const [contentTypesNames, setContentTypesNames] = useState<Record<string, string>>({});
 
   const { openOAuthPopup } = useAbTastyOAuth(setToken);
 
@@ -75,7 +77,7 @@ const ConfigScreen = () => {
     }
 
     const cleanParameters: AppInstallationParameters = {
-      content_type: parameters.content_type,
+      content_types: parameters.content_types,
       user_id: user?.id,
       flagship_account: selectedAccount
         ? {
@@ -122,8 +124,17 @@ const ConfigScreen = () => {
           throw err;
         }
       }
+
+      const cts = parameters?.content_types || [];
+      for (const ct of cts) {
+        try {
+          await ensureAppInSidebarAndEditor(sdk, ct.id);
+        } catch (err) {
+          console.error(`Error while ensuring app in sidebar/editor for ${ct.id}: `, err);
+        }
+      }
     });
-  }, [sdk]);
+  }, [sdk, parameters?.content_types]);
 
   useEffect(() => {
     sdk.app.onConfigure(() => onConfigure());
@@ -149,7 +160,7 @@ const ConfigScreen = () => {
         setToken(lsToken);
       }
 
-      const savedCtId = currentParameters?.content_type?.id;
+      const savedCtId = currentParameters?.content_types?.[0]?.id;
       if (savedCtId) {
         setSelectedContentType(savedCtId);
       }
@@ -174,7 +185,6 @@ const ConfigScreen = () => {
       setSelectedEnvironment(maybeEnv);
     }
   }, [accounts, parameters]);
-
   useEffect(() => {
     if (token) {
       updateToken(token);
@@ -182,32 +192,60 @@ const ConfigScreen = () => {
   }, [token]);
 
   useEffect(() => {
-    const loadCtName = async () => {
-      const ctId = parameters?.content_type?.id;
-      if (!ctId) {
-        setSelectedCtName(null);
+    const loadCtNames = async () => {
+      const cts = parameters?.content_types || [];
+      if (cts.length === 0) {
+        setContentTypesNames({});
         return;
       }
       try {
-        const ct = await sdk.cma.contentType.get({ contentTypeId: ctId });
-        setSelectedCtName(ct?.name ?? null);
+        const names: Record<string, string> = {};
+        await Promise.all(
+          cts.map(async (ctRef) => {
+            try {
+              const ct = await sdk.cma.contentType.get({ contentTypeId: ctRef.id });
+              names[ctRef.id] = ct?.name ?? 'Unknown';
+            } catch {
+              names[ctRef.id] = 'Unknown';
+            }
+          })
+        );
+        setContentTypesNames(names);
       } catch {
-        setSelectedCtName(null);
+        // Fallback or error handling
       }
     };
-    void loadCtName();
-  }, [sdk, parameters?.content_type?.id]);
+    void loadCtNames();
+  }, [sdk, parameters?.content_types]);
 
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const handleSaveContentType = (contentTypeRef: { id: string; referenceField: string[] }) => {
+    setParameters((prev) => {
+      const existingCts = prev.content_types || [];
+      const index = existingCts.findIndex(ct => ct.id === contentTypeRef.id);
+      let newCts;
+      if (index > -1) {
+        newCts = [...existingCts];
+        newCts[index] = contentTypeRef;
+      } else {
+        newCts = [...existingCts, contentTypeRef];
+      }
+      return {
+        ...prev,
+        content_types: newCts,
+      };
+    });
+    setOpen(false);
+  };
+
+  const handleRemoveContentType = (id: string) => {
     setParameters((prev) => ({
       ...prev,
-      content_type: contentTypeRef,
+      content_types: (prev.content_types || []).filter(ct => ct.id !== id),
     }));
-    setOpen(false);
   };
 
   if (isUserLoading || isAccountsLoading) {
@@ -261,25 +299,31 @@ const ConfigScreen = () => {
                 Select the content types for which you want to enable A/B testing
               </Typography>
 
-              {parameters?.content_type?.id && (
-                <Stack sx={{ mt: 1 }} spacing={0.5}>
-                  <Typography fontWeight="bold">Selected content type</Typography>
-                  <Typography>
-                    {selectedCtName ?? 'Unknown name'} ({parameters.content_type.id})
-                  </Typography>
-                  <Typography color="text.secondary" fontSize="small">
-                    Reference fields selected:{" "}
-                    {parameters.content_type.referenceField?.length
-                      ? parameters.content_type.referenceField.join(', ')
-                      : 'None'}
-                  </Typography>
-                </Stack>
-              )}
-
+              <Stack spacing={2}>
+                {(parameters?.content_types || []).map((ct) => (
+                  <div key={ct.id} style={{ position: 'relative', padding: '16px' }}>
+                    <CustomButtonDanger
+                      size="small"
+                      variant="contained"
+                      color="error"
+                      sx={{ position: 'absolute', top: 8, right: 8 }}
+                      onClick={() => handleRemoveContentType(ct.id)}
+                    >
+                      Remove
+                    </CustomButtonDanger>
+                    <Typography fontWeight="bold">
+                      {contentTypesNames[ct.id] ?? 'Unknown name'} ({ct.id})
+                    </Typography>
+                    <Typography color="text.secondary" fontSize="small">
+                      Reference fields: {ct.referenceField?.length ? ct.referenceField.join(', ') : 'None'}
+                    </Typography>
+                  </div>
+                ))}
+              </Stack>
 
               <div>
                 <CustomButton onClick={handleOpen} variant="contained" size="small">
-                  Add Content
+                  Add Content Type
                 </CustomButton>
               </div>
 

@@ -28,11 +28,7 @@ const steps = ['Select experiment', 'Add content', 'Publish experimentation', 'S
 
 const Entry = () => {
   const sdk = useSDK<EditorAppSDK>();
-  const {
-    flagship_account: account,
-    flagship_env: env,
-    content_type: contentTypeAllowed,
-  } = sdk.parameters.installation;
+  const { flagship_account: account, flagship_env: env, content_types: contentTypesAllowed } = sdk.parameters.installation;
 
   const token = getToken() || '';
 
@@ -53,7 +49,7 @@ const Entry = () => {
 
   const { data: user, isLoading: loadingUser } = useQuery(getMeQueryOptions(token));
 
-  const entries = useContentTypeEntries(sdk, contentTypeAllowed?.id);
+  const entries = useContentTypeEntries(sdk, (contentTypesAllowed || []).map(ct => ct.id));
 
   const handleReturnToAppConfigPage = () => {
     sdk.navigator.openAppConfig();
@@ -83,7 +79,7 @@ const Entry = () => {
     return <NotSignedInView onOpenConfig={handleReturnToAppConfigPage} />;
   }
 
-  const isConfigIncomplete = !(account?.account_id && env?.id && contentTypeAllowed?.id);
+  const isConfigIncomplete = !(account?.account_id && env?.id && (contentTypesAllowed || []).length > 0);
   if (isConfigIncomplete) {
     return <IncompleteConfigView onOpenConfig={handleReturnToAppConfigPage} />;
   }
@@ -107,11 +103,13 @@ const Entry = () => {
   const handleLinkExistingEntry = async (variationKey: string) => {
     const selectedEntry: any = await sdk.dialogs.selectSingleEntry({
       locale: sdk.locales.default,
-      contentTypes: contentTypeAllowed?.id ? [contentTypeAllowed.id] : undefined,
+      contentTypes: (contentTypesAllowed || []).length > 0 ? contentTypesAllowed.map(ct => ct.id) : undefined,
     });
     if (!selectedEntry) return;
 
     const entryId = selectedEntry.sys.id;
+    const contentTypeId = selectedEntry.sys.contentType.sys.id;
+
     const meta = (sdk.entry.fields['meta']?.getValue() as Record<string, string>) || {};
     const updatedMeta = { ...meta, [variationKey]: entryId };
     sdk.entry.fields['meta']?.setValue(updatedMeta);

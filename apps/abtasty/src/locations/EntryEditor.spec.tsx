@@ -54,11 +54,13 @@ describe('Entry component', () => {
             id: 'env_789',
             name: 'Production',
           },
-          // Ajout du content_type pour éviter l'écran "Configuration incomplète"
-          content_type: {
-            id: 'abTastyContainer',
-            referenceField: [],
-          },
+          // Ajout du content_types pour éviter l'écran "Configuration incomplète"
+          content_types: [
+            {
+              id: 'abTastyContainer',
+              referenceField: [],
+            },
+          ],
         },
       },
       ids: {
