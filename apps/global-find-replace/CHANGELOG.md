@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.5](https://github.com/contentful/marketplace-partner-apps/compare/global-find-replace-v0.2.4...global-find-replace-v0.2.5) (2026-02-07)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group in /apps/global-find-replace with 4 updates ([#7735](https://github.com/contentful/marketplace-partner-apps/issues/7735)) ([515c9fd](https://github.com/contentful/marketplace-partner-apps/commit/515c9fd79b6245e887c29015f8d939b54a93e988))
+
 ## [0.2.4](https://github.com/contentful/marketplace-partner-apps/compare/global-find-replace-v0.2.3...global-find-replace-v0.2.4) (2026-01-15)
 
 
