@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.11](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.10...vwo-fme-v1.0.11) (2026-02-07)
+
+
+### Bug Fixes
+
+* **deps:** bump contentful-management from 11.63.1 to 11.66.0 in /apps/vwo-fme in the production-dependencies group ([#7544](https://github.com/contentful/marketplace-partner-apps/issues/7544)) ([6f5d142](https://github.com/contentful/marketplace-partner-apps/commit/6f5d14228cf49d85457b2cafbe22404caad786ec))
+* **deps:** bump jsonpath from 1.1.1 to 1.2.0 in /apps/vwo-fme ([#7752](https://github.com/contentful/marketplace-partner-apps/issues/7752)) ([1a00487](https://github.com/contentful/marketplace-partner-apps/commit/1a00487e1456ed99873a91038c2808a7fcd04b24))
+* **deps:** bump lodash from 4.17.21 to 4.17.23 in /apps/vwo-fme ([#7720](https://github.com/contentful/marketplace-partner-apps/issues/7720)) ([50d30f3](https://github.com/contentful/marketplace-partner-apps/commit/50d30f3763c71f9435399d87f7d406fba7c729bb))
+* **deps:** bump qs and body-parser in /apps/vwo-fme ([#7572](https://github.com/contentful/marketplace-partner-apps/issues/7572)) ([1fdc5de](https://github.com/contentful/marketplace-partner-apps/commit/1fdc5de90d5f0c2a2dab5beae7f5a9d62ccf02e7))
+* **deps:** bump the production-dependencies group in /apps/vwo-fme with 2 updates ([#7730](https://github.com/contentful/marketplace-partner-apps/issues/7730)) ([eede4ad](https://github.com/contentful/marketplace-partner-apps/commit/eede4ad4d5987b48d183a9fa86fad0a4a6897620))
+* **deps:** bump webpack from 5.99.9 to 5.105.0 in /apps/vwo-fme ([#7754](https://github.com/contentful/marketplace-partner-apps/issues/7754)) ([d621833](https://github.com/contentful/marketplace-partner-apps/commit/d621833aa825cb01ba9131ab9cc1becc4b5ed3f4))
+
 ## [1.0.10](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.9...vwo-fme-v1.0.10) (2025-12-17)
 
 
