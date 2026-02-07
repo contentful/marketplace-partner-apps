@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/imagekit-contentful-v1.0.1...imagekit-contentful-v1.1.0) (2026-02-07)
+
+
+### Features
+
+* Imagekit app updates [INTEG-3155] ([#6615](https://github.com/contentful/marketplace-partner-apps/issues/6615)) ([6304362](https://github.com/contentful/marketplace-partner-apps/commit/63043622b625cfbfd58de13b8625b14e9075b17a))
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.44.1 to 4.45.0 in /apps/imagekit in the production-dependencies group ([#6829](https://github.com/contentful/marketplace-partner-apps/issues/6829)) ([3d02298](https://github.com/contentful/marketplace-partner-apps/commit/3d0229840d686d513f985a30196c76583a6010b9))
+* **deps:** bump js-yaml from 4.1.0 to 4.1.1 in /apps/imagekit ([#7345](https://github.com/contentful/marketplace-partner-apps/issues/7345)) ([d40ea81](https://github.com/contentful/marketplace-partner-apps/commit/d40ea81d401dc52667ad99d1105b7e0bfe6273e8))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/imagekit ([#7592](https://github.com/contentful/marketplace-partner-apps/issues/7592)) ([a7bc1a8](https://github.com/contentful/marketplace-partner-apps/commit/a7bc1a866570834a72a96d1fc756211e709ae649))
+
 ## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/imagekit-contentful-v1.0.0...imagekit-contentful-v1.0.1) (2025-09-16)
 
 
