@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/ls-contentful-app-v1.0.7...ls-contentful-app-v1.0.8) (2026-02-07)
+
+
+### Bug Fixes
+
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/livestory ([#7580](https://github.com/contentful/marketplace-partner-apps/issues/7580)) ([a8dfd32](https://github.com/contentful/marketplace-partner-apps/commit/a8dfd320710766a1eff176370747e25c9d62327f))
+
 ## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/ls-contentful-app-v1.0.6...ls-contentful-app-v1.0.7) (2025-10-16)
 
 
