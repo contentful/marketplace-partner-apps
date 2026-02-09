@@ -135,7 +135,7 @@ const DefaultField = (props: DefaultFieldProps) => {
   // This is required to show the dialogs related to markdown (expanded mode and cheatsheet)
   // ref: https://github.com/contentful/field-editors/blob/master/packages/markdown/stories/MarkdownEditor.stories.tsx#L93
   if (control?.widgetId === "markdown") {
-    // @ts-expect-error
+    // @ts-ignore - openCurrent is not in the SDK type definitions but is required for markdown dialogs
     sdk.dialogs.openCurrent = openMarkdownDialog(sdk);
   }
 

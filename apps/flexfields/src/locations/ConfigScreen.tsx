@@ -648,7 +648,7 @@ const ConfigScreen = () => {
   const fetchAssetName = async (assetId: string): Promise<string> => {
     try {
       const asset = await cma.asset.get({ assetId });
-      const fields = asset.fields || {};
+      const fields = asset.fields as any || {};
       
       // Try title first
       let name = undefined;

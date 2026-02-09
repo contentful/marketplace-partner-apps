@@ -122,7 +122,7 @@ const RulesList = (props: any) => {
           // Fetch asset from current space
           try {
             const asset = await cma.asset.get({ assetId: id });
-            const fields = asset.fields || {};
+            const fields = asset.fields as any || {};
             
             let name = undefined;
             // For assets, try title first
