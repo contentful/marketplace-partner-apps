@@ -1,5 +1,6 @@
 import { EditorAppSDK, FieldAppSDK } from "@contentful/app-sdk";
 import { KeyValueMap } from "contentful-management";
+import { documentToPlainTextString } from "@contentful/rich-text-plain-text-renderer";
 import { type Rule } from "./types/Rule";
 
 // Converts a field into <FieldAPI> data type, which is the expected data type for many API methods
@@ -36,6 +37,7 @@ const isFieldHidden = (
   );
 };
 
+
 export const isRuleValid = (
   rule: Rule,
   entryFields: any,
@@ -61,6 +63,7 @@ export const isRuleValid = (
     entryFields[contentTypeField].getValue?.();
 
   switch (condition) {
+    // Text field conditions
     case "is equal":
       isValid = contentTypeFieldValue === conditionValue;
       break;
@@ -76,6 +79,113 @@ export const isRuleValid = (
     case "is not empty":
       isValid = Boolean(contentTypeFieldValue);
       break;
+    
+    // Number field conditions
+    case "less than":
+      isValid = Number(contentTypeFieldValue) < Number(conditionValue);
+      break;
+    case "greater than":
+      isValid = Number(contentTypeFieldValue) > Number(conditionValue);
+      break;
+    case "equal":
+      isValid = Number(contentTypeFieldValue) === Number(conditionValue);
+      break;
+    case "not equal":
+      isValid = Number(contentTypeFieldValue) !== Number(conditionValue);
+      break;
+    case "between":
+      isValid =
+        Number(contentTypeFieldValue) >= Number(rule.conditionValueMin) &&
+        Number(contentTypeFieldValue) <= Number(rule.conditionValueMax);
+      break;
+    
+    // Boolean field conditions
+    case "is true":
+      isValid = contentTypeFieldValue === true;
+      break;
+    case "is false":
+      // Treat undefined as false
+      isValid = contentTypeFieldValue === false || contentTypeFieldValue === undefined;
+      break;
+    
+    // Reference field conditions (Link and Array of Links)
+    case "reference count less than": {
+      const refCount = Array.isArray(contentTypeFieldValue)
+        ? contentTypeFieldValue.length
+        : contentTypeFieldValue
+        ? 1
+        : 0;
+      isValid = refCount < Number(conditionValue);
+      break;
+    }
+    case "reference count greater than": {
+      const refCount = Array.isArray(contentTypeFieldValue)
+        ? contentTypeFieldValue.length
+        : contentTypeFieldValue
+        ? 1
+        : 0;
+      isValid = refCount > Number(conditionValue);
+      break;
+    }
+    case "reference count equal": {
+      const refCount = Array.isArray(contentTypeFieldValue)
+        ? contentTypeFieldValue.length
+        : contentTypeFieldValue
+        ? 1
+        : 0;
+      isValid = refCount === Number(conditionValue);
+      break;
+    }
+    case "reference count not equal": {
+      const refCount = Array.isArray(contentTypeFieldValue)
+        ? contentTypeFieldValue.length
+        : contentTypeFieldValue
+        ? 1
+        : 0;
+      isValid = refCount !== Number(conditionValue);
+      break;
+    }
+    case "reference count between": {
+      const refCount = Array.isArray(contentTypeFieldValue)
+        ? contentTypeFieldValue.length
+        : contentTypeFieldValue
+        ? 1
+        : 0;
+      isValid =
+        refCount >= Number(rule.conditionValueMin) &&
+        refCount <= Number(rule.conditionValueMax);
+      break;
+    }
+    case "includes entry":
+    case "includes asset": {
+      // Support both single (backward compatibility) and multiple entry/asset IDs
+      const entryIds = rule.linkedEntryIds || (rule.linkedEntryId ? [rule.linkedEntryId] : []);
+      
+      if (entryIds.length === 0) {
+        isValid = false;
+        break;
+      }
+      
+      if (Array.isArray(contentTypeFieldValue)) {
+        // Check if ANY of the selected entries/assets is in the reference field (OR logic)
+        isValid = contentTypeFieldValue.some(
+          (ref: any) => entryIds.includes(ref?.sys?.id)
+        );
+      } else if (contentTypeFieldValue?.sys?.id) {
+        isValid = entryIds.includes(contentTypeFieldValue.sys.id);
+      } else {
+        isValid = false;
+      }
+      break;
+    }
+    
+    // RichText field conditions
+    case "includes": {
+      const plainText = documentToPlainTextString(contentTypeFieldValue).toLowerCase().trim();
+      isValid = plainText.includes(conditionValue.toLowerCase());
+      break;
+    }
+    
     default:
       break;
   }
