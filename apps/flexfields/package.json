@@ -1,39 +1,66 @@
 {
-  "name": "@contentful/marketplace-partner-apps",
-  "private": false,
-  "engines": {
-    "node": ">=18.0.0 < 22.0.0",
-    "npm": ">= 9.0.0 < 11.0.0"
-  },
-  "packageManager": "npm@8.19.4",
-  "devDependencies": {
-    "@actions/core": "^1.10.1",
-    "@actions/github": "^6.0.0",
-    "@types/node": "^22.3.0",
-    "husky": "^8.0.0",
-    "jsonlint": "^1.6.3",
-    "lint-staged": "^15.4.2",
-    "prettier": "2.8.8"
+  "name": "thrillworks-flex-fields-app",
+  "version": "1.3.2",
+  "license": "MIT",
+  "dependencies": {
+    "@contentful/app-sdk": "4.45.0",
+    "@contentful/default-field-editors": "^1.7.79",
+    "@contentful/f36-components": "4.81.1",
+    "@contentful/f36-layout": "5.6.0",
+    "@contentful/f36-multiselect": "^4.81.1",
+    "@contentful/f36-tokens": "4.2.0",
+    "@contentful/field-editor-markdown": "^1.13.0",
+    "@contentful/field-editor-reference": "^6.15.0",
+    "@contentful/react-apps-toolkit": "1.2.16",
+    "@emotion/css": "11.13.5",
+    "contentful-management": "11.62.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
   },
   "scripts": {
-    "test-apps": "lerna run test --concurrency=1 --stream --since main",
-    "build-apps": "lerna run build --concurrency=1 --stream --since main",
-    "build-apps:deploy": "lerna run build --concurrency=1 --stream",
-    "install-apps": "lerna run install-ci --concurrency=1 --stream --since main",
-    "install-apps:deploy": "lerna run install-ci --concurrency=1 --stream",
-    "deploy:staging": "lerna run deploy:staging --concurrency=3",
-    "deploy:production": "lerna run deploy --concurrency=3",
-    "prepare": "husky install"
+    "install-ci": "npm ci",
+    "start": "vite",
+    "build": "rm -rf build && tsc && vite build",
+    "build:autoincrement": "npm --no-git-tag-version version patch && cross-env GENERATE_SOURCEMAP=false react-scripts build",
+    "test": "vitest run",
+    "create-app-definition": "contentful-app-scripts create-app-definition",
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 7GbS2x3SdVh7D2hb1FFsS6 --token ${CONTENTFUL_CMA_TOKEN}",
+    "postinstall": "npx playwright install && npx playwright install-deps"
   },
-  "lint-staged": {
-    "*.{t,j}s?(x)": [
-      "prettier --write"
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
     ],
-    "*.json": [
-      "prettier --write"
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ]
   },
-  "dependencies": {
-    "lerna": "^7.0.2"
-  }
+  "devDependencies": {
+    "@contentful/app-scripts": "2.5.6",
+    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/react": "12.1.5",
+    "@types/node": "^20",
+    "@types/react": "17.0.2",
+    "@types/react-dom": "17.0.2",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/parser": "^8.18.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "@vitest/browser": "^2.1.8",
+    "happy-dom": "^20.0.10",
+    "playwright": "^1.56.1",
+    "typescript": "5.4.3",
+    "vite": "^7.1.12",
+    "vitest": "^2.0.5"
+  },
+  "overrides": {
+    "typescript": "5.4.3"
+  },
+  "homepage": "."
 }
