@@ -5,9 +5,6 @@ export default defineConfig({
   base: '', // relative paths
   build: {
     outDir: 'build',
-    rollupOptions: {
-      external: ['is-hotkey'],
-    },
   },
   plugins: [react()],
   test: {
