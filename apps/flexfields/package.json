@@ -18,7 +18,7 @@
     "react-dom": "17.0.2"
   },
   "scripts": {
-    "install-ci": "npm ci",
+    "install-ci": "npm ci && npx playwright install --with-deps chromium",
     "start": "vite",
     "build": "rm -rf build && tsc && vite build",
     "build:autoincrement": "npm --no-git-tag-version version patch && cross-env GENERATE_SOURCEMAP=false react-scripts build",
