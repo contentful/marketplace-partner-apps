@@ -12,9 +12,43 @@ import {
 import { type Rule } from "../types/Rule";
 import { getContentTypeName, getFieldName } from "../utils";
 
+// CSS constants for repeated styles
+const HIGHLIGHTED_TEXT_STYLE = css({
+  color: "#444",
+  borderBottom: "1px dashed #333",
+  fontWeight: "bold",
+});
+
+/**
+ * Parse a Contentful URN to extract space, environment, and entity IDs
+ * Format: crn:contentful:::content:spaces/<space-id>/environments/<env-id>/entries/<entry-id>
+ */
+function parseUrn(urn: string): {
+  spaceId: string;
+  environmentId: string;
+  entityId: string;
+  entityType: 'entries' | 'assets';
+} | null {
+  const match = urn.match(
+    /crn:contentful:::content:spaces\/([^/]+)\/environments\/([^/]+)\/(entries|assets)\/([^/]+)/
+  );
+  
+  if (!match) {
+    return null;
+  }
+  
+  return {
+    spaceId: match[1],
+    environmentId: match[2],
+    entityType: match[3] as 'entries' | 'assets',
+    entityId: match[4],
+  };
+}
+
 const RulesList = (props: any) => {
   const [allContentTypes, setAllContentTypes] = useState<any[]>([]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [entryNames, setEntryNames] = useState<Record<string, string>>({});
 
   const handleWindowResize = () => {
     setWindowWidth(window.innerWidth);
@@ -27,11 +61,126 @@ const RulesList = (props: any) => {
       .getMany({})
       .then((response) => {
         setAllContentTypes(response.items);
-      })
-      .catch((error) => {
-        console.log(error);
       });
   }, [cma]);
+
+  // Fetch entry names for all linkedEntryIds in rules
+  useEffect(() => {
+    const fetchEntryNames = async () => {
+      // Collect all entry/asset IDs from rules with their type
+      const itemsToFetch: Record<string, {
+        type: 'entry' | 'asset' | 'resource',
+        spaceId?: string,
+        environmentId?: string
+      }> = {};
+      
+      props.rules?.forEach((rule: Rule) => {
+        const itemIds = rule.linkedEntryIds || (rule.linkedEntryId ? [rule.linkedEntryId] : []);
+        const isAsset = rule.condition === "includes asset";
+        
+        itemIds.forEach(id => {
+          // Check if this is a URN (cross-space reference)
+          if (typeof id === 'string' && id.startsWith('crn:contentful')) {
+            const urnInfo = parseUrn(id);
+            if (urnInfo) {
+              itemsToFetch[id] = {
+                type: 'resource',
+                spaceId: urnInfo.spaceId,
+                environmentId: urnInfo.environmentId
+              };
+            }
+          } else {
+            // Regular entry/asset in current space
+            itemsToFetch[id] = {
+              type: isAsset ? 'asset' : 'entry'
+            };
+          }
+        });
+      });
+
+      // Fetch entries/assets
+      const names: Record<string, string> = {};
+      
+      for (const [id, info] of Object.entries(itemsToFetch)) {
+        if (info.type === 'resource') {
+          // Handle cross-space resource references
+          try {
+            const urnInfo = parseUrn(id);
+            if (!urnInfo) {
+              names[id] = id;
+              continue;
+            }
+            
+            const entityType = urnInfo.entityType === 'entries' ? 'Entry' : 'Asset';
+            const truncatedId = urnInfo.entityId.substring(0, 8);
+            names[id] = `External ${entityType} (${truncatedId}...)`;
+            
+          } catch (error) {
+            names[id] = id;
+          }
+        } else if (info.type === 'asset') {
+          // Fetch asset from current space
+          try {
+            const asset = await cma.asset.get({ assetId: id });
+            const fields = asset.fields as any || {};
+            
+            let name = undefined;
+            // For assets, try title first
+            if (fields.title && typeof fields.title === 'object') {
+              const locales = Object.keys(fields.title);
+              if (locales.length > 0) {
+                name = fields.title[locales[0]];
+              }
+            }
+            
+            // If no title, try fileName from file object
+            if (!name && fields.file && typeof fields.file === 'object') {
+              const locales = Object.keys(fields.file);
+              if (locales.length > 0 && fields.file[locales[0]]?.fileName) {
+                name = fields.file[locales[0]].fileName;
+              }
+            }
+            
+            names[id] = name || id;
+          } catch (error) {
+            names[id] = id;
+          }
+        } else {
+          // Fetch entry from current space
+          try {
+            const entry = await cma.entry.get({ entryId: id });
+            const fields = entry.fields || {};
+            
+            // Get the content type to find the displayField
+            const entryContentTypeId = entry.sys.contentType.sys.id;
+            const entryContentType = await cma.contentType.get({ contentTypeId: entryContentTypeId });
+            const displayFieldId = entryContentType.displayField;
+            
+            let name = undefined;
+            if (displayFieldId && fields[displayFieldId]) {
+              const displayFieldValue = fields[displayFieldId];
+              if (typeof displayFieldValue === 'object') {
+                const locales = Object.keys(displayFieldValue);
+                if (locales.length > 0) {
+                  name = displayFieldValue[locales[0]];
+                }
+              }
+            }
+            
+            names[id] = name || id;
+          } catch (error) {
+            names[id] = id;
+          }
+        }
+      }
+      
+      setEntryNames(names);
+    };
+
+    if (props.rules?.length > 0) {
+      fetchEntryNames();
+    }
+  }, [props.rules, cma]);
 
   useEffect(() => {
     // Add event listener for window resize
@@ -118,11 +267,7 @@ const RulesList = (props: any) => {
                   </span>{" "}
                   has{" "}
                   <span
-                    className={css({
-                      color: "#444",
-                      borderBottom: "1px dashed #333",
-                      fontWeight: "bold",
-                    })}
+                    className={HIGHLIGHTED_TEXT_STYLE}
                   >
                     {getFieldName(
                       [rule.contentTypeField],
@@ -132,36 +277,81 @@ const RulesList = (props: any) => {
                   </span>{" "}
                   which{" "}
                   <span
-                    className={css({
-                      color: "#444",
-                      borderBottom: "1px dashed #333",
-                      fontWeight: "bold",
-                    })}
+                    className={HIGHLIGHTED_TEXT_STYLE}
                   >
                     {rule.condition}
                   </span>{" "}
+                  {/* Display condition values based on condition type */}
                   {rule.condition !== "is not empty" &&
-                  rule.condition !== "is empty" ? (
+                  rule.condition !== "is empty" &&
+                  rule.condition !== "is true" &&
+                  rule.condition !== "is false" ? (
                     <>
-                      {rule.condition !== "contains" && "to"}{" "}
-                      <span
-                        className={css({
-                          color: "#444",
-                          borderBottom: "1px dashed #333",
-                          fontWeight: "bold",
-                        })}
-                      >
-                        "{rule.conditionValue}"
-                      </span>
+                      {/* Between conditions show two values */}
+                      {(rule.condition === "between" ||
+                        rule.condition === "reference count between") && (
+                        <>
+                          between{" "}
+                          <span
+                            className={HIGHLIGHTED_TEXT_STYLE}
+                          >
+                            {rule.conditionValueMin}
+                          </span>{" "}
+                          and{" "}
+                          <span
+                            className={HIGHLIGHTED_TEXT_STYLE}
+                          >
+                            {rule.conditionValueMax}
+                          </span>
+                        </>
+                      )}
+                      {/* Includes entry shows entry ID(s) */}
+                      {(rule.condition === "includes entry" || rule.condition === "includes asset") && (
+                        <>
+                          {(() => {
+                            // Support both old (linkedEntryId) and new (linkedEntryIds) format
+                            const entryIds = rule.linkedEntryIds || 
+                              (rule.linkedEntryId ? [rule.linkedEntryId] : []);
+                            const itemType = rule.condition === "includes asset" ? "asset" : "entry";
+                            const itemTypePlural = rule.condition === "includes asset" ? "assets" : "entries";
+                            return entryIds.length === 1 ? itemType : itemTypePlural;
+                          })()}{" "}
+                          <span
+                            className={HIGHLIGHTED_TEXT_STYLE}
+                          >
+                            "
+                            {(() => {
+                              const entryIds = rule.linkedEntryIds || 
+                                (rule.linkedEntryId ? [rule.linkedEntryId] : []);
+                              // Map IDs to names (handles both regular and URN-based IDs)
+                              const names = entryIds.map(id => entryNames[id] || id);
+                              return names.join('", "');
+                            })()}
+                            "
+                          </span>
+                        </>
+                      )}
+                      {/* All other conditions with single value */}
+                      {rule.condition !== "between" &&
+                        rule.condition !== "reference count between" &&
+                        rule.condition !== "includes entry" &&
+                        rule.condition !== "includes asset" && (
+                          <>
+                            {rule.condition !== "contains" &&
+                              rule.condition !== "includes" &&
+                              "to"}{" "}
+                            <span
+                              className={HIGHLIGHTED_TEXT_STYLE}
+                            >
+                              "{rule.conditionValue}"
+                            </span>
+                          </>
+                        )}
                     </>
                   ) : null}{" "}
                   then in entity{" "}
                   <span
-                    className={css({
-                      color: "#444",
-                      borderBottom: "1px dashed #333",
-                      fontWeight: "bold",
-                    })}
+                    className={HIGHLIGHTED_TEXT_STYLE}
                   >
                     {/* {rule.targetEntity} */}
                     {getContentTypeName(rule.targetEntity, allContentTypes) ??
@@ -170,11 +360,7 @@ const RulesList = (props: any) => {
                   </span>{" "}
                   hide the{" "}
                   <span
-                    className={css({
-                      color: "#444",
-                      borderBottom: "1px dashed #333",
-                      fontWeight: "bold",
-                    })}
+                    className={HIGHLIGHTED_TEXT_STYLE}
                   >
                     "
                     {getFieldName(
