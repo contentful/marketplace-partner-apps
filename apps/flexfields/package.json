@@ -18,7 +18,6 @@
     "react-dom": "17.0.2"
   },
   "scripts": {
-    "_comment_install-ci": "CI-optimized: installs only Chromium (~400MB) instead of all browsers (~1.2GB). Reduces CI build time by 2-3 minutes and saves ~800MB storage.",
     "install-ci": "npm ci && npx playwright install --with-deps chromium",
     "start": "vite",
     "build": "rm -rf build && tsc && vite build",
