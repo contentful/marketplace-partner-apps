@@ -7,7 +7,7 @@
     "@contentful/f36-components": "4.81.1",
     "@contentful/f36-icons": "^4.29.1",
     "@contentful/f36-multiselect": "^4.81.1",
-    "@contentful/f36-tokens": "^4.0.5",
+    "@contentful/f36-tokens": "^5.1.0",
     "@contentful/react-apps-toolkit": "1.2.16",
     "@contentful/rich-text-html-renderer": "^16.6.10",
     "@emotion/css": "^11.13.5",
