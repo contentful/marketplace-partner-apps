@@ -10,7 +10,7 @@ import {
   Button,
   Badge,
 } from "@contentful/f36-components";
-import { Entry } from "contentful-management";
+import { Entry, KeyValueMap } from "contentful-management";
 import { css } from "@emotion/css";
 import { useCMA, useSDK } from "@contentful/react-apps-toolkit";
 import { FormControl, Select } from "@contentful/f36-components";
@@ -648,7 +648,7 @@ const ConfigScreen = () => {
   const fetchAssetName = async (assetId: string): Promise<string> => {
     try {
       const asset = await cma.asset.get({ assetId });
-      const fields = asset.fields as any || {};
+      const fields: KeyValueMap = asset.fields || {};
       
       // Try title first
       let name = undefined;

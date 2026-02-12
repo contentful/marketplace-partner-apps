@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Flex, SectionHeading, Text } from "@contentful/f36-components";
 import { css } from "@emotion/css";
 import { useCMA } from "@contentful/react-apps-toolkit";
+import { KeyValueMap } from "contentful-management";
 
 import {
   DeleteIcon,
@@ -122,7 +123,7 @@ const RulesList = (props: any) => {
           // Fetch asset from current space
           try {
             const asset = await cma.asset.get({ assetId: id });
-            const fields = asset.fields as any || {};
+            const fields: KeyValueMap = asset.fields || {};
             
             let name = undefined;
             // For assets, try title first
