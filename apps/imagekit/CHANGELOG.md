@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.2](https://github.com/contentful/marketplace-partner-apps/compare/imagekit-contentful-v1.0.1...imagekit-contentful-v1.0.2) (2026-02-13)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.44.1 to 4.45.0 in /apps/imagekit in the production-dependencies group ([#6829](https://github.com/contentful/marketplace-partner-apps/issues/6829)) ([3d02298](https://github.com/contentful/marketplace-partner-apps/commit/3d0229840d686d513f985a30196c76583a6010b9))
+* **deps:** bump axios from 1.12.2 to 1.13.5 in /apps/imagekit ([#7782](https://github.com/contentful/marketplace-partner-apps/issues/7782)) ([e538e64](https://github.com/contentful/marketplace-partner-apps/commit/e538e64ad46140d71501595a46feb545ab4eed87))
+* **deps:** bump js-yaml from 4.1.0 to 4.1.1 in /apps/imagekit ([#7345](https://github.com/contentful/marketplace-partner-apps/issues/7345)) ([d40ea81](https://github.com/contentful/marketplace-partner-apps/commit/d40ea81d401dc52667ad99d1105b7e0bfe6273e8))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/imagekit ([#7592](https://github.com/contentful/marketplace-partner-apps/issues/7592)) ([a7bc1a8](https://github.com/contentful/marketplace-partner-apps/commit/a7bc1a866570834a72a96d1fc756211e709ae649))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/imagekit ([#7818](https://github.com/contentful/marketplace-partner-apps/issues/7818)) ([6863382](https://github.com/contentful/marketplace-partner-apps/commit/6863382dc1384688c83f814a34bcbf08d9aa481c))
+
 ## [1.0.1](https://github.com/contentful/marketplace-partner-apps/compare/imagekit-contentful-v1.0.0...imagekit-contentful-v1.0.1) (2025-09-16)
 
 
