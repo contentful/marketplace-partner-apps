@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.5](https://github.com/contentful/marketplace-partner-apps/compare/global-find-replace-v0.2.4...global-find-replace-v0.2.5) (2026-02-13)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.13.2 to 1.13.5 in /apps/global-find-replace ([#7776](https://github.com/contentful/marketplace-partner-apps/issues/7776)) ([acc667f](https://github.com/contentful/marketplace-partner-apps/commit/acc667f9d476917372dda8533b58dab0e9086adb))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/global-find-replace ([#7821](https://github.com/contentful/marketplace-partner-apps/issues/7821)) ([a2c2ae7](https://github.com/contentful/marketplace-partner-apps/commit/a2c2ae79b516f4beeacf4109a231f644295db7f4))
+* **deps:** bump the production-dependencies group in /apps/global-find-replace with 4 updates ([#7735](https://github.com/contentful/marketplace-partner-apps/issues/7735)) ([515c9fd](https://github.com/contentful/marketplace-partner-apps/commit/515c9fd79b6245e887c29015f8d939b54a93e988))
+
 ## [0.2.4](https://github.com/contentful/marketplace-partner-apps/compare/global-find-replace-v0.2.3...global-find-replace-v0.2.4) (2026-01-15)
 
 
