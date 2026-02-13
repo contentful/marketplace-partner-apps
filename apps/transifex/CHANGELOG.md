@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.2](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.3.1...transifex-contentful-app-v1.3.2) (2026-02-13)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.13.1 to 1.13.5 in /apps/transifex ([#7766](https://github.com/contentful/marketplace-partner-apps/issues/7766)) ([3bdd9d5](https://github.com/contentful/marketplace-partner-apps/commit/3bdd9d5023aa2b66dd0776e61669737007be7cfc))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/transifex ([#7582](https://github.com/contentful/marketplace-partner-apps/issues/7582)) ([15fb9ea](https://github.com/contentful/marketplace-partner-apps/commit/15fb9eadc778df03ddfe61a422390856ef2ec393))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/transifex ([#7801](https://github.com/contentful/marketplace-partner-apps/issues/7801)) ([16ad152](https://github.com/contentful/marketplace-partner-apps/commit/16ad152ef79e21b29a00936fab46afb0bd96a4b7))
+
 ## [1.3.1](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.3.0...transifex-contentful-app-v1.3.1) (2025-12-03)
 
 
