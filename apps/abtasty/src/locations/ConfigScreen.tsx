@@ -19,10 +19,9 @@ import { LoadingCard } from '@/components/ConfigScreen/LoadingCard';
 import { LoginCard } from '@/components/ConfigScreen/LoginCard';
 import { AccountSelector } from '@/components/ConfigScreen/AccountSelector';
 import { EnvironmentSelector } from '@/components/ConfigScreen/EnvironmentSelector';
-import { ContentTypeModal } from '@/components/ConfigScreen/ContentTypeModal';
 import { useAbTastyOAuth } from '@/hooks/useAbTastyOAuth';
 import { getToken, updateToken } from '@/utils/getToken';
-import { CustomButton } from '@/components/ui/CustomButton';
+import { TableContentType } from '@/components/ConfigScreen/TableContentType';
 
 export interface AppInstallationParameters {
   user_id?: string;
@@ -34,23 +33,21 @@ export interface AppInstallationParameters {
     id?: string;
     name?: string;
   };
-  content_type?: {
+  content_types?: {
     id: string;
     referenceField: string[];
-  }
+  }[];
 }
 
 const ConfigScreen = () => {
   const [parameters, setParameters] = useState<AppInstallationParameters>({});
   const sdk = useSDK<ConfigAppSDK>();
 
-
   const [token, setToken] = useState<string>('');
+
+
   const [selectedAccount, setSelectedAccount] = useState<FlagshipAccount | null>(null);
   const [selectedEnvironment, setSelectedEnvironment] = useState<AccountEnvironment | undefined>(undefined);
-  const [open, setOpen] = useState<boolean>(false);
-
-  const [selectedCtName, setSelectedCtName] = useState<string | null>(null);
 
   const { openOAuthPopup } = useAbTastyOAuth(setToken);
 
@@ -59,7 +56,6 @@ const ConfigScreen = () => {
     getAccountByUserOptions(user?.id || '', token)
   );
 
-  const [selectedContentType, setSelectedContentType] = useState<string | null>(null);
 
   const onConfigure = useCallback(async () => {
     const currentState = await sdk.app.getCurrentState();
@@ -74,8 +70,23 @@ const ConfigScreen = () => {
       return false;
     }
 
+    if (!parameters.content_types || parameters.content_types.length === 0) {
+      sdk.notifier.error('You must select at least one content type before you can save.');
+      return false;
+    }
+
+    // Check that each selected content type has at least one reference field
+    const contentTypesWithoutFields = parameters.content_types.filter(
+      ct => !ct.referenceField || ct.referenceField.length === 0
+    );
+
+    if (contentTypesWithoutFields.length > 0) {
+      sdk.notifier.error('Each selected content type must have at least one reference field selected.');
+      return false;
+    }
+
     const cleanParameters: AppInstallationParameters = {
-      content_type: parameters.content_type,
+      content_types: parameters.content_types,
       user_id: user?.id,
       flagship_account: selectedAccount
         ? {
@@ -123,7 +134,7 @@ const ConfigScreen = () => {
         }
       }
     });
-  }, [sdk]);
+  }, [sdk, parameters?.content_types]);
 
   useEffect(() => {
     sdk.app.onConfigure(() => onConfigure());
@@ -149,11 +160,6 @@ const ConfigScreen = () => {
         setToken(lsToken);
       }
 
-      const savedCtId = currentParameters?.content_type?.id;
-      if (savedCtId) {
-        setSelectedContentType(savedCtId);
-      }
-
       sdk.app.setReady();
     };
 
@@ -174,41 +180,21 @@ const ConfigScreen = () => {
       setSelectedEnvironment(maybeEnv);
     }
   }, [accounts, parameters]);
-
   useEffect(() => {
     if (token) {
       updateToken(token);
     }
   }, [token]);
 
-  useEffect(() => {
-    const loadCtName = async () => {
-      const ctId = parameters?.content_type?.id;
-      if (!ctId) {
-        setSelectedCtName(null);
-        return;
-      }
-      try {
-        const ct = await sdk.cma.contentType.get({ contentTypeId: ctId });
-        setSelectedCtName(ct?.name ?? null);
-      } catch {
-        setSelectedCtName(null);
-      }
-    };
-    void loadCtName();
-  }, [sdk, parameters?.content_type?.id]);
 
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  const handleSaveContentType = (contentTypeRef: { id: string; referenceField: string[] }) => {
+  const handleUpdateContentTypes = (updater: (prev: { id: string; referenceField: string[] }[]) => { id: string; referenceField: string[] }[]) => {
     setParameters((prev) => ({
       ...prev,
-      content_type: contentTypeRef,
+      content_types: updater(prev.content_types || []),
     }));
-    setOpen(false);
   };
+
 
   if (isUserLoading || isAccountsLoading) {
     return (
@@ -223,7 +209,7 @@ const ConfigScreen = () => {
       {user ? (
         <Card sx={{ width: '100%' }}>
           <CardContent>
-            <Stack direction="column" spacing={3}>
+            <Stack direction="column" spacing={2}>
               <div>
                 <Typography fontWeight="bold" variant="h5">
                   Welcome, {user.first_name} {user.last_name}
@@ -261,35 +247,10 @@ const ConfigScreen = () => {
                 Select the content types for which you want to enable A/B testing
               </Typography>
 
-              {parameters?.content_type?.id && (
-                <Stack sx={{ mt: 1 }} spacing={0.5}>
-                  <Typography fontWeight="bold">Selected content type</Typography>
-                  <Typography>
-                    {selectedCtName ?? 'Unknown name'} ({parameters.content_type.id})
-                  </Typography>
-                  <Typography color="text.secondary" fontSize="small">
-                    Reference fields selected:{" "}
-                    {parameters.content_type.referenceField?.length
-                      ? parameters.content_type.referenceField.join(', ')
-                      : 'None'}
-                  </Typography>
-                </Stack>
-              )}
-
-
-              <div>
-                <CustomButton onClick={handleOpen} variant="contained" size="small">
-                  Add Content
-                </CustomButton>
-              </div>
-
-              <ContentTypeModal
-                open={open}
-                onClose={handleClose}
+              <TableContentType
                 sdk={sdk}
-                value={selectedContentType}
-                onChange={setSelectedContentType}
-                onSave={handleSaveContentType}
+                selectedContentTypes={parameters?.content_types || []}
+                onUpdateContentTypes={handleUpdateContentTypes}
               />
             </Stack>
           </CardContent>
