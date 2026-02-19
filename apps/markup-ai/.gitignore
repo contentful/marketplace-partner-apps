@@ -1,3 +1,4 @@
+.DS_Store
 .env
 .env.*
 !.env*.example
@@ -6,4 +7,3 @@ filtered-openapi.json
 build/
 coverage/
 node_modules/
-.DS_Store

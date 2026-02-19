@@ -70,8 +70,8 @@ describe("StyleSettings", () => {
       styleGuides: null,
       constantsLoading: false,
       styleGuidesLoading: false,
-      constantsError: new Error("x"),
-      styleGuidesError: new Error("x"),
+      constantsError: { detail: "x", status: 500, request_id: "test" },
+      styleGuidesError: { detail: "x", status: 500, request_id: "test" },
       checkContent: vi.fn(),
       contentRewrite: vi.fn(),
       fetchAdminConstants: vi.fn(),
@@ -82,7 +82,7 @@ describe("StyleSettings", () => {
     await waitFor(() => {
       expect(screen.getByText("Error")).toBeInTheDocument();
     });
-    expect(screen.getByText("x")).toBeInTheDocument();
+    expect(screen.getByText("Failed to load configuration")).toBeInTheDocument();
   });
 
   it("triggers onSaveAndClose when complete", async () => {

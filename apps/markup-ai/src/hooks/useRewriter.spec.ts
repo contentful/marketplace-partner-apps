@@ -370,7 +370,7 @@ describe("useRewriter", () => {
       expect(mockSetTimeout).toHaveBeenCalledWith(
         `cooldown-${FIELD_ID}`,
         expect.any(Function),
-        3000,
+        3_000,
       );
     });
 
