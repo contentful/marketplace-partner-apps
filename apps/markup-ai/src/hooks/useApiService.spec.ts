@@ -97,11 +97,16 @@ async function testWorkflowRejection(
     data: { workflow: { status: options.workflowStatus } },
   } as never);
 
-  vi.useFakeTimers();
-  const { result } = renderHook(() => useApiService(config));
-  const promise = methodCall(result);
-  await advanceAndExpectReject(promise, options.expectedError, options.timeoutMs);
-  vi.useRealTimers();
+  await runWithFakeTimers(async () => {
+    const { result } = renderHook(() => useApiService(config));
+    let promise: Promise<unknown> | undefined;
+    await act(async () => {
+      promise = methodCall(result);
+      await Promise.resolve();
+    });
+    if (!promise) throw new Error("Promise was not assigned");
+    await advanceAndExpectReject(promise, options.expectedError, options.timeoutMs);
+  });
 }
 
 /**
