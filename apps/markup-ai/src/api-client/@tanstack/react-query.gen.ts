@@ -5,11 +5,10 @@ import { queryOptions, type UseMutationOptions } from "@tanstack/react-query";
 import { client } from "../client.gen";
 import {
   getAdminConstants,
+  internalSubmitFeedback,
   type Options,
   styleChecksCreateStyleCheck,
-  styleChecksCreateStyleCheckBatch,
   styleChecksGetStyleCheck,
-  styleChecksGetStyleCheckBatch,
   styleGuidesCreateStyleGuide,
   styleGuidesDeleteStyleGuide,
   styleGuidesGetStyleGuide,
@@ -18,20 +17,21 @@ import {
   styleRewritesCreateStyleRewrite,
   styleRewritesGetStyleRewrite,
   styleSuggestionsCreateStyleSuggestion,
-  styleSuggestionsCreateStyleSuggestionBatch,
   styleSuggestionsGetStyleSuggestion,
-  styleSuggestionsGetStyleSuggestionBatch,
 } from "../sdk.gen";
 import type {
   GetAdminConstantsData,
-  StyleChecksCreateStyleCheckBatchData,
-  StyleChecksCreateStyleCheckBatchError,
-  StyleChecksCreateStyleCheckBatchResponse,
+  GetAdminConstantsError,
+  GetAdminConstantsResponse,
+  InternalSubmitFeedbackData,
+  InternalSubmitFeedbackError,
+  InternalSubmitFeedbackResponse,
   StyleChecksCreateStyleCheckData,
   StyleChecksCreateStyleCheckError,
   StyleChecksCreateStyleCheckResponse,
-  StyleChecksGetStyleCheckBatchData,
   StyleChecksGetStyleCheckData,
+  StyleChecksGetStyleCheckError,
+  StyleChecksGetStyleCheckResponse,
   StyleGuidesCreateStyleGuideData,
   StyleGuidesCreateStyleGuideError,
   StyleGuidesCreateStyleGuideResponse,
@@ -39,7 +39,11 @@ import type {
   StyleGuidesDeleteStyleGuideError,
   StyleGuidesDeleteStyleGuideResponse,
   StyleGuidesGetStyleGuideData,
+  StyleGuidesGetStyleGuideError,
+  StyleGuidesGetStyleGuideResponse,
   StyleGuidesListStyleGuidesData,
+  StyleGuidesListStyleGuidesError,
+  StyleGuidesListStyleGuidesResponse,
   StyleGuidesUpdateStyleGuideData,
   StyleGuidesUpdateStyleGuideError,
   StyleGuidesUpdateStyleGuideResponse,
@@ -47,14 +51,14 @@ import type {
   StyleRewritesCreateStyleRewriteError,
   StyleRewritesCreateStyleRewriteResponse,
   StyleRewritesGetStyleRewriteData,
-  StyleSuggestionsCreateStyleSuggestionBatchData,
-  StyleSuggestionsCreateStyleSuggestionBatchError,
-  StyleSuggestionsCreateStyleSuggestionBatchResponse,
+  StyleRewritesGetStyleRewriteError,
+  StyleRewritesGetStyleRewriteResponse,
   StyleSuggestionsCreateStyleSuggestionData,
   StyleSuggestionsCreateStyleSuggestionError,
   StyleSuggestionsCreateStyleSuggestionResponse,
-  StyleSuggestionsGetStyleSuggestionBatchData,
   StyleSuggestionsGetStyleSuggestionData,
+  StyleSuggestionsGetStyleSuggestionError,
+  StyleSuggestionsGetStyleSuggestionResponse,
 } from "../types.gen";
 
 export type QueryKey<TOptions extends Options> = [
@@ -107,8 +111,13 @@ export const styleGuidesListStyleGuidesQueryKey = (
  */
 export const styleGuidesListStyleGuidesOptions = (
   options?: Options<StyleGuidesListStyleGuidesData>,
-) => {
-  return queryOptions({
+) =>
+  queryOptions<
+    StyleGuidesListStyleGuidesResponse,
+    StyleGuidesListStyleGuidesError,
+    StyleGuidesListStyleGuidesResponse,
+    ReturnType<typeof styleGuidesListStyleGuidesQueryKey>
+  >({
     queryFn: async ({ queryKey, signal }) => {
       const { data } = await styleGuidesListStyleGuides({
         ...options,
@@ -120,12 +129,11 @@ export const styleGuidesListStyleGuidesOptions = (
     },
     queryKey: styleGuidesListStyleGuidesQueryKey(options),
   });
-};
 
 /**
  * Create Style Guide
  *
- * Create a new style guide that can be used in checks, suggestions, and rewrites.
+ * Create a new style guide from a document, or copy an existing style guide. To copy, provide the copyFrom query parameter with the source style guide ID.
  */
 export const styleGuidesCreateStyleGuideMutation = (
   options?: Partial<Options<StyleGuidesCreateStyleGuideData>>,
@@ -188,8 +196,13 @@ export const styleGuidesGetStyleGuideQueryKey = (options: Options<StyleGuidesGet
  *
  * Retrieve a specific style guide by ID, including its metadata such as `name` and `status`.
  */
-export const styleGuidesGetStyleGuideOptions = (options: Options<StyleGuidesGetStyleGuideData>) => {
-  return queryOptions({
+export const styleGuidesGetStyleGuideOptions = (options: Options<StyleGuidesGetStyleGuideData>) =>
+  queryOptions<
+    StyleGuidesGetStyleGuideResponse,
+    StyleGuidesGetStyleGuideError,
+    StyleGuidesGetStyleGuideResponse,
+    ReturnType<typeof styleGuidesGetStyleGuideQueryKey>
+  >({
     queryFn: async ({ queryKey, signal }) => {
       const { data } = await styleGuidesGetStyleGuide({
         ...options,
@@ -201,7 +214,6 @@ export const styleGuidesGetStyleGuideOptions = (options: Options<StyleGuidesGetS
     },
     queryKey: styleGuidesGetStyleGuideQueryKey(options),
   });
-};
 
 /**
  * Update Style Guide
@@ -269,8 +281,13 @@ export const styleChecksGetStyleCheckQueryKey = (options: Options<StyleChecksGet
  *
  * Retrieve style check results.
  */
-export const styleChecksGetStyleCheckOptions = (options: Options<StyleChecksGetStyleCheckData>) => {
-  return queryOptions({
+export const styleChecksGetStyleCheckOptions = (options: Options<StyleChecksGetStyleCheckData>) =>
+  queryOptions<
+    StyleChecksGetStyleCheckResponse,
+    StyleChecksGetStyleCheckError,
+    StyleChecksGetStyleCheckResponse,
+    ReturnType<typeof styleChecksGetStyleCheckQueryKey>
+  >({
     queryFn: async ({ queryKey, signal }) => {
       const { data } = await styleChecksGetStyleCheck({
         ...options,
@@ -282,62 +299,6 @@ export const styleChecksGetStyleCheckOptions = (options: Options<StyleChecksGetS
     },
     queryKey: styleChecksGetStyleCheckQueryKey(options),
   });
-};
-
-/**
- * Create Style Check Batch
- *
- * Analyze text for grammar, style, and clarity issues for multiple files.
- */
-export const styleChecksCreateStyleCheckBatchMutation = (
-  options?: Partial<Options<StyleChecksCreateStyleCheckBatchData>>,
-): UseMutationOptions<
-  StyleChecksCreateStyleCheckBatchResponse,
-  StyleChecksCreateStyleCheckBatchError,
-  Options<StyleChecksCreateStyleCheckBatchData>
-> => {
-  const mutationOptions: UseMutationOptions<
-    StyleChecksCreateStyleCheckBatchResponse,
-    StyleChecksCreateStyleCheckBatchError,
-    Options<StyleChecksCreateStyleCheckBatchData>
-  > = {
-    mutationFn: async (fnOptions) => {
-      const { data } = await styleChecksCreateStyleCheckBatch({
-        ...options,
-        ...fnOptions,
-        throwOnError: true,
-      });
-      return data;
-    },
-  };
-  return mutationOptions;
-};
-
-export const styleChecksGetStyleCheckBatchQueryKey = (
-  options: Options<StyleChecksGetStyleCheckBatchData>,
-) => createQueryKey("styleChecksGetStyleCheckBatch", options);
-
-/**
- * Get Style Check Batch
- *
- * Retrieve batch style check results.
- */
-export const styleChecksGetStyleCheckBatchOptions = (
-  options: Options<StyleChecksGetStyleCheckBatchData>,
-) => {
-  return queryOptions({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await styleChecksGetStyleCheckBatch({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: styleChecksGetStyleCheckBatchQueryKey(options),
-  });
-};
 
 /**
  * Create Style Suggestion
@@ -379,8 +340,13 @@ export const styleSuggestionsGetStyleSuggestionQueryKey = (
  */
 export const styleSuggestionsGetStyleSuggestionOptions = (
   options: Options<StyleSuggestionsGetStyleSuggestionData>,
-) => {
-  return queryOptions({
+) =>
+  queryOptions<
+    StyleSuggestionsGetStyleSuggestionResponse,
+    StyleSuggestionsGetStyleSuggestionError,
+    StyleSuggestionsGetStyleSuggestionResponse,
+    ReturnType<typeof styleSuggestionsGetStyleSuggestionQueryKey>
+  >({
     queryFn: async ({ queryKey, signal }) => {
       const { data } = await styleSuggestionsGetStyleSuggestion({
         ...options,
@@ -392,62 +358,6 @@ export const styleSuggestionsGetStyleSuggestionOptions = (
     },
     queryKey: styleSuggestionsGetStyleSuggestionQueryKey(options),
   });
-};
-
-/**
- * Create Style Suggestion Batch
- *
- * Get suggested corrections for text in multiple files.
- */
-export const styleSuggestionsCreateStyleSuggestionBatchMutation = (
-  options?: Partial<Options<StyleSuggestionsCreateStyleSuggestionBatchData>>,
-): UseMutationOptions<
-  StyleSuggestionsCreateStyleSuggestionBatchResponse,
-  StyleSuggestionsCreateStyleSuggestionBatchError,
-  Options<StyleSuggestionsCreateStyleSuggestionBatchData>
-> => {
-  const mutationOptions: UseMutationOptions<
-    StyleSuggestionsCreateStyleSuggestionBatchResponse,
-    StyleSuggestionsCreateStyleSuggestionBatchError,
-    Options<StyleSuggestionsCreateStyleSuggestionBatchData>
-  > = {
-    mutationFn: async (fnOptions) => {
-      const { data } = await styleSuggestionsCreateStyleSuggestionBatch({
-        ...options,
-        ...fnOptions,
-        throwOnError: true,
-      });
-      return data;
-    },
-  };
-  return mutationOptions;
-};
-
-export const styleSuggestionsGetStyleSuggestionBatchQueryKey = (
-  options: Options<StyleSuggestionsGetStyleSuggestionBatchData>,
-) => createQueryKey("styleSuggestionsGetStyleSuggestionBatch", options);
-
-/**
- * Get Style Suggestion Batch
- *
- * Retrieve batch style suggestion results.
- */
-export const styleSuggestionsGetStyleSuggestionBatchOptions = (
-  options: Options<StyleSuggestionsGetStyleSuggestionBatchData>,
-) => {
-  return queryOptions({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await styleSuggestionsGetStyleSuggestionBatch({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: styleSuggestionsGetStyleSuggestionBatchQueryKey(options),
-  });
-};
 
 /**
  * Create Style Rewrite
@@ -489,8 +399,13 @@ export const styleRewritesGetStyleRewriteQueryKey = (
  */
 export const styleRewritesGetStyleRewriteOptions = (
   options: Options<StyleRewritesGetStyleRewriteData>,
-) => {
-  return queryOptions({
+) =>
+  queryOptions<
+    StyleRewritesGetStyleRewriteResponse,
+    StyleRewritesGetStyleRewriteError,
+    StyleRewritesGetStyleRewriteResponse,
+    ReturnType<typeof styleRewritesGetStyleRewriteQueryKey>
+  >({
     queryFn: async ({ queryKey, signal }) => {
       const { data } = await styleRewritesGetStyleRewrite({
         ...options,
@@ -502,7 +417,6 @@ export const styleRewritesGetStyleRewriteOptions = (
     },
     queryKey: styleRewritesGetStyleRewriteQueryKey(options),
   });
-};
 
 export const getAdminConstantsQueryKey = (options?: Options<GetAdminConstantsData>) =>
   createQueryKey("getAdminConstants", options);
@@ -510,8 +424,13 @@ export const getAdminConstantsQueryKey = (options?: Options<GetAdminConstantsDat
 /**
  * Get Admin Constants
  */
-export const getAdminConstantsOptions = (options?: Options<GetAdminConstantsData>) => {
-  return queryOptions({
+export const getAdminConstantsOptions = (options?: Options<GetAdminConstantsData>) =>
+  queryOptions<
+    GetAdminConstantsResponse,
+    GetAdminConstantsError,
+    GetAdminConstantsResponse,
+    ReturnType<typeof getAdminConstantsQueryKey>
+  >({
     queryFn: async ({ queryKey, signal }) => {
       const { data } = await getAdminConstants({
         ...options,
@@ -523,4 +442,30 @@ export const getAdminConstantsOptions = (options?: Options<GetAdminConstantsData
     },
     queryKey: getAdminConstantsQueryKey(options),
   });
+
+/**
+ * Submit Feedback
+ */
+export const internalSubmitFeedbackMutation = (
+  options?: Partial<Options<InternalSubmitFeedbackData>>,
+): UseMutationOptions<
+  InternalSubmitFeedbackResponse,
+  InternalSubmitFeedbackError,
+  Options<InternalSubmitFeedbackData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    InternalSubmitFeedbackResponse,
+    InternalSubmitFeedbackError,
+    Options<InternalSubmitFeedbackData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await internalSubmitFeedback({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
 };

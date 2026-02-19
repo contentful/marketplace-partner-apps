@@ -6,17 +6,21 @@ export default defineConfig({
   base: "",
   build: {
     outDir: "build",
-    chunkSizeWarningLimit: 1200,
+    // Increased limit since we're not splitting chunks
+    chunkSizeWarningLimit: 3800,
+    // Ensure CommonJS modules are properly converted
+    // This is required for @contentful/field-editor-shared which uses require()
+    commonjsOptions: {
+      include: [/node_modules/],
+      transformMixedEsModules: true,
+      requireReturnsDefault: "auto",
+      ignoreDynamicRequires: false,
+    },
     rollupOptions: {
       output: {
-        manualChunks: {
-          react: ["react", "react-dom"],
-          contentful: [
-            "@contentful/app-sdk",
-            "@contentful/react-apps-toolkit",
-            "@contentful/f36-components",
-          ],
-        },
+        // Don't use manual chunks - let Vite handle chunking naturally
+        // This ensures React and react-query are available in the correct load order
+        manualChunks: undefined,
       },
     },
   },

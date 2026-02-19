@@ -192,6 +192,87 @@ export function AuthProvider({ children }: Readonly<AuthProviderProps>) {
     setAuthError,
   ]);
 
+  // Listen for storage events to detect auth changes from other locations (e.g., Dialog, Config)
+  // This handles the case when user logs in/out from another Contentful location
+  useEffect(() => {
+    let checkingAuth = false;
+
+    const checkAuthState = async () => {
+      const auth0Client = auth0Ref.current;
+      if (!auth0Client || checkingAuth) return;
+      checkingAuth = true;
+
+      try {
+        const currentApiKey = getUserSettings().apiKey;
+        const nowAuthenticated = await auth0Client.isAuthenticated();
+
+        setState((prevState) => {
+          const wasAuthenticated = prevState.isAuthenticated;
+
+          if (nowAuthenticated && !wasAuthenticated) {
+            // User logged in from another location - trigger session restore
+            void restoreSession(auth0Client, true);
+          } else if (!nowAuthenticated && wasAuthenticated) {
+            // User logged out from another location - clear state
+            return {
+              isLoading: false,
+              isAuthenticated: false,
+              user: null,
+              token: null,
+              error: null,
+            };
+          } else if (nowAuthenticated && !currentApiKey) {
+            // Session exists but API key was cleared - restore it
+            void restoreSession(auth0Client, true);
+          }
+          return prevState;
+        });
+      } catch {
+        // Ignore errors from auth check
+      } finally {
+        checkingAuth = false;
+      }
+    };
+
+    // Wrap checkAuthState to use as event handler
+    const handleStorageEvent = () => {
+      void checkAuthState();
+    };
+
+    // Listen for storage events (triggered when localStorage changes from another tab/iframe)
+    globalThis.addEventListener("storage", handleStorageEvent);
+
+    // Also check on visibility change (when tab/iframe becomes visible again)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        void checkAuthState();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    // Check on window focus (useful for embedded iframes)
+    const handleFocus = () => {
+      void checkAuthState();
+    };
+    globalThis.addEventListener("focus", handleFocus);
+
+    // Fallback periodic check every 30 seconds as a safety net for edge cases
+    // in Contentful's iframe-based architecture. Only check when document is visible
+    // to minimize CPU/network overhead.
+    const intervalId = globalThis.setInterval(() => {
+      if (document.visibilityState === "visible") {
+        void checkAuthState();
+      }
+    }, 30000);
+
+    return () => {
+      globalThis.removeEventListener("storage", handleStorageEvent);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      globalThis.removeEventListener("focus", handleFocus);
+      globalThis.clearInterval(intervalId);
+    };
+  }, [restoreSession]);
+
   const loginWithPopup = useCallback(async (options?: PopupLoginOptions) => {
     if (!auth0Ref.current) {
       throw new Error("Authentication is not configured");

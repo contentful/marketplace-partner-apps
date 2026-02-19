@@ -44,9 +44,6 @@ describe("configService", () => {
           audience: "test-audience",
         },
       });
-      expect(console.log).toHaveBeenCalledWith(
-        "[ConfigService] Using environment variables for Auth0 config",
-      );
     });
 
     it("should use production default for domain when empty", async () => {

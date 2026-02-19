@@ -2,8 +2,6 @@
 
 A Contentful app that integrates Markup AI's content quality checking capabilities into the Contentful platform.
 
-The app can be installed from [marketplace](https://www.contentful.com/marketplace/markup-ai/)
-
 ## Setup
 
 1. Install dependencies:
@@ -21,6 +19,18 @@ npm run dev
 ```
 
 The app will be available at `http://localhost:3000`
+
+### SSO configuration
+
+To enable SSO popup login using Auth0, set the following variables (e.g., in `.env.local`):
+
+```
+VITE_AUTH0_DOMAIN=your-tenant.auth0.com
+VITE_AUTH0_CLIENT_ID=...
+VITE_AUTH0_AUDIENCE=https://api.markup.ai
+```
+
+If these are not set, the app falls back to using the Contentful installation API key when present, and otherwise will prompt the user to sign in from the sidebar settings.
 
 ### Selecting Markup AI environment in local dev
 
@@ -71,4 +81,4 @@ DO NOT EDIT THESE FILES DIRECTLY. Instead, with your local dev server running, r
 
 ## License
 
-This project is licensed under the Apache-2.0 License - see the LICENSE file for details.
+This project is licensed under the Apache-2.0 License, see the [LICENSE](LICENSE) file for details.
