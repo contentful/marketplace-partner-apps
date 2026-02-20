@@ -68,10 +68,20 @@ const FIELD_SELECTION = `
 
 const validAssetTypes = ['image', 'audio', 'document', 'video'];
 
-function makeThumbnail(resource) {
+function makeThumbnail(resource, config) {
+  const urlMetapropertyName = config?.urlMetapropertyName;
+  if (urlMetapropertyName) {
+    const metaprop = (resource.textMetaproperties || []).find(
+      (p) => typeof p === 'object' && p.name === urlMetapropertyName
+    );
+    if (metaprop?.value) {
+      return [metaprop.value, `${resource.name} - ${resource.id}`];
+    }
+  }
+
   // Try thumbnail sources in order of preference
   // Use the original image if no other thumbnails are avilable
-  const thumbnail = resource.thumbnails?.thul || resource.thumbnails?.webimage || resource.src || resource.original;
+  const thumbnail = resource.src || resource.thumbnails?.thul || resource.thumbnails?.webimage || resource.original;
 
   const url = typeof thumbnail === 'string' ? thumbnail : undefined;
   const alt = `${resource.name} - ${resource.id}`;
@@ -87,7 +97,7 @@ function prepareBynderHTML() {
   `;
 }
 
-function transformAsset(asset, selected) {
+function transformAsset(asset, selected, urlMetapropertyName) {
   const thumbnails = {
     webimage: asset.files.webImage?.url,
     thul: asset.files.thumbnail?.url,
@@ -96,6 +106,15 @@ function transformAsset(asset, selected) {
   Object.entries(asset.files)
     .filter(([name]) => !['webimage', 'thumbnail'].includes(name.toLowerCase()))
     .forEach(([key, value]) => (thumbnails[key] = value?.url));
+
+  let resolvedUrl = asset.originalUrl;
+  if (urlMetapropertyName) {
+    const metaprop = (asset.textMetaproperties || []).find((p) => p.name === urlMetapropertyName);
+    if (metaprop?.value) {
+      resolvedUrl = metaprop.value;
+    }
+  }
+  console.log('[Bynder] resolvedUrl:', resolvedUrl);
 
   return {
     id: asset.databaseId,
@@ -118,7 +137,7 @@ function transformAsset(asset, selected) {
     isPublic: asset.isPublic ? 1 : 0,
     brandId: asset.brandId,
     thumbnails,
-    original: asset.originalUrl,
+    original: resolvedUrl,
     videoPreviewURLs: asset.previewUrls || [],
     textMetaproperties: asset.textMetaproperties || [],
     tags: asset.tags,
@@ -134,7 +153,7 @@ function checkMessageEvent(e) {
 
 function renderDialog(sdk) {
   const config = sdk.parameters.invocation;
-  const { assetTypes, bynderURL, compactViewMode, modeOverrideFields } = config;
+  const { assetTypes, bynderURL, compactViewMode, modeOverrideFields, urlMetapropertyName } = config;
 
   // --- Bynder Mode Override Logic ---
   // 1. Parse override field list (comma-separated, trimmed)
@@ -177,7 +196,7 @@ function renderDialog(sdk) {
   window.addEventListener('message', checkMessageEvent);
 
   function onSuccess(assets, selected) {
-    sdk.close(Array.isArray(assets) ? assets.map((asset) => transformAsset(asset, selected)) : []);
+    sdk.close(Array.isArray(assets) ? assets.map((asset) => transformAsset(asset, selected, urlMetapropertyName)) : []);
     window.removeEventListener('message', checkMessageEvent);
   }
 
@@ -225,7 +244,9 @@ async function openDialog(sdk, _currentValue, config) {
 
   return result.map((item) => ({
     ...pick(item, FIELDS_TO_PERSIST),
-    src: item.thumbnails && item.thumbnails.webimage,
+    src: config.urlMetapropertyName
+      ? (item.original || (item.thumbnails && item.thumbnails.webimage))
+      : (item.thumbnails && item.thumbnails.webimage),
   }));
 }
 
@@ -333,6 +354,13 @@ setup({
       type: 'Symbol',
       name: 'Bynder Client Secret',
       description: 'The OAuth2 client secret for Bynder API access (required for external references and asset tracker).',
+      required: false,
+    },
+    {
+      id: 'urlMetapropertyName',
+      type: 'Symbol',
+      name: 'URL Metaproperty Name',
+      description: 'Name of a Bynder text metaproperty whose value will be used as the asset URL, overriding the default original URL.',
       required: false,
     },
   ],
