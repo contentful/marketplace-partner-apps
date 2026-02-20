@@ -61,7 +61,7 @@ export const FieldCheckCard: React.FC<FieldCheckCardProps> = ({
       width: 600,
       title: "More Details",
       parameters: {
-        checkResponse: JSON.parse(JSON.stringify(checkResponse)) as typeof checkResponse,
+        checkResponse: structuredClone(checkResponse),
       },
     });
   };

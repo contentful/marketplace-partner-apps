@@ -10,7 +10,7 @@ import {
 } from "@contentful/f36-components";
 import styled from "@emotion/styled";
 import { useApiService } from "../../hooks/useApiService";
-import { DEFAULTS } from "../../utils/userSettings";
+import { DEFAULTS, TONE_NONE } from "../../utils/userSettings";
 
 const Wrapper = styled.div`
   padding: 5px;
@@ -89,7 +89,7 @@ export const StyleSettings: React.FC<StyleSettingsProps> = ({
     return (
       <Wrapper>
         <Note variant="negative" title="Error">
-          {error.message}
+          {error instanceof Error ? error.message : "Failed to load configuration"}
         </Note>
       </Wrapper>
     );
@@ -142,12 +142,14 @@ export const StyleSettings: React.FC<StyleSettingsProps> = ({
         <FormControl>
           <FormControl.Label>Tone</FormControl.Label>
           <Select
-            value={tone || ""}
+            value={tone ?? ""}
             onChange={(e) => {
+              // Empty string means "use default", convert to null
               onToneChange(e.target.value || null);
             }}
           >
-            <Select.Option value="">None</Select.Option>
+            <Select.Option value="">Default</Select.Option>
+            <Select.Option value={TONE_NONE}>None</Select.Option>
             {toneOptions.map((t) => (
               <Select.Option key={t} value={t}>
                 {t}

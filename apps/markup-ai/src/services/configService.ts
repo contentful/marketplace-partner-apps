@@ -19,28 +19,19 @@ export interface AppConfig {
  * For now, uses environment variables as fallback since API is not live yet
  * @returns Promise<AppConfig> - The application configuration
  */
-// eslint-disable-next-line @typescript-eslint/require-await
-export async function fetchAppConfig(): Promise<AppConfig> {
-  try {
-    // Use environment variables with production defaults as fallback
-    const domain = String(import.meta.env.VITE_AUTH0_DOMAIN || AUTH0_PROD_DEFAULTS.domain);
-    const clientId = String(import.meta.env.VITE_AUTH0_CLIENT_ID || AUTH0_PROD_DEFAULTS.clientId);
-    const audience = String(import.meta.env.VITE_AUTH0_AUDIENCE || AUTH0_PROD_DEFAULTS.audience);
+export function fetchAppConfig(): Promise<AppConfig> {
+  // Use environment variables with production defaults as fallback
+  const domain = String(import.meta.env.VITE_AUTH0_DOMAIN || AUTH0_PROD_DEFAULTS.domain);
+  const clientId = String(import.meta.env.VITE_AUTH0_CLIENT_ID || AUTH0_PROD_DEFAULTS.clientId);
+  const audience = String(import.meta.env.VITE_AUTH0_AUDIENCE || AUTH0_PROD_DEFAULTS.audience);
 
-    const config: AppConfig = {
-      auth0: {
-        domain,
-        clientId,
-        audience,
-      },
-    };
-
-    console.log("[ConfigService] Using environment variables for Auth0 config");
-    return config;
-  } catch (error) {
-    console.error("[ConfigService] Failed to fetch app config:", error);
-    throw error instanceof Error ? error : new Error(String(error));
-  }
+  return Promise.resolve({
+    auth0: {
+      domain,
+      clientId,
+      audience,
+    },
+  });
 }
 
 /**
