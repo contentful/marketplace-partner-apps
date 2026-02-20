@@ -7,7 +7,6 @@ import React, { useState, useMemo, useCallback, useRef, useEffect } from "react"
 import { Button, IconButton, Spinner, Popover, Select, Checkbox } from "@contentful/f36-components";
 import {
   GearSixIcon,
-  SparkleIcon,
   ListBulletsIcon,
   CheckCircleIcon,
   MinusCircleIcon,
@@ -744,13 +743,7 @@ export const SuggestionsSidebar: React.FC<SuggestionsSidebarProps> = ({
               )}
             </RiskDetails>
           </RiskInfoSection>
-          <CheckButton
-            variant="primary"
-            size="small"
-            startIcon={<SparkleIcon />}
-            onClick={onCheck}
-            isDisabled={isLoading}
-          >
+          <CheckButton variant="primary" size="small" onClick={onCheck} isDisabled={isLoading}>
             Check
           </CheckButton>
         </ScoreSection>
