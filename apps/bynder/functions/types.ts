@@ -44,7 +44,7 @@ export interface Asset {
   watermarked?: boolean;
   thumbnails?: any;
   videoPreviewURLs?: string[];
-  textMetaproperties?: string[];
+  textMetaproperties?: Array<{ name: string; value: string; [key: string]: any } | string>;
   userCreated?: string;
   activeOriginalFocusPoint?: any;
   dateCreated: string;

@@ -158,7 +158,7 @@ const schema = createSchema({
         _context: BynderFunctionEventContext,
       ) => {
         const { bynderAccessToken } = _context;
-        const { bynderURL } = _context.appInstallationParameters;
+        const { bynderURL, urlMetapropertyName } = _context.appInstallationParameters;
         const assetId = originalAsset.id ?? null;
         // Preliminary checks on the passed data.
         if (assetId === null) {
@@ -178,7 +178,7 @@ const schema = createSchema({
           assetId,
         );
         if (response.status === 200) {
-          return convertToGraphQLType(response.data);
+          return convertToGraphQLType(response.data, urlMetapropertyName);
         }
         if (response.status === 404) {
           throw new GraphQLError(
@@ -206,16 +206,27 @@ const schema = createSchema({
  * @returns Asset
  *  Transformed Asset.
  */
-const convertToGraphQLType = (rawAsset: any): Asset => {
+const convertToGraphQLType = (rawAsset: any, urlMetapropertyName?: string): Asset => {
   // Fetch the webimage
   const thumbnails =
     typeof rawAsset["thumbnails"] === "string"
       ? JSON.parse(rawAsset["thumbnails"])
       : (rawAsset["thumbnails"] ?? {});
 
+  let original = rawAsset["original"];
+  if (urlMetapropertyName && Array.isArray(rawAsset["textMetaproperties"])) {
+    const metaprop = rawAsset["textMetaproperties"].find(
+      (p: any) => typeof p === "object" && p.name === urlMetapropertyName,
+    );
+    if (metaprop?.value) {
+      original = metaprop.value;
+    }
+  }
+
   // GraphQL schema doesn't accept hyphens (-), hence this basic transformation of this asset key.
   return {
     ...rawAsset,
+    original,
     src: thumbnails["webimage"] ?? "",
     property_Asset_SubType: rawAsset["property_Asset_Sub-Type"] ?? null,
   };
