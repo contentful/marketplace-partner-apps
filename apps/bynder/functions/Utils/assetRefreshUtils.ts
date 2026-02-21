@@ -1,7 +1,7 @@
-import { Asset } from "../types";
-import { getAsset, getBynderAccessToken } from "./bynderUtils";
-import { BynderAuthConfig } from "../types";
-import { transformAsset } from "../../utils/transformAsset";
+import { Asset } from '../types';
+import { getAsset, getBynderAccessToken } from './bynderUtils';
+import { BynderAuthConfig } from '../types';
+import { transformAsset } from '../../utils/transformAsset';
 
 /**
  * Transform Bynder API response to match the format stored in Contentful
@@ -11,10 +11,7 @@ import { transformAsset } from "../../utils/transformAsset";
  * @param existingAsset - Existing asset data from Contentful (to preserve selectedFile)
  * @returns Transformed asset data matching Contentful storage format
  */
-export function transformApiAssetToStoredFormat(
-  apiAsset: any,
-  existingAsset?: any
-): any {
+export function transformApiAssetToStoredFormat(apiAsset: any, existingAsset?: any): any {
   return transformAsset(apiAsset, {
     existingAsset,
     filterFields: true, // Filter to FIELDS_TO_PERSIST only
@@ -23,22 +20,17 @@ export function transformApiAssetToStoredFormat(
 }
 
 /**
- * Refresh a single Bynder asset by fetching latest data from API
+ * Refresh a single Bynder asset by fetching latest data from API.
+ * The caller must pass the ID already in Bynder media-id format
+ * (8-4-4-16 uppercase, via resolveBynderAssetIdForApi / toBynderMediaId).
  *
  * @param config - Bynder authentication configuration
- * @param assetId - The Bynder asset ID to refresh
+ * @param assetId - The Bynder asset ID to refresh (Bynder format)
  * @param existingAsset - Existing asset data (to preserve selectedFile)
  * @returns Refreshed asset data or null if refresh failed
  */
-export async function refreshSingleAsset(
-  config: BynderAuthConfig,
-  assetId: string,
-  existingAsset?: any
-): Promise<any | null> {
+export async function refreshSingleAsset(config: BynderAuthConfig, assetId: string, existingAsset?: any): Promise<any | null> {
   try {
-    // Log the asset ID being used for debugging
-    console.log(`Refreshing asset with ID: ${assetId} (from Contentful: ${existingAsset?.id || 'N/A'})`);
-    
     const accessToken = await getBynderAccessToken(config);
     const response = await getAsset(config.bynderURL, accessToken, assetId);
 
@@ -46,20 +38,8 @@ export async function refreshSingleAsset(
       return transformApiAssetToStoredFormat(response.data as Asset, existingAsset);
     }
 
-    // Log more details for debugging
-    const errorMessage = response.error 
-      ? `Error: ${JSON.stringify(response.error)}` 
-      : `Status ${response.status}`;
-    console.error(`Failed to refresh asset ${assetId}: ${errorMessage}`);
-    
-    // If 404, the asset might not exist in Bynder or the ID format is wrong
-    if (response.status === 404) {
-      console.error(`Asset ${assetId} not found in Bynder API.`);
-      console.error(`  - Asset ID used: ${assetId}`);
-      console.error(`  - Original asset from Contentful:`, JSON.stringify(existingAsset, null, 2));
-      console.error(`  - Bynder URL: ${config.bynderURL}`);
-    }
-    
+    const detail = response.error ? `Error: ${JSON.stringify(response.error)}` : `Status ${response.status}`;
+    console.error(`Failed to refresh asset ${assetId}: ${detail}`);
     return null;
   } catch (error) {
     console.error(`Error refreshing asset ${assetId}:`, error);
@@ -81,19 +61,14 @@ export async function refreshMultipleAssets(
   const refreshedAssets = new Map<string, any>();
 
   // Refresh all assets in parallel
-  const refreshPromises = Array.from(assetMap.entries()).map(
-    async ([normalizedId, { originalId, existingAsset }]) => {
-      // Use the original ID when calling Bynder API (not normalized)
-      const refreshed = await refreshSingleAsset(config, originalId, existingAsset);
-      if (refreshed) {
-        // Store using normalized ID as key for consistency
-        refreshedAssets.set(normalizedId.toLowerCase(), refreshed);
-      } else {
-        console.error(`Failed to refresh asset ${originalId} (normalized: ${normalizedId}): Status 404`);
-      }
-      return { normalizedId, originalId, refreshed };
+  const refreshPromises = Array.from(assetMap.entries()).map(async ([normalizedId, { originalId, existingAsset }]) => {
+    // Use the original ID when calling Bynder API (not normalized)
+    const refreshed = await refreshSingleAsset(config, originalId, existingAsset);
+    if (refreshed) {
+      refreshedAssets.set(normalizedId.toLowerCase(), refreshed);
     }
-  );
+    return { normalizedId, originalId, refreshed };
+  });
 
   await Promise.allSettled(refreshPromises);
 

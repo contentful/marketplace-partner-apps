@@ -1,12 +1,7 @@
-import { createClient, CollectionProp, LocaleProps } from "contentful-management";
-import {
-  normalizeAssetId,
-  isBynderAsset,
-} from "./Utils/bynderUtils";
-import {
-  refreshMultipleAssets,
-} from "./Utils/assetRefreshUtils";
-import { BynderAuthConfig } from "./types";
+import { createClient, CollectionProp, LocaleProps } from 'contentful-management';
+import { normalizeAssetId, resolveBynderAssetIdForApi, isBynderAsset, getBynderAccessToken, probeMediaApiHost } from './Utils/bynderUtils';
+import { refreshMultipleAssets } from './Utils/assetRefreshUtils';
+import { BynderAuthConfig } from './types';
 
 /**
  * Extract assets from a field value (handles arrays and single objects)
@@ -30,12 +25,7 @@ function extractAssetsFromValue(value: any): Array<{ asset: any; index?: number 
 /**
  * Replace asset in array or single value
  */
-function replaceAssetInValue(
-  value: any,
-  assetId: string,
-  refreshedAsset: any,
-  index?: number
-): any {
+function replaceAssetInValue(value: any, assetId: string, refreshedAsset: any, index?: number): any {
   if (Array.isArray(value)) {
     if (index !== undefined && index >= 0 && index < value.length) {
       const newValue = [...value];
@@ -43,11 +33,7 @@ function replaceAssetInValue(
       return newValue;
     }
     // If no index, find and replace by ID
-    return value.map((item) =>
-      normalizeAssetId(item?.id) === normalizeAssetId(assetId)
-        ? refreshedAsset
-        : item
-    );
+    return value.map((item) => (normalizeAssetId(item?.id) === normalizeAssetId(assetId) ? refreshedAsset : item));
   }
   return refreshedAsset;
 }
@@ -71,13 +57,24 @@ async function refreshFieldAssetsForAllLocales(
   entryId: string,
   fieldId: string,
   config: BynderAuthConfig,
-  locales: CollectionProp<LocaleProps>,
-  syncIsPublic: boolean = true
+  locales: CollectionProp<LocaleProps>
 ): Promise<{ success: boolean; refreshedCount: number; errors: string[] }> {
   const errors: string[] = [];
-  let refreshedCount = 0;
 
   try {
+    // Probe whether the configured URL serves the v4 media API (avoids generic 404s when portal URL is used)
+    const token = await getBynderAccessToken(config);
+    const probe = await probeMediaApiHost(config.bynderURL, token);
+    if (!probe.ok) {
+      return {
+        success: false,
+        refreshedCount: 0,
+        errors: [
+          `The configured Bynder URL does not appear to serve the v4 media API (GET /api/v4/media/ returned ${probe.status}). Use your instance's API host, not the portal URL. Check the Bynder UI Network tab or ask Bynder for the correct API base URL.`,
+        ],
+      };
+    }
+
     // Get the entry
     const entry = await cma.entry.get({
       spaceId,
@@ -120,11 +117,11 @@ async function refreshFieldAssetsForAllLocales(
 
     // Refresh all assets from Bynder API
     // Map: normalizedId -> { originalId, existingAsset }
+    // originalId must be the ID Bynder API expects (resolve base64-wrapped "Asset_id <uuid>" etc.)
     const assetsToRefresh = new Map<string, { originalId: string; existingAsset: any }>();
     assetMap.forEach((occurrences, normalizedId) => {
-      // Use the first occurrence as the existing asset data
-      // Get the original ID from the asset object (before normalization)
-      const originalId = occurrences[0].asset?.id || normalizedId;
+      const storedId = occurrences[0].asset?.id || normalizedId;
+      const originalId = resolveBynderAssetIdForApi(String(storedId));
       assetsToRefresh.set(normalizedId, {
         originalId,
         existingAsset: occurrences[0].asset,
@@ -137,30 +134,8 @@ async function refreshFieldAssetsForAllLocales(
       return {
         success: false,
         refreshedCount: 0,
-        errors: ["Failed to refresh any assets from Bynder API"],
+        errors: ['Failed to refresh any assets from Bynder API. The assets may have been deleted or the configured credentials may lack the asset:read scope.'],
       };
-    }
-
-    // If syncing isPublic, determine the value to use for all locales
-    // Use the most permissive value (1 if any locale has 1, otherwise use the refreshed value)
-    if (syncIsPublic) {
-      refreshedAssets.forEach((refreshedAsset, assetId) => {
-        // Check all locales for this asset to find the most permissive isPublic value
-        let maxIsPublic = refreshedAsset.isPublic || 0;
-        assetMap.get(assetId)?.forEach(({ asset }) => {
-          if (asset?.isPublic === 1) {
-            maxIsPublic = 1;
-          }
-        });
-        
-        // If the refreshed asset from Bynder is public, use that; otherwise use max from existing locales
-        if (refreshedAsset.isPublic === 1) {
-          maxIsPublic = 1;
-        }
-        
-        // Normalize to use the most permissive value
-        refreshedAsset.isPublic = maxIsPublic;
-      });
     }
 
     // Update field values for all locales
@@ -182,37 +157,26 @@ async function refreshFieldAssetsForAllLocales(
         // Find occurrences for this locale
         const localeOccurrences = occurrences.filter((occ) => occ.locale === locale.code);
         for (const { index } of localeOccurrences) {
-          updatedValue = replaceAssetInValue(
-            updatedValue,
-            normalizedId,
-            refreshedAsset,
-            index
-          );
+          updatedValue = replaceAssetInValue(updatedValue, normalizedId, refreshedAsset, index);
         }
       });
 
-      // Update the entry field for this locale
-      if (!entry.fields[fieldId]) {
-        entry.fields[fieldId] = {};
-      }
       entry.fields[fieldId][locale.code] = updatedValue;
-      refreshedCount += refreshedAssets.size;
     }
 
-    // Save the updated entry
     await cma.entry.update({ entryId }, entry);
 
     return {
       success: true,
-      refreshedCount,
+      refreshedCount: refreshedAssets.size,
       errors: [],
     };
   } catch (error: any) {
-    console.error("Error refreshing assets:", error);
+    console.error('Error refreshing assets:', error);
     errors.push(error.message || String(error));
     return {
       success: false,
-      refreshedCount,
+      refreshedCount: 0,
       errors,
     };
   }
@@ -223,9 +187,7 @@ async function refreshFieldAssetsForAllLocales(
  */
 function initContentfulManagementClient(context: any) {
   if (!context.cmaClientOptions) {
-    throw new Error(
-      'Contentful Management API client options are only provided for certain function types.'
-    );
+    throw new Error('Contentful Management API client options are only provided for certain function types.');
   }
   return createClient(context.cmaClientOptions, {
     type: 'plain',
@@ -249,12 +211,12 @@ function initContentfulManagementClient(context: any) {
 export const handler = async (event: any, context: any) => {
   try {
     // Extract parameters from event body (App Actions pass parameters in body)
-    const { entryId, fieldId, syncIsPublicAcrossLocales } = event.body || event.payload || {};
+    const { entryId, fieldId } = event.body || event.payload || {};
 
     if (!entryId || !fieldId) {
       return {
         success: false,
-        error: "entryId and fieldId are required",
+        error: 'entryId and fieldId are required',
         timestamp: new Date().toISOString(),
       };
     }
@@ -263,17 +225,13 @@ export const handler = async (event: any, context: any) => {
     const targetEnvironmentId = context.environmentId;
 
     // Get Bynder configuration
-    const { bynderURL, clientId, clientSecret } =
-      context.appInstallationParameters || {};
+    const { bynderURL, clientId, clientSecret } = context.appInstallationParameters || {};
 
     if (!bynderURL || !clientId || !clientSecret) {
       return {
-        statusCode: 400,
-        body: JSON.stringify({
-          success: false,
-          error:
-            "Bynder configuration is missing. Please configure Bynder URL, Client ID, and Client Secret in the app installation settings.",
-        }),
+        success: false,
+        error: 'Bynder configuration is missing. Please configure Bynder URL, Client ID, and Client Secret in the app installation settings.',
+        timestamp: new Date().toISOString(),
       };
     }
 
@@ -290,17 +248,7 @@ export const handler = async (event: any, context: any) => {
     const locales = await cma.locale.getMany({ spaceId: targetSpaceId, environmentId: targetEnvironmentId });
 
     // Refresh assets for all locales
-    const result = await refreshFieldAssetsForAllLocales(
-      cma,
-      targetSpaceId,
-      targetEnvironmentId,
-      entryId,
-      fieldId,
-      config,
-      locales,
-      syncIsPublicAcrossLocales
-    );
-
+    const result = await refreshFieldAssetsForAllLocales(cma, targetSpaceId, targetEnvironmentId, entryId, fieldId, config, locales);
 
     if (result.success) {
       return {
@@ -318,7 +266,7 @@ export const handler = async (event: any, context: any) => {
       };
     }
   } catch (error: any) {
-    console.error("Error in refresh-assets handler:", error);
+    console.error('Error in refresh-assets handler:', error);
     return {
       success: false,
       error: error.message || String(error),

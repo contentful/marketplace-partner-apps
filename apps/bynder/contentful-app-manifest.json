@@ -24,12 +24,9 @@
         {
             "id": "BynderRefreshAssets",
             "name": "Bynder - Refresh Assets for All Locales",
-            "description": "This function refreshes Bynder asset data for all locales in an entry field to ensure consistent metadata (e.g., isPublic flag).",
+            "description": "Fetches the latest asset metadata from Bynder and updates all locales in an entry field.",
             "path": "functions/refresh-assets.js",
             "entryFile": "functions/refresh-assets.ts",
-            "allowNetworks": [
-                "contentful.getbynder.com"
-            ],
             "accepts": [
                 "appaction.call"
             ]
@@ -57,7 +54,36 @@
                     "description": "The ID of the field containing Bynder assets to refresh",
                     "required": true
                 }
-            ]
+            ],
+            "parametersSchema": {
+                "type": "object",
+                "properties": {
+                    "entryId": {
+                        "type": "string",
+                        "description": "The ID of the entry containing Bynder assets"
+                    },
+                    "fieldId": {
+                        "type": "string",
+                        "description": "The ID of the field containing Bynder assets to refresh"
+                    }
+                },
+                "required": ["entryId", "fieldId"]
+            },
+            "resultSchema": {
+                "type": "object",
+                "properties": {
+                    "success": { "type": "boolean" },
+                    "refreshedCount": { "type": "number" },
+                    "message": { "type": "string" },
+                    "error": { "type": "string" },
+                    "errors": {
+                        "type": "array",
+                        "items": { "type": "string" }
+                    },
+                    "timestamp": { "type": "string", "format": "date-time" }
+                },
+                "required": ["success", "timestamp"]
+            }
         }
     ]
 }

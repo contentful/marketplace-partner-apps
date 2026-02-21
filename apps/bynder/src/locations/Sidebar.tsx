@@ -85,13 +85,7 @@ const Sidebar = () => {
 
     try {
       const entryId = sdk.entry.getSys().id;
-      const syncIsPublic = sdk.parameters.installation?.syncIsPublicAcrossLocales !== 'No';
-
-      // Call the App Action via signed request
-      // App Actions are invoked through Contentful's API with signed requests
       const appId = sdk.ids.app;
-      const spaceId = sdk.ids.space;
-      const environmentId = sdk.ids.environment;
 
       if (!appId) {
         throw new Error('App ID not found');
@@ -101,16 +95,26 @@ const Sidebar = () => {
         appDefinitionId: appId,
       });
 
-      const appAction = appActions.items.find((action) => action.name === 'refreshBynderAssets');
+      // Match by manifest action name (id in manifest is "refreshBynderAssets", name is "Refresh Bynder Assets for All Locales")
+      const appAction = appActions.items.find(
+        (action) =>
+          action.name === 'Refresh Bynder Assets for All Locales' ||
+          (action as { id?: string }).id === 'refreshBynderAssets'
+      );
+
+      if (!appAction?.sys?.id) {
+        throw new Error(
+          'Refresh Bynder Assets app action not found. Ensure the app is deployed with the latest bundle (including the refresh-assets function and actions in the manifest).'
+        );
+      }
 
       const appActionCallResponse = await sdk.cma.appActionCall.createWithResponse({
         appDefinitionId: appId,
-        appActionId: appAction?.sys.id,
+        appActionId: appAction.sys.id,
       }, {
         parameters: {
           entryId,
           fieldId,
-          syncIsPublicAcrossLocales: syncIsPublic,
         },
       });
 
@@ -122,11 +126,9 @@ const Sidebar = () => {
           message: `Successfully refreshed ${body.refreshedCount || 0} asset(s)`,
         });
         sdk.notifier.success('Assets refreshed successfully');
-        
-        // Reload the entry to show updated values
         window.location.reload();
       } else {
-        throw new Error(JSON.parse(appActionCallResponse.response.body).error || JSON.parse(appActionCallResponse.response.body).errors?.join(', ') || 'Failed to refresh assets');
+        throw new Error(body.error || body.errors?.join(', ') || 'Failed to refresh assets');
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to refresh assets';
@@ -155,7 +157,7 @@ const Sidebar = () => {
         Refresh Bynder Assets
       </Text>
       <Text fontSize="fontSizeS" fontColor="gray600">
-        Refresh asset metadata for all locales to ensure consistent data (e.g., isPublic flag).
+        Fetch the latest metadata from Bynder and update all locales for this entry.
       </Text>
 
       {bynderFields.map((fieldId) => {
