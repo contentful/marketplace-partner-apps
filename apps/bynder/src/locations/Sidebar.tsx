@@ -91,15 +91,12 @@ const Sidebar = () => {
         throw new Error('App ID not found');
       }
 
-      const appActions = await sdk.cma.appAction.getMany({
-        appDefinitionId: appId,
-      });
+      const appActions = await sdk.cma.appAction.getManyForEnvironment({});
 
-      // Match by manifest action name (id in manifest is "refreshBynderAssets", name is "Refresh Bynder Assets for All Locales")
       const appAction = appActions.items.find(
         (action) =>
-          action.name === 'Refresh Bynder Assets for All Locales' ||
-          (action as { id?: string }).id === 'refreshBynderAssets'
+          action.sys.appDefinition?.sys.id === appId &&
+          action.name === 'Refresh Bynder Assets for All Locales'
       );
 
       if (!appAction?.sys?.id) {
