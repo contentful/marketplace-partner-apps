@@ -11,7 +11,7 @@ import { transformAsset } from '../../utils/transformAsset';
  * @param existingAsset - Existing asset data from Contentful (to preserve selectedFile)
  * @returns Transformed asset data matching Contentful storage format
  */
-export function transformApiAssetToStoredFormat(apiAsset: any, existingAsset?: any): any {
+export function transformApiAssetToStoredFormat(apiAsset: Asset, existingAsset?: Asset): Asset {
   return transformAsset(apiAsset, {
     existingAsset,
     filterFields: true, // Filter to FIELDS_TO_PERSIST only
@@ -29,7 +29,7 @@ export function transformApiAssetToStoredFormat(apiAsset: any, existingAsset?: a
  * @param existingAsset - Existing asset data (to preserve selectedFile)
  * @returns Refreshed asset data or null if refresh failed
  */
-export async function refreshSingleAsset(config: BynderAuthConfig, assetId: string, existingAsset?: any): Promise<any | null> {
+export async function refreshSingleAsset(config: BynderAuthConfig, assetId: string, existingAsset?: Asset): Promise<Asset | null> {
   try {
     const accessToken = await getBynderAccessToken(config);
     const response = await getAsset(config.bynderURL, accessToken, assetId);
@@ -56,9 +56,9 @@ export async function refreshSingleAsset(config: BynderAuthConfig, assetId: stri
  */
 export async function refreshMultipleAssets(
   config: BynderAuthConfig,
-  assetMap: Map<string, { originalId: string; existingAsset: any }>
-): Promise<Map<string, any>> {
-  const refreshedAssets = new Map<string, any>();
+  assetMap: Map<string, { originalId: string; existingAsset: Asset }>
+): Promise<Map<string, Asset>> {
+  const refreshedAssets = new Map<string, Asset>();
 
   // Refresh all assets in parallel
   const refreshPromises = Array.from(assetMap.entries()).map(async ([normalizedId, { originalId, existingAsset }]) => {

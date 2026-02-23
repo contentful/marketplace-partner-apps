@@ -118,14 +118,23 @@ const Sidebar = () => {
 
       const body = JSON.parse(appActionCallResponse.response.body);
       if (body.success) {
+        const failedIds: string[] = body.failedIds ?? [];
+        const message =
+          failedIds.length > 0
+            ? `Refreshed ${body.refreshedCount ?? 0} asset(s). ${failedIds.length} could not be refreshed (deleted or inaccessible): ${failedIds.join(', ')}`
+            : `Successfully refreshed ${body.refreshedCount ?? 0} asset(s)`;
         setLastRefreshResult({
           success: true,
-          message: `Successfully refreshed ${body.refreshedCount || 0} asset(s)`,
+          message,
         });
-        sdk.notifier.success('Assets refreshed successfully');
+        sdk.notifier.success(failedIds.length > 0 ? message : 'Assets refreshed successfully');
         window.location.reload();
       } else {
-        throw new Error(body.error || body.errors?.join(', ') || 'Failed to refresh assets');
+        const failedIds: string[] = body.failedIds ?? [];
+        const errorMsg = body.error || body.errors?.join(', ') || 'Failed to refresh assets';
+        throw new Error(
+          failedIds.length > 0 ? `${errorMsg}. Failed asset IDs: ${failedIds.join(', ')}` : errorMsg
+        );
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to refresh assets';

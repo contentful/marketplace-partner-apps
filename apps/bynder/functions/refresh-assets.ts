@@ -1,7 +1,7 @@
-import { createClient, CollectionProp, LocaleProps } from 'contentful-management';
+import { createClient, PlainClientAPI, CollectionProp, LocaleProps } from 'contentful-management';
 import { normalizeAssetId, resolveBynderAssetIdForApi, isBynderAsset, getBynderAccessToken, probeMediaApiHost } from './Utils/bynderUtils';
 import { refreshMultipleAssets } from './Utils/assetRefreshUtils';
-import { BynderAuthConfig } from './types';
+import { Asset, BynderAuthConfig, BynderFunctionEventContext } from './types';
 
 /**
  * Extract assets from a field value (handles arrays and single objects)
@@ -51,14 +51,14 @@ function replaceAssetInValue(value: any, assetId: string, refreshedAsset: any, i
  * @returns Success status and details
  */
 async function refreshFieldAssetsForAllLocales(
-  cma: any,
+  cma: PlainClientAPI,
   spaceId: string,
   environmentId: string,
   entryId: string,
   fieldId: string,
   config: BynderAuthConfig,
   locales: CollectionProp<LocaleProps>
-): Promise<{ success: boolean; refreshedCount: number; errors: string[] }> {
+): Promise<{ success: boolean; refreshedCount: number; errors: string[]; failedIds: string[] }> {
   const errors: string[] = [];
 
   try {
@@ -72,6 +72,7 @@ async function refreshFieldAssetsForAllLocales(
         errors: [
           `The configured Bynder URL does not appear to serve the v4 media API (GET /api/v4/media/ returned ${probe.status}). Use your instance's API host, not the portal URL. Check the Bynder UI Network tab or ask Bynder for the correct API base URL.`,
         ],
+        failedIds: [],
       };
     }
 
@@ -87,6 +88,7 @@ async function refreshFieldAssetsForAllLocales(
         success: false,
         refreshedCount: 0,
         errors: [`Field ${fieldId} not found in entry`],
+        failedIds: [],
       };
     }
 
@@ -112,13 +114,14 @@ async function refreshFieldAssetsForAllLocales(
         success: true,
         refreshedCount: 0,
         errors: [],
+        failedIds: [],
       };
     }
 
     // Refresh all assets from Bynder API
     // Map: normalizedId -> { originalId, existingAsset }
     // originalId must be the ID Bynder API expects (resolve base64-wrapped "Asset_id <uuid>" etc.)
-    const assetsToRefresh = new Map<string, { originalId: string; existingAsset: any }>();
+    const assetsToRefresh = new Map<string, { originalId: string; existingAsset: Asset }>();
     assetMap.forEach((occurrences, normalizedId) => {
       const storedId = occurrences[0].asset?.id || normalizedId;
       const originalId = resolveBynderAssetIdForApi(String(storedId));
@@ -130,11 +133,17 @@ async function refreshFieldAssetsForAllLocales(
 
     const refreshedAssets = await refreshMultipleAssets(config, assetsToRefresh);
 
+    // IDs that were requested but could not be refreshed (e.g. deleted in Bynder, 403)
+    const requestedIds = Array.from(assetsToRefresh.keys());
+    const succeededIds = new Set(refreshedAssets.keys());
+    const failedIds = requestedIds.filter((id) => !succeededIds.has(id.toLowerCase()));
+
     if (refreshedAssets.size === 0) {
       return {
         success: false,
         refreshedCount: 0,
         errors: ['Failed to refresh any assets from Bynder API. The assets may have been deleted or the configured credentials may lack the asset:read scope.'],
+        failedIds,
       };
     }
 
@@ -170,6 +179,7 @@ async function refreshFieldAssetsForAllLocales(
       success: true,
       refreshedCount: refreshedAssets.size,
       errors: [],
+      failedIds,
     };
   } catch (error: any) {
     console.error('Error refreshing assets:', error);
@@ -178,6 +188,7 @@ async function refreshFieldAssetsForAllLocales(
       success: false,
       refreshedCount: 0,
       errors,
+      failedIds: [],
     };
   }
 }
@@ -185,7 +196,7 @@ async function refreshFieldAssetsForAllLocales(
 /**
  * Initialize Contentful Management Client
  */
-function initContentfulManagementClient(context: any) {
+function initContentfulManagementClient(context: BynderFunctionEventContext): PlainClientAPI {
   if (!context.cmaClientOptions) {
     throw new Error('Contentful Management API client options are only provided for certain function types.');
   }
@@ -208,7 +219,10 @@ function initContentfulManagementClient(context: any) {
  * - entryId: string (required) - The ID of the entry containing Bynder assets
  * - fieldId: string (required) - The ID of the field containing Bynder assets to refresh
  */
-export const handler = async (event: any, context: any) => {
+export const handler = async (
+  event: { body?: { entryId?: string; fieldId?: string }; payload?: { entryId?: string; fieldId?: string } },
+  context: BynderFunctionEventContext
+) => {
   try {
     // Extract parameters from event body (App Actions pass parameters in body)
     const { entryId, fieldId } = event.body || event.payload || {};
@@ -254,7 +268,12 @@ export const handler = async (event: any, context: any) => {
       return {
         success: true,
         refreshedCount: result.refreshedCount,
-        message: `Successfully refreshed ${result.refreshedCount} asset(s) for all locales`,
+        failedIds: result.failedIds,
+        message: result.failedIds.length
+          ? `Refreshed ${result.refreshedCount} asset(s). ${result.failedIds.length} could not be refreshed (deleted or inaccessible): ${result.failedIds.join(
+              ', '
+            )}`
+          : `Successfully refreshed ${result.refreshedCount} asset(s) for all locales`,
         timestamp: new Date().toISOString(),
       };
     } else {
@@ -262,6 +281,7 @@ export const handler = async (event: any, context: any) => {
         success: false,
         errors: result.errors,
         refreshedCount: result.refreshedCount,
+        failedIds: result.failedIds,
         timestamp: new Date().toISOString(),
       };
     }
