@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.0](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.3.2...bynder-assets-v1.4.0) (2026-02-24)
+
+
+### Features
+
+* adding refresh assets mechanism [ZEND-7539] ([#7746](https://github.com/contentful/marketplace-partner-apps/issues/7746)) ([49596c4](https://github.com/contentful/marketplace-partner-apps/commit/49596c4f0baf85ef51e4485715e651978644c515))
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.12.2 to 1.13.5 in /apps/bynder ([#7793](https://github.com/contentful/marketplace-partner-apps/issues/7793)) ([e4ba2b7](https://github.com/contentful/marketplace-partner-apps/commit/e4ba2b70b1b91eab3c16d183927b264b33538b8f))
+* **deps:** bump qs from 6.14.0 to 6.14.2 in /apps/bynder ([#7830](https://github.com/contentful/marketplace-partner-apps/issues/7830)) ([857bb71](https://github.com/contentful/marketplace-partner-apps/commit/857bb71dc60b743ac2284cf012270f5348b03942))
+
 ## [1.3.2](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.3.1...bynder-assets-v1.3.2) (2026-02-04)
 
 
