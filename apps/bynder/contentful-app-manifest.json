@@ -20,6 +20,70 @@
             "accepts": [
                 "appevent.handler"
             ]
+        },
+        {
+            "id": "BynderRefreshAssets",
+            "name": "Bynder - Refresh Assets for All Locales",
+            "description": "Fetches the latest asset metadata from Bynder and updates all locales in an entry field.",
+            "path": "functions/refresh-assets.js",
+            "entryFile": "functions/refresh-assets.ts",
+            "accepts": [
+                "appaction.call"
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "id": "refreshBynderAssets",
+            "name": "Refresh Bynder Assets for All Locales",
+            "type": "function-invocation",
+            "functionId": "BynderRefreshAssets",
+            "category": "Custom",
+            "parameters": [
+                {
+                    "id": "entryId",
+                    "type": "Symbol",
+                    "name": "Entry ID",
+                    "description": "The ID of the entry containing Bynder assets",
+                    "required": true
+                },
+                {
+                    "id": "fieldId",
+                    "type": "Symbol",
+                    "name": "Field ID",
+                    "description": "The ID of the field containing Bynder assets to refresh",
+                    "required": true
+                }
+            ],
+            "parametersSchema": {
+                "type": "object",
+                "properties": {
+                    "entryId": {
+                        "type": "string",
+                        "description": "The ID of the entry containing Bynder assets"
+                    },
+                    "fieldId": {
+                        "type": "string",
+                        "description": "The ID of the field containing Bynder assets to refresh"
+                    }
+                },
+                "required": ["entryId", "fieldId"]
+            },
+            "resultSchema": {
+                "type": "object",
+                "properties": {
+                    "success": { "type": "boolean" },
+                    "refreshedCount": { "type": "number" },
+                    "message": { "type": "string" },
+                    "error": { "type": "string" },
+                    "errors": {
+                        "type": "array",
+                        "items": { "type": "string" }
+                    },
+                    "timestamp": { "type": "string", "format": "date-time" }
+                },
+                "required": ["success", "timestamp"]
+            }
         }
     ]
 }
