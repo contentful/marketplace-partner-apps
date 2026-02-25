@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Stack } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -11,7 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 
 import { EditorConfigForm } from '@/components/EntryEditor/EditorConfigForm';
-import { Campaign, Project } from '@/types';
+import { Campaign, Project, ContentTypeResponse, ContentTypeField, EntryReference } from '@/types';
 import { getVariationsOptions } from '@/queries/getVariationsOptions';
 import { getMeQueryOptions } from '@/queries/getMeQueryOptions';
 import { getToken } from '@/utils/getToken';
@@ -28,13 +28,36 @@ const steps = ['Select experiment', 'Add content', 'Publish experimentation', 'S
 
 const Entry = () => {
   const sdk = useSDK<EditorAppSDK>();
-  const {
-    flagship_account: account,
-    flagship_env: env,
-    content_type: contentTypeAllowed,
-  } = sdk.parameters.installation;
+  const { flagship_account: account, flagship_env: env, content_types: contentTypesAllowedLegacy } = sdk.parameters.installation;
 
   const token = getToken() || '';
+
+  const [allContentTypes, setAllContentTypes] = useState<{id: string, name: string}[]>([]);
+
+  useEffect(() => {
+    const fetchCTs = async () => {
+      const { items } = await sdk.cma.contentType.getMany({ query: { limit: 1000 } });
+      const filtered = (items as ContentTypeResponse[]).filter((ct) => {
+        return (
+          Array.isArray(ct.fields) &&
+          ct.fields.some((f: ContentTypeField) => {
+            if (f.type === 'Link') return f.linkType === 'Entry';
+            if (f.type === 'Array' && f.items?.type === 'Link') {
+              return f.items.linkType === 'Entry';
+            }
+            return false;
+          })
+        );
+      }).map(ct => ({ id: ct.sys.id, name: ct.name }));
+      setAllContentTypes(filtered);
+    };
+    fetchCTs();
+  }, [sdk.cma.contentType]);
+
+  const contentTypesAllowed = useMemo(() => {
+    const allowedIds = (contentTypesAllowedLegacy || []).map(ct => ct.id);
+    return allContentTypes.filter(ct => allowedIds.includes(ct.id));
+  }, [allContentTypes, contentTypesAllowedLegacy]);
 
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
 
@@ -53,7 +76,7 @@ const Entry = () => {
 
   const { data: user, isLoading: loadingUser } = useQuery(getMeQueryOptions(token));
 
-  const entries = useContentTypeEntries(sdk, contentTypeAllowed?.id);
+  const entries = useContentTypeEntries(sdk, (contentTypesAllowed || []).map(ct => ct.id));
 
   const handleReturnToAppConfigPage = () => {
     sdk.navigator.openAppConfig();
@@ -83,7 +106,7 @@ const Entry = () => {
     return <NotSignedInView onOpenConfig={handleReturnToAppConfigPage} />;
   }
 
-  const isConfigIncomplete = !(account?.account_id && env?.id && contentTypeAllowed?.id);
+  const isConfigIncomplete = !(account?.account_id && env?.id && (contentTypesAllowed || []).length > 0);
   if (isConfigIncomplete) {
     return <IncompleteConfigView onOpenConfig={handleReturnToAppConfigPage} />;
   }
@@ -105,13 +128,14 @@ const Entry = () => {
   };
 
   const handleLinkExistingEntry = async (variationKey: string) => {
-    const selectedEntry: any = await sdk.dialogs.selectSingleEntry({
+    const selectedEntry = await sdk.dialogs.selectSingleEntry({
       locale: sdk.locales.default,
-      contentTypes: contentTypeAllowed?.id ? [contentTypeAllowed.id] : undefined,
-    });
+      contentTypes: (contentTypesAllowed || []).length > 0 ? contentTypesAllowed.map(ct => ct.id) : undefined,
+    }) as EntryReference | null;
     if (!selectedEntry) return;
 
     const entryId = selectedEntry.sys.id;
+
     const meta = (sdk.entry.fields['meta']?.getValue() as Record<string, string>) || {};
     const updatedMeta = { ...meta, [variationKey]: entryId };
     sdk.entry.fields['meta']?.setValue(updatedMeta);
