@@ -9,7 +9,6 @@
     "add-locations": "contentful-app-scripts add-locations",
     "build": "npm run type-check && vite build",
     "create-app-definition": "contentful-app-scripts create-app-definition",
-    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 772aa0yka2VSPsAHnvnQ7 --token ${CONTENTFUL_CMA_TOKEN}",
     "dev": "vite",
     "filter-openapi": "node scripts/filter-openapi.js",
     "format:check": "prettier . --check",
@@ -23,8 +22,10 @@
     "start": "vite",
     "test": "vitest --run",
     "test:coverage": "vitest --run --coverage",
-    "type-check": "tsc --project tsconfig.json --noEmit",
-    "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN"
+    "type-check": "tsc --noEmit",
+    "upload": "contentful-app-scripts upload --bundle-dir ./build",
+    "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN",
+    "deploy": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id ${DEFINITIONS_ORG_ID} --definition-id 772aa0yka2VSPsAHnvnQ7 --token ${CONTENTFUL_CMA_TOKEN}"
   },
   "browserslist": {
     "production": [
