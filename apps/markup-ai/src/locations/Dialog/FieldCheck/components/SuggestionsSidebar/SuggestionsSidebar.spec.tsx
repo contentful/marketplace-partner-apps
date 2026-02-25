@@ -61,8 +61,8 @@ describe("SuggestionsSidebar", () => {
     onDismissSuggestion: mockOnDismissSuggestion,
     onSelectSuggestion: mockOnSelectSuggestion,
     selectedSuggestionIndex: null,
-    selectedCategories: new Set(["grammar", "consistency", "terminology", "clarity", "tone"]),
-    selectedSeverities: new Set([Severity.HIGH, Severity.MEDIUM, Severity.LOW]),
+    selectedCategories: new Set(),
+    selectedSeverities: new Set(),
     onCategoryChange: mockOnCategoryChange,
     onSeverityChange: mockOnSeverityChange,
     config: {
@@ -196,6 +196,53 @@ describe("SuggestionsSidebar", () => {
 
       const checkButton = screen.getByRole("button", { name: /check/i });
       expect(checkButton).toBeDisabled();
+    });
+  });
+
+  describe("Check Error State", () => {
+    it("shows error panel when checkError is set", () => {
+      const errorMessage = "Style guide does not exist";
+      render(
+        <SuggestionsSidebar
+          {...defaultProps}
+          checkError={errorMessage}
+          onDismissCheckError={vi.fn()}
+        />,
+      );
+
+      expect(screen.getByRole("alert")).toBeInTheDocument();
+      expect(screen.getByText("Check failed")).toBeInTheDocument();
+      expect(screen.getByText(errorMessage)).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /try again/i })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /dismiss/i })).toBeInTheDocument();
+    });
+
+    it("calls onDismissCheckError when Dismiss is clicked", () => {
+      const onDismissCheckError = vi.fn();
+      render(
+        <SuggestionsSidebar
+          {...defaultProps}
+          checkError="Something went wrong"
+          onDismissCheckError={onDismissCheckError}
+        />,
+      );
+
+      fireEvent.click(screen.getByRole("button", { name: /dismiss/i }));
+      expect(onDismissCheckError).toHaveBeenCalledTimes(1);
+    });
+
+    it("calls onCheck when Try again is clicked", () => {
+      const onCheck = vi.fn();
+      render(
+        <SuggestionsSidebar
+          {...defaultProps}
+          checkError="Something went wrong"
+          onCheck={onCheck}
+        />,
+      );
+
+      fireEvent.click(screen.getByRole("button", { name: /try again/i }));
+      expect(onCheck).toHaveBeenCalledTimes(1);
     });
   });
 

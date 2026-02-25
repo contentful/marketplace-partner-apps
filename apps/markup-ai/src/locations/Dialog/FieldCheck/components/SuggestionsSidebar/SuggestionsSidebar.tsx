@@ -10,6 +10,7 @@ import {
   ListBulletsIcon,
   CheckCircleIcon,
   MinusCircleIcon,
+  WarningIcon,
 } from "@contentful/f36-icons";
 import { UserProfileButton } from "../../../../ConfigScreen/components/UserProfileButton";
 import styled from "@emotion/styled";
@@ -46,6 +47,10 @@ export interface SuggestionsSidebarProps {
   /** Set of indices that are currently exiting (animating out) */
   exitingIndices?: Set<number>;
   isLoading: boolean;
+  /** API error message from last check (e.g. invalid style guide). When set, shown in sidebar. */
+  checkError?: string | null;
+  /** Clear the check error (e.g. when user dismisses or runs a new check). */
+  onDismissCheckError?: () => void;
   onCheck: () => void;
   onApplySuggestion: (suggestion: Suggestion, index: number) => void;
   onDismissSuggestion: (suggestion: Suggestion, index: number) => void;
@@ -280,6 +285,54 @@ const PerfectScoreLink = styled.span`
   color: #2e7d32;
 `;
 
+// --- Check Error Panel ---
+const CheckErrorContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: ${tokens.spacingXl} ${tokens.spacingM};
+  text-align: center;
+  background: ${tokens.red100};
+  border: 1px solid ${tokens.red300};
+  border-radius: ${tokens.borderRadiusMedium};
+  margin: ${tokens.spacingM};
+`;
+
+const CheckErrorIconWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: ${tokens.spacingS};
+  color: ${tokens.red600};
+
+  svg {
+    width: 48px;
+    height: 48px;
+  }
+`;
+
+const CheckErrorTitle = styled.h3`
+  font-size: ${tokens.fontSizeM};
+  font-weight: ${tokens.fontWeightDemiBold};
+  color: ${tokens.gray900};
+  margin: 0 0 ${tokens.spacingXs} 0;
+`;
+
+const CheckErrorMessage = styled.p`
+  font-size: ${tokens.fontSizeS};
+  color: ${tokens.gray700};
+  margin: 0 0 ${tokens.spacingM} 0;
+  line-height: ${tokens.lineHeightDefault};
+`;
+
+const CheckErrorActions = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: ${tokens.spacingS};
+  justify-content: center;
+`;
+
 // --- Issue Progress Bar ---
 const ProgressBarSection = styled.div`
   display: flex;
@@ -412,9 +465,16 @@ const FilterPopoverTitle = styled.div`
   font-size: ${tokens.fontSizeS};
   font-weight: ${tokens.fontWeightDemiBold};
   color: ${tokens.gray700};
-  margin-bottom: ${tokens.spacingS};
+  margin-bottom: ${tokens.spacing2Xs};
   text-transform: uppercase;
   letter-spacing: 0.5px;
+`;
+
+const FilterPopoverHint = styled.div`
+  font-size: ${tokens.fontSizeS};
+  color: ${tokens.gray500};
+  margin-bottom: ${tokens.spacingS};
+  line-height: ${tokens.lineHeightDefault};
 `;
 
 const FilterCheckboxGroup = styled.div`
@@ -534,6 +594,8 @@ export const SuggestionsSidebar: React.FC<SuggestionsSidebarProps> = ({
   suggestionToOriginalIndex,
   exitingIndices = new Set(),
   isLoading,
+  checkError = null,
+  onDismissCheckError,
   onCheck,
   onApplySuggestion,
   onDismissSuggestion,
@@ -816,6 +878,9 @@ export const SuggestionsSidebar: React.FC<SuggestionsSidebarProps> = ({
             <Popover.Content>
               <FilterPopoverContent>
                 <FilterPopoverTitle>Suggestion Type</FilterPopoverTitle>
+                <FilterPopoverHint>
+                  Select types to show; all shown when none selected.
+                </FilterPopoverHint>
                 <FilterCheckboxGroup>
                   {FILTER_CATEGORY_OPTIONS.map((cat) => (
                     <FilterCheckboxRow key={cat.id}>
@@ -846,6 +911,27 @@ export const SuggestionsSidebar: React.FC<SuggestionsSidebarProps> = ({
                 <Spinner size="medium" />
                 <span>Analyzing content...</span>
               </LoadingState>
+            );
+          }
+          if (checkError) {
+            return (
+              <CheckErrorContainer role="alert" aria-live="polite">
+                <CheckErrorIconWrap>
+                  <WarningIcon variant="negative" />
+                </CheckErrorIconWrap>
+                <CheckErrorTitle>Check failed</CheckErrorTitle>
+                <CheckErrorMessage>{checkError}</CheckErrorMessage>
+                <CheckErrorActions>
+                  <Button variant="primary" size="small" onClick={onCheck}>
+                    Try again
+                  </Button>
+                  {onDismissCheckError && (
+                    <Button variant="secondary" size="small" onClick={onDismissCheckError}>
+                      Dismiss
+                    </Button>
+                  )}
+                </CheckErrorActions>
+              </CheckErrorContainer>
             );
           }
           if (suggestions.length === 0) {

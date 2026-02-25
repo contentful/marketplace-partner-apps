@@ -29,8 +29,8 @@ import {
   convertHtmlToRichText,
   type TextNodeWithId,
 } from "../../utils/richTextUtils";
-import { FILTER_CATEGORY_IDS } from "./FieldCheck/utils/constants";
 import { TONE_NONE } from "../../utils/userSettings";
+import { getApiErrorMessage } from "../../utils/errorMessage";
 
 const DialogContainer = styled.div`
   display: flex;
@@ -151,9 +151,6 @@ const SidebarSection = styled.div`
   }
 `;
 
-// Severity options for filtering (using API enum values)
-const SEVERITY_OPTIONS: Severity[] = [Severity.HIGH, Severity.MEDIUM, Severity.LOW];
-
 const FieldCheckDialog: React.FC = () => {
   useAutoResizer();
   const sdk = useSDK<DialogAppSDK>();
@@ -173,16 +170,14 @@ const FieldCheckDialog: React.FC = () => {
   const [checkId, setCheckId] = useState(0);
   // Initial loading state - true from dialog open until first check completes
   const [isInitialLoading, setIsInitialLoading] = useState(true);
+  // API error from last check (e.g. invalid style guide) – shown in sidebar
+  const [checkError, setCheckError] = useState<string | null>(null);
   // Workflow ID copy state
   const [workflowIdCopied, setWorkflowIdCopied] = useState(false);
 
-  // Filter state - lifted to parent so we can sync with EditorPanel
-  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
-    () => new Set(FILTER_CATEGORY_IDS),
-  );
-  const [selectedSeverities, setSelectedSeverities] = useState<Set<Severity>>(
-    () => new Set(SEVERITY_OPTIONS),
-  );
+  // Filter state: empty = show all (enable-to-include). Non-empty = show only selected.
+  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(() => new Set());
+  const [selectedSeverities, setSelectedSeverities] = useState<Set<Severity>>(() => new Set());
 
   // RichText handling - convert Document to HTML for editing
   const isRichText = params.fieldFormat === "RichText";
@@ -316,6 +311,7 @@ const FieldCheckDialog: React.FC = () => {
     void (async () => {
       try {
         const result = await getSuggestions(initialEditorContent, isRichText);
+        setCheckError(null);
         if (result.original) {
           setActiveScores(result.original.scores ?? null);
           setActiveSuggestions(result.original.issues ?? []);
@@ -324,6 +320,7 @@ const FieldCheckDialog: React.FC = () => {
         }
       } catch (error) {
         console.error("Error running initial check:", error);
+        setCheckError(getApiErrorMessage(error));
       } finally {
         // Initial loading complete
         setIsInitialLoading(false);
@@ -348,6 +345,7 @@ const FieldCheckDialog: React.FC = () => {
     // Only reset selection, keep everything else as-is until new results arrive
     setSelectedSuggestionIndex(null);
 
+    setCheckError(null);
     try {
       const result = await getSuggestions(content, isRichText);
       if (result.original) {
@@ -362,6 +360,7 @@ const FieldCheckDialog: React.FC = () => {
       }
     } catch (error) {
       console.error("Error checking content:", error);
+      setCheckError(getApiErrorMessage(error));
     }
   }, [getSuggestions, isRichText, resetAll, setActiveScores, setActiveSuggestions]);
 
@@ -517,12 +516,14 @@ const FieldCheckDialog: React.FC = () => {
     return map;
   }, [visibleSuggestionsWithIndices]);
 
-  // Apply category and severity filters (for sidebar display)
+  // Apply category and severity filters (empty set = show all; non-empty = show only selected)
   const filteredSuggestions = useMemo(() => {
     return visibleSuggestions.filter((s) => {
       const category = s.category?.toLowerCase() || "other";
       const severity = s.severity;
-      return selectedCategories.has(category) && selectedSeverities.has(severity);
+      const categoryMatch = selectedCategories.size === 0 || selectedCategories.has(category);
+      const severityMatch = selectedSeverities.size === 0 || selectedSeverities.has(severity);
+      return categoryMatch && severityMatch;
     });
   }, [visibleSuggestions, selectedCategories, selectedSeverities]);
 
@@ -545,10 +546,12 @@ const FieldCheckDialog: React.FC = () => {
     return activeSuggestions.filter((s, index) => {
       // Skip dismissed
       if (dismissedIndices.has(index)) return false;
-      // Apply filters
+      // Apply filters (empty set = show all; non-empty = show only selected)
       const category = s.category?.toLowerCase() || "other";
       const severity = s.severity;
-      return selectedCategories.has(category) && selectedSeverities.has(severity);
+      const categoryMatch = selectedCategories.size === 0 || selectedCategories.has(category);
+      const severityMatch = selectedSeverities.size === 0 || selectedSeverities.has(severity);
+      return categoryMatch && severityMatch;
     });
   }, [activeSuggestions, dismissedIndices, selectedCategories, selectedSeverities]);
 
@@ -674,6 +677,10 @@ const FieldCheckDialog: React.FC = () => {
           suggestionToOriginalIndex={suggestionToOriginalIndex}
           exitingIndices={exitingIndices}
           isLoading={isInitialLoading || isLoadingSuggestions}
+          checkError={checkError}
+          onDismissCheckError={() => {
+            setCheckError(null);
+          }}
           onCheck={handleCheck}
           onApplySuggestion={handleApplySuggestion}
           onDismissSuggestion={handleDismissSuggestion}
