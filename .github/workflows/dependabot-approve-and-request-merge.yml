@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Fetch Dependabot metadata
         id: dependabot-metadata
-        uses: dependabot/fetch-metadata@v1
+        uses: dependabot/fetch-metadata@8348ea7f5d949b08c7f125a44b569c9626b05db3
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
 
@@ -30,7 +30,7 @@ jobs:
       - name: Retrieve Github Token
         if: steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major'
         id: vault
-        uses: hashicorp/vault-action@v2.4.3
+        uses: hashicorp/vault-action@8fa61e909919a3f94952e9e07ace6b5a1114440b
         with:
           url: ${{ secrets.VAULT_URL }}
           role: ${{ github.event.repository.name }}-github-action
@@ -42,7 +42,7 @@ jobs:
 
       - name: approve PR
         if: steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major'
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b
         with:
           github-token: ${{ steps.vault.outputs.GITHUB_MERGE_TOKEN }}
           script: |
@@ -77,7 +77,7 @@ jobs:
       - name: Get merge type
         if: steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major'
         id: merge-type
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b
         with:
           github-token: ${{ steps.vault.outputs.GITHUB_MERGE_TOKEN }}
           script: |
@@ -115,8 +115,12 @@ jobs:
           # contradicts GH's documentation
           GH_TOKEN: ${{ steps.vault.outputs.GITHUB_MERGE_TOKEN }}
           MERGE_METHOD: ${{ steps.merge-type.outputs.result }}
-          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          merge_method="$(echo "$MERGE_METHOD" | tr -d '"')"
-          echo "Auto merging PR using method $merge_method"
-          gh pr merge "--$merge_method" --auto "$PR_URL"
+          # Ensure merge method is one of the supported values
+          case "$MERGE_METHOD" in
+            squash|merge|rebase) ;;
+            *) echo "Invalid merge method"; exit 1 ;;
+          esac
+          echo "Auto merging PR using method $MERGE_METHOD"
+          gh pr merge "$PR_NUMBER" "--$MERGE_METHOD" --auto
