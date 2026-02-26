@@ -30,7 +30,7 @@
     "eslint-plugin-react-hooks": "^6.0.0",
     "happy-dom": "^20.0.10",
     "jiti": "^2.6.1",
-    "jsdom": "^26.1.0",
+    "jsdom": "^27.4.0",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "typescript": "^5.9.3",
