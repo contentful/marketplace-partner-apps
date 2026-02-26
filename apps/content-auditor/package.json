@@ -9,7 +9,7 @@
     "@contentful/react-apps-toolkit": "1.2.16",
     "contentful": "^11.9.0",
     "contentful-management": "^10.46.4",
-    "emotion": "10.0.27",
+    "emotion": "11.0.0",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
