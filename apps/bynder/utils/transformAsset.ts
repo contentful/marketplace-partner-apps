@@ -1,21 +1,6 @@
 import { FIELDS_TO_PERSIST } from './constants';
 
 /**
- * Normalize an asset ID to standard UUID format (8-4-4-4-12) for consistent API output.
- * Handles Bynder's 8-4-4-16 format and hyphen-less hex; leaves non-UUID strings unchanged.
- */
-function normalizeIdToStandardUuid(assetId: string | null | undefined): string {
-  if (assetId == null || typeof assetId !== 'string') {
-    return '';
-  }
-  const clean = assetId.replace(/-/g, '').toLowerCase();
-  if (clean.length === 32 && /^[0-9a-f]{32}$/.test(clean)) {
-    return `${clean.slice(0, 8)}-${clean.slice(8, 12)}-${clean.slice(12, 16)}-${clean.slice(16, 20)}-${clean.slice(20, 32)}`;
-  }
-  return assetId;
-}
-
-/**
  * Extract thumbnails from asset files object
  */
 function extractThumbnails(asset: any): Record<string, string> {
@@ -77,11 +62,11 @@ export function transformAsset(
   // Determine selectedFile: prefer from options, then existingAsset, then null
   const finalSelectedFile = selectedFile ?? existingAsset?.selectedFile ?? null;
 
-  // Prefer databaseId (GUID) when present; then normalize to standard UUID (8-4-4-4-12)
-  // so Contentful's API always serves a consistent GUID to customers.
-  const rawId = asset.databaseId ?? asset.id;
+  // Prefer databaseId when present (avoids storing Base64 from Compact View's id field).
+  // Store the id as-is: Bynder uses 8-4-4-16 format; do not convert to standard UUID (8-4-4-4-12)
+  // or the Bynder API will not find the asset.
   const transformed: any = {
-    id: normalizeIdToStandardUuid(rawId),
+    id: asset.databaseId ?? asset.id ?? '',
     name: asset.name || '',
     type: (asset.type || '').toLowerCase(),
     fileSize: asset.fileSize || 0,
