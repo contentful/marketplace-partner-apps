@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.1](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.4.0...bynder-assets-v1.4.1) (2026-02-26)
+
+
+### Bug Fixes
+
+* **bynder:** preserve Bynder 8-4-4-16 asset id [ZEND-7663] ([#7889](https://github.com/contentful/marketplace-partner-apps/issues/7889)) ([68cfc43](https://github.com/contentful/marketplace-partner-apps/commit/68cfc43500f0e5049ce91d21e94da64d951023d9))
+* **deps:** Bump rollup from 4.45.1 to 4.59.0 in /apps/bynder ([#7884](https://github.com/contentful/marketplace-partner-apps/issues/7884)) ([eba236d](https://github.com/contentful/marketplace-partner-apps/commit/eba236d2fe13c0fb47c189a47fce3ade214ae715))
+
 ## [1.4.0](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.3.2...bynder-assets-v1.4.0) (2026-02-24)
 
 
