@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.2.5](https://github.com/contentful/marketplace-partner-apps/compare/docs-to-rich-text-v1.2.4...docs-to-rich-text-v1.2.5) (2026-02-27)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.13.1 to 1.13.2 in /apps/docs-to-rich-text in the production-dependencies group ([#7158](https://github.com/contentful/marketplace-partner-apps/issues/7158)) ([63c77ed](https://github.com/contentful/marketplace-partner-apps/commit/63c77eda219ff122cc63e6c23cd46a651209707a))
+* **deps:** bump axios from 1.13.2 to 1.13.5 in /apps/docs-to-rich-text ([#7777](https://github.com/contentful/marketplace-partner-apps/issues/7777)) ([a6eb4cd](https://github.com/contentful/marketplace-partner-apps/commit/a6eb4cdc3a8281b1f6df9e238dd79f2c743e9427))
+* **deps:** bump js-yaml from 4.1.0 to 4.1.1 in /apps/docs-to-rich-text ([#7337](https://github.com/contentful/marketplace-partner-apps/issues/7337)) ([b255551](https://github.com/contentful/marketplace-partner-apps/commit/b255551d2c1b7cc2f62e863a1e25cfe9bc189592))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/docs-to-rich-text ([#7600](https://github.com/contentful/marketplace-partner-apps/issues/7600)) ([eae2259](https://github.com/contentful/marketplace-partner-apps/commit/eae2259080ee0311dc15daf42e1132ad943a1182))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/docs-to-rich-text ([#7825](https://github.com/contentful/marketplace-partner-apps/issues/7825)) ([d5ab7cb](https://github.com/contentful/marketplace-partner-apps/commit/d5ab7cb15fd7e72823f6604f01b31da92d234ae9))
+* **deps:** Bump rollup from 4.50.2 to 4.59.0 in /apps/docs-to-rich-text ([#7879](https://github.com/contentful/marketplace-partner-apps/issues/7879)) ([68cd225](https://github.com/contentful/marketplace-partner-apps/commit/68cd225bf0fc3f345de0dcf293b7e1f55e2da349))
+* **deps:** bump the production-dependencies group in /apps/docs-to-rich-text with 2 updates ([#6963](https://github.com/contentful/marketplace-partner-apps/issues/6963)) ([51a7480](https://github.com/contentful/marketplace-partner-apps/commit/51a7480bf77e78fb43bfdaca8eed252850fc918d))
+* **deps:** bump validator from 13.15.15 to 13.15.20 in /apps/docs-to-rich-text ([#6947](https://github.com/contentful/marketplace-partner-apps/issues/6947)) ([4113459](https://github.com/contentful/marketplace-partner-apps/commit/4113459cff296e5bf53b0da05a0ed99cf220d055))
+* **deps:** bump validator from 13.15.20 to 13.15.23 in /apps/docs-to-rich-text ([#7421](https://github.com/contentful/marketplace-partner-apps/issues/7421)) ([ae62e1f](https://github.com/contentful/marketplace-partner-apps/commit/ae62e1f8b8f84204dc1f357aa517b44f59c6a202))
+* **deps:** bump vite in /apps/docs-to-rich-text ([#6927](https://github.com/contentful/marketplace-partner-apps/issues/6927)) ([d7faabc](https://github.com/contentful/marketplace-partner-apps/commit/d7faabca02d7c720aa5070a9808798a58a34b679))
+* update version of rich-text-editor [] ([#6952](https://github.com/contentful/marketplace-partner-apps/issues/6952)) ([cc5ea79](https://github.com/contentful/marketplace-partner-apps/commit/cc5ea795dc81b46587582b49398c92bf5c8b13c0))
+
 ## [1.2.4](https://github.com/contentful/marketplace-partner-apps/compare/docs-to-rich-text-v1.2.3...docs-to-rich-text-v1.2.4) (2025-08-27)
 
 
