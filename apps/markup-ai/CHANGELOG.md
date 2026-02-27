@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.2.0](https://github.com/contentful/marketplace-partner-apps/compare/markup-ai-contentful-app-v1.1.1...markup-ai-contentful-app-v1.2.0) (2026-02-27)
+
+
+### Features
+
+* introduce new field editor workflow [] ([#7836](https://github.com/contentful/marketplace-partner-apps/issues/7836)) ([52e6c49](https://github.com/contentful/marketplace-partner-apps/commit/52e6c49e17ce88cbf0e92c45a3954f996cf69a89))
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.13.2 to 1.13.5 in /apps/markup-ai ([#7770](https://github.com/contentful/marketplace-partner-apps/issues/7770)) ([8dfbb2e](https://github.com/contentful/marketplace-partner-apps/commit/8dfbb2ec7d3d9b7151dc3c61b9e3df147b71eacf))
+* **deps:** bump axios from 1.13.4 to 1.13.6 in /apps/markup-ai ([#7896](https://github.com/contentful/marketplace-partner-apps/issues/7896)) ([5b3a865](https://github.com/contentful/marketplace-partner-apps/commit/5b3a865c2001cfaf6b6b97fd4a01c33b34767cf3))
+* **deps:** bump diff from 8.0.2 to 8.0.3 in /apps/markup-ai ([#7713](https://github.com/contentful/marketplace-partner-apps/issues/7713)) ([2563e61](https://github.com/contentful/marketplace-partner-apps/commit/2563e612c90974df0ba0a2ef10cd95840e300590))
+* **deps:** bump markdown-it from 14.1.0 to 14.1.1 in /apps/markup-ai ([#7835](https://github.com/contentful/marketplace-partner-apps/issues/7835)) ([6d0ea8d](https://github.com/contentful/marketplace-partner-apps/commit/6d0ea8d7f2cb65b4d048a1eb59e69c5a53cfb183))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/markup-ai ([#7601](https://github.com/contentful/marketplace-partner-apps/issues/7601)) ([0f6753b](https://github.com/contentful/marketplace-partner-apps/commit/0f6753bf937af6768257188335c3069ab8d05549))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/markup-ai ([#7812](https://github.com/contentful/marketplace-partner-apps/issues/7812)) ([497475e](https://github.com/contentful/marketplace-partner-apps/commit/497475e58fe34bfd5d7babff092c8f97566ccc1a))
+* **deps:** bump qs from 6.14.1 to 6.15.0 in /apps/markup-ai ([#7895](https://github.com/contentful/marketplace-partner-apps/issues/7895)) ([154657e](https://github.com/contentful/marketplace-partner-apps/commit/154657e68cfc6473b053a8b37b7808725412e6c0))
+* **deps:** Bump rollup from 4.53.3 to 4.59.0 in /apps/markup-ai ([#7871](https://github.com/contentful/marketplace-partner-apps/issues/7871)) ([27d9879](https://github.com/contentful/marketplace-partner-apps/commit/27d98791e0fe75918af6129cec04ac4bdc0ff593))
+* **deps:** bump the production-dependencies group in /apps/markup-ai with 3 updates ([#7631](https://github.com/contentful/marketplace-partner-apps/issues/7631)) ([cc5a53d](https://github.com/contentful/marketplace-partner-apps/commit/cc5a53d4300961c2bfb2bd32d7c2cf167ebf0e8b))
+* **deps:** bump the production-dependencies group in /apps/markup-ai with 5 updates ([#7559](https://github.com/contentful/marketplace-partner-apps/issues/7559)) ([f64e110](https://github.com/contentful/marketplace-partner-apps/commit/f64e1109389f7b652248e20d1c57d5e34f20d9a5))
+* **deps:** bump the production-dependencies group in /apps/markup-ai with 7 updates ([#7734](https://github.com/contentful/marketplace-partner-apps/issues/7734)) ([e610097](https://github.com/contentful/marketplace-partner-apps/commit/e6100971cb27e8a326928ed45759634616f9df31))
+
 ## [1.1.1](https://github.com/contentful/marketplace-partner-apps/compare/markup-ai-contentful-app-v1.1.0...markup-ai-contentful-app-v1.1.1) (2025-12-15)
 
 
