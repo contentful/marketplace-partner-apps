@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Google Auth Callback</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+      background-color: #f7f9fa;
+    }
+    .container {
+      max-width: 500px;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background-color: white;
+    }
+    h1 {
+      color: #2962FF;
+      margin-bottom: 20px;
+    }
+    p {
+      margin-bottom: 20px;
+      color: #536171;
+      line-height: 1.5;
+    }
+    .log {
+      text-align: left;
+      font-family: monospace;
+      background-color: #f5f5f5;
+      padding: 10px;
+      border-radius: 4px;
+      max-height: 100px;
+      overflow: auto;
+      margin-top: 20px;
+      font-size: 12px;
+    }
+    .success {
+      color: #3C80CF;
+    }
+    .error {
+      color: #D9304F;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Google Authentication</h1>
+    <p id="status">Processing authentication...</p>
+    <div id="log" class="log"></div>
+  </div>
+
+  <script>
+    const statusElement = document.getElementById('status');
+    const logElement = document.getElementById('log');
+    
+    function log(message, isError = false) {
+      console.log(message);
+      const entry = document.createElement('div');
+      entry.textContent = message;
+      if (isError) entry.className = 'error';
+      logElement.appendChild(entry);
+      logElement.scrollTop = logElement.scrollHeight;
+    }
+    
+    function setStatus(message, isError = false) {
+      statusElement.textContent = message;
+      statusElement.className = isError ? 'error' : 'success';
+    }
+    
+    try {
+      log('Callback page loaded');
+      
+      // Extract token from hash
+      const hash = window.location.hash;
+      log(`URL hash: ${hash ? hash.substring(0, 20) + '...' : 'none'}`);
+      
+      if (!hash || hash.length < 2) {
+        setStatus('No authentication data found. Please try again.', true);
+        log('No hash data found', true);
+        throw new Error('No hash data');
+      }
+      
+      const params = new URLSearchParams(hash.substring(1));
+      const token = params.get('access_token');
+      const error = params.get('error');
+      const state = params.get('state');
+      
+      log(`Token present: ${!!token}`);
+      log(`Error present: ${!!error}`);
+      log(`State present: ${!!state}`);
+      
+      if (!window.opener) {
+        setStatus('Cannot communicate with Contentful. Please close this window and try again.', true);
+        log('No opener window found', true);
+        
+        // Fallback for when opener is not available - store token in localStorage directly
+        if (token) {
+          log('Storing token in localStorage as fallback');
+          localStorage.setItem('google_access_token', token);
+          setStatus('Authentication successful! You can close this window and return to Contentful.');
+        }
+      } else if (token) {
+        // Send message to parent window
+        log('Sending token to parent window');
+        window.opener.postMessage(
+          { type: 'GOOGLE_AUTH_CALLBACK', token, error: null, state }, 
+          '*'
+        );
+        
+        setStatus('Authentication successful! This window will close automatically.');
+        
+        // Also store token in localStorage as backup
+        localStorage.setItem('google_access_token', token);
+        
+        // Close this window after a short delay
+        setTimeout(() => {
+          log('Closing window...');
+          window.close();
+        }, 2000);
+      } else if (error) {
+        // Send error to parent window
+        log(`Auth error: ${error}`, true);
+        window.opener.postMessage(
+          { type: 'GOOGLE_AUTH_CALLBACK', token: null, error }, 
+          '*'
+        );
+        
+        setStatus('Authentication failed. Please close this window and try again.', true);
+      } else {
+        setStatus('No authentication data found. Please close this window and try again.', true);
+        log('No token or error in hash', true);
+      }
+    } catch (e) {
+      log(`Error: ${e.message}`, true);
+      setStatus(`An error occurred: ${e.message}`, true);
+    }
+  </script>
+</body>
+</html> 
