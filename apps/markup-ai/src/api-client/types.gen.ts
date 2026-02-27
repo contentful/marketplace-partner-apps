@@ -134,6 +134,75 @@ export type ApiKeyUpdate = {
 };
 
 /**
+ * AccessPolicyRead
+ *
+ * Model for reading access policy data.
+ */
+export type AccessPolicyRead = {
+  /**
+   * The subject type of the access policy (e.g., everyone, user, etc.).
+   */
+  subject_type: AccessPolicySubjectType;
+  /**
+   * Subject Id
+   *
+   * The subject the access policy applies to. Can be a user ID, API key ID, group ID, etc.
+   */
+  subject_id?: string | null;
+  /**
+   * Role Id
+   *
+   * The role assigned by this access policy.
+   */
+  role_id: string;
+  /**
+   * Scope
+   */
+  scope: string | null;
+  /**
+   * Created At
+   */
+  created_at: string;
+};
+
+/**
+ * AccessPolicySubjectType
+ */
+export enum AccessPolicySubjectType {
+  EVERYONE = "everyone",
+  AUTHENTICATED = "authenticated",
+  USER = "user",
+  APIKEY = "apikey",
+  ORG_MEMBER = "org_member",
+  ORG_USER = "org_user",
+  ORG_APIKEY = "org_apikey",
+}
+
+/**
+ * AccessPolicyWrite
+ *
+ * Model for creating a new access policy in the global scope.
+ */
+export type AccessPolicyWrite = {
+  /**
+   * The subject type of the access policy (e.g., everyone, user, etc.).
+   */
+  subject_type: AccessPolicySubjectType;
+  /**
+   * Subject Id
+   *
+   * The subject the access policy applies to. Can be a user ID, API key ID, group ID, etc.
+   */
+  subject_id?: string | null;
+  /**
+   * Role Id
+   *
+   * The role assigned by this access policy.
+   */
+  role_id: string;
+};
+
+/**
  * AccountMetadata
  */
 export type AccountMetadata = {
@@ -165,6 +234,7 @@ export type AccountMetadata = {
 export type AccountResponse = {
   organization: OrganizationResponseFull;
   user_profile: UserProfileResponse;
+  user?: UserRead | null;
 };
 
 /**
@@ -176,6 +246,79 @@ export enum ActorType {
   STRIPE = "stripe",
   ADMIN = "admin",
 }
+
+/**
+ * AdminStyleGuideResponse
+ *
+ * Admin response schema for style guides with full details including prompts and domains.
+ */
+export type AdminStyleGuideResponse = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Name
+   */
+  name: string;
+  /**
+   * Created At
+   */
+  created_at: string;
+  /**
+   * Created By
+   */
+  created_by: string;
+  /**
+   * Status
+   */
+  status: string;
+  /**
+   * Updated At
+   */
+  updated_at?: string | null;
+  /**
+   * Updated By
+   */
+  updated_by?: string | null;
+  /**
+   * Deleted At
+   */
+  deleted_at?: string | null;
+  /**
+   * Deleted By
+   */
+  deleted_by?: string | null;
+  /**
+   * Summary
+   */
+  summary?: string | null;
+  base_style_guide_type?: BaseStyleGuideType | null;
+  /**
+   * Organization Id
+   */
+  organization_id?: string | null;
+  /**
+   * Consistency Prompt
+   */
+  consistency_prompt?: string | null;
+  /**
+   * Tone Prompt
+   */
+  tone_prompt?: string | null;
+  /**
+   * Clarity Sentence Structure Prompt
+   */
+  clarity_sentence_structure_prompt?: string | null;
+  /**
+   * Clarity Simple Vocabulary Prompt
+   */
+  clarity_simple_vocabulary_prompt?: string | null;
+  /**
+   * Terminology Domains
+   */
+  terminology_domains?: Array<TerminologyDomainInfo> | null;
+};
 
 /**
  * AnalysisScore
@@ -243,6 +386,12 @@ export type AuthResponse = {
    * Whether the organization is an internal organization
    */
   org_is_internal?: boolean;
+  /**
+   * Is Staff
+   *
+   * Whether the user is a staff member
+   */
+  is_staff?: boolean;
 };
 
 /**
@@ -252,93 +401,6 @@ export enum BaseStyleGuideType {
   AP = "ap",
   CHICAGO = "chicago",
   MICROSOFT = "microsoft",
-}
-
-/**
- * BatchStyleCheckRequestBody
- */
-export type BatchStyleCheckRequestBody = {
-  /**
-   * The language variant you'd like us to use for analysis. Choose from American English, British English, or other supported dialects.
-   */
-  dialect: Dialects;
-  /**
-   * The tone variation you're aiming for. Options include formal, academic, casual, and other tone variations to match your content goals.
-   */
-  tone?: Tones | null;
-  /**
-   * Style Guide
-   *
-   * The style guide to follow for your content. You can use a style guide ID or choose from built-in options: `ap`, `chicago`, or `microsoft`.
-   */
-  style_guide: string;
-  /**
-   * Webhook Url
-   *
-   * A URL that results will be POSTed to once the process completes.
-   */
-  webhook_url?: string | null;
-  /**
-   * File Uploads
-   *
-   * The documents to analyze. Text (.txt), Markdown (.md), HTML (.html .htm), DITA (.dita, .xml), and PDF (.pdf) files are accepted. The max file size is 1.5 MB.
-   */
-  file_uploads: Array<Blob | File>;
-};
-
-/**
- * BatchStyleResponse
- */
-export type BatchStyleResponse = {
-  /**
-   * Workflows
-   *
-   * List of workflow information for each workflow in the batch
-   */
-  workflows?: Array<WorkflowInfo> | null;
-};
-
-/**
- * BatchStyleSuggestionRequestBody
- */
-export type BatchStyleSuggestionRequestBody = {
-  /**
-   * The language variant you'd like us to use for analysis. Choose from American English, British English, or other supported dialects.
-   */
-  dialect: Dialects;
-  /**
-   * The tone variation you're aiming for. Options include formal, academic, casual, and other tone variations to match your content goals.
-   */
-  tone?: Tones | null;
-  /**
-   * Style Guide
-   *
-   * The style guide to follow for your content. You can use a style guide ID or choose from built-in options: `ap`, `chicago`, or `microsoft`.
-   */
-  style_guide: string;
-  /**
-   * Webhook Url
-   *
-   * A URL that results will be POSTed to once the process completes.
-   */
-  webhook_url?: string | null;
-  /**
-   * File Uploads
-   *
-   * The documents to analyze. Text (.txt), Markdown (.md), HTML (.html .htm), DITA (.dita, .xml), and PDF (.pdf) files are accepted. The max file size is 1.5 MB.
-   */
-  file_uploads: Array<Blob | File>;
-};
-
-/**
- * BillingCycle
- *
- * Billing cycle enumeration
- */
-export enum BillingCycle {
-  MONTHLY = "monthly",
-  YEARLY = "yearly",
-  ONE_TIME = "one_time",
 }
 
 /**
@@ -408,6 +470,16 @@ export type BulkInvitationResponse = {
    */
   failure_count: number;
 };
+
+/**
+ * CancelBehaviorForActiveOrders
+ *
+ * Cancel behavior enumeration for active orders
+ */
+export enum CancelBehaviorForActiveOrders {
+  IMMEDIATELY = "immediately",
+  AT_PERIOD_END = "at_period_end",
+}
 
 /**
  * CancelCancelationRequest
@@ -554,7 +626,7 @@ export type Color = {
  */
 export type ConfigOptions = {
   dialect?: Dialects | null;
-  style_guide?: HeliosOneActivitiesEngineSharedModelsStyleGuide | null;
+  style_guide?: StyleGuide | null;
   tone?: Tones | null;
 };
 
@@ -663,6 +735,14 @@ export type CreatorResponse = {
 };
 
 /**
+ * Currency
+ */
+export enum Currency {
+  USD = "usd",
+  EUR = "eur",
+}
+
+/**
  * Dialects
  */
 export enum Dialects {
@@ -749,6 +829,58 @@ export type DomainUpdateRequest = {
    * Description
    */
   description?: string | null;
+};
+
+/**
+ * DuplicateStyleGuideRequest
+ *
+ * Request to duplicate a style guide to another organization.
+ */
+export type DuplicateStyleGuideRequest = {
+  /**
+   * Source Style Guide Id
+   *
+   * The ID of the style guide to duplicate
+   */
+  source_style_guide_id: string;
+  /**
+   * New Name
+   *
+   * Optional new name for the duplicated style guide. If not provided, uses the source name.
+   */
+  new_name?: string | null;
+};
+
+/**
+ * DuplicateStyleGuideResponse
+ *
+ * Response after duplicating a style guide.
+ */
+export type DuplicateStyleGuideResponse = {
+  /**
+   * Id
+   *
+   * The ID of the newly created style guide
+   */
+  id: string;
+  /**
+   * Name
+   *
+   * The name of the duplicated style guide
+   */
+  name: string;
+  /**
+   * Organization Id
+   *
+   * The target organization ID
+   */
+  organization_id: string;
+  /**
+   * Message
+   *
+   * Success message
+   */
+  message: string;
 };
 
 /**
@@ -1037,6 +1169,106 @@ export type InvitedUser = {
 };
 
 /**
+ * InvoiceResponse
+ *
+ * Response model for invoice data
+ */
+export type InvoiceResponse = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Organization Id
+   */
+  organization_id: string;
+  /**
+   * Order Id
+   */
+  order_id?: string | null;
+  /**
+   * Stripe Customer Id
+   */
+  stripe_customer_id?: string | null;
+  /**
+   * Stripe Subscription Id
+   */
+  stripe_subscription_id?: string | null;
+  /**
+   * Stripe Invoice Id
+   */
+  stripe_invoice_id: string;
+  /**
+   * Hosted Invoice Url
+   */
+  hosted_invoice_url?: string | null;
+  /**
+   * Invoice Pdf
+   */
+  invoice_pdf?: string | null;
+  /**
+   * Status
+   */
+  status: string;
+  /**
+   * Amount Due
+   */
+  amount_due?: number | null;
+  /**
+   * Currency
+   */
+  currency?: string | null;
+  /**
+   * Attempt Count
+   */
+  attempt_count?: number | null;
+  /**
+   * Paid At
+   */
+  paid_at?: string | null;
+  /**
+   * Due Date
+   */
+  due_date?: string | null;
+  /**
+   * Period Start
+   */
+  period_start?: string | null;
+  /**
+   * Period End
+   */
+  period_end?: string | null;
+  /**
+   * Billing Reason
+   */
+  billing_reason?: string | null;
+  /**
+   * Metadata
+   */
+  metadata?: {
+    [key: string]: unknown;
+  } | null;
+  /**
+   * Lines
+   */
+  lines?: Array<{
+    [key: string]: unknown;
+  }> | null;
+  /**
+   * Next Payment Attempt
+   */
+  next_payment_attempt?: string | null;
+  /**
+   * Created At
+   */
+  created_at: string;
+  /**
+   * Updated At
+   */
+  updated_at: string;
+};
+
+/**
  * Issue
  */
 export type Issue = {
@@ -1061,7 +1293,8 @@ export type Issue = {
     | ToneCategory
     | ConsistencyCategory
     | TermReplaceCategory;
-  category: IssueCategory | null;
+  readonly category: IssueCategory | null;
+  readonly severity: Severity;
 };
 
 /**
@@ -1100,6 +1333,88 @@ export type Member = {
 };
 
 /**
+ * OrderModel
+ *
+ * Response model for order data
+ */
+export type OrderModel = {
+  /**
+   * Order Id
+   */
+  order_id: string;
+  /**
+   * Organization Id
+   */
+  organization_id: string;
+  /**
+   * Product Id
+   */
+  product_id: string;
+  /**
+   * Product Price Id
+   */
+  product_price_id: string;
+  /**
+   * Stripe Subscription Id
+   */
+  stripe_subscription_id: string | null;
+  order_type: HeliosOneDatabaseModelsEnumsOrderType;
+  billing_cycle: HeliosOneApiModulesSubscriptionSchemasSubscriptionApiModelBillingCycle | null;
+  order_status: OrderStatus;
+  stripe_subscription_status: StripeSubscriptionStatus | null;
+  /**
+   * Current Period Start
+   */
+  current_period_start: string | null;
+  /**
+   * Current Period End
+   */
+  current_period_end: string | null;
+  /**
+   * Cancel At Period End
+   */
+  cancel_at_period_end: boolean;
+  /**
+   * Cancel Reason
+   */
+  cancel_reason?: string | null;
+  /**
+   * Created At
+   */
+  created_at: string;
+  /**
+   * Updated At
+   */
+  updated_at: string;
+  /**
+   * Is Visible
+   */
+  is_visible: boolean;
+  product: ProductModel | null;
+  product_price: ProductPriceModel | null;
+  /**
+   * Next Order Id
+   */
+  next_order_id?: string | null;
+  /**
+   * Last Token Reset At
+   */
+  last_token_reset_at?: string | null;
+  /**
+   * Token Limit
+   */
+  token_limit: number;
+  /**
+   * Style Guide Limit
+   */
+  style_guide_limit: number;
+  /**
+   * Term Limit
+   */
+  term_limit: number;
+};
+
+/**
  * OrderStatus
  */
 export enum OrderStatus {
@@ -1117,13 +1432,75 @@ export enum OrderStatus {
 }
 
 /**
- * OrderType
+ * OrderUpdate
  */
-export enum OrderType {
-  RECURRING = "recurring",
-  ONETIME = "onetime",
-  UNLIMITED = "unlimited",
-}
+export type OrderUpdate = {
+  order_type?: HeliosOneDatabaseModelsEnumsOrderType | null;
+  billing_cycle?: HeliosOneDatabaseModelsEnumsBillingCycle | null;
+  payment_method?: PaymentMethod | null;
+  order_status?: OrderStatus | null;
+  stripe_subscription_status?: StripeSubscriptionStatus | null;
+  /**
+   * Stripe Subscription Id
+   */
+  stripe_subscription_id?: string | null;
+  /**
+   * Stripe Payment Method Id
+   */
+  stripe_payment_method_id?: string | null;
+  /**
+   * Current Period Start
+   */
+  current_period_start?: string | null;
+  /**
+   * Current Period End
+   */
+  current_period_end?: string | null;
+  /**
+   * Cancel At Period End
+   */
+  cancel_at_period_end?: boolean | null;
+  /**
+   * Is Visible
+   */
+  is_visible?: boolean | null;
+  /**
+   * Is Invoiced
+   */
+  is_invoiced?: boolean | null;
+  /**
+   * Cancel Reason
+   */
+  cancel_reason?: string | null;
+  /**
+   * Product Id
+   */
+  product_id?: string | null;
+  /**
+   * Product Price Id
+   */
+  product_price_id?: string | null;
+  /**
+   * Token Limit
+   */
+  token_limit?: number | null;
+  /**
+   * Style Guide Limit
+   */
+  style_guide_limit?: number | null;
+  /**
+   * Term Limit
+   */
+  term_limit?: number | null;
+  /**
+   * Next Order Id
+   */
+  next_order_id?: string | null;
+  /**
+   * Last Token Reset At
+   */
+  last_token_reset_at?: string | null;
+};
 
 /**
  * OrgEventHistory
@@ -1216,6 +1593,44 @@ export type OrgEventHistory = {
 };
 
 /**
+ * OrgEventHistoryUpdate
+ */
+export type OrgEventHistoryUpdate = {
+  /**
+   * Title
+   */
+  title?: string | null;
+  /**
+   * Description
+   */
+  description?: string | null;
+  /**
+   * Summary
+   */
+  summary?: string | null;
+  /**
+   * Is Visible
+   */
+  is_visible?: boolean | null;
+  /**
+   * Modified Field Names
+   */
+  modified_field_names?: Array<string> | null;
+  /**
+   * Old Values
+   */
+  old_values?: {
+    [key: string]: unknown;
+  } | null;
+  /**
+   * New Values
+   */
+  new_values?: {
+    [key: string]: unknown;
+  } | null;
+};
+
+/**
  * Organization
  */
 export type Organization = {
@@ -1253,6 +1668,14 @@ export type OrganizationMember = {
    * Name
    */
   name: string;
+  /**
+   * User Id
+   */
+  user_id?: string | null;
+  /**
+   * Is Staff
+   */
+  is_staff?: boolean;
 };
 
 /**
@@ -1437,6 +1860,14 @@ export type OrganizationResponseAdmin = {
    * Is Acrolinx Classic
    */
   is_acrolinx_classic: boolean;
+  /**
+   * Stripe Customer Id
+   */
+  stripe_customer_id?: string | null;
+  /**
+   * Billing Status
+   */
+  billing_status?: string | null;
   /**
    * Trial
    */
@@ -1654,6 +2085,14 @@ export type OrganizationUpdate = {
    * Is Acrolinx Classic
    */
   is_acrolinx_classic?: boolean | null;
+  /**
+   * Stripe Customer Id
+   */
+  stripe_customer_id?: string | null;
+  /**
+   * Billing Status
+   */
+  billing_status?: string | null;
 };
 
 /**
@@ -1696,13 +2135,125 @@ export type PageApiKeyRead = {
 };
 
 /**
- * Page[StyleGuide]
+ * Page[AccessPolicyRead]
  */
-export type PageStyleGuide = {
+export type PageAccessPolicyRead = {
   /**
    * Items
    */
-  items: Array<HeliosOneDatabaseModelsStyleGuideStyleGuide>;
+  items: Array<AccessPolicyRead>;
+  /**
+   * Total Items
+   */
+  total_items: number;
+  /**
+   * Page
+   */
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+  /**
+   * Total Pages
+   *
+   * The total number of pages.
+   */
+  readonly total_pages: number;
+};
+
+/**
+ * Page[AdminStyleGuideResponse]
+ */
+export type PageAdminStyleGuideResponse = {
+  /**
+   * Items
+   */
+  items: Array<AdminStyleGuideResponse>;
+  /**
+   * Total Items
+   */
+  total_items: number;
+  /**
+   * Page
+   */
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+  /**
+   * Total Pages
+   *
+   * The total number of pages.
+   */
+  readonly total_pages: number;
+};
+
+/**
+ * Page[OrgEventHistory]
+ */
+export type PageOrgEventHistory = {
+  /**
+   * Items
+   */
+  items: Array<OrgEventHistory>;
+  /**
+   * Total Items
+   */
+  total_items: number;
+  /**
+   * Page
+   */
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+  /**
+   * Total Pages
+   *
+   * The total number of pages.
+   */
+  readonly total_pages: number;
+};
+
+/**
+ * Page[RoleRead]
+ */
+export type PageRoleRead = {
+  /**
+   * Items
+   */
+  items: Array<RoleRead>;
+  /**
+   * Total Items
+   */
+  total_items: number;
+  /**
+   * Page
+   */
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+  /**
+   * Total Pages
+   *
+   * The total number of pages.
+   */
+  readonly total_pages: number;
+};
+
+/**
+ * Page[StripeEventHistory]
+ */
+export type PageStripeEventHistory = {
+  /**
+   * Items
+   */
+  items: Array<StripeEventHistory>;
   /**
    * Total Items
    */
@@ -1731,6 +2282,34 @@ export type PageTermSetWithTerms = {
    * Items
    */
   items: Array<TermSetWithTerms>;
+  /**
+   * Total Items
+   */
+  total_items: number;
+  /**
+   * Page
+   */
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+  /**
+   * Total Pages
+   *
+   * The total number of pages.
+   */
+  readonly total_pages: number;
+};
+
+/**
+ * Page[UserRead]
+ */
+export type PageUserRead = {
+  /**
+   * Items
+   */
+  items: Array<UserRead>;
   /**
    * Total Items
    */
@@ -1832,6 +2411,40 @@ export type PaginatedTermSetsResponse = {
 };
 
 /**
+ * PaymentMethod
+ */
+export enum PaymentMethod {
+  STRIPE = "stripe",
+  MANUAL = "manual",
+}
+
+/**
+ * PermissionsCheckRequest
+ */
+export type PermissionsCheckRequest = {
+  /**
+   * Permissions
+   *
+   * List of permission strings to check.
+   */
+  permissions?: Array<string>;
+};
+
+/**
+ * PermissionsCheckResponse
+ */
+export type PermissionsCheckResponse = {
+  /**
+   * Has Permissions
+   *
+   * Indicates whether the user has all the specified permissions.
+   */
+  has_permissions?: {
+    [key: string]: boolean;
+  };
+};
+
+/**
  * Position
  */
 export type Position = {
@@ -1841,6 +2454,85 @@ export type Position = {
    * The start index of the issue in the text
    */
   start_index: number;
+};
+
+/**
+ * ProductModel
+ *
+ * Response model for product data with its prices
+ */
+export type ProductModel = {
+  /**
+   * Product Id
+   */
+  product_id: string;
+  type: ProductType;
+  /**
+   * Name
+   */
+  name: string;
+  /**
+   * Description
+   */
+  description: string | null;
+  /**
+   * Token Limit
+   */
+  token_limit: number;
+  /**
+   * Style Guide Limit
+   */
+  style_guide_limit: number;
+  /**
+   * Term Limit
+   */
+  term_limit: number;
+  /**
+   * Product Code
+   */
+  product_code?: string | null;
+  /**
+   * Active
+   */
+  active: boolean;
+  /**
+   * Product Prices
+   */
+  product_prices: Array<ProductPriceModel>;
+};
+
+/**
+ * ProductPriceModel
+ *
+ * Response model for product price data
+ */
+export type ProductPriceModel = {
+  /**
+   * Product Price Id
+   */
+  product_price_id: string;
+  /**
+   * Product Id
+   */
+  product_id: string;
+  /**
+   * Amount Cents
+   */
+  amount_cents: number;
+  currency: Currency;
+  billing_cycle: HeliosOneApiModulesSubscriptionSchemasSubscriptionApiModelBillingCycle;
+  /**
+   * Stripe Price Id
+   */
+  stripe_price_id: string;
+  /**
+   * Version
+   */
+  version: number;
+  /**
+   * Active
+   */
+  active: boolean;
 };
 
 /**
@@ -1923,6 +2615,10 @@ export type ProductWithPricesResponse = {
    */
   term_limit: number;
   /**
+   * Product Code
+   */
+  product_code?: string | null;
+  /**
    * Active
    */
   active: boolean;
@@ -1967,12 +2663,73 @@ export type RewriteResponse = {
 };
 
 /**
+ * RoleRead
+ *
+ * Model for reading role data.
+ */
+export type RoleRead = {
+  /**
+   * Name
+   *
+   * The name of the role.
+   */
+  name: string;
+  /**
+   * Description
+   *
+   * A description of the role.
+   */
+  description?: string | null;
+  /**
+   * Organization Id
+   *
+   * The ID of the organization this role belongs to, if any.
+   */
+  organization_id?: string | null;
+  /**
+   * Hidden
+   *
+   * Setting to true will hide this role from the UI, but the role is still assignable.
+   */
+  hidden?: boolean;
+  /**
+   * Superuser
+   *
+   * Setting to true will give this role all permissions.
+   */
+  superuser?: boolean;
+  /**
+   * Priority
+   *
+   * The priority level of the role, with higher numbers indicating higher priority. This is used to determine the order to display roles in the UI.
+   */
+  priority?: number;
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Created At
+   */
+  created_at: string;
+};
+
+/**
  * ScoreOutput
  */
 export type ScoreOutput = {
   quality?: QualityScore | null;
   analysis?: AnalysisScore | null;
 };
+
+/**
+ * Severity
+ */
+export enum Severity {
+  HIGH = "high",
+  MEDIUM = "medium",
+  LOW = "low",
+}
 
 /**
  * StaffRequest
@@ -2014,6 +2771,108 @@ export type StaffUpdate = {
    * Admin
    */
   admin?: boolean;
+};
+
+/**
+ * StripeEventHistory
+ */
+export type StripeEventHistory = {
+  /**
+   * Organization Id
+   *
+   * ID of the organization this event relates to (if applicable)
+   */
+  organization_id: string | null;
+  /**
+   * Customer Id
+   *
+   * Stripe customer ID
+   */
+  customer_id?: string | null;
+  /**
+   * Subscription Id
+   *
+   * Stripe subscription ID (if applicable)
+   */
+  subscription_id?: string | null;
+  /**
+   * Invoice Id
+   *
+   * Stripe invoice ID (if applicable)
+   */
+  invoice_id?: string | null;
+  /**
+   * Payment Intent Id
+   *
+   * Stripe payment intent ID (if applicable)
+   */
+  payment_intent_id?: string | null;
+  /**
+   * Stripe Event Id
+   *
+   * Stripe event ID (e.g., evt_1234567890)
+   */
+  stripe_event_id: string;
+  /**
+   * Stripe Product Id
+   *
+   * Stripe product ID (if applicable)
+   */
+  stripe_product_id?: string | null;
+  /**
+   * Stripe Price Id
+   *
+   * Stripe price ID (if applicable)
+   */
+  stripe_price_id?: string | null;
+  /**
+   * Stripe Event Type
+   *
+   * Stripe event type (e.g., customer.subscription.created, invoice.payment_succeeded)
+   */
+  stripe_event_type: string;
+  /**
+   * Processing Attempts
+   *
+   * Number of processing attempts
+   */
+  processing_attempts?: number;
+  /**
+   * Last Processing Error
+   *
+   * Last error message during processing
+   */
+  last_processing_error?: string | null;
+  /**
+   * Event Description
+   *
+   * Human-readable description of the event
+   */
+  event_description?: string | null;
+  /**
+   * Full Payload
+   *
+   * Complete Stripe event payload (JSONB)
+   */
+  full_payload: {
+    [key: string]: unknown;
+  };
+  /**
+   * Stripe Created At
+   *
+   * When the event was created by Stripe
+   */
+  stripe_created_at?: string | null;
+  /**
+   * Received At
+   *
+   * When the event was received by our system
+   */
+  received_at?: string;
+  /**
+   * Id
+   */
+  id?: string;
 };
 
 /**
@@ -2072,21 +2931,37 @@ export type StyleCheckResponse = {
 };
 
 /**
+ * StyleGuide
+ */
+export type StyleGuide = {
+  /**
+   * The type of style guide to use
+   */
+  style_guide_type?: StyleGuides | null;
+  /**
+   * Style Guide Id
+   *
+   * The ID of the style guide to use
+   */
+  style_guide_id?: string | null;
+};
+
+/**
  * StyleGuideRequestBody
  */
 export type StyleGuideRequestBody = {
   /**
    * File Upload
    *
-   * The document to analyze. We accept PDF files (.pdf) up to 2 MB.
+   * The document to analyze. We accept PDF files (.pdf) up to 2 MB. Required unless copy_from is provided.
    */
-  file_upload: Blob | File;
+  file_upload?: Blob | File | null;
   /**
    * Name
    *
-   * A friendly name for your style guide to help you identify it later.
+   * A friendly name for your style guide. Required when creating from a document, optional when copying (auto-generated if not provided).
    */
-  name: string;
+  name?: string | null;
   /**
    * The base style guide to extend (AP, Chicago, or Microsoft). If not provided, the style guide will be created from scratch.
    */
@@ -2157,6 +3032,12 @@ export type StyleGuideResponse = {
    * List of domain IDs to filter terminology searches by. NULL or empty list means no filtering.
    */
   terminology_domain_ids?: Array<string> | null;
+  /**
+   * Has Tone Prompt
+   *
+   * Whether this style guide has a tone prompt defined.
+   */
+  has_tone_prompt?: boolean;
 };
 
 /**
@@ -2269,8 +3150,8 @@ export type SubscriptionResponse = {
    * Organization Id
    */
   organization_id: string;
-  order_type: OrderType;
-  billing_cycle: BillingCycle;
+  order_type: HeliosOneDatabaseModelsEnumsOrderType;
+  billing_cycle: HeliosOneApiModulesSubscriptionSchemasSubscriptionApiModelBillingCycle;
   order_status: OrderStatus;
   /**
    * Current Period Start
@@ -2284,7 +3165,7 @@ export type SubscriptionResponse = {
    * Cancel At Period End
    */
   cancel_at_period_end: boolean;
-  stripe_subscription_status: StripeSubscriptionStatus;
+  stripe_subscription_status: StripeSubscriptionStatus | null;
   /**
    * Cancel Reason
    */
@@ -2350,7 +3231,14 @@ export type Suggestion = {
    * The suggested replacement text
    */
   suggestion: string;
-  category: IssueCategory | null;
+  /**
+   * Explanation
+   *
+   * Explanation for the suggestion, generated by the LLM
+   */
+  explanation?: string | null;
+  readonly category: IssueCategory | null;
+  readonly severity: Severity;
 };
 
 /**
@@ -2607,8 +3495,8 @@ export type TermSetWithTerms = {
  */
 export enum TermType {
   PREFERRED = "preferred",
-  DEPRECATED = "deprecated",
-  CONTEXT_MATTERS = "context_matters",
+  PROHIBITED = "prohibited",
+  CONTEXT_DEPENDENT = "context_dependent",
 }
 
 /**
@@ -2622,6 +3510,22 @@ export type TermUpdateRequest = {
    */
   term: string;
   type: TermType;
+};
+
+/**
+ * TerminologyDomainInfo
+ *
+ * Basic domain info for display in style guide responses.
+ */
+export type TerminologyDomainInfo = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Name
+   */
+  name: string;
 };
 
 /**
@@ -2915,6 +3819,80 @@ export type ThrottleToggleResponse = {
 };
 
 /**
+ * ToEnterpriseRequest
+ *
+ * Request model for upgrading to enterprise
+ */
+export type ToEnterpriseRequest = {
+  /**
+   * Start Date
+   */
+  start_date?: string | null;
+  /**
+   * End Date
+   */
+  end_date?: string | null;
+  /**
+   * Token Limit
+   */
+  token_limit: number;
+  /**
+   * Style Guide Limit
+   */
+  style_guide_limit: number;
+  /**
+   * Term Limit
+   */
+  term_limit: number;
+  cancel_behavior?: CancelBehaviorForActiveOrders;
+};
+
+/**
+ * ToEnterpriseResponse
+ *
+ * Response model for upgrading to enterprise
+ */
+export type ToEnterpriseResponse = {
+  /**
+   * Message
+   */
+  message: string;
+  /**
+   * Order Id
+   */
+  order_id: string;
+  new_order: SubscriptionResponse;
+  /**
+   * Cancelled Orders
+   */
+  cancelled_orders: Array<SubscriptionResponse>;
+};
+
+/**
+ * TokenUsageDataPoint
+ */
+export type TokenUsageDataPoint = {
+  /**
+   * Report Date
+   */
+  report_date: string;
+  /**
+   * Tokens Used
+   */
+  tokens_used: number;
+};
+
+/**
+ * TokenUsageHistoryResponse
+ */
+export type TokenUsageHistoryResponse = {
+  /**
+   * Data
+   */
+  data: Array<TokenUsageDataPoint>;
+};
+
+/**
  * ToneCategory
  */
 export enum ToneCategory {
@@ -2963,6 +3941,7 @@ export enum Tones {
   ENGAGING = "engaging",
   FRIENDLY = "friendly",
   PROFESSIONAL = "professional",
+  STYLE_GUIDE = "style_guide",
   TECHNICAL = "technical",
 }
 
@@ -2976,40 +3955,6 @@ export type UpdateSubscriptionRequest = {
    * New Product Price Id
    */
   new_product_price_id: string;
-};
-
-/**
- * UpdateSubscriptionResponse
- *
- * Response model for updating a subscription
- */
-export type UpdateSubscriptionResponse = {
-  /**
-   * Order Id
-   */
-  order_id: string;
-  /**
-   * Organization Id
-   */
-  organization_id: string;
-  order_type: OrderType;
-  billing_cycle: BillingCycle;
-  order_status: OrderStatus;
-  /**
-   * Current Period Start
-   */
-  current_period_start: string;
-  /**
-   * Current Period End
-   */
-  current_period_end: string;
-  /**
-   * Cancel At Period End
-   */
-  cancel_at_period_end: boolean;
-  stripe_subscription_status: StripeSubscriptionStatus;
-  new_product?: ProductWithPricesResponse | null;
-  old_product?: ProductWithPricesResponse | null;
 };
 
 /**
@@ -3039,17 +3984,31 @@ export type UserProfileResponse = {
 };
 
 /**
- * UserResponse
+ * UserRead
  */
-export type UserResponse = {
-  /**
-   * Name
-   */
-  name: string;
+export type UserRead = {
   /**
    * Email
    */
-  email: string;
+  email?: string | null;
+  /**
+   * Is Staff
+   */
+  is_staff?: boolean;
+  /**
+   * Id
+   */
+  id: string;
+};
+
+/**
+ * UserUpdate
+ */
+export type UserUpdate = {
+  /**
+   * Is Staff
+   */
+  is_staff?: boolean | null;
 };
 
 /**
@@ -3149,7 +4108,7 @@ export type WorkflowInfo = {
    *
    * API version
    */
-  api_version?: string;
+  api_version?: string | null;
   /**
    * Filename
    *
@@ -3197,25 +4156,9 @@ export enum WorkflowStatus {
 }
 
 /**
- * StyleGuide
- */
-export type HeliosOneActivitiesEngineSharedModelsStyleGuide = {
-  /**
-   * The type of style guide to use
-   */
-  style_guide_type?: StyleGuides | null;
-  /**
-   * Style Guide Id
-   *
-   * The ID of the style guide to use
-   */
-  style_guide_id?: string | null;
-};
-
-/**
  * PaginatedInvitationsResponse
  */
-export type HeliosOneApiModulesAdminMainPaginatedInvitationsResponse = {
+export type HeliosOneApiModulesAdminOrganizationsPaginatedInvitationsResponse = {
   /**
    * Page
    */
@@ -3233,7 +4176,7 @@ export type HeliosOneApiModulesAdminMainPaginatedInvitationsResponse = {
 /**
  * PaginatedMembersResponse
  */
-export type HeliosOneApiModulesAdminMainPaginatedMembersResponse = {
+export type HeliosOneApiModulesAdminOrganizationsPaginatedMembersResponse = {
   /**
    * Total
    */
@@ -3253,100 +4196,33 @@ export type HeliosOneApiModulesAdminMainPaginatedMembersResponse = {
 };
 
 /**
- * StyleGuide
+ * BillingCycle
+ *
+ * Billing cycle enumeration
  */
-export type HeliosOneDatabaseModelsStyleGuideStyleGuide = {
-  /**
-   * Created By
-   *
-   * The ID of the user who created the style guide. For now, this is the user's email but will likely be a UUID in the future.
-   */
-  created_by: string;
-  /**
-   * Organization Id
-   *
-   * The ID of the organization that owns the style guide. NULL for system-provided guides.
-   */
-  organization_id?: string | null;
-  /**
-   * Created At
-   *
-   * The date and time the style guide was created.
-   */
-  created_at?: string | null;
-  /**
-   * Name
-   *
-   * A user-friendly name for the style guide.
-   */
-  name?: string;
-  /**
-   * Updated By
-   *
-   * The ID of the user who last updated the style guide. For now, this is the user's email but will likely be a UUID in the future.
-   */
-  updated_by?: string | null;
-  /**
-   * Updated At
-   *
-   * The date and time the style guide was last updated. If null, the style guide has never been updated.
-   */
-  updated_at?: string | null;
-  /**
-   * Deleted By
-   *
-   * The ID of the user who deleted the style guide. For now, this is the user's email but will likely be a UUID in the future.
-   */
-  deleted_by?: string | null;
-  /**
-   * Deleted At
-   *
-   * The date and time the style guide was deleted. If null, the style guide is not deleted.
-   */
-  deleted_at?: string | null;
-  /**
-   * The status of the submitted style guide.
-   */
-  status?: StyleGuideStatus;
-  /**
-   * The base style guide type (AP, Chicago, Microsoft) that this style guide extends
-   */
-  base_style_guide_type?: BaseStyleGuideType | null;
-  /**
-   * Id
-   */
-  id?: string;
-  /**
-   * Consistency Prompt
-   *
-   * Consistency prompt for capitalization, punctuation, numbers, and technical conventions
-   */
-  consistency_prompt?: string | null;
-  /**
-   * Tone Prompt
-   *
-   * Tone prompt for voice and inclusive language
-   */
-  tone_prompt?: string | null;
-  /**
-   * Clarity Sentence Structure Prompt
-   *
-   * Clarity sentence structure prompt for grammar and sentence construction
-   */
-  clarity_sentence_structure_prompt?: string | null;
-  /**
-   * Clarity Simple Vocabulary Prompt
-   *
-   * Clarity simple vocabulary prompt for word choice and vocabulary simplification
-   */
-  clarity_simple_vocabulary_prompt?: string | null;
-  /**
-   * Summary
-   *
-   * User-friendly summary of the style guide's contents and characteristics
-   */
-  summary?: string | null;
-};
+export enum HeliosOneApiModulesSubscriptionSchemasSubscriptionApiModelBillingCycle {
+  MONTHLY = "monthly",
+  YEARLY = "yearly",
+  ONE_TIME = "one_time",
+}
+
+/**
+ * BillingCycle
+ */
+export enum HeliosOneDatabaseModelsEnumsBillingCycle {
+  MONTHLY = "monthly",
+  YEARLY = "yearly",
+  ONE_TIME = "one_time",
+}
+
+/**
+ * OrderType
+ */
+export enum HeliosOneDatabaseModelsEnumsOrderType {
+  RECURRING = "recurring",
+  ONETIME = "onetime",
+  UNLIMITED = "unlimited",
+}
 
 /**
  * AccountResponse
@@ -3354,6 +4230,7 @@ export type HeliosOneDatabaseModelsStyleGuideStyleGuide = {
 export type AccountResponseWritable = {
   organization: OrganizationResponseFullWritable;
   user_profile: UserProfileResponse;
+  user?: UserRead | null;
 };
 
 /**
@@ -3511,6 +4388,14 @@ export type OrganizationResponseAdminWritable = {
    * Is Acrolinx Classic
    */
   is_acrolinx_classic: boolean;
+  /**
+   * Stripe Customer Id
+   */
+  stripe_customer_id?: string | null;
+  /**
+   * Billing Status
+   */
+  billing_status?: string | null;
 };
 
 /**
@@ -3618,13 +4503,101 @@ export type PageApiKeyReadWritable = {
 };
 
 /**
- * Page[StyleGuide]
+ * Page[AccessPolicyRead]
  */
-export type PageStyleGuideWritable = {
+export type PageAccessPolicyReadWritable = {
   /**
    * Items
    */
-  items: Array<HeliosOneDatabaseModelsStyleGuideStyleGuide>;
+  items: Array<AccessPolicyRead>;
+  /**
+   * Total Items
+   */
+  total_items: number;
+  /**
+   * Page
+   */
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+};
+
+/**
+ * Page[AdminStyleGuideResponse]
+ */
+export type PageAdminStyleGuideResponseWritable = {
+  /**
+   * Items
+   */
+  items: Array<AdminStyleGuideResponse>;
+  /**
+   * Total Items
+   */
+  total_items: number;
+  /**
+   * Page
+   */
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+};
+
+/**
+ * Page[OrgEventHistory]
+ */
+export type PageOrgEventHistoryWritable = {
+  /**
+   * Items
+   */
+  items: Array<OrgEventHistory>;
+  /**
+   * Total Items
+   */
+  total_items: number;
+  /**
+   * Page
+   */
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+};
+
+/**
+ * Page[RoleRead]
+ */
+export type PageRoleReadWritable = {
+  /**
+   * Items
+   */
+  items: Array<RoleRead>;
+  /**
+   * Total Items
+   */
+  total_items: number;
+  /**
+   * Page
+   */
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+};
+
+/**
+ * Page[StripeEventHistory]
+ */
+export type PageStripeEventHistoryWritable = {
+  /**
+   * Items
+   */
+  items: Array<StripeEventHistory>;
   /**
    * Total Items
    */
@@ -3647,6 +4620,28 @@ export type PageTermSetWithTermsWritable = {
    * Items
    */
   items: Array<TermSetWithTerms>;
+  /**
+   * Total Items
+   */
+  total_items: number;
+  /**
+   * Page
+   */
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+};
+
+/**
+ * Page[UserRead]
+ */
+export type PageUserReadWritable = {
+  /**
+   * Items
+   */
+  items: Array<UserRead>;
   /**
    * Total Items
    */
@@ -3733,6 +4728,12 @@ export type SuggestionWritable = {
    * The suggested replacement text
    */
   suggestion: string;
+  /**
+   * Explanation
+   *
+   * Explanation for the suggestion, generated by the LLM
+   */
+  explanation?: string | null;
 };
 
 /**
@@ -3799,11 +4800,22 @@ export type StyleGuidesListStyleGuidesResponse =
 export type StyleGuidesCreateStyleGuideData = {
   body: StyleGuideRequestBody;
   path?: never;
-  query?: never;
+  query?: {
+    /**
+     * Copyfrom
+     *
+     * The ID of an existing style guide to copy. When provided, creates a copy instead of processing a document.
+     */
+    copyFrom?: string | null;
+  };
   url: "/v1/style-guides";
 };
 
 export type StyleGuidesCreateStyleGuideErrors = {
+  /**
+   * Invalid request parameters
+   */
+  400: ErrorResponse;
   /**
    * Authentication failed or no valid API key provided.
    */
@@ -3812,6 +4824,10 @@ export type StyleGuidesCreateStyleGuideErrors = {
    * Forbidden
    */
   403: ErrorResponse;
+  /**
+   * Source style guide not found (when using copyFrom).
+   */
+  404: ErrorResponse;
   /**
    * A style guide with this name already exists
    */
@@ -3835,7 +4851,11 @@ export type StyleGuidesCreateStyleGuideError =
 
 export type StyleGuidesCreateStyleGuideResponses = {
   /**
-   * Style guide creation started successfully.
+   * Style guide copied successfully (when using copyFrom).
+   */
+  201: StyleGuideResponse;
+  /**
+   * Style guide creation started successfully (when using file_upload).
    */
   202: StyleGuideResponse;
 };
@@ -4092,101 +5112,6 @@ export type StyleChecksGetStyleCheckResponses = {
 export type StyleChecksGetStyleCheckResponse =
   StyleChecksGetStyleCheckResponses[keyof StyleChecksGetStyleCheckResponses];
 
-export type StyleChecksCreateStyleCheckBatchData = {
-  body: BatchStyleCheckRequestBody;
-  path?: never;
-  query?: never;
-  url: "/v1/style/batch-checks";
-};
-
-export type StyleChecksCreateStyleCheckBatchErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * The uploaded file exceeds the maximum allowed size.
-   */
-  413: ErrorResponse;
-  /**
-   * The request validation failed.
-   */
-  422: ValidationErrorResponse;
-  /**
-   * Token limit exceeded.
-   */
-  429: ErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type StyleChecksCreateStyleCheckBatchError =
-  StyleChecksCreateStyleCheckBatchErrors[keyof StyleChecksCreateStyleCheckBatchErrors];
-
-export type StyleChecksCreateStyleCheckBatchResponses = {
-  /**
-   * Request accepted.
-   */
-  202: WorkflowResponse;
-};
-
-export type StyleChecksCreateStyleCheckBatchResponse =
-  StyleChecksCreateStyleCheckBatchResponses[keyof StyleChecksCreateStyleCheckBatchResponses];
-
-export type StyleChecksGetStyleCheckBatchData = {
-  body?: never;
-  path: {
-    /**
-     * Workflow Id
-     */
-    workflow_id: string;
-  };
-  query?: never;
-  url: "/v1/style/batch-checks/{workflow_id}";
-};
-
-export type StyleChecksGetStyleCheckBatchErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * The client attempted to poll or retrieve results for an ID that doesn't exist.
-   */
-  404: ErrorResponse;
-  /**
-   * The request validation failed.
-   */
-  422: ValidationErrorResponse;
-  /**
-   * An internal server error occurred while fetching the workflow result.
-   */
-  500: ErrorResponse;
-};
-
-export type StyleChecksGetStyleCheckBatchError =
-  StyleChecksGetStyleCheckBatchErrors[keyof StyleChecksGetStyleCheckBatchErrors];
-
-export type StyleChecksGetStyleCheckBatchResponses = {
-  /**
-   * Batch style check results.
-   */
-  200: BatchStyleResponse;
-};
-
-export type StyleChecksGetStyleCheckBatchResponse =
-  StyleChecksGetStyleCheckBatchResponses[keyof StyleChecksGetStyleCheckBatchResponses];
-
 export type StyleSuggestionsCreateStyleSuggestionData = {
   body: StyleSuggestionRequestBody;
   path?: never;
@@ -4281,101 +5206,6 @@ export type StyleSuggestionsGetStyleSuggestionResponses = {
 
 export type StyleSuggestionsGetStyleSuggestionResponse =
   StyleSuggestionsGetStyleSuggestionResponses[keyof StyleSuggestionsGetStyleSuggestionResponses];
-
-export type StyleSuggestionsCreateStyleSuggestionBatchData = {
-  body: BatchStyleSuggestionRequestBody;
-  path?: never;
-  query?: never;
-  url: "/v1/style/batch-suggestions";
-};
-
-export type StyleSuggestionsCreateStyleSuggestionBatchErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * The uploaded file exceeds the maximum allowed size.
-   */
-  413: ErrorResponse;
-  /**
-   * The request validation failed.
-   */
-  422: ValidationErrorResponse;
-  /**
-   * Token limit exceeded.
-   */
-  429: ErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type StyleSuggestionsCreateStyleSuggestionBatchError =
-  StyleSuggestionsCreateStyleSuggestionBatchErrors[keyof StyleSuggestionsCreateStyleSuggestionBatchErrors];
-
-export type StyleSuggestionsCreateStyleSuggestionBatchResponses = {
-  /**
-   * Request accepted.
-   */
-  202: WorkflowResponse;
-};
-
-export type StyleSuggestionsCreateStyleSuggestionBatchResponse =
-  StyleSuggestionsCreateStyleSuggestionBatchResponses[keyof StyleSuggestionsCreateStyleSuggestionBatchResponses];
-
-export type StyleSuggestionsGetStyleSuggestionBatchData = {
-  body?: never;
-  path: {
-    /**
-     * Workflow Id
-     */
-    workflow_id: string;
-  };
-  query?: never;
-  url: "/v1/style/batch-suggestions/{workflow_id}";
-};
-
-export type StyleSuggestionsGetStyleSuggestionBatchErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * The client attempted to poll or retrieve results for an ID that doesn't exist.
-   */
-  404: ErrorResponse;
-  /**
-   * The request validation failed.
-   */
-  422: ValidationErrorResponse;
-  /**
-   * An internal server error occurred while fetching the workflow result.
-   */
-  500: ErrorResponse;
-};
-
-export type StyleSuggestionsGetStyleSuggestionBatchError =
-  StyleSuggestionsGetStyleSuggestionBatchErrors[keyof StyleSuggestionsGetStyleSuggestionBatchErrors];
-
-export type StyleSuggestionsGetStyleSuggestionBatchResponses = {
-  /**
-   * Batch style suggestions results.
-   */
-  200: BatchStyleResponse;
-};
-
-export type StyleSuggestionsGetStyleSuggestionBatchResponse =
-  StyleSuggestionsGetStyleSuggestionBatchResponses[keyof StyleSuggestionsGetStyleSuggestionBatchResponses];
 
 export type StyleRewritesCreateStyleRewriteData = {
   body: StyleRewriteRequestBody;
@@ -4511,3 +5341,34 @@ export type GetAdminConstantsResponses = {
 
 export type GetAdminConstantsResponse =
   GetAdminConstantsResponses[keyof GetAdminConstantsResponses];
+
+export type InternalSubmitFeedbackData = {
+  body: FeedbackRequest;
+  path?: never;
+  query?: never;
+  url: "/internal/demo-feedback";
+};
+
+export type InternalSubmitFeedbackErrors = {
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type InternalSubmitFeedbackError =
+  InternalSubmitFeedbackErrors[keyof InternalSubmitFeedbackErrors];
+
+export type InternalSubmitFeedbackResponses = {
+  /**
+   * Successful Response
+   */
+  204: void;
+};
+
+export type InternalSubmitFeedbackResponse =
+  InternalSubmitFeedbackResponses[keyof InternalSubmitFeedbackResponses];

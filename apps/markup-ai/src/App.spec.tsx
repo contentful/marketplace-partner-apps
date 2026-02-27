@@ -31,10 +31,11 @@ describe("App", () => {
     expect(await screen.findByText("ConfigScreen")).toBeInTheDocument();
   });
 
-  it("renders Sidebar when in entry sidebar location", async () => {
+  // Sidebar is disabled - this test verifies it renders nothing
+  it("renders nothing when in entry sidebar location (Sidebar disabled)", () => {
     (useSDK as unknown as Mock).mockReturnValue(makeSdk(locations.LOCATION_ENTRY_SIDEBAR));
-    render(<App />);
-    expect(await screen.findByText("Sidebar")).toBeInTheDocument();
+    const { container } = render(<App />);
+    expect(container.firstChild).toBeNull();
   });
 
   it("renders DialogRouter when in dialog location", async () => {

@@ -24,7 +24,7 @@ describe("useTimeouts", () => {
     act(() => {
       result.current.clearTimeout("b");
     });
-    vi.advanceTimersByTime(2000);
+    vi.advanceTimersByTime(2_000);
     expect(cb2).not.toHaveBeenCalled();
 
     const cb3 = vi.fn();
@@ -32,7 +32,7 @@ describe("useTimeouts", () => {
       result.current.setTimeout("c", cb3, 1_000);
       result.current.clearAllTimeouts();
     });
-    vi.advanceTimersByTime(2000);
+    vi.advanceTimersByTime(2_000);
     expect(cb3).not.toHaveBeenCalled();
 
     vi.useRealTimers();

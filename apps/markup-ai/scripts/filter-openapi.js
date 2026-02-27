@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-/* eslint-env node, es6 */
 /* global console, process */
 
 import fs from "node:fs";
@@ -9,7 +8,12 @@ import http from "node:http";
 
 const OPENAPI_URL = "http://localhost:8000/docs/openapi.json";
 const OUTPUT_FILE = "filtered-openapi.json";
-const INCLUDED_PATHS = ["/v1/style/", "/v1/internal/", "/v1/style-guides"];
+const INCLUDED_PATHS = [
+  "/v1/style/",
+  "/v1/internal/",
+  "/v1/style-guides",
+  "/internal/demo-feedback",
+];
 
 function downloadOpenAPISpec(url) {
   return new Promise((resolve, reject) => {
