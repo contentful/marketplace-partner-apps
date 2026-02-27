@@ -1,6 +1,6 @@
 {
   "name": "bynder-content-workflow",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "4.45.0",
