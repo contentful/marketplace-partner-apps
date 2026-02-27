@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.34](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.33...surfer-contentful-app-v1.0.34) (2026-02-27)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.12.2 to 1.13.5 in /apps/surfer ([#7764](https://github.com/contentful/marketplace-partner-apps/issues/7764)) ([0f96649](https://github.com/contentful/marketplace-partner-apps/commit/0f96649659f011d6b78b1861e669d438a79ac89e))
+* **deps:** bump contentful-management from 11.60.4 to 11.62.0 in /apps/surfer in the production-dependencies group ([#6961](https://github.com/contentful/marketplace-partner-apps/issues/6961)) ([b83d99f](https://github.com/contentful/marketplace-partner-apps/commit/b83d99f691631c5343e52d3aa6a363b8b9cb106d))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/surfer ([#7585](https://github.com/contentful/marketplace-partner-apps/issues/7585)) ([cb553e3](https://github.com/contentful/marketplace-partner-apps/commit/cb553e3abb35c8f8e94af014705d42db86045277))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/surfer ([#7799](https://github.com/contentful/marketplace-partner-apps/issues/7799)) ([d2c568a](https://github.com/contentful/marketplace-partner-apps/commit/d2c568acc11de391e80b6e440ef49fd38eb5c00d))
+* **deps:** bump rollup from 4.44.1 to 4.59.0 in /apps/surfer ([#7860](https://github.com/contentful/marketplace-partner-apps/issues/7860)) ([93eabaa](https://github.com/contentful/marketplace-partner-apps/commit/93eabaa30bbb2043239a06e9667e3a05b853153d))
+
 ## [1.0.33](https://github.com/contentful/marketplace-partner-apps/compare/surfer-contentful-app-v1.0.32...surfer-contentful-app-v1.0.33) (2025-08-01)
 
 
