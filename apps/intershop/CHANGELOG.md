@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.26](https://github.com/contentful/marketplace-partner-apps/compare/intershop-connector-v1.0.25...intershop-connector-v1.0.26) (2026-02-27)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.13.1 to 1.13.5 in /apps/intershop ([#7775](https://github.com/contentful/marketplace-partner-apps/issues/7775)) ([7a0bc30](https://github.com/contentful/marketplace-partner-apps/commit/7a0bc3062d6b0e122e44fb2891f0792c7d73f5d0))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/intershop ([#7588](https://github.com/contentful/marketplace-partner-apps/issues/7588)) ([6871558](https://github.com/contentful/marketplace-partner-apps/commit/6871558fc6c91b6e8219fab22347e12604211328))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/intershop ([#7814](https://github.com/contentful/marketplace-partner-apps/issues/7814)) ([71c9421](https://github.com/contentful/marketplace-partner-apps/commit/71c9421e7567488c73aeb4c12d46733db1848c3f))
+* **deps:** Bump rollup from 4.44.1 to 4.59.0 in /apps/intershop ([#7872](https://github.com/contentful/marketplace-partner-apps/issues/7872)) ([f5b537a](https://github.com/contentful/marketplace-partner-apps/commit/f5b537aa365dee6cb78c648d8995b673d0efb056))
+
 ## [1.0.25](https://github.com/contentful/marketplace-partner-apps/compare/intershop-connector-v1.0.24...intershop-connector-v1.0.25) (2025-12-16)
 
 
