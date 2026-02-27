@@ -1,0 +1,15 @@
+{
+  "extends": ["@tsconfig/create-react-app/tsconfig.json", "@tsconfig/strictest/tsconfig.json"],
+  "compilerOptions": {
+    "target": "es5",
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true
+  },
+  "include": ["src", "test", "vite.config.mts"],
+  "exclude": ["actions", "functions"]
+}

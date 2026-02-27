@@ -1,0 +1,22 @@
+# Build output
+build/
+dist/
+coverage/
+
+# Dependencies
+node_modules/
+
+# Package files
+package-lock.json
+yarn.lock
+
+# Cache
+.cache/
+.eslintcache
+
+# Misc
+.DS_Store
+*.log 
+
+# Configuration files that should not be formatted
+renovate.json 
