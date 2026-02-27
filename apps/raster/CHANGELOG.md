@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.11](https://github.com/contentful/marketplace-partner-apps/compare/raster-v1.0.10...raster-v1.0.11) (2026-02-27)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.41.1 to 4.45.0 in /apps/raster in the production-dependencies group ([#6958](https://github.com/contentful/marketplace-partner-apps/issues/6958)) ([28fbb4e](https://github.com/contentful/marketplace-partner-apps/commit/28fbb4e7b3271176bcdedd4c9639a6865e3afcae))
+* **deps:** bump axios from 1.13.1 to 1.13.5 in /apps/raster ([#7767](https://github.com/contentful/marketplace-partner-apps/issues/7767)) ([3941735](https://github.com/contentful/marketplace-partner-apps/commit/3941735f94adc1275177ecc39c49a236abe942e0))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/raster ([#7591](https://github.com/contentful/marketplace-partner-apps/issues/7591)) ([0117584](https://github.com/contentful/marketplace-partner-apps/commit/0117584dc11530af12d10d24e0e7550d8121c245))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/raster ([#7811](https://github.com/contentful/marketplace-partner-apps/issues/7811)) ([98941be](https://github.com/contentful/marketplace-partner-apps/commit/98941be6ae214ef49dbb5c1f0fb2317e91e8db3b))
+* **deps:** bump rollup in /apps/raster ([#7858](https://github.com/contentful/marketplace-partner-apps/issues/7858)) ([80f0ff3](https://github.com/contentful/marketplace-partner-apps/commit/80f0ff373d63890a1810b730813dacf6404d7d91))
+
 ## [1.0.10](https://github.com/contentful/marketplace-partner-apps/compare/raster-v1.0.9...raster-v1.0.10) (2025-10-15)
 
 
