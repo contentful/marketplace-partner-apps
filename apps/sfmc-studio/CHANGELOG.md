@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.2.8](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.7...sfmc-studio-v1.2.8) (2026-02-27)
+
+
+### Bug Fixes
+
+* **deps:** bump ajv from 6.12.6 to 6.14.0 in /apps/sfmc-studio ([#7843](https://github.com/contentful/marketplace-partner-apps/issues/7843)) ([403990d](https://github.com/contentful/marketplace-partner-apps/commit/403990d3a02efe5d6697487b932a90c3a40e8c8f))
+* **deps:** bump axios from 1.13.2 to 1.13.5 in /apps/sfmc-studio ([#7763](https://github.com/contentful/marketplace-partner-apps/issues/7763)) ([493d350](https://github.com/contentful/marketplace-partner-apps/commit/493d3504d887b469fad006ecfcb16971f2b0c029))
+* **deps:** bump lodash-es from 4.17.22 to 4.17.23 in /apps/sfmc-studio ([#7717](https://github.com/contentful/marketplace-partner-apps/issues/7717)) ([abba065](https://github.com/contentful/marketplace-partner-apps/commit/abba065e8df3d75646ecdda1998919f11ef914c5))
+* **deps:** bump minimatch in /apps/sfmc-studio ([#7850](https://github.com/contentful/marketplace-partner-apps/issues/7850)) ([168b1d5](https://github.com/contentful/marketplace-partner-apps/commit/168b1d5db16af95ea4099ff341788480d3c1a669))
+* **deps:** bump next from 15.5.7 to 15.5.8 in /apps/sfmc-studio ([#7524](https://github.com/contentful/marketplace-partner-apps/issues/7524)) ([e5c5445](https://github.com/contentful/marketplace-partner-apps/commit/e5c54455b323220b088c4b97323fcf2b44a09ca1))
+* **deps:** bump next from 15.5.8 to 15.5.9 in /apps/sfmc-studio ([#7525](https://github.com/contentful/marketplace-partner-apps/issues/7525)) ([0110e53](https://github.com/contentful/marketplace-partner-apps/commit/0110e5332b2030ded08d26f17fb48320a79a4b7c))
+* **deps:** bump next from 15.5.9 to 15.5.10 in /apps/sfmc-studio ([#7725](https://github.com/contentful/marketplace-partner-apps/issues/7725)) ([d95a9bc](https://github.com/contentful/marketplace-partner-apps/commit/d95a9bc77eaaddb3ca2a3672a83078b08470f3b3))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/sfmc-studio ([#7586](https://github.com/contentful/marketplace-partner-apps/issues/7586)) ([17bcabc](https://github.com/contentful/marketplace-partner-apps/commit/17bcabc61a5a6f45f40468e55dd501140b916150))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/sfmc-studio ([#7809](https://github.com/contentful/marketplace-partner-apps/issues/7809)) ([0dded5d](https://github.com/contentful/marketplace-partner-apps/commit/0dded5d2abe58f7b1911dd7b40cb3baebfe007f0))
+* **deps:** bump the production-dependencies group across 1 directory with 5 updates ([#7609](https://github.com/contentful/marketplace-partner-apps/issues/7609)) ([5982e80](https://github.com/contentful/marketplace-partner-apps/commit/5982e8005b962891dd66575031a6e2d1970560fa))
+* **deps:** bump the production-dependencies group in /apps/sfmc-studio with 2 updates ([#7448](https://github.com/contentful/marketplace-partner-apps/issues/7448)) ([1389ba8](https://github.com/contentful/marketplace-partner-apps/commit/1389ba8f0d509b1472fa89aab232ce91c315ed14))
+
 ## [1.2.7](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.6...sfmc-studio-v1.2.7) (2025-12-03)
 
 
