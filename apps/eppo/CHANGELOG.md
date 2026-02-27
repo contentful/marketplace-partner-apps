@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.0.9](https://github.com/contentful/marketplace-partner-apps/compare/eppo-contentful-app-v1.0.8...eppo-contentful-app-v1.0.9) (2026-02-27)
+
+
+### Bug Fixes
+
+* Add explicit GITHUB_TOKEN permissions to workflows [ACT-2078] / [INTEG-3360] ([#7532](https://github.com/contentful/marketplace-partner-apps/issues/7532)) ([e02cfa4](https://github.com/contentful/marketplace-partner-apps/commit/e02cfa4275da01728658d3d75c42f5506d3b72a0))
+* **deps:** bump ajv from 6.12.6 to 6.14.0 in /apps/eppo ([#7845](https://github.com/contentful/marketplace-partner-apps/issues/7845)) ([d778faa](https://github.com/contentful/marketplace-partner-apps/commit/d778faa482aae3246bdbb20c99f1441d55f12330))
+* **deps:** bump axios from 1.13.1 to 1.13.5 in /apps/eppo ([#7790](https://github.com/contentful/marketplace-partner-apps/issues/7790)) ([e84246e](https://github.com/contentful/marketplace-partner-apps/commit/e84246ebc5aa9c776d1098e16a015ca673c5348f))
+* **deps:** bump express from 4.21.2 to 4.22.1 in /apps/eppo ([#7418](https://github.com/contentful/marketplace-partner-apps/issues/7418)) ([121bb05](https://github.com/contentful/marketplace-partner-apps/commit/121bb050facb46f586c075b16d7fc25276de7403))
+* **deps:** bump js-yaml from 3.14.1 to 3.14.2 in /apps/eppo ([#7355](https://github.com/contentful/marketplace-partner-apps/issues/7355)) ([738a498](https://github.com/contentful/marketplace-partner-apps/commit/738a4989ca0b882b1a5061c389900f09c0c66f8a))
+* **deps:** bump jsonpath from 1.1.1 to 1.2.0 in /apps/eppo ([#7753](https://github.com/contentful/marketplace-partner-apps/issues/7753)) ([3001a84](https://github.com/contentful/marketplace-partner-apps/commit/3001a840be500919aafe9861ab8c8809aa232c0c))
+* **deps:** bump jsonpath from 1.2.0 to 1.2.1 in /apps/eppo ([#7797](https://github.com/contentful/marketplace-partner-apps/issues/7797)) ([53cb2c5](https://github.com/contentful/marketplace-partner-apps/commit/53cb2c5734cae8971d95f1905b6199c516ba53cf))
+* **deps:** bump minimatch in /apps/eppo ([#7851](https://github.com/contentful/marketplace-partner-apps/issues/7851)) ([f863a39](https://github.com/contentful/marketplace-partner-apps/commit/f863a39ba12435f7861f949593068ee5a6648dc6))
+* **deps:** bump qs and body-parser in /apps/eppo ([#7573](https://github.com/contentful/marketplace-partner-apps/issues/7573)) ([ae1e072](https://github.com/contentful/marketplace-partner-apps/commit/ae1e072cf8198ec805bdd61e3c8de3d59a6a266e))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/eppo ([#7823](https://github.com/contentful/marketplace-partner-apps/issues/7823)) ([fad087b](https://github.com/contentful/marketplace-partner-apps/commit/fad087b681f05ce2326198959b3e168a322c5083))
+* **deps:** Bump rollup from 2.79.2 to 2.80.0 in /apps/eppo ([#7880](https://github.com/contentful/marketplace-partner-apps/issues/7880)) ([f866820](https://github.com/contentful/marketplace-partner-apps/commit/f86682051da693fbf676fab1f96795a808631964))
+* **deps:** bump the production-dependencies group in /apps/eppo with 3 updates ([#6982](https://github.com/contentful/marketplace-partner-apps/issues/6982)) ([f8972dd](https://github.com/contentful/marketplace-partner-apps/commit/f8972dd91651346b23626d0cef169f43b6efc40e))
+* **deps:** bump webpack from 5.99.9 to 5.105.0 in /apps/eppo ([#7757](https://github.com/contentful/marketplace-partner-apps/issues/7757)) ([b982f9c](https://github.com/contentful/marketplace-partner-apps/commit/b982f9c630210fb59c6cdb918f5a6b889ca48d57))
+
 ## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/eppo-contentful-app-v1.0.7...eppo-contentful-app-v1.0.8) (2025-08-01)
 
 
