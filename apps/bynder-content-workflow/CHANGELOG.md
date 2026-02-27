@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.13](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.12...bynder-content-workflow-v1.0.13) (2026-02-27)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.13.1 to 1.13.5 in /apps/bynder-content-workflow ([#7788](https://github.com/contentful/marketplace-partner-apps/issues/7788)) ([16b32aa](https://github.com/contentful/marketplace-partner-apps/commit/16b32aaceb50b5c6f5e24f8030a7120970b77223))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/bynder-content-workflow ([#7575](https://github.com/contentful/marketplace-partner-apps/issues/7575)) ([277fef8](https://github.com/contentful/marketplace-partner-apps/commit/277fef8ac1ce5e87d9f82d0e6c1fb7c9c0583baa))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/bynder-content-workflow ([#7831](https://github.com/contentful/marketplace-partner-apps/issues/7831)) ([466d4f9](https://github.com/contentful/marketplace-partner-apps/commit/466d4f9f9c65d9fb3cd3e0fd771288335a920d05))
+* **deps:** Bump rollup from 4.46.2 to 4.59.0 in /apps/bynder-content-workflow ([#7881](https://github.com/contentful/marketplace-partner-apps/issues/7881)) ([2aa0539](https://github.com/contentful/marketplace-partner-apps/commit/2aa0539894ac639ea4fd1672d0fe16d2fb812de7))
+* **deps:** bump the production-dependencies group in /apps/bynder-content-workflow with 4 updates ([#6980](https://github.com/contentful/marketplace-partner-apps/issues/6980)) ([497f668](https://github.com/contentful/marketplace-partner-apps/commit/497f66857700d8f4570d0a55d5919b67e7ea3eaf))
+* **deps:** bump validator from 13.15.15 to 13.15.20 in /apps/bynder-content-workflow ([#6949](https://github.com/contentful/marketplace-partner-apps/issues/6949)) ([48da4f3](https://github.com/contentful/marketplace-partner-apps/commit/48da4f3be5f4950b540dd33c8f98ecfa41181efa))
+* **deps:** bump validator from 13.15.20 to 13.15.23 in /apps/bynder-content-workflow ([#7422](https://github.com/contentful/marketplace-partner-apps/issues/7422)) ([186a1cf](https://github.com/contentful/marketplace-partner-apps/commit/186a1cfae6cd9947ee4e38adf1296417895fe63f))
+
 ## [1.0.12](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.11...bynder-content-workflow-v1.0.12) (2025-08-01)
 
 
