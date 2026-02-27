@@ -7,8 +7,10 @@ import {
   TextInput,
   Text,
   SectionHeading,
+  Button,
+  Badge,
 } from "@contentful/f36-components";
-import { Entry } from "contentful-management";
+import { Entry, KeyValueMap } from "contentful-management";
 import { css } from "@emotion/css";
 import { useCMA, useSDK } from "@contentful/react-apps-toolkit";
 import { FormControl, Select } from "@contentful/f36-components";
@@ -51,6 +53,76 @@ const COMPARISON_CONDITIONS = [
 
 const COMPARISON_CONDITIONS_NON_TEXT_FIELD = ["is empty", "is not empty"];
 
+const COMPARISON_CONDITIONS_NUMBER = [
+  "less than",
+  "greater than",
+  "between",
+  "equal",
+  "not equal",
+  "is empty",
+  "is not empty",
+];
+
+const COMPARISON_CONDITIONS_REFERENCE_MULTIPLE = [
+  "reference count less than",
+  "reference count greater than",
+  "reference count between",
+  "reference count equal",
+  "reference count not equal",
+  "includes entry", // checks if a specific entry is included
+  "is empty",
+  "is not empty",
+];
+
+const COMPARISON_CONDITIONS_REFERENCE_SINGLE = [
+  "includes entry", // checks if a specific entry is included
+  "is empty",
+  "is not empty",
+];
+
+const COMPARISON_CONDITIONS_ASSET_MULTIPLE = [
+  "reference count less than",
+  "reference count greater than",
+  "reference count between",
+  "reference count equal",
+  "reference count not equal",
+  "includes asset", // checks if a specific asset is included
+  "is empty",
+  "is not empty",
+];
+
+const COMPARISON_CONDITIONS_ASSET_SINGLE = [
+  "includes asset", // checks if a specific asset is included
+  "is empty",
+  "is not empty",
+];
+
+const COMPARISON_CONDITIONS_RICHTEXT = [
+  "includes", // checks if a specific text is included
+  "is empty",
+  "is not empty",
+];
+
+const COMPARISON_CONDITIONS_BOOLEAN = [
+  "is true",
+  "is false",
+];
+
+// CSS constants for repeated styles
+const INPUT_STYLE_200 = css({
+  width: "200px !important",
+  margin: "0 1rem !important",
+});
+
+const INPUT_STYLE_150 = css({
+  width: "150px !important",
+  margin: "0 0.5rem !important",
+});
+
+const BUTTON_MARGIN = css({
+  margin: "0 1rem !important",
+});
+
 const ConfigScreen = () => {
   const [parameters, setParameters] = useState<AppInstallationParameters>({
     rules: [],
@@ -67,6 +139,10 @@ const ConfigScreen = () => {
     COMPARISON_CONDITIONS
   );
   const [conditionValue, setConditionValue] = useState<string>("");
+  const [conditionValueMin, setConditionValueMin] = useState<string>("");
+  const [conditionValueMax, setConditionValueMax] = useState<string>("");
+  const [linkedEntryIds, setLinkedEntryIds] = useState<string[]>([]);
+  const [linkedEntryNames, setLinkedEntryNames] = useState<string[]>([]);
   const [conditionValueOptions, setConditionValueOptions] = useState<string[]>(
     []
   );
@@ -75,7 +151,6 @@ const ConfigScreen = () => {
   const [targetEntity, setTargetEntity] = useState<string>("");
   const [targetEntityFields, setTargetEntityFields] = useState<any>([]);
   const [targetEntityField, setTargetEntityField] = useState<string[]>([]);
-
   /*
      To use the cma, inject it as follows.
      If it is not needed, you can remove the next line.
@@ -114,13 +189,42 @@ const ConfigScreen = () => {
       throw new Error("Please fill out all fields");
     }
 
-    if (
-      conditionValue === "" &&
-      condition !== "is empty" &&
-      condition !== "is not empty"
-    ) {
+    // Validate condition values based on condition type
+    const needsSingleValue = [
+      "contains",
+      "is equal",
+      "is not equal",
+      "includes",
+      "less than",
+      "greater than",
+      "equal",
+      "not equal",
+      "reference count less than",
+      "reference count greater than",
+      "reference count equal",
+      "reference count not equal",
+    ];
+
+    const needsBetweenValues = ["between", "reference count between"];
+    const needsEntryId = ["includes entry", "includes asset"];
+
+    if (needsSingleValue.includes(condition) && conditionValue === "") {
       sdk.notifier.error("Please enter a condition value");
       throw new Error("Please enter a condition value");
+    }
+
+    if (
+      needsBetweenValues.includes(condition) &&
+      (conditionValueMin === "" || conditionValueMax === "")
+    ) {
+      sdk.notifier.error("Please enter both min and max values");
+      throw new Error("Please enter both min and max values");
+    }
+
+    if (needsEntryId.includes(condition) && linkedEntryIds.length === 0) {
+      const itemType = condition === "includes asset" ? "asset" : "entry";
+      sdk.notifier.error(`Please select at least one ${itemType}`);
+      throw new Error(`Please select at least one ${itemType}`);
     }
 
     const suffixIndex = targetEntity.indexOf("-sameEntity");
@@ -131,6 +235,13 @@ const ConfigScreen = () => {
       contentTypeField,
       condition,
       conditionValue,
+      ...(needsBetweenValues.includes(condition) && {
+        conditionValueMin,
+        conditionValueMax,
+      }),
+      ...(needsEntryId.includes(condition) && {
+        linkedEntryIds,
+      }),
       isForSameEntity,
       targetEntity: isForSameEntity
         ? targetEntity.substring(0, suffixIndex)
@@ -177,6 +288,10 @@ const ConfigScreen = () => {
     setContentTypeField("");
     setCondition("");
     setConditionValue("");
+    setConditionValueMin("");
+    setConditionValueMax("");
+    setLinkedEntryIds([]);
+    setLinkedEntryNames([]);
     setTargetEntity("");
     setTargetEntityField([]);
     setRuleToEditIndex(undefined);
@@ -204,6 +319,9 @@ const ConfigScreen = () => {
     targetEntity,
     targetEntityField,
     conditionValue,
+    conditionValueMin,
+    conditionValueMax,
+    linkedEntryIds,
     parameters,
     ruleToEditIndex,
   ]);
@@ -223,8 +341,47 @@ const ConfigScreen = () => {
       // The fields are fetched dynamically based on content type
       setTimeout(() => {
         setContentTypeField(ruleToEdit.contentTypeField);
-        setCondition(ruleToEdit.condition);
+        
+        // Determine if it's an asset or entry field to set correct condition
+        const contentTypeObj = contentTypes.find(
+          (c: any) => c.sys.id === ruleToEdit.contentType
+        );
+        const contentTypeFieldObj = contentTypeObj?.fields.find(
+          (f: any) => f.id === ruleToEdit.contentTypeField
+        );
+        const linkType = contentTypeFieldObj?.linkType || 
+          contentTypeFieldObj?.items?.linkType;
+        
+        // Update condition if it's "includes entry" but field is actually an asset
+        let condition = ruleToEdit.condition;
+        if (condition === "includes entry" && linkType === "Asset") {
+          condition = "includes asset";
+        }
+        setCondition(condition);
+        
         setConditionValue(ruleToEdit.conditionValue);
+        setConditionValueMin(ruleToEdit.conditionValueMin || "");
+        setConditionValueMax(ruleToEdit.conditionValueMax || "");
+        // Support both old (linkedEntryId) and new (linkedEntryIds) format
+        const entryIds = ruleToEdit.linkedEntryIds || 
+          (ruleToEdit.linkedEntryId ? [ruleToEdit.linkedEntryId] : []);
+        setLinkedEntryIds(entryIds);
+        
+        // Fetch entry/asset names for editing
+        if (entryIds.length > 0) {
+          
+          Promise.all(
+            entryIds.map(async (id: string) => {
+              if (linkType === 'Asset') {
+                return fetchAssetName(id);
+              } else {
+                return fetchEntryName(id);
+              }
+            })
+          ).then((names) => {
+            setLinkedEntryNames(names);
+          });
+        }
         // If the rule is set for same entity, add `-sameEntity` to targetEntity
         setTargetEntity(
           `${
@@ -236,7 +393,9 @@ const ConfigScreen = () => {
         setTargetEntityField(ruleToEdit.targetEntityField);
       }, 100);
     }
-  }, [ruleToEditIndex, parameters.rules]);
+    // fetchAssetName and fetchEntryName are stable functions that only depend on cma (already in deps)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ruleToEditIndex, parameters.rules, cma, contentTypes]);
 
   useEffect(() => {
     (async () => {
@@ -271,6 +430,10 @@ const ConfigScreen = () => {
   useEffect(() => {
     setContentTypeField("");
     setConditionValue("");
+    setConditionValueMin("");
+    setConditionValueMax("");
+    setLinkedEntryIds([]);
+    setLinkedEntryNames([]);
     setTargetEntity("");
   }, [contentType]);
 
@@ -292,12 +455,33 @@ const ConfigScreen = () => {
       if (validation) {
         setConditionValueOptions(validation.in);
       }
-      const conditionOptions =
-        contentTypes
-          .find((c: any) => c.sys.id === contentType)
-          .fields.find((f: any) => f.id === contentTypeField)?.type === "Symbol"
-          ? COMPARISON_CONDITIONS
-          : COMPARISON_CONDITIONS_NON_TEXT_FIELD;
+
+      // Determine field type and set appropriate conditions
+      const fieldType = contentTypeFieldObj?.type;
+      const itemsType = contentTypeFieldObj?.items?.type;
+      const linkType = contentTypeFieldObj?.linkType || contentTypeFieldObj?.items?.linkType;
+      
+      let conditionOptions = COMPARISON_CONDITIONS_NON_TEXT_FIELD;
+
+      if (fieldType === "Symbol" || fieldType === "Text") {
+        conditionOptions = COMPARISON_CONDITIONS;
+      } else if (fieldType === "Number" || fieldType === "Integer") {
+        conditionOptions = COMPARISON_CONDITIONS_NUMBER;
+      } else if (fieldType === "RichText") {
+        conditionOptions = COMPARISON_CONDITIONS_RICHTEXT;
+      } else if (fieldType === "Boolean") {
+        conditionOptions = COMPARISON_CONDITIONS_BOOLEAN;
+      } else if (fieldType === "Link") {
+        // Single reference - check if it's Asset or Entry
+        conditionOptions = linkType === "Asset" 
+          ? COMPARISON_CONDITIONS_ASSET_SINGLE 
+          : COMPARISON_CONDITIONS_REFERENCE_SINGLE;
+      } else if (fieldType === "Array" && itemsType === "Link") {
+        // Multiple references - check if it's Asset or Entry
+        conditionOptions = linkType === "Asset"
+          ? COMPARISON_CONDITIONS_ASSET_MULTIPLE
+          : COMPARISON_CONDITIONS_REFERENCE_MULTIPLE;
+      }
 
       setConditionOptions(conditionOptions);
     }
@@ -320,6 +504,7 @@ const ConfigScreen = () => {
         });
 
         if (children) {
+          // filter fields with type reference
           setChildEntities(children);
 
           const targetEntities = [
@@ -388,6 +573,12 @@ const ConfigScreen = () => {
     if (fieldId === "conditionValue") {
       setConditionValue(value as string);
     }
+    if (fieldId === "conditionValueMin") {
+      setConditionValueMin(value as string);
+    }
+    if (fieldId === "conditionValueMax") {
+      setConditionValueMax(value as string);
+    }
     if (fieldId === "targetEntity") {
       setTargetEntity(value as string);
     }
@@ -447,9 +638,120 @@ const ConfigScreen = () => {
 
   const toggleAll = (checked: boolean) => {
     if (checked) {
-      setTargetEntityField(targetEntityFields.map((field) => field.id));
+      setTargetEntityField(targetEntityFields.map((field: any) => field.id));
     } else {
       setTargetEntityField([]);
+    }
+  };
+
+  // Helper function to fetch asset name
+  const fetchAssetName = async (assetId: string): Promise<string> => {
+    try {
+      const asset = await cma.asset.get({ assetId });
+      const fields: KeyValueMap = asset.fields || {};
+      
+      // Try title first
+      let name = undefined;
+      if (fields.title && typeof fields.title === 'object') {
+        const locales = Object.keys(fields.title);
+        if (locales.length > 0) {
+          name = fields.title[locales[0]];
+        }
+      }
+      
+      // If no title, try fileName from file object
+      if (!name && fields.file && typeof fields.file === 'object') {
+        const locales = Object.keys(fields.file);
+        if (locales.length > 0 && fields.file[locales[0]]?.fileName) {
+          name = fields.file[locales[0]].fileName;
+        }
+      }
+      
+      return name || assetId;
+    } catch (error) {
+      return assetId;
+    }
+  };
+
+  // Helper function to fetch entry name
+  const fetchEntryName = async (entryId: string): Promise<string> => {
+    try {
+      const entry = await cma.entry.get({ entryId });
+      const fields = entry.fields || {};
+      
+      // Get the content type to find the displayField
+      const entryContentTypeId = entry.sys.contentType.sys.id;
+      const entryContentType = await cma.contentType.get({ contentTypeId: entryContentTypeId });
+      const displayFieldId = entryContentType.displayField;
+      
+      let name = undefined;
+      if (displayFieldId && fields[displayFieldId]) {
+        const displayFieldValue = fields[displayFieldId];
+        if (typeof displayFieldValue === 'object') {
+          const locales = Object.keys(displayFieldValue);
+          if (locales.length > 0) {
+            name = displayFieldValue[locales[0]];
+          }
+        }
+      }
+      
+      return name || entryId;
+    } catch (error) {
+      return entryId;
+    }
+  };
+
+  const handleSelectEntriesOrAssets = async () => {
+    // Get linked content types from field validation
+    const contentTypeObj = contentTypes.find(
+      (c: any) => c.sys.id === contentType
+    );
+    const contentTypeFieldObj = contentTypeObj?.fields.find(
+      (f: any) => f.id === contentTypeField
+    );
+    
+    // Check if it is an asset link or entry link
+    const linkType = contentTypeFieldObj?.linkType || 
+      contentTypeFieldObj?.items?.linkType;
+    
+    const linkedContentTypes =
+      contentTypeFieldObj?.validations?.[0]?.linkContentType ||
+      contentTypeFieldObj?.items?.validations?.[0]?.linkContentType;
+
+    try {
+      let result;
+      
+      // Use appropriate dialog based on link type
+      if (linkType === 'Asset') {
+        result = await sdk.dialogs.selectMultipleAssets({
+          locale: sdk.locales.default,
+        });
+      } else {
+        result = await sdk.dialogs.selectMultipleEntries({
+          contentTypes: linkedContentTypes || [],
+          locale: sdk.locales.default,
+        });
+      }
+
+      if (result && result.length > 0) {
+        const entryIds = result.map((item: any) => item.sys.id);
+        setLinkedEntryIds(entryIds);
+        
+        // Fetch full items to get names
+        Promise.all(
+          entryIds.map(async (id: string) => {
+            if (linkType === 'Asset') {
+              return fetchAssetName(id);
+            } else {
+              return fetchEntryName(id);
+            }
+          })
+        ).then((names) => {
+          setLinkedEntryNames(names);
+        });
+      }
+    } catch (error) {
+      // Error opening entry selector
     }
   };
 
@@ -624,12 +926,15 @@ const ConfigScreen = () => {
                     }))}
                     handleChange={updateInput}
                   />
-                  {/* only show if condition is contains, is equal or is not equal */}
+                  {/* Render appropriate input based on condition type */}
+                  {/* Text field conditions */}
                   {(condition === "contains" ||
                     condition === "is equal" ||
-                    condition === "is not equal") &&
+                    condition === "is not equal" ||
+                    condition === "includes") &&
                     (conditionValueOptions.length &&
-                    condition !== "contains" ? (
+                    condition !== "contains" &&
+                    condition !== "includes" ? (
                       <CustomSelect
                         className={css({
                           width: "200px !important",
@@ -653,12 +958,101 @@ const ConfigScreen = () => {
                           updateInput("conditionValue", e.target.value);
                         }}
                         placeholder="Condition value"
-                        className={css({
-                          width: "200px !important",
-                          margin: "0 1rem !important",
-                        })}
+                        className={INPUT_STYLE_200}
                       />
                     ))}
+                  {/* Number field conditions - single value */}
+                  {(condition === "less than" ||
+                    condition === "greater than" ||
+                    condition === "equal" ||
+                    condition === "not equal" ||
+                    condition === "reference count less than" ||
+                    condition === "reference count greater than" ||
+                    condition === "reference count equal" ||
+                    condition === "reference count not equal") && (
+                    <TextInput
+                      value={conditionValue}
+                      type="number"
+                      onChange={(e) => {
+                        updateInput("conditionValue", e.target.value);
+                      }}
+                      placeholder="Value"
+                      className={INPUT_STYLE_200}
+                    />
+                  )}
+                  {/* Number field conditions - between (two values) */}
+                  {(condition === "between" ||
+                    condition === "reference count between") && (
+                    <>
+                      <TextInput
+                        value={conditionValueMin}
+                        type="number"
+                        onChange={(e) => {
+                          updateInput("conditionValueMin", e.target.value);
+                        }}
+                        placeholder="Min value"
+                        className={INPUT_STYLE_150}
+                      />
+                      <Text>and</Text>
+                      <TextInput
+                        value={conditionValueMax}
+                        type="number"
+                        onChange={(e) => {
+                          updateInput("conditionValueMax", e.target.value);
+                        }}
+                        placeholder="Max value"
+                        className={INPUT_STYLE_150}
+                      />
+                    </>
+                  )}
+                  {/* Reference field condition -  includes entry or includes asset */}
+                  {(condition === "includes entry" || condition === "includes asset") && (
+                    <Flex>
+                      <Button
+                        variant="secondary"
+                        size="medium"
+                        onClick={handleSelectEntriesOrAssets}
+                        className={BUTTON_MARGIN}
+                      >
+                        {condition === "includes asset" ? "Select Assets" : "Select Entries"} ({linkedEntryIds.length} selected)
+                      </Button>
+                      {linkedEntryIds.length > 0 && (
+                        <Flex
+                          gap="spacingXs"
+                          flexWrap="wrap"
+                          className={css({
+                            margin: "0 1rem !important",
+                          })}
+                        >
+                          {linkedEntryNames.map((name, index) => {
+                            const itemId = linkedEntryIds[index];
+                            const isAsset = condition === "includes asset";
+                            const itemType = isAsset ? "assets" : "entries";
+                            const url = `https://app.contentful.com/spaces/${sdk.ids.space}/environments/${sdk.ids.environment}/${itemType}/${itemId}`;
+                            
+                            return (
+                              <a
+                                key={index}
+                                href={url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={css({
+                                  textDecoration: "none",
+                                  "&:hover": {
+                                    opacity: 0.8,
+                                  },
+                                })}
+                              >
+                                <Badge variant="primary" className={css({ cursor: "pointer" })}>
+                                  {name}
+                                </Badge>
+                              </a>
+                            );
+                          })}
+                        </Flex>
+                      )}
+                    </Flex>
+                  )}
                 </Flex>
                 <SectionHeading
                   className={css({ margin: "20px 10px 0 0 !important" })}
