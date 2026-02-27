@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.8](https://github.com/contentful/marketplace-partner-apps/compare/growthbook-contentful-app-v1.2.7...growthbook-contentful-app-v1.2.8) (2026-02-27)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.46.0 to 4.47.0 in /apps/growthbook in the production-dependencies group ([#7442](https://github.com/contentful/marketplace-partner-apps/issues/7442)) ([5c30bc1](https://github.com/contentful/marketplace-partner-apps/commit/5c30bc186012a7e88070062673fe28dc948ce2d3))
+* **deps:** bump axios from 1.13.1 to 1.13.5 in /apps/growthbook ([#7780](https://github.com/contentful/marketplace-partner-apps/issues/7780)) ([6ff7c54](https://github.com/contentful/marketplace-partner-apps/commit/6ff7c54e3495ba8d6c4dea6e5ad8654590cb1c49))
+* **deps:** bump next from 15.5.7 to 15.5.8 in /apps/growthbook ([#7522](https://github.com/contentful/marketplace-partner-apps/issues/7522)) ([5b1f4e5](https://github.com/contentful/marketplace-partner-apps/commit/5b1f4e58b2f650991137b341237f54cec4df54a0))
+* **deps:** bump next from 15.5.8 to 15.5.9 in /apps/growthbook ([#7527](https://github.com/contentful/marketplace-partner-apps/issues/7527)) ([c7ae841](https://github.com/contentful/marketplace-partner-apps/commit/c7ae841b77a331fe93b47385b1414abd28bbf627))
+* **deps:** bump next from 15.5.9 to 15.5.10 in /apps/growthbook ([#7726](https://github.com/contentful/marketplace-partner-apps/issues/7726)) ([497ad80](https://github.com/contentful/marketplace-partner-apps/commit/497ad80afdbd1647125ed68943355b5e1e920b67))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/growthbook ([#7589](https://github.com/contentful/marketplace-partner-apps/issues/7589)) ([118b5cb](https://github.com/contentful/marketplace-partner-apps/commit/118b5cbea244b9da558266f2ec14bd25370f3982))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/growthbook ([#7820](https://github.com/contentful/marketplace-partner-apps/issues/7820)) ([8cdeb7c](https://github.com/contentful/marketplace-partner-apps/commit/8cdeb7cf8102d6082c98d8c0344a630d1c283aa0))
+
 ## [1.2.7](https://github.com/contentful/marketplace-partner-apps/compare/growthbook-contentful-app-v1.2.6...growthbook-contentful-app-v1.2.7) (2025-12-03)
 
 
