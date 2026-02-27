@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/convox-v1.0.3...convox-v1.0.4) (2026-02-27)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.13.1 to 1.13.5 in /apps/convox ([#7791](https://github.com/contentful/marketplace-partner-apps/issues/7791)) ([11edede](https://github.com/contentful/marketplace-partner-apps/commit/11edede6c30780957fdfe245d83b58f096c27cd1))
+* **deps:** bump js-yaml from 4.1.0 to 4.1.1 in /apps/convox ([#7336](https://github.com/contentful/marketplace-partner-apps/issues/7336)) ([cb5cf80](https://github.com/contentful/marketplace-partner-apps/commit/cb5cf803126a3d03d96bc4f96831e28372030236))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/convox ([#7584](https://github.com/contentful/marketplace-partner-apps/issues/7584)) ([306fb8b](https://github.com/contentful/marketplace-partner-apps/commit/306fb8b11100739d417609400d474f876cb39f16))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/convox ([#7827](https://github.com/contentful/marketplace-partner-apps/issues/7827)) ([6029c5b](https://github.com/contentful/marketplace-partner-apps/commit/6029c5bb9cfb6163d345b0de217deefc0fce352f))
+* **deps:** bump rollup in /apps/convox ([#7856](https://github.com/contentful/marketplace-partner-apps/issues/7856)) ([94610e3](https://github.com/contentful/marketplace-partner-apps/commit/94610e33bb8c6c032d7dc4850a16863592777408))
+* **deps:** bump the production-dependencies group in /apps/convox with 2 updates ([#6964](https://github.com/contentful/marketplace-partner-apps/issues/6964)) ([da44746](https://github.com/contentful/marketplace-partner-apps/commit/da44746bcf0911728d4aabeee4a15919dff44ee2))
+
 ## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/convox-v1.0.2...convox-v1.0.3) (2025-08-01)
 
 
