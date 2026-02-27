@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.2.2](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.2.1...shopify-sku-v2.2.2) (2026-02-27)
+
+
+### Bug Fixes
+
+* **deps:** bump ajv from 6.12.6 to 6.14.0 in /apps/shopify ([#7839](https://github.com/contentful/marketplace-partner-apps/issues/7839)) ([67442e5](https://github.com/contentful/marketplace-partner-apps/commit/67442e581d1dd6744c04396571e09b043ba8fc02))
+* **deps:** bump axios from 1.12.0 to 1.13.5 in /apps/shopify ([#7760](https://github.com/contentful/marketplace-partner-apps/issues/7760)) ([e130726](https://github.com/contentful/marketplace-partner-apps/commit/e130726b0dabe959633771afaed7db498f056ba6))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/shopify ([#7581](https://github.com/contentful/marketplace-partner-apps/issues/7581)) ([d78799e](https://github.com/contentful/marketplace-partner-apps/commit/d78799e3318cf9b122074e137b13a913ec4a8ef1))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/shopify ([#7800](https://github.com/contentful/marketplace-partner-apps/issues/7800)) ([c9e8824](https://github.com/contentful/marketplace-partner-apps/commit/c9e88244c2d8c58a6e2404ed3a6195a6a8a6b32c))
+* **deps:** bump rollup from 4.44.1 to 4.59.0 in /apps/shopify ([#7859](https://github.com/contentful/marketplace-partner-apps/issues/7859)) ([ddc4360](https://github.com/contentful/marketplace-partner-apps/commit/ddc4360a9a4cc36d56b864c9bf69711d5f51a74e))
+
 ## [2.2.1](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.2.0...shopify-sku-v2.2.1) (2025-12-02)
 
 
