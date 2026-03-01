@@ -17,13 +17,28 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5
 
-      - name: Delete branch
+      - name: Validate and write branch name
+        id: branch
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
         run: |
-          if [ "$BRANCH_NAME" != "main" ]; then
-            git push origin --delete "$BRANCH_NAME"
-          fi
+          # Validate branch name format and write to file when valid
+          python3 -c '
+          import os, re
+          name = os.environ.get("BRANCH_NAME", "") or ""
+          if re.match(r"^[a-zA-Z0-9/_.-]+$", name) and name != "main":
+            open("branch_name.txt", "w").write(name)
+            print("valid=true", file=open(os.environ["GITHUB_OUTPUT"], "a"))
+          else:
+            print("valid=false", file=open(os.environ["GITHUB_OUTPUT"], "a"))
+          '
+
+      - name: Delete branch
+        if: steps.branch.outputs.valid == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          branch_name=$(cat branch_name.txt)
+          git push origin --delete "$branch_name"

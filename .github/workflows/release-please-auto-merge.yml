@@ -22,23 +22,25 @@ jobs:
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
         run: |
+          # Write PR body to file for grep-based checks
+          python3 -c "import os; open('pr_body.txt', 'w').write(os.environ.get('PR_BODY', '') or '')"
 
           # Check for sections that should NOT be present in dependency-only releases
-          if echo "$PR_BODY" | grep -E "### (Features|Performance Improvements|Reverts|Documentation)" -i; then
+          if grep -E "### (Features|Performance Improvements|Reverts|Documentation)" -i pr_body.txt; then
             echo "Found non-dependency sections, skipping auto-merge"
             echo "is-dependency-only=false" >> $GITHUB_OUTPUT
             exit 0
           fi
 
           # Check for breaking changes
-          if echo "$PR_BODY" | grep -E "BREAKING CHANGE" -i; then
+          if grep -E "BREAKING CHANGE" -i pr_body.txt; then
             echo "Found breaking changes, skipping auto-merge"
             echo "is-dependency-only=false" >> $GITHUB_OUTPUT
             exit 0
           fi
 
           # Positive check: ensure we have dependency-related entries
-          if echo "$PR_BODY" | grep -E "\*\*deps\*\*:" -i; then
+          if grep -E "\*\*deps\*\*:" -i pr_body.txt; then
             echo "Found dependency updates, proceeding with auto-merge"
             echo "is-dependency-only=true" >> $GITHUB_OUTPUT
           else
@@ -58,7 +60,7 @@ jobs:
       - name: Retrieve github token
         if: steps.check-dependencies.outputs.is-dependency-only == 'true'
         id: vault
-        uses: hashicorp/vault-action@v2.4.3
+        uses: hashicorp/vault-action@8fa61e909919a3f94952e9e07ace6b5a1114440b
         with:
           url: ${{ secrets.VAULT_URL }}
           role: ${{ github.event.repository.name }}-github-action
@@ -70,7 +72,7 @@ jobs:
 
       - name: Approve PR
         if: steps.check-dependencies.outputs.is-dependency-only == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b
         with:
           github-token: ${{ steps.vault.outputs.GITHUB_MERGE_TOKEN }}
           script: |
@@ -106,7 +108,7 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ steps.vault.outputs.GITHUB_MERGE_TOKEN }}
-          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           echo "Auto merging dependency-only release PR"
-          gh pr merge --auto "$PR_URL"
+          gh pr merge "$PR_NUMBER" --auto
