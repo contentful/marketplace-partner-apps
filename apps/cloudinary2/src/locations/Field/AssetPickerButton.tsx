@@ -75,6 +75,19 @@ export function AssetPickerButton({ onNewAssetsAdded, isDisabled }: Props) {
       </Button>
     );
   } else if (resourceType === 'all') {
+    const showAssetButtonOnly = sdk.parameters.installation.showAssetButtonOnly === 'true';
+    if (showAssetButtonOnly) {
+      return (
+        <Button
+          startIcon={<img src={logo} alt="Logo" css={styles.logo} />}
+          variant="secondary"
+          size="small"
+          onClick={() => handleDialogOpenClick()}
+          isDisabled={isDisabled}>
+          Select an Asset
+        </Button>
+      );
+    }
     return (
       <>
         <ButtonGroup withDivider>
