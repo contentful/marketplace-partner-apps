@@ -148,6 +148,15 @@ export function InstallParamsConfiguration(props: Props) {
         </Checkbox>
       </FieldWrapper>
 
+      <FieldWrapper description="When enabled, only the 'Select an asset' button is shown; the dropdown to choose image or video is hidden. Use this when you want editors to pick from all asset types without seeing the image/video option separately.">
+        <Checkbox
+          isChecked={parameters.showAssetButtonOnly === 'true'}
+          value={'showAssetButtonOnly'}
+          onChange={(event) => onParameterChange('showAssetButtonOnly', event.currentTarget.checked ? 'true' : 'false')}>
+          Show only &quot;Select an asset&quot; button (hide image/video dropdown)
+        </Checkbox>
+      </FieldWrapper>
+
       <TextField
         testId="config-imageEditorOverlays"
         name="Image editor overlays"

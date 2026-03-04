@@ -122,6 +122,7 @@ const ConfigScreen = () => {
         quality: currentParameters?.quality ?? DEFAULT_APP_INSTALLATION_PARAMETERS.format,
         format: currentParameters?.format ?? DEFAULT_APP_INSTALLATION_PARAMETERS.format,
         showUploadButton: currentParameters?.showUploadButton ?? DEFAULT_APP_INSTALLATION_PARAMETERS.showUploadButton,
+        showAssetButtonOnly: currentParameters?.showAssetButtonOnly ?? DEFAULT_APP_INSTALLATION_PARAMETERS.showAssetButtonOnly,
         imageEditorOverlays: currentParameters?.imageEditorOverlays ?? DEFAULT_APP_INSTALLATION_PARAMETERS.imageEditorOverlays,
       });
       setSelectedFields(editorInterfacesToSelectedFields(editorInterfacesResponse.items, sdk.ids.app));
