@@ -57,7 +57,14 @@ export function transformAsset(
 ): any {
   const { selectedFile, existingAsset, filterFields = false, addSrc = false } = options;
 
-  const thumbnails = extractThumbnails(asset);
+  const thumbnailsFromSource = extractThumbnails(asset);
+  // When refreshing from API, preserve existing thumbnails (e.g. from Compact View) that the API
+  // does not return — mini, original, inprv_* transforms, transformBaseUrl — and overlay
+  // API-provided URLs (webimage, thul) so they stay up to date.
+  const thumbnails =
+    existingAsset?.thumbnails && typeof existingAsset.thumbnails === 'object' && !Array.isArray(existingAsset.thumbnails)
+      ? { ...existingAsset.thumbnails, ...thumbnailsFromSource }
+      : thumbnailsFromSource;
 
   // Determine selectedFile: prefer from options, then existingAsset, then null
   const finalSelectedFile = selectedFile ?? existingAsset?.selectedFile ?? null;
@@ -82,8 +89,8 @@ export function transformAsset(
     isPublic: asset.isPublic ? 1 : 0,
     brandId: asset.brandId || null,
     thumbnails,
-    original: asset.originalUrl || asset.original || null,
-    videoPreviewURLs: asset.previewUrls || asset.videoPreviewURLs || [],
+    original: asset.originalUrl || asset.original || existingAsset?.original || null,
+    videoPreviewURLs: asset.previewUrls ?? asset.videoPreviewURLs ?? existingAsset?.videoPreviewURLs ?? [],
     textMetaproperties: asset.textMetaproperties || [],
     tags: asset.tags || [],
     dateCreated: asset.dateCreated || asset.createdAt || '',
