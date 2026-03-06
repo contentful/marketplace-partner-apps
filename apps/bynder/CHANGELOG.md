@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.2](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.4.1...bynder-assets-v1.4.2) (2026-03-05)
+
+
+### Bug Fixes
+
+* preserve existing thumbnails and original on refresh [ZEND-7539] ([#7927](https://github.com/contentful/marketplace-partner-apps/issues/7927)) ([537cd78](https://github.com/contentful/marketplace-partner-apps/commit/537cd789a03fb9005b17c1875615342ff63fea3e))
+
 ## [1.4.1](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.4.0...bynder-assets-v1.4.1) (2026-02-26)
 
 
