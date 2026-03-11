@@ -24,6 +24,7 @@ export const FIELDS_TO_PERSIST = [
  'watermarked',
  'width',
  'videoPreviewURLs',
+ 'streamingLinks',
  'tags',
  'selectedFile',
  'textMetaproperties',

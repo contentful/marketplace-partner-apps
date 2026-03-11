@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.4.3](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.4.2...bynder-assets-v1.4.3) (2026-03-05)
+
+### Features
+
+* added support for Video streaming links
+
 ## [1.4.2](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.4.1...bynder-assets-v1.4.2) (2026-03-05)
 
 
