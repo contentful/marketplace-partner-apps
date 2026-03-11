@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.4.2...bynder-assets-v1.5.0) (2026-03-11)
+
+
+### Features
+
+* add streaming link support for Bynder video assets [] ([#7934](https://github.com/contentful/marketplace-partner-apps/issues/7934)) ([e4ddbb6](https://github.com/contentful/marketplace-partner-apps/commit/e4ddbb635b0596c8189d1fcfe0f47b8f2a831c5c))
+
 ## [1.4.2](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.4.1...bynder-assets-v1.4.2) (2026-03-05)
 
 
