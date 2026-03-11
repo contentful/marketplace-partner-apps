@@ -91,6 +91,7 @@ export function transformAsset(
     thumbnails,
     original: asset.originalUrl || asset.original || existingAsset?.original || null,
     videoPreviewURLs: asset.previewUrls ?? asset.videoPreviewURLs ?? existingAsset?.videoPreviewURLs ?? [],
+    streamingLinks: asset.streamingLinks ?? asset.streamingLinks ?? existingAsset?.streamingLinks ?? {},
     textMetaproperties: asset.textMetaproperties || [],
     tags: asset.tags || [],
     dateCreated: asset.dateCreated || asset.createdAt || '',
