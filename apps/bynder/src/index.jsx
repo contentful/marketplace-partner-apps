@@ -4,7 +4,7 @@ import { setup } from '@contentful/dam-app-base';
 import logo from './logo.svg';
 
 const CTA = 'Select a file on Bynder';
-const BYNDER_BASE_URL = 'https://d8ejoa1fys2rk.cloudfront.net';
+const BYNDER_BASE_URL = 'https://ucv.bynder.com';
 const BYNDER_SDK_URL = `${BYNDER_BASE_URL}/5.0.5/modules/compactview/bynder-compactview-5-latest.js`;
 
 const FIELDS_TO_PERSIST = [
@@ -29,6 +29,7 @@ const FIELDS_TO_PERSIST = [
   'watermarked',
   'width',
   'videoPreviewURLs',
+  'streamingLinks',
   'tags',
   'selectedFile',
   'textMetaproperties',
@@ -63,6 +64,10 @@ const FIELD_SELECTION = `
   }
   ... on Video {
     previewUrls
+    streamingLinks {
+      dash,
+      hls
+    }
   }
 `;
 
@@ -117,6 +122,7 @@ function transformAsset(asset, selected) {
     thumbnails: thumbnails,
     original: asset.originalUrl,
     videoPreviewURLs: asset.previewUrls || [],
+    streamingLinks: asset.streamingLinks || {},
     textMetaproperties: asset.textMetaproperties || [],
     tags: asset.tags,
     selectedFile: selected.selectedFile,
