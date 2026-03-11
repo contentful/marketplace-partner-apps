@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.1.18...bynder-assets-v2.0.1) (2025-03-11)
+
+### Features
+
+* **Streaming Video URLs**
+Added support for capturing streaming video URLs
+
 ## [2.0.0](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.1.18...bynder-assets-v2.0.0) (2025-10-13)
 
 ### Features
