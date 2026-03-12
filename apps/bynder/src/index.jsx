@@ -37,11 +37,12 @@ const FIELD_SELECTION = `
     value
   }
   ... on Video {
-   previewUrls,
-   streamingLinks {
+    previewUrls,
+    streamingLinks {
       dash,
       hls
     }
+  }
 `;
 
 const validAssetTypes = ['image', 'audio', 'document', 'video'];
