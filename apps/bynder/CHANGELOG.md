@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.5.0...bynder-assets-v1.6.0) (2026-03-12)
+
+
+### Features
+
+* bynder streaming link support [ZEND-7539] ([#7937](https://github.com/contentful/marketplace-partner-apps/issues/7937)) ([53f7e48](https://github.com/contentful/marketplace-partner-apps/commit/53f7e482864ce688be29b68b1825ffd36151d9b4))
+
 ## [1.5.0](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.4.2...bynder-assets-v1.5.0) (2026-03-11)
 
 
