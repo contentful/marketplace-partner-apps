@@ -121,14 +121,23 @@ async function refreshFieldAssetsForAllLocales(
     // Refresh all assets from Bynder API
     // Map: normalizedId -> { originalId, existingAsset }
     // originalId must be the ID Bynder API expects (resolve base64-wrapped "Asset_id <uuid>" etc.)
+    // Merge thumbnails from all locales so we preserve inprv_*, transformBaseUrl, etc. from any locale
+    // (otherwise we only use the first occurrence and can overwrite richer thumbnails in other locales)
     const assetsToRefresh = new Map<string, { originalId: string; existingAsset: Asset }>();
     assetMap.forEach((occurrences, normalizedId) => {
-      const storedId = occurrences[0].asset?.id || normalizedId;
+      const first = occurrences[0].asset;
+      const storedId = first?.id || normalizedId;
       const originalId = resolveBynderAssetIdForApi(String(storedId));
-      assetsToRefresh.set(normalizedId, {
-        originalId,
-        existingAsset: occurrences[0].asset,
-      });
+      const mergedThumbnails: Record<string, string> = {};
+      for (const { asset } of occurrences) {
+        if (asset?.thumbnails && typeof asset.thumbnails === 'object' && !Array.isArray(asset.thumbnails)) {
+          Object.assign(mergedThumbnails, asset.thumbnails);
+        }
+      }
+      const existingAsset: Asset | undefined = first
+        ? { ...first, thumbnails: Object.keys(mergedThumbnails).length > 0 ? mergedThumbnails : first.thumbnails }
+        : undefined;
+      assetsToRefresh.set(normalizedId, { originalId, existingAsset });
     });
 
     const refreshedAssets = await refreshMultipleAssets(config, assetsToRefresh);
