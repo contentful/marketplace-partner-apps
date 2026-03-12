@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.6.0...bynder-assets-v1.7.0) (2026-03-12)
+
+
+### Features
+
+* field storage updates [] ([#7936](https://github.com/contentful/marketplace-partner-apps/issues/7936)) ([f927aa9](https://github.com/contentful/marketplace-partner-apps/commit/f927aa981ce731efe43bb55d8a52f8b0aa533386))
+
 ## [1.6.0](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.5.0...bynder-assets-v1.6.0) (2026-03-12)
 
 
