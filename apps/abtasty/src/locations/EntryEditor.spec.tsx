@@ -54,11 +54,13 @@ describe('Entry component', () => {
             id: 'env_789',
             name: 'Production',
           },
-          // Ajout du content_type pour éviter l'écran "Configuration incomplète"
-          content_type: {
-            id: 'abTastyContainer',
-            referenceField: [],
-          },
+          // Ajout du content_types pour éviter l'écran "Configuration incomplète"
+          content_types: [
+            {
+              id: 'abTastyContainer',
+              referenceField: [],
+            },
+          ],
         },
       },
       ids: {
@@ -93,7 +95,22 @@ describe('Entry component', () => {
             sys: { id: 'abTastyContainer' },
             name: 'AB Tasty Container',
           }),
-          getMany: vi.fn().mockResolvedValue({ items: [] }),
+          getMany: vi.fn().mockResolvedValue({
+            items: [
+              {
+                sys: { id: 'abTastyContainer' },
+                name: 'AB Tasty Container',
+                fields: [
+                  {
+                    id: 'variations',
+                    name: 'Variations',
+                    type: 'Array',
+                    items: { type: 'Link', linkType: 'Entry' },
+                  },
+                ],
+              },
+            ],
+          }),
         },
         entry: {
           get: vi.fn().mockResolvedValue({
