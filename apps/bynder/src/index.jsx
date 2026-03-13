@@ -6,7 +6,7 @@ import { transformAsset as transformAssetUtil } from '../utils/transformAsset';
 import logo from './logo.svg';
 
 const CTA = 'Select a file on Bynder';
-const BYNDER_BASE_URL = 'https://ucv.bynder.com';
+const BYNDER_BASE_URL = 'https://d8ejoa1fys2rk.cloudfront.net';
 const BYNDER_SDK_URL = `${BYNDER_BASE_URL}/5.0.5/modules/compactview/bynder-compactview-5-latest.js`;
 
 const FIELD_SELECTION = `
