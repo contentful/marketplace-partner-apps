@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.7.0...bynder-assets-v1.7.1) (2026-03-13)
+
+
+### Bug Fixes
+
+* ucv url adjustment [] ([#7940](https://github.com/contentful/marketplace-partner-apps/issues/7940)) ([9f00404](https://github.com/contentful/marketplace-partner-apps/commit/9f00404c38c132814d9c4f775294b0e716653a5c))
+
 ## [1.7.0](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.6.0...bynder-assets-v1.7.0) (2026-03-12)
 
 
