@@ -2,11 +2,13 @@ import React, { useMemo } from "react";
 import { locations } from "@contentful/app-sdk";
 import ConfigScreen from "./locations/ConfigScreen";
 import EntryEditor from "./locations/EntryEditor";
+import Page from "./locations/Page";
 import { useSDK } from "@contentful/react-apps-toolkit";
 
 const ComponentLocationSettings = {
   [locations.LOCATION_APP_CONFIG]: ConfigScreen,
   [locations.LOCATION_ENTRY_EDITOR]: EntryEditor,
+  [locations.LOCATION_PAGE]: Page,
 };
 
 const App = () => {
