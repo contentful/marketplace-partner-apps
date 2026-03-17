@@ -6,12 +6,7 @@ import { getMeQueryOptions } from '@/queries/getMeQueryOptions';
 import { createAbTastyContainerContentType } from '@/services/createContentType';
 import { AccountEnvironment, FlagshipAccount } from '@/types';
 import { getAccountByUserOptions } from '@/queries/getAccountByUserOptions';
-import {
-  Card,
-  CardContent,
-  Stack,
-  Divider,
-} from '@mui/material';
+import { Card, CardContent, Stack, Divider } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { ConfigCardLayout } from '@/components/ConfigScreen/ConfigCardLayout';
 import { CONTENT_TYPE_ID } from '@/constants';
@@ -39,12 +34,34 @@ export interface AppInstallationParameters {
   }[];
 }
 
+/** Shape saved by the previous single-content-type version of the app. */
+interface LegacyAppInstallationParameters extends AppInstallationParameters {
+  content_type?: {
+    id: string;
+    referenceField: string[];
+  };
+}
+
+/**
+ * Migrates parameters saved by older installations that used a single
+ * `content_type` object to the current `content_types` array schema.
+ * Safe to call on already-migrated parameters (no-op when `content_type` is absent).
+ */
+function migrateParameters(raw: LegacyAppInstallationParameters): AppInstallationParameters {
+  const { content_type, ...rest } = raw;
+
+  if (content_type && !rest.content_types?.length) {
+    return { ...rest, content_types: [content_type] };
+  }
+
+  return rest;
+}
+
 const ConfigScreen = () => {
   const [parameters, setParameters] = useState<AppInstallationParameters>({});
   const sdk = useSDK<ConfigAppSDK>();
 
   const [token, setToken] = useState<string>('');
-
 
   const [selectedAccount, setSelectedAccount] = useState<FlagshipAccount | null>(null);
   const [selectedEnvironment, setSelectedEnvironment] = useState<AccountEnvironment | undefined>(undefined);
@@ -52,21 +69,20 @@ const ConfigScreen = () => {
   const { openOAuthPopup } = useAbTastyOAuth(setToken);
 
   const { data: user, isLoading: isUserLoading } = useQuery(getMeQueryOptions(token));
-  const { data: accounts, isLoading: isAccountsLoading } = useQuery(
-    getAccountByUserOptions(user?.id || '', token)
-  );
-
+  const { data: accounts, isLoading: isAccountsLoading } = useQuery(getAccountByUserOptions(user?.id || '', token));
 
   const onConfigure = useCallback(async () => {
     const currentState = await sdk.app.getCurrentState();
 
-    if(!user) {
+    if (!user) {
       sdk.notifier.error('You must be connected to your AB Tasty account to use this application.');
       return false;
     }
 
     if (!selectedAccount || !selectedEnvironment) {
-      sdk.notifier.error('You must configure your application with an account and an environment before you can use it.');
+      sdk.notifier.error(
+        'You must configure your application with an account and an environment before you can use it.'
+      );
       return false;
     }
 
@@ -77,7 +93,7 @@ const ConfigScreen = () => {
 
     // Check that each selected content type has at least one reference field
     const contentTypesWithoutFields = parameters.content_types.filter(
-      ct => !ct.referenceField || ct.referenceField.length === 0
+      (ct) => !ct.referenceField || ct.referenceField.length === 0
     );
 
     if (contentTypesWithoutFields.length > 0) {
@@ -115,7 +131,7 @@ const ConfigScreen = () => {
           contentTypeId: CONTENT_TYPE_ID,
         });
       } catch (err: any) {
-        console.log("Error while checking content type: ", err);
+        console.log('Error while checking content type: ', err);
 
         const message = String(err?.message || '').toLowerCase();
         const isNotFound =
@@ -153,7 +169,7 @@ const ConfigScreen = () => {
         return;
       }
 
-      setParameters(currentParameters);
+      setParameters(migrateParameters(currentParameters as LegacyAppInstallationParameters));
 
       const lsToken = getToken();
       if (lsToken && !token) {
@@ -186,15 +202,14 @@ const ConfigScreen = () => {
     }
   }, [token]);
 
-
-
-  const handleUpdateContentTypes = (updater: (prev: { id: string; referenceField: string[] }[]) => { id: string; referenceField: string[] }[]) => {
+  const handleUpdateContentTypes = (
+    updater: (prev: { id: string; referenceField: string[] }[]) => { id: string; referenceField: string[] }[]
+  ) => {
     setParameters((prev) => ({
       ...prev,
       content_types: updater(prev.content_types || []),
     }));
   };
-
 
   if (isUserLoading || isAccountsLoading) {
     return (
@@ -261,6 +276,5 @@ const ConfigScreen = () => {
     </ConfigCardLayout>
   );
 };
-
 
 export default ConfigScreen;
