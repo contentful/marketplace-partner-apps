@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.7.1](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.7.0...bynder-assets-v1.7.1) (2026-03-13)
+
+
+### Bug Fixes
+
+* ucv url adjustment [] ([#7940](https://github.com/contentful/marketplace-partner-apps/issues/7940)) ([9f00404](https://github.com/contentful/marketplace-partner-apps/commit/9f00404c38c132814d9c4f775294b0e716653a5c))
+
+## [1.7.0](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.6.0...bynder-assets-v1.7.0) (2026-03-12)
+
+
+### Features
+
+* field storage updates [] ([#7936](https://github.com/contentful/marketplace-partner-apps/issues/7936)) ([f927aa9](https://github.com/contentful/marketplace-partner-apps/commit/f927aa981ce731efe43bb55d8a52f8b0aa533386))
+
+## [1.6.0](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.5.0...bynder-assets-v1.6.0) (2026-03-12)
+
+
+### Features
+
+* bynder streaming link support [ZEND-7539] ([#7937](https://github.com/contentful/marketplace-partner-apps/issues/7937)) ([53f7e48](https://github.com/contentful/marketplace-partner-apps/commit/53f7e482864ce688be29b68b1825ffd36151d9b4))
+
+## [1.5.0](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.4.2...bynder-assets-v1.5.0) (2026-03-11)
+
+
+### Features
+
+* add streaming link support for Bynder video assets [] ([#7934](https://github.com/contentful/marketplace-partner-apps/issues/7934)) ([e4ddbb6](https://github.com/contentful/marketplace-partner-apps/commit/e4ddbb635b0596c8189d1fcfe0f47b8f2a831c5c))
+
 ## [1.4.2](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.4.1...bynder-assets-v1.4.2) (2026-03-05)
 
 
