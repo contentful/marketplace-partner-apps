@@ -20,7 +20,7 @@
     "react-scripts": "5.0.1"
   },
   "scripts": {
-    "install-ci": "npm ci",
+    "install-ci": "npm install",
     "start": "cross-env BROWSER=none react-scripts start",
     "build:prod": "REACT_APP_LAMBDA_API=prod react-scripts build",
     "build:demo": "REACT_APP_LAMBDA_API=demo react-scripts build",
