@@ -61,8 +61,9 @@ export const PageLayout = () => {
       </Tabs>
       <Outlet />
       <Box marginTop="spacingXl" style={{ textAlign: 'center', color: '#666', fontSize: '12px', paddingTop: '20px', paddingBottom: '20px' }}>
-        Bureau Works App v{packageJson.version}
+        wxrks - v{packageJson.version}
       </Box>
     </div>
   );
 };
+

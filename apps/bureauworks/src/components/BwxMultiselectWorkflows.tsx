@@ -90,7 +90,7 @@ function WorkflowMultiselect({ onInput, workflowsValue, hideTip } : Props) {
         { !hide && (
           <Grid>
             <FormControl.HelpText>
-              Please select at least one workflow to define the workflow in your projects on Bureau Works.
+              Please select at least one workflow to define the workflow in your projects on wxrks.
             </FormControl.HelpText>
             <FormControl.Counter />
           </Grid>)

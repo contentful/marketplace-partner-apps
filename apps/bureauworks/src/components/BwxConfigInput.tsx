@@ -25,7 +25,7 @@ function ConfigInputForm({ onInput, configUuid } : Props) {
         placeholder="xxxxxxx-xxxxxxx-xxxxxxx-xxxxxxx"
         onChange={(e) => updateValue(e.target.value)}
       />
-      <FormControl.HelpText>Provide your Connector Config UUID to create your projects on Bureau Works.</FormControl.HelpText>
+      <FormControl.HelpText>Provide your Connector Config UUID to create your projects on wxrks.</FormControl.HelpText>
       {!value && (
         <FormControl.ValidationMessage>
           Please, provide your Connector Config UUID.

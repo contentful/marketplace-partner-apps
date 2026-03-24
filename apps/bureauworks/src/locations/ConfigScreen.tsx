@@ -103,11 +103,11 @@ const ConfigScreen = () => {
     try {
       await bwxApi.login(apiKey.trim(), secretKey.trim(), sdk, cma);
       setIsConnected(true);
-      Notification.success('Successfully authenticated with Bureau Works.');
+      Notification.success('Successfully authenticated with wxrks.');
     } catch (error) {
       console.error(error);
       setIsConnected(false);
-      Notification.error('Failed to authenticate with Bureau Works. Check API ID and Secret Key and try again.');
+      Notification.error('Failed to authenticate with wxrks. Check your credentials and try again.');
     } finally {
       setLoadingConnection(false);
     }
@@ -210,10 +210,10 @@ const ConfigScreen = () => {
   return (
     <Flex flexDirection="column" gap="spacingS" alignItems="center" justifyContent="center" style={{ marginBottom: '50px' }}>
       <Image
-        alt="Bureau Works Logo"
+        alt="wxrks logo"
         height="281px"
         width="400px"
-        src="https://cdn.prod.website-files.com/65a6d693980f7ac91c0d37a3/662bd7d53082cccc4ae5590d_Logo%20Bureau%20Works.svg"
+        src={`${process.env.PUBLIC_URL}/assets/wxrks.svg`}
       />
 
       <Flex flexDirection="column" style={{ width: '60%' }} gap="spacingS">
@@ -244,7 +244,7 @@ const ConfigScreen = () => {
           {isConnected && (
             <Flex flexDirection="column" gap="spacingS" alignItems="center">
               <Text fontColor="green600" fontWeight="fontWeightDemiBold">
-                Connected to Bureau Works.
+                You are connected with wxrks
               </Text>
             </Flex>
           )}
@@ -265,7 +265,7 @@ const ConfigScreen = () => {
         <SectionHeading marginTop="spacingS" marginBottom="spacingS">Content Model Assignment (3/3)</SectionHeading>
         <Card style={{ padding: '30px' }}>
           <FormControl isRequired>
-            <FormControl.Label>Content Types with Bureau Works sidebar</FormControl.Label>
+            <FormControl.Label>Content Types with wxrks sidebar</FormControl.Label>
             <Multiselect
               placeholder="Select content types"
               searchProps={{
@@ -287,7 +287,7 @@ const ConfigScreen = () => {
               ))}
             </Multiselect>
             <FormControl.HelpText>
-              Select only the content types where editors should see the Bureau Works sidebar.
+              Select only the content types where editors should see the wxrks sidebar.
             </FormControl.HelpText>
           </FormControl>
 
@@ -304,10 +304,11 @@ const ConfigScreen = () => {
       )}
 
       <Note style={{ width: '60%' }} variant="neutral">
-        For configuration help, visit <a href="https://docs.bureauworks.com/en/articles/10430113-bureau-works-contentful-integration" target="_blank" rel="noreferrer">Bureau Works Contentful Integration Guide</a>.
+        For further details on how to configure, please visit: <a href="https://wxrks.com" target="_blank" rel="noreferrer">wxrks</a>
       </Note>
     </Flex>
   );
 };
 
 export default ConfigScreen;
+

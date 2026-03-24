@@ -238,11 +238,11 @@ function SendEntriesToBWX({ onCreate, withName, bulk, entryIds, referenceIds } :
             isLoading={loading} 
             isDisabled={loading || !selectedConfig || (!locales || locales.length === 0)|| (!workflows || workflows.length === 0) || (withName && !projectName)}
           >
-              Send to Bureau Works
+              Send to wxrks
           </Button>
 
           {configs.length === 0 && (
-            <Note style={{marginTop: "10px"}} variant="warning">No project configurations found. Please check your Bureau Works account.</Note>
+            <Note style={{marginTop: "10px"}} variant="warning">No project configurations found. Please check your wxrks account.</Note>
           )}
         </Form>
       )}
@@ -251,7 +251,7 @@ function SendEntriesToBWX({ onCreate, withName, bulk, entryIds, referenceIds } :
         <div>
           <br></br>
           <Note variant="negative">
-            Authentication failed with Bureau Works. Please check app credentials in App Configuration and try again.
+            Authentication failed with wxrks. Please verify your credentials and reinstall the app with the correct credentials.
           </Note>
         </div>)
       }
@@ -260,7 +260,7 @@ function SendEntriesToBWX({ onCreate, withName, bulk, entryIds, referenceIds } :
         <div>
           <br></br>
           <Note variant="negative">
-            Failed to create project on Bureau Works. Please try again later.
+            Failed to create project on wxrks. Please try again later.
           </Note>
         </div>)
       }
@@ -269,3 +269,4 @@ function SendEntriesToBWX({ onCreate, withName, bulk, entryIds, referenceIds } :
 }
 
 export default SendEntriesToBWX;
+

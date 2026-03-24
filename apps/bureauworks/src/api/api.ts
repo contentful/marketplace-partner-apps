@@ -60,7 +60,7 @@ async function login (apiKey: string, secretKey: string, sdk: ConfigAppSDK, cma:
   const response = await fetch(`${BASE_URL}/auth`, req);
 
   if (!response.ok) {
-    throw new Error("Invalid credentials to connect with BWX.");
+    throw new Error("Invalid credentials to connect with wxrks.");
   }
 
   const token = response.headers.get('Bwx-Auth-Token');
@@ -82,7 +82,7 @@ async function sendEntry(params: ProjectCreation, entryId: string, sdk: ConfigAp
   const response = await fetchWithSignedRequest(`${BASE_URL}/create`, sdk, cma, headers(sdk), 'POST', payload);
 
   if (!response.ok) {
-    throw new Error("Error to send entry to BWX");
+    throw new Error("Error to send entry to wxrks");
   }
   return response;
 }
@@ -95,7 +95,7 @@ async function sendEntries(params: ProjectCreation, entryIds: string[], sdk: Con
   const response = await fetchWithSignedRequest(`${BASE_URL}/bulk-create`, sdk, cma, headers(sdk), 'POST', payload);
 
   if (!response.ok) {
-    throw new Error("Error to send entries to BWX");
+    throw new Error("Error to send entries to wxrks");
   }
   return response;
 }
@@ -108,7 +108,7 @@ async function getProjects(sdk: ConfigAppSDK, cma: CMAClient, page: number, page
   const response = await fetchWithSignedRequest(`${BASE_URL}/projects`, sdk, cma, headers(sdk), 'POST', payload);
 
   if (!response.ok) {
-    throw new Error("Error to get projects from BWX");
+    throw new Error("Error to get projects from wxrks");
   }
   return response;
 }
@@ -121,7 +121,7 @@ async function getProgress(entryId: string, sdk: ConfigAppSDK, cma: CMAClient, r
   const response = await fetchWithSignedRequest(`${BASE_URL}/progress`, sdk, cma, headers(sdk), 'POST', payload);
 
   if (!response.ok) {
-    throw new Error("Error to get progress from BWX");
+    throw new Error("Error to get progress from wxrks");
   }
   return response;
 }
@@ -134,7 +134,7 @@ async function getEntries(projectUuid: string, sdk: ConfigAppSDK, cma: CMAClient
   const response = await fetchWithSignedRequest(`${BASE_URL}/entries`, sdk, cma, headers(sdk), 'POST', payload);
 
   if (!response.ok) {
-    throw new Error("Error to get entries from BWX");
+    throw new Error("Error to get entries from wxrks");
   }
   return response;
 }
@@ -148,7 +148,7 @@ async function fetchTranslations(force: boolean, entryId: string, projectUuid: s
   const response = await fetchWithSignedRequest(`${BASE_URL}/fetch`, sdk, cma, headers(sdk), 'POST', payload);
 
   if (!response.ok) {
-    throw new Error("Error to send fetch translations from BWX");
+    throw new Error("Error to fetch translations from wxrks");
   }
   return response;
 }
@@ -161,7 +161,7 @@ async function getConfigs(sdk: ConfigAppSDK, cma: CMAClient, requestId?: string)
   const response = await fetchWithSignedRequest(`${BASE_URL}/configs`, sdk, cma, headers(sdk), 'POST', payload);
 
   if (!response.ok) {
-    throw new Error("Error to get configs from BWX");
+    throw new Error("Error to get configs from wxrks");
   }
   return response;
 }
@@ -174,7 +174,7 @@ async function sendTmChanges(changes: TmChange[], sdk: ConfigAppSDK, cma: CMACli
   const response = await fetchWithSignedRequest(`${BASE_URL}/upsert-tm`, sdk, cma, headers(sdk), 'POST', payload);
 
   if (!response.ok) {
-    throw new Error("Error to send TM changes to BWX");
+    throw new Error("Error to send TM changes to wxrks");
   }
   return response;
 }
@@ -194,7 +194,7 @@ async function changeProjectStatus(projectUuid: string, newStatus: string, sdk: 
   const response = await fetchWithSignedRequest(url, sdk, cma, headers(sdk), 'POST', payload);
 
   if (!response.ok) {
-    throw new Error('Error to change the project status on BWX');
+    throw new Error('Error to change the project status on wxrks');
   }
   return response;
 }
@@ -244,3 +244,4 @@ const bwxService = {
 }
 
 export default bwxService;
+

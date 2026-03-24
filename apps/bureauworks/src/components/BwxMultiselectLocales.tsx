@@ -114,7 +114,7 @@ function LocalesMultiselect({ onInput, localesValue, initialLocales, hideTip } :
         { !hide && (
           <Grid>
             <FormControl.HelpText>
-              Please select at least one locale to create project on Bureau Works.
+              Please select at least one locale to create project on wxrks.
             </FormControl.HelpText>
             <FormControl.Counter />
           </Grid>)
@@ -122,7 +122,7 @@ function LocalesMultiselect({ onInput, localesValue, initialLocales, hideTip } :
       </FormControl>
 
       {localeWarning && (
-        <Note style={{marginTop: "10px"}} variant="warning">Some target locales from Bureau Works are not configured within your Contentful space.</Note>
+        <Note style={{marginTop: "10px"}} variant="warning">Some target locales from wxrks are not configured within your Contentful space.</Note>
       )}
       <br></br>
     </Grid>

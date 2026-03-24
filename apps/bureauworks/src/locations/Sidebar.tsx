@@ -109,7 +109,7 @@ const Sidebar = () => {
     <>
       {loadingApp && (
         <Flex>
-          <Text marginRight="spacingXs" fontWeight="fontWeightDemiBold">Loading Bureau Works App</Text>
+          <Text marginRight="spacingXs" fontWeight="fontWeightDemiBold">Loading wxrks App</Text>
           <Spinner variant="primary" />
         </Flex>
       )}
@@ -117,7 +117,7 @@ const Sidebar = () => {
       {!loadingApp && (
         <>
           <Button variant="primary" onClick={() => setIsExpanded(!isExpanded)} isFullWidth startIcon={<PlusIcon />} endIcon={!isExpanded ? <ChevronDownIcon /> : <ChevronUpIcon />}>
-            Create project on Bureau Works
+            Create project on wxrks
           </Button>
 
           <Collapse isExpanded={isExpanded}>
@@ -141,7 +141,7 @@ const Sidebar = () => {
               <Flex justifyContent="space-between" alignItems="center" style={{ width: '291px' }}>
                 <br></br>
                 <Note variant="neutral">
-                  This entry has not been submitted to Bureau Works yet. Click the button when ready to create the project.
+                  This entry has not been submitted to wxrks yet. Click the button when ready to create the project.
                 </Note>
               </Flex>
             </div>
@@ -163,7 +163,7 @@ const Sidebar = () => {
           {error && (
             <div>
               <Note variant="negative">
-                Failed to load status in Bureau Works. Please check app credentials in App Configuration.
+                Failed to load status in wxrks. Please try again later.
               </Note>
               <br></br>
               <Button variant="secondary" onClick={checkApp} isFullWidth>
@@ -186,3 +186,4 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+

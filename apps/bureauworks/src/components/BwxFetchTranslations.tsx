@@ -18,8 +18,8 @@ interface Props {
   project?: any;
 }
 
-const ERROR_MESSAGE = 'Failed to fetch translations from Bureau Works. Please try again later.';
-const ERROR_AUTH_MESSAGE = 'Authentication failed with Bureau Works. Please check app credentials in App Configuration and try again.';
+const ERROR_MESSAGE = 'Failed to fetch translations from wxrks. Please try again later.';
+const ERROR_AUTH_MESSAGE = 'Authentication failed with wxrks. Please verify your credentials and reinstall the app with the correct credentials.';
 
 function BwxFetchTranslations({ project } : Props) {
   const sdkConfig = useSDK<ConfigAppSDK>();
@@ -116,7 +116,7 @@ function BwxFetchTranslations({ project } : Props) {
       setCompleted(true);
       if (project) {
         Notification.setPlacement('top');
-        Notification.success('Translations successfully retrieved from Bureau Works.', { duration: 0 });
+        Notification.success('Translations successfully retrieved from wxrks.', { duration: 0 });
       }
       saveProjectToStorage({ projectUuid: project?.uuid, status: 'DONE' });
     }
@@ -158,7 +158,7 @@ function BwxFetchTranslations({ project } : Props) {
         <Tooltip placement="top-end" 
                  showDelay={1000} 
                  id="tooltip-force-translations" 
-                 content="This option disregards the current status of the project on Bureau Works and pulls the current state of translations."
+                 content="This option disregards the current status of the project on wxrks and pulls the current state of translations."
         >
           <Checkbox
             name="force-translations"
@@ -166,7 +166,7 @@ function BwxFetchTranslations({ project } : Props) {
             isChecked={force}
             onChange={() => setForceTranslations(!force)}
           >
-            Force download of Bureau Works translations
+            Force download of wxrks translations
           </Checkbox>
         </Tooltip>
       </Collapse>
@@ -175,7 +175,7 @@ function BwxFetchTranslations({ project } : Props) {
         <div>
           <br></br>
           <Note variant="positive" withCloseButton onClose={close}>
-            Translations successfully retrieved from Bureau Works.
+            Translations successfully retrieved from wxrks.
           </Note>
         </div>  
       }
@@ -200,3 +200,4 @@ function BwxFetchTranslations({ project } : Props) {
 }
 
 export default BwxFetchTranslations;
+

@@ -167,10 +167,10 @@ export default function ProjectCreation({ contentTypes }: ProjectCreationProps) 
   return (
     <Flex flexDirection="column" marginTop="spacingXl">
       <Image
-        alt='Bureau Works Logo"'
+        alt='wxrks logo'
         height="100px"
         width="230px"
-        src="https://cdn.prod.website-files.com/65a6d693980f7ac91c0d37a3/662bd7d53082cccc4ae5590d_Logo%20Bureau%20Works.svg"
+        src={`${process.env.PUBLIC_URL}/assets/wxrks.svg`}
       />
 
       <Button isDisabled={!selectedEntries.length} variant="primary" onClick={() => setIsExpanded(!isExpanded) } startIcon={<PlusIcon />} endIcon={!isExpanded ? <ChevronDownIcon /> : <ChevronUpIcon />}>Create New Project</Button>
@@ -188,7 +188,7 @@ export default function ProjectCreation({ contentTypes }: ProjectCreationProps) 
       </Collapse>
 
       <Box marginTop="spacingXl">
-        <Heading as="h2">Select the entries you wish to translate with Bureau Works</Heading>
+        <Heading as="h2">Select the set of entries to include in the project you are creating</Heading>
         <Paragraph>Note that the maximum number of entries per project is 50.</Paragraph>
         
         {selectedEntries.length ? (

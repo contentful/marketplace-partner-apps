@@ -25,7 +25,7 @@ function OrgUnitInputForm({ onInput, orgUnitUuid } : Props) {
         placeholder="xxxxxxx-xxxxxxx-xxxxxxx-xxxxxxx"
         onChange={(e) => updateValue(e.target.value)}
       />
-      <FormControl.HelpText>Provide your Organizational Unit UUID to create your projects on Bureau Works.</FormControl.HelpText>
+      <FormControl.HelpText>Provide your Organizational Unit UUID to create your projects on wxrks.</FormControl.HelpText>
       {!value && (
         <FormControl.ValidationMessage>
           Please, provide your Organizational Unit UUID.
