@@ -148,6 +148,44 @@ class Pagination {
                   }
                 }
               }
+              adjacentVariants {
+                id
+                title
+                sku
+                availableForSale
+                image {
+                  id
+                  url
+                  altText
+                }
+              }
+              selectedOrFirstAvailableVariant {
+                id
+                title
+                sku
+                availableForSale
+                price {
+                  amount
+                  currencyCode
+                }
+                image {
+                  id
+                  url
+                  altText
+                }
+              }
+              encodedVariantAvailability
+              encodedVariantExistence
+              options(first: 10) {
+                name
+                optionValues {
+                  id
+                  name
+                  firstSelectableVariant {
+                    id
+                  }
+                }
+              }
             }
             cursor
           }
@@ -262,6 +300,44 @@ class Pagination {
                       url
                       altText
                     }
+                  }
+                }
+              }
+              adjacentVariants {
+                id
+                title
+                sku
+                availableForSale
+                image {
+                  id
+                  url
+                  altText
+                }
+              }
+              selectedOrFirstAvailableVariant {
+                id
+                title
+                sku
+                availableForSale
+                price {
+                  amount
+                  currencyCode
+                }
+                image {
+                  id
+                  url
+                  altText
+                }
+              }
+              encodedVariantAvailability
+              encodedVariantExistence
+              options(first: 10) {
+                name
+                optionValues {
+                  id
+                  name
+                  firstSelectableVariant {
+                    id
                   }
                 }
               }
