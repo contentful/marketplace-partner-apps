@@ -22,10 +22,12 @@
   "scripts": {
     "install-ci": "npm ci",
     "start": "cross-env BROWSER=none react-scripts start",
+    "build": "npm run build:prod",
     "build:prod": "REACT_APP_LAMBDA_API=prod react-scripts build",
     "build:demo": "REACT_APP_LAMBDA_API=demo react-scripts build",
     "build:dev": "REACT_APP_LAMBDA_API=dev react-scripts build",
     "test": "react-scripts test --watchAll=false --passWithNoTests",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
     "eject": "react-scripts eject",
     "create-app-definition": "contentful-app-scripts create-app-definition",
     "upload": "contentful-app-scripts upload --bundle-dir ./build",

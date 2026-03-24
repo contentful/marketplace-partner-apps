@@ -40,9 +40,13 @@ The app provides:
 ## Available Scripts
 
 - `npm run start` - starts the app in development mode.
+- `npm run install-ci` - installs dependencies using `npm ci`.
+- `npm run build` - builds app bundle for production proxy path (default build command).
 - `npm run build:dev` - builds app bundle for dev proxy path.
 - `npm run build:demo` - builds app bundle for demo proxy path.
 - `npm run build:prod` - builds app bundle for production proxy path.
+- `npm run test` - runs tests in non-watch mode and passes when no tests are present.
+- `npm run lint` - lints source files.
 - `npm run upload` - uploads build bundle with `contentful-app-scripts`.
 
 ## Official Integration Guide (Bureau Works)
@@ -65,3 +69,7 @@ For setup and operational support:
 - Contentful App SDK + React Apps Toolkit
 - Forma 36
 - Contentful App Scripts
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file.
