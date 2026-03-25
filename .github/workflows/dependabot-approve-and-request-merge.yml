@@ -1,7 +1,7 @@
 ---
-name: "dependabot approve-and-request-merge"
+name: 'dependabot approve-and-request-merge'
 
-"on": pull_request_target
+'on': pull_request_target
 
 jobs:
   worker:
@@ -16,19 +16,12 @@ jobs:
         id: dependabot-metadata
         uses: dependabot/fetch-metadata@21025c705c08248db411dc16f3619e6b5f9ea21a # v2.5.0
         with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-
-      - name: Check if PR is from fork
-        if: steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major'
-        shell: bash
-        run: |
-          if [ "${{ github.event.pull_request.head.repo.fork }}" == "true" ]; then
-            echo "Skipping action on fork PR"
-            exit 1
-          fi
+          github-token: '${{ secrets.GITHUB_TOKEN }}'
 
       - name: Retrieve Github Token
-        if: steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major'
+        if: |
+          steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major' &&
+          github.event.pull_request.head.repo.fork != true
         id: vault
         uses: hashicorp/vault-action@4c06c5ccf5c0761b6029f56cfb1dcf5565918a3b # v3.4.0
         with:
@@ -41,7 +34,9 @@ jobs:
             github/token/${{ github.event.repository.name }}-dependabot token | GITHUB_MERGE_TOKEN ;
 
       - name: approve PR
-        if: steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major'
+        if: |
+          steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major' &&
+          github.event.pull_request.head.repo.fork != true
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
           github-token: ${{ steps.vault.outputs.GITHUB_MERGE_TOKEN }}
@@ -75,7 +70,9 @@ jobs:
             }
 
       - name: Get merge type
-        if: steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major'
+        if: |
+          steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major' &&
+          github.event.pull_request.head.repo.fork != true
         id: merge-type
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
@@ -108,15 +105,17 @@ jobs:
             return mergeMethod;
 
       - name: Enable auto merge
-        if: steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major'
+        if: |
+          steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major' &&
+          github.event.pull_request.head.repo.fork != true
         shell: bash
         env:
           # Note: The GH_TOKEN env var is required for now, even though it
           # contradicts GH's documentation
           GH_TOKEN: ${{ steps.vault.outputs.GITHUB_MERGE_TOKEN }}
           MERGE_METHOD: ${{ steps.merge-type.outputs.result }}
-          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           merge_method="$(echo "$MERGE_METHOD" | tr -d '"')"
           echo "Auto merging PR using method $merge_method"
-          gh pr merge "--$merge_method" --auto "$PR_URL"
+          gh pr merge "--$merge_method" --auto "$PR_NUMBER"
