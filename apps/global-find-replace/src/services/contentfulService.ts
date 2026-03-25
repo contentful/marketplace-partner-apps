@@ -5,14 +5,32 @@ import * as Sentry from '@sentry/react';
 import { EntryProps } from 'contentful-management';
 
 export class ContentfulService {
+  private static readonly CONTENT_TYPE_PAGE_SIZE = 100;
+
   constructor(private sdk: PageAppSDK) {}
 
   /**
    * Fetches all content types
    */
   async getContentTypes(): Promise<ContentType[]> {
-    const response = await this.sdk.cma.contentType.getMany({});
-    return response.items;
+    const contentTypes: ContentType[] = [];
+    let skip = 0;
+    let total = 0;
+
+    do {
+      const response = await this.sdk.cma.contentType.getMany({
+        query: {
+          limit: ContentfulService.CONTENT_TYPE_PAGE_SIZE,
+          skip,
+        },
+      });
+
+      contentTypes.push(...response.items);
+      skip += response.items.length;
+      total = response.total ?? contentTypes.length;
+    } while (skip < total);
+
+    return contentTypes;
   }
 
   /**

@@ -17,7 +17,6 @@ const FindReplaceApp: React.FC = () => {
     handleEntrySelection,
     handleSelectAll,
     handleApplyChanges,
-    anchorRef,
     totalPages,
     currentPageEntries,
     allSelected,
@@ -73,12 +72,8 @@ const FindReplaceApp: React.FC = () => {
             contentTypes={state.contentTypes}
             locales={state.locales}
             searching={state.searching}
-            contentTypeDropdownOpen={state.contentTypeDropdownOpen}
             onFiltersChange={updateFilters}
             onSearch={handleSearch}
-            onContentTypeDropdownToggle={() => updateState({ contentTypeDropdownOpen: !state.contentTypeDropdownOpen })}
-            onContentTypeDropdownClose={() => updateState({ contentTypeDropdownOpen: false })}
-            anchorRef={anchorRef}
           />
         </span>
 

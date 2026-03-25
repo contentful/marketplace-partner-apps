@@ -1,20 +1,17 @@
 import React from 'react';
-import { Flex, FormLabel, TextInput, Select, Option, Button, Spinner, Popover, List, ListItem, Checkbox, Tooltip } from '@contentful/f36-components';
+import { Flex, FormLabel, TextInput, Select, Option, Button, Spinner, Checkbox, Tooltip } from '@contentful/f36-components';
 import { css } from '@emotion/css';
 import { ContentType, SearchFilters } from '../types';
 import { HelpCircleIcon } from '@contentful/f36-icons';
+import { ContentTypePicker } from './ContentTypePicker';
 
 interface SearchFormProps {
   filters: SearchFilters;
   contentTypes: ContentType[];
   locales: string[];
   searching: boolean;
-  contentTypeDropdownOpen: boolean;
   onFiltersChange: (filters: Partial<SearchFilters>) => void;
   onSearch: () => void;
-  onContentTypeDropdownToggle: () => void;
-  onContentTypeDropdownClose: () => void;
-  anchorRef: React.RefObject<HTMLButtonElement | null>;
 }
 
 export const SearchForm: React.FC<SearchFormProps> = ({
@@ -22,24 +19,13 @@ export const SearchForm: React.FC<SearchFormProps> = ({
   contentTypes,
   locales,
   searching,
-  contentTypeDropdownOpen,
   onFiltersChange,
   onSearch,
-  onContentTypeDropdownToggle,
-  onContentTypeDropdownClose,
-  anchorRef,
 }) => {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       onSearch();
     }
-  };
-
-  const handleContentTypeToggle = (contentTypeId: string) => {
-    const isSelected = filters.selectedContentTypes.includes(contentTypeId);
-    const newSelection = isSelected ? filters.selectedContentTypes.filter((id) => id !== contentTypeId) : [...filters.selectedContentTypes, contentTypeId];
-
-    onFiltersChange({ selectedContentTypes: newSelection });
   };
 
   return (
@@ -89,35 +75,15 @@ export const SearchForm: React.FC<SearchFormProps> = ({
         </Flex>
 
         <Flex flexDirection="column">
-          <FormLabel htmlFor="contentTypes">Content Types</FormLabel>
-          <Popover isOpen={contentTypeDropdownOpen} onClose={onContentTypeDropdownClose}>
-            <Popover.Trigger>
-              <Button variant="secondary" ref={anchorRef} className={css({ fontWeight: 'normal' })} onClick={onContentTypeDropdownToggle}>
-                {filters.selectedContentTypes.length === 0 ? 'All Content Types' : `${filters.selectedContentTypes.length} selected`}
-              </Button>
-            </Popover.Trigger>
-
-            <Popover.Content>
-              <List
-                className={css({
-                  listStyle: 'none',
-                  fontWeight: 'normal',
-                  padding: 5,
-                  margin: 0,
-                })}>
-                {contentTypes.map((ct) => {
-                  const isChecked = filters.selectedContentTypes.includes(ct.sys.id);
-                  return (
-                    <ListItem key={ct.sys.id}>
-                      <Checkbox isChecked={isChecked} onChange={() => handleContentTypeToggle(ct.sys.id)}>
-                        {ct.name}
-                      </Checkbox>
-                    </ListItem>
-                  );
-                })}
-              </List>
-            </Popover.Content>
-          </Popover>
+          <FormLabel>Content Types</FormLabel>
+          <div className={css({ minWidth: '260px' })}>
+            <ContentTypePicker
+              contentTypes={contentTypes}
+              selectedContentTypeIds={filters.selectedContentTypes}
+              onSelectionChange={(selectedContentTypes) => onFiltersChange({ selectedContentTypes })}
+              placeholder="All Content Types"
+            />
+          </div>
         </Flex>
 
         <Flex flexDirection="column">

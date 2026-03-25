@@ -9,7 +9,6 @@ import _ from 'lodash';
 export const useFindReplace = () => {
   const sdk = useSDK<PageAppSDK>();
   const contentfulService = useRef(new ContentfulService(sdk));
-  const anchorRef = useRef<HTMLButtonElement>(null);
 
   const initialAppState = {
     find: '',
@@ -27,7 +26,6 @@ export const useFindReplace = () => {
     currentPage: 0,
     showSummary: false,
     appliedChanges: [],
-    contentTypeDropdownOpen: false,
     applyingChanges: false,
     caseSensitive: false,
     includeAllFields: false,
@@ -247,7 +245,6 @@ export const useFindReplace = () => {
     handleEntrySelection,
     handleSelectAll,
     handleApplyChanges,
-    anchorRef,
     // Computed values
     totalPages,
     currentPageEntries,
