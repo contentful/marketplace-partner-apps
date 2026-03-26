@@ -1,6 +1,6 @@
-# Bureau Works Contentful App (Frontend)
+# wxrks Contentful App (Frontend)
 
-This app integrates Contentful with Bureau Works to create translation projects, monitor project status, and fetch translations.
+This app integrates Contentful with wxrks to create translation projects, monitor project status, and fetch translations.
 
 ## Overview
 
@@ -13,8 +13,8 @@ The app provides:
 ## Requirements
 
 - Contentful space with app installation permissions.
-- Bureau Works account with **API ID** and **Secret Key**.
-- Bureau Works Connector Configuration UUID (`configUuid`).
+- wxrks account with **API ID** and **Secret Key**.
+- wxrks Connector Configuration UUID (`configUuid`).
 
 ## Installation and Configuration
 
@@ -28,7 +28,7 @@ The app provides:
    - Provide Connector Config UUID.
    - Select default workflows.
 5. In **Content Model Assignment**:
-   - Select the Content Types that should show the Bureau Works sidebar.
+   - Select the Content Types that should show the wxrks sidebar.
 6. Save/Install the app.
 
 ## Authentication Model
@@ -49,19 +49,19 @@ The app provides:
 - `npm run lint` - lints source files.
 - `npm run upload` - uploads build bundle with `contentful-app-scripts`.
 
-## Official Integration Guide (Bureau Works)
+## Official Integration Guide (wxrks)
 
-Detailed walkthrough from Bureau Works:
+Detailed walkthrough from wxrks:
 
-- [Bureau Works - Contentful Integration](https://docs.bureauworks.com/en/articles/10430113-bureau-works-contentful-integration)
+- [wxrks - Contentful Integration](https://support.wxrks.com/en/articles/10430113-bureau-works-contentful-integration)
 
 ## Support
 
 For setup and operational support:
 
-- Bureau Works Help Center article above (step-by-step guide).
-- Bureau Works support via the Help Center contact flow:
-  [Bureau Works Help Center](https://docs.bureauworks.com/)
+- wxrks Help Center article above (step-by-step guide).
+- wxrks support via the Help Center contact flow:
+  [wxrks Help Center](https://support.wxrks.com)
 
 ## Tech Stack
 

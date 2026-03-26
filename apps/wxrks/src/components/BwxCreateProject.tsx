@@ -7,8 +7,8 @@ import { Button, Note, Select, Spinner, Flex, Text } from '@contentful/f36-compo
 import { Form, TextInput, FormControl } from '@contentful/f36-forms';
 import { CloudUploadIcon } from '@contentful/f36-icons';
 
-import BwxMultiselectWorkflows from '../components/BwxMultiselectWorkflows';
-import BwxMultiselectLocales from '../components/BwxMultiselectLocales';
+import BwxMultiselectWorkflows from './BwxMultiselectWorkflows';
+import BwxMultiselectLocales from './BwxMultiselectLocales';
 import BwxMultiselectReferences from './BwxMultiselectReferences';
 
 import { ConfigGroup, ProjectCreation } from '../interfaces';
