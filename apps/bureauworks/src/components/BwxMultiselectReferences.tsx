@@ -15,7 +15,6 @@ const BwxMultiselectReferences = ({ entryId, selectedReferences = [], onInput }:
   const defaultLocale = sdk.locales.default;
 
   const [references, setReferences] = useState<any[]>([]);
-  const [contentTypes, setContentTypes] = useState<any[]>([]);
   const [selected, setSelected] = useState<string[]>([]);
   const [selectedTitles, setSelectedTitles] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -53,7 +52,6 @@ const BwxMultiselectReferences = ({ entryId, selectedReferences = [], onInput }:
           return { ...ref, title };
         });
   
-        setContentTypes(contentTypesResponse.items);
         setReferences(formattedRefs);
 
         const uniqueReferenceIds = Array.from(new Set([entryId, ...formattedRefs.map((ref) => ref.sys.id)]));
@@ -71,7 +69,7 @@ const BwxMultiselectReferences = ({ entryId, selectedReferences = [], onInput }:
     if (entryId) {
       fetchData();
     }
-  }, [entryId, cma, sdk, onInput]);  
+  }, [entryId, cma, sdk, onInput, defaultLocale]);  
 
   const handleSelectItem = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { checked, value } = event.target;

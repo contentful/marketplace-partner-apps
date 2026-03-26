@@ -74,7 +74,7 @@ const TMUpdates = () => {
         }
       });
     });
-  }, []);
+  }, [locales, sdk.entry.fields, sourceLocale]);
 
   useEffect(() => {
     isFirstRender.current = false;
@@ -90,7 +90,7 @@ const TMUpdates = () => {
         localStorage.setItem('tmUpdates', JSON.stringify(newItem));
       }
     }
-  }, [changes]);
+  }, [changes, entryId]);
 
   useEffect(() => {
     let tmUpdates: any = localStorage.getItem('tmUpdates');
@@ -101,7 +101,7 @@ const TMUpdates = () => {
         setTmChanges(entryTmUpdates);
       }
     }
-  }, []);
+  }, [entryId]);
 
   const clear = () => {
     let tmUpdates: any = localStorage.getItem('tmUpdates');

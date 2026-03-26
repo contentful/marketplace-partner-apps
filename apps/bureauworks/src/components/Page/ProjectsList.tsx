@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { useCMA, useSDK } from "@contentful/react-apps-toolkit";
 import { ContentType, ConfigAppSDK } from "@contentful/app-sdk";
@@ -104,7 +104,7 @@ export default function Projects({ contentTypes }: ProjectCreationProps) {
   const [targetLocalesSelected, setTargetLocalesSelected] = useState([]);
   const [selectedReferences, setSelectedReferences] = useState<string[]>([]);
 
-  const getProjects = async () => {
+  const getProjects = useCallback(async () => {
     setLoading(true);
     try {
       const response = await bwxApi.getProjects(
@@ -123,17 +123,17 @@ export default function Projects({ contentTypes }: ProjectCreationProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [sdkConfig, cma, page, pageSize, projectName]);
 
   useEffect(() => {
     getProjects();
-  }, [page, pageSize]);
+  }, [getProjects]);
 
   useEffect(() => {
     if (projectName === "") {
       getProjects();
     }
-  }, [projectName]);
+  }, [projectName, getProjects]);
 
   const handleViewPerPageChange = (i: React.SetStateAction<number>) => {
     setPage(0);

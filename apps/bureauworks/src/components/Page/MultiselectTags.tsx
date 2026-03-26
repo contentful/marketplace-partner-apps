@@ -20,7 +20,7 @@ export default function MultiselectSearchContentType({ onSelect }: DashboardProp
       }
     }
     cma.tag.getMany(params).then((result) => result?.items && setTags(result.items));
-  }, []);
+  }, [cma]);
   
   const [tags, setTags] = useState<TagProps[]>([]);
   const [selectedItems, setSelectedItems] = React.useState(init);
@@ -35,7 +35,7 @@ export default function MultiselectSearchContentType({ onSelect }: DashboardProp
   React.useEffect(() => {
     const tagsQuery = selectedItems.join(",")
     onSelect(tagsQuery);
-  }, [selectedItems]);
+  }, [selectedItems, onSelect]);
 
   const handleSearchValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;

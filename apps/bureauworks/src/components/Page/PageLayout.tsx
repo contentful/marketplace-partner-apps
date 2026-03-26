@@ -29,7 +29,7 @@ export const PageLayout = () => {
       navigate(initialInvocationParameters.path);
       currentTab.current = initialInvocationParameters.path;
     }
-  }, [sdk.parameters.invocation]);
+  }, [sdk.parameters.invocation, navigate]);
 
   const onTabChange = (tabId: string) => {
     sdk.navigator.openCurrentAppPage({ path: tabId });

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { ConfigAppSDK, SidebarAppSDK } from '@contentful/app-sdk';
 import { useCMA, useSDK } from '@contentful/react-apps-toolkit';
@@ -34,7 +34,7 @@ function BwxFetchTranslations({ project } : Props) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  let projectRequest: any = null;
+  const projectRequestRef = useRef<any>(null);
 
   const mapToObject = (map: Map<string, Project>): { [key: string]: Project } => {
     return Object.fromEntries(map);
@@ -44,74 +44,51 @@ function BwxFetchTranslations({ project } : Props) {
     return new Map(Object.entries(obj) as [string, Project][]);
   };
   
-  const getStoredProjects = (): Map<string, Project> => {
+  const getStoredProjects = useCallback((): Map<string, Project> => {
     const storedProjects = localStorage.getItem('bwx-translations-projects');
     return storedProjects ? objectToMap(JSON.parse(storedProjects)) : new Map();
-  };
+  }, []);
   
-  const saveProjectToStorage = (projectData: Project) => {
+  const saveProjectToStorage = useCallback((projectData: Project) => {
     const storedProjects = getStoredProjects();
     storedProjects.set(projectData.projectUuid, projectData);
     localStorage.setItem('bwx-translations-projects', JSON.stringify(mapToObject(storedProjects)));
-  };
+  }, [getStoredProjects]);
 
-  useEffect(() => {
-    const storedProjects = getStoredProjects();
-    const storedProject = storedProjects.get(project?.uuid);
-    if (storedProject) {
-      if (storedProject.status === 'RUNNING' && storedProject.requestId) {
-        setLoading(true);
-        projectRequest = { id: storedProject.requestId, status: 'RUNNING' };
-        poll();
-      } else {
-        setLoading(false);
-      }
+  const showErrorNotification = useCallback((msg: string) => {
+    if (project) {
+      Notification.setPlacement('top');
+      Notification.error(msg, { duration: 0 });
     }
-  }, [project?.uuid])
- 
-  const fetch = async () => {
-    setIsAuth(true);
-    setLoading(true);
-    setError(false);
-    setCompleted(false);
-    projectRequest = null;
-    try {
-      const response = await bwxApi.fetchTranslations(force, sdkSideBar.ids.entry, project?.uuid, sdkConfig, cma);
-      projectRequest = await response.json();
-      saveProjectToStorage({ projectUuid: project?.uuid, status: 'RUNNING', requestId: projectRequest.id });
-      poll();
-    } catch (err) {
-      setIsAuth(false);
-      setLoading(false);
-      showErrorNotification(ERROR_AUTH_MESSAGE);
-    }
-  }
+  }, [project]);
 
-  const poll = async () => {
+  const poll = useCallback(async () => {
     const runningStatuses = ['NEW', 'RUNNING'];
     setLoading(true);
 
-    while (projectRequest && runningStatuses.includes(projectRequest.status)) {
+    while (projectRequestRef.current && runningStatuses.includes(projectRequestRef.current.status)) {
         try {
-          const response = await bwxApi.fetchTranslations(force, sdkSideBar.ids.entry, project?.uuid, sdkConfig, cma, projectRequest.id);
-          projectRequest = await response.json();
-          saveProjectToStorage({ projectUuid: project?.uuid, status: projectRequest.status, requestId: projectRequest.id });
+          const response = await bwxApi.fetchTranslations(force, sdkSideBar.ids.entry, project?.uuid, sdkConfig, cma, projectRequestRef.current.id);
+          projectRequestRef.current = await response.json();
+          saveProjectToStorage({ projectUuid: project?.uuid, status: projectRequestRef.current.status, requestId: projectRequestRef.current.id });
         } catch (error) {
             console.error("Error polling: ", error);
-            projectRequest.status = 'ERROR';
+            if (projectRequestRef.current) {
+              projectRequestRef.current.status = 'ERROR';
+            }
             setError(true);
             showErrorNotification(ERROR_MESSAGE);
         }
         await new Promise(resolve => setTimeout(resolve, 5000));
     }
 
-    if (projectRequest && projectRequest.status === 'ERROR') {
+    if (projectRequestRef.current && projectRequestRef.current.status === 'ERROR') {
       setLoading(false);
       setError(true);
-      const msg = projectRequest.error ? projectRequest.error.replace("BW Error:", "").trim() : '';
+      const msg = projectRequestRef.current.error ? projectRequestRef.current.error.replace("BW Error:", "").trim() : '';
       setErrorMessage(msg);
       showErrorNotification(msg || ERROR_MESSAGE);
-    } else if (projectRequest && projectRequest.status === 'DONE') {
+    } else if (projectRequestRef.current && projectRequestRef.current.status === 'DONE') {
       setLoading(false);
       setCompleted(true);
       if (project) {
@@ -122,17 +99,42 @@ function BwxFetchTranslations({ project } : Props) {
     }
 
     setLoading(false);
+  }, [cma, force, project, saveProjectToStorage, sdkConfig, sdkSideBar.ids.entry, showErrorNotification]);
+
+  useEffect(() => {
+    const storedProjects = getStoredProjects();
+    const storedProject = storedProjects.get(project?.uuid);
+    if (storedProject) {
+      if (storedProject.status === 'RUNNING' && storedProject.requestId) {
+        setLoading(true);
+        projectRequestRef.current = { id: storedProject.requestId, status: 'RUNNING' };
+        poll();
+      } else {
+        setLoading(false);
+      }
+    }
+  }, [project?.uuid, getStoredProjects, poll])
+ 
+  const fetch = async () => {
+    setIsAuth(true);
+    setLoading(true);
+    setError(false);
+    setCompleted(false);
+    projectRequestRef.current = null;
+    try {
+      const response = await bwxApi.fetchTranslations(force, sdkSideBar.ids.entry, project?.uuid, sdkConfig, cma);
+      projectRequestRef.current = await response.json();
+      saveProjectToStorage({ projectUuid: project?.uuid, status: 'RUNNING', requestId: projectRequestRef.current.id });
+      poll();
+    } catch (err) {
+      setIsAuth(false);
+      setLoading(false);
+      showErrorNotification(ERROR_AUTH_MESSAGE);
+    }
   }
 
   const close = () => {
     setCompleted(false);
-  }
-
-  const showErrorNotification = (msg: string) => {
-    if (project) {
-      Notification.setPlacement('top');
-      Notification.error(msg, { duration: 0 });
-    }
   }
 
   return (

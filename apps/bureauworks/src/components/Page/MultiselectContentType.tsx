@@ -24,7 +24,7 @@ export default function MultiselectSearchContentType({ contentTypes, onSelect }:
   React.useEffect(() => {
     const contentTypeQuery = selectedItems.join(",")
     onSelect(contentTypeQuery);
-  }, [selectedItems]);
+  }, [selectedItems, onSelect]);
 
   const handleSearchValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
