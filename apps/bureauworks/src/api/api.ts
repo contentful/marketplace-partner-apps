@@ -6,8 +6,8 @@ import { ProjectCreation, TmChange } from '../interfaces';
 const BASE_URL = process.env.REACT_APP_LAMBDA_API ? `/${process.env.REACT_APP_LAMBDA_API}/api/bwx` : '/api/bwx';
 const getTokenStorageKey = (sdk: ConfigAppSDK) => `bwxToken-${sdk.ids.space}`;
 
-const headers = (sdk: ConfigAppSDK) => ({
-  "x-contentful-bwx-token": sessionStorage.getItem(getTokenStorageKey(sdk))
+const headers = (sdk: ConfigAppSDK): Record<string, string> => ({
+  "x-contentful-bwx-token": sessionStorage.getItem(getTokenStorageKey(sdk)) ?? ''
 });
 
 async function checkAuth (sdk: ConfigAppSDK, cma: CMAClient) {

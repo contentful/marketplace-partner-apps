@@ -1,11 +1,13 @@
 import { CMAClient, ConfigAppSDK } from '@contentful/app-sdk';
 
+type HttpMethod = 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH' | 'HEAD';
+
 async function fetchWithSignedRequest(
   url: string,
   sdk: ConfigAppSDK,
   cma: CMAClient,
   headers: Record<string, string> = {},
-  method: NonNullable<RequestInit['method']> = 'GET',
+  method: HttpMethod = 'GET',
   body?: unknown
 ): Promise<Response> {
   
