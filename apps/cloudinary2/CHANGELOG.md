@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.4.0...cloudinary-assets-v1.4.1) (2026-03-27)
+
+
+### Bug Fixes
+
+* **deps:** bump picomatch in /apps/cloudinary2 ([#7983](https://github.com/contentful/marketplace-partner-apps/issues/7983)) ([56ce7c2](https://github.com/contentful/marketplace-partner-apps/commit/56ce7c214a181aa3d5099f850975eb26e6987828))
+
 ## [1.4.0](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.3.1...cloudinary-assets-v1.4.0) (2026-03-04)
 
 
