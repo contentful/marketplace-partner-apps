@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.1](https://github.com/contentful/marketplace-partner-apps/compare/markup-ai-contentful-app-v1.2.0...markup-ai-contentful-app-v1.2.1) (2026-03-27)
+
+
+### Bug Fixes
+
+* **deps:** bump flatted from 3.3.3 to 3.4.2 in /apps/markup-ai ([#7966](https://github.com/contentful/marketplace-partner-apps/issues/7966)) ([ce99d3e](https://github.com/contentful/marketplace-partner-apps/commit/ce99d3e8fb2796972a3a227a21fe38034eeb2212))
+* **deps:** bump picomatch from 4.0.3 to 4.0.4 in /apps/markup-ai ([#8012](https://github.com/contentful/marketplace-partner-apps/issues/8012)) ([dfe252c](https://github.com/contentful/marketplace-partner-apps/commit/dfe252ca088bbf495787bd8a5b31d300c413b6ee))
+* **deps:** bump yaml from 1.10.2 to 1.10.3 in /apps/markup-ai ([#8013](https://github.com/contentful/marketplace-partner-apps/issues/8013)) ([b3f7fe1](https://github.com/contentful/marketplace-partner-apps/commit/b3f7fe169f6ea57a1c57e69b3fd41cd55d110a58))
+
 ## [1.2.0](https://github.com/contentful/marketplace-partner-apps/compare/markup-ai-contentful-app-v1.1.1...markup-ai-contentful-app-v1.2.0) (2026-03-04)
 
 
