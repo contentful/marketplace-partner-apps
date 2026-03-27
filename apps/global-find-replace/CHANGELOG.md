@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.2.5](https://github.com/contentful/marketplace-partner-apps/compare/global-find-replace-v0.2.4...global-find-replace-v0.2.5) (2026-03-27)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.13.2 to 1.13.5 in /apps/global-find-replace ([#7776](https://github.com/contentful/marketplace-partner-apps/issues/7776)) ([acc667f](https://github.com/contentful/marketplace-partner-apps/commit/acc667f9d476917372dda8533b58dab0e9086adb))
+* **deps:** bump flatted from 3.3.3 to 3.4.2 in /apps/global-find-replace ([#7955](https://github.com/contentful/marketplace-partner-apps/issues/7955)) ([3df3697](https://github.com/contentful/marketplace-partner-apps/commit/3df3697e5770262ceac93334e45a8f76ac11b8e7))
+* **deps:** bump happy-dom from 20.6.1 to 20.8.9 in /apps/global-find-replace ([#8036](https://github.com/contentful/marketplace-partner-apps/issues/8036)) ([1fb44e1](https://github.com/contentful/marketplace-partner-apps/commit/1fb44e1169f3b4647150324a69f5d792bcce4a1f))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/global-find-replace ([#7821](https://github.com/contentful/marketplace-partner-apps/issues/7821)) ([a2c2ae7](https://github.com/contentful/marketplace-partner-apps/commit/a2c2ae79b516f4beeacf4109a231f644295db7f4))
+* **deps:** Bump rollup from 4.45.1 to 4.59.0 in /apps/global-find-replace ([#7873](https://github.com/contentful/marketplace-partner-apps/issues/7873)) ([f7d49ec](https://github.com/contentful/marketplace-partner-apps/commit/f7d49ec16439ec88b39b308ee600a2aba4b63d63))
+* **deps:** bump the production-dependencies group in /apps/global-find-replace with 4 updates ([#7735](https://github.com/contentful/marketplace-partner-apps/issues/7735)) ([515c9fd](https://github.com/contentful/marketplace-partner-apps/commit/515c9fd79b6245e887c29015f8d939b54a93e988))
+* **deps:** bump the production-dependencies group in /apps/global-find-replace with 8 updates ([#7910](https://github.com/contentful/marketplace-partner-apps/issues/7910)) ([8dc7ffe](https://github.com/contentful/marketplace-partner-apps/commit/8dc7ffe307e7a3505b366f52e8e8bf9e885d9402))
+
 ## [0.2.4](https://github.com/contentful/marketplace-partner-apps/compare/global-find-replace-v0.2.3...global-find-replace-v0.2.4) (2026-01-15)
 
 
