@@ -13,7 +13,19 @@ export const getFieldAppSdk = (
   locale?: string
 ) => {
   const fieldAPI = getFieldAPI(fieldId, sdk, locale || sdk.locales.default);
-  return Object.assign({ field: fieldAPI }, sdk) as FieldAppSDK;
+  
+  // Create a proper FieldAppSDK with ids.field set correctly
+  // This is critical for Live Preview to work - it uses sdk.ids.field for data-contentful-field-id
+  const fieldAppSdk = {
+    ...sdk,
+    field: fieldAPI,
+    ids: {
+      ...sdk.ids,
+      field: fieldId, // ✅ FIX: Set the field ID (e.g., "title", "entryName") instead of content type ID
+    },
+  } as FieldAppSDK;
+  
+  return fieldAppSdk;
 };
 
 // Get localization setting for a field
