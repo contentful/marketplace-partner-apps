@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.3.2](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.3.1...transifex-contentful-app-v1.3.2) (2026-03-27)
+
+
+### Bug Fixes
+
+* **deps:** bump ajv from 6.12.6 to 6.14.0 in /apps/transifex ([#7842](https://github.com/contentful/marketplace-partner-apps/issues/7842)) ([dde74cc](https://github.com/contentful/marketplace-partner-apps/commit/dde74ccd0e0c27ce53cef7f331c09bbba159bfef))
+* **deps:** bump axios from 1.13.1 to 1.13.5 in /apps/transifex ([#7766](https://github.com/contentful/marketplace-partner-apps/issues/7766)) ([3bdd9d5](https://github.com/contentful/marketplace-partner-apps/commit/3bdd9d5023aa2b66dd0776e61669737007be7cfc))
+* **deps:** bump flatted from 3.3.3 to 3.4.1 in /apps/transifex ([#7947](https://github.com/contentful/marketplace-partner-apps/issues/7947)) ([2f93766](https://github.com/contentful/marketplace-partner-apps/commit/2f9376668b640c41adb27b9fa0b8bac72ad67389))
+* **deps:** bump flatted from 3.4.1 to 3.4.2 in /apps/transifex ([#7979](https://github.com/contentful/marketplace-partner-apps/issues/7979)) ([043a167](https://github.com/contentful/marketplace-partner-apps/commit/043a167faa0efec79aecaab6a1a96a971d115b5d))
+* **deps:** bump minimatch from 3.1.2 to 3.1.3 in /apps/transifex ([#7848](https://github.com/contentful/marketplace-partner-apps/issues/7848)) ([186d904](https://github.com/contentful/marketplace-partner-apps/commit/186d904f0206eadfd8a531a4b495202113aa4ba2))
+* **deps:** bump picomatch from 4.0.3 to 4.0.4 in /apps/transifex ([#8004](https://github.com/contentful/marketplace-partner-apps/issues/8004)) ([e492adb](https://github.com/contentful/marketplace-partner-apps/commit/e492adbdc16a052484d860c33be8b54494e3f551))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/transifex ([#7582](https://github.com/contentful/marketplace-partner-apps/issues/7582)) ([15fb9ea](https://github.com/contentful/marketplace-partner-apps/commit/15fb9eadc778df03ddfe61a422390856ef2ec393))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/transifex ([#7801](https://github.com/contentful/marketplace-partner-apps/issues/7801)) ([16ad152](https://github.com/contentful/marketplace-partner-apps/commit/16ad152ef79e21b29a00936fab46afb0bd96a4b7))
+* **deps:** bump rollup from 4.44.1 to 4.59.0 in /apps/transifex ([#7864](https://github.com/contentful/marketplace-partner-apps/issues/7864)) ([fdd619f](https://github.com/contentful/marketplace-partner-apps/commit/fdd619fb1101fa8c7874ca27053573936d50ff87))
+* **deps:** bump yaml from 1.10.2 to 1.10.3 in /apps/transifex ([#7999](https://github.com/contentful/marketplace-partner-apps/issues/7999)) ([7afd2e8](https://github.com/contentful/marketplace-partner-apps/commit/7afd2e8d1160c0fbb1bd34dcc9facbaffd23264b))
+
 ## [1.3.1](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.3.0...transifex-contentful-app-v1.3.1) (2025-12-03)
 
 
