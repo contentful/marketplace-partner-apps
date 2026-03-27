@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.6](https://github.com/contentful/marketplace-partner-apps/compare/hugging-face-v1.1.5...hugging-face-v1.1.6) (2026-03-27)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.12.2 to 1.13.5 in /apps/hugging-face ([#7781](https://github.com/contentful/marketplace-partner-apps/issues/7781)) ([53d4ea2](https://github.com/contentful/marketplace-partner-apps/commit/53d4ea2a80b2eba0a10c8868917e252c3ed7bd59))
+* **deps:** bump flatted from 3.3.3 to 3.4.2 in /apps/hugging-face ([#7960](https://github.com/contentful/marketplace-partner-apps/issues/7960)) ([e9b4dc8](https://github.com/contentful/marketplace-partner-apps/commit/e9b4dc87fa08508810fb60a7991ca686b21672b3))
+* **deps:** bump picomatch in /apps/hugging-face ([#7989](https://github.com/contentful/marketplace-partner-apps/issues/7989)) ([bf5795a](https://github.com/contentful/marketplace-partner-apps/commit/bf5795a717d8c66c424524bf9ddf9531d1aac469))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/hugging-face ([#7587](https://github.com/contentful/marketplace-partner-apps/issues/7587)) ([564318c](https://github.com/contentful/marketplace-partner-apps/commit/564318c3e2ff832e7c5f1c7817d36ce76b22f7bf))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/hugging-face ([#7819](https://github.com/contentful/marketplace-partner-apps/issues/7819)) ([563614a](https://github.com/contentful/marketplace-partner-apps/commit/563614a65d766ccde3fbc52b554a2c965fb35bbf))
+* **deps:** Bump rollup from 4.44.1 to 4.59.0 in /apps/hugging-face ([#7876](https://github.com/contentful/marketplace-partner-apps/issues/7876)) ([78177b7](https://github.com/contentful/marketplace-partner-apps/commit/78177b7cb8a08c04b76519320b563c97945c39c5))
+
 ## [1.1.5](https://github.com/contentful/marketplace-partner-apps/compare/hugging-face-v1.1.4...hugging-face-v1.1.5) (2025-12-03)
 
 
