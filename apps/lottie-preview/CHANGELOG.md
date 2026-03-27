@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.7...lottie-preview-v1.0.8) (2026-03-27)
+
+
+### Bug Fixes
+
+* **deps:** bump @lottiefiles/dotlottie-react from 0.17.6 to 0.17.7 in /apps/lottie-preview in the production-dependencies group ([#7228](https://github.com/contentful/marketplace-partner-apps/issues/7228)) ([1882e31](https://github.com/contentful/marketplace-partner-apps/commit/1882e31316c6714ba8c6513b61c5fdf9f9e73d1a))
+* **deps:** bump axios from 1.13.1 to 1.13.5 in /apps/lottie-preview ([#7772](https://github.com/contentful/marketplace-partner-apps/issues/7772)) ([02cb40a](https://github.com/contentful/marketplace-partner-apps/commit/02cb40a1fdafc9845cd3ef78bada7ab213ba05ee))
+* **deps:** bump flatted from 3.3.3 to 3.4.2 in /apps/lottie-preview ([#7959](https://github.com/contentful/marketplace-partner-apps/issues/7959)) ([fd9f5ad](https://github.com/contentful/marketplace-partner-apps/commit/fd9f5ad27b34298e98420e3a8b0a0f85caf7b7ac))
+* **deps:** bump js-yaml from 4.1.0 to 4.1.1 in /apps/lottie-preview ([#7349](https://github.com/contentful/marketplace-partner-apps/issues/7349)) ([509cb6c](https://github.com/contentful/marketplace-partner-apps/commit/509cb6c5bfde72e26d6a9c8fcadde531c9b69f3e))
+* **deps:** bump picomatch from 4.0.3 to 4.0.4 in /apps/lottie-preview ([#8014](https://github.com/contentful/marketplace-partner-apps/issues/8014)) ([a2e8b29](https://github.com/contentful/marketplace-partner-apps/commit/a2e8b29705bf9678153a8af6d5ca124b6084e639))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/lottie-preview ([#7576](https://github.com/contentful/marketplace-partner-apps/issues/7576)) ([b82ebd0](https://github.com/contentful/marketplace-partner-apps/commit/b82ebd08d966725302165d01186f33852dbb28bd))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/lottie-preview ([#7810](https://github.com/contentful/marketplace-partner-apps/issues/7810)) ([42f0e1b](https://github.com/contentful/marketplace-partner-apps/commit/42f0e1b149c6da13f2dc1b2bbda5c2f3fa504c57))
+* **deps:** Bump rollup from 4.46.2 to 4.59.0 in /apps/lottie-preview ([#7868](https://github.com/contentful/marketplace-partner-apps/issues/7868)) ([840448b](https://github.com/contentful/marketplace-partner-apps/commit/840448ba69eafd74ba4b382ae50a9b5d1738de4a))
+* **deps:** bump svgo from 3.3.2 to 3.3.3 in /apps/lottie-preview ([#7925](https://github.com/contentful/marketplace-partner-apps/issues/7925)) ([14243b7](https://github.com/contentful/marketplace-partner-apps/commit/14243b7244fb372878b708e370504f4e497ac8c3))
+
 ## [1.0.7](https://github.com/contentful/marketplace-partner-apps/compare/lottie-preview-v1.0.6...lottie-preview-v1.0.7) (2025-07-02)
 
 
