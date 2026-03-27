@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.30](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.29...uploadcare-contentful-app-v1.0.30) (2026-03-27)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.13.1 to 1.13.5 in /apps/uploadcare ([#7765](https://github.com/contentful/marketplace-partner-apps/issues/7765)) ([38327e8](https://github.com/contentful/marketplace-partner-apps/commit/38327e8e899209e676ac398f6724661df8eefa89))
+* **deps:** bump minimatch in /apps/uploadcare ([#7893](https://github.com/contentful/marketplace-partner-apps/issues/7893)) ([d8255d2](https://github.com/contentful/marketplace-partner-apps/commit/d8255d2144c283db7295e6f1a5bdc5aa36bc90fa))
+* **deps:** bump node-forge from 1.3.1 to 1.4.0 in /apps/uploadcare ([#8035](https://github.com/contentful/marketplace-partner-apps/issues/8035)) ([d646702](https://github.com/contentful/marketplace-partner-apps/commit/d646702069833aa93eef99023ebdfbb54059a228))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/uploadcare ([#7571](https://github.com/contentful/marketplace-partner-apps/issues/7571)) ([922be85](https://github.com/contentful/marketplace-partner-apps/commit/922be857ac558246c036ff034caca7039a66d080))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/uploadcare ([#7802](https://github.com/contentful/marketplace-partner-apps/issues/7802)) ([c8c282c](https://github.com/contentful/marketplace-partner-apps/commit/c8c282cd58ce648b10a6dc43703a34edd39ea844))
+* **deps:** bump yaml in /apps/uploadcare ([#7995](https://github.com/contentful/marketplace-partner-apps/issues/7995)) ([9171b9b](https://github.com/contentful/marketplace-partner-apps/commit/9171b9bba901f717b2cd4f57c22d5c2de4a8cb3f))
+
 ## [1.0.29](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.28...uploadcare-contentful-app-v1.0.29) (2025-10-16)
 
 
