@@ -1,7 +1,7 @@
 ---
-name: "release-please dependency-only auto-merge"
+name: 'release-please dependency-only auto-merge'
 
-"on":
+'on':
   pull_request:
     types: [opened, synchronize]
 
@@ -19,44 +19,40 @@ jobs:
     steps:
       - name: Check if release contains only dependency updates
         id: check-dependencies
-        env:
-          PR_BODY: ${{ github.event.pull_request.body }}
-        run: |
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        with:
+          script: |
+            const body = context.payload.pull_request.body ?? '';
 
-          # Check for sections that should NOT be present in dependency-only releases
-          if echo "$PR_BODY" | grep -E "### (Features|Performance Improvements|Reverts|Documentation)" -i; then
-            echo "Found non-dependency sections, skipping auto-merge"
-            echo "is-dependency-only=false" >> $GITHUB_OUTPUT
-            exit 0
-          fi
+            const hasNonDependencySections = /### (Features|Performance Improvements|Reverts|Documentation)/i.test(body);
+            const hasBreakingChanges = /BREAKING CHANGE/i.test(body);
+            const hasDependencyEntries = /\*\*deps\*\*:/i.test(body);
 
-          # Check for breaking changes
-          if echo "$PR_BODY" | grep -E "BREAKING CHANGE" -i; then
-            echo "Found breaking changes, skipping auto-merge"
-            echo "is-dependency-only=false" >> $GITHUB_OUTPUT
-            exit 0
-          fi
+            if (hasNonDependencySections) {
+              console.log('Found non-dependency sections, skipping auto-merge');
+              core.setOutput('is-dependency-only', 'false');
+              return;
+            }
 
-          # Positive check: ensure we have dependency-related entries
-          if echo "$PR_BODY" | grep -E "\*\*deps\*\*:" -i; then
-            echo "Found dependency updates, proceeding with auto-merge"
-            echo "is-dependency-only=true" >> $GITHUB_OUTPUT
-          else
-            echo "No dependency updates found, skipping auto-merge"
-            echo "is-dependency-only=false" >> $GITHUB_OUTPUT
-          fi
+            if (hasBreakingChanges) {
+              console.log('Found breaking changes, skipping auto-merge');
+              core.setOutput('is-dependency-only', 'false');
+              return;
+            }
 
-      - name: Check if PR is from fork
-        if: steps.check-dependencies.outputs.is-dependency-only == 'true'
-        shell: bash
-        run: |
-          if [ "${{ github.event.pull_request.head.repo.fork }}" == "true" ]; then
-            echo "Skipping action on fork PR"
-            exit 1
-          fi
+            if (hasDependencyEntries) {
+              console.log('Found dependency updates, proceeding with auto-merge');
+              core.setOutput('is-dependency-only', 'true');
+              return;
+            }
+
+            console.log('No dependency updates found, skipping auto-merge');
+            core.setOutput('is-dependency-only', 'false');
 
       - name: Retrieve github token
-        if: steps.check-dependencies.outputs.is-dependency-only == 'true'
+        if: |
+          steps.check-dependencies.outputs.is-dependency-only == 'true' &&
+          github.event.pull_request.head.repo.fork != true
         id: vault
         uses: hashicorp/vault-action@4c06c5ccf5c0761b6029f56cfb1dcf5565918a3b # v3.4.0
         with:
@@ -69,7 +65,9 @@ jobs:
             github/token/${{ github.event.repository.name }}-dependabot token | GITHUB_MERGE_TOKEN ;
 
       - name: Approve PR
-        if: steps.check-dependencies.outputs.is-dependency-only == 'true'
+        if: |
+          steps.check-dependencies.outputs.is-dependency-only == 'true' &&
+          github.event.pull_request.head.repo.fork != true
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
           github-token: ${{ steps.vault.outputs.GITHUB_MERGE_TOKEN }}
@@ -102,11 +100,13 @@ jobs:
             }
 
       - name: Enable auto merge
-        if: steps.check-dependencies.outputs.is-dependency-only == 'true'
+        if: |
+          steps.check-dependencies.outputs.is-dependency-only == 'true' &&
+          github.event.pull_request.head.repo.fork != true
         shell: bash
         env:
           GH_TOKEN: ${{ steps.vault.outputs.GITHUB_MERGE_TOKEN }}
-          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           echo "Auto merging dependency-only release PR"
-          gh pr merge --auto "$PR_URL"
+          gh pr merge --auto "$PR_NUMBER"
