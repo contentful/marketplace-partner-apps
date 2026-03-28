@@ -1,26 +1,35 @@
 import { Button, styled } from '@mui/material';
 
-export const CustomButton = styled(Button)({
+export const CustomPrimaryButton = styled(Button)({
+  gap: '4px',
+  padding: '4px 8px',
+  minWidth: '96px',
+  overflow: 'hidden',
+  border: 'none #D8D8E2',
+  color: '#FCFCFD',
+  transition: '90ms',
+});
+
+export const CustomButton = styled(CustomPrimaryButton)({
   background: '#3100BF',
   textTransform: 'none',
   fontWeight: 'bold',
 });
 
-export const CustomButtonSecond = styled(Button)({
+export const CustomButtonSecond = styled(CustomPrimaryButton)({
   textTransform: 'none',
-  border: '2px solid #3100BF',
   fontWeight: 'bold',
   color: '#3100BF',
 });
 
-export const CustomButtonDanger = styled(Button)({
+export const CustomButtonDanger = styled(CustomPrimaryButton)({
   textTransform: 'none',
   border: '2px solid #b02f25',
   fontWeight: 'bold',
   color: '#fff',
 });
 
-export const CustomButtonSuccess = styled(Button)({
+export const CustomButtonSuccess = styled(CustomPrimaryButton)({
   textTransform: 'none',
   border: '2px solid #00806c',
   fontWeight: 'bold',
