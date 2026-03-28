@@ -9,6 +9,7 @@ export interface ContentType {
     id: string;
   };
   name: string;
+  description?: string;
   displayField?: string;
   fields: FieldDefinition[];
 }
@@ -78,7 +79,6 @@ export interface AppState extends SearchFilters {
   currentPage: number;
   showSummary: boolean;
   appliedChanges: MatchField[];
-  contentTypeDropdownOpen: boolean;
   applyingChanges: boolean;
   formModifiedSinceSearch: boolean;
   resultsLoaded: boolean;
