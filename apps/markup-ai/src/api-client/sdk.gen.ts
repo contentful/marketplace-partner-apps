@@ -11,15 +11,12 @@ import type {
   GetAdminConstantsData,
   GetAdminConstantsErrors,
   GetAdminConstantsResponses,
-  StyleChecksCreateStyleCheckBatchData,
-  StyleChecksCreateStyleCheckBatchErrors,
-  StyleChecksCreateStyleCheckBatchResponses,
+  InternalSubmitFeedbackData,
+  InternalSubmitFeedbackErrors,
+  InternalSubmitFeedbackResponses,
   StyleChecksCreateStyleCheckData,
   StyleChecksCreateStyleCheckErrors,
   StyleChecksCreateStyleCheckResponses,
-  StyleChecksGetStyleCheckBatchData,
-  StyleChecksGetStyleCheckBatchErrors,
-  StyleChecksGetStyleCheckBatchResponses,
   StyleChecksGetStyleCheckData,
   StyleChecksGetStyleCheckErrors,
   StyleChecksGetStyleCheckResponses,
@@ -44,15 +41,9 @@ import type {
   StyleRewritesGetStyleRewriteData,
   StyleRewritesGetStyleRewriteErrors,
   StyleRewritesGetStyleRewriteResponses,
-  StyleSuggestionsCreateStyleSuggestionBatchData,
-  StyleSuggestionsCreateStyleSuggestionBatchErrors,
-  StyleSuggestionsCreateStyleSuggestionBatchResponses,
   StyleSuggestionsCreateStyleSuggestionData,
   StyleSuggestionsCreateStyleSuggestionErrors,
   StyleSuggestionsCreateStyleSuggestionResponses,
-  StyleSuggestionsGetStyleSuggestionBatchData,
-  StyleSuggestionsGetStyleSuggestionBatchErrors,
-  StyleSuggestionsGetStyleSuggestionBatchResponses,
   StyleSuggestionsGetStyleSuggestionData,
   StyleSuggestionsGetStyleSuggestionErrors,
   StyleSuggestionsGetStyleSuggestionResponses,
@@ -82,43 +73,32 @@ export type Options<
  */
 export const styleGuidesListStyleGuides = <ThrowOnError extends boolean = false>(
   options?: Options<StyleGuidesListStyleGuidesData, ThrowOnError>,
-) => {
-  return (options?.client ?? client).get<
+) =>
+  (options?.client ?? client).get<
     StyleGuidesListStyleGuidesResponses,
     StyleGuidesListStyleGuidesErrors,
     ThrowOnError
   >({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
+    security: [{ scheme: "bearer", type: "http" }],
     url: "/v1/style-guides",
     ...options,
   });
-};
 
 /**
  * Create Style Guide
  *
- * Create a new style guide that can be used in checks, suggestions, and rewrites.
+ * Create a new style guide from a document, or copy an existing style guide. To copy, provide the copyFrom query parameter with the source style guide ID.
  */
 export const styleGuidesCreateStyleGuide = <ThrowOnError extends boolean = false>(
   options: Options<StyleGuidesCreateStyleGuideData, ThrowOnError>,
-) => {
-  return (options.client ?? client).post<
+) =>
+  (options.client ?? client).post<
     StyleGuidesCreateStyleGuideResponses,
     StyleGuidesCreateStyleGuideErrors,
     ThrowOnError
   >({
     ...formDataBodySerializer,
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
+    security: [{ scheme: "bearer", type: "http" }],
     url: "/v1/style-guides",
     ...options,
     headers: {
@@ -126,7 +106,6 @@ export const styleGuidesCreateStyleGuide = <ThrowOnError extends boolean = false
       ...options.headers,
     },
   });
-};
 
 /**
  * Delete Style Guide
@@ -135,22 +114,16 @@ export const styleGuidesCreateStyleGuide = <ThrowOnError extends boolean = false
  */
 export const styleGuidesDeleteStyleGuide = <ThrowOnError extends boolean = false>(
   options: Options<StyleGuidesDeleteStyleGuideData, ThrowOnError>,
-) => {
-  return (options.client ?? client).delete<
+) =>
+  (options.client ?? client).delete<
     StyleGuidesDeleteStyleGuideResponses,
     StyleGuidesDeleteStyleGuideErrors,
     ThrowOnError
   >({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
+    security: [{ scheme: "bearer", type: "http" }],
     url: "/v1/style-guides/{style_guide_id}",
     ...options,
   });
-};
 
 /**
  * Get Style Guide
@@ -159,22 +132,16 @@ export const styleGuidesDeleteStyleGuide = <ThrowOnError extends boolean = false
  */
 export const styleGuidesGetStyleGuide = <ThrowOnError extends boolean = false>(
   options: Options<StyleGuidesGetStyleGuideData, ThrowOnError>,
-) => {
-  return (options.client ?? client).get<
+) =>
+  (options.client ?? client).get<
     StyleGuidesGetStyleGuideResponses,
     StyleGuidesGetStyleGuideErrors,
     ThrowOnError
   >({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
+    security: [{ scheme: "bearer", type: "http" }],
     url: "/v1/style-guides/{style_guide_id}",
     ...options,
   });
-};
 
 /**
  * Update Style Guide
@@ -183,18 +150,13 @@ export const styleGuidesGetStyleGuide = <ThrowOnError extends boolean = false>(
  */
 export const styleGuidesUpdateStyleGuide = <ThrowOnError extends boolean = false>(
   options: Options<StyleGuidesUpdateStyleGuideData, ThrowOnError>,
-) => {
-  return (options.client ?? client).patch<
+) =>
+  (options.client ?? client).patch<
     StyleGuidesUpdateStyleGuideResponses,
     StyleGuidesUpdateStyleGuideErrors,
     ThrowOnError
   >({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
+    security: [{ scheme: "bearer", type: "http" }],
     url: "/v1/style-guides/{style_guide_id}",
     ...options,
     headers: {
@@ -202,7 +164,6 @@ export const styleGuidesUpdateStyleGuide = <ThrowOnError extends boolean = false
       ...options.headers,
     },
   });
-};
 
 /**
  * Create Style Check
@@ -211,19 +172,14 @@ export const styleGuidesUpdateStyleGuide = <ThrowOnError extends boolean = false
  */
 export const styleChecksCreateStyleCheck = <ThrowOnError extends boolean = false>(
   options: Options<StyleChecksCreateStyleCheckData, ThrowOnError>,
-) => {
-  return (options.client ?? client).post<
+) =>
+  (options.client ?? client).post<
     StyleChecksCreateStyleCheckResponses,
     StyleChecksCreateStyleCheckErrors,
     ThrowOnError
   >({
     ...formDataBodySerializer,
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
+    security: [{ scheme: "bearer", type: "http" }],
     url: "/v1/style/checks",
     ...options,
     headers: {
@@ -231,7 +187,6 @@ export const styleChecksCreateStyleCheck = <ThrowOnError extends boolean = false
       ...options.headers,
     },
   });
-};
 
 /**
  * Get Style Check
@@ -240,75 +195,16 @@ export const styleChecksCreateStyleCheck = <ThrowOnError extends boolean = false
  */
 export const styleChecksGetStyleCheck = <ThrowOnError extends boolean = false>(
   options: Options<StyleChecksGetStyleCheckData, ThrowOnError>,
-) => {
-  return (options.client ?? client).get<
+) =>
+  (options.client ?? client).get<
     StyleChecksGetStyleCheckResponses,
     StyleChecksGetStyleCheckErrors,
     ThrowOnError
   >({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
+    security: [{ scheme: "bearer", type: "http" }],
     url: "/v1/style/checks/{workflow_id}",
     ...options,
   });
-};
-
-/**
- * Create Style Check Batch
- *
- * Analyze text for grammar, style, and clarity issues for multiple files.
- */
-export const styleChecksCreateStyleCheckBatch = <ThrowOnError extends boolean = false>(
-  options: Options<StyleChecksCreateStyleCheckBatchData, ThrowOnError>,
-) => {
-  return (options.client ?? client).post<
-    StyleChecksCreateStyleCheckBatchResponses,
-    StyleChecksCreateStyleCheckBatchErrors,
-    ThrowOnError
-  >({
-    ...formDataBodySerializer,
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v1/style/batch-checks",
-    ...options,
-    headers: {
-      "Content-Type": null,
-      ...options.headers,
-    },
-  });
-};
-
-/**
- * Get Style Check Batch
- *
- * Retrieve batch style check results.
- */
-export const styleChecksGetStyleCheckBatch = <ThrowOnError extends boolean = false>(
-  options: Options<StyleChecksGetStyleCheckBatchData, ThrowOnError>,
-) => {
-  return (options.client ?? client).get<
-    StyleChecksGetStyleCheckBatchResponses,
-    StyleChecksGetStyleCheckBatchErrors,
-    ThrowOnError
-  >({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v1/style/batch-checks/{workflow_id}",
-    ...options,
-  });
-};
 
 /**
  * Create Style Suggestion
@@ -317,19 +213,14 @@ export const styleChecksGetStyleCheckBatch = <ThrowOnError extends boolean = fal
  */
 export const styleSuggestionsCreateStyleSuggestion = <ThrowOnError extends boolean = false>(
   options: Options<StyleSuggestionsCreateStyleSuggestionData, ThrowOnError>,
-) => {
-  return (options.client ?? client).post<
+) =>
+  (options.client ?? client).post<
     StyleSuggestionsCreateStyleSuggestionResponses,
     StyleSuggestionsCreateStyleSuggestionErrors,
     ThrowOnError
   >({
     ...formDataBodySerializer,
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
+    security: [{ scheme: "bearer", type: "http" }],
     url: "/v1/style/suggestions",
     ...options,
     headers: {
@@ -337,7 +228,6 @@ export const styleSuggestionsCreateStyleSuggestion = <ThrowOnError extends boole
       ...options.headers,
     },
   });
-};
 
 /**
  * Get Style Suggestion
@@ -346,75 +236,16 @@ export const styleSuggestionsCreateStyleSuggestion = <ThrowOnError extends boole
  */
 export const styleSuggestionsGetStyleSuggestion = <ThrowOnError extends boolean = false>(
   options: Options<StyleSuggestionsGetStyleSuggestionData, ThrowOnError>,
-) => {
-  return (options.client ?? client).get<
+) =>
+  (options.client ?? client).get<
     StyleSuggestionsGetStyleSuggestionResponses,
     StyleSuggestionsGetStyleSuggestionErrors,
     ThrowOnError
   >({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
+    security: [{ scheme: "bearer", type: "http" }],
     url: "/v1/style/suggestions/{workflow_id}",
     ...options,
   });
-};
-
-/**
- * Create Style Suggestion Batch
- *
- * Get suggested corrections for text in multiple files.
- */
-export const styleSuggestionsCreateStyleSuggestionBatch = <ThrowOnError extends boolean = false>(
-  options: Options<StyleSuggestionsCreateStyleSuggestionBatchData, ThrowOnError>,
-) => {
-  return (options.client ?? client).post<
-    StyleSuggestionsCreateStyleSuggestionBatchResponses,
-    StyleSuggestionsCreateStyleSuggestionBatchErrors,
-    ThrowOnError
-  >({
-    ...formDataBodySerializer,
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v1/style/batch-suggestions",
-    ...options,
-    headers: {
-      "Content-Type": null,
-      ...options.headers,
-    },
-  });
-};
-
-/**
- * Get Style Suggestion Batch
- *
- * Retrieve batch style suggestion results.
- */
-export const styleSuggestionsGetStyleSuggestionBatch = <ThrowOnError extends boolean = false>(
-  options: Options<StyleSuggestionsGetStyleSuggestionBatchData, ThrowOnError>,
-) => {
-  return (options.client ?? client).get<
-    StyleSuggestionsGetStyleSuggestionBatchResponses,
-    StyleSuggestionsGetStyleSuggestionBatchErrors,
-    ThrowOnError
-  >({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v1/style/batch-suggestions/{workflow_id}",
-    ...options,
-  });
-};
 
 /**
  * Create Style Rewrite
@@ -423,19 +254,14 @@ export const styleSuggestionsGetStyleSuggestionBatch = <ThrowOnError extends boo
  */
 export const styleRewritesCreateStyleRewrite = <ThrowOnError extends boolean = false>(
   options: Options<StyleRewritesCreateStyleRewriteData, ThrowOnError>,
-) => {
-  return (options.client ?? client).post<
+) =>
+  (options.client ?? client).post<
     StyleRewritesCreateStyleRewriteResponses,
     StyleRewritesCreateStyleRewriteErrors,
     ThrowOnError
   >({
     ...formDataBodySerializer,
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
+    security: [{ scheme: "bearer", type: "http" }],
     url: "/v1/style/rewrites",
     ...options,
     headers: {
@@ -443,7 +269,6 @@ export const styleRewritesCreateStyleRewrite = <ThrowOnError extends boolean = f
       ...options.headers,
     },
   });
-};
 
 /**
  * Get Style Rewrite
@@ -452,41 +277,49 @@ export const styleRewritesCreateStyleRewrite = <ThrowOnError extends boolean = f
  */
 export const styleRewritesGetStyleRewrite = <ThrowOnError extends boolean = false>(
   options: Options<StyleRewritesGetStyleRewriteData, ThrowOnError>,
-) => {
-  return (options.client ?? client).get<
+) =>
+  (options.client ?? client).get<
     StyleRewritesGetStyleRewriteResponses,
     StyleRewritesGetStyleRewriteErrors,
     ThrowOnError
   >({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
+    security: [{ scheme: "bearer", type: "http" }],
     url: "/v1/style/rewrites/{workflow_id}",
     ...options,
   });
-};
 
 /**
  * Get Admin Constants
  */
 export const getAdminConstants = <ThrowOnError extends boolean = false>(
   options?: Options<GetAdminConstantsData, ThrowOnError>,
-) => {
-  return (options?.client ?? client).get<
+) =>
+  (options?.client ?? client).get<
     GetAdminConstantsResponses,
     GetAdminConstantsErrors,
     ThrowOnError
   >({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
+    security: [{ scheme: "bearer", type: "http" }],
     url: "/v1/internal/constants",
     ...options,
   });
-};
+
+/**
+ * Submit Feedback
+ */
+export const internalSubmitFeedback = <ThrowOnError extends boolean = false>(
+  options: Options<InternalSubmitFeedbackData, ThrowOnError>,
+) =>
+  (options.client ?? client).post<
+    InternalSubmitFeedbackResponses,
+    InternalSubmitFeedbackErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/internal/demo-feedback",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  });

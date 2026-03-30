@@ -27,7 +27,7 @@
     "react-dom": "18.2.0",
     "react-focus-lock": "^2.13.2",
     "react-markdown": "^9.0.1",
-    "react-router-dom": "^7.9.5",
+    "react-router-dom": "^7.12.0",
     "remark-gfm": "^4.0.0",
     "use-local-storage-extended": "^0.1.1"
   },
@@ -41,7 +41,7 @@
     "eslint": "^9.38.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.24",
-    "happy-dom": "^20.0.10",
+    "happy-dom": "^20.8.8",
     "type-fest": "^4.41.0",
     "typescript": "~5.9.3",
     "vite": "^7.1.12"

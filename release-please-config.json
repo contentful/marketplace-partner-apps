@@ -98,9 +98,6 @@
     "apps/vwo-fme": {
       "release-type": "node"
     },
-    "apps/wix": {
-      "release-type": "node"
-    },
     "apps/markup-ai": {
       "release-type": "node"
     },

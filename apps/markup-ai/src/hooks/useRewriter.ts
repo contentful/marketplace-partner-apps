@@ -20,7 +20,7 @@ export const useRewriter = (sdk: SidebarAppSDK) => {
   const isAcceptingSuggestionRef = useRef(false);
   const onFieldChangeRef = useRef<((fieldId: string) => void) | null>(null);
   const cooldownFieldsRef = useRef<Set<string>>(new Set());
-  const COOLDOWN_DURATION = 3000; // 3 seconds
+  const COOLDOWN_DURATION = 3_000; // 3 seconds
 
   const { fieldChecks, updateCheck, createCheck, removeCheck, clearChecks } = useFieldChecks();
   const { setTimeout, clearAllTimeouts } = useTimeouts();

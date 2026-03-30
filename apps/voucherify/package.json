@@ -19,14 +19,14 @@
     "@emotion/css": "11.13.5",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
-    "axios": "1.13.2",
+    "axios": "1.13.5",
     "http-status-codes": "2.3.0",
-    "lodash": "4.17.21",
+    "lodash": "4.17.23",
     "prop-types": "15.8.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-hook-form": "7.66.0",
-    "react-router-dom": "7.9.5"
+    "react-router-dom": "7.12.0"
   },
   "devDependencies": {
     "@contentful/app-scripts": "1.32.0",
@@ -34,7 +34,7 @@
     "@vitejs/plugin-react": "^4.7.0",
     "eslint": "^9.39.1",
     "eslint-plugin-react": "~7.37.5",
-    "happy-dom": "^20.0.10",
+    "happy-dom": "^20.8.9",
     "vite": "^7.2.2",
     "vitest": "^3.2.4"
   },

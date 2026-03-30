@@ -438,25 +438,6 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: wix
-  annotations:
-    github.com/project-slug: contentful/marketplace-partner-apps/wix
-    contentful.com/service-tier: '2'
-    contentful.com/ci-alert-slack: prd-marketplace-bots
-  tags:
-    - node
-    - service
-    - sast-enabled
-    - tier-2
-spec:
-  type: service
-  lifecycle: production
-  owner: group:team-marketplace
-
----
-apiVersion: backstage.io/v1alpha1
-kind: Component
-metadata:
   name: markup-ai
   annotations:
     github.com/project-slug: contentful/marketplace-partner-apps/markup-ai

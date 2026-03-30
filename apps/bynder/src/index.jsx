@@ -1,38 +1,13 @@
 import pick from 'lodash/pick';
 import { setup } from '@contentful/dam-app-base';
+import { FIELDS_TO_PERSIST } from '../utils/constants';
+import { transformAsset as transformAssetUtil } from '../utils/transformAsset';
 
 import logo from './logo.svg';
 
 const CTA = 'Select a file on Bynder';
 const BYNDER_BASE_URL = 'https://d8ejoa1fys2rk.cloudfront.net';
 const BYNDER_SDK_URL = `${BYNDER_BASE_URL}/5.0.5/modules/compactview/bynder-compactview-5-latest.js`;
-
-const FIELDS_TO_PERSIST = [
-  'archive',
-  'brandId',
-  'copyright',
-  'dateCreated',
-  'dateModified',
-  'datePublished',
-  'description',
-  'extension',
-  'fileSize',
-  'height',
-  'id',
-  'isPublic',
-  'limited',
-  'name',
-  'orientation',
-  'original',
-  'thumbnails',
-  'type',
-  'watermarked',
-  'width',
-  'videoPreviewURLs',
-  'tags',
-  'selectedFile',
-  'textMetaproperties',
-];
 
 const FIELD_SELECTION = `
   databaseId
@@ -62,14 +37,21 @@ const FIELD_SELECTION = `
     value
   }
   ... on Video {
-    previewUrls
+    previewUrls,
+    streamingLinks {
+      dash,
+      hls
+    }
   }
 `;
 
 const validAssetTypes = ['image', 'audio', 'document', 'video'];
 
 function makeThumbnail(resource) {
-  const thumbnail = (resource.thumbnails && resource.thumbnails.webimage) || resource.src;
+  // Try thumbnail sources in order of preference
+  // Use the original image if no other thumbnails are avilable
+  const thumbnail = resource.thumbnails?.thul || resource.thumbnails?.webimage || resource.src || resource.original;
+
   const url = typeof thumbnail === 'string' ? thumbnail : undefined;
   const alt = `${resource.name} - ${resource.id}`;
 
@@ -85,42 +67,12 @@ function prepareBynderHTML() {
 }
 
 function transformAsset(asset, selected) {
-  const thumbnails = {
-    webimage: asset.files.webImage?.url,
-    thul: asset.files.thumbnail?.url,
-  };
-
-  Object.entries(asset.files)
-    .filter(([name]) => !['webImage', 'thumbnail'].includes(name))
-    .forEach(([key, value]) => (thumbnails[key] = value?.url));
-
-  return {
-    id: asset.databaseId,
-    orientation: asset.orientation.toLowerCase(),
-    archive: asset.isArchived ? 1 : 0,
-    type: asset.type.toLowerCase(),
-    fileSize: asset.fileSize,
-    description: asset.description,
-    name: asset.name,
-    height: asset.height,
-    width: asset.width,
-    copyright: asset.copyright,
-    extension: asset.extensions,
-    userCreated: asset.createdBy,
-    datePublished: asset.publishedAt,
-    dateCreated: asset.createdAt,
-    dateModified: asset.updatedAt,
-    watermarked: asset.isWatermarked ? 1 : 0,
-    limited: asset.isLimitedUse ? 1 : 0,
-    isPublic: asset.isPublic ? 1 : 0,
-    brandId: asset.brandId,
-    thumbnails: thumbnails,
-    original: asset.originalUrl,
-    videoPreviewURLs: asset.previewUrls || [],
-    textMetaproperties: asset.textMetaproperties || [],
-    tags: asset.tags,
+  // Reuse shared transform utility
+  return transformAssetUtil(asset, {
     selectedFile: selected.selectedFile,
-  };
+    filterFields: false, // Don't filter - return all fields for dialog
+    addSrc: false, // Don't add src - not needed in dialog context
+  });
 }
 
 function checkMessageEvent(e) {
@@ -141,14 +93,11 @@ function renderDialog(sdk) {
   let effectiveMode = compactViewMode ?? 'MultiSelect';
   if (modeOverrideFields && typeof sdk.ids.field === 'string') {
     // Remove all whitespace before splitting
-    const overrideList = modeOverrideFields
-      .replace(/\s+/g, '')
-      .split(',')
-      .filter(Boolean);
+    const overrideList = modeOverrideFields.replace(/\s+/g, '').split(',').filter(Boolean);
     const fieldMachineName = sdk.ids.field;
     if (overrideList.includes(fieldMachineName)) {
       // Switch to the opposite mode
-      effectiveMode = (compactViewMode === 'MultiSelect' ? 'SingleSelectFile' : 'MultiSelect');
+      effectiveMode = compactViewMode === 'MultiSelect' ? 'SingleSelectFile' : 'MultiSelect';
     }
   }
 
@@ -212,7 +161,7 @@ async function openDialog(sdk, _currentValue, config) {
     shouldCloseOnEscapePress: true,
     parameters,
     width: 'fullWidth',
-    minHeight: '80vh'
+    minHeight: '80vh',
   });
 
   if (!Array.isArray(result)) {
@@ -334,7 +283,17 @@ setup({
       name: 'Bynder Client Secret',
       description: 'The OAuth2 client secret for Bynder API access (required for external references and asset tracker).',
       required: false,
-    }
+    },
+    {
+      id: 'syncIsPublicAcrossLocales',
+      name: 'Sync isPublic Across Locales',
+      type: 'List',
+      value: 'Yes,No',
+      default: 'Yes',
+      description:
+        'When enabled (Yes), the isPublic flag will be synchronized across all locales to ensure consistent asset visibility. If an asset is public in one locale, it will be public in all locales. When disabled (No), each locale maintains its own isPublic value from Bynder.',
+      required: true,
+    },
   ],
   makeThumbnail,
   renderDialog,
