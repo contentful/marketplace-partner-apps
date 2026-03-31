@@ -9,12 +9,7 @@ export default defineConfig({
   plugins: [react()],
   test: {
     globals: true,
-    browser: {
-      provider: 'playwright',
-      enabled: true,
-      headless: true,
-      name: 'chromium',
-    },
+    environment: 'happy-dom',
     setupFiles: './test/vite.setup.ts',
   },
 });
