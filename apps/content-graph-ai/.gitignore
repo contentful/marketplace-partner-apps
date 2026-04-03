@@ -1,0 +1,56 @@
+node_modules
+.context/
+dist
+.mastra
+.env.development
+.env
+*.db
+*.db-*
+.DS_Store
+.env
+node_modules/
+.mastra/output/
+dist/
+.turbo/
+.DS_Store
+logs/
+
+.vercel
+.env*.local
+.cache/
+
+# Generated exports (CSV outputs from classifier runs)
+exports/
+
+# Diagrams (regenerate from source as needed)
+competitor-digest-diagram.png
+competitor-digest-diagram.svg
+taxonomy-tool-diagram.png
+taxonomy-tool-diagram.svg
+
+# Misc assets / screenshots
+attached_assets/
+
+# Internal strategy docs (not part of classifier codebase)
+docs/FY27-*/
+docs/FY27-*.md
+docs/CONFLUENCE_*.md
+docs/CUSTOM_GPT_*
+docs/ELEVATE_*.md
+docs/CONTENT_GRAPH_USE_CASES.md
+docs/assets/
+docs/images/
+
+# AI assistant config
+.ai-assistant/
+SPARK_*.json
+SPARK_*.md
+IMPLEMENTATION_PLAN.md
+PLAN.md
+
+# One-off utility scripts
+scripts/generate_google_doc_tabs_apps_script.py
+.gstack/
+.agents/
+.learnings/SESSION_LOG.md
+llm-council/

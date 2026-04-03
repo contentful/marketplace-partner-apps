@@ -1,0 +1,43 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: content_graph
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  chroma:
+    image: chromadb/chroma:0.5.5
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma-data:/chroma/chroma
+
+  phoenix:
+    image: arizephoenix/phoenix:latest
+    ports:
+      - "6006:6006"
+      - "4317:4317"
+      - "4318:4318"
+
+  nlp-sidecar:
+    image: ${CONTENT_GRAPH_NLP_SIDECAR_IMAGE:-content-graph-nlp-sidecar:dev}
+    build:
+      context: .
+      dockerfile: vendor/python/Dockerfile.sidecar
+    environment:
+      GLINER_MODEL: urchade/gliner_multi-v2.1
+      ZERO_SHOT_MODEL: valhalla/distilbart-mnli-12-3
+    volumes:
+      - hf-cache:/models/huggingface
+    ports:
+      - "8090:8090"
+
+volumes:
+  chroma-data:
+  hf-cache:
+  postgres-data:

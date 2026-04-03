@@ -1,0 +1,417 @@
+{
+  "pageLongFormSeo": {
+    "assetType": "Webpage",
+    "assetSubType": "Article",
+    "schemaType": {
+      "default": "Article",
+      "aiDecides": true
+    },
+    "funnelStage": {
+      "default": "Awareness (TOFU)",
+      "allowed": [
+        "Awareness (TOFU)",
+        "Consideration (MOFU)"
+      ],
+      "never": [
+        "Evaluation/Engagement (BOFU)",
+        "Retention",
+        "Sign-up"
+      ]
+    },
+    "audienceHints": [],
+    "companyEnrichmentApplies": false
+  },
+  "longFormSeo": {
+    "assetType": "Webpage",
+    "assetSubType": "Article",
+    "schemaType": {
+      "default": "Article",
+      "aiDecides": true
+    },
+    "funnelStage": {
+      "default": "Awareness (TOFU)",
+      "allowed": [
+        "Awareness (TOFU)",
+        "Consideration (MOFU)"
+      ],
+      "never": [
+        "Evaluation/Engagement (BOFU)",
+        "Retention",
+        "Sign-up"
+      ]
+    },
+    "audienceHints": [],
+    "companyEnrichmentApplies": false
+  },
+  "pageBlogPost": {
+    "assetType": "Blog",
+    "assetSubType": "Blog",
+    "schemaType": {
+      "default": "BlogPosting",
+      "aiDecides": false
+    },
+    "funnelStage": {
+      "default": "Awareness (TOFU)",
+      "allowed": [
+        "Awareness (TOFU)",
+        "Consideration (MOFU)"
+      ],
+      "never": [
+        "Evaluation/Engagement (BOFU)",
+        "Retention",
+        "Sign-up"
+      ]
+    },
+    "audienceHints": [],
+    "companyEnrichmentApplies": false
+  },
+  "blogPost": {
+    "assetType": "Blog",
+    "assetSubType": "Blog",
+    "schemaType": {
+      "default": "BlogPosting",
+      "aiDecides": false
+    },
+    "funnelStage": {
+      "default": "Awareness (TOFU)",
+      "allowed": [
+        "Awareness (TOFU)",
+        "Consideration (MOFU)"
+      ],
+      "never": [
+        "Evaluation/Engagement (BOFU)",
+        "Retention",
+        "Sign-up"
+      ]
+    },
+    "audienceHints": [],
+    "companyEnrichmentApplies": false
+  },
+  "pageCaseStudy": {
+    "assetType": "Case Study",
+    "assetSubType": "Case Study",
+    "schemaType": {
+      "default": "Article",
+      "aiDecides": false
+    },
+    "funnelStage": {
+      "default": "Evaluation/Engagement (BOFU)",
+      "allowed": [
+        "Evaluation/Engagement (BOFU)"
+      ],
+      "never": [
+        "Awareness (TOFU)",
+        "Retention",
+        "Sign-up"
+      ]
+    },
+    "audienceHints": [],
+    "companyEnrichmentApplies": true
+  },
+  "caseStudy": {
+    "assetType": "Case Study",
+    "assetSubType": "Case Study",
+    "schemaType": {
+      "default": "Article",
+      "aiDecides": false
+    },
+    "funnelStage": {
+      "default": "Evaluation/Engagement (BOFU)",
+      "allowed": [
+        "Evaluation/Engagement (BOFU)"
+      ],
+      "never": [
+        "Awareness (TOFU)",
+        "Retention",
+        "Sign-up"
+      ]
+    },
+    "audienceHints": [],
+    "companyEnrichmentApplies": true
+  },
+  "pageResource": {
+    "assetType": null,
+    "assetSubType": null,
+    "schemaType": {
+      "default": "Article",
+      "aiDecides": true
+    },
+    "funnelStage": {
+      "default": "Consideration (MOFU)",
+      "allowed": [
+        "Awareness (TOFU)",
+        "Consideration (MOFU)",
+        "Evaluation/Engagement (BOFU)"
+      ],
+      "never": [
+        "Retention",
+        "Sign-up"
+      ]
+    },
+    "audienceHints": [],
+    "companyEnrichmentApplies": false
+  },
+  "resource": {
+    "assetType": null,
+    "assetSubType": null,
+    "schemaType": {
+      "default": "Article",
+      "aiDecides": true
+    },
+    "funnelStage": {
+      "default": "Consideration (MOFU)",
+      "allowed": [
+        "Awareness (TOFU)",
+        "Consideration (MOFU)",
+        "Evaluation/Engagement (BOFU)"
+      ],
+      "never": [
+        "Retention",
+        "Sign-up"
+      ]
+    },
+    "audienceHints": [],
+    "companyEnrichmentApplies": false
+  },
+  "pageEvent": {
+    "assetType": "Event",
+    "assetSubType": "Event",
+    "schemaType": {
+      "default": "Event",
+      "aiDecides": false
+    },
+    "funnelStage": {
+      "default": "Consideration (MOFU)",
+      "allowed": [
+        "Awareness (TOFU)",
+        "Consideration (MOFU)",
+        "Evaluation/Engagement (BOFU)"
+      ],
+      "never": [
+        "Retention",
+        "Sign-up"
+      ]
+    },
+    "audienceHints": [],
+    "companyEnrichmentApplies": false
+  },
+  "event": {
+    "assetType": "Event",
+    "assetSubType": "Event",
+    "schemaType": {
+      "default": "Event",
+      "aiDecides": false
+    },
+    "funnelStage": {
+      "default": "Consideration (MOFU)",
+      "allowed": [
+        "Awareness (TOFU)",
+        "Consideration (MOFU)",
+        "Evaluation/Engagement (BOFU)"
+      ],
+      "never": [
+        "Retention",
+        "Sign-up"
+      ]
+    },
+    "audienceHints": [],
+    "companyEnrichmentApplies": false
+  },
+  "pagePricing": {
+    "assetType": "Webpage",
+    "assetSubType": "Webpage",
+    "schemaType": {
+      "default": "SoftwareApplication",
+      "aiDecides": false
+    },
+    "funnelStage": {
+      "default": "Evaluation/Engagement (BOFU)",
+      "allowed": [
+        "Evaluation/Engagement (BOFU)"
+      ],
+      "never": [
+        "Awareness (TOFU)",
+        "Consideration (MOFU)",
+        "Retention",
+        "Sign-up"
+      ]
+    },
+    "audienceHints": [],
+    "companyEnrichmentApplies": false
+  },
+  "pricing": {
+    "assetType": "Webpage",
+    "assetSubType": "Webpage",
+    "schemaType": {
+      "default": "SoftwareApplication",
+      "aiDecides": false
+    },
+    "funnelStage": {
+      "default": "Evaluation/Engagement (BOFU)",
+      "allowed": [
+        "Evaluation/Engagement (BOFU)"
+      ],
+      "never": [
+        "Awareness (TOFU)",
+        "Consideration (MOFU)",
+        "Retention",
+        "Sign-up"
+      ]
+    },
+    "audienceHints": [],
+    "companyEnrichmentApplies": false
+  },
+  "pageSolution": {
+    "assetType": "Webpage",
+    "assetSubType": "Webpage",
+    "schemaType": {
+      "default": "SoftwareApplication",
+      "aiDecides": true
+    },
+    "funnelStage": {
+      "default": "Consideration (MOFU)",
+      "allowed": [
+        "Consideration (MOFU)",
+        "Evaluation/Engagement (BOFU)"
+      ],
+      "never": [
+        "Awareness (TOFU)",
+        "Retention",
+        "Sign-up"
+      ]
+    },
+    "audienceHints": [],
+    "companyEnrichmentApplies": false
+  },
+  "solution": {
+    "assetType": "Webpage",
+    "assetSubType": "Webpage",
+    "schemaType": {
+      "default": "SoftwareApplication",
+      "aiDecides": true
+    },
+    "funnelStage": {
+      "default": "Consideration (MOFU)",
+      "allowed": [
+        "Consideration (MOFU)",
+        "Evaluation/Engagement (BOFU)"
+      ],
+      "never": [
+        "Awareness (TOFU)",
+        "Retention",
+        "Sign-up"
+      ]
+    },
+    "audienceHints": [],
+    "companyEnrichmentApplies": false
+  },
+  "page": {
+    "assetType": null,
+    "assetSubType": null,
+    "schemaType": {
+      "default": "Article",
+      "aiDecides": true
+    },
+    "funnelStage": {
+      "default": "Awareness (TOFU)",
+      "allowed": [
+        "Awareness (TOFU)",
+        "Consideration (MOFU)",
+        "Evaluation/Engagement (BOFU)",
+        "Retention",
+        "Sign-up"
+      ],
+      "never": []
+    },
+    "audienceHints": [],
+    "companyEnrichmentApplies": false
+  },
+  "pageGlossary": {
+    "assetType": "Webpage",
+    "assetSubType": "Article",
+    "schemaType": {
+      "default": "Article",
+      "aiDecides": false
+    },
+    "funnelStage": {
+      "default": "Awareness (TOFU)",
+      "allowed": [
+        "Awareness (TOFU)"
+      ],
+      "never": [
+        "Consideration (MOFU)",
+        "Evaluation/Engagement (BOFU)",
+        "Retention",
+        "Sign-up"
+      ]
+    },
+    "audienceHints": [],
+    "companyEnrichmentApplies": false
+  },
+  "glossary": {
+    "assetType": "Webpage",
+    "assetSubType": "Article",
+    "schemaType": {
+      "default": "Article",
+      "aiDecides": false
+    },
+    "funnelStage": {
+      "default": "Awareness (TOFU)",
+      "allowed": [
+        "Awareness (TOFU)"
+      ],
+      "never": [
+        "Consideration (MOFU)",
+        "Evaluation/Engagement (BOFU)",
+        "Retention",
+        "Sign-up"
+      ]
+    },
+    "audienceHints": [],
+    "companyEnrichmentApplies": false
+  },
+  "pagePartner": {
+    "assetType": "Webpage",
+    "assetSubType": "Webpage",
+    "schemaType": {
+      "default": "SoftwareApplication",
+      "aiDecides": true
+    },
+    "funnelStage": {
+      "default": "Consideration (MOFU)",
+      "allowed": [
+        "Awareness (TOFU)",
+        "Consideration (MOFU)",
+        "Evaluation/Engagement (BOFU)"
+      ],
+      "never": [
+        "Retention",
+        "Sign-up"
+      ]
+    },
+    "audienceHints": [],
+    "companyEnrichmentApplies": false
+  },
+  "partner": {
+    "assetType": "Webpage",
+    "assetSubType": "Webpage",
+    "schemaType": {
+      "default": "SoftwareApplication",
+      "aiDecides": true
+    },
+    "funnelStage": {
+      "default": "Consideration (MOFU)",
+      "allowed": [
+        "Awareness (TOFU)",
+        "Consideration (MOFU)",
+        "Evaluation/Engagement (BOFU)"
+      ],
+      "never": [
+        "Retention",
+        "Sign-up"
+      ]
+    },
+    "audienceHints": [],
+    "companyEnrichmentApplies": false
+  }
+}

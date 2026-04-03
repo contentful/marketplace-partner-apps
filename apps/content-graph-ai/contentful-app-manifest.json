@@ -1,0 +1,22 @@
+{
+    "name": "Content Graph AI",
+    "src": "https://content-graph-main.vercel.app/app/sidebar.html",
+    "locations": [
+        {
+            "location": "entry-sidebar",
+            "src": "https://content-graph-main.vercel.app/app/sidebar.html"
+        }
+    ],
+    "parameters": {
+        "installation": [
+            {
+                "id": "appToken",
+                "name": "App Token",
+                "description": "Shared secret used by the sidebar app to authenticate API calls.",
+                "type": "Secret",
+                "required": true
+            }
+        ],
+        "instance": []
+    }
+}
