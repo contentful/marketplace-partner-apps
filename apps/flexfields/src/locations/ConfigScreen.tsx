@@ -1,23 +1,16 @@
-import React, { useCallback, useState, useEffect } from "react";
-import type { AppExtensionSDK } from "@contentful/app-sdk";
-import {
-  Heading,
-  Form,
-  Flex,
-  TextInput,
-  Text,
-  SectionHeading,
-} from "@contentful/f36-components";
-import { Entry } from "contentful-management";
-import { css } from "@emotion/css";
-import { useCMA, useSDK } from "@contentful/react-apps-toolkit";
-import { FormControl, Select } from "@contentful/f36-components";
-import { Multiselect } from "@contentful/f36-multiselect";
-import { PlusIcon, WarningIcon } from "@contentful/f36-icons";
-import RulesList from "../components/RulesList";
-import { type Rule } from "../types/Rule";
-import { getFieldName } from "../utils";
-import packageData from "../../package.json";
+import React, { useCallback, useState, useEffect } from 'react';
+import type { AppExtensionSDK } from '@contentful/app-sdk';
+import { Heading, Form, Flex, TextInput, Text, SectionHeading } from '@contentful/f36-components';
+import { Entry } from 'contentful-management';
+import { css } from '@emotion/css';
+import { useCMA, useSDK } from '@contentful/react-apps-toolkit';
+import { FormControl, Select } from '@contentful/f36-components';
+import { Multiselect } from '@contentful/f36-multiselect';
+import { PlusIcon, WarningIcon } from '@contentful/f36-icons';
+import RulesList from '../components/RulesList';
+import { type Rule } from '../types/Rule';
+import { getSelectedTargetFields } from '../utils';
+import packageData from '../../package.json';
 
 const version = packageData.version;
 export interface AppInstallationParameters {
@@ -41,15 +34,9 @@ interface CustomSelectProps {
   sdk?: any;
 }
 
-const COMPARISON_CONDITIONS = [
-  "contains",
-  "is equal",
-  "is not equal",
-  "is empty",
-  "is not empty",
-];
+const COMPARISON_CONDITIONS = ['contains', 'is equal', 'is not equal', 'is empty', 'is not empty'];
 
-const COMPARISON_CONDITIONS_NON_TEXT_FIELD = ["is empty", "is not empty"];
+const COMPARISON_CONDITIONS_NON_TEXT_FIELD = ['is empty', 'is not empty'];
 
 const ConfigScreen = () => {
   const [parameters, setParameters] = useState<AppInstallationParameters>({
@@ -60,19 +47,15 @@ const ConfigScreen = () => {
   const sdk = useSDK<AppExtensionSDK>();
 
   const [contentTypes, setContentTypes] = useState<any>([]);
-  const [contentType, setContentType] = useState<string>("");
-  const [contentTypeField, setContentTypeField] = useState<string>("");
-  const [condition, setCondition] = useState<string>("");
-  const [conditionOptions, setConditionOptions] = useState<string[]>(
-    COMPARISON_CONDITIONS
-  );
-  const [conditionValue, setConditionValue] = useState<string>("");
-  const [conditionValueOptions, setConditionValueOptions] = useState<string[]>(
-    []
-  );
+  const [contentType, setContentType] = useState<string>('');
+  const [contentTypeField, setContentTypeField] = useState<string>('');
+  const [condition, setCondition] = useState<string>('');
+  const [conditionOptions, setConditionOptions] = useState<string[]>(COMPARISON_CONDITIONS);
+  const [conditionValue, setConditionValue] = useState<string>('');
+  const [conditionValueOptions, setConditionValueOptions] = useState<string[]>([]);
   const [childEntities, setChildEntities] = useState<any>([]);
   const [targetEntities, setTargetEntities] = useState<any>([]);
-  const [targetEntity, setTargetEntity] = useState<string>("");
+  const [targetEntity, setTargetEntity] = useState<string>('');
   const [targetEntityFields, setTargetEntityFields] = useState<any>([]);
   const [targetEntityField, setTargetEntityField] = useState<string[]>([]);
 
@@ -103,27 +86,17 @@ const ConfigScreen = () => {
     }
 
     // Validate and save rule fields
-    if (
-      !contentType ||
-      !contentTypeField ||
-      !condition ||
-      !targetEntity ||
-      !targetEntityField.length
-    ) {
-      sdk.notifier.error("Please fill out all fields");
-      throw new Error("Please fill out all fields");
+    if (!contentType || !contentTypeField || !condition || !targetEntity || !targetEntityField.length) {
+      sdk.notifier.error('Please fill out all fields');
+      throw new Error('Please fill out all fields');
     }
 
-    if (
-      conditionValue === "" &&
-      condition !== "is empty" &&
-      condition !== "is not empty"
-    ) {
-      sdk.notifier.error("Please enter a condition value");
-      throw new Error("Please enter a condition value");
+    if (conditionValue === '' && condition !== 'is empty' && condition !== 'is not empty') {
+      sdk.notifier.error('Please enter a condition value');
+      throw new Error('Please enter a condition value');
     }
 
-    const suffixIndex = targetEntity.indexOf("-sameEntity");
+    const suffixIndex = targetEntity.indexOf('-sameEntity');
     const isForSameEntity = suffixIndex !== -1;
 
     const newRule: Rule = {
@@ -132,9 +105,7 @@ const ConfigScreen = () => {
       condition,
       conditionValue,
       isForSameEntity,
-      targetEntity: isForSameEntity
-        ? targetEntity.substring(0, suffixIndex)
-        : targetEntity,
+      targetEntity: isForSameEntity ? targetEntity.substring(0, suffixIndex) : targetEntity,
       targetEntityField,
     };
 
@@ -173,11 +144,11 @@ const ConfigScreen = () => {
       ...parameters,
       rules: newRules,
     });
-    setContentType("");
-    setContentTypeField("");
-    setCondition("");
-    setConditionValue("");
-    setTargetEntity("");
+    setContentType('');
+    setContentTypeField('');
+    setCondition('');
+    setConditionValue('');
+    setTargetEntity('');
     setTargetEntityField([]);
     setRuleToEditIndex(undefined);
 
@@ -226,13 +197,7 @@ const ConfigScreen = () => {
         setCondition(ruleToEdit.condition);
         setConditionValue(ruleToEdit.conditionValue);
         // If the rule is set for same entity, add `-sameEntity` to targetEntity
-        setTargetEntity(
-          `${
-            ruleToEdit.isForSameEntity
-              ? `${ruleToEdit.targetEntity}-sameEntity`
-              : ruleToEdit.targetEntity
-          }`
-        );
+        setTargetEntity(`${ruleToEdit.isForSameEntity ? `${ruleToEdit.targetEntity}-sameEntity` : ruleToEdit.targetEntity}`);
         setTargetEntityField(ruleToEdit.targetEntityField);
       }, 100);
     }
@@ -242,8 +207,7 @@ const ConfigScreen = () => {
     (async () => {
       // Get current parameters of the app.
       // If the app is not installed yet, `parameters` will be `null`.
-      const currentParameters: AppInstallationParameters | null =
-        await sdk.app.getParameters();
+      const currentParameters: AppInstallationParameters | null = await sdk.app.getParameters();
 
       if (currentParameters) {
         setParameters(currentParameters);
@@ -269,33 +233,25 @@ const ConfigScreen = () => {
   }, [cma.contentType]);
 
   useEffect(() => {
-    setContentTypeField("");
-    setConditionValue("");
-    setTargetEntity("");
+    setContentTypeField('');
+    setConditionValue('');
+    setTargetEntity('');
   }, [contentType]);
 
   useEffect(() => {
-    setCondition("");
+    setCondition('');
     setConditionValueOptions([]);
 
     if (contentType && contentTypeField) {
-      const contentTypeObj = contentTypes.find(
-        (c: any) => c.sys.id === contentType
-      );
-      const contentTypeFieldObj = contentTypeObj?.fields.find(
-        (f: any) => f.id === contentTypeField
-      );
-      const validation = contentTypeFieldObj?.validations?.find(
-        (v: any) => v.in
-      );
+      const contentTypeObj = contentTypes.find((c: any) => c.sys.id === contentType);
+      const contentTypeFieldObj = contentTypeObj?.fields.find((f: any) => f.id === contentTypeField);
+      const validation = contentTypeFieldObj?.validations?.find((v: any) => v.in);
 
       if (validation) {
         setConditionValueOptions(validation.in);
       }
       const conditionOptions =
-        contentTypes
-          .find((c: any) => c.sys.id === contentType)
-          .fields.find((f: any) => f.id === contentTypeField)?.type === "Symbol"
+        contentTypes.find((c: any) => c.sys.id === contentType).fields.find((f: any) => f.id === contentTypeField)?.type === 'Symbol'
           ? COMPARISON_CONDITIONS
           : COMPARISON_CONDITIONS_NON_TEXT_FIELD;
 
@@ -311,9 +267,7 @@ const ConfigScreen = () => {
         let childrenEntities: any[] = [];
 
         children?.forEach((obj) => {
-          const linkedContentTypes =
-            obj.validations?.[0]?.linkContentType ||
-            obj.items?.validations?.[0]?.linkContentType;
+          const linkedContentTypes = obj.validations?.[0]?.linkContentType || obj.items?.validations?.[0]?.linkContentType;
           if (linkedContentTypes?.length) {
             childrenEntities = [...childrenEntities, ...linkedContentTypes];
           }
@@ -325,14 +279,11 @@ const ConfigScreen = () => {
           const targetEntities = [
             {
               id: `${contentType}-sameEntity`,
-              name: `${
-                contentTypes.find((c: Entry) => c.sys.id === contentType)?.name
-              } (Same Entry)`,
+              name: `${contentTypes.find((c: Entry) => c.sys.id === contentType)?.name} (Same Entry)`,
             },
             ...childrenEntities.map((contentType) => ({
               id: contentType,
-              name: contentTypes.find((c: Entry) => c.sys.id === contentType)
-                ?.name,
+              name: contentTypes.find((c: Entry) => c.sys.id === contentType)?.name,
             })),
           ];
 
@@ -347,14 +298,12 @@ const ConfigScreen = () => {
 
     if (!targetEntity) return;
 
-    const suffixIndex = targetEntity.indexOf("-sameEntity");
+    const suffixIndex = targetEntity.indexOf('-sameEntity');
     const isForSameEntity = suffixIndex !== -1;
 
     cma.contentType
       .get({
-        contentTypeId: isForSameEntity
-          ? targetEntity.substring(0, suffixIndex)
-          : targetEntity,
+        contentTypeId: isForSameEntity ? targetEntity.substring(0, suffixIndex) : targetEntity,
       })
       .then((data) => {
         // only show fields that are not required
@@ -362,10 +311,7 @@ const ConfigScreen = () => {
 
         if (fields) {
           // filter contentTypeField from fields
-          if (
-            isForSameEntity &&
-            targetEntity.substring(0, suffixIndex) === contentType
-          ) {
+          if (isForSameEntity && targetEntity.substring(0, suffixIndex) === contentType) {
             fields = fields.filter((field) => field.id !== contentTypeField);
           }
 
@@ -376,54 +322,40 @@ const ConfigScreen = () => {
 
   const updateInput = (fieldId: string, value: string) => {
     //do update
-    if (fieldId === "contentType") {
+    if (fieldId === 'contentType') {
       setContentType(value as string);
     }
-    if (fieldId === "contentTypeField") {
+    if (fieldId === 'contentTypeField') {
       setContentTypeField(value as string);
     }
-    if (fieldId === "condition") {
+    if (fieldId === 'condition') {
       setCondition(value as string);
     }
-    if (fieldId === "conditionValue") {
+    if (fieldId === 'conditionValue') {
       setConditionValue(value as string);
     }
-    if (fieldId === "targetEntity") {
+    if (fieldId === 'targetEntity') {
       setTargetEntity(value as string);
     }
   };
 
   // A stateful Select component that mimics Contentful's default
   const CustomSelect = (props: CustomSelectProps) => {
-    const {
-      isDisabled = false,
-      fieldId,
-      handleChange,
-      value,
-      options,
-      className,
-    } = props;
+    const { isDisabled = false, fieldId, handleChange, value, options, className } = props;
 
     return (
-      <FormControl
-        isRequired
-        className={className ? className : css({ margin: 0 })}
-      >
+      <FormControl isRequired className={className ? className : css({ margin: 0 })}>
         <Select
           isDisabled={isDisabled}
           id={`optionSelect-controlled-${fieldId}`}
           name={`optionSelect-controlled-${fieldId}`}
           onChange={(e) => handleChange(fieldId, e.target.value)}
-          value={value}
-        >
+          value={value}>
           <Select.Option value="" isDisabled>
             Please select an option...
           </Select.Option>
           {options?.map((option) => (
-            <Select.Option
-              key={`custom-select-option-${option.id}`}
-              value={option.id}
-            >
+            <Select.Option key={`custom-select-option-${option.id}`} value={option.id}>
               {option.name}
             </Select.Option>
           ))}
@@ -454,10 +386,7 @@ const ConfigScreen = () => {
   };
 
   return (
-    <Flex
-      flexDirection="column"
-      className={css({ margin: 45, maxWidth: "100vw" })}
-    >
+    <Flex flexDirection="column" className={css({ margin: 45, maxWidth: '100vw' })}>
       <Form>
         <Heading className={css({ marginBottom: 35 })}>
           <svg
@@ -467,13 +396,12 @@ const ConfigScreen = () => {
             viewBox="0 0 125.63 127.95"
             width="36px"
             style={{
-              marginRight: "0.5rem",
-            }}
-          >
+              marginRight: '0.5rem',
+            }}>
             <defs>
               <style>
                 {
-                  "\n      .cls-1 {\n        fill: none;\n      }\n\n      .cls-2 {\n        clip-path: url(#clippath);\n      }\n\n      .cls-3 {\n        fill: #c3baf2;\n      }\n\n      .cls-4 {\n        fill: #0d2830;\n      }\n    "
+                  '\n      .cls-1 {\n        fill: none;\n      }\n\n      .cls-2 {\n        clip-path: url(#clippath);\n      }\n\n      .cls-3 {\n        fill: #c3baf2;\n      }\n\n      .cls-4 {\n        fill: #0d2830;\n      }\n    '
                 }
               </style>
               <clipPath id="clippath">
@@ -492,10 +420,7 @@ const ConfigScreen = () => {
                 className="cls-4"
                 d="m38.52,104.22s-2.69,10.08-3.05,12.22c-.27-1.72-3.26-12.26-3.26-12.26l-5.26-.03-3.27,12.22-3.08-12.26-7.82-.05.05-7.93-6.1-.04-.05,7.93-3.33-.02-1.61,5.53,4.87.03-.09,15.29,6.1.04.09-15.29,3.23.02,4.47,15.32,5.79.04,3.3-12.96,3.43,13,5.86.04,6.02-20.79-6.28-.04Z"
               />
-              <path
-                className="cls-4"
-                d="m42.78,119.53l-1.61,5.53,5.68.03,1.61-5.53-5.68-.03Z"
-              />
+              <path className="cls-4" d="m42.78,119.53l-1.61,5.53,5.68.03,1.61-5.53-5.68-.03Z" />
             </g>
             <g>
               <circle className="cls-4" cx={108.23} cy={17.83} r={14.97} />
@@ -509,10 +434,7 @@ const ConfigScreen = () => {
               d="m17.08,48.2c-8.53-.05-15.48,6.81-15.53,15.31-.05,8.49,6.81,15.48,15.34,15.53,8.53.05,15.48-6.81,15.53-15.34.05-8.53-6.81-15.44-15.34-15.49Zm4.04,19.58c-2.29,2.26-6.01,2.24-8.28-.05s-2.24-6.01.05-8.28c2.29-2.26,6.01-2.24,8.28.05,2.26,2.29,2.24,6.01-.05,8.28Z"
             />
             <g>
-              <path
-                className="cls-4"
-                d="m45.89,102.87h-.44v-1.59h-.6v-.38h1.63v.38h-.6v1.59Z"
-              />
+              <path className="cls-4" d="m45.89,102.87h-.44v-1.59h-.6v-.38h1.63v.38h-.6v1.59Z" />
               <path
                 className="cls-4"
                 d="m47.47,102.87l-.27-1.05c-.02-.09-.04-.15-.05-.19-.01-.06-.02-.07-.04-.13,0,.07,0,.12,0,.15v.19s0,1.03,0,1.03h-.4v-1.97h.62l.25,1.03c.04.15.07.32.09.44,0-.04.01-.06.01-.06l.03-.13s.02-.08.03-.13c.01-.06.03-.12.03-.13l.26-1.02h.62v1.97h-.4v-1.21s0-.08,0-.15c-.03.12-.05.2-.06.22-.02.05-.03.09-.03.09l-.27,1.05h-.44Z"
@@ -534,47 +456,36 @@ const ConfigScreen = () => {
             alignItems="center"
             gap="8px"
             className={css({
-              border: "1px solid #aaa",
+              border: '1px solid #aaa',
               borderRadius: 10,
               padding: 15,
               marginBottom: 24,
-            })}
-          >
+            })}>
             <WarningIcon
               className={css({
-                fill: "#EED202",
+                fill: '#EED202',
               })}
             />
             <SectionHeading
               className={css({
                 margin: 0,
-              })}
-            >
+              })}>
               Please click Save to update the app configuration
             </SectionHeading>
           </Flex>
         ) : (
           <>
-            <Flex
-              alignItems="center"
-              gap="8px"
-              className={css({ margin: "1.5rem 0" })}
-            >
+            <Flex alignItems="center" gap="8px" className={css({ margin: '1.5rem 0' })}>
               <PlusIcon />
               <SectionHeading
                 className={css({
-                  fontSize: "14px !important",
-                  margin: "0 !important",
-                })}
-              >
+                  fontSize: '14px !important',
+                  margin: '0 !important',
+                })}>
                 Add new rule(s) below
               </SectionHeading>
             </Flex>
-            <Flex
-              alignItems="center"
-              className={css({ width: "100%", marginBottom: 20 })}
-              flexDirection="row"
-            >
+            <Flex alignItems="center" className={css({ width: '100%', marginBottom: 20 })} flexDirection="row">
               <Text className={css({ minWidth: 150 })}>For content type</Text>
               <CustomSelect
                 value={contentType}
@@ -590,11 +501,7 @@ const ConfigScreen = () => {
             </Flex>
             {contentType && (
               <>
-                <Flex
-                  alignItems="center"
-                  className={css({ width: "100%" })}
-                  flexDirection="row"
-                >
+                <Flex alignItems="center" className={css({ width: '100%' })} flexDirection="row">
                   <Text className={css({ minWidth: 150 })}>With field</Text>
                   <CustomSelect
                     value={contentTypeField}
@@ -610,9 +517,8 @@ const ConfigScreen = () => {
                   <Text
                     className={css({
                       minWidth: 100,
-                      marginLeft: "40px !important",
-                    })}
-                  >
+                      marginLeft: '40px !important',
+                    })}>
                     Condition
                   </Text>
                   <CustomSelect
@@ -625,15 +531,12 @@ const ConfigScreen = () => {
                     handleChange={updateInput}
                   />
                   {/* only show if condition is contains, is equal or is not equal */}
-                  {(condition === "contains" ||
-                    condition === "is equal" ||
-                    condition === "is not equal") &&
-                    (conditionValueOptions.length &&
-                    condition !== "contains" ? (
+                  {(condition === 'contains' || condition === 'is equal' || condition === 'is not equal') &&
+                    (conditionValueOptions.length && condition !== 'contains' ? (
                       <CustomSelect
                         className={css({
-                          width: "200px !important",
-                          margin: "0 1rem !important",
+                          width: '200px !important',
+                          margin: '0 1rem !important',
                         })}
                         value={conditionValue}
                         fieldId="conditionValue"
@@ -650,29 +553,19 @@ const ConfigScreen = () => {
                         value={conditionValue}
                         type="text"
                         onChange={(e) => {
-                          updateInput("conditionValue", e.target.value);
+                          updateInput('conditionValue', e.target.value);
                         }}
                         placeholder="Condition value"
                         className={css({
-                          width: "200px !important",
-                          margin: "0 1rem !important",
+                          width: '200px !important',
+                          margin: '0 1rem !important',
                         })}
                       />
                     ))}
                 </Flex>
-                <SectionHeading
-                  className={css({ margin: "20px 10px 0 0 !important" })}
-                >
-                  Hide field:
-                </SectionHeading>
-                <Flex
-                  alignItems="center"
-                  className={css({ marginBottom: 20, width: "100%" })}
-                  flexDirection="row"
-                >
-                  <Text className={css({ minWidth: 150 })}>
-                    Within content type
-                  </Text>
+                <SectionHeading className={css({ margin: '20px 10px 0 0 !important' })}>Hide field:</SectionHeading>
+                <Flex alignItems="center" className={css({ marginBottom: 20, width: '100%' })} flexDirection="row">
+                  <Text className={css({ minWidth: 150 })}>Within content type</Text>
                   <CustomSelect
                     value={targetEntity}
                     fieldId="targetEntity"
@@ -686,25 +579,17 @@ const ConfigScreen = () => {
                   />
                   <Text
                     className={css({
-                      marginLeft: "40px !important",
+                      marginLeft: '40px !important',
                       minWidth: 100,
-                    })}
-                  >
+                    })}>
                     Hide field
                   </Text>
                   <Multiselect
-                    currentSelection={getFieldName(
-                      targetEntityField,
-                      targetEntity,
-                      contentTypes
-                    )}
-                    className={css({ width: "300px !important" })}
-                  >
+                    currentSelection={getSelectedTargetFields({ targetEntityFields, targetEntityField })}
+                    className={css({ width: '300px !important' })}>
                     <Multiselect.SelectAll
                       onSelectItem={(event) => toggleAll(event.target.checked)}
-                      isChecked={
-                        targetEntityField.length === targetEntityFields.length
-                      }
+                      isChecked={targetEntityField.length === targetEntityFields.length}
                     />
                     {targetEntityFields.map((tef: any) => {
                       return (
@@ -712,19 +597,13 @@ const ConfigScreen = () => {
                           key={`key-${tef.id}}`}
                           itemId={`space-${tef.id}}`}
                           value={tef.id}
-                          label={`${tef.name} ${
-                            tef.disabled ? "(Hidden when editing)" : ""
-                          }`}
+                          label={`${tef.name} ${tef.disabled ? '(Hidden when editing)' : ''}`}
                           onSelectItem={(ev) => {
                             setTargetEntityField((targetEntityField) => {
                               if (targetEntityField?.includes(tef.id)) {
-                                const targetEntityFieldCopy = [
-                                  ...targetEntityField,
-                                ];
+                                const targetEntityFieldCopy = [...targetEntityField];
                                 targetEntityFieldCopy.splice(
-                                  targetEntityField.findIndex(
-                                    (val) => val === ev.target.value
-                                  ),
+                                  targetEntityField.findIndex((val) => val === ev.target.value),
                                   1
                                 );
                                 return targetEntityFieldCopy;
@@ -745,31 +624,24 @@ const ConfigScreen = () => {
       </Form>
 
       {!!parameters.rules && (
-        <RulesList
-          deleteRule={deleteRule}
-          rules={parameters.rules}
-          setRuleToEditIndex={setRuleToEditIndex}
-          ruleToEditIndex={ruleToEditIndex}
-        />
+        <RulesList deleteRule={deleteRule} rules={parameters.rules} setRuleToEditIndex={setRuleToEditIndex} ruleToEditIndex={ruleToEditIndex} />
       )}
 
       <Text
         className={css({
-          marginTop: "1rem !important",
-        })}
-      >
-        Built by{" "}
+          marginTop: '1rem !important',
+        })}>
+        Built by{' '}
         <a
           href="https://thrillworks.com?ref=flexfields"
           className={css({
-            fontWeight: "bold",
-            color: "rgb(1, 71, 81)",
-            transition: "all 0.2s ease-in-out",
-            ":hover": {
-              color: "rgb(239, 150, 89)",
+            fontWeight: 'bold',
+            color: 'rgb(1, 71, 81)',
+            transition: 'all 0.2s ease-in-out',
+            ':hover': {
+              color: 'rgb(239, 150, 89)',
             },
-          })}
-        >
+          })}>
           Thrillworks
         </a>
         .

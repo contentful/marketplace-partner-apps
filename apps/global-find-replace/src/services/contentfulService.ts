@@ -11,8 +11,21 @@ export class ContentfulService {
    * Fetches all content types
    */
   async getContentTypes(): Promise<ContentType[]> {
-    const response = await this.sdk.cma.contentType.getMany({});
-    return response.items;
+    let hasMore = true;
+    const items: ContentType[] = [];
+    let skip = 0;
+    const limit = 100;
+
+    while (hasMore) {
+      const response = await this.sdk.cma.contentType.getMany({ query: { limit, skip } });
+      items.push(...response.items);
+      skip += response.items.length;
+      if (items.length === response.total) {
+        hasMore = false;
+      }
+    }
+
+    return items;
   }
 
   /**
@@ -159,7 +172,7 @@ export class ContentfulService {
           skip += limit;
           hasMore = response.items.length === limit;
         } catch (error: any) {
-          if (error.message.includes('Response size too big') && limit > 75) {
+          if (error.message.includes('Response size too big') && limit > 10) {
             limit = limit / 2;
           } else {
             throw error;
