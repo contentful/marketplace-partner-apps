@@ -84,13 +84,14 @@ interface EnhancedTableProps {
   numSelected: number;
   numVisibleSelected: number;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
   order: Order;
   orderBy: string;
   rowCount: number;
   visibleRowCount: number;
 }
 
-function EnhancedTableHead({ onSelectAllClick, order, orderBy, numSelected, numVisibleSelected, rowCount, visibleRowCount }: EnhancedTableProps) {
+function EnhancedTableHead({ onSelectAllClick, onRequestSort, order, orderBy, numSelected, numVisibleSelected, rowCount, visibleRowCount }: EnhancedTableProps) {
 
   return (
     <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
@@ -117,6 +118,8 @@ function EnhancedTableHead({ onSelectAllClick, order, orderBy, numSelected, numV
             <TableSortLabel
               sx={{ fontWeight: 'bold' }}
               active={orderBy === headCell.id}
+              direction={orderBy === headCell.id ? order : 'asc'}
+              onClick={(e) => onRequestSort(e, headCell.id)}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
@@ -171,6 +174,12 @@ export const TableContentType = ({ sdk, selectedContentTypes, onUpdateContentTyp
 
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof Data>('name');
+
+  const handleRequestSort = (_event: React.MouseEvent<unknown>, property: keyof Data) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
   const selectedIds = useMemo(() => selectedContentTypes.map((s) => s.id), [selectedContentTypes]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -314,6 +323,7 @@ export const TableContentType = ({ sdk, selectedContentTypes, onUpdateContentTyp
             order={order}
             orderBy={orderBy}
             onSelectAllClick={handleSelectAllClick}
+            onRequestSort={handleRequestSort}
             rowCount={rows.length}
             visibleRowCount={visibleRows.length}
           />

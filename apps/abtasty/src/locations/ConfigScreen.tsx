@@ -144,6 +144,7 @@ const ConfigScreen = () => {
 
         if (isNotFound) {
           await createAbTastyContainerContentType({ sdk });
+          sdk.app.onConfigure(() => onConfigure());
         } else {
           console.error('[onConfigure] Unexpected error while checking content type', err);
           throw err;

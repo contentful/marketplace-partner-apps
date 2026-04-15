@@ -28,7 +28,11 @@ const steps = ['Select experiment', 'Add content', 'Publish experimentation', 'S
 
 const Entry = () => {
   const sdk = useSDK<EditorAppSDK>();
-  const { flagship_account: account, flagship_env: env, content_types: contentTypesAllowedLegacy } = sdk.parameters.installation;
+  const rawInstallation = sdk.parameters.installation as any;
+  const { flagship_account: account, flagship_env: env } = rawInstallation;
+  const contentTypesAllowedLegacy: { id: string; referenceField: string[] }[] =
+    rawInstallation.content_types ??
+    (rawInstallation.content_type ? [rawInstallation.content_type] : []);
 
   const token = getToken() || '';
 
