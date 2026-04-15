@@ -35,7 +35,8 @@ const Entry = () => {
   const [allContentTypes, setAllContentTypes] = useState<{id: string, name: string}[]>([]);
 
   useEffect(() => {
-    const fetchCTs = async () => {
+  const fetchCTs = async () => {
+    try {
       const { items } = await sdk.cma.contentType.getMany({ query: { limit: 1000 } });
       const filtered = (items as ContentTypeResponse[]).filter((ct) => {
         return (
@@ -45,12 +46,16 @@ const Entry = () => {
             if (f.type === 'Array' && f.items?.type === 'Link') {
               return f.items.linkType === 'Entry';
             }
-            return false;
+              return false;
           })
         );
       }).map(ct => ({ id: ct.sys.id, name: ct.name }));
       setAllContentTypes(filtered);
-    };
+    } catch (error) {
+      console.error('Error fetching content types:', error);
+      setAllContentTypes([]);
+    }
+  };
     fetchCTs();
   }, [sdk.cma.contentType]);
 
