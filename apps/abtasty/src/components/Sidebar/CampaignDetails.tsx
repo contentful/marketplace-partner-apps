@@ -3,9 +3,9 @@ import { CustomButton } from '@/components/ui/CustomButton';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { Campaign } from '@/types';
 
-export const CampaignDetails = ({ campaignInfo, env }: { campaignInfo: Campaign; env: any }) => {
+export const CampaignDetails = ({ campaignInfo }: { campaignInfo: Campaign }) => {
   const handleRedirectToFlagship = () => {
-    const url = `https://app.flagship.io/env/${env.id}/report/${campaignInfo.type}/${campaignInfo.id}/details`;
+    const url = `https://app2.abtasty.com/feature-experimentation/edit/test/${campaignInfo.id}/overview`;
     window.open(url, '_blank');
   };
 
