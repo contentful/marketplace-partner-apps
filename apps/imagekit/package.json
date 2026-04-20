@@ -37,7 +37,7 @@
     "prettier": "^3.4.1",
     "typescript": "^5.9.3",
     "vite": "^6.4.1",
-    "vitest": "^3.2.4",
+    "vitest": "^4.0.17",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
