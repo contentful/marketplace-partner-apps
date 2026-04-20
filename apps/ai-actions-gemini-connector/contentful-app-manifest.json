@@ -1,0 +1,18 @@
+{
+  "functions": [
+    {
+      "id": "modelDiscovery",
+      "name": "Google Gemini Model Discovery",
+      "description": "Function to retrieve available model from Google Gemini API",
+      "path": "functions/model-discovery.js",
+      "entryFile": "functions/model-discovery.ts",
+      "allowNetworks": [
+        "api.flinkly.com",
+        "api.contentful.com",
+        "generativelanguage.googleapis.com",
+        "oauth2.googleapis.com"
+      ],
+      "accepts": ["appaction.call"]
+    }
+  ]
+}
