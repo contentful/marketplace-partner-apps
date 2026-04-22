@@ -142,7 +142,7 @@ const parameterDefinitions = [
   {
     id: 'apiVersion',
     name: 'Storefront API Version',
-    description: `The Shopify Storefront API version to use. Supported values: ${SHOPIFY_SUPPORTED_API_VERSIONS.join(', ')}`,
+    description: 'The Shopify Storefront API version to use.',
     type: 'Symbol',
     default: SHOPIFY_DEFAULT_API_VERSION,
     required: true,
