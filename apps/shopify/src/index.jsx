@@ -1,7 +1,13 @@
-import { setup, renderSkuPicker } from '@contentful/ecommerce-app-base';
+import { init, locations } from '@contentful/app-sdk';
+import { renderSkuPicker } from '@contentful/ecommerce-app-base';
+import { Field, IntegrationProvider } from '@contentful/ecommerce-app-base/lib/Editor';
+import { GlobalStyles } from '@contentful/f36-components';
+import { SDKProvider } from '@contentful/react-apps-toolkit';
+import { createRoot } from 'react-dom/client';
 import { fetchProductVariantPreviews, fetchProductPreviews, fetchCollectionPreviews, makeSkuResolver } from './skuResolvers';
 import { SHOPIFY_DEFAULT_API_VERSION, SHOPIFY_SUPPORTED_API_VERSIONS, SKU_TYPES } from './constants';
 import { validateParameters } from './utils/validation';
+import { ConfigScreen } from './ConfigScreen';
 
 import logo from './logo.svg';
 import { AdditionalDataRenderer } from './additionalDataRenderer';
@@ -124,36 +130,39 @@ function isDisabled(/* currentValue, config */) {
   return false;
 }
 
-setup({
+const parameterDefinitions = [
+  {
+    id: 'storefrontAccessToken',
+    name: 'Storefront Access Token',
+    description: 'The storefront access token to your Shopify store',
+    type: 'Symbol',
+    required: true,
+  },
+  {
+    id: 'apiEndpoint',
+    name: 'Store URL',
+    description: 'The Shopify store URL (e.g. [your-shop-name].myshopify.com)',
+    type: 'Symbol',
+    required: true,
+  },
+  {
+    id: 'apiVersion',
+    name: 'Storefront API Version',
+    description: `The Shopify Storefront API version to use. Supported values: ${SHOPIFY_SUPPORTED_API_VERSIONS.join(', ')}`,
+    type: 'Symbol',
+    default: SHOPIFY_DEFAULT_API_VERSION,
+    required: true,
+    options: SHOPIFY_SUPPORTED_API_VERSIONS,
+  },
+];
+
+const integration = {
   makeCTA,
   name: 'Shopify',
   logo,
   description: 'The Shopify app allows editors to select products from their Shopify account and reference them inside of Contentful entries.',
   color: '#212F3F',
-  parameterDefinitions: [
-    {
-      id: 'storefrontAccessToken',
-      name: 'Storefront Access Token',
-      description: 'The storefront access token to your Shopify store',
-      type: 'Symbol',
-      required: true,
-    },
-    {
-      id: 'apiEndpoint',
-      name: 'Store URL',
-      description: 'The Shopify store URL (e.g. [your-shop-name].myshopify.com)',
-      type: 'Symbol',
-      required: true,
-    },
-    {
-      id: 'apiVersion',
-      name: 'Storefront API Version',
-      description: `The Shopify Storefront API version to use. Supported values: ${SHOPIFY_SUPPORTED_API_VERSIONS.join(', ')}`,
-      type: 'Symbol',
-      default: SHOPIFY_DEFAULT_API_VERSION,
-      required: true,
-    },
-  ],
+  parameterDefinitions,
   skuTypes: SKU_TYPES,
   isInOrchestrationEAP: true,
   fetchProductPreviews: fetchPreviews,
@@ -163,4 +172,29 @@ setup({
   validateParameters,
   productCardVersion: 'v2',
   additionalDataRenderer: AdditionalDataRenderer,
+};
+
+init((sdk) => {
+  const root = createRoot(document.getElementById('root'));
+
+  if (sdk.location.is(locations.LOCATION_DIALOG)) {
+    integration.renderDialog(sdk);
+    return;
+  }
+
+  if (sdk.location.is(locations.LOCATION_ENTRY_FIELD)) {
+    root.render(
+      <IntegrationProvider integration={integration}>
+        <SDKProvider>
+          <GlobalStyles />
+          <Field />
+        </SDKProvider>
+      </IntegrationProvider>
+    );
+    return;
+  }
+
+  if (sdk.location.is(locations.LOCATION_APP_CONFIG)) {
+    root.render(<ConfigScreen integration={integration} parameterDefinitions={parameterDefinitions} sdk={sdk} />);
+  }
 });
