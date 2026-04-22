@@ -1,13 +1,7 @@
-import { init, locations } from '@contentful/app-sdk';
-import { renderSkuPicker } from '@contentful/ecommerce-app-base';
-import { Field, IntegrationProvider } from '@contentful/ecommerce-app-base/lib/Editor';
-import { GlobalStyles } from '@contentful/f36-components';
-import { SDKProvider } from '@contentful/react-apps-toolkit';
-import { createRoot } from 'react-dom/client';
+import { renderSkuPicker, setup } from '@contentful/ecommerce-app-base';
 import { fetchProductVariantPreviews, fetchProductPreviews, fetchCollectionPreviews, makeSkuResolver } from './skuResolvers';
 import { SHOPIFY_DEFAULT_API_VERSION, SHOPIFY_SUPPORTED_API_VERSIONS, SKU_TYPES } from './constants';
 import { validateParameters } from './utils/validation';
-import { ConfigScreen } from './ConfigScreen';
 
 import logo from './logo.svg';
 import { AdditionalDataRenderer } from './additionalDataRenderer';
@@ -174,27 +168,4 @@ const integration = {
   additionalDataRenderer: AdditionalDataRenderer,
 };
 
-init((sdk) => {
-  const root = createRoot(document.getElementById('root'));
-
-  if (sdk.location.is(locations.LOCATION_DIALOG)) {
-    integration.renderDialog(sdk);
-    return;
-  }
-
-  if (sdk.location.is(locations.LOCATION_ENTRY_FIELD)) {
-    root.render(
-      <IntegrationProvider integration={integration}>
-        <SDKProvider>
-          <GlobalStyles />
-          <Field />
-        </SDKProvider>
-      </IntegrationProvider>
-    );
-    return;
-  }
-
-  if (sdk.location.is(locations.LOCATION_APP_CONFIG)) {
-    root.render(<ConfigScreen integration={integration} parameterDefinitions={parameterDefinitions} sdk={sdk} />);
-  }
-});
+setup(integration);
