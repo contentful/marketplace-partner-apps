@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "^4.51.5",
-    "@contentful/f36-components": "^4.81.1",
+    "@contentful/f36-components": "^6.7.1",
     "@contentful/f36-tokens": "4.2.0",
     "@contentful/field-editor-reference": "^6.22.1",
     "@contentful/react-apps-toolkit": "1.2.20",
