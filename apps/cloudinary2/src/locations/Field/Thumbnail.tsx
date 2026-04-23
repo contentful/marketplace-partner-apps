@@ -89,7 +89,7 @@ export function Thumbnail({ asset, isDisabled, onDelete, onReplace }: Props) {
       return;
     }
     // assuming the user only selects one asset
-    const newAsset = result.assets.map(extractAsset)[0];
+    const newAsset = result.assets.map((asset) => extractAsset(asset, sdk.parameters.instance.customAttributes))[0];
     onReplace(asset, newAsset);
   }, [sdk.dialogs]);
 
@@ -118,7 +118,7 @@ export function Thumbnail({ asset, isDisabled, onDelete, onReplace }: Props) {
       return;
     }
     // assuming the user only selects one asset
-    const newAsset = result.assets.map(extractAsset)[0];
+    const newAsset = result.assets.map((asset)=>extractAsset(asset, sdk.parameters.instance.customAttributes))[0];
     onReplace(asset, newAsset);
   }, [sdk.dialogs]);
 
