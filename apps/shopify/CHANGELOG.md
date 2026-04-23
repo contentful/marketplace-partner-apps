@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.3.0](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.2.2...shopify-sku-v2.3.0) (2026-04-23)
+
+
+### Features
+
+* allow configuring Shopify Storefront API version [] ([#8156](https://github.com/contentful/marketplace-partner-apps/issues/8156)) ([b8a8b68](https://github.com/contentful/marketplace-partner-apps/commit/b8a8b68d97898f452b05045335efb777bab5743c))
+
+
+### Bug Fixes
+
+* **deps:** bump picomatch in /apps/shopify ([#8003](https://github.com/contentful/marketplace-partner-apps/issues/8003)) ([94b8d3e](https://github.com/contentful/marketplace-partner-apps/commit/94b8d3e6fabaf4445c50f29fcba914df030d39e2))
+* **deps:** bump yaml from 1.10.2 to 1.10.3 in /apps/shopify ([#8006](https://github.com/contentful/marketplace-partner-apps/issues/8006)) ([99505f7](https://github.com/contentful/marketplace-partner-apps/commit/99505f792609cbd8d5b5d85b34817c3db6f655ee))
+
 ## [2.2.2](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.2.1...shopify-sku-v2.2.2) (2026-03-23)
 
 
