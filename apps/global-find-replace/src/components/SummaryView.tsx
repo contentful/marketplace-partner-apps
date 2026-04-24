@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Heading, Paragraph, Table, TableBody, TableCell, TableHead, TableRow, Button } from '@contentful/f36-components';
+import { Flex, Heading, Table, TableBody, TableCell, TableHead, TableRow, Button } from '@contentful/f36-components';
 import { MatchField } from '../types';
 
 interface SummaryViewProps {
