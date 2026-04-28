@@ -1,5 +1,61 @@
 # Changelog
 
+## [1.7.1](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.7.0...bynder-assets-v1.7.1) (2026-03-13)
+
+
+### Bug Fixes
+
+* ucv url adjustment [] ([#7940](https://github.com/contentful/marketplace-partner-apps/issues/7940)) ([9f00404](https://github.com/contentful/marketplace-partner-apps/commit/9f00404c38c132814d9c4f775294b0e716653a5c))
+
+## [1.7.0](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.6.0...bynder-assets-v1.7.0) (2026-03-12)
+
+
+### Features
+
+* field storage updates [] ([#7936](https://github.com/contentful/marketplace-partner-apps/issues/7936)) ([f927aa9](https://github.com/contentful/marketplace-partner-apps/commit/f927aa981ce731efe43bb55d8a52f8b0aa533386))
+
+## [1.6.0](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.5.0...bynder-assets-v1.6.0) (2026-03-12)
+
+
+### Features
+
+* bynder streaming link support [ZEND-7539] ([#7937](https://github.com/contentful/marketplace-partner-apps/issues/7937)) ([53f7e48](https://github.com/contentful/marketplace-partner-apps/commit/53f7e482864ce688be29b68b1825ffd36151d9b4))
+
+## [1.5.0](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.4.2...bynder-assets-v1.5.0) (2026-03-11)
+
+
+### Features
+
+* add streaming link support for Bynder video assets [] ([#7934](https://github.com/contentful/marketplace-partner-apps/issues/7934)) ([e4ddbb6](https://github.com/contentful/marketplace-partner-apps/commit/e4ddbb635b0596c8189d1fcfe0f47b8f2a831c5c))
+
+## [1.4.2](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.4.1...bynder-assets-v1.4.2) (2026-03-05)
+
+
+### Bug Fixes
+
+* preserve existing thumbnails and original on refresh [ZEND-7539] ([#7927](https://github.com/contentful/marketplace-partner-apps/issues/7927)) ([537cd78](https://github.com/contentful/marketplace-partner-apps/commit/537cd789a03fb9005b17c1875615342ff63fea3e))
+
+## [1.4.1](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.4.0...bynder-assets-v1.4.1) (2026-02-26)
+
+
+### Bug Fixes
+
+* **bynder:** preserve Bynder 8-4-4-16 asset id [ZEND-7663] ([#7889](https://github.com/contentful/marketplace-partner-apps/issues/7889)) ([68cfc43](https://github.com/contentful/marketplace-partner-apps/commit/68cfc43500f0e5049ce91d21e94da64d951023d9))
+* **deps:** Bump rollup from 4.45.1 to 4.59.0 in /apps/bynder ([#7884](https://github.com/contentful/marketplace-partner-apps/issues/7884)) ([eba236d](https://github.com/contentful/marketplace-partner-apps/commit/eba236d2fe13c0fb47c189a47fce3ade214ae715))
+
+## [1.4.0](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.3.2...bynder-assets-v1.4.0) (2026-02-24)
+
+
+### Features
+
+* adding refresh assets mechanism [ZEND-7539] ([#7746](https://github.com/contentful/marketplace-partner-apps/issues/7746)) ([49596c4](https://github.com/contentful/marketplace-partner-apps/commit/49596c4f0baf85ef51e4485715e651978644c515))
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.12.2 to 1.13.5 in /apps/bynder ([#7793](https://github.com/contentful/marketplace-partner-apps/issues/7793)) ([e4ba2b7](https://github.com/contentful/marketplace-partner-apps/commit/e4ba2b70b1b91eab3c16d183927b264b33538b8f))
+* **deps:** bump qs from 6.14.0 to 6.14.2 in /apps/bynder ([#7830](https://github.com/contentful/marketplace-partner-apps/issues/7830)) ([857bb71](https://github.com/contentful/marketplace-partner-apps/commit/857bb71dc60b743ac2284cf012270f5348b03942))
+
 ## [1.3.2](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.3.1...bynder-assets-v1.3.2) (2026-02-04)
 
 

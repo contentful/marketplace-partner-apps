@@ -7,6 +7,8 @@ export interface AppInstallationParameters {
   quality: string;
   format: string;
   showUploadButton: string;
+  /** When true, only show "Select an asset" button; hide the image/video dropdown. */
+  showAssetButtonOnly?: string;
   imageEditorOverlays: string[];
 }
 

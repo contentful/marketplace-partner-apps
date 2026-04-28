@@ -1,6 +1,6 @@
-import { setup, renderSkuPicker } from '@contentful/ecommerce-app-base';
+import { renderSkuPicker, setup } from '@contentful/ecommerce-app-base';
 import { fetchProductVariantPreviews, fetchProductPreviews, fetchCollectionPreviews, makeSkuResolver } from './skuResolvers';
-import { SKU_TYPES } from './constants';
+import { SHOPIFY_DEFAULT_API_VERSION, SHOPIFY_SUPPORTED_API_VERSIONS, SKU_TYPES } from './constants';
 import { validateParameters } from './utils/validation';
 
 import logo from './logo.svg';
@@ -124,28 +124,39 @@ function isDisabled(/* currentValue, config */) {
   return false;
 }
 
-setup({
+const parameterDefinitions = [
+  {
+    id: 'storefrontAccessToken',
+    name: 'Storefront Access Token',
+    description: 'The storefront access token to your Shopify store',
+    type: 'Symbol',
+    required: true,
+  },
+  {
+    id: 'apiEndpoint',
+    name: 'Store URL',
+    description: 'The Shopify store URL (e.g. [your-shop-name].myshopify.com)',
+    type: 'Symbol',
+    required: true,
+  },
+  {
+    id: 'apiVersion',
+    name: 'Storefront API Version',
+    description: 'The Shopify Storefront API version to use.',
+    type: 'Symbol',
+    default: SHOPIFY_DEFAULT_API_VERSION,
+    required: true,
+    options: SHOPIFY_SUPPORTED_API_VERSIONS,
+  },
+];
+
+const integration = {
   makeCTA,
   name: 'Shopify',
   logo,
   description: 'The Shopify app allows editors to select products from their Shopify account and reference them inside of Contentful entries.',
   color: '#212F3F',
-  parameterDefinitions: [
-    {
-      id: 'storefrontAccessToken',
-      name: 'Storefront Access Token',
-      description: 'The storefront access token to your Shopify store',
-      type: 'Symbol',
-      required: true,
-    },
-    {
-      id: 'apiEndpoint',
-      name: 'Store URL',
-      description: 'The Shopify store URL (e.g. [your-shop-name].myshopify.com)',
-      type: 'Symbol',
-      required: true,
-    },
-  ],
+  parameterDefinitions,
   skuTypes: SKU_TYPES,
   isInOrchestrationEAP: true,
   fetchProductPreviews: fetchPreviews,
@@ -155,4 +166,6 @@ setup({
   validateParameters,
   productCardVersion: 'v2',
   additionalDataRenderer: AdditionalDataRenderer,
-});
+};
+
+setup(integration);

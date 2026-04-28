@@ -50,7 +50,7 @@ describe("rewriterService", () => {
           isChecking: false,
           checkResponse: null,
           error: null,
-          lastUpdated: 1000,
+          lastUpdated: 1_000,
           hasRewriteResult: false,
         },
       };
@@ -58,7 +58,7 @@ describe("rewriterService", () => {
       expect(updated.f1.fieldId).toBe("f1");
       expect(updated.f1.originalValue).toBe("original");
       expect(updated.f1.isChecking).toBe(true);
-      expect(updated.f1.lastUpdated).toBeGreaterThan(1000);
+      expect(updated.f1.lastUpdated).toBeGreaterThan(1_000);
     });
 
     it("removes oldest field when max field checks reached", () => {

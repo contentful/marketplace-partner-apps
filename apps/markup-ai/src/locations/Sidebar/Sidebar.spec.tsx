@@ -75,6 +75,17 @@ const createMockRewriter = (overrides?: Partial<MockRewriter>): MockRewriter => 
 const mockRewriter = createMockRewriter();
 
 const mockUserSettings = {
+  effectiveSettings: {
+    dialect: "american_english",
+    tone: "professional",
+    styleGuide: "default",
+    apiKey: "test-api-key",
+  },
+  fieldSettings: {
+    dialect: null,
+    tone: null,
+    styleGuide: null,
+  },
   settings: {
     dialect: "american_english",
     tone: "professional",

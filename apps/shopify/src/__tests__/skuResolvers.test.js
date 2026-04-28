@@ -60,11 +60,16 @@ jest.mock('../utils/base64', () => ({
 // Mock the validation utils
 jest.mock('../utils/validation', () => ({
   validateParameters: jest.fn((params) => {
+    const { SHOPIFY_SUPPORTED_API_VERSIONS } = require('../constants');
+
     if (!params.storefrontAccessToken || params.storefrontAccessToken.length < 1) {
       return 'Provide the storefront access token to your Shopify store.';
     }
     if (!params.apiEndpoint || params.apiEndpoint.length < 1) {
       return 'Provide the Shopify store URL.';
+    }
+    if (params.apiVersion && !SHOPIFY_SUPPORTED_API_VERSIONS.includes(params.apiVersion)) {
+      return `Provide a supported Shopify Storefront API version: ${SHOPIFY_SUPPORTED_API_VERSIONS.join(', ')}.`;
     }
     return null;
   }),
@@ -85,6 +90,12 @@ jest.mock('../collectionPagination', () => ({
 const { makeShopifyClient, fetchProductPreviews, filterAndDecodeValidIds } = require('../skuResolvers');
 
 describe('makeShopifyClient', () => {
+  let createStorefrontApiClient;
+
+  beforeEach(() => {
+    ({ createStorefrontApiClient } = require('@shopify/storefront-api-client'));
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -98,6 +109,27 @@ describe('makeShopifyClient', () => {
     const client = await makeShopifyClient(config);
     expect(client).toBeDefined();
     expect(client.request).toBeDefined();
+    expect(createStorefrontApiClient).toHaveBeenCalledWith(
+      expect.objectContaining({
+        apiVersion: '2025-07',
+      })
+    );
+  });
+
+  it('should use the configured API version when provided', async () => {
+    const config = {
+      storefrontAccessToken: 'test_token',
+      apiEndpoint: 'https://test.myshopify.com',
+      apiVersion: '2026-04',
+    };
+
+    await makeShopifyClient(config);
+
+    expect(createStorefrontApiClient).toHaveBeenCalledWith(
+      expect.objectContaining({
+        apiVersion: '2026-04',
+      })
+    );
   });
 
   it('should handle missing storefrontAccessToken', async () => {
@@ -112,6 +144,17 @@ describe('makeShopifyClient', () => {
       storefrontAccessToken: 'test_token',
     };
     await expect(makeShopifyClient(config)).rejects.toThrow('Provide the Shopify store URL');
+  });
+
+  it('should reject unsupported apiVersion values', async () => {
+    const config = {
+      storefrontAccessToken: 'test_token',
+      apiEndpoint: 'https://test.myshopify.com',
+      apiVersion: '2024-10',
+    };
+
+    await expect(makeShopifyClient(config)).rejects.toThrow('Provide a supported Shopify Storefront API version: 2025-07, 2025-10, 2026-01, 2026-04.');
+    expect(createStorefrontApiClient).not.toHaveBeenCalled();
   });
 });
 

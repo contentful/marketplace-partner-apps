@@ -166,7 +166,7 @@ const extractTextFromRichText = (value: string | Document | null | undefined): s
 };
 
 const updateNodeAtPath = (doc: Document, path: number[], newValue: string): Document => {
-  const newDoc = JSON.parse(JSON.stringify(doc)) as Document;
+  const newDoc = structuredClone(doc);
 
   let current: { content: RichTextNode[] } = newDoc;
   for (let i = 0; i < path.length - 1; i++) {

@@ -36,5 +36,8 @@ export function useApiClient(config?: PlatformConfig) {
   return createClient({
     baseUrl,
     auth: apiKey,
+    headers: {
+      "x-integration-id": "markupai-contentful-app",
+    },
   });
 }
