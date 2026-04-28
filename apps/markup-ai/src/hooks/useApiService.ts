@@ -40,20 +40,49 @@ export function validateConfig(
   }
 }
 
+/**
+ * Wrap HTML fragment in a proper HTML document structure
+ */
+const wrapInHtmlDocument = (content: string): string => {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+${content}
+</body>
+</html>`;
+};
+
+/**
+ * Check if content is already a full HTML document
+ */
+const isFullHtmlDocument = (content: string): boolean => {
+  const trimmed = content.trim();
+  return /^<!DOCTYPE\s+html/i.test(trimmed) || /^<html/i.test(trimmed);
+};
+
 // Helper function to create a Blob from string content
+// Ensures HTML content is wrapped in a proper document structure
 const createContentBlob = (content: string): File => {
   let mimeType = "text/plain";
   let extension = ".txt";
+  let finalContent = content;
 
   if (isLikelyHtmlString(content)) {
     mimeType = "text/html";
     extension = ".html";
+    // Wrap in full document if it's just an HTML fragment
+    if (!isFullHtmlDocument(content)) {
+      finalContent = wrapInHtmlDocument(content);
+    }
   } else if (isLikelyMarkdownString(content)) {
     mimeType = "text/markdown";
     extension = ".md";
   }
 
-  return new File([content], `content${extension}`, { type: mimeType });
+  return new File([finalContent], `content${extension}`, { type: mimeType });
 };
 
 // Helper function for polling workflow completion
@@ -230,42 +259,56 @@ export function useApiService(config: PlatformConfig) {
     [config, createStyleRewriteMutation],
   );
 
-  // eslint-disable-next-line @typescript-eslint/require-await
-  const fetchAdminConstants = useCallback(async (): Promise<Constants> => {
-    try {
-      validateConfig(config);
+  const fetchAdminConstants = useCallback((): Promise<Constants> => {
+    return new Promise((resolve, reject) => {
+      try {
+        validateConfig(config);
 
-      if (constantsError) {
-        throw constantsError;
+        if (constantsError) {
+          reject(
+            constantsError instanceof Error
+              ? constantsError
+              : new Error("Failed to load constants"),
+          );
+          return;
+        }
+
+        if (!constants) {
+          reject(new Error("Constants not loaded"));
+          return;
+        }
+
+        resolve(constants);
+      } catch (error: unknown) {
+        reject(error instanceof Error ? error : new Error(String(error)));
       }
-
-      if (!constants) {
-        throw new Error("Constants not loaded");
-      }
-
-      return constants;
-    } catch (error: unknown) {
-      throw error instanceof Error ? error : new Error(String(error));
-    }
+    });
   }, [config, constants, constantsError]);
 
-  // eslint-disable-next-line @typescript-eslint/require-await
-  const fetchStyleGuides = useCallback(async (): Promise<StyleGuides> => {
-    try {
-      validateConfig(config);
+  const fetchStyleGuides = useCallback((): Promise<StyleGuides> => {
+    return new Promise((resolve, reject) => {
+      try {
+        validateConfig(config);
 
-      if (styleGuidesError) {
-        throw styleGuidesError;
+        if (styleGuidesError) {
+          reject(
+            styleGuidesError instanceof Error
+              ? styleGuidesError
+              : new Error("Failed to load style guides"),
+          );
+          return;
+        }
+
+        if (!styleGuides) {
+          reject(new Error("Style guides not loaded"));
+          return;
+        }
+
+        resolve(styleGuides);
+      } catch (error: unknown) {
+        reject(error instanceof Error ? error : new Error(String(error)));
       }
-
-      if (!styleGuides) {
-        throw new Error("Style guides not loaded");
-      }
-
-      return styleGuides;
-    } catch (error: unknown) {
-      throw error instanceof Error ? error : new Error(String(error));
-    }
+    });
   }, [config, styleGuides, styleGuidesError]);
 
   return {

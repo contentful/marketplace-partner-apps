@@ -18,7 +18,8 @@ const Sidebar: React.FC = () => {
   const { fieldChecks, handleAcceptSuggestion, clearError, setOnFieldChange, updateCheck } =
     useRewriter(sdk);
   const [expandedFieldId, setExpandedFieldId] = useState<string | null>(null);
-  const { settings, updateDialect, updateTone, updateStyleGuide } = useUserSettings();
+  const { effectiveSettings, fieldSettings, updateDialect, updateTone, updateStyleGuide } =
+    useUserSettings();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const { isAuthenticated } = useAuth();
 
@@ -115,9 +116,9 @@ const Sidebar: React.FC = () => {
           onClose={() => {
             setIsSettingsOpen(false);
           }}
-          dialect={settings.dialect}
-          tone={settings.tone}
-          styleGuide={settings.styleGuide}
+          dialect={effectiveSettings.dialect}
+          tone={fieldSettings.tone}
+          styleGuide={effectiveSettings.styleGuide}
           onDialectChange={updateDialect}
           onToneChange={updateTone}
           onStyleGuideChange={updateStyleGuide}
