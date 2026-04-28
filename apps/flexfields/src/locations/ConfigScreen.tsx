@@ -1,25 +1,16 @@
-import React, { useCallback, useState, useEffect } from "react";
-import type { AppExtensionSDK } from "@contentful/app-sdk";
-import {
-  Heading,
-  Form,
-  Flex,
-  TextInput,
-  Text,
-  SectionHeading,
-  Button,
-  Badge,
-} from "@contentful/f36-components";
-import { Entry, KeyValueMap } from "contentful-management";
-import { css } from "@emotion/css";
-import { useCMA, useSDK } from "@contentful/react-apps-toolkit";
-import { FormControl, Select } from "@contentful/f36-components";
-import { Multiselect } from "@contentful/f36-multiselect";
-import { PlusIcon, WarningIcon } from "@contentful/f36-icons";
-import RulesList from "../components/RulesList";
-import { type Rule } from "../types/Rule";
-import { getFieldName } from "../utils";
-import packageData from "../../package.json";
+import React, { useCallback, useState, useEffect } from 'react';
+import type { AppExtensionSDK } from '@contentful/app-sdk';
+import { Heading, Form, Flex, TextInput, Text, SectionHeading, Button, Badge } from '@contentful/f36-components';
+import { Entry, KeyValueMap } from 'contentful-management';
+import { css } from '@emotion/css';
+import { useCMA, useSDK } from '@contentful/react-apps-toolkit';
+import { FormControl, Select } from '@contentful/f36-components';
+import { Multiselect } from '@contentful/f36-multiselect';
+import { PlusIcon, WarningIcon } from '@contentful/f36-icons';
+import RulesList from '../components/RulesList';
+import { type Rule } from '../types/Rule';
+import { getFieldName } from '../utils';
+import packageData from '../../package.json';
 
 const version = packageData.version;
 export interface AppInstallationParameters {
@@ -43,84 +34,67 @@ interface CustomSelectProps {
   sdk?: any;
 }
 
-const COMPARISON_CONDITIONS = [
-  "contains",
-  "is equal",
-  "is not equal",
-  "is empty",
-  "is not empty",
-];
+const COMPARISON_CONDITIONS = ['contains', 'is equal', 'is not equal', 'is empty', 'is not empty'];
 
-const COMPARISON_CONDITIONS_NON_TEXT_FIELD = ["is empty", "is not empty"];
+const COMPARISON_CONDITIONS_NON_TEXT_FIELD = ['is empty', 'is not empty'];
 
-const COMPARISON_CONDITIONS_NUMBER = [
-  "less than",
-  "greater than",
-  "between",
-  "equal",
-  "not equal",
-  "is empty",
-  "is not empty",
-];
+const COMPARISON_CONDITIONS_NUMBER = ['less than', 'greater than', 'between', 'equal', 'not equal', 'is empty', 'is not empty'];
 
 const COMPARISON_CONDITIONS_REFERENCE_MULTIPLE = [
-  "reference count less than",
-  "reference count greater than",
-  "reference count between",
-  "reference count equal",
-  "reference count not equal",
-  "includes entry", // checks if a specific entry is included
-  "is empty",
-  "is not empty",
+  'reference count less than',
+  'reference count greater than',
+  'reference count between',
+  'reference count equal',
+  'reference count not equal',
+  'includes entry', // checks if a specific entry is included
+  'is empty',
+  'is not empty',
 ];
 
 const COMPARISON_CONDITIONS_REFERENCE_SINGLE = [
-  "includes entry", // checks if a specific entry is included
-  "is empty",
-  "is not empty",
+  'includes entry', // checks if a specific entry is included
+  'is empty',
+  'is not empty',
 ];
 
 const COMPARISON_CONDITIONS_ASSET_MULTIPLE = [
-  "reference count less than",
-  "reference count greater than",
-  "reference count between",
-  "reference count equal",
-  "reference count not equal",
-  "includes asset", // checks if a specific asset is included
-  "is empty",
-  "is not empty",
+  'reference count less than',
+  'reference count greater than',
+  'reference count between',
+  'reference count equal',
+  'reference count not equal',
+  'includes asset', // checks if a specific asset is included
+  'is empty',
+  'is not empty',
 ];
 
 const COMPARISON_CONDITIONS_ASSET_SINGLE = [
-  "includes asset", // checks if a specific asset is included
-  "is empty",
-  "is not empty",
+  'includes asset', // checks if a specific asset is included
+  'is empty',
+  'is not empty',
 ];
 
 const COMPARISON_CONDITIONS_RICHTEXT = [
-  "includes", // checks if a specific text is included
-  "is empty",
-  "is not empty",
+  'includes', // checks if a specific text is included
+  'is empty',
+  'is not empty',
 ];
 
-const COMPARISON_CONDITIONS_BOOLEAN = [
-  "is true",
-  "is false",
-];
+const COMPARISON_CONDITIONS_BOOLEAN = ['is true', 'is false'];
 
 // CSS constants for repeated styles
 const INPUT_STYLE_200 = css({
-  width: "200px !important",
-  margin: "0 1rem !important",
+  width: '200px !important',
+  margin: '0 1rem !important',
 });
 
 const INPUT_STYLE_150 = css({
-  width: "150px !important",
-  margin: "0 0.5rem !important",
+  width: '150px !important',
+  margin: '0 0.5rem !important',
 });
 
 const BUTTON_MARGIN = css({
-  margin: "0 1rem !important",
+  margin: '0 1rem !important',
 });
 
 const ConfigScreen = () => {
@@ -132,23 +106,19 @@ const ConfigScreen = () => {
   const sdk = useSDK<AppExtensionSDK>();
 
   const [contentTypes, setContentTypes] = useState<any>([]);
-  const [contentType, setContentType] = useState<string>("");
-  const [contentTypeField, setContentTypeField] = useState<string>("");
-  const [condition, setCondition] = useState<string>("");
-  const [conditionOptions, setConditionOptions] = useState<string[]>(
-    COMPARISON_CONDITIONS
-  );
-  const [conditionValue, setConditionValue] = useState<string>("");
-  const [conditionValueMin, setConditionValueMin] = useState<string>("");
-  const [conditionValueMax, setConditionValueMax] = useState<string>("");
+  const [conditionValueMin, setConditionValueMin] = useState<string>('');
+  const [conditionValueMax, setConditionValueMax] = useState<string>('');
   const [linkedEntryIds, setLinkedEntryIds] = useState<string[]>([]);
   const [linkedEntryNames, setLinkedEntryNames] = useState<string[]>([]);
-  const [conditionValueOptions, setConditionValueOptions] = useState<string[]>(
-    []
-  );
+  const [contentType, setContentType] = useState<string>('');
+  const [contentTypeField, setContentTypeField] = useState<string>('');
+  const [condition, setCondition] = useState<string>('');
+  const [conditionOptions, setConditionOptions] = useState<string[]>(COMPARISON_CONDITIONS);
+  const [conditionValue, setConditionValue] = useState<string>('');
+  const [conditionValueOptions, setConditionValueOptions] = useState<string[]>([]);
   const [childEntities, setChildEntities] = useState<any>([]);
   const [targetEntities, setTargetEntities] = useState<any>([]);
-  const [targetEntity, setTargetEntity] = useState<string>("");
+  const [targetEntity, setTargetEntity] = useState<string>('');
   const [targetEntityFields, setTargetEntityFields] = useState<any>([]);
   const [targetEntityField, setTargetEntityField] = useState<string[]>([]);
   /*
@@ -178,56 +148,53 @@ const ConfigScreen = () => {
     }
 
     // Validate and save rule fields
-    if (
-      !contentType ||
-      !contentTypeField ||
-      !condition ||
-      !targetEntity ||
-      !targetEntityField.length
-    ) {
-      sdk.notifier.error("Please fill out all fields");
-      throw new Error("Please fill out all fields");
+    if (!contentType || !contentTypeField || !condition || !targetEntity || !targetEntityField.length) {
+      sdk.notifier.error('Please fill out all fields');
+      throw new Error('Please fill out all fields');
     }
 
     // Validate condition values based on condition type
+    // Validate condition values based on condition type
     const needsSingleValue = [
-      "contains",
-      "is equal",
-      "is not equal",
-      "includes",
-      "less than",
-      "greater than",
-      "equal",
-      "not equal",
-      "reference count less than",
-      "reference count greater than",
-      "reference count equal",
-      "reference count not equal",
+      'contains',
+      'is equal',
+      'is not equal',
+      'includes',
+      'less than',
+      'greater than',
+      'equal',
+      'not equal',
+      'reference count less than',
+      'reference count greater than',
+      'reference count equal',
+      'reference count not equal',
     ];
 
-    const needsBetweenValues = ["between", "reference count between"];
-    const needsEntryId = ["includes entry", "includes asset"];
+    const needsBetweenValues = ['between', 'reference count between'];
+    const needsEntryId = ['includes entry', 'includes asset'];
 
-    if (needsSingleValue.includes(condition) && conditionValue === "") {
-      sdk.notifier.error("Please enter a condition value");
-      throw new Error("Please enter a condition value");
+    if (needsSingleValue.includes(condition) && conditionValue === '') {
+      sdk.notifier.error('Please enter a condition value');
+      throw new Error('Please enter a condition value');
     }
 
-    if (
-      needsBetweenValues.includes(condition) &&
-      (conditionValueMin === "" || conditionValueMax === "")
-    ) {
-      sdk.notifier.error("Please enter both min and max values");
-      throw new Error("Please enter both min and max values");
+    if (needsBetweenValues.includes(condition) && (conditionValueMin === '' || conditionValueMax === '')) {
+      sdk.notifier.error('Please enter both min and max values');
+      throw new Error('Please enter both min and max values');
     }
 
     if (needsEntryId.includes(condition) && linkedEntryIds.length === 0) {
-      const itemType = condition === "includes asset" ? "asset" : "entry";
+      const itemType = condition === 'includes asset' ? 'asset' : 'entry';
       sdk.notifier.error(`Please select at least one ${itemType}`);
       throw new Error(`Please select at least one ${itemType}`);
     }
 
-    const suffixIndex = targetEntity.indexOf("-sameEntity");
+    if (conditionValue === '' && condition !== 'is empty' && condition !== 'is not empty') {
+      sdk.notifier.error('Please enter a condition value');
+      throw new Error('Please enter a condition value');
+    }
+
+    const suffixIndex = targetEntity.indexOf('-sameEntity');
     const isForSameEntity = suffixIndex !== -1;
 
     const newRule: Rule = {
@@ -243,9 +210,7 @@ const ConfigScreen = () => {
         linkedEntryIds,
       }),
       isForSameEntity,
-      targetEntity: isForSameEntity
-        ? targetEntity.substring(0, suffixIndex)
-        : targetEntity,
+      targetEntity: isForSameEntity ? targetEntity.substring(0, suffixIndex) : targetEntity,
       targetEntityField,
     };
 
@@ -284,16 +249,17 @@ const ConfigScreen = () => {
       ...parameters,
       rules: newRules,
     });
-    setContentType("");
-    setContentTypeField("");
-    setCondition("");
-    setConditionValue("");
-    setConditionValueMin("");
-    setConditionValueMax("");
+
+    setContentType('');
+    setContentTypeField('');
+    setCondition('');
+    setConditionValue('');
+    setConditionValueMin('');
+    setConditionValueMax('');
+    setTargetEntity('');
+    setTargetEntityField([]);
     setLinkedEntryIds([]);
     setLinkedEntryNames([]);
-    setTargetEntity("");
-    setTargetEntityField([]);
     setRuleToEditIndex(undefined);
 
     //uncomments and save config screent to reset rules
@@ -341,35 +307,28 @@ const ConfigScreen = () => {
       // The fields are fetched dynamically based on content type
       setTimeout(() => {
         setContentTypeField(ruleToEdit.contentTypeField);
-        
+
         // Determine if it's an asset or entry field to set correct condition
-        const contentTypeObj = contentTypes.find(
-          (c: any) => c.sys.id === ruleToEdit.contentType
-        );
-        const contentTypeFieldObj = contentTypeObj?.fields.find(
-          (f: any) => f.id === ruleToEdit.contentTypeField
-        );
-        const linkType = contentTypeFieldObj?.linkType || 
-          contentTypeFieldObj?.items?.linkType;
-        
+        const contentTypeObj = contentTypes.find((c: any) => c.sys.id === ruleToEdit.contentType);
+        const contentTypeFieldObj = contentTypeObj?.fields.find((f: any) => f.id === ruleToEdit.contentTypeField);
+        const linkType = contentTypeFieldObj?.linkType || contentTypeFieldObj?.items?.linkType;
+
         // Update condition if it's "includes entry" but field is actually an asset
         let condition = ruleToEdit.condition;
-        if (condition === "includes entry" && linkType === "Asset") {
-          condition = "includes asset";
+        if (condition === 'includes entry' && linkType === 'Asset') {
+          condition = 'includes asset';
         }
         setCondition(condition);
-        
+
         setConditionValue(ruleToEdit.conditionValue);
-        setConditionValueMin(ruleToEdit.conditionValueMin || "");
-        setConditionValueMax(ruleToEdit.conditionValueMax || "");
+        setConditionValueMin(ruleToEdit.conditionValueMin || '');
+        setConditionValueMax(ruleToEdit.conditionValueMax || '');
         // Support both old (linkedEntryId) and new (linkedEntryIds) format
-        const entryIds = ruleToEdit.linkedEntryIds || 
-          (ruleToEdit.linkedEntryId ? [ruleToEdit.linkedEntryId] : []);
+        const entryIds = ruleToEdit.linkedEntryIds || (ruleToEdit.linkedEntryId ? [ruleToEdit.linkedEntryId] : []);
         setLinkedEntryIds(entryIds);
-        
+
         // Fetch entry/asset names for editing
         if (entryIds.length > 0) {
-          
           Promise.all(
             entryIds.map(async (id: string) => {
               if (linkType === 'Asset') {
@@ -383,13 +342,7 @@ const ConfigScreen = () => {
           });
         }
         // If the rule is set for same entity, add `-sameEntity` to targetEntity
-        setTargetEntity(
-          `${
-            ruleToEdit.isForSameEntity
-              ? `${ruleToEdit.targetEntity}-sameEntity`
-              : ruleToEdit.targetEntity
-          }`
-        );
+        setTargetEntity(`${ruleToEdit.isForSameEntity ? `${ruleToEdit.targetEntity}-sameEntity` : ruleToEdit.targetEntity}`);
         setTargetEntityField(ruleToEdit.targetEntityField);
       }, 100);
     }
@@ -401,8 +354,7 @@ const ConfigScreen = () => {
     (async () => {
       // Get current parameters of the app.
       // If the app is not installed yet, `parameters` will be `null`.
-      const currentParameters: AppInstallationParameters | null =
-        await sdk.app.getParameters();
+      const currentParameters: AppInstallationParameters | null = await sdk.app.getParameters();
 
       if (currentParameters) {
         setParameters(currentParameters);
@@ -428,29 +380,23 @@ const ConfigScreen = () => {
   }, [cma.contentType]);
 
   useEffect(() => {
-    setContentTypeField("");
-    setConditionValue("");
-    setConditionValueMin("");
-    setConditionValueMax("");
+    setContentTypeField('');
+    setConditionValue('');
+    setConditionValueMin('');
+    setConditionValueMax('');
     setLinkedEntryIds([]);
     setLinkedEntryNames([]);
-    setTargetEntity("");
+    setTargetEntity('');
   }, [contentType]);
 
   useEffect(() => {
-    setCondition("");
+    setCondition('');
     setConditionValueOptions([]);
 
     if (contentType && contentTypeField) {
-      const contentTypeObj = contentTypes.find(
-        (c: any) => c.sys.id === contentType
-      );
-      const contentTypeFieldObj = contentTypeObj?.fields.find(
-        (f: any) => f.id === contentTypeField
-      );
-      const validation = contentTypeFieldObj?.validations?.find(
-        (v: any) => v.in
-      );
+      const contentTypeObj = contentTypes.find((c: any) => c.sys.id === contentType);
+      const contentTypeFieldObj = contentTypeObj?.fields.find((f: any) => f.id === contentTypeField);
+      const validation = contentTypeFieldObj?.validations?.find((v: any) => v.in);
 
       if (validation) {
         setConditionValueOptions(validation.in);
@@ -460,27 +406,23 @@ const ConfigScreen = () => {
       const fieldType = contentTypeFieldObj?.type;
       const itemsType = contentTypeFieldObj?.items?.type;
       const linkType = contentTypeFieldObj?.linkType || contentTypeFieldObj?.items?.linkType;
-      
+
       let conditionOptions = COMPARISON_CONDITIONS_NON_TEXT_FIELD;
 
-      if (fieldType === "Symbol" || fieldType === "Text") {
+      if (fieldType === 'Symbol' || fieldType === 'Text') {
         conditionOptions = COMPARISON_CONDITIONS;
-      } else if (fieldType === "Number" || fieldType === "Integer") {
+      } else if (fieldType === 'Number' || fieldType === 'Integer') {
         conditionOptions = COMPARISON_CONDITIONS_NUMBER;
-      } else if (fieldType === "RichText") {
+      } else if (fieldType === 'RichText') {
         conditionOptions = COMPARISON_CONDITIONS_RICHTEXT;
-      } else if (fieldType === "Boolean") {
+      } else if (fieldType === 'Boolean') {
         conditionOptions = COMPARISON_CONDITIONS_BOOLEAN;
-      } else if (fieldType === "Link") {
+      } else if (fieldType === 'Link') {
         // Single reference - check if it's Asset or Entry
-        conditionOptions = linkType === "Asset" 
-          ? COMPARISON_CONDITIONS_ASSET_SINGLE 
-          : COMPARISON_CONDITIONS_REFERENCE_SINGLE;
-      } else if (fieldType === "Array" && itemsType === "Link") {
+        conditionOptions = linkType === 'Asset' ? COMPARISON_CONDITIONS_ASSET_SINGLE : COMPARISON_CONDITIONS_REFERENCE_SINGLE;
+      } else if (fieldType === 'Array' && itemsType === 'Link') {
         // Multiple references - check if it's Asset or Entry
-        conditionOptions = linkType === "Asset"
-          ? COMPARISON_CONDITIONS_ASSET_MULTIPLE
-          : COMPARISON_CONDITIONS_REFERENCE_MULTIPLE;
+        conditionOptions = linkType === 'Asset' ? COMPARISON_CONDITIONS_ASSET_MULTIPLE : COMPARISON_CONDITIONS_REFERENCE_MULTIPLE;
       }
 
       setConditionOptions(conditionOptions);
@@ -495,9 +437,7 @@ const ConfigScreen = () => {
         let childrenEntities: any[] = [];
 
         children?.forEach((obj) => {
-          const linkedContentTypes =
-            obj.validations?.[0]?.linkContentType ||
-            obj.items?.validations?.[0]?.linkContentType;
+          const linkedContentTypes = obj.validations?.[0]?.linkContentType || obj.items?.validations?.[0]?.linkContentType;
           if (linkedContentTypes?.length) {
             childrenEntities = [...childrenEntities, ...linkedContentTypes];
           }
@@ -510,14 +450,11 @@ const ConfigScreen = () => {
           const targetEntities = [
             {
               id: `${contentType}-sameEntity`,
-              name: `${
-                contentTypes.find((c: Entry) => c.sys.id === contentType)?.name
-              } (Same Entry)`,
+              name: `${contentTypes.find((c: Entry) => c.sys.id === contentType)?.name} (Same Entry)`,
             },
             ...childrenEntities.map((contentType) => ({
               id: contentType,
-              name: contentTypes.find((c: Entry) => c.sys.id === contentType)
-                ?.name,
+              name: contentTypes.find((c: Entry) => c.sys.id === contentType)?.name,
             })),
           ];
 
@@ -532,14 +469,12 @@ const ConfigScreen = () => {
 
     if (!targetEntity) return;
 
-    const suffixIndex = targetEntity.indexOf("-sameEntity");
+    const suffixIndex = targetEntity.indexOf('-sameEntity');
     const isForSameEntity = suffixIndex !== -1;
 
     cma.contentType
       .get({
-        contentTypeId: isForSameEntity
-          ? targetEntity.substring(0, suffixIndex)
-          : targetEntity,
+        contentTypeId: isForSameEntity ? targetEntity.substring(0, suffixIndex) : targetEntity,
       })
       .then((data) => {
         // only show fields that are not required
@@ -547,10 +482,7 @@ const ConfigScreen = () => {
 
         if (fields) {
           // filter contentTypeField from fields
-          if (
-            isForSameEntity &&
-            targetEntity.substring(0, suffixIndex) === contentType
-          ) {
+          if (isForSameEntity && targetEntity.substring(0, suffixIndex) === contentType) {
             fields = fields.filter((field) => field.id !== contentTypeField);
           }
 
@@ -561,60 +493,46 @@ const ConfigScreen = () => {
 
   const updateInput = (fieldId: string, value: string) => {
     //do update
-    if (fieldId === "contentType") {
+    if (fieldId === 'contentType') {
       setContentType(value as string);
     }
-    if (fieldId === "contentTypeField") {
+    if (fieldId === 'contentTypeField') {
       setContentTypeField(value as string);
     }
-    if (fieldId === "condition") {
+    if (fieldId === 'condition') {
       setCondition(value as string);
     }
-    if (fieldId === "conditionValue") {
+    if (fieldId === 'conditionValue') {
       setConditionValue(value as string);
     }
-    if (fieldId === "conditionValueMin") {
+    if (fieldId === 'conditionValueMin') {
       setConditionValueMin(value as string);
     }
-    if (fieldId === "conditionValueMax") {
+    if (fieldId === 'conditionValueMax') {
       setConditionValueMax(value as string);
     }
-    if (fieldId === "targetEntity") {
+    if (fieldId === 'targetEntity') {
       setTargetEntity(value as string);
     }
   };
 
   // A stateful Select component that mimics Contentful's default
   const CustomSelect = (props: CustomSelectProps) => {
-    const {
-      isDisabled = false,
-      fieldId,
-      handleChange,
-      value,
-      options,
-      className,
-    } = props;
+    const { isDisabled = false, fieldId, handleChange, value, options, className } = props;
 
     return (
-      <FormControl
-        isRequired
-        className={className ? className : css({ margin: 0 })}
-      >
+      <FormControl isRequired className={className ? className : css({ margin: 0 })}>
         <Select
           isDisabled={isDisabled}
           id={`optionSelect-controlled-${fieldId}`}
           name={`optionSelect-controlled-${fieldId}`}
           onChange={(e) => handleChange(fieldId, e.target.value)}
-          value={value}
-        >
+          value={value}>
           <Select.Option value="" isDisabled>
             Please select an option...
           </Select.Option>
           {options?.map((option) => (
-            <Select.Option
-              key={`custom-select-option-${option.id}`}
-              value={option.id}
-            >
+            <Select.Option key={`custom-select-option-${option.id}`} value={option.id}>
               {option.name}
             </Select.Option>
           ))}
@@ -649,7 +567,7 @@ const ConfigScreen = () => {
     try {
       const asset = await cma.asset.get({ assetId });
       const fields: KeyValueMap = asset.fields || {};
-      
+
       // Try title first
       let name = undefined;
       if (fields.title && typeof fields.title === 'object') {
@@ -658,7 +576,7 @@ const ConfigScreen = () => {
           name = fields.title[locales[0]];
         }
       }
-      
+
       // If no title, try fileName from file object
       if (!name && fields.file && typeof fields.file === 'object') {
         const locales = Object.keys(fields.file);
@@ -666,7 +584,7 @@ const ConfigScreen = () => {
           name = fields.file[locales[0]].fileName;
         }
       }
-      
+
       return name || assetId;
     } catch (error) {
       return assetId;
@@ -678,12 +596,12 @@ const ConfigScreen = () => {
     try {
       const entry = await cma.entry.get({ entryId });
       const fields = entry.fields || {};
-      
+
       // Get the content type to find the displayField
       const entryContentTypeId = entry.sys.contentType.sys.id;
       const entryContentType = await cma.contentType.get({ contentTypeId: entryContentTypeId });
       const displayFieldId = entryContentType.displayField;
-      
+
       let name = undefined;
       if (displayFieldId && fields[displayFieldId]) {
         const displayFieldValue = fields[displayFieldId];
@@ -694,7 +612,7 @@ const ConfigScreen = () => {
           }
         }
       }
-      
+
       return name || entryId;
     } catch (error) {
       return entryId;
@@ -703,24 +621,17 @@ const ConfigScreen = () => {
 
   const handleSelectEntriesOrAssets = async () => {
     // Get linked content types from field validation
-    const contentTypeObj = contentTypes.find(
-      (c: any) => c.sys.id === contentType
-    );
-    const contentTypeFieldObj = contentTypeObj?.fields.find(
-      (f: any) => f.id === contentTypeField
-    );
-    
+    const contentTypeObj = contentTypes.find((c: any) => c.sys.id === contentType);
+    const contentTypeFieldObj = contentTypeObj?.fields.find((f: any) => f.id === contentTypeField);
+
     // Check if it is an asset link or entry link
-    const linkType = contentTypeFieldObj?.linkType || 
-      contentTypeFieldObj?.items?.linkType;
-    
-    const linkedContentTypes =
-      contentTypeFieldObj?.validations?.[0]?.linkContentType ||
-      contentTypeFieldObj?.items?.validations?.[0]?.linkContentType;
+    const linkType = contentTypeFieldObj?.linkType || contentTypeFieldObj?.items?.linkType;
+
+    const linkedContentTypes = contentTypeFieldObj?.validations?.[0]?.linkContentType || contentTypeFieldObj?.items?.validations?.[0]?.linkContentType;
 
     try {
       let result;
-      
+
       // Use appropriate dialog based on link type
       if (linkType === 'Asset') {
         result = await sdk.dialogs.selectMultipleAssets({
@@ -736,7 +647,7 @@ const ConfigScreen = () => {
       if (result && result.length > 0) {
         const entryIds = result.map((item: any) => item.sys.id);
         setLinkedEntryIds(entryIds);
-        
+
         // Fetch full items to get names
         Promise.all(
           entryIds.map(async (id: string) => {
@@ -756,10 +667,7 @@ const ConfigScreen = () => {
   };
 
   return (
-    <Flex
-      flexDirection="column"
-      className={css({ margin: 45, maxWidth: "100vw" })}
-    >
+    <Flex flexDirection="column" className={css({ margin: 45, maxWidth: '100vw' })}>
       <Form>
         <Heading className={css({ marginBottom: 35 })}>
           <svg
@@ -769,13 +677,12 @@ const ConfigScreen = () => {
             viewBox="0 0 125.63 127.95"
             width="36px"
             style={{
-              marginRight: "0.5rem",
-            }}
-          >
+              marginRight: '0.5rem',
+            }}>
             <defs>
               <style>
                 {
-                  "\n      .cls-1 {\n        fill: none;\n      }\n\n      .cls-2 {\n        clip-path: url(#clippath);\n      }\n\n      .cls-3 {\n        fill: #c3baf2;\n      }\n\n      .cls-4 {\n        fill: #0d2830;\n      }\n    "
+                  '\n      .cls-1 {\n        fill: none;\n      }\n\n      .cls-2 {\n        clip-path: url(#clippath);\n      }\n\n      .cls-3 {\n        fill: #c3baf2;\n      }\n\n      .cls-4 {\n        fill: #0d2830;\n      }\n    '
                 }
               </style>
               <clipPath id="clippath">
@@ -794,10 +701,7 @@ const ConfigScreen = () => {
                 className="cls-4"
                 d="m38.52,104.22s-2.69,10.08-3.05,12.22c-.27-1.72-3.26-12.26-3.26-12.26l-5.26-.03-3.27,12.22-3.08-12.26-7.82-.05.05-7.93-6.1-.04-.05,7.93-3.33-.02-1.61,5.53,4.87.03-.09,15.29,6.1.04.09-15.29,3.23.02,4.47,15.32,5.79.04,3.3-12.96,3.43,13,5.86.04,6.02-20.79-6.28-.04Z"
               />
-              <path
-                className="cls-4"
-                d="m42.78,119.53l-1.61,5.53,5.68.03,1.61-5.53-5.68-.03Z"
-              />
+              <path className="cls-4" d="m42.78,119.53l-1.61,5.53,5.68.03,1.61-5.53-5.68-.03Z" />
             </g>
             <g>
               <circle className="cls-4" cx={108.23} cy={17.83} r={14.97} />
@@ -811,10 +715,7 @@ const ConfigScreen = () => {
               d="m17.08,48.2c-8.53-.05-15.48,6.81-15.53,15.31-.05,8.49,6.81,15.48,15.34,15.53,8.53.05,15.48-6.81,15.53-15.34.05-8.53-6.81-15.44-15.34-15.49Zm4.04,19.58c-2.29,2.26-6.01,2.24-8.28-.05s-2.24-6.01.05-8.28c2.29-2.26,6.01-2.24,8.28.05,2.26,2.29,2.24,6.01-.05,8.28Z"
             />
             <g>
-              <path
-                className="cls-4"
-                d="m45.89,102.87h-.44v-1.59h-.6v-.38h1.63v.38h-.6v1.59Z"
-              />
+              <path className="cls-4" d="m45.89,102.87h-.44v-1.59h-.6v-.38h1.63v.38h-.6v1.59Z" />
               <path
                 className="cls-4"
                 d="m47.47,102.87l-.27-1.05c-.02-.09-.04-.15-.05-.19-.01-.06-.02-.07-.04-.13,0,.07,0,.12,0,.15v.19s0,1.03,0,1.03h-.4v-1.97h.62l.25,1.03c.04.15.07.32.09.44,0-.04.01-.06.01-.06l.03-.13s.02-.08.03-.13c.01-.06.03-.12.03-.13l.26-1.02h.62v1.97h-.4v-1.21s0-.08,0-.15c-.03.12-.05.2-.06.22-.02.05-.03.09-.03.09l-.27,1.05h-.44Z"
@@ -836,47 +737,36 @@ const ConfigScreen = () => {
             alignItems="center"
             gap="8px"
             className={css({
-              border: "1px solid #aaa",
+              border: '1px solid #aaa',
               borderRadius: 10,
               padding: 15,
               marginBottom: 24,
-            })}
-          >
+            })}>
             <WarningIcon
               className={css({
-                fill: "#EED202",
+                fill: '#EED202',
               })}
             />
             <SectionHeading
               className={css({
                 margin: 0,
-              })}
-            >
+              })}>
               Please click Save to update the app configuration
             </SectionHeading>
           </Flex>
         ) : (
           <>
-            <Flex
-              alignItems="center"
-              gap="8px"
-              className={css({ margin: "1.5rem 0" })}
-            >
+            <Flex alignItems="center" gap="8px" className={css({ margin: '1.5rem 0' })}>
               <PlusIcon />
               <SectionHeading
                 className={css({
-                  fontSize: "14px !important",
-                  margin: "0 !important",
-                })}
-              >
+                  fontSize: '14px !important',
+                  margin: '0 !important',
+                })}>
                 Add new rule(s) below
               </SectionHeading>
             </Flex>
-            <Flex
-              alignItems="center"
-              className={css({ width: "100%", marginBottom: 20 })}
-              flexDirection="row"
-            >
+            <Flex alignItems="center" className={css({ width: '100%', marginBottom: 20 })} flexDirection="row">
               <Text className={css({ minWidth: 150 })}>For content type</Text>
               <CustomSelect
                 value={contentType}
@@ -892,11 +782,7 @@ const ConfigScreen = () => {
             </Flex>
             {contentType && (
               <>
-                <Flex
-                  alignItems="center"
-                  className={css({ width: "100%" })}
-                  flexDirection="row"
-                >
+                <Flex alignItems="center" className={css({ width: '100%' })} flexDirection="row">
                   <Text className={css({ minWidth: 150 })}>With field</Text>
                   <CustomSelect
                     value={contentTypeField}
@@ -912,9 +798,8 @@ const ConfigScreen = () => {
                   <Text
                     className={css({
                       minWidth: 100,
-                      marginLeft: "40px !important",
-                    })}
-                  >
+                      marginLeft: '40px !important',
+                    })}>
                     Condition
                   </Text>
                   <CustomSelect
@@ -926,19 +811,13 @@ const ConfigScreen = () => {
                     }))}
                     handleChange={updateInput}
                   />
-                  {/* Render appropriate input based on condition type */}
-                  {/* Text field conditions */}
-                  {(condition === "contains" ||
-                    condition === "is equal" ||
-                    condition === "is not equal" ||
-                    condition === "includes") &&
-                    (conditionValueOptions.length &&
-                    condition !== "contains" &&
-                    condition !== "includes" ? (
+                  {/* Text / symbol condition value: enum select vs free text */}
+                  {(condition === 'contains' || condition === 'is equal' || condition === 'is not equal' || condition === 'includes') &&
+                    (conditionValueOptions.length && condition !== 'contains' && condition !== 'includes' ? (
                       <CustomSelect
                         className={css({
-                          width: "200px !important",
-                          margin: "0 1rem !important",
+                          width: '200px !important',
+                          margin: '0 1rem !important',
                         })}
                         value={conditionValue}
                         fieldId="conditionValue"
@@ -955,40 +834,39 @@ const ConfigScreen = () => {
                         value={conditionValue}
                         type="text"
                         onChange={(e) => {
-                          updateInput("conditionValue", e.target.value);
+                          updateInput('conditionValue', e.target.value);
                         }}
                         placeholder="Condition value"
                         className={INPUT_STYLE_200}
                       />
                     ))}
                   {/* Number field conditions - single value */}
-                  {(condition === "less than" ||
-                    condition === "greater than" ||
-                    condition === "equal" ||
-                    condition === "not equal" ||
-                    condition === "reference count less than" ||
-                    condition === "reference count greater than" ||
-                    condition === "reference count equal" ||
-                    condition === "reference count not equal") && (
-                    <TextInput
-                      value={conditionValue}
-                      type="number"
-                      onChange={(e) => {
-                        updateInput("conditionValue", e.target.value);
-                      }}
-                      placeholder="Value"
-                      className={INPUT_STYLE_200}
-                    />
-                  )}
+                  {(condition === 'less than' ||
+                    condition === 'greater than' ||
+                    condition === 'equal' ||
+                    condition === 'not equal' ||
+                    condition === 'reference count less than' ||
+                    condition === 'reference count greater than' ||
+                    condition === 'reference count equal' ||
+                    condition === 'reference count not equal') && (
+                      <TextInput
+                        value={conditionValue}
+                        type="number"
+                        onChange={(e) => {
+                          updateInput('conditionValue', e.target.value);
+                        }}
+                        placeholder="Value"
+                        className={INPUT_STYLE_200}
+                      />
+                    )}
                   {/* Number field conditions - between (two values) */}
-                  {(condition === "between" ||
-                    condition === "reference count between") && (
+                  {(condition === 'between' || condition === 'reference count between') && (
                     <>
                       <TextInput
                         value={conditionValueMin}
                         type="number"
                         onChange={(e) => {
-                          updateInput("conditionValueMin", e.target.value);
+                          updateInput('conditionValueMin', e.target.value);
                         }}
                         placeholder="Min value"
                         className={INPUT_STYLE_150}
@@ -998,7 +876,7 @@ const ConfigScreen = () => {
                         value={conditionValueMax}
                         type="number"
                         onChange={(e) => {
-                          updateInput("conditionValueMax", e.target.value);
+                          updateInput('conditionValueMax', e.target.value);
                         }}
                         placeholder="Max value"
                         className={INPUT_STYLE_150}
@@ -1006,30 +884,24 @@ const ConfigScreen = () => {
                     </>
                   )}
                   {/* Reference field condition -  includes entry or includes asset */}
-                  {(condition === "includes entry" || condition === "includes asset") && (
+                  {(condition === 'includes entry' || condition === 'includes asset') && (
                     <Flex>
-                      <Button
-                        variant="secondary"
-                        size="medium"
-                        onClick={handleSelectEntriesOrAssets}
-                        className={BUTTON_MARGIN}
-                      >
-                        {condition === "includes asset" ? "Select Assets" : "Select Entries"} ({linkedEntryIds.length} selected)
+                      <Button variant="secondary" size="medium" onClick={handleSelectEntriesOrAssets} className={BUTTON_MARGIN}>
+                        {condition === 'includes asset' ? 'Select Assets' : 'Select Entries'} ({linkedEntryIds.length} selected)
                       </Button>
                       {linkedEntryIds.length > 0 && (
                         <Flex
                           gap="spacingXs"
                           flexWrap="wrap"
                           className={css({
-                            margin: "0 1rem !important",
-                          })}
-                        >
+                            margin: '0 1rem !important',
+                          })}>
                           {linkedEntryNames.map((name, index) => {
                             const itemId = linkedEntryIds[index];
-                            const isAsset = condition === "includes asset";
-                            const itemType = isAsset ? "assets" : "entries";
+                            const isAsset = condition === 'includes asset';
+                            const itemType = isAsset ? 'assets' : 'entries';
                             const url = `https://app.contentful.com/spaces/${sdk.ids.space}/environments/${sdk.ids.environment}/${itemType}/${itemId}`;
-                            
+
                             return (
                               <a
                                 key={index}
@@ -1037,13 +909,12 @@ const ConfigScreen = () => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className={css({
-                                  textDecoration: "none",
-                                  "&:hover": {
+                                  textDecoration: 'none',
+                                  '&:hover': {
                                     opacity: 0.8,
                                   },
-                                })}
-                              >
-                                <Badge variant="primary" className={css({ cursor: "pointer" })}>
+                                })}>
+                                <Badge variant="primary" className={css({ cursor: 'pointer' })}>
                                   {name}
                                 </Badge>
                               </a>
@@ -1054,19 +925,9 @@ const ConfigScreen = () => {
                     </Flex>
                   )}
                 </Flex>
-                <SectionHeading
-                  className={css({ margin: "20px 10px 0 0 !important" })}
-                >
-                  Hide field:
-                </SectionHeading>
-                <Flex
-                  alignItems="center"
-                  className={css({ marginBottom: 20, width: "100%" })}
-                  flexDirection="row"
-                >
-                  <Text className={css({ minWidth: 150 })}>
-                    Within content type
-                  </Text>
+                <SectionHeading className={css({ margin: '20px 10px 0 0 !important' })}>Hide field:</SectionHeading>
+                <Flex alignItems="center" className={css({ marginBottom: 20, width: '100%' })} flexDirection="row">
+                  <Text className={css({ minWidth: 150 })}>Within content type</Text>
                   <CustomSelect
                     value={targetEntity}
                     fieldId="targetEntity"
@@ -1080,45 +941,35 @@ const ConfigScreen = () => {
                   />
                   <Text
                     className={css({
-                      marginLeft: "40px !important",
+                      marginLeft: '40px !important',
                       minWidth: 100,
-                    })}
-                  >
+                    })}>
                     Hide field
                   </Text>
                   <Multiselect
                     currentSelection={getFieldName(
                       targetEntityField,
-                      targetEntity,
+                      targetEntity.includes('-sameEntity') ? targetEntity.substring(0, targetEntity.indexOf('-sameEntity')) : targetEntity,
                       contentTypes
                     )}
-                    className={css({ width: "300px !important" })}
-                  >
+                    className={css({ width: '300px !important' })}>
                     <Multiselect.SelectAll
                       onSelectItem={(event) => toggleAll(event.target.checked)}
-                      isChecked={
-                        targetEntityField.length === targetEntityFields.length
-                      }
+                      isChecked={targetEntityField.length === targetEntityFields.length}
                     />
                     {targetEntityFields.map((tef: any) => {
                       return (
                         <Multiselect.Option
-                          key={`key-${tef.id}}`}
-                          itemId={`space-${tef.id}}`}
+                          key={`key-${tef.id}`}
+                          itemId={`space-${tef.id}`}
                           value={tef.id}
-                          label={`${tef.name} ${
-                            tef.disabled ? "(Hidden when editing)" : ""
-                          }`}
+                          label={`${tef.name} ${tef.disabled ? '(Hidden when editing)' : ''}`}
                           onSelectItem={(ev) => {
                             setTargetEntityField((targetEntityField) => {
                               if (targetEntityField?.includes(tef.id)) {
-                                const targetEntityFieldCopy = [
-                                  ...targetEntityField,
-                                ];
+                                const targetEntityFieldCopy = [...targetEntityField];
                                 targetEntityFieldCopy.splice(
-                                  targetEntityField.findIndex(
-                                    (val) => val === ev.target.value
-                                  ),
+                                  targetEntityField.findIndex((val) => val === ev.target.value),
                                   1
                                 );
                                 return targetEntityFieldCopy;
@@ -1139,31 +990,24 @@ const ConfigScreen = () => {
       </Form>
 
       {!!parameters.rules && (
-        <RulesList
-          deleteRule={deleteRule}
-          rules={parameters.rules}
-          setRuleToEditIndex={setRuleToEditIndex}
-          ruleToEditIndex={ruleToEditIndex}
-        />
+        <RulesList deleteRule={deleteRule} rules={parameters.rules} setRuleToEditIndex={setRuleToEditIndex} ruleToEditIndex={ruleToEditIndex} />
       )}
 
       <Text
         className={css({
-          marginTop: "1rem !important",
-        })}
-      >
-        Built by{" "}
+          marginTop: '1rem !important',
+        })}>
+        Built by{' '}
         <a
           href="https://thrillworks.com?ref=flexfields"
           className={css({
-            fontWeight: "bold",
-            color: "rgb(1, 71, 81)",
-            transition: "all 0.2s ease-in-out",
-            ":hover": {
-              color: "rgb(239, 150, 89)",
+            fontWeight: 'bold',
+            color: 'rgb(1, 71, 81)',
+            transition: 'all 0.2s ease-in-out',
+            ':hover': {
+              color: 'rgb(239, 150, 89)',
             },
-          })}
-        >
+          })}>
           Thrillworks
         </a>
         .
