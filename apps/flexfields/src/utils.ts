@@ -50,6 +50,7 @@ export const isRuleValid = (rule: Rule, entryFields: any, entryContentType: stri
       isValid = contentTypeFieldValue !== conditionValue;
       break;
     case 'contains':
+    case 'includes':
       isValid = contentTypeFieldValue?.includes(conditionValue);
       break;
     case 'is empty':

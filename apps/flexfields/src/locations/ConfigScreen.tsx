@@ -34,7 +34,7 @@ interface CustomSelectProps {
   sdk?: any;
 }
 
-const COMPARISON_CONDITIONS = ['contains', 'is equal', 'is not equal', 'is empty', 'is not empty'];
+const COMPARISON_CONDITIONS = ['contains', 'includes', 'is equal', 'is not equal', 'is empty', 'is not empty'];
 
 const COMPARISON_CONDITIONS_NON_TEXT_FIELD = ['is empty', 'is not empty'];
 
