@@ -144,7 +144,6 @@ const ConfigScreen = () => {
 
         if (isNotFound) {
           await createAbTastyContainerContentType({ sdk });
-          sdk.app.onConfigure(() => onConfigure());
         } else {
           console.error('[onConfigure] Unexpected error while checking content type', err);
           throw err;
@@ -203,14 +202,15 @@ const ConfigScreen = () => {
     }
   }, [token]);
 
-  const handleUpdateContentTypes = (
-    updater: (prev: { id: string; referenceField: string[] }[]) => { id: string; referenceField: string[] }[]
-  ) => {
-    setParameters((prev) => ({
-      ...prev,
-      content_types: updater(prev.content_types || []),
-    }));
-  };
+  const handleUpdateContentTypes = useCallback(
+    (updater: (prev: { id: string; referenceField: string[] }[]) => { id: string; referenceField: string[] }[]) => {
+      setParameters((prev) => ({
+        ...prev,
+        content_types: updater(prev.content_types || []),
+      }));
+    },
+    []
+  );
 
   if (isUserLoading || isAccountsLoading) {
     return (

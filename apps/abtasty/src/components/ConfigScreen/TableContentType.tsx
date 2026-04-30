@@ -209,7 +209,8 @@ export const TableContentType = ({ sdk, selectedContentTypes, onUpdateContentTyp
         }))
       );
     }
-  }, [contentTypes.length, refFieldsByCt]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contentTypes.length, selectedContentTypes.length, refFieldsByCt, onUpdateContentTypes]);
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
