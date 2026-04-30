@@ -45,13 +45,10 @@ const Entry = () => {
       const filtered = (items as ContentTypeResponse[]).filter((ct) => {
         return (
           Array.isArray(ct.fields) &&
-          ct.fields.some((f: ContentTypeField) => {
-            if (f.type === 'Link') return f.linkType === 'Entry';
-            if (f.type === 'Array' && f.items?.type === 'Link') {
-              return f.items.linkType === 'Entry';
-            }
-              return false;
-          })
+          ct.fields.some(
+            (f: ContentTypeField) =>
+              f.type === 'Array' && f.items?.type === 'Link' && f.items?.linkType === 'Entry'
+          )
         );
       }).map(ct => ({ id: ct.sys.id, name: ct.name }));
       setAllContentTypes(filtered);
