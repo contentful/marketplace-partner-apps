@@ -63,7 +63,7 @@
     "cross-env": "7.0.3",
     "jsdom": "^26.0.0",
     "typescript": "4.9.5",
-    "vite": "^6.4.1",
+    "vite": "^6.4.2",
     "vitest": "^3.0.9",
     "prettier": "^3.7.4",
     "typescript-eslint": "^8.50.0",
