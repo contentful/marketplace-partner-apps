@@ -48,3 +48,35 @@ export type Variation = {
   name: string;
   modifications: Modifications;
 };
+
+export interface ContentTypeField {
+  id: string;
+  name: string;
+  type: string;
+  linkType?: string;
+  items?: {
+    type: string;
+    linkType?: string;
+  };
+}
+
+export interface ContentTypeResponse {
+  sys: {
+    id: string;
+  };
+  name: string;
+  fields?: ContentTypeField[];
+}
+
+export interface EntryReference {
+  sys: {
+    id: string;
+    type: string;
+    linkType?: string;
+    contentType?: {
+      sys: {
+        id: string;
+      };
+    };
+  };
+}
