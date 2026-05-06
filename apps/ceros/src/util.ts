@@ -19,7 +19,7 @@ export async function createDefaultContentType(sdk: ConfigAppSDK, cma: CMAClient
       environmentId: sdk.ids.environment,
       contentTypeId: DEFAULT_CONTENT_TYPE_ID,
     },
-    DEFAULT_CONTENT_TYPE
+    DEFAULT_CONTENT_TYPE,
   );
   await cma.contentType.publish({ contentTypeId: createdContentType.sys.id }, createdContentType);
   return createdContentType.sys.id;

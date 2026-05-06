@@ -1,6 +1,6 @@
 import { ConfigAppSDK } from '@contentful/app-sdk';
 import { Box, Checkbox, Flex, Form, FormControl, Heading, Note, Paragraph, Select } from '@contentful/f36-components';
-import { useCMA, useSDK } from '@contentful/react-apps-toolkit';
+import { useSDK } from '@contentful/react-apps-toolkit';
 import { css } from '@emotion/css';
 import { ContentTypeProps } from 'contentful-management';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -23,7 +23,7 @@ const ConfigScreen = () => {
 
   // Access to the SDK and CMA provided by the @contentful/react-apps-toolkit
   const sdk = useSDK<ConfigAppSDK>();
-  const cma = useCMA();
+  const cma = sdk.cma;
 
   // State to store various UI elements
   const [selectedContentType, setSelectedContentType] = useState<ContentTypeProps | null>(null);
