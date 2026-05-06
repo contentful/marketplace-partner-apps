@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.2](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.7.1...bynder-assets-v1.7.2) (2026-05-06)
+
+
+### Bug Fixes
+
+* **bynder:** Compact View resizing [FSB-11085] ([#8177](https://github.com/contentful/marketplace-partner-apps/issues/8177)) ([2c959ae](https://github.com/contentful/marketplace-partner-apps/commit/2c959ae3e5120df23baf0dc87900b57b919f4b0c))
+
 ## [1.7.1](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.7.0...bynder-assets-v1.7.1) (2026-03-13)
 
 
