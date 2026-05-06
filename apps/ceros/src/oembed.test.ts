@@ -130,10 +130,12 @@ describe('getExperienceMetadata', () => {
         expect.arrayContaining([
           expect.objectContaining({
             provider_name: 'Ceros',
+            provider_url: 'https://www.ceros.com/',
             endpoints: expect.arrayContaining([
               expect.objectContaining({
                 schemes: ['https://view.ceros.com/*'],
                 url: 'https://view.ceros.com/oembed',
+                discovery: true,
               }),
             ]),
           }),
@@ -148,10 +150,12 @@ describe('getExperienceMetadata', () => {
         expect.arrayContaining([
           expect.objectContaining({
             provider_name: 'Ceros',
+            provider_url: 'https://www.ceros.com/',
             endpoints: expect.arrayContaining([
               expect.objectContaining({
                 schemes: ['https://myaccount.ceros.site/*'],
                 url: 'https://myaccount.ceros.site/oembed',
+                discovery: true,
               }),
             ]),
           }),
