@@ -273,12 +273,12 @@ function getUrlFromAsset(installationParams: AppInstallationParameters, asset: C
       asset.version != null
         ? {
             type: asset.type,
-            rawTransformation: `/h_149/f_avif,fl_animated,e_loop/${asset.raw_transformation}`,
+            rawTransformation: `/h_149/f_avif,fl_animated,e_loop/${asset.raw_transformation ?? ''}`,
             version: String(asset.version),
           }
         : {
             type: asset.type,
-            rawTransformation: `/h_149/f_avif,fl_animated,e_loop/${asset.raw_transformation}`,
+            rawTransformation: `/h_149/f_avif,fl_animated,e_loop/${asset.raw_transformation ?? ''}`,
           };
 
     return cloudinary.video_url(asset.public_id, videoOptions);

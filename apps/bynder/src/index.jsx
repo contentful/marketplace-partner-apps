@@ -161,7 +161,7 @@ async function openDialog(sdk, _currentValue, config) {
     shouldCloseOnEscapePress: true,
     parameters,
     width: 'fullWidth',
-    minHeight: '80vh',
+    minHeight: '70vh',
   });
 
   if (!Array.isArray(result)) {
