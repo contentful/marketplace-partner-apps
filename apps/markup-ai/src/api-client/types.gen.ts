@@ -134,6 +134,98 @@ export type ApiKeyUpdate = {
 };
 
 /**
+ * AbandonedSignupFollowupResponse
+ *
+ * Response model for abandoned signup followup job.
+ */
+export type AbandonedSignupFollowupResponse = {
+  /**
+   * Workflow Id
+   *
+   * Temporal workflow ID (check Temporal UI for status)
+   */
+  workflow_id?: string | null;
+  /**
+   * Emails Sent
+   *
+   * Number of emails successfully sent (non-dry-run only)
+   */
+  emails_sent?: number | null;
+  /**
+   * Message
+   *
+   * Status message for early exit conditions
+   */
+  message?: string | null;
+  /**
+   * Error
+   *
+   * Error message if job failed
+   */
+  error?: string | null;
+  /**
+   * Dry Run
+   *
+   * Whether this was a dry run
+   */
+  dry_run?: boolean;
+  /**
+   * Would Send Count
+   *
+   * Number of emails that would be sent (dry-run only)
+   */
+  would_send_count?: number | null;
+  /**
+   * Users
+   *
+   * Users who would receive emails (dry-run only)
+   */
+  users?: Array<AbandonedSignupUserPreview> | null;
+  /**
+   * Excluded Count
+   *
+   * Number of users excluded (already sent or max retries exceeded)
+   */
+  excluded_count?: number | null;
+  /**
+   * Filtered Out Count
+   *
+   * Number of users filtered out by email pattern
+   */
+  filtered_out_count?: number | null;
+  /**
+   * Failed Count
+   *
+   * Number of emails that failed to send
+   */
+  failed_count?: number | null;
+  /**
+   * Errors
+   *
+   * Error messages for failed emails
+   */
+  errors?: Array<string> | null;
+};
+
+/**
+ * AbandonedSignupUserPreview
+ */
+export type AbandonedSignupUserPreview = {
+  /**
+   * Email
+   */
+  email: string;
+  /**
+   * Name
+   */
+  name?: string | null;
+  /**
+   * Created At
+   */
+  created_at: string;
+};
+
+/**
  * AccessPolicyRead
  *
  * Model for reading access policy data.
@@ -238,14 +330,87 @@ export type AccountResponse = {
 };
 
 /**
- * ActorType
+ * ActivityEventRequest
+ *
+ * Request body for tracking a user action on an agent issue.
+ *
+ * workflow_id and request_id are promoted to top-level fields on the
+ * ActivityEvent; the remaining fields are serialized into event_data.
  */
-export enum ActorType {
-  USER = "user",
-  SYSTEM = "system",
-  STRIPE = "stripe",
-  ADMIN = "admin",
-}
+export type ActivityEventRequest = {
+  /**
+   * Workflow Id
+   *
+   * Workflow ID of the check that produced the issue
+   */
+  workflow_id: string;
+  /**
+   * Request Id
+   *
+   * Request ID of the check that produced the issue
+   */
+  request_id: string;
+  /**
+   * Session Id
+   *
+   * Client-generated UUID per sidepanel lifecycle
+   */
+  session_id: string;
+  /**
+   * Action
+   *
+   * Action taken (e.g., 'APPLY_CHANGE', 'dismiss', 'mark-resolve')
+   */
+  action: string;
+  /**
+   * Issue Id
+   *
+   * Backend-generated issue ID (iss_xxx)
+   */
+  issue_id?: string | null;
+  /**
+   * Agent Id
+   *
+   * Stable agent ID (ag_<nanoid>)
+   */
+  agent_id?: string | null;
+  /**
+   * Agent Name
+   *
+   * Agent that produced the issue
+   */
+  agent_name?: string | null;
+  /**
+   * Action Source
+   *
+   * Where the action was triggered (e.g., 'sidebar', 'tooltip')
+   */
+  action_source: string;
+  /**
+   * Document Ref
+   *
+   * Normalized document URL
+   */
+  document_ref?: string | null;
+  /**
+   * Status
+   *
+   * Outcome of the action: 'success' or 'failed'
+   */
+  status?: string | null;
+  /**
+   * Error Code
+   *
+   * Error description if the action failed
+   */
+  error_code?: string | null;
+  /**
+   * Timestamp
+   *
+   * Timestamp when the action was initiated
+   */
+  timestamp?: string | null;
+};
 
 /**
  * AdminStyleGuideResponse
@@ -318,6 +483,279 @@ export type AdminStyleGuideResponse = {
    * Terminology Domains
    */
   terminology_domains?: Array<TerminologyDomainInfo> | null;
+};
+
+/**
+ * AgentListResult
+ *
+ * Result of listing agents with optional filtering and pagination.
+ */
+export type AgentListResult = {
+  /**
+   * Agents
+   *
+   * Agents for the current page
+   */
+  agents: Array<AgentMetadata>;
+  /**
+   * Total
+   *
+   * Total number of agents matching filters
+   */
+  total: number;
+  /**
+   * Page
+   *
+   * Current page number (1-based)
+   */
+  page: number;
+  /**
+   * Page Size
+   *
+   * Number of items per page
+   */
+  page_size: number;
+  /**
+   * Total Pages
+   *
+   * Total number of pages
+   */
+  total_pages: number;
+};
+
+/**
+ * AgentMetadata
+ *
+ * Metadata about a registered agent.
+ */
+export type AgentMetadata = {
+  /**
+   * Id
+   *
+   * Stable agent ID (ag_<nanoid>) used for API routing
+   */
+  id: string;
+  /**
+   * Description
+   *
+   * Agent description
+   */
+  description?: string | null;
+  /**
+   * Labs
+   *
+   * Whether this agent is in labs
+   */
+  labs?: boolean;
+  /**
+   * Input Schema
+   *
+   * Input JSON schema
+   */
+  input_schema?: {
+    [key: string]: unknown;
+  } | null;
+  /**
+   * Name
+   *
+   * Agent name
+   */
+  name: string;
+  /**
+   * Output Schema
+   *
+   * Output JSON schema
+   */
+  output_schema?: {
+    [key: string]: unknown;
+  } | null;
+  /**
+   * Categories
+   *
+   * Category IDs for discovery and filtering
+   */
+  categories?: Array<string>;
+  /**
+   * UI metadata
+   */
+  ui?: AgentUiMetadata;
+};
+
+/**
+ * AgentRunRequest
+ *
+ * Request to run an agent.
+ */
+export type AgentRunRequest = {
+  /**
+   * Text
+   *
+   * Document text to analyze.
+   */
+  text: string;
+  /**
+   * Agents
+   *
+   * Agent IDs to execute. Resolved to agent names server-side.
+   */
+  agents?: Array<string> | null;
+  /**
+   * Domain Ids
+   *
+   * Terminology domain IDs.
+   */
+  domain_ids?: Array<string> | null;
+  /**
+   * Document Ref
+   *
+   * Caller-provided document identifier for tracking across scans.
+   */
+  document_ref?: string | null;
+  /**
+   * Url
+   *
+   * Document URL.
+   */
+  url?: string | null;
+  /**
+   * Document Name
+   *
+   * Document name or title.
+   */
+  document_name?: string | null;
+  /**
+   * Target Id
+   *
+   * Language-service target ID for style checking.
+   */
+  target_id?: string | null;
+  /**
+   * Content Profile Id
+   *
+   * Language-service content profile ID for style checking.
+   */
+  content_profile_id?: string | null;
+  /**
+   * Goal
+   *
+   * Document goal for agent recommendation.
+   */
+  goal?: string | null;
+  /**
+   * Persona Id
+   *
+   * Agent configuration UUID for persona selection. Used by: persona.
+   */
+  persona_id?: string | null;
+  /**
+   * Voice Profile Id
+   *
+   * Agent configuration UUID for brand voice profile selection. Used by: brand_voice.
+   */
+  voice_profile_id?: string | null;
+  /**
+   * Webhook Url
+   *
+   * Optional webhook URL for async result delivery.
+   */
+  webhook_url?: string | null;
+};
+
+/**
+ * AgentRunResponse
+ *
+ * Response from agent run.
+ */
+export type AgentRunResponse = {
+  /**
+   * Workflow Id
+   *
+   * Workflow ID for tracking
+   */
+  workflow_id: string;
+  /**
+   * Request Id
+   *
+   * Request tracking ID
+   */
+  request_id?: string | null;
+  /**
+   * Workflow status
+   */
+  status: HeliosSharedCortexModelsResponseWorkflowStatus;
+  /**
+   * Document Ref
+   *
+   * Caller-provided document identifier.
+   */
+  document_ref?: string | null;
+  /**
+   * Result
+   *
+   * Execution result (if completed)
+   */
+  result?: {
+    [key: string]: unknown;
+  } | null;
+  /**
+   * Started At
+   *
+   * Workflow start time
+   */
+  started_at: string;
+  /**
+   * Completed At
+   *
+   * Workflow completion time
+   */
+  completed_at?: string | null;
+  /**
+   * Duration Seconds
+   *
+   * Execution duration
+   */
+  duration_seconds?: number | null;
+};
+
+/**
+ * AgentType
+ *
+ * Type of agent executor.
+ *
+ * - YAML: Prompt -> LLM -> structured output (single-step)
+ * - ACTIVITY: @activity.defn function (deterministic, can do I/O)
+ * - WORKFLOW: @workflow.defn class (orchestrator, can call child workflows)
+ */
+export enum AgentType {
+  YAML = "yaml",
+  ACTIVITY = "activity",
+  WORKFLOW = "workflow",
+}
+
+/**
+ * AgentUIMetadata
+ *
+ * UI presentation metadata for an agent.
+ */
+export type AgentUiMetadata = {
+  /**
+   * Title
+   *
+   * Display name override
+   */
+  title?: string | null;
+  /**
+   * Description
+   *
+   * Description override for UI
+   */
+  description?: string | null;
+  /**
+   * Icon
+   *
+   * Lucide icon key (e.g. 'spell-check')
+   */
+  icon?: string;
 };
 
 /**
@@ -404,6 +842,16 @@ export enum BaseStyleGuideType {
 }
 
 /**
+ * Body_Advanced Terminology-import_xml_dump_endpoint
+ */
+export type BodyAdvancedTerminologyImportXmlDumpEndpoint = {
+  /**
+   * File
+   */
+  file: Blob | File;
+};
+
+/**
  * Body_Style Guides-update_style_guide
  */
 export type BodyStyleGuidesUpdateStyleGuide = {
@@ -431,6 +879,114 @@ export type BodyTerminologyImportTerminology = {
    * CSV or ACTIF XML file containing terminology data
    */
   file: Blob | File;
+};
+
+/**
+ * BrandVoiceProfileCreate
+ */
+export type BrandVoiceProfileCreate = {
+  /**
+   * Name
+   */
+  name: string;
+  /**
+   * Identity
+   */
+  identity?: Array<string>;
+  /**
+   * Bright Lines
+   */
+  bright_lines?: Array<string>;
+  /**
+   * Fingerprints
+   */
+  fingerprints?: Array<FingerprintPayload>;
+  /**
+   * Exemplars
+   */
+  exemplars?: Array<ExemplarPayload>;
+};
+
+/**
+ * BrandVoiceProfileListResponse
+ */
+export type BrandVoiceProfileListResponse = {
+  /**
+   * Profiles
+   */
+  profiles: Array<BrandVoiceProfileResponse>;
+  /**
+   * Total
+   */
+  total: number;
+};
+
+/**
+ * BrandVoiceProfileResponse
+ */
+export type BrandVoiceProfileResponse = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Name
+   */
+  name: string;
+  /**
+   * Identity
+   */
+  identity: Array<string>;
+  /**
+   * Bright Lines
+   */
+  bright_lines: Array<string>;
+  /**
+   * Fingerprints
+   */
+  fingerprints: Array<FingerprintPayload>;
+  /**
+   * Exemplars
+   */
+  exemplars: Array<ExemplarPayload>;
+  /**
+   * Created By Email
+   */
+  created_by_email?: string | null;
+  /**
+   * Created At
+   */
+  created_at: string;
+  /**
+   * Updated At
+   */
+  updated_at: string;
+};
+
+/**
+ * BrandVoiceProfileUpdate
+ */
+export type BrandVoiceProfileUpdate = {
+  /**
+   * Name
+   */
+  name?: string | null;
+  /**
+   * Identity
+   */
+  identity?: Array<string> | null;
+  /**
+   * Bright Lines
+   */
+  bright_lines?: Array<string> | null;
+  /**
+   * Fingerprints
+   */
+  fingerprints?: Array<FingerprintPayload> | null;
+  /**
+   * Exemplars
+   */
+  exemplars?: Array<ExemplarPayload> | null;
 };
 
 /**
@@ -472,89 +1028,270 @@ export type BulkInvitationResponse = {
 };
 
 /**
- * CancelBehaviorForActiveOrders
- *
- * Cancel behavior enumeration for active orders
+ * BuyingAuthority
  */
-export enum CancelBehaviorForActiveOrders {
-  IMMEDIATELY = "immediately",
-  AT_PERIOD_END = "at_period_end",
+export enum BuyingAuthority {
+  DECISION_MAKER = "decision_maker",
+  RECOMMENDER = "recommender",
+  EVALUATOR = "evaluator",
+  INFLUENCER = "influencer",
+  END_USER = "end_user",
 }
 
 /**
- * CancelCancelationRequest
- *
- * Request model for canceling a cancel subscription request
+ * CategoryCreateRequest
  */
-export type CancelCancelationRequest = {
+export type CategoryCreateRequest = {
   /**
-   * Order Id
+   * Type
+   *
+   * Category type ID
    */
-  order_id: string;
+  type: string;
+  /**
+   * Name
+   */
+  name: string;
+  /**
+   * Displayname
+   */
+  displayname: string;
+  /**
+   * Parent
+   */
+  parent?: string | null;
+  /**
+   * Priority
+   */
+  priority?: number;
+  /**
+   * Issystem
+   */
+  issystem?: boolean;
 };
 
 /**
- * CancelCancelationResponse
+ * CategoryDefinition
  *
- * Response model for canceling a cancel subscription request
+ * A single agent category for API responses.
  */
-export type CancelCancelationResponse = {
+export type CategoryDefinition = {
   /**
-   * Message
+   * Id
+   *
+   * Stable category ID (e.g. 'cat_r2FOEuqy06OR')
    */
-  message: string;
+  id: string;
+  /**
+   * Name
+   *
+   * Human-readable display name
+   */
+  name: string;
+  /**
+   * Description
+   *
+   * What this category covers
+   */
+  description: string;
 };
 
 /**
- * CancelDowngradeRequest
+ * CategoryListResult
  *
- * Request model for canceling a downgrade request
+ * Result of listing all available categories.
  */
-export type CancelDowngradeRequest = {
+export type CategoryListResult = {
   /**
-   * Order Id
+   * Categories
+   *
+   * All defined categories
    */
-  order_id?: string | null;
+  categories: Array<CategoryDefinition>;
+  /**
+   * Total
+   *
+   * Total number of categories
+   */
+  total: number;
 };
 
 /**
- * CancelDowngradeResponse
- *
- * Response model for canceling a downgrade request
+ * CategoryResponse
  */
-export type CancelDowngradeResponse = {
+export type CategoryResponse = {
   /**
-   * Message
+   * Id
    */
-  message: string;
+  id: string;
+  /**
+   * Type
+   */
+  type: string;
+  /**
+   * Parent
+   */
+  parent?: string | null;
+  /**
+   * Name
+   */
+  name: string;
+  /**
+   * Displayname
+   */
+  displayname: string;
+  /**
+   * Priority
+   */
+  priority?: number | null;
+  /**
+   * Issystem
+   */
+  issystem: boolean;
+  /**
+   * Uuid
+   */
+  uuid: string;
+  /**
+   * External Id
+   */
+  external_id: string;
 };
 
 /**
- * CancelSubscriptionRequest
- *
- * Request model for canceling a subscription
+ * CategoryTypeCreateRequest
  */
-export type CancelSubscriptionRequest = {
+export type CategoryTypeCreateRequest = {
   /**
-   * Order Id
+   * Name
    */
-  order_id?: string | null;
+  name: string;
   /**
-   * Cancel Reason
+   * Displayname
    */
-  cancel_reason?: string | null;
+  displayname: string;
+  /**
+   * Hierarchical
+   */
+  hierarchical?: boolean;
+  /**
+   * System
+   */
+  system?: boolean;
+  /**
+   * Closed
+   */
+  closed?: boolean;
+  /**
+   * Relationtype
+   */
+  relationtype?: number;
+  /**
+   * Membershaveseparatedisplayname
+   */
+  membershaveseparatedisplayname?: boolean;
 };
 
 /**
- * CancelSubscriptionResponse
- *
- * Response model for canceling a subscription
+ * CategoryTypeResponse
  */
-export type CancelSubscriptionResponse = {
+export type CategoryTypeResponse = {
   /**
-   * Message
+   * Id
    */
-  message: string;
+  id: string;
+  /**
+   * Name
+   */
+  name: string;
+  /**
+   * Displayname
+   */
+  displayname: string;
+  /**
+   * Hierarchical
+   */
+  hierarchical: boolean;
+  /**
+   * System
+   */
+  system: boolean;
+  /**
+   * Closed
+   */
+  closed: boolean;
+  /**
+   * Relationtype
+   */
+  relationtype: number;
+  /**
+   * Membershaveseparatedisplayname
+   */
+  membershaveseparatedisplayname: boolean;
+  /**
+   * Uuid
+   */
+  uuid: string;
+  /**
+   * External Id
+   */
+  external_id: string;
+  /**
+   * Category Count
+   */
+  category_count?: number;
+};
+
+/**
+ * CategoryTypeUpdateRequest
+ */
+export type CategoryTypeUpdateRequest = {
+  /**
+   * Name
+   */
+  name?: string | null;
+  /**
+   * Displayname
+   */
+  displayname?: string | null;
+  /**
+   * Hierarchical
+   */
+  hierarchical?: boolean | null;
+  /**
+   * Closed
+   */
+  closed?: boolean | null;
+  /**
+   * Relationtype
+   */
+  relationtype?: number | null;
+  /**
+   * Membershaveseparatedisplayname
+   */
+  membershaveseparatedisplayname?: boolean | null;
+};
+
+/**
+ * CategoryUpdateRequest
+ */
+export type CategoryUpdateRequest = {
+  /**
+   * Name
+   */
+  name?: string | null;
+  /**
+   * Displayname
+   */
+  displayname?: string | null;
+  /**
+   * Parent
+   */
+  parent?: string | null;
+  /**
+   * Priority
+   */
+  priority?: number | null;
 };
 
 /**
@@ -683,42 +1420,50 @@ export type ConstantsResponse = {
 };
 
 /**
- * CooldownInfo
- *
- * Cooldown information for an API key.
+ * ContentProfileResponse
  */
-export type CooldownInfo = {
+export type ContentProfileResponse = {
   /**
-   * Api Key
-   *
-   * The API key identifier
+   * Id
    */
-  api_key: string;
+  id: string;
   /**
-   * Remaining Seconds
-   *
-   * Remaining cooldown time in seconds
+   * Profile Id
    */
-  remaining_seconds: number;
+  profile_id: string;
   /**
-   * Cooldown Type
-   *
-   * Type of cooldown (increase/decrease)
+   * Organization Name
    */
-  cooldown_type: string;
+  organization_name: string;
+  /**
+   * Display Name
+   */
+  display_name: string;
+  /**
+   * Description
+   */
+  description?: string | null;
+  /**
+   * Enabled
+   */
+  enabled?: boolean | null;
+  /**
+   * Inherited
+   */
+  inherited?: boolean | null;
+  /**
+   * Source Organization
+   */
+  source_organization?: string | null;
 };
 
 /**
- * CreateSubscriptionRequest
- *
- * Request model for creating a subscription
+ * ContextPolarity
  */
-export type CreateSubscriptionRequest = {
-  /**
-   * Product Price Id
-   */
-  product_price_id: string;
-};
+export enum ContextPolarity {
+  INCLUDE = "include",
+  EXCLUDE = "exclude",
+}
 
 /**
  * CreatorResponse
@@ -735,12 +1480,77 @@ export type CreatorResponse = {
 };
 
 /**
- * Currency
+ * CurrentPriority
  */
-export enum Currency {
-  USD = "usd",
-  EUR = "eur",
+export enum CurrentPriority {
+  PLATFORM_MIGRATION = "platform_migration",
+  TEAM_EFFICIENCY = "team_efficiency",
+  EXEC_PRESSURE = "exec_pressure",
+  INNOVATION_LEADERSHIP = "innovation_leadership",
+  REVENUE_GROWTH = "revenue_growth",
+  BRAND_AUTHENTICITY = "brand_authenticity",
+  LOYALTY_PROGRAMS = "loyalty_programs",
+  AI_ADOPTION = "ai_adoption",
+  CDP_EVALUATION = "cdp_evaluation",
+  CHANNEL_EXPANSION = "channel_expansion",
+  RETENTION = "retention",
 }
+
+/**
+ * CustomFieldValueResponse
+ *
+ * One custom field's resolved value for a term.
+ *
+ * Backed by adv_customfieldejb (definition) + adv_customfieldvalueejb (value).
+ * For CATEGORIES (multi-select), multiple value rows for the same (term, field)
+ * pair are collapsed into a single response with `category_values` populated.
+ *
+ * `field_uuid` is the preserved XML uuid from the original Acrolinx dump. It
+ * survives import/export round-trips and is what `termEditCfg` references —
+ * use it (not `field_id`, which is our internal DB PK) for visibility lookups.
+ */
+export type CustomFieldValueResponse = {
+  /**
+   * Field Id
+   */
+  field_id: string;
+  /**
+   * Field Uuid
+   */
+  field_uuid: string;
+  /**
+   * Name
+   */
+  name: string;
+  /**
+   * Displayname
+   */
+  displayname: string;
+  /**
+   * Type
+   */
+  type: string;
+  /**
+   * Isconceptlevel
+   */
+  isconceptlevel: boolean;
+  /**
+   * Ismultiline
+   */
+  ismultiline: boolean;
+  /**
+   * Location
+   */
+  location: number;
+  /**
+   * String Value
+   */
+  string_value?: string | null;
+  /**
+   * Category Values
+   */
+  category_values?: Array<CategoryResponse>;
+};
 
 /**
  * Dialects
@@ -884,6 +1694,15 @@ export type DuplicateStyleGuideResponse = {
 };
 
 /**
+ * EffortTolerance
+ */
+export enum EffortTolerance {
+  LOW = "low",
+  MEDIUM = "medium",
+  HIGH = "high",
+}
+
+/**
  * EmailTestRequest
  */
 export type EmailTestRequest = {
@@ -924,55 +1743,22 @@ export type ErrorResponse = {
 };
 
 /**
- * EventCategory
+ * ExemplarPayload
  */
-export enum EventCategory {
-  SUBSCRIPTION = "subscription",
-  BILLING = "billing",
-  LIMITS = "limits",
-  SETTINGS = "settings",
-  PAYMENT = "payment",
-  PLAN = "plan",
-  USER_MANAGEMENT = "user_management",
-  API_USAGE = "api_usage",
-  ORGANIZATION = "organization",
-}
-
-/**
- * EventType
- */
-export enum EventType {
-  PENDING_DOWNGRADE = "pending_downgrade",
-  PENDING_UPGRADE = "pending_upgrade",
-  ORGANIZATION_CREATED_STRIPE_CUSTOMER = "organization_created_stripe_customer",
-  ORGANIZATION_CREATED_CHECKOUT_SESSION = "organization_created_checkout_session",
-  ORGANIZATION_UPDATED = "organization_updated",
-  ORGANIZATION_RESOURCES_UPDATED = "organization_resources_updated",
-  SUBSCRIPTION_CREATED = "subscription_created",
-  SUBSCRIPTION_UPDATED = "subscription_updated",
-  SUBSCRIPTION_DELETED = "subscription_deleted",
-  SUBSCRIPTION_CANCELLED = "subscription_cancelled",
-  SUBSCRIPTION_CANCEL_REQUESTED = "subscription_cancel_requested",
-  SUBSCRIPTION_CANCELLED_CANCELATION = "subscription_cancelled_cancelation",
-  SUBSCRIPTION_NOT_FOUND_ERROR = "subscription_not_found_error",
-  SUBSCRIPTION_CANCELLED_ERROR = "subscription_cancelled_error",
-  SUBSCRIPTION_CANCELLED_CANCELATION_ERROR = "subscription_cancelled_cancelation_error",
-  PLAN_UPGRADED = "plan_upgraded",
-  PLAN_DOWNGRADED = "plan_downgraded",
-  ACCOUNT_SUSPENDED = "account_suspended",
-  INCREASED_TERM_LIMIT = "increased_term_limit",
-  INCREASED_STYLE_GUIDE_LIMIT = "increased_style_guide_limit",
-  INCREASED_TOKEN_LIMIT = "increased_token_limit",
-  DECREASED_TERM_LIMIT = "decreased_term_limit",
-  DECREASED_STYLE_GUIDE_LIMIT = "decreased_style_guide_limit",
-  DECREASED_TOKEN_LIMIT = "decreased_token_limit",
-  PAYMENT_INITIATED = "payment_initiated",
-  PAYMENT_SUCCEEDED = "payment_succeeded",
-  PAYMENT_FAILED = "payment_failed",
-  PAYMENT_METHOD_ATTACHED = "payment_method_attached",
-  PAYMENT_SUCCEEDED_ERROR = "payment_succeeded_error",
-  TOKEN_RESET = "token_reset",
-}
+export type ExemplarPayload = {
+  /**
+   * Passage
+   */
+  passage: string;
+  /**
+   * Annotation
+   */
+  annotation?: string;
+  /**
+   * Fingerprint Names
+   */
+  fingerprint_names?: Array<string>;
+};
 
 /**
  * FeedbackRequest
@@ -1006,6 +1792,161 @@ export type FeedbackRequest = {
    * Category
    */
   category?: string | null;
+};
+
+/**
+ * FingerprintPayload
+ */
+export type FingerprintPayload = {
+  /**
+   * Name
+   */
+  name: string;
+  /**
+   * Description
+   */
+  description: string;
+  /**
+   * Source
+   */
+  source?: string;
+};
+
+/**
+ * GenerateBrandVoiceRequest
+ */
+export type GenerateBrandVoiceRequest = {
+  /**
+   * Guide Text
+   */
+  guide_text: string;
+  /**
+   * Exemplar Texts
+   */
+  exemplar_texts?: Array<string>;
+};
+
+/**
+ * GenerateBrandVoiceResponse
+ */
+export type GenerateBrandVoiceResponse = {
+  profile: GeneratedBrandVoiceProfile;
+};
+
+/**
+ * GeneratePersonaRequest
+ *
+ * Request to generate a persona from a text description.
+ */
+export type GeneratePersonaRequest = {
+  /**
+   * Description
+   */
+  description: string;
+};
+
+/**
+ * GeneratePersonaResponse
+ */
+export type GeneratePersonaResponse = {
+  /**
+   * Persona
+   *
+   * Generated persona fields (without id/timestamps)
+   */
+  persona: {
+    [key: string]: unknown;
+  };
+  /**
+   * Uncertain Fields
+   */
+  uncertain_fields: Array<UncertainField>;
+};
+
+/**
+ * GenerateRuleRequest
+ *
+ * Request to generate a term rule from a natural language description.
+ */
+export type GenerateRuleRequest = {
+  /**
+   * Prompt
+   *
+   * Natural language description of the term rule
+   */
+  prompt: string;
+};
+
+/**
+ * GenerateRuleResponse
+ *
+ * Structured term rule extracted from a natural language description.
+ */
+export type GenerateRuleResponse = {
+  /**
+   * Terms
+   *
+   * Terms being defined
+   */
+  terms?: Array<string>;
+  /**
+   * Term Type
+   *
+   * Type of rule: 'prohibited' or 'preferred'
+   */
+  term_type?: "prohibited" | "preferred";
+  /**
+   * Replacements
+   *
+   * Alternative/replacement terms
+   */
+  replacements?: Array<string>;
+  /**
+   * Context
+   *
+   * Contextual conditions or exceptions
+   */
+  context?: string;
+};
+
+/**
+ * GenerateRulesResponse
+ *
+ * Multiple term rules extracted from a natural language description.
+ */
+export type GenerateRulesResponse = {
+  /**
+   * Rules
+   *
+   * List of generated term rules
+   */
+  rules?: Array<GenerateRuleResponse>;
+};
+
+/**
+ * GeneratedBrandVoiceProfile
+ */
+export type GeneratedBrandVoiceProfile = {
+  /**
+   * Name
+   */
+  name: string;
+  /**
+   * Identity
+   */
+  identity?: Array<string>;
+  /**
+   * Bright Lines
+   */
+  bright_lines?: Array<string>;
+  /**
+   * Fingerprints
+   */
+  fingerprints?: Array<FingerprintPayload>;
+  /**
+   * Exemplars
+   */
+  exemplars?: Array<ExemplarPayload>;
 };
 
 /**
@@ -1085,6 +2026,16 @@ export type GrammarScore = {
 };
 
 /**
+ * GuidedModeSwitchFeedbackRequest
+ */
+export type GuidedModeSwitchFeedbackRequest = {
+  /**
+   * Note
+   */
+  note: string;
+};
+
+/**
  * ImportSummary
  */
 export type ImportSummary = {
@@ -1117,6 +2068,22 @@ export type ImportSummary = {
    */
   errors?: Array<string>;
 };
+
+/**
+ * Industry
+ */
+export enum Industry {
+  QSR = "qsr",
+  CPG = "cpg",
+  FINTECH = "fintech",
+  COSMETICS = "cosmetics",
+  BEVERAGE = "beverage",
+  RETAIL = "retail",
+  GAMING = "gaming",
+  B2B_SAAS = "b2b_saas",
+  HEALTHCARE = "healthcare",
+  MEDIA = "media",
+}
 
 /**
  * Invitation
@@ -1169,106 +2136,6 @@ export type InvitedUser = {
 };
 
 /**
- * InvoiceResponse
- *
- * Response model for invoice data
- */
-export type InvoiceResponse = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Organization Id
-   */
-  organization_id: string;
-  /**
-   * Order Id
-   */
-  order_id?: string | null;
-  /**
-   * Stripe Customer Id
-   */
-  stripe_customer_id?: string | null;
-  /**
-   * Stripe Subscription Id
-   */
-  stripe_subscription_id?: string | null;
-  /**
-   * Stripe Invoice Id
-   */
-  stripe_invoice_id: string;
-  /**
-   * Hosted Invoice Url
-   */
-  hosted_invoice_url?: string | null;
-  /**
-   * Invoice Pdf
-   */
-  invoice_pdf?: string | null;
-  /**
-   * Status
-   */
-  status: string;
-  /**
-   * Amount Due
-   */
-  amount_due?: number | null;
-  /**
-   * Currency
-   */
-  currency?: string | null;
-  /**
-   * Attempt Count
-   */
-  attempt_count?: number | null;
-  /**
-   * Paid At
-   */
-  paid_at?: string | null;
-  /**
-   * Due Date
-   */
-  due_date?: string | null;
-  /**
-   * Period Start
-   */
-  period_start?: string | null;
-  /**
-   * Period End
-   */
-  period_end?: string | null;
-  /**
-   * Billing Reason
-   */
-  billing_reason?: string | null;
-  /**
-   * Metadata
-   */
-  metadata?: {
-    [key: string]: unknown;
-  } | null;
-  /**
-   * Lines
-   */
-  lines?: Array<{
-    [key: string]: unknown;
-  }> | null;
-  /**
-   * Next Payment Attempt
-   */
-  next_payment_attempt?: string | null;
-  /**
-   * Created At
-   */
-  created_at: string;
-  /**
-   * Updated At
-   */
-  updated_at: string;
-};
-
-/**
  * Issue
  */
 export type Issue = {
@@ -1309,6 +2176,115 @@ export enum IssueCategory {
 }
 
 /**
+ * LabsAgentAccessBulkUpdate
+ *
+ * Body for the bulk PUT endpoint.
+ *
+ * If `agent_ids` is omitted, applies `enabled` to every *current* labs agent
+ * (the "enable all / disable all" button in the admin UI).
+ */
+export type LabsAgentAccessBulkUpdate = {
+  /**
+   * Enabled
+   */
+  enabled: boolean;
+  /**
+   * Agent Ids
+   *
+   * Optional subset of current labs agent_ids to update. If omitted, applies to every current labs agent.
+   */
+  agent_ids?: Array<string> | null;
+};
+
+/**
+ * LabsAgentAccessEntry
+ *
+ * One labs agent, with its display metadata and current toggle state.
+ */
+export type LabsAgentAccessEntry = {
+  /**
+   * Agent Id
+   *
+   * Stable agent id, e.g. ag_FcW2nRs5tYzA
+   */
+  agent_id: string;
+  /**
+   * Name
+   *
+   * Internal agent name (matches agents.yaml key)
+   */
+  name: string;
+  /**
+   * Title
+   *
+   * Human-readable title (from ui.title)
+   */
+  title?: string | null;
+  /**
+   * Description
+   *
+   * Agent description
+   */
+  description?: string | null;
+  /**
+   * Icon
+   *
+   * Lucide icon key (from ui.icon)
+   */
+  icon: string;
+  /**
+   * Enabled
+   *
+   * Whether this org can use the agent
+   */
+  enabled: boolean;
+};
+
+/**
+ * LabsAgentAccessList
+ */
+export type LabsAgentAccessList = {
+  /**
+   * Agents
+   */
+  agents: Array<LabsAgentAccessEntry>;
+  /**
+   * Can Update
+   *
+   * Whether the current user can update labs agent access for this org
+   */
+  can_update: boolean;
+};
+
+/**
+ * LabsAgentAccessUpdate
+ *
+ * Body for the single-toggle PUT endpoint.
+ */
+export type LabsAgentAccessUpdate = {
+  /**
+   * Enabled
+   */
+  enabled: boolean;
+};
+
+/**
+ * LinkedTermSummary
+ */
+export type LinkedTermSummary = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Surface
+   */
+  surface: string;
+  status?: CategoryResponse | null;
+  language?: CategoryResponse | null;
+};
+
+/**
  * MatchedTerm
  */
 export type MatchedTerm = {
@@ -1333,323 +2309,150 @@ export type Member = {
 };
 
 /**
- * OrderModel
+ * OAuthExchangeResponse
+ */
+export type OAuthExchangeResponse = {
+  /**
+   * Access Token
+   *
+   * Access token from Auth0
+   */
+  access_token: string;
+  /**
+   * Expires In
+   *
+   * Access token lifetime in seconds
+   */
+  expires_in: number;
+  /**
+   * Refresh Token
+   *
+   * Refresh token from Auth0 when offline_access scope is used
+   */
+  refresh_token?: string | null;
+};
+
+/**
+ * OAuthLogoutResponse
+ */
+export type OAuthLogoutResponse = {
+  /**
+   * Logout Url
+   *
+   * URL to open in the browser to logout
+   */
+  logout_url: string;
+};
+
+/**
+ * OAuthPollResponse
+ */
+export type OAuthPollResponse = {
+  /**
+   * Status
+   */
+  status: string;
+  /**
+   * Code
+   */
+  code?: string | null;
+  /**
+   * Error
+   */
+  error?: string | null;
+};
+
+/**
+ * OAuthStartRequest
  *
- * Response model for order data
+ * Optional payload for /oauth/{integration_id}/start.
+ *
+ * When ``organization`` is supplied, the relay forwards it as the
+ * ``organization`` query parameter on Auth0's ``/authorize`` URL so the
+ * resulting access token is scoped to that org (token claims include
+ * ``org_id`` and ``org_name``). When omitted, Auth0 falls back to the
+ * organization picker per the integration_oauth client's
+ * ``organization_require_behavior = "post_login_prompt"`` setting.
  */
-export type OrderModel = {
+export type OAuthStartRequest = {
   /**
-   * Order Id
+   * Organization
+   *
+   * Auth0 organization id (e.g. 'org_xxx') to scope the login to.
    */
-  order_id: string;
-  /**
-   * Organization Id
-   */
-  organization_id: string;
-  /**
-   * Product Id
-   */
-  product_id: string;
-  /**
-   * Product Price Id
-   */
-  product_price_id: string;
-  /**
-   * Stripe Subscription Id
-   */
-  stripe_subscription_id: string | null;
-  order_type: HeliosOneDatabaseModelsEnumsOrderType;
-  billing_cycle: HeliosOneApiModulesSubscriptionSchemasSubscriptionApiModelBillingCycle | null;
-  order_status: OrderStatus;
-  stripe_subscription_status: StripeSubscriptionStatus | null;
-  /**
-   * Current Period Start
-   */
-  current_period_start: string | null;
-  /**
-   * Current Period End
-   */
-  current_period_end: string | null;
-  /**
-   * Cancel At Period End
-   */
-  cancel_at_period_end: boolean;
-  /**
-   * Cancel Reason
-   */
-  cancel_reason?: string | null;
-  /**
-   * Created At
-   */
-  created_at: string;
-  /**
-   * Updated At
-   */
-  updated_at: string;
-  /**
-   * Is Visible
-   */
-  is_visible: boolean;
-  product: ProductModel | null;
-  product_price: ProductPriceModel | null;
-  /**
-   * Next Order Id
-   */
-  next_order_id?: string | null;
-  /**
-   * Last Token Reset At
-   */
-  last_token_reset_at?: string | null;
-  /**
-   * Token Limit
-   */
-  token_limit: number;
-  /**
-   * Style Guide Limit
-   */
-  style_guide_limit: number;
-  /**
-   * Term Limit
-   */
-  term_limit: number;
+  organization?: string | null;
 };
 
 /**
- * OrderStatus
+ * OAuthStartResponse
  */
-export enum OrderStatus {
-  ACTIVE = "active",
-  PENDING = "pending",
-  CANCELED = "canceled",
-  CANCEL_REQUESTED = "cancel_requested",
-  UPGRADE_REQUESTED = "upgrade_requested",
-  DOWNGRADE_REQUESTED = "downgrade_requested",
-  FAILED = "failed",
-  PAST_DUE = "past_due",
-  UNPAID = "unpaid",
-  INCOMPLETE = "incomplete",
-  INCOMPLETE_EXPIRED = "incomplete_expired",
-}
-
-/**
- * OrderUpdate
- */
-export type OrderUpdate = {
-  order_type?: HeliosOneDatabaseModelsEnumsOrderType | null;
-  billing_cycle?: HeliosOneDatabaseModelsEnumsBillingCycle | null;
-  payment_method?: PaymentMethod | null;
-  order_status?: OrderStatus | null;
-  stripe_subscription_status?: StripeSubscriptionStatus | null;
+export type OAuthStartResponse = {
   /**
-   * Stripe Subscription Id
+   * Read Key
+   *
+   * Key used by the plugin to poll for auth result
    */
-  stripe_subscription_id?: string | null;
+  read_key: string;
   /**
-   * Stripe Payment Method Id
+   * Write Key
+   *
+   * Key used during browser auth flow
    */
-  stripe_payment_method_id?: string | null;
+  write_key: string;
   /**
-   * Current Period Start
+   * Authorize Url
+   *
+   * URL to open in the browser for authorization
    */
-  current_period_start?: string | null;
-  /**
-   * Current Period End
-   */
-  current_period_end?: string | null;
-  /**
-   * Cancel At Period End
-   */
-  cancel_at_period_end?: boolean | null;
-  /**
-   * Is Visible
-   */
-  is_visible?: boolean | null;
-  /**
-   * Is Invoiced
-   */
-  is_invoiced?: boolean | null;
-  /**
-   * Cancel Reason
-   */
-  cancel_reason?: string | null;
-  /**
-   * Product Id
-   */
-  product_id?: string | null;
-  /**
-   * Product Price Id
-   */
-  product_price_id?: string | null;
-  /**
-   * Token Limit
-   */
-  token_limit?: number | null;
-  /**
-   * Style Guide Limit
-   */
-  style_guide_limit?: number | null;
-  /**
-   * Term Limit
-   */
-  term_limit?: number | null;
-  /**
-   * Next Order Id
-   */
-  next_order_id?: string | null;
-  /**
-   * Last Token Reset At
-   */
-  last_token_reset_at?: string | null;
+  authorize_url: string;
 };
 
 /**
- * OrgEventHistory
+ * OAuthTokenRequest
+ *
+ * OAuth 2.0 token request. Use grant_type to select authorization_code or refresh_token.
  */
-export type OrgEventHistory = {
+export type OAuthTokenRequest = {
   /**
-   * Organization Id
+   * Grant Type
    *
-   * ID of the organization this event relates to
+   * Grant type: authorization_code to exchange a code, refresh_token to refresh
    */
-  organization_id: string;
+  grant_type?: "authorization_code" | "refresh_token";
   /**
-   * Actor Id
+   * Code
    *
-   * ID of the admin or system user who triggered the event
+   * Authorization code (required when grant_type=authorization_code)
    */
-  actor_id: string | null;
+  code?: string | null;
   /**
-   * Type of actor
-   */
-  actor_type: ActorType;
-  /**
-   * Event Category
+   * Refresh Token
    *
-   * Event category for grouping
+   * Refresh token (required when grant_type=refresh_token)
    */
-  event_category: string;
-  /**
-   * Event Type
-   *
-   * Specific event type (free-form for finer granularity)
-   */
-  event_type: string;
-  /**
-   * Title
-   *
-   * Short title for the event (e.g., 'Plan Upgraded', 'Term Limit Increased')
-   */
-  title: string;
-  /**
-   * Description
-   *
-   * Detailed description of what happened
-   */
-  description: string;
-  /**
-   * Summary
-   *
-   * Brief summary for quick overview
-   */
-  summary?: string | null;
-  /**
-   * Modified Field Names
-   *
-   * Names of the modified fields
-   */
-  modified_field_names?: Array<string> | null;
-  /**
-   * Old Values
-   *
-   * Previous snapshot before the change
-   */
-  old_values?: {
-    [key: string]: unknown;
-  } | null;
-  /**
-   * New Values
-   *
-   * New snapshot after the change
-   */
-  new_values?: {
-    [key: string]: unknown;
-  } | null;
-  /**
-   * Is Visible
-   *
-   * Whether this event should be visible in the frontend
-   */
-  is_visible?: boolean;
-  /**
-   * Created At
-   *
-   * When the event record was created
-   */
-  created_at?: string;
-  /**
-   * Id
-   */
-  id?: string;
+  refresh_token?: string | null;
 };
 
 /**
- * OrgEventHistoryUpdate
+ * OrganizationConfigResponse
+ *
+ * Org-level configuration slice that drives client-side behaviour.
+ *
+ * Returned by ``GET /account/config`` for both JWT and API-key auth. The
+ * organization is identified by the auth credential — no request-side org
+ * id is needed (the API key already carries one). This intentionally omits
+ * user_profile / user fields that don't make sense for API-key callers.
  */
-export type OrgEventHistoryUpdate = {
+export type OrganizationConfigResponse = {
   /**
-   * Title
+   * Is Acrolinx Classic
    */
-  title?: string | null;
+  is_acrolinx_classic: boolean;
+  style_agent: StyleAgentMode;
   /**
-   * Description
+   * Style Agent Numeric Scoring
    */
-  description?: string | null;
-  /**
-   * Summary
-   */
-  summary?: string | null;
-  /**
-   * Is Visible
-   */
-  is_visible?: boolean | null;
-  /**
-   * Modified Field Names
-   */
-  modified_field_names?: Array<string> | null;
-  /**
-   * Old Values
-   */
-  old_values?: {
-    [key: string]: unknown;
-  } | null;
-  /**
-   * New Values
-   */
-  new_values?: {
-    [key: string]: unknown;
-  } | null;
-};
-
-/**
- * Organization
- */
-export type Organization = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Display Name
-   */
-  display_name: string;
-  /**
-   * Picture
-   */
-  picture: string;
+  style_agent_numeric_scoring: boolean;
 };
 
 /**
@@ -1860,14 +2663,11 @@ export type OrganizationResponseAdmin = {
    * Is Acrolinx Classic
    */
   is_acrolinx_classic: boolean;
+  style_agent?: StyleAgentMode;
   /**
-   * Stripe Customer Id
+   * Style Agent Numeric Scoring
    */
-  stripe_customer_id?: string | null;
-  /**
-   * Billing Status
-   */
-  billing_status?: string | null;
+  style_agent_numeric_scoring?: boolean;
   /**
    * Trial
    */
@@ -1947,6 +2747,11 @@ export type OrganizationResponseFull = {
    * Is Acrolinx Classic
    */
   is_acrolinx_classic: boolean;
+  style_agent?: StyleAgentMode;
+  /**
+   * Style Agent Numeric Scoring
+   */
+  style_agent_numeric_scoring?: boolean;
   /**
    * Trial
    */
@@ -2006,9 +2811,9 @@ export type OrganizationSignupRequest = {
   /**
    * Captcha Response
    *
-   * CAPTCHA response
+   * CAPTCHA response (optional for clients exempt via captcha_exempt_client_ids)
    */
-  captcha_response: string;
+  captcha_response?: string | null;
 };
 
 /**
@@ -2085,14 +2890,11 @@ export type OrganizationUpdate = {
    * Is Acrolinx Classic
    */
   is_acrolinx_classic?: boolean | null;
+  style_agent?: StyleAgentMode | null;
   /**
-   * Stripe Customer Id
+   * Style Agent Numeric Scoring
    */
-  stripe_customer_id?: string | null;
-  /**
-   * Billing Status
-   */
-  billing_status?: string | null;
+  style_agent_numeric_scoring?: boolean | null;
 };
 
 /**
@@ -2104,6 +2906,18 @@ export type OriginalContent = {
    */
   issues?: Array<Issue>;
   scores?: ScoreOutput | null;
+  /**
+   * High Risk Count
+   */
+  readonly high_risk_count: number;
+  /**
+   * Medium Risk Count
+   */
+  readonly medium_risk_count: number;
+  /**
+   * Low Risk Count
+   */
+  readonly low_risk_count: number;
 };
 
 /**
@@ -2191,34 +3005,6 @@ export type PageAdminStyleGuideResponse = {
 };
 
 /**
- * Page[OrgEventHistory]
- */
-export type PageOrgEventHistory = {
-  /**
-   * Items
-   */
-  items: Array<OrgEventHistory>;
-  /**
-   * Total Items
-   */
-  total_items: number;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-  /**
-   * Total Pages
-   *
-   * The total number of pages.
-   */
-  readonly total_pages: number;
-};
-
-/**
  * Page[RoleRead]
  */
 export type PageRoleRead = {
@@ -2226,34 +3012,6 @@ export type PageRoleRead = {
    * Items
    */
   items: Array<RoleRead>;
-  /**
-   * Total Items
-   */
-  total_items: number;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-  /**
-   * Total Pages
-   *
-   * The total number of pages.
-   */
-  readonly total_pages: number;
-};
-
-/**
- * Page[StripeEventHistory]
- */
-export type PageStripeEventHistory = {
-  /**
-   * Items
-   */
-  items: Array<StripeEventHistory>;
   /**
    * Total Items
    */
@@ -2411,11 +3169,64 @@ export type PaginatedTermSetsResponse = {
 };
 
 /**
- * PaymentMethod
+ * PaginatedTermsResponse
  */
-export enum PaymentMethod {
-  STRIPE = "stripe",
-  MANUAL = "manual",
+export type PaginatedTermsResponse = {
+  /**
+   * Terms
+   */
+  terms: Array<HeliosOneApiModulesAdvancedTerminologySchemasTermsTermResponse>;
+  /**
+   * Total Count
+   */
+  total_count: number;
+  /**
+   * Page
+   */
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+  /**
+   * Total Pages
+   */
+  total_pages: number;
+};
+
+/**
+ * PaginationInfo
+ *
+ * Cursor-based pagination metadata.
+ */
+export type PaginationInfo = {
+  /**
+   * Next Cursor
+   *
+   * Opaque cursor for fetching the next page
+   */
+  next_cursor?: string | null;
+  /**
+   * Has More
+   *
+   * Whether more results are available
+   */
+  has_more: boolean;
+};
+
+/**
+ * PainPoint
+ */
+export enum PainPoint {
+  LEAN_TEAM = "lean_team",
+  OVEREXTENDED = "overextended",
+  TOOL_FRAGMENTATION = "tool_fragmentation",
+  PROVING_ROI = "proving_roi",
+  SLOW_VENDOR = "slow_vendor",
+  LACK_OF_CREATIVE_IDEAS = "lack_of_creative_ideas",
+  TECHNICAL_DEBT = "technical_debt",
+  CROSS_TEAM_ALIGNMENT = "cross_team_alignment",
+  NEW_LEADERSHIP_PRESSURE = "new_leadership_pressure",
 }
 
 /**
@@ -2445,6 +3256,161 @@ export type PermissionsCheckResponse = {
 };
 
 /**
+ * PersonaListResponse
+ */
+export type PersonaListResponse = {
+  /**
+   * Personas
+   */
+  personas: Array<PersonaResponse>;
+  /**
+   * Total
+   */
+  total: number;
+};
+
+/**
+ * PersonaRequest
+ *
+ * API request body for creating or updating a persona.
+ */
+export type PersonaRequest = {
+  /**
+   * Name
+   */
+  name: string;
+  /**
+   * Title
+   */
+  title?: string | null;
+  seniority?: Seniority | null;
+  industry?: Industry | null;
+  technical_level: TechnicalLevel;
+  skepticism_level: SkepticismLevel;
+  effort_tolerance: EffortTolerance;
+  reading_goal: ReadingGoal;
+  buying_authority?: BuyingAuthority | null;
+  tone_preference: TonePreference;
+  /**
+   * Trust Triggers
+   */
+  trust_triggers?: Array<TrustTrigger>;
+  /**
+   * Pet Peeves
+   */
+  pet_peeves?: Array<PetPeeve>;
+  /**
+   * Current Priorities
+   */
+  current_priorities?: Array<CurrentPriority>;
+  /**
+   * Pain Points
+   */
+  pain_points?: Array<PainPoint>;
+};
+
+/**
+ * PersonaResponse
+ */
+export type PersonaResponse = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Organization Id
+   */
+  organization_id: string | null;
+  /**
+   * Name
+   */
+  name: string;
+  /**
+   * Title
+   */
+  title: string | null;
+  seniority: Seniority | null;
+  industry: Industry | null;
+  technical_level: TechnicalLevel;
+  skepticism_level: SkepticismLevel;
+  effort_tolerance: EffortTolerance;
+  reading_goal: ReadingGoal;
+  buying_authority: BuyingAuthority | null;
+  tone_preference: TonePreference;
+  /**
+   * Trust Triggers
+   */
+  trust_triggers: Array<TrustTrigger>;
+  /**
+   * Pet Peeves
+   */
+  pet_peeves: Array<PetPeeve>;
+  /**
+   * Current Priorities
+   */
+  current_priorities: Array<CurrentPriority>;
+  /**
+   * Pain Points
+   */
+  pain_points: Array<PainPoint>;
+  /**
+   * Behavioral Context
+   */
+  behavioral_context: string;
+  /**
+   * Created By Email
+   */
+  created_by_email?: string | null;
+  /**
+   * Created At
+   */
+  created_at: string;
+  /**
+   * Updated At
+   */
+  updated_at: string;
+};
+
+/**
+ * PersonaSuggestion
+ */
+export type PersonaSuggestion = {
+  /**
+   * Title
+   */
+  title: string;
+  /**
+   * Description
+   */
+  description: string;
+};
+
+/**
+ * PersonaSuggestionsResponse
+ */
+export type PersonaSuggestionsResponse = {
+  /**
+   * Suggestions
+   */
+  suggestions: Array<PersonaSuggestion>;
+};
+
+/**
+ * PetPeeve
+ */
+export enum PetPeeve {
+  FLUFF = "fluff",
+  VAGUE_CLAIMS = "vague_claims",
+  OVER_EXPLANATION = "over_explanation",
+  SALES_SPEAK = "sales_speak",
+  JARGON = "jargon",
+  EXCESSIVE_HEDGING = "excessive_hedging",
+  SLOW_PACING = "slow_pacing",
+  LACK_OF_SPECIFICS = "lack_of_specifics",
+  CONDESCENDING_TONE = "condescending_tone",
+}
+
+/**
  * Position
  */
 export type Position = {
@@ -2454,178 +3420,6 @@ export type Position = {
    * The start index of the issue in the text
    */
   start_index: number;
-};
-
-/**
- * ProductModel
- *
- * Response model for product data with its prices
- */
-export type ProductModel = {
-  /**
-   * Product Id
-   */
-  product_id: string;
-  type: ProductType;
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Description
-   */
-  description: string | null;
-  /**
-   * Token Limit
-   */
-  token_limit: number;
-  /**
-   * Style Guide Limit
-   */
-  style_guide_limit: number;
-  /**
-   * Term Limit
-   */
-  term_limit: number;
-  /**
-   * Product Code
-   */
-  product_code?: string | null;
-  /**
-   * Active
-   */
-  active: boolean;
-  /**
-   * Product Prices
-   */
-  product_prices: Array<ProductPriceModel>;
-};
-
-/**
- * ProductPriceModel
- *
- * Response model for product price data
- */
-export type ProductPriceModel = {
-  /**
-   * Product Price Id
-   */
-  product_price_id: string;
-  /**
-   * Product Id
-   */
-  product_id: string;
-  /**
-   * Amount Cents
-   */
-  amount_cents: number;
-  currency: Currency;
-  billing_cycle: HeliosOneApiModulesSubscriptionSchemasSubscriptionApiModelBillingCycle;
-  /**
-   * Stripe Price Id
-   */
-  stripe_price_id: string;
-  /**
-   * Version
-   */
-  version: number;
-  /**
-   * Active
-   */
-  active: boolean;
-};
-
-/**
- * ProductPriceResponse
- *
- * Response model for product price data
- */
-export type ProductPriceResponse = {
-  /**
-   * Product Price Id
-   */
-  product_price_id: string;
-  /**
-   * Product Id
-   */
-  product_id?: string | null;
-  /**
-   * Amount Cents
-   */
-  amount_cents: number;
-  /**
-   * Currency
-   */
-  currency: string;
-  /**
-   * Billing Cycle
-   */
-  billing_cycle?: string | null;
-  /**
-   * Version
-   */
-  version: number;
-  /**
-   * Active
-   */
-  active: boolean;
-};
-
-/**
- * ProductType
- */
-export enum ProductType {
-  PLAN = "plan",
-  ADDON = "addon",
-  FREE_ADDON = "free_addon",
-}
-
-/**
- * ProductWithPricesResponse
- *
- * Response model for product with its prices
- */
-export type ProductWithPricesResponse = {
-  /**
-   * Product Id
-   */
-  product_id: string;
-  /**
-   * Type
-   */
-  type: string;
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Description
-   */
-  description: string | null;
-  /**
-   * Token Limit
-   */
-  token_limit: number;
-  /**
-   * Style Guide Limit
-   */
-  style_guide_limit: number;
-  /**
-   * Term Limit
-   */
-  term_limit: number;
-  /**
-   * Product Code
-   */
-  product_code?: string | null;
-  /**
-   * Active
-   */
-  active: boolean;
-  /**
-   * Prices
-   */
-  prices?: Array<ProductPriceResponse>;
 };
 
 /**
@@ -2639,6 +3433,55 @@ export type QualityScore = {
   grammar?: GrammarScore | null;
   consistency?: ConsistencyScore | null;
   terminology?: TerminologyScore | null;
+};
+
+/**
+ * ReadingGoal
+ */
+export enum ReadingGoal {
+  QUICK_SCAN = "quick_scan",
+  DEEP_UNDERSTANDING = "deep_understanding",
+  DECISION_MAKING = "decision_making",
+  RESEARCH = "research",
+  VALIDATION = "validation",
+}
+
+/**
+ * RetryPolicy
+ *
+ * Retry policy configuration for agent execution.
+ */
+export type RetryPolicy = {
+  /**
+   * Max Attempts
+   *
+   * Maximum number of retry attempts
+   */
+  max_attempts?: number;
+  /**
+   * Initial Interval Seconds
+   *
+   * Initial retry interval in seconds
+   */
+  initial_interval_seconds?: number;
+  /**
+   * Backoff Coefficient
+   *
+   * Backoff multiplier for retry intervals
+   */
+  backoff_coefficient?: number;
+  /**
+   * Maximum Interval Seconds
+   *
+   * Maximum retry interval in seconds
+   */
+  maximum_interval_seconds?: number;
+  /**
+   * Non Retryable Error Types
+   *
+   * Error types that should never be retried (deterministic bugs)
+   */
+  non_retryable_error_types?: Array<string>;
 };
 
 /**
@@ -2723,6 +3566,49 @@ export type ScoreOutput = {
 };
 
 /**
+ * Seniority
+ */
+export enum Seniority {
+  INDIVIDUAL_CONTRIBUTOR = "individual_contributor",
+  MANAGER = "manager",
+  SENIOR_MANAGER = "senior_manager",
+  DIRECTOR = "director",
+  SENIOR_DIRECTOR = "senior_director",
+  VP = "vp",
+  C_SUITE = "c_suite",
+}
+
+/**
+ * SetupTicketRequest
+ */
+export type SetupTicketRequest = {
+  /**
+   * Strategy
+   *
+   * Connection strategy. Picks which self-service profile to mint the ticket against.
+   */
+  strategy: "saml" | "oidc";
+};
+
+/**
+ * SetupTicketResponse
+ */
+export type SetupTicketResponse = {
+  /**
+   * Ticket Url
+   *
+   * Hosted Auth0 form URL for the admin.
+   */
+  ticket_url: string;
+  /**
+   * Expires At
+   *
+   * When the ticket URL stops working.
+   */
+  expires_at: string;
+};
+
+/**
  * Severity
  */
 export enum Severity {
@@ -2730,6 +3616,57 @@ export enum Severity {
   MEDIUM = "medium",
   LOW = "low",
 }
+
+/**
+ * SkepticismLevel
+ */
+export enum SkepticismLevel {
+  LOW = "low",
+  MEDIUM = "medium",
+  HIGH = "high",
+  VERY_HIGH = "very_high",
+}
+
+/**
+ * SsoConfig
+ *
+ * Per-org SSO group-mapping config.
+ *
+ * All fields are optional; an empty config is a valid state (org hasn't set
+ * SSO yet). Field names are the contract with the post-login Action and must stay stable.
+ */
+export type SsoConfig = {
+  /**
+   * Sso Claim Attribute
+   *
+   * JWT claim name carrying group identifiers
+   */
+  sso_claim_attribute?: string | null;
+  /**
+   * Sso Claim Format
+   *
+   * Shape of the claim value: array_strings | dn_strings | comma_separated.
+   */
+  sso_claim_format?: "array_strings" | "dn_strings" | "comma_separated" | null;
+  /**
+   * Sso Prefix Filter
+   *
+   * Optional prefix that must appear on a group string for it to count (stripped before storage).
+   */
+  sso_prefix_filter?: string | null;
+  /**
+   * Sso Ignore Groups
+   *
+   * Comma-separated list of group identifiers to drop.
+   */
+  sso_ignore_groups?: string | null;
+  /**
+   * Sso Primary Group Attribute
+   *
+   * Optional claim name whose value picks the user's primary group.
+   */
+  sso_primary_group_attribute?: string | null;
+};
 
 /**
  * StaffRequest
@@ -2761,6 +3698,10 @@ export type StaffResponse = {
    * Admin
    */
   admin: boolean;
+  /**
+   * Id
+   */
+  id: string;
 };
 
 /**
@@ -2774,119 +3715,12 @@ export type StaffUpdate = {
 };
 
 /**
- * StripeEventHistory
+ * StyleAgentMode
  */
-export type StripeEventHistory = {
-  /**
-   * Organization Id
-   *
-   * ID of the organization this event relates to (if applicable)
-   */
-  organization_id: string | null;
-  /**
-   * Customer Id
-   *
-   * Stripe customer ID
-   */
-  customer_id?: string | null;
-  /**
-   * Subscription Id
-   *
-   * Stripe subscription ID (if applicable)
-   */
-  subscription_id?: string | null;
-  /**
-   * Invoice Id
-   *
-   * Stripe invoice ID (if applicable)
-   */
-  invoice_id?: string | null;
-  /**
-   * Payment Intent Id
-   *
-   * Stripe payment intent ID (if applicable)
-   */
-  payment_intent_id?: string | null;
-  /**
-   * Stripe Event Id
-   *
-   * Stripe event ID (e.g., evt_1234567890)
-   */
-  stripe_event_id: string;
-  /**
-   * Stripe Product Id
-   *
-   * Stripe product ID (if applicable)
-   */
-  stripe_product_id?: string | null;
-  /**
-   * Stripe Price Id
-   *
-   * Stripe price ID (if applicable)
-   */
-  stripe_price_id?: string | null;
-  /**
-   * Stripe Event Type
-   *
-   * Stripe event type (e.g., customer.subscription.created, invoice.payment_succeeded)
-   */
-  stripe_event_type: string;
-  /**
-   * Processing Attempts
-   *
-   * Number of processing attempts
-   */
-  processing_attempts?: number;
-  /**
-   * Last Processing Error
-   *
-   * Last error message during processing
-   */
-  last_processing_error?: string | null;
-  /**
-   * Event Description
-   *
-   * Human-readable description of the event
-   */
-  event_description?: string | null;
-  /**
-   * Full Payload
-   *
-   * Complete Stripe event payload (JSONB)
-   */
-  full_payload: {
-    [key: string]: unknown;
-  };
-  /**
-   * Stripe Created At
-   *
-   * When the event was created by Stripe
-   */
-  stripe_created_at?: string | null;
-  /**
-   * Received At
-   *
-   * When the event was received by our system
-   */
-  received_at?: string;
-  /**
-   * Id
-   */
-  id?: string;
-};
-
-/**
- * StripeSubscriptionStatus
- */
-export enum StripeSubscriptionStatus {
-  ACTIVE = "active",
-  CANCELED = "canceled",
-  NOT_STARTED = "not_started",
-  PAST_DUE = "past_due",
-  UNPAID = "unpaid",
-  INCOMPLETE = "incomplete",
-  INCOMPLETE_EXPIRED = "incomplete_expired",
-  TRIALING = "trialing",
+export enum StyleAgentMode {
+  DISABLED = "disabled",
+  ENABLED = "enabled",
+  ENABLED_TERMINOLOGY = "enabled_terminology",
 }
 
 /**
@@ -3125,82 +3959,6 @@ export type StyleSuggestionRequestBody = {
 };
 
 /**
- * SubscriptionLogResponse
- *
- * Response model for subscription log data
- */
-export type SubscriptionLogResponse = {
-  /**
-   * Org Event History
-   */
-  org_event_history: Array<OrgEventHistory>;
-};
-
-/**
- * SubscriptionResponse
- *
- * Response model for subscription data
- */
-export type SubscriptionResponse = {
-  /**
-   * Order Id
-   */
-  order_id: string;
-  /**
-   * Organization Id
-   */
-  organization_id: string;
-  order_type: HeliosOneDatabaseModelsEnumsOrderType;
-  billing_cycle: HeliosOneApiModulesSubscriptionSchemasSubscriptionApiModelBillingCycle;
-  order_status: OrderStatus;
-  /**
-   * Current Period Start
-   */
-  current_period_start: string;
-  /**
-   * Current Period End
-   */
-  current_period_end: string;
-  /**
-   * Cancel At Period End
-   */
-  cancel_at_period_end: boolean;
-  stripe_subscription_status: StripeSubscriptionStatus | null;
-  /**
-   * Cancel Reason
-   */
-  cancel_reason?: string | null;
-  /**
-   * Updated At
-   */
-  updated_at: string;
-  /**
-   * Amount
-   */
-  amount: number;
-  /**
-   * Currency
-   */
-  currency: string;
-  /**
-   * Product Name
-   */
-  product_name: string;
-  /**
-   * Product Type
-   */
-  product_type: string;
-  /**
-   * Created At
-   */
-  created_at: string;
-  /**
-   * Is Visible
-   */
-  is_visible: boolean;
-};
-
-/**
  * Suggestion
  */
 export type Suggestion = {
@@ -3250,6 +4008,18 @@ export type SuggestionOriginalContent = {
    */
   issues?: Array<Suggestion>;
   scores?: ScoreOutput | null;
+  /**
+   * High Risk Count
+   */
+  readonly high_risk_count: number;
+  /**
+   * Medium Risk Count
+   */
+  readonly medium_risk_count: number;
+  /**
+   * Low Risk Count
+   */
+  readonly low_risk_count: number;
 };
 
 /**
@@ -3262,17 +4032,58 @@ export type SuggestionResponse = {
 };
 
 /**
- * TermCreateRequest
- *
- * Payload to create a new term for a term set
+ * SurfaceResponse
  */
-export type TermCreateRequest = {
+export type SurfaceResponse = {
   /**
-   * Term
+   * Surface
    */
-  term: string;
-  type: TermType;
+  surface: string;
+  /**
+   * Lowercasesurface
+   */
+  lowercasesurface?: string | null;
+  /**
+   * Lemmastart
+   */
+  lemmastart: number;
+  /**
+   * Lemmalength
+   */
+  lemmalength: number;
 };
+
+/**
+ * TargetResponse
+ */
+export type TargetResponse = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Display Name
+   */
+  display_name: string;
+  /**
+   * Is Default
+   */
+  is_default: boolean;
+  /**
+   * Enabled
+   */
+  enabled: boolean;
+};
+
+/**
+ * TechnicalLevel
+ */
+export enum TechnicalLevel {
+  LOW = "low",
+  MODERATE = "moderate",
+  HIGH = "high",
+  VERY_HIGH = "very_high",
+}
 
 /**
  * TermDetail
@@ -3308,6 +4119,148 @@ export type TermDetail = {
 };
 
 /**
+ * TermDetailResponse
+ *
+ * Term with linked terms and history.
+ */
+export type TermDetailResponse = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Uuid
+   */
+  uuid: string;
+  /**
+   * External Id
+   */
+  external_id: string;
+  /**
+   * Conceptid
+   */
+  conceptid: string;
+  /**
+   * Conceptuuid
+   */
+  conceptuuid: string;
+  /**
+   * Isconcept
+   */
+  isconcept: string;
+  surface?: SurfaceResponse | null;
+  language?: CategoryResponse | null;
+  status?: CategoryResponse | null;
+  msr?: CategoryResponse | null;
+  /**
+   * Categories
+   */
+  categories?: Array<CategoryResponse>;
+  /**
+   * Variantsconfigurations
+   */
+  variantsconfigurations?: string | null;
+  /**
+   * Frequency
+   */
+  frequency?: number;
+  /**
+   * Creationdate
+   */
+  creationdate?: string | null;
+  /**
+   * Creator
+   */
+  creator?: string | null;
+  /**
+   * Lastmodificationdate
+   */
+  lastmodificationdate?: string | null;
+  /**
+   * Lastmodifier
+   */
+  lastmodifier?: string | null;
+  /**
+   * Linked Term Count
+   */
+  linked_term_count?: number;
+  /**
+   * Member Count
+   */
+  member_count?: number;
+  /**
+   * Custom Fields
+   */
+  custom_fields?: {
+    [key: string]: string | null;
+  };
+  /**
+   * Custom Field Values
+   */
+  custom_field_values?: Array<CustomFieldValueResponse>;
+  /**
+   * Member Terms
+   */
+  member_terms?: Array<LinkedTermSummary>;
+};
+
+/**
+ * TermEditorConfigResponse
+ *
+ * Parsed view of the legacy `termEditCfg` global setting.
+ *
+ * `configured=False` means the org never customized the layout (or the
+ * setting failed to parse) — UIs should treat that as "show every custom
+ * field" for backwards compatibility with the GWT default.
+ */
+export type TermEditorConfigResponse = {
+  /**
+   * Configured
+   */
+  configured: boolean;
+  /**
+   * Visible Custom Field Uuids
+   */
+  visible_custom_field_uuids?: Array<string>;
+  /**
+   * Visible Custom Field Names
+   */
+  visible_custom_field_names?: Array<string>;
+  /**
+   * Raw
+   */
+  raw?: {
+    [key: string]: unknown;
+  } | null;
+};
+
+/**
+ * TermHistoryResponse
+ */
+export type TermHistoryResponse = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Eventtype
+   */
+  eventtype: string;
+  /**
+   * Eventtext
+   */
+  eventtext?: string | null;
+  /**
+   * Username
+   */
+  username?: string | null;
+  /**
+   * Eventdate
+   */
+  eventdate: string;
+};
+
+/**
  * TermItem
  */
 export type TermItem = {
@@ -3330,56 +4283,45 @@ export enum TermReplaceCategory {
 }
 
 /**
- * TermResponse
- *
- * DB-mapped representation of a term.
- */
-export type TermResponse = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Term
-   */
-  term: string;
-  type: TermType;
-  /**
-   * Created At
-   */
-  created_at: string;
-  /**
-   * Updated At
-   */
-  updated_at: string;
-  /**
-   * Created By
-   */
-  created_by?: string | null;
-  /**
-   * Updated By
-   */
-  updated_by?: string | null;
-};
-
-/**
  * TermSetCreateRequest
  *
  * Payload to create a new term set
  */
 export type TermSetCreateRequest = {
   /**
-   * Instructions
+   * Context
    */
-  instructions: string;
+  context: string;
+  term_type?: TermType | null;
+  context_polarity?: ContextPolarity | null;
   /**
    * Terms
    */
-  terms?: Array<TermCreateRequest> | null;
+  terms?: Array<HeliosOneApiModulesTerminologySchemasTermApiModelsTermCreateRequest> | null;
   /**
    * Domain Ids
    */
   domain_ids?: Array<string> | null;
+};
+
+/**
+ * TermSetDetailResponse
+ *
+ * All terms in a concept/term set with full data.
+ */
+export type TermSetDetailResponse = {
+  /**
+   * Concept Id
+   */
+  concept_id: string;
+  /**
+   * Concept Uuid
+   */
+  concept_uuid: string;
+  /**
+   * Terms
+   */
+  terms: Array<HeliosOneApiModulesAdvancedTerminologySchemasTermsTermResponse>;
 };
 
 /**
@@ -3393,9 +4335,11 @@ export type TermSetResponse = {
    */
   id: string;
   /**
-   * Instructions
+   * Context
    */
-  instructions: string;
+  context: string;
+  term_type?: TermType | null;
+  context_polarity?: ContextPolarity | null;
   /**
    * Created At
    */
@@ -3419,9 +4363,13 @@ export type TermSetResponse = {
  */
 export type TermSetResult = {
   /**
-   * Instructions
+   * Context
    */
-  instructions: string;
+  context: string;
+  /**
+   * Context Polarity
+   */
+  context_polarity?: string | null;
   /**
    * Terms
    */
@@ -3439,9 +4387,11 @@ export type TermSetResult = {
  */
 export type TermSetUpdateRequest = {
   /**
-   * Instructions
+   * Context
    */
-  instructions?: string | null;
+  context?: string | null;
+  term_type?: TermType | null;
+  context_polarity?: ContextPolarity | null;
   /**
    * Domain Ids
    */
@@ -3459,9 +4409,11 @@ export type TermSetWithTerms = {
    */
   id: string;
   /**
-   * Instructions
+   * Context
    */
-  instructions: string;
+  context: string;
+  term_type?: TermType | null;
+  context_polarity?: ContextPolarity | null;
   /**
    * Created At
    */
@@ -3490,27 +4442,11 @@ export type TermSetWithTerms = {
 
 /**
  * TermType
- *
- * Represents the three types of terms in the terminology system.
  */
 export enum TermType {
   PREFERRED = "preferred",
   PROHIBITED = "prohibited",
-  CONTEXT_DEPENDENT = "context_dependent",
 }
-
-/**
- * TermUpdateRequest
- *
- * Payload to update an existing term
- */
-export type TermUpdateRequest = {
-  /**
-   * Term
-   */
-  term: string;
-  type: TermType;
-};
 
 /**
  * TerminologyDomainInfo
@@ -3553,322 +4489,6 @@ export type TerminologySearchResponse = {
 };
 
 /**
- * ThrottleConfig
- *
- * Throttle configuration for an API key.
- */
-export type ThrottleConfig = {
-  /**
-   * Api Key
-   *
-   * The API key identifier
-   */
-  api_key: string;
-  /**
-   * Tpm Limit
-   *
-   * Tokens per minute limit
-   */
-  tpm_limit: number;
-  /**
-   * Tps Limit
-   *
-   * Tokens per second limit
-   */
-  tps_limit: number;
-  /**
-   * Tps Burst Ms
-   *
-   * TPS burst duration in milliseconds
-   */
-  tps_burst_ms: number;
-  /**
-   * Safety Margin
-   *
-   * Safety margin as a decimal (0.1 = 10%)
-   */
-  safety_margin: number;
-  /**
-   * Lease Ttl Ms
-   *
-   * Lease TTL in milliseconds
-   */
-  lease_ttl_ms: number;
-  /**
-   * Aimd Decrease Rate
-   *
-   * AIMD decrease rate as a decimal
-   */
-  aimd_decrease_rate: number;
-  /**
-   * Aimd Increase Rate
-   *
-   * AIMD increase rate as a decimal
-   */
-  aimd_increase_rate: number;
-  /**
-   * Aimd Clean Window Seconds
-   *
-   * AIMD clean window in seconds
-   */
-  aimd_clean_window_seconds: number;
-  /**
-   * Ttl Seconds
-   *
-   * Configuration TTL in seconds
-   */
-  ttl_seconds: number;
-  /**
-   * Ttl Minutes
-   *
-   * Configuration TTL in minutes
-   */
-  ttl_minutes: number;
-  /**
-   * Gsu Tpm Percentage
-   *
-   * Percentage of 1 GSU TPM capacity
-   */
-  gsu_tpm_percentage: number;
-  /**
-   * Gsu Tps Percentage
-   *
-   * Percentage of 1 GSU TPS capacity
-   */
-  gsu_tps_percentage: number;
-};
-
-/**
- * ThrottleMetricsResponse
- *
- * Response containing all throttle metrics.
- */
-export type ThrottleMetricsResponse = {
-  /**
-   * Configurations
-   *
-   * List of all throttle configurations
-   */
-  configurations: Array<ThrottleConfig>;
-  /**
-   * Cooldowns
-   *
-   * List of active cooldowns
-   */
-  cooldowns: Array<CooldownInfo>;
-  /**
-   * Summary
-   *
-   * Summary statistics
-   */
-  summary: {
-    [key: string]: unknown;
-  };
-  /**
-   * Timestamp
-   *
-   * Timestamp of the metrics snapshot
-   */
-  timestamp: string;
-};
-
-/**
- * ThrottleResetRequest
- *
- * Request to reset or update throttle configuration.
- */
-export type ThrottleResetRequest = {
-  /**
-   * Api Key
-   *
-   * The API key to reset/update
-   */
-  api_key: string;
-  /**
-   * Gsu Percentage
-   *
-   * Percentage of 1 GSU capacity (e.g., 1000 for 1000%)
-   */
-  gsu_percentage?: number;
-  /**
-   * Tpm Limit
-   *
-   * Optional: Override TPM limit directly
-   */
-  tpm_limit?: number | null;
-  /**
-   * Tps Limit
-   *
-   * Optional: Override TPS limit directly
-   */
-  tps_limit?: number | null;
-  /**
-   * Tps Burst Ms
-   *
-   * Optional: Override TPS burst window in milliseconds (default: keeps existing or 5000)
-   */
-  tps_burst_ms?: number | null;
-  /**
-   * Clear Aimd State
-   *
-   * Clear AIMD state (successes, 429 history)
-   */
-  clear_aimd_state?: boolean;
-  /**
-   * Reset Cooldowns
-   *
-   * Reset increase/decrease cooldowns
-   */
-  reset_cooldowns?: boolean;
-};
-
-/**
- * ThrottleResetResponse
- *
- * Response after resetting throttle configuration.
- */
-export type ThrottleResetResponse = {
-  /**
-   * Api Key
-   *
-   * The API key that was reset
-   */
-  api_key: string;
-  /**
-   * Old Tpm Limit
-   *
-   * Previous TPM limit
-   */
-  old_tpm_limit: number | null;
-  /**
-   * Old Tps Limit
-   *
-   * Previous TPS limit
-   */
-  old_tps_limit: number | null;
-  /**
-   * New Tpm Limit
-   *
-   * New TPM limit
-   */
-  new_tpm_limit: number;
-  /**
-   * New Tps Limit
-   *
-   * New TPS limit
-   */
-  new_tps_limit: number;
-  /**
-   * Gsu Percentage
-   *
-   * Percentage of 1 GSU capacity
-   */
-  gsu_percentage: number;
-  /**
-   * Aimd State Cleared
-   *
-   * Whether AIMD state was cleared
-   */
-  aimd_state_cleared: boolean;
-  /**
-   * Cooldowns Reset
-   *
-   * Whether cooldowns were reset
-   */
-  cooldowns_reset: boolean;
-};
-
-/**
- * ThrottleToggleRequest
- *
- * Request to toggle rate limiting on/off.
- */
-export type ThrottleToggleRequest = {
-  /**
-   * Enabled
-   *
-   * Whether to enable or disable rate limiting
-   */
-  enabled: boolean;
-};
-
-/**
- * ThrottleToggleResponse
- *
- * Response after toggling rate limiting.
- */
-export type ThrottleToggleResponse = {
-  /**
-   * Enabled
-   *
-   * Current rate limiting state
-   */
-  enabled: boolean;
-  /**
-   * Previous State
-   *
-   * Previous rate limiting state (None if not previously set)
-   */
-  previous_state: boolean | null;
-  /**
-   * Message
-   *
-   * Confirmation message
-   */
-  message: string;
-};
-
-/**
- * ToEnterpriseRequest
- *
- * Request model for upgrading to enterprise
- */
-export type ToEnterpriseRequest = {
-  /**
-   * Start Date
-   */
-  start_date?: string | null;
-  /**
-   * End Date
-   */
-  end_date?: string | null;
-  /**
-   * Token Limit
-   */
-  token_limit: number;
-  /**
-   * Style Guide Limit
-   */
-  style_guide_limit: number;
-  /**
-   * Term Limit
-   */
-  term_limit: number;
-  cancel_behavior?: CancelBehaviorForActiveOrders;
-};
-
-/**
- * ToEnterpriseResponse
- *
- * Response model for upgrading to enterprise
- */
-export type ToEnterpriseResponse = {
-  /**
-   * Message
-   */
-  message: string;
-  /**
-   * Order Id
-   */
-  order_id: string;
-  new_order: SubscriptionResponse;
-  /**
-   * Cancelled Orders
-   */
-  cancelled_orders: Array<SubscriptionResponse>;
-};
-
-/**
  * TokenUsageDataPoint
  */
 export type TokenUsageDataPoint = {
@@ -3902,6 +4522,18 @@ export enum ToneCategory {
   TRANSITIONS_AND_FLOW = "Transitions and Flow",
   ADDITIONAL_TONE_CHANGES = "Additional Tone Changes",
   OTHER = "other",
+}
+
+/**
+ * TonePreference
+ */
+export enum TonePreference {
+  DIRECT = "direct",
+  FORMAL = "formal",
+  CONVERSATIONAL = "conversational",
+  TECHNICAL = "technical",
+  INSPIRATIONAL = "inspirational",
+  PEER_TO_PEER = "peer_to_peer",
 }
 
 /**
@@ -3946,15 +4578,115 @@ export enum Tones {
 }
 
 /**
- * UpdateSubscriptionRequest
- *
- * Request model for updating a subscription
+ * TrustTrigger
  */
-export type UpdateSubscriptionRequest = {
+export enum TrustTrigger {
+  DATA_AND_PROOF = "data_and_proof",
+  PEER_REFERENCES = "peer_references",
+  TECHNICAL_DEPTH = "technical_depth",
+  EXECUTIVE_ENDORSEMENT = "executive_endorsement",
+  CLEAR_ROI = "clear_roi",
+  TRANSPARENCY = "transparency",
+  INNOVATION_TRACK_RECORD = "innovation_track_record",
+  SPECIFICITY = "specificity",
+  CASE_STUDIES = "case_studies",
+}
+
+/**
+ * UncertainField
+ */
+export type UncertainField = {
   /**
-   * New Product Price Id
+   * Field
+   *
+   * The persona field name
    */
-  new_product_price_id: string;
+  field: string;
+  /**
+   * Chosen Value
+   *
+   * The value(s) selected by the agent
+   */
+  chosen_value: string | Array<string>;
+  /**
+   * Explanation
+   *
+   * Why this value was chosen and when the user might want to change it
+   */
+  explanation: string;
+  /**
+   * Alternatives
+   *
+   * Other values the user might consider
+   */
+  alternatives?: Array<string>;
+};
+
+/**
+ * UserOrganizationWithDetails
+ */
+export type UserOrganizationWithDetails = {
+  /**
+   * Role
+   *
+   * The role of the user in the organization.
+   */
+  role?: string | null;
+  /**
+   * First Name
+   *
+   * First name of the user.
+   */
+  first_name?: string | null;
+  /**
+   * Last Name
+   *
+   * Last name of the user.
+   */
+  last_name?: string | null;
+  /**
+   * Job Title
+   *
+   * Job title of the user.
+   */
+  job_title?: string | null;
+  /**
+   * Company Role
+   *
+   * Company role selected by the user (Developer, Content Owner, etc.).
+   */
+  company_role?: string | null;
+  /**
+   * Marketing Consent
+   *
+   * Whether the user has consented to marketing communications.
+   */
+  marketing_consent?: boolean | null;
+  /**
+   * Created At
+   *
+   * The date and time the mapping was created.
+   */
+  created_at?: string;
+  /**
+   * Updated At
+   *
+   * The date and time the mapping was last updated.
+   */
+  updated_at?: string;
+  /**
+   * User Id
+   *
+   * ID of the user
+   */
+  user_id: string;
+  /**
+   * Organization Id
+   *
+   * ID of the organization
+   */
+  organization_id: string;
+  organization: HeliosOneDatabaseModelsOrganizationOrganization;
 };
 
 /**
@@ -4009,6 +4741,28 @@ export type UserUpdate = {
    * Is Staff
    */
   is_staff?: boolean | null;
+};
+
+/**
+ * UserWithOrganizations
+ */
+export type UserWithOrganizations = {
+  /**
+   * Email
+   */
+  email?: string | null;
+  /**
+   * Is Staff
+   */
+  is_staff?: boolean;
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * User Organizations
+   */
+  user_organizations?: Array<UserOrganizationWithDetails>;
 };
 
 /**
@@ -4094,6 +4848,26 @@ export type WebhookResponse = {
 };
 
 /**
+ * WorkflowCancelResponse
+ *
+ * Response from cancelling a workflow.
+ */
+export type WorkflowCancelResponse = {
+  /**
+   * Workflow Id
+   *
+   * Workflow ID
+   */
+  workflow_id: string;
+  /**
+   * Cancelled At
+   *
+   * Timestamp when cancellation was requested
+   */
+  cancelled_at: string;
+};
+
+/**
  * WorkflowInfo
  */
 export type WorkflowInfo = {
@@ -4121,7 +4895,7 @@ export type WorkflowInfo = {
    * UTC timestamp when the result was generated
    */
   generated_at?: string | null;
-  status?: WorkflowStatus;
+  status?: HeliosOneApiModulesEngineSchemasWorkflowsWorkflowStatus;
   /**
    * Type
    *
@@ -4135,10 +4909,28 @@ export type WorkflowInfo = {
 };
 
 /**
+ * WorkflowListResponse
+ *
+ * Paginated list of workflow executions.
+ */
+export type WorkflowListResponse = {
+  /**
+   * Workflows
+   *
+   * Workflow executions
+   */
+  workflows: Array<WorkflowStatusResponse>;
+  /**
+   * Pagination metadata
+   */
+  pagination: PaginationInfo;
+};
+
+/**
  * WorkflowResponse
  */
 export type WorkflowResponse = {
-  status: WorkflowStatus;
+  status: HeliosOneApiModulesEngineSchemasWorkflowsWorkflowStatus;
   /**
    * Workflow Id
    */
@@ -4146,14 +4938,54 @@ export type WorkflowResponse = {
 };
 
 /**
- * WorkflowStatus
+ * WorkflowStatusResponse
+ *
+ * Status response for a workflow.
  */
-export enum WorkflowStatus {
-  RUNNING = "running",
-  COMPLETED = "completed",
-  FAILED = "failed",
-  NOT_FOUND = "not_found",
-}
+export type WorkflowStatusResponse = {
+  /**
+   * Workflow Id
+   *
+   * Workflow ID
+   */
+  workflow_id: string;
+  /**
+   * Agent Id
+   *
+   * Agent that ran this workflow
+   */
+  agent_id?: string;
+  /**
+   * Document Ref
+   *
+   * Caller-provided document identifier.
+   */
+  document_ref?: string | null;
+  /**
+   * Current status
+   */
+  status: HeliosSharedCortexModelsResponseWorkflowStatus;
+  /**
+   * Result
+   *
+   * Result (if completed)
+   */
+  result?: {
+    [key: string]: unknown;
+  } | null;
+  /**
+   * Started At
+   *
+   * Start time
+   */
+  started_at: string;
+  /**
+   * Completed At
+   *
+   * Workflow completion time
+   */
+  completed_at?: string | null;
+};
 
 /**
  * PaginatedInvitationsResponse
@@ -4196,32 +5028,369 @@ export type HeliosOneApiModulesAdminOrganizationsPaginatedMembersResponse = {
 };
 
 /**
- * BillingCycle
+ * TermCreateRequest
+ */
+export type HeliosOneApiModulesAdvancedTerminologySchemasTermsTermCreateRequest = {
+  /**
+   * Surface
+   */
+  surface: string;
+  /**
+   * Language Id
+   */
+  language_id: string;
+  /**
+   * Status Id
+   */
+  status_id: string;
+  /**
+   * Msr Id
+   */
+  msr_id?: string | null;
+  /**
+   * Masterterm Id
+   *
+   * Link to existing head term. If null, creates a new head term.
+   */
+  masterterm_id?: string | null;
+  /**
+   * Variantsconfigurations
+   */
+  variantsconfigurations?: string | null;
+  /**
+   * Category Ids
+   */
+  category_ids?: Array<string> | null;
+  /**
+   * Concept Id
+   *
+   * Human-readable concept ID. Defaults to surface text.
+   */
+  concept_id?: string | null;
+};
+
+/**
+ * TermResponse
+ */
+export type HeliosOneApiModulesAdvancedTerminologySchemasTermsTermResponse = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Uuid
+   */
+  uuid: string;
+  /**
+   * External Id
+   */
+  external_id: string;
+  /**
+   * Conceptid
+   */
+  conceptid: string;
+  /**
+   * Conceptuuid
+   */
+  conceptuuid: string;
+  /**
+   * Isconcept
+   */
+  isconcept: string;
+  surface?: SurfaceResponse | null;
+  language?: CategoryResponse | null;
+  status?: CategoryResponse | null;
+  msr?: CategoryResponse | null;
+  /**
+   * Categories
+   */
+  categories?: Array<CategoryResponse>;
+  /**
+   * Variantsconfigurations
+   */
+  variantsconfigurations?: string | null;
+  /**
+   * Frequency
+   */
+  frequency?: number;
+  /**
+   * Creationdate
+   */
+  creationdate?: string | null;
+  /**
+   * Creator
+   */
+  creator?: string | null;
+  /**
+   * Lastmodificationdate
+   */
+  lastmodificationdate?: string | null;
+  /**
+   * Lastmodifier
+   */
+  lastmodifier?: string | null;
+  /**
+   * Linked Term Count
+   */
+  linked_term_count?: number;
+  /**
+   * Member Count
+   */
+  member_count?: number;
+  /**
+   * Custom Fields
+   */
+  custom_fields?: {
+    [key: string]: string | null;
+  };
+  /**
+   * Custom Field Values
+   */
+  custom_field_values?: Array<CustomFieldValueResponse>;
+};
+
+/**
+ * TermUpdateRequest
+ */
+export type HeliosOneApiModulesAdvancedTerminologySchemasTermsTermUpdateRequest = {
+  /**
+   * Surface
+   */
+  surface?: string | null;
+  /**
+   * Language Id
+   */
+  language_id?: string | null;
+  /**
+   * Status Id
+   */
+  status_id?: string | null;
+  /**
+   * Msr Id
+   */
+  msr_id?: string | null;
+  /**
+   * Variantsconfigurations
+   */
+  variantsconfigurations?: string | null;
+  /**
+   * Category Ids
+   */
+  category_ids?: Array<string> | null;
+};
+
+/**
+ * Organization
+ */
+export type HeliosOneApiModulesAuthMainOrganization = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Name
+   */
+  name: string;
+  /**
+   * Display Name
+   */
+  display_name: string;
+  /**
+   * Picture
+   */
+  picture: string;
+};
+
+/**
+ * WorkflowStatus
+ */
+export enum HeliosOneApiModulesEngineSchemasWorkflowsWorkflowStatus {
+  RUNNING = "running",
+  COMPLETED = "completed",
+  FAILED = "failed",
+  NOT_FOUND = "not_found",
+}
+
+/**
+ * TermCreateRequest
  *
- * Billing cycle enumeration
+ * Payload to create a new term for a term set
  */
-export enum HeliosOneApiModulesSubscriptionSchemasSubscriptionApiModelBillingCycle {
-  MONTHLY = "monthly",
-  YEARLY = "yearly",
-  ONE_TIME = "one_time",
-}
+export type HeliosOneApiModulesTerminologySchemasTermApiModelsTermCreateRequest = {
+  /**
+   * Term
+   */
+  term: string;
+  type: TermType;
+};
 
 /**
- * BillingCycle
+ * TermResponse
+ *
+ * DB-mapped representation of a term.
  */
-export enum HeliosOneDatabaseModelsEnumsBillingCycle {
-  MONTHLY = "monthly",
-  YEARLY = "yearly",
-  ONE_TIME = "one_time",
-}
+export type HeliosOneApiModulesTerminologySchemasTermApiModelsTermResponse = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Term
+   */
+  term: string;
+  type: TermType;
+  /**
+   * Created At
+   */
+  created_at: string;
+  /**
+   * Updated At
+   */
+  updated_at: string;
+  /**
+   * Created By
+   */
+  created_by?: string | null;
+  /**
+   * Updated By
+   */
+  updated_by?: string | null;
+};
 
 /**
- * OrderType
+ * TermUpdateRequest
+ *
+ * Payload to update an existing term
  */
-export enum HeliosOneDatabaseModelsEnumsOrderType {
-  RECURRING = "recurring",
-  ONETIME = "onetime",
-  UNLIMITED = "unlimited",
+export type HeliosOneApiModulesTerminologySchemasTermApiModelsTermUpdateRequest = {
+  /**
+   * Term
+   */
+  term: string;
+  type: TermType;
+};
+
+/**
+ * Organization
+ */
+export type HeliosOneDatabaseModelsOrganizationOrganization = {
+  /**
+   * Name
+   *
+   * The name of the organization.
+   */
+  name: string;
+  /**
+   * Display Name
+   *
+   * The display name of the organization.
+   */
+  display_name?: string | null;
+  /**
+   * Created At
+   *
+   * The date and time the organization was created.
+   */
+  created_at?: string;
+  /**
+   * Created By
+   *
+   * ID of the user who created the organization
+   */
+  created_by?: string | null;
+  /**
+   * Token Limit
+   *
+   * The maximum number of tokens the organization can use.
+   */
+  token_limit: number;
+  /**
+   * Tokens Used
+   *
+   * The number of tokens the organization has used.
+   */
+  tokens_used?: number;
+  /**
+   * Tokens Used Last Update
+   *
+   * The date and time the tokens used was last updated.
+   */
+  tokens_used_last_update?: string | null;
+  /**
+   * Email Domain
+   *
+   * The email domain of the organization.
+   */
+  email_domain: string;
+  /**
+   * Trial Expires At
+   *
+   * The date and time the organization's trial ends.
+   */
+  trial_expires_at?: string | null;
+  /**
+   * Tier
+   *
+   * The tier/plan for the organization.
+   */
+  tier?: string;
+  /**
+   * Style Guide Limit
+   *
+   * The maximum number of style guides for the organization.
+   */
+  style_guide_limit?: number;
+  /**
+   * Term Limit
+   *
+   * The maximum number of terms for the organization.
+   */
+  term_limit?: number;
+  /**
+   * Country
+   *
+   * The country of the organization.
+   */
+  country?: string | null;
+  /**
+   * Is Internal
+   *
+   * Whether the organization is an internal organization.
+   */
+  is_internal?: boolean;
+  /**
+   * Is Acrolinx Classic
+   *
+   * Whether the organization is an Acrolinx Classic customer.
+   */
+  is_acrolinx_classic?: boolean;
+  /**
+   * Style agent mode for the organization.
+   */
+  style_agent?: StyleAgentMode;
+  /**
+   * Style Agent Numeric Scoring
+   *
+   * Whether integrations should surface numeric scoring alongside the default risk-based scoring. Only meaningful when style_agent is not 'disabled'.
+   */
+  style_agent_numeric_scoring?: boolean;
+  /**
+   * Id
+   */
+  id?: string;
+};
+
+/**
+ * WorkflowStatus
+ *
+ * Status of a workflow execution.
+ */
+export enum HeliosSharedCortexModelsResponseWorkflowStatus {
+  RUNNING = "running",
+  COMPLETED = "completed",
+  FAILED = "failed",
+  TIMED_OUT = "timed_out",
+  CANCELLED = "cancelled",
 }
 
 /**
@@ -4388,14 +5557,11 @@ export type OrganizationResponseAdminWritable = {
    * Is Acrolinx Classic
    */
   is_acrolinx_classic: boolean;
+  style_agent?: StyleAgentMode;
   /**
-   * Stripe Customer Id
+   * Style Agent Numeric Scoring
    */
-  stripe_customer_id?: string | null;
-  /**
-   * Billing Status
-   */
-  billing_status?: string | null;
+  style_agent_numeric_scoring?: boolean;
 };
 
 /**
@@ -4467,6 +5633,11 @@ export type OrganizationResponseFullWritable = {
    * Is Acrolinx Classic
    */
   is_acrolinx_classic: boolean;
+  style_agent?: StyleAgentMode;
+  /**
+   * Style Agent Numeric Scoring
+   */
+  style_agent_numeric_scoring?: boolean;
 };
 
 /**
@@ -4547,28 +5718,6 @@ export type PageAdminStyleGuideResponseWritable = {
 };
 
 /**
- * Page[OrgEventHistory]
- */
-export type PageOrgEventHistoryWritable = {
-  /**
-   * Items
-   */
-  items: Array<OrgEventHistory>;
-  /**
-   * Total Items
-   */
-  total_items: number;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-};
-
-/**
  * Page[RoleRead]
  */
 export type PageRoleReadWritable = {
@@ -4576,28 +5725,6 @@ export type PageRoleReadWritable = {
    * Items
    */
   items: Array<RoleRead>;
-  /**
-   * Total Items
-   */
-  total_items: number;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-};
-
-/**
- * Page[StripeEventHistory]
- */
-export type PageStripeEventHistoryWritable = {
-  /**
-   * Items
-   */
-  items: Array<StripeEventHistory>;
   /**
    * Total Items
    */
@@ -4756,554 +5883,6 @@ export type SuggestionResponseWritable = {
   workflow: WorkflowInfo;
 };
 
-export type StyleGuidesListStyleGuidesData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: "/v1/style-guides";
-};
-
-export type StyleGuidesListStyleGuidesErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * Validation error.
-   */
-  422: ErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type StyleGuidesListStyleGuidesError =
-  StyleGuidesListStyleGuidesErrors[keyof StyleGuidesListStyleGuidesErrors];
-
-export type StyleGuidesListStyleGuidesResponses = {
-  /**
-   * Response 200 Style Guides-List Style Guides
-   *
-   * Successfully retrieved style guides.
-   */
-  200: Array<StyleGuideResponse>;
-};
-
-export type StyleGuidesListStyleGuidesResponse =
-  StyleGuidesListStyleGuidesResponses[keyof StyleGuidesListStyleGuidesResponses];
-
-export type StyleGuidesCreateStyleGuideData = {
-  body: StyleGuideRequestBody;
-  path?: never;
-  query?: {
-    /**
-     * Copyfrom
-     *
-     * The ID of an existing style guide to copy. When provided, creates a copy instead of processing a document.
-     */
-    copyFrom?: string | null;
-  };
-  url: "/v1/style-guides";
-};
-
-export type StyleGuidesCreateStyleGuideErrors = {
-  /**
-   * Invalid request parameters
-   */
-  400: ErrorResponse;
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * Source style guide not found (when using copyFrom).
-   */
-  404: ErrorResponse;
-  /**
-   * A style guide with this name already exists
-   */
-  409: ErrorResponse;
-  /**
-   * The uploaded file exceeds the maximum allowed size.
-   */
-  413: ErrorResponse;
-  /**
-   * Unprocessable Entity
-   */
-  422: ValidationErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type StyleGuidesCreateStyleGuideError =
-  StyleGuidesCreateStyleGuideErrors[keyof StyleGuidesCreateStyleGuideErrors];
-
-export type StyleGuidesCreateStyleGuideResponses = {
-  /**
-   * Style guide copied successfully (when using copyFrom).
-   */
-  201: StyleGuideResponse;
-  /**
-   * Style guide creation started successfully (when using file_upload).
-   */
-  202: StyleGuideResponse;
-};
-
-export type StyleGuidesCreateStyleGuideResponse =
-  StyleGuidesCreateStyleGuideResponses[keyof StyleGuidesCreateStyleGuideResponses];
-
-export type StyleGuidesDeleteStyleGuideData = {
-  body?: never;
-  path: {
-    /**
-     * Style Guide Id
-     *
-     * The ID of the style guide.
-     */
-    style_guide_id: string;
-  };
-  query?: never;
-  url: "/v1/style-guides/{style_guide_id}";
-};
-
-export type StyleGuidesDeleteStyleGuideErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Cannot delete predefined style guides.
-   */
-  403: ErrorResponse;
-  /**
-   * Style guide not found.
-   */
-  404: ErrorResponse;
-  /**
-   * Validation error.
-   */
-  422: ErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type StyleGuidesDeleteStyleGuideError =
-  StyleGuidesDeleteStyleGuideErrors[keyof StyleGuidesDeleteStyleGuideErrors];
-
-export type StyleGuidesDeleteStyleGuideResponses = {
-  /**
-   * Style guide successfully deleted.
-   */
-  204: void;
-};
-
-export type StyleGuidesDeleteStyleGuideResponse =
-  StyleGuidesDeleteStyleGuideResponses[keyof StyleGuidesDeleteStyleGuideResponses];
-
-export type StyleGuidesGetStyleGuideData = {
-  body?: never;
-  path: {
-    /**
-     * Style Guide Id
-     *
-     * The ID of the style guide.
-     */
-    style_guide_id: string;
-  };
-  query?: never;
-  url: "/v1/style-guides/{style_guide_id}";
-};
-
-export type StyleGuidesGetStyleGuideErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * Style guide not found or invalid UUID format.
-   */
-  404: ErrorResponse;
-  /**
-   * Validation error.
-   */
-  422: ErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type StyleGuidesGetStyleGuideError =
-  StyleGuidesGetStyleGuideErrors[keyof StyleGuidesGetStyleGuideErrors];
-
-export type StyleGuidesGetStyleGuideResponses = {
-  /**
-   * Successfully retrieved the style guide.
-   */
-  200: StyleGuideResponse;
-};
-
-export type StyleGuidesGetStyleGuideResponse =
-  StyleGuidesGetStyleGuideResponses[keyof StyleGuidesGetStyleGuideResponses];
-
-export type StyleGuidesUpdateStyleGuideData = {
-  body?: BodyStyleGuidesUpdateStyleGuide;
-  path: {
-    /**
-     * Style Guide Id
-     *
-     * The ID of the style guide.
-     */
-    style_guide_id: string;
-  };
-  query?: never;
-  url: "/v1/style-guides/{style_guide_id}";
-};
-
-export type StyleGuidesUpdateStyleGuideErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Cannot update predefined style guides.
-   */
-  403: ErrorResponse;
-  /**
-   * Style guide not found.
-   */
-  404: ErrorResponse;
-  /**
-   * A style guide with this name already exists
-   */
-  409: ErrorResponse;
-  /**
-   * Validation error.
-   */
-  422: ErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type StyleGuidesUpdateStyleGuideError =
-  StyleGuidesUpdateStyleGuideErrors[keyof StyleGuidesUpdateStyleGuideErrors];
-
-export type StyleGuidesUpdateStyleGuideResponses = {
-  /**
-   * The style guide was updated successfully.
-   */
-  200: StyleGuideResponse;
-};
-
-export type StyleGuidesUpdateStyleGuideResponse =
-  StyleGuidesUpdateStyleGuideResponses[keyof StyleGuidesUpdateStyleGuideResponses];
-
-export type StyleChecksCreateStyleCheckData = {
-  body: StyleCheckRequestBody;
-  path?: never;
-  query?: never;
-  url: "/v1/style/checks";
-};
-
-export type StyleChecksCreateStyleCheckErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * The uploaded file exceeds the maximum allowed size.
-   */
-  413: ErrorResponse;
-  /**
-   * The request validation failed.
-   */
-  422: ValidationErrorResponse;
-  /**
-   * Token limit exceeded.
-   */
-  429: ErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type StyleChecksCreateStyleCheckError =
-  StyleChecksCreateStyleCheckErrors[keyof StyleChecksCreateStyleCheckErrors];
-
-export type StyleChecksCreateStyleCheckResponses = {
-  /**
-   * Request accepted.
-   */
-  202: WorkflowResponse;
-};
-
-export type StyleChecksCreateStyleCheckResponse =
-  StyleChecksCreateStyleCheckResponses[keyof StyleChecksCreateStyleCheckResponses];
-
-export type StyleChecksGetStyleCheckData = {
-  body?: never;
-  path: {
-    /**
-     * Workflow Id
-     */
-    workflow_id: string;
-  };
-  query?: never;
-  url: "/v1/style/checks/{workflow_id}";
-};
-
-export type StyleChecksGetStyleCheckErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * The client attempted to poll or retrieve results for an ID that doesn't exist.
-   */
-  404: ErrorResponse;
-  /**
-   * The request validation failed.
-   */
-  422: ValidationErrorResponse;
-  /**
-   * An internal server error occurred while fetching the workflow result.
-   */
-  500: ErrorResponse;
-};
-
-export type StyleChecksGetStyleCheckError =
-  StyleChecksGetStyleCheckErrors[keyof StyleChecksGetStyleCheckErrors];
-
-export type StyleChecksGetStyleCheckResponses = {
-  /**
-   * Style check results.
-   */
-  200: StyleCheckResponse;
-};
-
-export type StyleChecksGetStyleCheckResponse =
-  StyleChecksGetStyleCheckResponses[keyof StyleChecksGetStyleCheckResponses];
-
-export type StyleSuggestionsCreateStyleSuggestionData = {
-  body: StyleSuggestionRequestBody;
-  path?: never;
-  query?: never;
-  url: "/v1/style/suggestions";
-};
-
-export type StyleSuggestionsCreateStyleSuggestionErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * The uploaded file exceeds the maximum allowed size.
-   */
-  413: ErrorResponse;
-  /**
-   * The request validation failed.
-   */
-  422: ValidationErrorResponse;
-  /**
-   * Token limit exceeded.
-   */
-  429: ErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type StyleSuggestionsCreateStyleSuggestionError =
-  StyleSuggestionsCreateStyleSuggestionErrors[keyof StyleSuggestionsCreateStyleSuggestionErrors];
-
-export type StyleSuggestionsCreateStyleSuggestionResponses = {
-  /**
-   * Request accepted.
-   */
-  202: WorkflowResponse;
-};
-
-export type StyleSuggestionsCreateStyleSuggestionResponse =
-  StyleSuggestionsCreateStyleSuggestionResponses[keyof StyleSuggestionsCreateStyleSuggestionResponses];
-
-export type StyleSuggestionsGetStyleSuggestionData = {
-  body?: never;
-  path: {
-    /**
-     * Workflow Id
-     */
-    workflow_id: string;
-  };
-  query?: never;
-  url: "/v1/style/suggestions/{workflow_id}";
-};
-
-export type StyleSuggestionsGetStyleSuggestionErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * The client attempted to poll or retrieve results for an ID that doesn't exist.
-   */
-  404: ErrorResponse;
-  /**
-   * The request validation failed.
-   */
-  422: ValidationErrorResponse;
-  /**
-   * An internal server error occurred while fetching the workflow result.
-   */
-  500: ErrorResponse;
-};
-
-export type StyleSuggestionsGetStyleSuggestionError =
-  StyleSuggestionsGetStyleSuggestionErrors[keyof StyleSuggestionsGetStyleSuggestionErrors];
-
-export type StyleSuggestionsGetStyleSuggestionResponses = {
-  /**
-   * Suggestion results.
-   */
-  200: SuggestionResponse;
-};
-
-export type StyleSuggestionsGetStyleSuggestionResponse =
-  StyleSuggestionsGetStyleSuggestionResponses[keyof StyleSuggestionsGetStyleSuggestionResponses];
-
-export type StyleRewritesCreateStyleRewriteData = {
-  body: StyleRewriteRequestBody;
-  path?: never;
-  query?: never;
-  url: "/v1/style/rewrites";
-};
-
-export type StyleRewritesCreateStyleRewriteErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * The uploaded file exceeds the maximum allowed size.
-   */
-  413: ErrorResponse;
-  /**
-   * The request validation failed.
-   */
-  422: ValidationErrorResponse;
-  /**
-   * Token limit exceeded.
-   */
-  429: ErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type StyleRewritesCreateStyleRewriteError =
-  StyleRewritesCreateStyleRewriteErrors[keyof StyleRewritesCreateStyleRewriteErrors];
-
-export type StyleRewritesCreateStyleRewriteResponses = {
-  /**
-   * Request accepted.
-   */
-  202: WorkflowResponse;
-};
-
-export type StyleRewritesCreateStyleRewriteResponse =
-  StyleRewritesCreateStyleRewriteResponses[keyof StyleRewritesCreateStyleRewriteResponses];
-
-export type StyleRewritesGetStyleRewriteData = {
-  body?: never;
-  path: {
-    /**
-     * Workflow Id
-     */
-    workflow_id: string;
-  };
-  query?: never;
-  url: "/v1/style/rewrites/{workflow_id}";
-};
-
-export type StyleRewritesGetStyleRewriteErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * The client attempted to poll or retrieve results for an ID that doesn't exist.
-   */
-  404: ErrorResponse;
-  /**
-   * The request validation failed.
-   */
-  422: ValidationErrorResponse;
-  /**
-   * An internal server error occurred while fetching the workflow result.
-   */
-  500: ErrorResponse;
-};
-
-export type StyleRewritesGetStyleRewriteError =
-  StyleRewritesGetStyleRewriteErrors[keyof StyleRewritesGetStyleRewriteErrors];
-
-export type StyleRewritesGetStyleRewriteResponses = {
-  /**
-   * Response Style Rewrites-Get Style Rewrite
-   *
-   * Rewrite results.
-   */
-  200: RewriteResponse;
-};
-
-export type StyleRewritesGetStyleRewriteResponse =
-  StyleRewritesGetStyleRewriteResponses[keyof StyleRewritesGetStyleRewriteResponses];
-
 export type GetAdminConstantsData = {
   body?: never;
   path?: never;
@@ -5342,6 +5921,241 @@ export type GetAdminConstantsResponses = {
 export type GetAdminConstantsResponse =
   GetAdminConstantsResponses[keyof GetAdminConstantsResponses];
 
+export type TerminologyListDomainsData = {
+  body?: never;
+  path?: never;
+  query?: {
+    /**
+     * Page
+     *
+     * Page number (1-based)
+     */
+    page?: number;
+    /**
+     * Page Size
+     *
+     * Number of items per page
+     */
+    page_size?: number;
+    /**
+     * Search
+     *
+     * Optional name filter
+     */
+    search?: string | null;
+  };
+  url: "/v1/terminology/domains";
+};
+
+export type TerminologyListDomainsErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type TerminologyListDomainsError =
+  TerminologyListDomainsErrors[keyof TerminologyListDomainsErrors];
+
+export type TerminologyListDomainsResponses = {
+  /**
+   * Successful Response
+   */
+  200: PaginatedDomainsResponse;
+};
+
+export type TerminologyListDomainsResponse =
+  TerminologyListDomainsResponses[keyof TerminologyListDomainsResponses];
+
+export type TerminologyCreateDomainData = {
+  body: DomainCreateRequest;
+  path?: never;
+  query?: never;
+  url: "/v1/terminology/domains";
+};
+
+export type TerminologyCreateDomainErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type TerminologyCreateDomainError =
+  TerminologyCreateDomainErrors[keyof TerminologyCreateDomainErrors];
+
+export type TerminologyCreateDomainResponses = {
+  /**
+   * Successful Response
+   */
+  201: DomainResponse;
+};
+
+export type TerminologyCreateDomainResponse =
+  TerminologyCreateDomainResponses[keyof TerminologyCreateDomainResponses];
+
+export type TerminologyDeleteDomainData = {
+  body?: never;
+  path: {
+    /**
+     * Domain Id
+     *
+     * UUID of the domain
+     */
+    domain_id: string;
+  };
+  query?: never;
+  url: "/v1/terminology/domains/{domain_id}";
+};
+
+export type TerminologyDeleteDomainErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type TerminologyDeleteDomainError =
+  TerminologyDeleteDomainErrors[keyof TerminologyDeleteDomainErrors];
+
+export type TerminologyDeleteDomainResponses = {
+  /**
+   * Successful Response
+   */
+  204: void;
+};
+
+export type TerminologyDeleteDomainResponse =
+  TerminologyDeleteDomainResponses[keyof TerminologyDeleteDomainResponses];
+
+export type TerminologyGetDomainData = {
+  body?: never;
+  path: {
+    /**
+     * Domain Id
+     *
+     * UUID of the domain
+     */
+    domain_id: string;
+  };
+  query?: never;
+  url: "/v1/terminology/domains/{domain_id}";
+};
+
+export type TerminologyGetDomainErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type TerminologyGetDomainError =
+  TerminologyGetDomainErrors[keyof TerminologyGetDomainErrors];
+
+export type TerminologyGetDomainResponses = {
+  /**
+   * Successful Response
+   */
+  200: DomainResponse;
+};
+
+export type TerminologyGetDomainResponse =
+  TerminologyGetDomainResponses[keyof TerminologyGetDomainResponses];
+
+export type TerminologyUpdateDomainData = {
+  body: DomainUpdateRequest;
+  path: {
+    /**
+     * Domain Id
+     *
+     * UUID of the domain
+     */
+    domain_id: string;
+  };
+  query?: never;
+  url: "/v1/terminology/domains/{domain_id}";
+};
+
+export type TerminologyUpdateDomainErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type TerminologyUpdateDomainError =
+  TerminologyUpdateDomainErrors[keyof TerminologyUpdateDomainErrors];
+
+export type TerminologyUpdateDomainResponses = {
+  /**
+   * Successful Response
+   */
+  200: DomainResponse;
+};
+
+export type TerminologyUpdateDomainResponse =
+  TerminologyUpdateDomainResponses[keyof TerminologyUpdateDomainResponses];
+
 export type InternalSubmitFeedbackData = {
   body: FeedbackRequest;
   path?: never;
@@ -5372,3 +6186,476 @@ export type InternalSubmitFeedbackResponses = {
 
 export type InternalSubmitFeedbackResponse =
   InternalSubmitFeedbackResponses[keyof InternalSubmitFeedbackResponses];
+
+export type InternalListTargetsData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/internal/targets";
+};
+
+export type InternalListTargetsErrors = {
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type InternalListTargetsError = InternalListTargetsErrors[keyof InternalListTargetsErrors];
+
+export type InternalListTargetsResponses = {
+  /**
+   * Response Internal-List Targets
+   *
+   * Successful Response
+   */
+  200: Array<TargetResponse>;
+};
+
+export type InternalListTargetsResponse =
+  InternalListTargetsResponses[keyof InternalListTargetsResponses];
+
+export type CortexActivityEventsTrackActivityEventData = {
+  body: ActivityEventRequest;
+  path?: never;
+  query?: never;
+  url: "/agents/activity-events";
+};
+
+export type CortexActivityEventsTrackActivityEventErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type CortexActivityEventsTrackActivityEventError =
+  CortexActivityEventsTrackActivityEventErrors[keyof CortexActivityEventsTrackActivityEventErrors];
+
+export type CortexActivityEventsTrackActivityEventResponses = {
+  /**
+   * Successful Response
+   */
+  204: void;
+};
+
+export type CortexActivityEventsTrackActivityEventResponse =
+  CortexActivityEventsTrackActivityEventResponses[keyof CortexActivityEventsTrackActivityEventResponses];
+
+export type CortexWorkflowsListWorkflowsData = {
+  body?: never;
+  path?: never;
+  query?: {
+    /**
+     * Status
+     *
+     * Filter by workflow status
+     */
+    status?: "running" | "completed" | "failed" | "cancelled" | "timed_out" | "terminated" | null;
+    /**
+     * Agent Id
+     *
+     * Filter by agent ID
+     */
+    agent_id?: string | null;
+    /**
+     * Created After
+     *
+     * Only return workflows created after this timestamp (ISO 8601)
+     */
+    created_after?: string | null;
+    /**
+     * Limit
+     *
+     * Maximum number of results per page
+     */
+    limit?: number;
+    /**
+     * Cursor
+     *
+     * Opaque cursor from a previous response to fetch the next page
+     */
+    cursor?: string | null;
+  };
+  url: "/agents/workflows";
+};
+
+export type CortexWorkflowsListWorkflowsErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+  /**
+   * Failed to list workflows
+   */
+  502: ErrorResponse;
+};
+
+export type CortexWorkflowsListWorkflowsError =
+  CortexWorkflowsListWorkflowsErrors[keyof CortexWorkflowsListWorkflowsErrors];
+
+export type CortexWorkflowsListWorkflowsResponses = {
+  /**
+   * Successful Response
+   */
+  200: WorkflowListResponse;
+};
+
+export type CortexWorkflowsListWorkflowsResponse =
+  CortexWorkflowsListWorkflowsResponses[keyof CortexWorkflowsListWorkflowsResponses];
+
+export type CortexWorkflowsCancelWorkflowData = {
+  body?: never;
+  path: {
+    /**
+     * Workflow Id
+     */
+    workflow_id: string;
+  };
+  query?: never;
+  url: "/agents/workflows/{workflow_id}";
+};
+
+export type CortexWorkflowsCancelWorkflowErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
+  /**
+   * Workflow not found
+   */
+  404: ErrorResponse;
+  /**
+   * Workflow cannot be cancelled
+   */
+  409: ErrorResponse;
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Failed to cancel workflow
+   */
+  500: ErrorResponse;
+};
+
+export type CortexWorkflowsCancelWorkflowError =
+  CortexWorkflowsCancelWorkflowErrors[keyof CortexWorkflowsCancelWorkflowErrors];
+
+export type CortexWorkflowsCancelWorkflowResponses = {
+  /**
+   * Successful Response
+   */
+  200: WorkflowCancelResponse;
+};
+
+export type CortexWorkflowsCancelWorkflowResponse =
+  CortexWorkflowsCancelWorkflowResponses[keyof CortexWorkflowsCancelWorkflowResponses];
+
+export type CortexWorkflowsGetWorkflowStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Workflow Id
+     */
+    workflow_id: string;
+  };
+  query?: never;
+  url: "/agents/workflows/{workflow_id}";
+};
+
+export type CortexWorkflowsGetWorkflowStatusErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
+  /**
+   * Workflow not found
+   */
+  404: ErrorResponse;
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Failed to retrieve workflow status
+   */
+  500: ErrorResponse;
+};
+
+export type CortexWorkflowsGetWorkflowStatusError =
+  CortexWorkflowsGetWorkflowStatusErrors[keyof CortexWorkflowsGetWorkflowStatusErrors];
+
+export type CortexWorkflowsGetWorkflowStatusResponses = {
+  /**
+   * Successful Response
+   */
+  200: WorkflowStatusResponse;
+};
+
+export type CortexWorkflowsGetWorkflowStatusResponse =
+  CortexWorkflowsGetWorkflowStatusResponses[keyof CortexWorkflowsGetWorkflowStatusResponses];
+
+export type CortexWorkflowsStreamWorkflowEventsData = {
+  body?: never;
+  path: {
+    /**
+     * Workflow Id
+     */
+    workflow_id: string;
+  };
+  query?: never;
+  url: "/agents/workflows/{workflow_id}/stream";
+};
+
+export type CortexWorkflowsStreamWorkflowEventsErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
+  /**
+   * Workflow not found
+   */
+  404: ErrorResponse;
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Failed to retrieve workflow status
+   */
+  500: ErrorResponse;
+  /**
+   * Streaming not enabled
+   */
+  503: ErrorResponse;
+};
+
+export type CortexWorkflowsStreamWorkflowEventsError =
+  CortexWorkflowsStreamWorkflowEventsErrors[keyof CortexWorkflowsStreamWorkflowEventsErrors];
+
+export type CortexWorkflowsStreamWorkflowEventsResponses = {
+  /**
+   * Successful Response
+   */
+  200: unknown;
+};
+
+export type CortexAgentsListCategoriesData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/agents/categories";
+};
+
+export type CortexAgentsListCategoriesErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type CortexAgentsListCategoriesError =
+  CortexAgentsListCategoriesErrors[keyof CortexAgentsListCategoriesErrors];
+
+export type CortexAgentsListCategoriesResponses = {
+  /**
+   * Successful Response
+   */
+  200: CategoryListResult;
+};
+
+export type CortexAgentsListCategoriesResponse =
+  CortexAgentsListCategoriesResponses[keyof CortexAgentsListCategoriesResponses];
+
+export type CortexAgentsGetAgentData = {
+  body?: never;
+  path: {
+    /**
+     * Agent Id
+     */
+    agent_id: string;
+  };
+  query?: never;
+  url: "/agents/{agent_id}";
+};
+
+export type CortexAgentsGetAgentErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type CortexAgentsGetAgentError =
+  CortexAgentsGetAgentErrors[keyof CortexAgentsGetAgentErrors];
+
+export type CortexAgentsGetAgentResponses = {
+  /**
+   * Successful Response
+   */
+  200: AgentMetadata;
+};
+
+export type CortexAgentsGetAgentResponse =
+  CortexAgentsGetAgentResponses[keyof CortexAgentsGetAgentResponses];
+
+export type CortexAgentsRunAgentData = {
+  body: AgentRunRequest;
+  path: {
+    /**
+     * Agent Id
+     */
+    agent_id: string;
+  };
+  query?: {
+    /**
+     * Wait
+     */
+    wait?: boolean;
+  };
+  url: "/agents/{agent_id}/run";
+};
+
+export type CortexAgentsRunAgentErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
+  /**
+   * Invalid input for agent
+   */
+  422: unknown;
+  /**
+   * Workflow execution failed (wait=true)
+   */
+  500: unknown;
+};
+
+export type CortexAgentsRunAgentError =
+  CortexAgentsRunAgentErrors[keyof CortexAgentsRunAgentErrors];
+
+export type CortexAgentsRunAgentResponses = {
+  /**
+   * Successful Response
+   */
+  200: AgentRunResponse;
+  /**
+   * Completed (wait=true)
+   */
+  201: AgentRunResponse;
+  /**
+   * Accepted (wait=false)
+   */
+  202: AgentRunResponse;
+};
+
+export type CortexAgentsRunAgentResponse =
+  CortexAgentsRunAgentResponses[keyof CortexAgentsRunAgentResponses];
+
+export type AccountGetAccountConfigData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/account/config";
+};
+
+export type AccountGetAccountConfigErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type AccountGetAccountConfigError =
+  AccountGetAccountConfigErrors[keyof AccountGetAccountConfigErrors];
+
+export type AccountGetAccountConfigResponses = {
+  /**
+   * Successful Response
+   */
+  200: OrganizationConfigResponse;
+};
+
+export type AccountGetAccountConfigResponse =
+  AccountGetAccountConfigResponses[keyof AccountGetAccountConfigResponses];

@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { ConfigAppSDK } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
-import { Box, Spinner } from "@contentful/f36-components";
+import { Box, Checkbox, Heading, Paragraph, Spinner, Subheading } from "@contentful/f36-components";
 import { createClient } from "contentful-management";
+import styled from "@emotion/styled";
+import tokens from "@contentful/f36-tokens";
 import {
   ConfigScreenWrapper,
   ContentArea,
@@ -10,20 +12,22 @@ import {
   FooterLogo,
   FooterLogoImage,
 } from "./ConfigScreen.styles";
-import { UserProfileButton, ContentTypeAccordion } from "./components";
+import { ContentTypeStyleGuideSelect, UserProfileButton } from "./components";
+import {
+  buildActiveFieldsMap,
+  collectTextFieldsForContentType,
+  type FieldInfo,
+} from "./ConfigScreen.utils";
+import { AboutView } from "../../components/About/AboutView";
 import { useAuth } from "../../contexts/AuthContext";
-import { useConfigData } from "../../contexts/ConfigDataContext";
+import { useStyleTargets } from "../../hooks/useStyleTargets";
 import type {
   AppInstallationParameters,
   ContentTypeSettings,
   ContentTypeSettingsMap,
 } from "../../types/appConfig";
-import { DEFAULT_CONTENT_TYPE_SETTINGS } from "../../types/appConfig";
 export type { AppInstallationParameters } from "../../types/appConfig";
-import styled from "@emotion/styled";
-import tokens from "@contentful/f36-tokens";
 
-// App intro section
 const IntroSection = styled.div`
   margin-bottom: ${tokens.spacingL};
 `;
@@ -36,96 +40,52 @@ const IntroHeader = styled.div`
   margin-bottom: ${tokens.spacingS};
 `;
 
-const AppTitle = styled.h1`
-  font-family: ${tokens.fontStackPrimary};
-  font-weight: ${tokens.fontWeightDemiBold};
-  font-size: ${tokens.fontSizeL};
-  line-height: ${tokens.lineHeightL};
-  color: ${tokens.gray900};
-  margin: 0;
-`;
-
-const IntroDescription = styled.p`
-  font-family: ${tokens.fontStackPrimary};
-  font-size: ${tokens.fontSizeS};
-  line-height: ${tokens.lineHeightS};
-  color: ${tokens.gray700};
-  margin: 0;
-`;
-
-// Section header for content types
 const SectionHeader = styled.div`
   margin-bottom: ${tokens.spacingM};
   padding-top: ${tokens.spacingM};
   border-top: 1px solid ${tokens.gray200};
 `;
 
-const SectionTitle = styled.h2`
-  font-family: ${tokens.fontStackPrimary};
-  font-weight: ${tokens.fontWeightDemiBold};
-  font-size: ${tokens.fontSizeM};
-  line-height: ${tokens.lineHeightM};
-  color: ${tokens.gray900};
-  margin: 0 0 ${tokens.spacingXs} 0;
-`;
-
-const SectionDescription = styled.p`
-  font-family: ${tokens.fontStackPrimary};
-  font-size: ${tokens.fontSizeS};
-  line-height: ${tokens.lineHeightS};
-  color: ${tokens.gray600};
-  margin: 0;
-`;
-
-const ContentTypesContainer = styled.div`
+const ContentTypeBlock = styled.div`
+  border: 1px solid ${tokens.gray200};
+  border-radius: ${tokens.borderRadiusMedium};
+  padding: ${tokens.spacingM};
   margin-bottom: ${tokens.spacingM};
+  background: ${tokens.colorWhite};
 `;
 
-interface FieldInfo {
-  id: string;
-  name: string;
-  type: string;
-  modelName: string;
-  isChecked: boolean;
-}
+const ContentTypeHeader = styled.div`
+  margin-bottom: ${tokens.spacingS};
+`;
 
-interface TextFieldsState {
-  [contentTypeId: string]: FieldInfo[];
-}
+const FieldList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${tokens.spacing2Xs};
+`;
+
+type TextFieldsState = Record<string, FieldInfo[]>;
 
 export const ConfigScreen = () => {
   const sdk = useSDK<ConfigAppSDK>();
+  const { isAuthenticated, token } = useAuth();
   const [loading, setLoading] = useState(true);
   const [textFields, setTextFields] = useState<TextFieldsState>({});
   const [contentTypeSettings, setContentTypeSettings] = useState<ContentTypeSettingsMap>({});
-  const [expandedContentType, setExpandedContentType] = useState<string | null>(null);
+  const [activeView, setActiveView] = useState<"config" | "about">("config");
 
-  // Auth and config data for showing settings when signed in
-  const { isAuthenticated, loginWithPopup } = useAuth();
-  const { constants, styleGuides, isLoading: configDataLoading } = useConfigData();
-
-  const handleSignIn = useCallback(async () => {
-    try {
-      await loginWithPopup();
-    } catch (err) {
-      console.error("[ConfigScreen] Sign in failed:", err);
-    }
-  }, [loginWithPopup]);
+  // Fetch style guide options ONCE for the whole screen so we never make
+  // multiple `/internal/targets` calls when there are many content types.
+  const { targets, isLoading: targetsLoading, isError: targetsError } = useStyleTargets(token);
 
   const onConfigure = useCallback(() => {
     const newConfig: {
       parameters: AppInstallationParameters;
       targetState: {
-        EditorInterface: {
-          [contentTypeId: string]: {
-            controls: { fieldId: string }[];
-          };
-        };
+        EditorInterface: Record<string, { controls: { fieldId: string }[] }>;
       };
     } = {
-      parameters: {
-        contentTypeSettings: contentTypeSettings,
-      },
+      parameters: { contentTypeSettings },
       targetState: {
         EditorInterface: {},
       },
@@ -165,105 +125,55 @@ export const ConfigScreen = () => {
         },
       );
 
-      // Fetch all content types
       const content = await cma.contentType.getMany({ query: { limit: 1000 } });
-
-      // Get current app state to determine which fields are already enabled
       const currentState = await app.getCurrentState();
 
-      if (currentState?.EditorInterface) {
-        Object.entries(currentState.EditorInterface).forEach(([contentTypeId, value]) => {
-          const editorInterface = value as { controls?: { fieldId: string }[] };
-          if (editorInterface.controls) {
-            editorInterface.controls.forEach((control) => {
-              activeFields[`${contentTypeId}${control.fieldId}`] = true;
-            });
-          }
-        });
-      }
+      Object.assign(activeFields, buildActiveFieldsMap(currentState?.EditorInterface));
 
-      // Load existing content type settings from app parameters
-      const currentParams = await app.getParameters();
+      // Hydrate any persisted per-content-type defaults from app params.
+      const currentParams: AppInstallationParameters | null = await app.getParameters();
       if (currentParams?.contentTypeSettings) {
-        setContentTypeSettings(currentParams.contentTypeSettings as ContentTypeSettingsMap);
+        setContentTypeSettings(currentParams.contentTypeSettings);
       }
 
-      // Filter content types and their text fields
       content.items.forEach((item) => {
-        const textFieldsForContentType: FieldInfo[] = [];
-
-        item.fields.forEach((field) => {
-          // Include Text, Symbol, and RichText fields
-          if (field.type === "Text" || field.type === "Symbol" || field.type === "RichText") {
-            textFieldsForContentType.push({
-              id: field.id,
-              name: field.name,
-              type: field.type,
-              modelName: item.name,
-              isChecked: `${item.sys.id}${field.id}` in activeFields,
-            });
-          }
-        });
-
-        // Only add content types that have text fields
-        if (textFieldsForContentType.length > 0) {
-          richTextFields[item.sys.id] = textFieldsForContentType;
+        const fieldsForContentType = collectTextFieldsForContentType(item, activeFields);
+        if (fieldsForContentType.length > 0) {
+          richTextFields[item.sys.id] = fieldsForContentType;
         }
       });
 
       setTextFields(richTextFields);
-
-      // Expand the first content type by default for better UX
-      const contentTypeIds = Object.keys(richTextFields);
-      if (contentTypeIds.length > 0) {
-        setExpandedContentType(contentTypeIds[0]);
-      }
-
       setLoading(false);
       await app.setReady();
     })();
   }, [sdk]);
 
   const handleCheckboxChange = useCallback((fieldId: string, contentTypeId: string) => {
-    setTextFields((prevFields) => {
-      const newFields = { ...prevFields };
-      newFields[contentTypeId] = newFields[contentTypeId].map((field) =>
+    setTextFields((prev) => {
+      const next = { ...prev };
+      next[contentTypeId] = next[contentTypeId].map((field) =>
         field.id === fieldId ? { ...field, isChecked: !field.isChecked } : field,
       );
-      return newFields;
+      return next;
     });
   }, []);
 
-  const handleCheckAllChange = useCallback((contentTypeId: string, checked: boolean) => {
-    setTextFields((prevFields) => {
-      const newFields = { ...prevFields };
-      newFields[contentTypeId] = newFields[contentTypeId].map((field) => ({
-        ...field,
-        isChecked: checked,
-      }));
-      return newFields;
-    });
-  }, []);
-
-  const handleToggleExpand = useCallback((contentTypeId: string) => {
-    setExpandedContentType((prev) => (prev === contentTypeId ? null : contentTypeId));
-  }, []);
-
-  const handleContentTypeSettingsChange = useCallback(
-    (contentTypeId: string, settings: ContentTypeSettings) => {
-      setContentTypeSettings((prev) => ({
-        ...prev,
-        [contentTypeId]: settings,
-      }));
+  const handleStyleGuideChange = useCallback(
+    (contentTypeId: string, styleGuideId: string | null) => {
+      setContentTypeSettings((prev) => {
+        if (styleGuideId) {
+          const existing: ContentTypeSettings = prev[contentTypeId] ?? { styleGuide: null };
+          return { ...prev, [contentTypeId]: { ...existing, styleGuide: styleGuideId } };
+        }
+        if (!prev[contentTypeId]) return prev;
+        // Rebuild without the entry so the params stay tidy when cleared.
+        return Object.fromEntries(
+          Object.entries(prev).filter(([key]) => key !== contentTypeId),
+        ) as ContentTypeSettingsMap;
+      });
     },
     [],
-  );
-
-  const getContentTypeSettings = useCallback(
-    (contentTypeId: string): ContentTypeSettings => {
-      return contentTypeSettings[contentTypeId] ?? DEFAULT_CONTENT_TYPE_SETTINGS;
-    },
-    [contentTypeSettings],
   );
 
   if (loading) {
@@ -274,56 +184,83 @@ export const ConfigScreen = () => {
     );
   }
 
+  if (activeView === "about") {
+    return (
+      <ConfigScreenWrapper>
+        <TopCover />
+        <ContentArea>
+          <AboutView
+            variant="page"
+            onBack={() => {
+              setActiveView("config");
+            }}
+          />
+        </ContentArea>
+      </ConfigScreenWrapper>
+    );
+  }
+
   return (
     <ConfigScreenWrapper>
       <TopCover />
       <ContentArea>
         <IntroSection>
           <IntroHeader>
-            <AppTitle>Markup AI App</AppTitle>
-            <UserProfileButton />
+            <Heading>Markup AI App</Heading>
+            <UserProfileButton
+              onOpenAbout={() => {
+                setActiveView("about");
+              }}
+            />
           </IntroHeader>
-          <IntroDescription>
+          <Paragraph>
             Scan, score, and rewrite content at scale instantly. With our Content Guardian Agents℠
             and APIs, you can ensure every word meets your brand and compliance standards across
             your organization.
-          </IntroDescription>
+          </Paragraph>
         </IntroSection>
 
         <SectionHeader>
-          <SectionTitle>Assign to Content Types</SectionTitle>
-          <SectionDescription>
-            Choose which content types and fields to use with Markup AI, and set the default check
-            settings that will prefill new entries — authors can still update them in the editor.
-          </SectionDescription>
+          <Subheading>Assign to Content Types</Subheading>
+          <Paragraph>
+            Choose which content types and fields to use with Markup AI. Authors will see a Check
+            button on the selected fields. Optionally set a default style guide that applies to
+            every field of a content type — authors can override it per field.
+          </Paragraph>
         </SectionHeader>
 
-        <ContentTypesContainer>
-          {Object.entries(textFields).map(([contentTypeId, fields]) => {
-            if (fields.length === 0) return null;
-            const contentTypeName = fields[0]?.modelName || contentTypeId;
-
-            return (
-              <ContentTypeAccordion
-                key={contentTypeId}
+        {Object.entries(textFields).map(([contentTypeId, fields]) => {
+          const contentTypeName = fields[0]?.modelName || contentTypeId;
+          return (
+            <ContentTypeBlock key={contentTypeId}>
+              <ContentTypeHeader>
+                <Subheading>{contentTypeName}</Subheading>
+              </ContentTypeHeader>
+              <FieldList>
+                {fields.map((field) => (
+                  <Checkbox
+                    key={field.id}
+                    isChecked={field.isChecked}
+                    onChange={() => {
+                      handleCheckboxChange(field.id, contentTypeId);
+                    }}
+                  >
+                    {field.name} <span style={{ color: tokens.gray500 }}>({field.type})</span>
+                  </Checkbox>
+                ))}
+              </FieldList>
+              <ContentTypeStyleGuideSelect
                 contentTypeId={contentTypeId}
-                contentTypeName={contentTypeName}
-                fields={fields}
-                isExpanded={expandedContentType === contentTypeId}
+                value={contentTypeSettings[contentTypeId]?.styleGuide ?? null}
+                targets={targets}
+                isLoading={targetsLoading}
+                isError={targetsError}
                 isAuthenticated={isAuthenticated}
-                settings={getContentTypeSettings(contentTypeId)}
-                constants={constants}
-                styleGuides={styleGuides}
-                isLoading={configDataLoading}
-                onToggleExpand={handleToggleExpand}
-                onFieldChange={handleCheckboxChange}
-                onCheckAll={handleCheckAllChange}
-                onSettingsChange={handleContentTypeSettingsChange}
-                onSignIn={handleSignIn}
+                onChange={handleStyleGuideChange}
               />
-            );
-          })}
-        </ContentTypesContainer>
+            </ContentTypeBlock>
+          );
+        })}
 
         <FooterLogo href="https://markup.ai" target="_blank" rel="noopener noreferrer">
           <FooterLogoImage

@@ -72,23 +72,6 @@ export const ISSUE_STYLES = {
 } as const;
 
 /**
- * Filter category options for the suggestions sidebar
- * These include all categories from API responses
- */
-export const FILTER_CATEGORY_OPTIONS = [
-  { id: "grammar", label: "Grammar" },
-  { id: "consistency", label: "Consistency" },
-  { id: "terminology", label: "Terminology" },
-  { id: "clarity", label: "Clarity" },
-  { id: "tone", label: "Tone" },
-] as const;
-
-/**
- * Category IDs as a simple array (for filter state initialization)
- */
-export const FILTER_CATEGORY_IDS = FILTER_CATEGORY_OPTIONS.map((c) => c.id);
-
-/**
  * Shared selector contract between SuggestionsSidebar and IssueHighlights
  * to detect sidebar interactions without relying on duplicated string literals.
  */
