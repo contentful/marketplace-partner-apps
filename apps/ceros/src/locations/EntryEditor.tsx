@@ -126,13 +126,23 @@ function LinkedState({ entry, setLinked, parameters }: StateProps) {
   // State for the embed code
   const [embedCode, setEmbedCode] = useState(entry.fields[parameters.embedCodeFieldId].getValue());
   const [isCerosExperience, setIsCerosExperience] = useState(false);
+
+  const hasCerosHost = (html: string, allowed: (host: string) => boolean): boolean => {
+    const urlMatches = html.match(/https:\/\/[^\s"'<>]+/g) || [];
+    return urlMatches.some((urlString) => {
+      try {
+        return allowed(new URL(urlString).hostname.toLowerCase());
+      } catch {
+        return false;
+      }
+    });
+  };
+
   useEffect(() => {
-    (async () => {
-      // Determine if the embed code is for a Ceros experience
-      setIsCerosExperience(
-        Boolean((embedCode.includes('class="ceros-experience"') && embedCode.includes('https://view.ceros.com/')) || embedCode.includes('.ceros.site/')),
-      );
-    })();
+    const hasCerosClass = embedCode.includes('class="ceros-experience"');
+    const hasViewCerosUrl = hasCerosHost(embedCode, (h) => h === 'view.ceros.com');
+    const hasCerosSiteUrl = hasCerosHost(embedCode, (h) => h === 'ceros.site' || h.endsWith('.ceros.site'));
+    setIsCerosExperience((hasCerosClass && hasViewCerosUrl) || hasCerosSiteUrl);
   }, [embedCode]);
 
   const embedRef = useRef<HTMLDivElement>(null);
