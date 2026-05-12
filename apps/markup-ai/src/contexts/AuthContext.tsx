@@ -84,10 +84,9 @@ export function AuthProvider({ children }: Readonly<AuthProviderProps>) {
       }
     };
 
-    let accessToken: string | null = null;
+    let accessToken: string | null;
     try {
-      const t = await auth0Client.getTokenSilently();
-      accessToken = t;
+      accessToken = await auth0Client.getTokenSilently();
     } catch (err) {
       // Token fetch failed - token is expired or invalid
       console.warn("[Auth] Failed to restore session, token may be expired:", err);

@@ -1,168 +1,49 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent, mockUseAuth } from "../../../../test/utils/testUtils";
+import { describe, expect, it, vi } from "vitest";
+import { fireEvent } from "@testing-library/react";
+import { render } from "../../../../test/utils/testUtils";
 import { FieldHeader } from "./FieldHeader";
 
-// Mock the hooks
-vi.mock("../../../hooks/useUserSettings", () => ({
-  useUserSettings: vi.fn(() => ({
-    effectiveSettings: {
-      dialect: "american_english",
-      tone: null,
-      styleGuide: "microsoft",
-      apiKey: "test-key",
-    },
-    fieldSettings: {
-      dialect: null,
-      tone: null,
-      styleGuide: null,
-    },
-    updateDialect: vi.fn(),
-    updateTone: vi.fn(),
-    updateStyleGuide: vi.fn(),
-  })),
-}));
-
-vi.mock("../../../hooks/useContentTypeDefaults", () => ({
-  useContentTypeDefaults: vi.fn(() => ({
-    defaults: { styleGuide: null, dialect: null, tone: null },
-    isLoading: false,
-    contentTypeId: "blogPost",
-    fieldId: "title",
-  })),
-}));
-
-vi.mock("../../../contexts/ConfigDataContext", () => ({
-  useConfigData: vi.fn(() => ({
-    constants: {
-      dialects: ["american_english", "british_english"],
-      tones: ["formal", "casual"],
-    },
-    styleGuides: [
-      { id: "microsoft", name: "Microsoft" },
-      { id: "ap", name: "AP Style" },
-    ],
-    isLoading: false,
-    error: null,
-  })),
-}));
+function defaultProps(
+  overrides: Partial<React.ComponentProps<typeof FieldHeader>> = {},
+): React.ComponentProps<typeof FieldHeader> {
+  return {
+    onCheckClick: vi.fn(),
+    ...overrides,
+  };
+}
 
 describe("FieldHeader", () => {
-  const mockOnCheckClick = vi.fn();
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-    // Set up authenticated state for most tests
-    mockUseAuth.mockReturnValue({
-      isLoading: false,
-      isAuthenticated: true,
-      user: { email: "test@example.com" },
-      token: "test-token",
-      error: null,
-      loginWithPopup: vi.fn().mockResolvedValue(null),
-      getAccessToken: vi.fn().mockResolvedValue("test-token"),
-      logout: vi.fn().mockResolvedValue(undefined),
-    });
+  it("invokes onCheckClick when the Markup AI button is clicked", () => {
+    const onCheckClick = vi.fn();
+    const { getByRole } = render(<FieldHeader {...defaultProps({ onCheckClick })} />);
+    fireEvent.click(getByRole("button", { name: /markup ai/i }));
+    expect(onCheckClick).toHaveBeenCalledTimes(1);
   });
 
-  it("renders the Markup AI button", () => {
-    render(<FieldHeader onCheckClick={mockOnCheckClick} />);
-
-    expect(screen.getByText("Markup AI")).toBeInTheDocument();
-  });
-
-  it("calls onCheckClick when button is clicked", () => {
-    render(<FieldHeader onCheckClick={mockOnCheckClick} />);
-
-    const button = screen.getByText("Markup AI");
+  it("disables the Check button when isDisabled is set", () => {
+    const onCheckClick = vi.fn();
+    const { getByRole } = render(
+      <FieldHeader {...defaultProps({ onCheckClick, isDisabled: true })} />,
+    );
+    const button = getByRole("button", { name: /markup ai/i }) as HTMLButtonElement;
+    expect(button.disabled).toBe(true);
     fireEvent.click(button);
-
-    expect(mockOnCheckClick).toHaveBeenCalledTimes(1);
+    expect(onCheckClick).not.toHaveBeenCalled();
   });
 
-  it("disables the button when isDisabled is true", () => {
-    render(<FieldHeader onCheckClick={mockOnCheckClick} isDisabled={true} />);
-
-    const button = screen.getByRole("button", { name: /Markup AI/i });
-    expect(button).toBeDisabled();
-  });
-
-  it("shows gear icon for configuration", () => {
-    render(<FieldHeader onCheckClick={mockOnCheckClick} />);
-
-    const configButton = screen.getByRole("button", { name: /configuration/i });
-    expect(configButton).toBeInTheDocument();
-  });
-
-  it("toggles configuration controls when gear icon is clicked", () => {
-    render(<FieldHeader onCheckClick={mockOnCheckClick} />);
-
-    // Configuration should be hidden initially
-    expect(screen.queryByText("Style Guide")).not.toBeVisible();
-
-    // Click gear icon
-    const configButton = screen.getByRole("button", { name: /configuration/i });
-    fireEvent.click(configButton);
-
-    // Configuration should now be visible
-    expect(screen.getByText("Style Guide")).toBeVisible();
-  });
-
-  it("renders style guide dropdown when config is expanded", () => {
-    render(<FieldHeader onCheckClick={mockOnCheckClick} />);
-
-    // Expand config
-    const configButton = screen.getByRole("button", { name: /configuration/i });
-    fireEvent.click(configButton);
-
-    // Check that style guide dropdown exists
-    expect(screen.getByText("Style Guide")).toBeInTheDocument();
-  });
-
-  it("renders dialect dropdown when config is expanded", () => {
-    render(<FieldHeader onCheckClick={mockOnCheckClick} />);
-
-    // Expand config
-    const configButton = screen.getByRole("button", { name: /configuration/i });
-    fireEvent.click(configButton);
-
-    // Check that dialect label exists
-    expect(screen.getByText("Dialect")).toBeInTheDocument();
-  });
-
-  it("renders tone dropdown when config is expanded", () => {
-    render(<FieldHeader onCheckClick={mockOnCheckClick} />);
-
-    // Expand config
-    const configButton = screen.getByRole("button", { name: /configuration/i });
-    fireEvent.click(configButton);
-
-    // Check that tone label exists
-    expect(screen.getByText("Tone")).toBeInTheDocument();
-  });
-
-  it("displays logo image", () => {
-    render(<FieldHeader onCheckClick={mockOnCheckClick} />);
-
-    const logo = screen.getByAltText("Markup AI");
-    expect(logo).toBeInTheDocument();
-  });
-
-  it("disables gear icon when user is not authenticated", () => {
-    // Set up unauthenticated state
-    mockUseAuth.mockReturnValue({
-      isLoading: false,
-      isAuthenticated: false,
-      user: null,
-      token: null,
-      error: null,
-      loginWithPopup: vi.fn().mockResolvedValue(null),
-      getAccessToken: vi.fn().mockResolvedValue(null),
-      logout: vi.fn().mockResolvedValue(undefined),
-    });
-
-    render(<FieldHeader onCheckClick={mockOnCheckClick} />);
-
-    const configButton = screen.getByRole("button", { name: /configuration/i });
-    expect(configButton).toBeDisabled();
+  it("disables the Check button with the reason wiring when checkDisabledReason is set", () => {
+    const reason = "Style agent is disabled for your organization. Contact support to enable it.";
+    const { container, getAllByRole } = render(
+      <FieldHeader {...defaultProps({ isDisabled: true, checkDisabledReason: reason })} />,
+    );
+    // Two role="button" elements now: the DisabledTooltipTarget wrapper span
+    // and the inner native button. Pick the native one for the disabled
+    // assertion, and the wrapper span for the a11y assertions.
+    const buttons = getAllByRole("button", { name: /markup ai/i });
+    const native = buttons.find((b) => b.tagName === "BUTTON") as HTMLButtonElement;
+    expect(native.disabled).toBe(true);
+    const wrapper = container.querySelector('span[aria-disabled="true"]');
+    expect(wrapper).not.toBeNull();
+    expect(wrapper?.getAttribute("tabindex")).toBe("0");
   });
 });

@@ -4,61 +4,76 @@ import { queryOptions, type UseMutationOptions } from "@tanstack/react-query";
 
 import { client } from "../client.gen";
 import {
+  accountGetAccountConfig,
+  cortexActivityEventsTrackActivityEvent,
+  cortexAgentsGetAgent,
+  cortexAgentsListCategories,
+  cortexAgentsRunAgent,
+  cortexWorkflowsCancelWorkflow,
+  cortexWorkflowsGetWorkflowStatus,
+  cortexWorkflowsListWorkflows,
+  cortexWorkflowsStreamWorkflowEvents,
   getAdminConstants,
+  internalListTargets,
   internalSubmitFeedback,
   type Options,
-  styleChecksCreateStyleCheck,
-  styleChecksGetStyleCheck,
-  styleGuidesCreateStyleGuide,
-  styleGuidesDeleteStyleGuide,
-  styleGuidesGetStyleGuide,
-  styleGuidesListStyleGuides,
-  styleGuidesUpdateStyleGuide,
-  styleRewritesCreateStyleRewrite,
-  styleRewritesGetStyleRewrite,
-  styleSuggestionsCreateStyleSuggestion,
-  styleSuggestionsGetStyleSuggestion,
+  terminologyCreateDomain,
+  terminologyDeleteDomain,
+  terminologyGetDomain,
+  terminologyListDomains,
+  terminologyUpdateDomain,
 } from "../sdk.gen";
 import type {
+  AccountGetAccountConfigData,
+  AccountGetAccountConfigError,
+  AccountGetAccountConfigResponse,
+  CortexActivityEventsTrackActivityEventData,
+  CortexActivityEventsTrackActivityEventError,
+  CortexActivityEventsTrackActivityEventResponse,
+  CortexAgentsGetAgentData,
+  CortexAgentsGetAgentError,
+  CortexAgentsGetAgentResponse,
+  CortexAgentsListCategoriesData,
+  CortexAgentsListCategoriesError,
+  CortexAgentsListCategoriesResponse,
+  CortexAgentsRunAgentData,
+  CortexAgentsRunAgentError,
+  CortexAgentsRunAgentResponse,
+  CortexWorkflowsCancelWorkflowData,
+  CortexWorkflowsCancelWorkflowError,
+  CortexWorkflowsCancelWorkflowResponse,
+  CortexWorkflowsGetWorkflowStatusData,
+  CortexWorkflowsGetWorkflowStatusError,
+  CortexWorkflowsGetWorkflowStatusResponse,
+  CortexWorkflowsListWorkflowsData,
+  CortexWorkflowsListWorkflowsError,
+  CortexWorkflowsListWorkflowsResponse,
+  CortexWorkflowsStreamWorkflowEventsData,
+  CortexWorkflowsStreamWorkflowEventsError,
   GetAdminConstantsData,
   GetAdminConstantsError,
   GetAdminConstantsResponse,
+  InternalListTargetsData,
+  InternalListTargetsError,
+  InternalListTargetsResponse,
   InternalSubmitFeedbackData,
   InternalSubmitFeedbackError,
   InternalSubmitFeedbackResponse,
-  StyleChecksCreateStyleCheckData,
-  StyleChecksCreateStyleCheckError,
-  StyleChecksCreateStyleCheckResponse,
-  StyleChecksGetStyleCheckData,
-  StyleChecksGetStyleCheckError,
-  StyleChecksGetStyleCheckResponse,
-  StyleGuidesCreateStyleGuideData,
-  StyleGuidesCreateStyleGuideError,
-  StyleGuidesCreateStyleGuideResponse,
-  StyleGuidesDeleteStyleGuideData,
-  StyleGuidesDeleteStyleGuideError,
-  StyleGuidesDeleteStyleGuideResponse,
-  StyleGuidesGetStyleGuideData,
-  StyleGuidesGetStyleGuideError,
-  StyleGuidesGetStyleGuideResponse,
-  StyleGuidesListStyleGuidesData,
-  StyleGuidesListStyleGuidesError,
-  StyleGuidesListStyleGuidesResponse,
-  StyleGuidesUpdateStyleGuideData,
-  StyleGuidesUpdateStyleGuideError,
-  StyleGuidesUpdateStyleGuideResponse,
-  StyleRewritesCreateStyleRewriteData,
-  StyleRewritesCreateStyleRewriteError,
-  StyleRewritesCreateStyleRewriteResponse,
-  StyleRewritesGetStyleRewriteData,
-  StyleRewritesGetStyleRewriteError,
-  StyleRewritesGetStyleRewriteResponse,
-  StyleSuggestionsCreateStyleSuggestionData,
-  StyleSuggestionsCreateStyleSuggestionError,
-  StyleSuggestionsCreateStyleSuggestionResponse,
-  StyleSuggestionsGetStyleSuggestionData,
-  StyleSuggestionsGetStyleSuggestionError,
-  StyleSuggestionsGetStyleSuggestionResponse,
+  TerminologyCreateDomainData,
+  TerminologyCreateDomainError,
+  TerminologyCreateDomainResponse,
+  TerminologyDeleteDomainData,
+  TerminologyDeleteDomainError,
+  TerminologyDeleteDomainResponse,
+  TerminologyGetDomainData,
+  TerminologyGetDomainError,
+  TerminologyGetDomainResponse,
+  TerminologyListDomainsData,
+  TerminologyListDomainsError,
+  TerminologyListDomainsResponse,
+  TerminologyUpdateDomainData,
+  TerminologyUpdateDomainError,
+  TerminologyUpdateDomainResponse,
 } from "../types.gen";
 
 export type QueryKey<TOptions extends Options> = [
@@ -100,324 +115,6 @@ const createQueryKey = <TOptions extends Options>(
   return [params];
 };
 
-export const styleGuidesListStyleGuidesQueryKey = (
-  options?: Options<StyleGuidesListStyleGuidesData>,
-) => createQueryKey("styleGuidesListStyleGuides", options);
-
-/**
- * List Style Guides
- *
- * Retrieve all style guides associated with your organization.
- */
-export const styleGuidesListStyleGuidesOptions = (
-  options?: Options<StyleGuidesListStyleGuidesData>,
-) =>
-  queryOptions<
-    StyleGuidesListStyleGuidesResponse,
-    StyleGuidesListStyleGuidesError,
-    StyleGuidesListStyleGuidesResponse,
-    ReturnType<typeof styleGuidesListStyleGuidesQueryKey>
-  >({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await styleGuidesListStyleGuides({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: styleGuidesListStyleGuidesQueryKey(options),
-  });
-
-/**
- * Create Style Guide
- *
- * Create a new style guide from a document, or copy an existing style guide. To copy, provide the copyFrom query parameter with the source style guide ID.
- */
-export const styleGuidesCreateStyleGuideMutation = (
-  options?: Partial<Options<StyleGuidesCreateStyleGuideData>>,
-): UseMutationOptions<
-  StyleGuidesCreateStyleGuideResponse,
-  StyleGuidesCreateStyleGuideError,
-  Options<StyleGuidesCreateStyleGuideData>
-> => {
-  const mutationOptions: UseMutationOptions<
-    StyleGuidesCreateStyleGuideResponse,
-    StyleGuidesCreateStyleGuideError,
-    Options<StyleGuidesCreateStyleGuideData>
-  > = {
-    mutationFn: async (fnOptions) => {
-      const { data } = await styleGuidesCreateStyleGuide({
-        ...options,
-        ...fnOptions,
-        throwOnError: true,
-      });
-      return data;
-    },
-  };
-  return mutationOptions;
-};
-
-/**
- * Delete Style Guide
- *
- * Delete a style guide by ID.
- */
-export const styleGuidesDeleteStyleGuideMutation = (
-  options?: Partial<Options<StyleGuidesDeleteStyleGuideData>>,
-): UseMutationOptions<
-  StyleGuidesDeleteStyleGuideResponse,
-  StyleGuidesDeleteStyleGuideError,
-  Options<StyleGuidesDeleteStyleGuideData>
-> => {
-  const mutationOptions: UseMutationOptions<
-    StyleGuidesDeleteStyleGuideResponse,
-    StyleGuidesDeleteStyleGuideError,
-    Options<StyleGuidesDeleteStyleGuideData>
-  > = {
-    mutationFn: async (fnOptions) => {
-      const { data } = await styleGuidesDeleteStyleGuide({
-        ...options,
-        ...fnOptions,
-        throwOnError: true,
-      });
-      return data;
-    },
-  };
-  return mutationOptions;
-};
-
-export const styleGuidesGetStyleGuideQueryKey = (options: Options<StyleGuidesGetStyleGuideData>) =>
-  createQueryKey("styleGuidesGetStyleGuide", options);
-
-/**
- * Get Style Guide
- *
- * Retrieve a specific style guide by ID, including its metadata such as `name` and `status`.
- */
-export const styleGuidesGetStyleGuideOptions = (options: Options<StyleGuidesGetStyleGuideData>) =>
-  queryOptions<
-    StyleGuidesGetStyleGuideResponse,
-    StyleGuidesGetStyleGuideError,
-    StyleGuidesGetStyleGuideResponse,
-    ReturnType<typeof styleGuidesGetStyleGuideQueryKey>
-  >({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await styleGuidesGetStyleGuide({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: styleGuidesGetStyleGuideQueryKey(options),
-  });
-
-/**
- * Update Style Guide
- *
- * Update the name and/or terminology domain IDs of an existing style guide.
- */
-export const styleGuidesUpdateStyleGuideMutation = (
-  options?: Partial<Options<StyleGuidesUpdateStyleGuideData>>,
-): UseMutationOptions<
-  StyleGuidesUpdateStyleGuideResponse,
-  StyleGuidesUpdateStyleGuideError,
-  Options<StyleGuidesUpdateStyleGuideData>
-> => {
-  const mutationOptions: UseMutationOptions<
-    StyleGuidesUpdateStyleGuideResponse,
-    StyleGuidesUpdateStyleGuideError,
-    Options<StyleGuidesUpdateStyleGuideData>
-  > = {
-    mutationFn: async (fnOptions) => {
-      const { data } = await styleGuidesUpdateStyleGuide({
-        ...options,
-        ...fnOptions,
-        throwOnError: true,
-      });
-      return data;
-    },
-  };
-  return mutationOptions;
-};
-
-/**
- * Create Style Check
- *
- * Analyze text for grammar, style, and clarity issues.
- */
-export const styleChecksCreateStyleCheckMutation = (
-  options?: Partial<Options<StyleChecksCreateStyleCheckData>>,
-): UseMutationOptions<
-  StyleChecksCreateStyleCheckResponse,
-  StyleChecksCreateStyleCheckError,
-  Options<StyleChecksCreateStyleCheckData>
-> => {
-  const mutationOptions: UseMutationOptions<
-    StyleChecksCreateStyleCheckResponse,
-    StyleChecksCreateStyleCheckError,
-    Options<StyleChecksCreateStyleCheckData>
-  > = {
-    mutationFn: async (fnOptions) => {
-      const { data } = await styleChecksCreateStyleCheck({
-        ...options,
-        ...fnOptions,
-        throwOnError: true,
-      });
-      return data;
-    },
-  };
-  return mutationOptions;
-};
-
-export const styleChecksGetStyleCheckQueryKey = (options: Options<StyleChecksGetStyleCheckData>) =>
-  createQueryKey("styleChecksGetStyleCheck", options);
-
-/**
- * Get Style Check
- *
- * Retrieve style check results.
- */
-export const styleChecksGetStyleCheckOptions = (options: Options<StyleChecksGetStyleCheckData>) =>
-  queryOptions<
-    StyleChecksGetStyleCheckResponse,
-    StyleChecksGetStyleCheckError,
-    StyleChecksGetStyleCheckResponse,
-    ReturnType<typeof styleChecksGetStyleCheckQueryKey>
-  >({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await styleChecksGetStyleCheck({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: styleChecksGetStyleCheckQueryKey(options),
-  });
-
-/**
- * Create Style Suggestion
- *
- * Get suggested corrections for text.
- */
-export const styleSuggestionsCreateStyleSuggestionMutation = (
-  options?: Partial<Options<StyleSuggestionsCreateStyleSuggestionData>>,
-): UseMutationOptions<
-  StyleSuggestionsCreateStyleSuggestionResponse,
-  StyleSuggestionsCreateStyleSuggestionError,
-  Options<StyleSuggestionsCreateStyleSuggestionData>
-> => {
-  const mutationOptions: UseMutationOptions<
-    StyleSuggestionsCreateStyleSuggestionResponse,
-    StyleSuggestionsCreateStyleSuggestionError,
-    Options<StyleSuggestionsCreateStyleSuggestionData>
-  > = {
-    mutationFn: async (fnOptions) => {
-      const { data } = await styleSuggestionsCreateStyleSuggestion({
-        ...options,
-        ...fnOptions,
-        throwOnError: true,
-      });
-      return data;
-    },
-  };
-  return mutationOptions;
-};
-
-export const styleSuggestionsGetStyleSuggestionQueryKey = (
-  options: Options<StyleSuggestionsGetStyleSuggestionData>,
-) => createQueryKey("styleSuggestionsGetStyleSuggestion", options);
-
-/**
- * Get Style Suggestion
- *
- * Retrieve suggestion results.
- */
-export const styleSuggestionsGetStyleSuggestionOptions = (
-  options: Options<StyleSuggestionsGetStyleSuggestionData>,
-) =>
-  queryOptions<
-    StyleSuggestionsGetStyleSuggestionResponse,
-    StyleSuggestionsGetStyleSuggestionError,
-    StyleSuggestionsGetStyleSuggestionResponse,
-    ReturnType<typeof styleSuggestionsGetStyleSuggestionQueryKey>
-  >({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await styleSuggestionsGetStyleSuggestion({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: styleSuggestionsGetStyleSuggestionQueryKey(options),
-  });
-
-/**
- * Create Style Rewrite
- *
- * Rewrite text with style corrections applied.
- */
-export const styleRewritesCreateStyleRewriteMutation = (
-  options?: Partial<Options<StyleRewritesCreateStyleRewriteData>>,
-): UseMutationOptions<
-  StyleRewritesCreateStyleRewriteResponse,
-  StyleRewritesCreateStyleRewriteError,
-  Options<StyleRewritesCreateStyleRewriteData>
-> => {
-  const mutationOptions: UseMutationOptions<
-    StyleRewritesCreateStyleRewriteResponse,
-    StyleRewritesCreateStyleRewriteError,
-    Options<StyleRewritesCreateStyleRewriteData>
-  > = {
-    mutationFn: async (fnOptions) => {
-      const { data } = await styleRewritesCreateStyleRewrite({
-        ...options,
-        ...fnOptions,
-        throwOnError: true,
-      });
-      return data;
-    },
-  };
-  return mutationOptions;
-};
-
-export const styleRewritesGetStyleRewriteQueryKey = (
-  options: Options<StyleRewritesGetStyleRewriteData>,
-) => createQueryKey("styleRewritesGetStyleRewrite", options);
-
-/**
- * Get Style Rewrite
- *
- * Retrieve rewrite results.
- */
-export const styleRewritesGetStyleRewriteOptions = (
-  options: Options<StyleRewritesGetStyleRewriteData>,
-) =>
-  queryOptions<
-    StyleRewritesGetStyleRewriteResponse,
-    StyleRewritesGetStyleRewriteError,
-    StyleRewritesGetStyleRewriteResponse,
-    ReturnType<typeof styleRewritesGetStyleRewriteQueryKey>
-  >({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await styleRewritesGetStyleRewrite({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: styleRewritesGetStyleRewriteQueryKey(options),
-  });
-
 export const getAdminConstantsQueryKey = (options?: Options<GetAdminConstantsData>) =>
   createQueryKey("getAdminConstants", options);
 
@@ -442,6 +139,137 @@ export const getAdminConstantsOptions = (options?: Options<GetAdminConstantsData
     },
     queryKey: getAdminConstantsQueryKey(options),
   });
+
+export const terminologyListDomainsQueryKey = (options?: Options<TerminologyListDomainsData>) =>
+  createQueryKey("terminologyListDomains", options);
+
+/**
+ * List Domains
+ */
+export const terminologyListDomainsOptions = (options?: Options<TerminologyListDomainsData>) =>
+  queryOptions<
+    TerminologyListDomainsResponse,
+    TerminologyListDomainsError,
+    TerminologyListDomainsResponse,
+    ReturnType<typeof terminologyListDomainsQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await terminologyListDomains({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: terminologyListDomainsQueryKey(options),
+  });
+
+/**
+ * Create Domain
+ */
+export const terminologyCreateDomainMutation = (
+  options?: Partial<Options<TerminologyCreateDomainData>>,
+): UseMutationOptions<
+  TerminologyCreateDomainResponse,
+  TerminologyCreateDomainError,
+  Options<TerminologyCreateDomainData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    TerminologyCreateDomainResponse,
+    TerminologyCreateDomainError,
+    Options<TerminologyCreateDomainData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await terminologyCreateDomain({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
+/**
+ * Delete Domain
+ */
+export const terminologyDeleteDomainMutation = (
+  options?: Partial<Options<TerminologyDeleteDomainData>>,
+): UseMutationOptions<
+  TerminologyDeleteDomainResponse,
+  TerminologyDeleteDomainError,
+  Options<TerminologyDeleteDomainData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    TerminologyDeleteDomainResponse,
+    TerminologyDeleteDomainError,
+    Options<TerminologyDeleteDomainData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await terminologyDeleteDomain({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
+export const terminologyGetDomainQueryKey = (options: Options<TerminologyGetDomainData>) =>
+  createQueryKey("terminologyGetDomain", options);
+
+/**
+ * Get Domain
+ */
+export const terminologyGetDomainOptions = (options: Options<TerminologyGetDomainData>) =>
+  queryOptions<
+    TerminologyGetDomainResponse,
+    TerminologyGetDomainError,
+    TerminologyGetDomainResponse,
+    ReturnType<typeof terminologyGetDomainQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await terminologyGetDomain({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: terminologyGetDomainQueryKey(options),
+  });
+
+/**
+ * Update Domain
+ */
+export const terminologyUpdateDomainMutation = (
+  options?: Partial<Options<TerminologyUpdateDomainData>>,
+): UseMutationOptions<
+  TerminologyUpdateDomainResponse,
+  TerminologyUpdateDomainError,
+  Options<TerminologyUpdateDomainData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    TerminologyUpdateDomainResponse,
+    TerminologyUpdateDomainError,
+    Options<TerminologyUpdateDomainData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await terminologyUpdateDomain({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
 
 /**
  * Submit Feedback
@@ -469,3 +297,299 @@ export const internalSubmitFeedbackMutation = (
   };
   return mutationOptions;
 };
+
+export const internalListTargetsQueryKey = (options?: Options<InternalListTargetsData>) =>
+  createQueryKey("internalListTargets", options);
+
+/**
+ * List Targets
+ */
+export const internalListTargetsOptions = (options?: Options<InternalListTargetsData>) =>
+  queryOptions<
+    InternalListTargetsResponse,
+    InternalListTargetsError,
+    InternalListTargetsResponse,
+    ReturnType<typeof internalListTargetsQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await internalListTargets({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: internalListTargetsQueryKey(options),
+  });
+
+/**
+ * Track Activity Event
+ *
+ * Track a user action on an agent issue in the Chrome extension.
+ *
+ * Emits a single combined event (API metadata + activity data) to Kinesis.
+ * Returns 204 immediately — event emission is non-blocking.
+ */
+export const cortexActivityEventsTrackActivityEventMutation = (
+  options?: Partial<Options<CortexActivityEventsTrackActivityEventData>>,
+): UseMutationOptions<
+  CortexActivityEventsTrackActivityEventResponse,
+  CortexActivityEventsTrackActivityEventError,
+  Options<CortexActivityEventsTrackActivityEventData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    CortexActivityEventsTrackActivityEventResponse,
+    CortexActivityEventsTrackActivityEventError,
+    Options<CortexActivityEventsTrackActivityEventData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await cortexActivityEventsTrackActivityEvent({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
+export const cortexWorkflowsListWorkflowsQueryKey = (
+  options?: Options<CortexWorkflowsListWorkflowsData>,
+) => createQueryKey("cortexWorkflowsListWorkflows", options);
+
+/**
+ * List Workflows
+ *
+ * List agent workflow executions with optional filters and cursor-based pagination.
+ */
+export const cortexWorkflowsListWorkflowsOptions = (
+  options?: Options<CortexWorkflowsListWorkflowsData>,
+) =>
+  queryOptions<
+    CortexWorkflowsListWorkflowsResponse,
+    CortexWorkflowsListWorkflowsError,
+    CortexWorkflowsListWorkflowsResponse,
+    ReturnType<typeof cortexWorkflowsListWorkflowsQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await cortexWorkflowsListWorkflows({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: cortexWorkflowsListWorkflowsQueryKey(options),
+  });
+
+/**
+ * Cancel Workflow
+ *
+ * Cancel a running workflow.
+ */
+export const cortexWorkflowsCancelWorkflowMutation = (
+  options?: Partial<Options<CortexWorkflowsCancelWorkflowData>>,
+): UseMutationOptions<
+  CortexWorkflowsCancelWorkflowResponse,
+  CortexWorkflowsCancelWorkflowError,
+  Options<CortexWorkflowsCancelWorkflowData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    CortexWorkflowsCancelWorkflowResponse,
+    CortexWorkflowsCancelWorkflowError,
+    Options<CortexWorkflowsCancelWorkflowData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await cortexWorkflowsCancelWorkflow({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
+export const cortexWorkflowsGetWorkflowStatusQueryKey = (
+  options: Options<CortexWorkflowsGetWorkflowStatusData>,
+) => createQueryKey("cortexWorkflowsGetWorkflowStatus", options);
+
+/**
+ * Get Workflow Status
+ *
+ * Get workflow status and result.
+ */
+export const cortexWorkflowsGetWorkflowStatusOptions = (
+  options: Options<CortexWorkflowsGetWorkflowStatusData>,
+) =>
+  queryOptions<
+    CortexWorkflowsGetWorkflowStatusResponse,
+    CortexWorkflowsGetWorkflowStatusError,
+    CortexWorkflowsGetWorkflowStatusResponse,
+    ReturnType<typeof cortexWorkflowsGetWorkflowStatusQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await cortexWorkflowsGetWorkflowStatus({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: cortexWorkflowsGetWorkflowStatusQueryKey(options),
+  });
+
+export const cortexWorkflowsStreamWorkflowEventsQueryKey = (
+  options: Options<CortexWorkflowsStreamWorkflowEventsData>,
+) => createQueryKey("cortexWorkflowsStreamWorkflowEvents", options);
+
+/**
+ * Stream Workflow Events
+ *
+ * Stream workflow execution events via Server-Sent Events (SSE).
+ */
+export const cortexWorkflowsStreamWorkflowEventsOptions = (
+  options: Options<CortexWorkflowsStreamWorkflowEventsData>,
+) =>
+  queryOptions<
+    unknown,
+    CortexWorkflowsStreamWorkflowEventsError,
+    unknown,
+    ReturnType<typeof cortexWorkflowsStreamWorkflowEventsQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await cortexWorkflowsStreamWorkflowEvents({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: cortexWorkflowsStreamWorkflowEventsQueryKey(options),
+  });
+
+export const cortexAgentsListCategoriesQueryKey = (
+  options?: Options<CortexAgentsListCategoriesData>,
+) => createQueryKey("cortexAgentsListCategories", options);
+
+/**
+ * List Categories
+ *
+ * List all available agent categories.
+ */
+export const cortexAgentsListCategoriesOptions = (
+  options?: Options<CortexAgentsListCategoriesData>,
+) =>
+  queryOptions<
+    CortexAgentsListCategoriesResponse,
+    CortexAgentsListCategoriesError,
+    CortexAgentsListCategoriesResponse,
+    ReturnType<typeof cortexAgentsListCategoriesQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await cortexAgentsListCategories({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: cortexAgentsListCategoriesQueryKey(options),
+  });
+
+export const cortexAgentsGetAgentQueryKey = (options: Options<CortexAgentsGetAgentData>) =>
+  createQueryKey("cortexAgentsGetAgent", options);
+
+/**
+ * Get Agent
+ *
+ * Get agent metadata.
+ */
+export const cortexAgentsGetAgentOptions = (options: Options<CortexAgentsGetAgentData>) =>
+  queryOptions<
+    CortexAgentsGetAgentResponse,
+    CortexAgentsGetAgentError,
+    CortexAgentsGetAgentResponse,
+    ReturnType<typeof cortexAgentsGetAgentQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await cortexAgentsGetAgent({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: cortexAgentsGetAgentQueryKey(options),
+  });
+
+/**
+ * Run Agent
+ *
+ * Run an agent.
+ *
+ * Use `wait=true` to block until the workflow completes (201 Created).
+ * Default (`wait=false`) returns immediately with 202 Accepted.
+ */
+export const cortexAgentsRunAgentMutation = (
+  options?: Partial<Options<CortexAgentsRunAgentData>>,
+): UseMutationOptions<
+  CortexAgentsRunAgentResponse,
+  CortexAgentsRunAgentError,
+  Options<CortexAgentsRunAgentData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    CortexAgentsRunAgentResponse,
+    CortexAgentsRunAgentError,
+    Options<CortexAgentsRunAgentData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await cortexAgentsRunAgent({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
+export const accountGetAccountConfigQueryKey = (options?: Options<AccountGetAccountConfigData>) =>
+  createQueryKey("accountGetAccountConfig", options);
+
+/**
+ * Get Account Config
+ *
+ * Return the org-level config slice that drives integration behaviour.
+ *
+ * Auth: JWT or API key. The org is identified by the credential — no org
+ * id is taken from the request, so API-key consumers don't need to know
+ * which org they're tied to.
+ */
+export const accountGetAccountConfigOptions = (options?: Options<AccountGetAccountConfigData>) =>
+  queryOptions<
+    AccountGetAccountConfigResponse,
+    AccountGetAccountConfigError,
+    AccountGetAccountConfigResponse,
+    ReturnType<typeof accountGetAccountConfigQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await accountGetAccountConfig({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: accountGetAccountConfigQueryKey(options),
+  });

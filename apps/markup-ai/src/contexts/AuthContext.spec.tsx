@@ -487,9 +487,6 @@ describe("AuthContext", () => {
     mockAuthMethods.isAuthenticated.mockResolvedValue(false);
     vi.mocked(userSettings.getUserSettings).mockReturnValue({
       apiKey: "stored-token",
-      dialect: null,
-      tone: null,
-      styleGuide: null,
     });
 
     render(

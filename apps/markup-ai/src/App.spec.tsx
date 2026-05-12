@@ -5,12 +5,12 @@ vi.mock("@contentful/react-apps-toolkit", () => ({
   useSDK: vi.fn(),
 }));
 
-// Mock the three components App dynamically chooses
+// Mock the components App dynamically chooses
 vi.mock("./locations/ConfigScreen/ConfigScreen", () => ({
   default: () => <div>ConfigScreen</div>,
 }));
-vi.mock("./locations/Sidebar/Sidebar", () => ({ default: () => <div>Sidebar</div> }));
 vi.mock("./locations/Dialog/DialogRouter", () => ({ default: () => <div>DialogRouter</div> }));
+vi.mock("./locations/Field/Field", () => ({ default: () => <div>Field</div> }));
 
 import { useSDK } from "@contentful/react-apps-toolkit";
 import { locations } from "@contentful/app-sdk";
@@ -31,8 +31,7 @@ describe("App", () => {
     expect(await screen.findByText("ConfigScreen")).toBeInTheDocument();
   });
 
-  // Sidebar is disabled - this test verifies it renders nothing
-  it("renders nothing when in entry sidebar location (Sidebar disabled)", () => {
+  it("renders nothing when in entry sidebar location (no longer registered)", () => {
     (useSDK as unknown as Mock).mockReturnValue(makeSdk(locations.LOCATION_ENTRY_SIDEBAR));
     const { container } = render(<App />);
     expect(container.firstChild).toBeNull();
@@ -42,6 +41,12 @@ describe("App", () => {
     (useSDK as unknown as Mock).mockReturnValue(makeSdk(locations.LOCATION_DIALOG));
     render(<App />);
     expect(await screen.findByText("DialogRouter")).toBeInTheDocument();
+  });
+
+  it("renders Field when in entry field location", async () => {
+    (useSDK as unknown as Mock).mockReturnValue(makeSdk(locations.LOCATION_ENTRY_FIELD));
+    render(<App />);
+    expect(await screen.findByText("Field")).toBeInTheDocument();
   });
 
   it("renders nothing when no location matches", () => {
