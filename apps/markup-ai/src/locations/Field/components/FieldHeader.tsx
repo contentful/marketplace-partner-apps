@@ -7,12 +7,13 @@ const ButtonContent = styled.span`
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  line-height: 1;
+  line-height: 1.8;
 `;
 
 const LogoImage = styled.img`
-  height: 20px;
+  height: 18px;
   width: auto;
+  display: block;
 `;
 
 export interface FieldHeaderProps {
