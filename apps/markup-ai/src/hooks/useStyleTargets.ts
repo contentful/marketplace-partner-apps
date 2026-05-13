@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { internalListTargets } from "../api-client/sdk.gen";
+import { styleAgentListStyleAgentTargets } from "../api-client/sdk.gen";
 import type { TargetResponse } from "../api-client/types.gen";
 import { useApiClient } from "./useApiClient";
 import {
@@ -16,7 +16,7 @@ export interface UseStyleTargetsResult {
   defaultTargetId: string | null;
 }
 
-const STYLE_TARGETS_QUERY_PREFIX = "internalListTargets";
+const STYLE_TARGETS_QUERY_PREFIX = "styleAgentListStyleAgentTargets";
 
 /**
  * Fetches the list of style guides ("targets") for the authenticated user.
@@ -56,7 +56,11 @@ export function useStyleTargets(apiKey?: string | null): UseStyleTargetsResult {
   const query = useQuery<TargetResponse[]>({
     queryKey: [STYLE_TARGETS_QUERY_PREFIX, apiKeyFp],
     queryFn: async ({ signal }) => {
-      const { data } = await internalListTargets({ client, signal, throwOnError: true });
+      const { data } = await styleAgentListStyleAgentTargets({
+        client,
+        signal,
+        throwOnError: true,
+      });
       return data;
     },
     enabled: Boolean(apiKey) && !cached,

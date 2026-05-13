@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { accountGetAccountConfig } from "../api-client/sdk.gen";
+import { styleAgentGetStyleAgentConfig } from "../api-client/sdk.gen";
 import type { OrganizationConfigResponse } from "../api-client/types.gen";
 import { useApiClient } from "./useApiClient";
 import { useAuth } from "../contexts/AuthContext";
@@ -12,7 +12,7 @@ export interface UseAccountConfigResult {
 }
 
 /**
- * Org-level capability flags from `GET /account/config`. The org is
+ * Org-level capability flags from `GET /style-agent/config`. The org is
  * identified by the auth credential, so we just need an authenticated
  * client; no params are passed.
  *
@@ -32,7 +32,7 @@ export function useAccountConfig(): UseAccountConfigResult {
 
   // Key the query by a fingerprint of the auth token so a within-iframe
   // account/org switch (the cross-location auth sync in AuthContext) can
-  // never serve user A's `/account/config` to user B from react-query's
+  // never serve user A's `/style-agent/config` to user B from react-query's
   // cache. Same pattern as `useStyleTargets`.
   const apiKeyFp = token ? fingerprintApiKey(token) : "anonymous";
 
@@ -43,9 +43,9 @@ export function useAccountConfig(): UseAccountConfigResult {
   const enabled = isAuthenticated && Boolean(token);
 
   const query = useQuery<OrganizationConfigResponse>({
-    queryKey: ["accountGetAccountConfig", apiKeyFp],
+    queryKey: ["styleAgentGetStyleAgentConfig", apiKeyFp],
     queryFn: async ({ signal }) => {
-      const { data } = await accountGetAccountConfig({
+      const { data } = await styleAgentGetStyleAgentConfig({
         client,
         signal,
         throwOnError: true,

@@ -17,9 +17,9 @@ vi.mock("../contexts/AuthContext", () => ({
   useAuth: (): unknown => mockUseAuth() as unknown,
 }));
 
-const mockAccountGetAccountConfig = vi.fn();
+const mockStyleAgentGetConfig = vi.fn();
 vi.mock("../api-client/sdk.gen", () => ({
-  accountGetAccountConfig: (options: unknown): unknown => mockAccountGetAccountConfig(options),
+  styleAgentGetStyleAgentConfig: (options: unknown): unknown => mockStyleAgentGetConfig(options),
 }));
 
 function createWrapper() {
@@ -41,7 +41,7 @@ describe("useAccountConfig", () => {
     const { result } = renderHook(() => useAccountConfig(), { wrapper: createWrapper() });
     expect(result.current.config).toBeNull();
     expect(result.current.isLoading).toBe(false);
-    expect(mockAccountGetAccountConfig).not.toHaveBeenCalled();
+    expect(mockStyleAgentGetConfig).not.toHaveBeenCalled();
   });
 
   it("does not fire the request during the auth tick when token is not yet populated", () => {
@@ -51,11 +51,11 @@ describe("useAccountConfig", () => {
     const { result } = renderHook(() => useAccountConfig(), { wrapper: createWrapper() });
     expect(result.current.config).toBeNull();
     expect(result.current.isLoading).toBe(false);
-    expect(mockAccountGetAccountConfig).not.toHaveBeenCalled();
+    expect(mockStyleAgentGetConfig).not.toHaveBeenCalled();
   });
 
   it("exposes the loaded config when authenticated", async () => {
-    mockAccountGetAccountConfig.mockResolvedValue({
+    mockStyleAgentGetConfig.mockResolvedValue({
       data: {
         is_acrolinx_classic: false,
         style_agent: StyleAgentMode.ENABLED,
@@ -70,7 +70,7 @@ describe("useAccountConfig", () => {
   });
 
   it("surfaces errors via isError and keeps config null (fail-open)", async () => {
-    mockAccountGetAccountConfig.mockRejectedValue(new Error("500"));
+    mockStyleAgentGetConfig.mockRejectedValue(new Error("500"));
     const { result } = renderHook(() => useAccountConfig(), { wrapper: createWrapper() });
     await waitFor(() => {
       expect(result.current.isError).toBe(true);

@@ -18,7 +18,7 @@ export interface AgentConfigFieldProps {
   isDisabled?: boolean;
   /** API key — only used when prefetched targets are not provided. */
   apiKey?: string | null;
-  /** Pre-fetched style guide targets. Passing these avoids a duplicate `/internal/targets` call. */
+  /** Pre-fetched style guide targets. Passing these avoids a duplicate `/style-agent/targets` call. */
   styleGuideTargets?: TargetResponse[];
   styleGuidesLoading?: boolean;
   styleGuidesError?: boolean;
@@ -112,7 +112,7 @@ interface TargetSelectFieldProps {
 
 /**
  * Style-guide picker. When the parent passes `prefetchedTargets`, we reuse
- * them instead of firing another `/internal/targets` request — that's how
+ * them instead of firing another `/style-agent/targets` request — that's how
  * the dialog ensures a single network call is shared between the header
  * picker and this control.
  */
