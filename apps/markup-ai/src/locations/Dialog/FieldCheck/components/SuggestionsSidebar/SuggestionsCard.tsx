@@ -59,7 +59,7 @@ const SuggestionItem = styled.button<{ canInteract: boolean }>`
   margin: 0;
   text-align: left;
   font-size: ${tokens.fontSizeS};
-  font-weight: ${tokens.fontWeightMedium};
+  font-weight: ${tokens.fontWeightDemiBold};
   line-height: 1.4;
   color: ${tokens.green700};
   cursor: ${(p) => (p.canInteract ? "pointer" : "not-allowed")};

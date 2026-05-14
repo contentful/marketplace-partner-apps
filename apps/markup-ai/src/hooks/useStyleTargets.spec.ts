@@ -13,11 +13,12 @@ vi.mock("./useApiClient", () => ({
 }));
 
 // We build the query inline (no longer via the generated
-// `internalListTargetsOptions`) so the queryKey can include an auth
+// `styleAgentListStyleAgentTargetsOptions`) so the queryKey can include an auth
 // fingerprint. Tests stub the SDK-level fetch instead.
-const mockInternalListTargets = vi.fn();
+const mockStyleAgentListTargets = vi.fn();
 vi.mock("../api-client/sdk.gen", () => ({
-  internalListTargets: (options: unknown): unknown => mockInternalListTargets(options),
+  styleAgentListStyleAgentTargets: (options: unknown): unknown =>
+    mockStyleAgentListTargets(options),
 }));
 
 function createWrapper() {
@@ -38,7 +39,7 @@ function target(overrides: Partial<TargetResponse> = {}): TargetResponse {
 }
 
 function mockTargets(targets: TargetResponse[]): void {
-  mockInternalListTargets.mockResolvedValue({ data: targets });
+  mockStyleAgentListTargets.mockResolvedValue({ data: targets });
 }
 
 describe("useStyleTargets", () => {
@@ -52,7 +53,7 @@ describe("useStyleTargets", () => {
     const { result } = renderHook(() => useStyleTargets(), { wrapper: createWrapper() });
     expect(result.current.targets).toEqual([]);
     expect(result.current.defaultTargetId).toBeNull();
-    expect(mockInternalListTargets).not.toHaveBeenCalled();
+    expect(mockStyleAgentListTargets).not.toHaveBeenCalled();
   });
 
   it("exposes loaded targets and picks the is_default target as defaultTargetId", async () => {
@@ -96,7 +97,7 @@ describe("useStyleTargets", () => {
   });
 
   it("surfaces query errors via isError", async () => {
-    mockInternalListTargets.mockRejectedValue(new Error("401"));
+    mockStyleAgentListTargets.mockRejectedValue(new Error("401"));
     const { result } = renderHook(() => useStyleTargets("token"), { wrapper: createWrapper() });
     await waitFor(() => {
       expect(result.current.isError).toBe(true);
@@ -123,14 +124,14 @@ describe("useStyleTargets", () => {
 
     // Simulate user B signing in within the same iframe. The cache for B
     // doesn't exist yet, so a fresh fetch must fire.
-    mockInternalListTargets.mockClear();
+    mockStyleAgentListTargets.mockClear();
     mockTargets(userBTargets);
     rerender({ key: "tokenB" });
 
     await waitFor(() => {
       expect(result.current.targets.map((t) => t.id)).toEqual(["b-1"]);
     });
-    expect(mockInternalListTargets).toHaveBeenCalled();
+    expect(mockStyleAgentListTargets).toHaveBeenCalled();
   });
 
   it("caches an empty target list (so accounts with zero targets don't keep refetching)", async () => {
@@ -141,13 +142,13 @@ describe("useStyleTargets", () => {
     await waitFor(() => {
       expect(first.result.current.isLoading).toBe(false);
     });
-    expect(mockInternalListTargets).toHaveBeenCalledTimes(1);
+    expect(mockStyleAgentListTargets).toHaveBeenCalledTimes(1);
 
     // A fresh mount in a different react tree (simulating another iframe)
     // hydrates from localStorage and skips the network entirely.
-    mockInternalListTargets.mockClear();
+    mockStyleAgentListTargets.mockClear();
     const second = renderHook(() => useStyleTargets("token"), { wrapper: createWrapper() });
     expect(second.result.current.targets).toEqual([]);
-    expect(mockInternalListTargets).not.toHaveBeenCalled();
+    expect(mockStyleAgentListTargets).not.toHaveBeenCalled();
   });
 });

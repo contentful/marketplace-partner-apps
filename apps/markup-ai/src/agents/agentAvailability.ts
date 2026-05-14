@@ -3,7 +3,7 @@
  * catalog agents the user is *allowed* to run, regardless of whether they
  * have the agent toggled on in settings.
  *
- * Today the only input is the `/account/config` `OrganizationConfigResponse`
+ * Today the only input is the `/style-agent/config` `OrganizationConfigResponse`
  * and the only rule is "if the org has style_agent disabled, mark
  * `style_agent` unavailable." As more agents come online, extend
  * `computeAgentAvailability` with one rule per agent — the UI never needs
