@@ -268,6 +268,7 @@ export enum AccessPolicySubjectType {
   ORG_MEMBER = "org_member",
   ORG_USER = "org_user",
   ORG_APIKEY = "org_apikey",
+  GROUP = "group",
 }
 
 /**
@@ -341,15 +342,15 @@ export type ActivityEventRequest = {
   /**
    * Workflow Id
    *
-   * Workflow ID of the check that produced the issue
+   * Workflow ID of the check that produced the issue (null for pre-scan actions)
    */
-  workflow_id: string;
+  workflow_id?: string | null;
   /**
    * Request Id
    *
-   * Request ID of the check that produced the issue
+   * Request ID of the check that produced the issue (empty for pre-scan actions; handler falls back to API request ID)
    */
-  request_id: string;
+  request_id?: string;
   /**
    * Session Id
    *
@@ -383,7 +384,7 @@ export type ActivityEventRequest = {
   /**
    * Action Source
    *
-   * Where the action was triggered (e.g., 'sidebar', 'tooltip')
+   * Where the action was triggered (e.g., 'issue_panel', 'tooltip', 'work', 'goal', 'plan')
    */
   action_source: string;
   /**
@@ -392,6 +393,30 @@ export type ActivityEventRequest = {
    * Normalized document URL
    */
   document_ref?: string | null;
+  /**
+   * Mode
+   *
+   * Workflow mode: 'guided' or 'manual'
+   */
+  mode?: string | null;
+  /**
+   * Goal Id
+   *
+   * Stable goal identifier (e.g., 'brand-consistency')
+   */
+  goal_id?: string | null;
+  /**
+   * Goal Agent Names
+   *
+   * Agent slugs associated with the selected goal
+   */
+  goal_agent_names?: Array<string> | null;
+  /**
+   * Goal Agent Ids
+   *
+   * Stable agent IDs (ag_<nanoid>) for the selected goal
+   */
+  goal_agent_ids?: Array<string> | null;
   /**
    * Status
    *
@@ -3588,6 +3613,18 @@ export type SetupTicketRequest = {
    * Connection strategy. Picks which self-service profile to mint the ticket against.
    */
   strategy: "saml" | "oidc";
+  /**
+   * Connection Name
+   *
+   * User-supplied friendly name for a new connection. Required when creating; ignored when editing an existing connection. The Helios backend slugifies this and adds a uniqueness suffix to derive the underlying Auth0 connection name. Capped at 64 chars to match Auth0's `connection.display_name` length limit.
+   */
+  connection_name?: string | null;
+  /**
+   * Connection Id
+   *
+   * Auth0 connection ID. When set, mints an edit ticket for that connection (user reconfigure flow). When absent, mints a create ticket and `connection_name` must be present.
+   */
+  connection_id?: string | null;
 };
 
 /**
@@ -3628,44 +3665,122 @@ export enum SkepticismLevel {
 }
 
 /**
- * SsoConfig
+ * SsoAttributeConfig
  *
- * Per-org SSO group-mapping config.
- *
- * All fields are optional; an empty config is a valid state (org hasn't set
- * SSO yet). Field names are the contract with the post-login Action and must stay stable.
+ * One claim-mapping rule. Multiple of these per connection compose the
+ * full extraction policy.
  */
-export type SsoConfig = {
+export type SsoAttributeConfig = {
   /**
-   * Sso Claim Attribute
+   * Attribute
    *
-   * JWT claim name carrying group identifiers
+   * JWT claim name carrying group identifiers for this attribute.
    */
-  sso_claim_attribute?: string | null;
+  attribute: string;
   /**
-   * Sso Claim Format
+   * Claim Format
    *
    * Shape of the claim value: array_strings | dn_strings | comma_separated.
    */
-  sso_claim_format?: "array_strings" | "dn_strings" | "comma_separated" | null;
+  claim_format: "array_strings" | "dn_strings" | "comma_separated";
   /**
-   * Sso Prefix Filter
+   * Prefix Filter
    *
-   * Optional prefix that must appear on a group string for it to count (stripped before storage).
+   * Optional prefix the IDP-emitted group string must start with to be kept; the prefix is stripped from the canonical identifier.
    */
-  sso_prefix_filter?: string | null;
+  prefix_filter?: string | null;
+};
+
+/**
+ * SsoConfig
+ *
+ * Per-connection SSO group-mapping config.
+ *
+ * An empty config (`attributes=[]`, no primary, no ignores) is the valid
+ * initial state. Field names form the contract with the post-login Action
+ * and must stay stable.
+ */
+export type SsoConfig = {
   /**
-   * Sso Ignore Groups
+   * Attributes
    *
-   * Comma-separated list of group identifiers to drop.
+   * Ordered list of attribute mappings.
    */
-  sso_ignore_groups?: string | null;
+  attributes?: Array<SsoAttributeConfig>;
   /**
-   * Sso Primary Group Attribute
+   * Ignore Groups
    *
-   * Optional claim name whose value picks the user's primary group.
+   * Per-connection list of canonical (post-prefix-strip) group identifiers to drop from the extracted groups set.
    */
-  sso_primary_group_attribute?: string | null;
+  ignore_groups?: Array<string>;
+  /**
+   * Primary Group Attribute
+   *
+   * Optional. Names one of `attributes[].attribute`; the first value the IDP emits for that attribute becomes the user's primary group.
+   */
+  primary_group_attribute?: string | null;
+};
+
+/**
+ * SsoConnection
+ *
+ * Public projection of an Auth0 SSO connection in the caller's org.
+ */
+export type SsoConnection = {
+  /**
+   * Id
+   *
+   * Auth0 connection ID
+   */
+  id: string;
+  /**
+   * Name
+   *
+   * Connection name, e.g. 'acme-engineering-sso-a1b2c3d4'.
+   */
+  name: string;
+  /**
+   * Strategy
+   *
+   * Normalized strategy ('saml' or 'oidc').
+   */
+  strategy: "saml" | "oidc";
+  /**
+   * Assign Membership On Login
+   *
+   * Whether new users authenticating via this connection are auto-added as org members. Auth0 has no top-level connection `enabled` flag; this is the closest signal — admin can flip it in Auth0 to suspend JIT membership without deleting the connection.
+   */
+  assign_membership_on_login: boolean;
+  /**
+   * Idp Entity Id
+   *
+   * Cached SAML entityId / OIDC issuer for this connection, or `null` if not yet populated. Lazily fetched and cached on the first list-endpoint call after the connection appears.
+   */
+  idp_entity_id?: string | null;
+  /**
+   * Display Name
+   *
+   * Friendly name the admin gave the connection at create time. Lazily fetched and cached alongside `idp_entity_id`. Falls back to the technical `name` (slugified) when this hasn't been populated for older connections.
+   */
+  display_name?: string | null;
+  /**
+   * Mapping Configured
+   *
+   * True if the connection has at least one claim-mapping attribute configured.
+   */
+  mapping_configured: boolean;
+};
+
+/**
+ * SsoConnectionsResponse
+ */
+export type SsoConnectionsResponse = {
+  /**
+   * Connections
+   *
+   * Every SSO connection currently enabled for the caller's org. Empty list means no SSO is configured. An org may have multiple connections per strategy.
+   */
+  connections?: Array<SsoConnection>;
 };
 
 /**
