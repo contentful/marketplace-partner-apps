@@ -16,7 +16,6 @@ const INCLUDED_PATHS = [
   "/v1/internal/",
   "/v1/terminology/domains",
   "/account/config",
-  "/style-agent/",
 ];
 
 function downloadOpenAPISpec(url) {

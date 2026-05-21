@@ -1,7 +1,7 @@
 import type { TargetResponse } from "../api-client/types.gen";
 
 /**
- * Cross-iframe cache for the `/style-agent/targets` response.
+ * Cross-iframe cache for the `/internal/targets` response.
  *
  * Each Markup AI-enabled field on the entry editor renders inside its own
  * iframe, so they each run a separate React tree and a separate react-query

@@ -17,9 +17,6 @@ import {
   internalListTargets,
   internalSubmitFeedback,
   type Options,
-  styleAgentGetStyleAgentConfig,
-  styleAgentListStyleAgentContentProfiles,
-  styleAgentListStyleAgentTargets,
   terminologyCreateDomain,
   terminologyDeleteDomain,
   terminologyGetDomain,
@@ -62,15 +59,6 @@ import type {
   InternalSubmitFeedbackData,
   InternalSubmitFeedbackError,
   InternalSubmitFeedbackResponse,
-  StyleAgentGetStyleAgentConfigData,
-  StyleAgentGetStyleAgentConfigError,
-  StyleAgentGetStyleAgentConfigResponse,
-  StyleAgentListStyleAgentContentProfilesData,
-  StyleAgentListStyleAgentContentProfilesError,
-  StyleAgentListStyleAgentContentProfilesResponse,
-  StyleAgentListStyleAgentTargetsData,
-  StyleAgentListStyleAgentTargetsError,
-  StyleAgentListStyleAgentTargetsResponse,
   TerminologyCreateDomainData,
   TerminologyCreateDomainError,
   TerminologyCreateDomainResponse,
@@ -604,88 +592,4 @@ export const accountGetAccountConfigOptions = (options?: Options<AccountGetAccou
       return data;
     },
     queryKey: accountGetAccountConfigQueryKey(options),
-  });
-
-export const styleAgentGetStyleAgentConfigQueryKey = (
-  options?: Options<StyleAgentGetStyleAgentConfigData>,
-) => createQueryKey("styleAgentGetStyleAgentConfig", options);
-
-/**
- * Get Style Agent Config
- */
-export const styleAgentGetStyleAgentConfigOptions = (
-  options?: Options<StyleAgentGetStyleAgentConfigData>,
-) =>
-  queryOptions<
-    StyleAgentGetStyleAgentConfigResponse,
-    StyleAgentGetStyleAgentConfigError,
-    StyleAgentGetStyleAgentConfigResponse,
-    ReturnType<typeof styleAgentGetStyleAgentConfigQueryKey>
-  >({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await styleAgentGetStyleAgentConfig({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: styleAgentGetStyleAgentConfigQueryKey(options),
-  });
-
-export const styleAgentListStyleAgentTargetsQueryKey = (
-  options?: Options<StyleAgentListStyleAgentTargetsData>,
-) => createQueryKey("styleAgentListStyleAgentTargets", options);
-
-/**
- * List Style Agent Targets
- */
-export const styleAgentListStyleAgentTargetsOptions = (
-  options?: Options<StyleAgentListStyleAgentTargetsData>,
-) =>
-  queryOptions<
-    StyleAgentListStyleAgentTargetsResponse,
-    StyleAgentListStyleAgentTargetsError,
-    StyleAgentListStyleAgentTargetsResponse,
-    ReturnType<typeof styleAgentListStyleAgentTargetsQueryKey>
-  >({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await styleAgentListStyleAgentTargets({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: styleAgentListStyleAgentTargetsQueryKey(options),
-  });
-
-export const styleAgentListStyleAgentContentProfilesQueryKey = (
-  options?: Options<StyleAgentListStyleAgentContentProfilesData>,
-) => createQueryKey("styleAgentListStyleAgentContentProfiles", options);
-
-/**
- * List Style Agent Content Profiles
- */
-export const styleAgentListStyleAgentContentProfilesOptions = (
-  options?: Options<StyleAgentListStyleAgentContentProfilesData>,
-) =>
-  queryOptions<
-    StyleAgentListStyleAgentContentProfilesResponse,
-    StyleAgentListStyleAgentContentProfilesError,
-    StyleAgentListStyleAgentContentProfilesResponse,
-    ReturnType<typeof styleAgentListStyleAgentContentProfilesQueryKey>
-  >({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await styleAgentListStyleAgentContentProfiles({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: styleAgentListStyleAgentContentProfilesQueryKey(options),
   });

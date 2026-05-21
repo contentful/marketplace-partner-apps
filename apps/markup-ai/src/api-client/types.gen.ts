@@ -3628,110 +3628,44 @@ export enum SkepticismLevel {
 }
 
 /**
- * SsoAttributeConfig
- *
- * One claim-mapping rule. Multiple of these per org compose the full
- * extraction policy.
- */
-export type SsoAttributeConfig = {
-  /**
-   * Attribute
-   *
-   * JWT claim name carrying group identifiers for this attribute.
-   */
-  attribute: string;
-  /**
-   * Claim Format
-   *
-   * Shape of the claim value: array_strings | dn_strings | comma_separated.
-   */
-  claim_format: "array_strings" | "dn_strings" | "comma_separated";
-  /**
-   * Prefix Filter
-   *
-   * Optional prefix the IDP-emitted group string must start with to be kept; the prefix is stripped from the canonical identifier.
-   */
-  prefix_filter?: string | null;
-};
-
-/**
  * SsoConfig
  *
  * Per-org SSO group-mapping config.
  *
- * An empty config (`attributes=[]`, no primary, no ignores) is the valid
- * initial state. Field names form the contract with the post-login Action
- * and must stay stable.
+ * All fields are optional; an empty config is a valid state (org hasn't set
+ * SSO yet). Field names are the contract with the post-login Action and must stay stable.
  */
 export type SsoConfig = {
   /**
-   * Attributes
+   * Sso Claim Attribute
    *
-   * Ordered list of attribute mappings.
+   * JWT claim name carrying group identifiers
    */
-  attributes?: Array<SsoAttributeConfig>;
+  sso_claim_attribute?: string | null;
   /**
-   * Ignore Groups
+   * Sso Claim Format
    *
-   * Org-level list of canonical (post-prefix-strip) group identifiers to drop from the extracted groups set.
+   * Shape of the claim value: array_strings | dn_strings | comma_separated.
    */
-  ignore_groups?: Array<string>;
+  sso_claim_format?: "array_strings" | "dn_strings" | "comma_separated" | null;
   /**
-   * Primary Group Attribute
+   * Sso Prefix Filter
    *
-   * Optional. Names one of `attributes[].attribute`; the first value the IDP emits for that attribute becomes the user's primary group.
+   * Optional prefix that must appear on a group string for it to count (stripped before storage).
    */
-  primary_group_attribute?: string | null;
-};
-
-/**
- * SsoConnection
- *
- * Public projection of the org's Auth0 SSO connection.
- */
-export type SsoConnection = {
+  sso_prefix_filter?: string | null;
   /**
-   * Id
+   * Sso Ignore Groups
    *
-   * Auth0 connection ID
+   * Comma-separated list of group identifiers to drop.
    */
-  id: string;
+  sso_ignore_groups?: string | null;
   /**
-   * Name
+   * Sso Primary Group Attribute
    *
-   * Connection name, e.g. 'acme-corp-saml'.
+   * Optional claim name whose value picks the user's primary group.
    */
-  name: string;
-  /**
-   * Strategy
-   *
-   * Normalized strategy ('saml' or 'oidc').
-   */
-  strategy: "saml" | "oidc";
-  /**
-   * Enabled
-   *
-   * Whether the connection is currently active for the org.
-   */
-  enabled: boolean;
-  /**
-   * Idp Entity Id
-   *
-   * IDP entity ID (SAML) or issuer URL (OIDC), if set.
-   */
-  idp_entity_id?: string | null;
-};
-
-/**
- * SsoConnectionsResponse
- */
-export type SsoConnectionsResponse = {
-  /**
-   * Connections
-   *
-   * The org's customer SSO connections (zero, one, or two — one per strategy). Empty list means no SSO is configured.
-   */
-  connections?: Array<SsoConnection>;
+  sso_primary_group_attribute?: string | null;
 };
 
 /**
@@ -6725,124 +6659,3 @@ export type AccountGetAccountConfigResponses = {
 
 export type AccountGetAccountConfigResponse =
   AccountGetAccountConfigResponses[keyof AccountGetAccountConfigResponses];
-
-export type StyleAgentGetStyleAgentConfigData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: "/style-agent/config";
-};
-
-export type StyleAgentGetStyleAgentConfigErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * Unprocessable Entity
-   */
-  422: ValidationErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type StyleAgentGetStyleAgentConfigError =
-  StyleAgentGetStyleAgentConfigErrors[keyof StyleAgentGetStyleAgentConfigErrors];
-
-export type StyleAgentGetStyleAgentConfigResponses = {
-  /**
-   * Successful Response
-   */
-  200: OrganizationConfigResponse;
-};
-
-export type StyleAgentGetStyleAgentConfigResponse =
-  StyleAgentGetStyleAgentConfigResponses[keyof StyleAgentGetStyleAgentConfigResponses];
-
-export type StyleAgentListStyleAgentTargetsData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: "/style-agent/targets";
-};
-
-export type StyleAgentListStyleAgentTargetsErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * Unprocessable Entity
-   */
-  422: ValidationErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type StyleAgentListStyleAgentTargetsError =
-  StyleAgentListStyleAgentTargetsErrors[keyof StyleAgentListStyleAgentTargetsErrors];
-
-export type StyleAgentListStyleAgentTargetsResponses = {
-  /**
-   * Response Style Agent-List Style Agent Targets
-   *
-   * Successful Response
-   */
-  200: Array<TargetResponse>;
-};
-
-export type StyleAgentListStyleAgentTargetsResponse =
-  StyleAgentListStyleAgentTargetsResponses[keyof StyleAgentListStyleAgentTargetsResponses];
-
-export type StyleAgentListStyleAgentContentProfilesData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: "/style-agent/content-profiles";
-};
-
-export type StyleAgentListStyleAgentContentProfilesErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * Unprocessable Entity
-   */
-  422: ValidationErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type StyleAgentListStyleAgentContentProfilesError =
-  StyleAgentListStyleAgentContentProfilesErrors[keyof StyleAgentListStyleAgentContentProfilesErrors];
-
-export type StyleAgentListStyleAgentContentProfilesResponses = {
-  /**
-   * Response Style Agent-List Style Agent Content Profiles
-   *
-   * Successful Response
-   */
-  200: Array<ContentProfileResponse>;
-};
-
-export type StyleAgentListStyleAgentContentProfilesResponse =
-  StyleAgentListStyleAgentContentProfilesResponses[keyof StyleAgentListStyleAgentContentProfilesResponses];

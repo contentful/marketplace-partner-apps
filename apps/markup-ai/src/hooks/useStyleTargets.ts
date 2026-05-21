@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { styleAgentListStyleAgentTargets } from "../api-client/sdk.gen";
+import { internalListTargets } from "../api-client/sdk.gen";
 import type { TargetResponse } from "../api-client/types.gen";
 import { useApiClient } from "./useApiClient";
+import { defaultStyleTargetId } from "../agents/utils/defaultStyleTarget";
 import {
   fingerprintApiKey,
   readStyleTargetsCache,
@@ -16,7 +17,7 @@ export interface UseStyleTargetsResult {
   defaultTargetId: string | null;
 }
 
-const STYLE_TARGETS_QUERY_PREFIX = "styleAgentListStyleAgentTargets";
+const STYLE_TARGETS_QUERY_PREFIX = "internalListTargets";
 
 /**
  * Fetches the list of style guides ("targets") for the authenticated user.
@@ -56,11 +57,7 @@ export function useStyleTargets(apiKey?: string | null): UseStyleTargetsResult {
   const query = useQuery<TargetResponse[]>({
     queryKey: [STYLE_TARGETS_QUERY_PREFIX, apiKeyFp],
     queryFn: async ({ signal }) => {
-      const { data } = await styleAgentListStyleAgentTargets({
-        client,
-        signal,
-        throwOnError: true,
-      });
+      const { data } = await internalListTargets({ client, signal, throwOnError: true });
       return data;
     },
     enabled: Boolean(apiKey) && !cached,
@@ -80,10 +77,11 @@ export function useStyleTargets(apiKey?: string | null): UseStyleTargetsResult {
 
   const targets: TargetResponse[] = query.data ?? [];
 
-  const defaultTargetId = useMemo(
-    () => targets.find((t) => t.is_default)?.id ?? targets.find((t) => t.enabled)?.id ?? null,
-    [targets],
-  );
+  // Prefer a target named "Main" → API `is_default` → first enabled.
+  // Sending a target_id is required: the backend does not consistently
+  // pick a default when the field is omitted, which produces analyses
+  // with `targetDisplayName=null`. See sidebar-app INT-520.
+  const defaultTargetId = useMemo(() => defaultStyleTargetId(targets) ?? null, [targets]);
 
   return {
     targets,

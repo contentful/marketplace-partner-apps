@@ -39,15 +39,6 @@ import type {
   InternalSubmitFeedbackData,
   InternalSubmitFeedbackErrors,
   InternalSubmitFeedbackResponses,
-  StyleAgentGetStyleAgentConfigData,
-  StyleAgentGetStyleAgentConfigErrors,
-  StyleAgentGetStyleAgentConfigResponses,
-  StyleAgentListStyleAgentContentProfilesData,
-  StyleAgentListStyleAgentContentProfilesErrors,
-  StyleAgentListStyleAgentContentProfilesResponses,
-  StyleAgentListStyleAgentTargetsData,
-  StyleAgentListStyleAgentTargetsErrors,
-  StyleAgentListStyleAgentTargetsResponses,
   TerminologyCreateDomainData,
   TerminologyCreateDomainErrors,
   TerminologyCreateDomainResponses,
@@ -399,53 +390,5 @@ export const accountGetAccountConfig = <ThrowOnError extends boolean = false>(
   >({
     security: [{ scheme: "bearer", type: "http" }],
     url: "/account/config",
-    ...options,
-  });
-
-/**
- * Get Style Agent Config
- */
-export const styleAgentGetStyleAgentConfig = <ThrowOnError extends boolean = false>(
-  options?: Options<StyleAgentGetStyleAgentConfigData, ThrowOnError>,
-) =>
-  (options?.client ?? client).get<
-    StyleAgentGetStyleAgentConfigResponses,
-    StyleAgentGetStyleAgentConfigErrors,
-    ThrowOnError
-  >({
-    security: [{ scheme: "bearer", type: "http" }],
-    url: "/style-agent/config",
-    ...options,
-  });
-
-/**
- * List Style Agent Targets
- */
-export const styleAgentListStyleAgentTargets = <ThrowOnError extends boolean = false>(
-  options?: Options<StyleAgentListStyleAgentTargetsData, ThrowOnError>,
-) =>
-  (options?.client ?? client).get<
-    StyleAgentListStyleAgentTargetsResponses,
-    StyleAgentListStyleAgentTargetsErrors,
-    ThrowOnError
-  >({
-    security: [{ scheme: "bearer", type: "http" }],
-    url: "/style-agent/targets",
-    ...options,
-  });
-
-/**
- * List Style Agent Content Profiles
- */
-export const styleAgentListStyleAgentContentProfiles = <ThrowOnError extends boolean = false>(
-  options?: Options<StyleAgentListStyleAgentContentProfilesData, ThrowOnError>,
-) =>
-  (options?.client ?? client).get<
-    StyleAgentListStyleAgentContentProfilesResponses,
-    StyleAgentListStyleAgentContentProfilesErrors,
-    ThrowOnError
-  >({
-    security: [{ scheme: "bearer", type: "http" }],
-    url: "/style-agent/content-profiles",
     ...options,
   });

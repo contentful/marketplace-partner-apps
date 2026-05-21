@@ -27,6 +27,7 @@ import { toBackendAgentIds } from "../../agents/agenticConfig";
 import { filterRunnableAgentIds, unavailabilityReasonsFor } from "../../agents/agentAvailability";
 import type { CortexIssueWithId, CortexSeverity } from "../../agents/types";
 import { getAgenticSuggestionChoices } from "../../agents/utils/agenticSuggestions";
+import { buildDocumentRef, extensionForFieldAndContent } from "../../agents/utils/documentMeta";
 import {
   buildStyleAgentApplyAllPeerCountByIssueId,
   getStyleAgentApplyAllClusterKey,
@@ -244,6 +245,7 @@ const FieldCheckDialog: React.FC = () => {
     targets: styleGuideTargets,
     isLoading: styleGuidesLoading,
     isError: styleGuidesError,
+    defaultTargetId: defaultStyleTarget,
   } = useStyleTargets(apiKey);
 
   // Pull the per-content-type default straight from `sdk.parameters.installation`
@@ -312,20 +314,39 @@ const FieldCheckDialog: React.FC = () => {
       // returned `position.start` / `position.end` against the exact same string.
       setScannedContent(content);
       try {
-        // The picker is the single source of truth for `target_id`. We
-        // overwrite (or, when cleared, delete) it on the freshly-flattened
-        // config so a leftover sessionStorage entry can never re-send a
-        // stale value behind the user's back.
+        // The picker is the single source of truth for `target_id` when the
+        // user (or admin) has picked one. When nothing has been picked we
+        // fall back to the org default chosen by `useStyleTargets` (Main →
+        // API is_default → first enabled). The backend does not always pick
+        // a default when the field is omitted, so always sending one keeps
+        // analyses from coming back with `targetDisplayName=null`.
         const finalAgentConfig: Record<string, unknown> = flattenConfigForRequest(selectedAgentIds);
-        if (effectiveStyleGuideId) {
-          finalAgentConfig.target_id = effectiveStyleGuideId;
+        const resolvedTargetId = effectiveStyleGuideId ?? defaultStyleTarget ?? null;
+        if (resolvedTargetId) {
+          finalAgentConfig.target_id = resolvedTargetId;
         } else {
           delete finalAgentConfig.target_id;
         }
 
+        // `document_name` carries the entry title (e.g. "My Article"); we
+        // also build a unique `document_ref` from title + field id + a file
+        // extension derived from the field type, refined by detected syntax
+        // so a Symbol that contains markdown still gets `.md`.
+        const extension = extensionForFieldAndContent(
+          params.fieldFormat,
+          detectSyntaxKind(content),
+        );
+        const documentName = params.entryTitle?.trim() || undefined;
+        const documentRef = buildDocumentRef({
+          title: documentName,
+          fieldId: params.fieldId,
+          extension,
+        });
+
         await startScan({
           text: content,
-          documentName: `${params.contentTypeId}/${params.fieldId}`,
+          documentName,
+          documentRef,
           backendIds,
           agentConfig: finalAgentConfig,
         });
@@ -340,9 +361,11 @@ const FieldCheckDialog: React.FC = () => {
       selectedAgentIds,
       unavailableAgents,
       flattenConfigForRequest,
-      params.contentTypeId,
+      params.fieldFormat,
       params.fieldId,
+      params.entryTitle,
       effectiveStyleGuideId,
+      defaultStyleTarget,
     ],
   );
 

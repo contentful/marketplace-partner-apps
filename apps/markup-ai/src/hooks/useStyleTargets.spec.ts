@@ -13,12 +13,11 @@ vi.mock("./useApiClient", () => ({
 }));
 
 // We build the query inline (no longer via the generated
-// `styleAgentListStyleAgentTargetsOptions`) so the queryKey can include an auth
+// `internalListTargetsOptions`) so the queryKey can include an auth
 // fingerprint. Tests stub the SDK-level fetch instead.
-const mockStyleAgentListTargets = vi.fn();
+const mockInternalListTargets = vi.fn();
 vi.mock("../api-client/sdk.gen", () => ({
-  styleAgentListStyleAgentTargets: (options: unknown): unknown =>
-    mockStyleAgentListTargets(options),
+  internalListTargets: (options: unknown): unknown => mockInternalListTargets(options),
 }));
 
 function createWrapper() {
@@ -39,7 +38,7 @@ function target(overrides: Partial<TargetResponse> = {}): TargetResponse {
 }
 
 function mockTargets(targets: TargetResponse[]): void {
-  mockStyleAgentListTargets.mockResolvedValue({ data: targets });
+  mockInternalListTargets.mockResolvedValue({ data: targets });
 }
 
 describe("useStyleTargets", () => {
@@ -53,7 +52,7 @@ describe("useStyleTargets", () => {
     const { result } = renderHook(() => useStyleTargets(), { wrapper: createWrapper() });
     expect(result.current.targets).toEqual([]);
     expect(result.current.defaultTargetId).toBeNull();
-    expect(mockStyleAgentListTargets).not.toHaveBeenCalled();
+    expect(mockInternalListTargets).not.toHaveBeenCalled();
   });
 
   it("exposes loaded targets and picks the is_default target as defaultTargetId", async () => {
@@ -70,6 +69,21 @@ describe("useStyleTargets", () => {
 
     expect(result.current.targets.map((t) => t.id)).toEqual(["ap", "microsoft"]);
     expect(result.current.defaultTargetId).toBe("microsoft");
+  });
+
+  it("prefers a target named 'Main' over the API-default target", async () => {
+    mockTargets([
+      target({ id: "ap", display_name: "AP", is_default: true }),
+      target({ id: "main", display_name: "Main", is_default: false }),
+    ]);
+
+    const { result } = renderHook(() => useStyleTargets("token"), { wrapper: createWrapper() });
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    expect(result.current.defaultTargetId).toBe("main");
   });
 
   it("falls back to the first enabled target when no target is flagged default", async () => {
@@ -97,7 +111,7 @@ describe("useStyleTargets", () => {
   });
 
   it("surfaces query errors via isError", async () => {
-    mockStyleAgentListTargets.mockRejectedValue(new Error("401"));
+    mockInternalListTargets.mockRejectedValue(new Error("401"));
     const { result } = renderHook(() => useStyleTargets("token"), { wrapper: createWrapper() });
     await waitFor(() => {
       expect(result.current.isError).toBe(true);
@@ -124,14 +138,14 @@ describe("useStyleTargets", () => {
 
     // Simulate user B signing in within the same iframe. The cache for B
     // doesn't exist yet, so a fresh fetch must fire.
-    mockStyleAgentListTargets.mockClear();
+    mockInternalListTargets.mockClear();
     mockTargets(userBTargets);
     rerender({ key: "tokenB" });
 
     await waitFor(() => {
       expect(result.current.targets.map((t) => t.id)).toEqual(["b-1"]);
     });
-    expect(mockStyleAgentListTargets).toHaveBeenCalled();
+    expect(mockInternalListTargets).toHaveBeenCalled();
   });
 
   it("caches an empty target list (so accounts with zero targets don't keep refetching)", async () => {
@@ -142,13 +156,13 @@ describe("useStyleTargets", () => {
     await waitFor(() => {
       expect(first.result.current.isLoading).toBe(false);
     });
-    expect(mockStyleAgentListTargets).toHaveBeenCalledTimes(1);
+    expect(mockInternalListTargets).toHaveBeenCalledTimes(1);
 
     // A fresh mount in a different react tree (simulating another iframe)
     // hydrates from localStorage and skips the network entirely.
-    mockStyleAgentListTargets.mockClear();
+    mockInternalListTargets.mockClear();
     const second = renderHook(() => useStyleTargets("token"), { wrapper: createWrapper() });
     expect(second.result.current.targets).toEqual([]);
-    expect(mockStyleAgentListTargets).not.toHaveBeenCalled();
+    expect(mockInternalListTargets).not.toHaveBeenCalled();
   });
 });
