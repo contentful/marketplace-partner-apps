@@ -1,7 +1,7 @@
 import { EditorAppSDK, EntryAPI } from '@contentful/app-sdk';
 import { Box, Button, Flex, Form, FormControl, Note, Paragraph, TextInput } from '@contentful/f36-components';
 import { useSDK } from '@contentful/react-apps-toolkit';
-import React, { Dispatch, useEffect, useState } from 'react';
+import React, { Dispatch, useEffect, useRef, useState } from 'react';
 
 import cerosLogo from '../assets/ceros-logo.svg';
 import styles from '../styles';
@@ -59,12 +59,13 @@ function EmptyState({ entry, setLinked, parameters }: StateProps) {
             value={experienceUrl}
             type="text"
             name="experienceUrl"
-            placeholder="https://view.ceros.com/account/experience"
+            placeholder="https://account.ceros.site/experience"
             onChange={(e) => setExperienceUrl(e.target.value)}
           />
           {isCerosExperienceInvalid && (
             <FormControl.ValidationMessage>
-              The experience URL is invalid. Make sure it looks like 'https://view.ceros.com/account/experience' and that the experience is published.
+              The experience URL is invalid. Make sure it looks like 'https://account.ceros.site/experience' or 'https://view.ceros.com/account/experience' and
+              that the experience is published.
             </FormControl.ValidationMessage>
           )}
         </FormControl>
@@ -125,12 +126,32 @@ function LinkedState({ entry, setLinked, parameters }: StateProps) {
   // State for the embed code
   const [embedCode, setEmbedCode] = useState(entry.fields[parameters.embedCodeFieldId].getValue());
   const [isCerosExperience, setIsCerosExperience] = useState(false);
+
+  const hasCerosHost = (html: string, allowed: (host: string) => boolean): boolean => {
+    const urlMatches = html.match(/https:\/\/[^\s"'<>]+/g) || [];
+    return urlMatches.some((urlString) => {
+      try {
+        return allowed(new URL(urlString).hostname.toLowerCase());
+      } catch {
+        return false;
+      }
+    });
+  };
+
   useEffect(() => {
-    (async () => {
-      // Determine if the embed code is for a Ceros experience
-      setIsCerosExperience(Boolean(embedCode.includes('class="ceros-experience"') && embedCode.includes('https://view.ceros.com/')));
-    })();
+    const hasCerosClass = embedCode.includes('class="ceros-experience"');
+    const hasViewCerosUrl = hasCerosHost(embedCode, (h) => h === 'view.ceros.com');
+    const hasCerosSiteUrl = hasCerosHost(embedCode, (h) => h === 'ceros.site' || h.endsWith('.ceros.site'));
+    setIsCerosExperience((hasCerosClass && hasViewCerosUrl) || hasCerosSiteUrl);
   }, [embedCode]);
+
+  const embedRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const container = embedRef.current;
+    if (!container || !embedCode) return;
+    container.innerHTML = '';
+    container.appendChild(document.createRange().createContextualFragment(embedCode));
+  }, [embedCode, isCerosExperience]);
 
   return (
     <>
@@ -171,7 +192,7 @@ function LinkedState({ entry, setLinked, parameters }: StateProps) {
             </Box>
           </Flex>
 
-          <div className={styles.experienceEmbed} dangerouslySetInnerHTML={{ __html: embedCode }}></div>
+          <div className={styles.experienceEmbed} ref={embedRef}></div>
         </>
       ) : (
         <>

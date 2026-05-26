@@ -1,718 +1,319 @@
-import React from "react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { SuggestionsSidebar, SuggestionsSidebarProps } from "./SuggestionsSidebar";
-import {
-  Severity,
-  Dialects,
-  Tones,
-  IssueCategory,
-  GrammarCategory,
-} from "../../../../../api-client/types.gen";
-import type {
-  Suggestion,
-  ConstantsResponse,
-  StyleGuideResponse,
-} from "../../../../../api-client/types.gen";
+import { describe, expect, it, vi } from "vitest";
+import { fireEvent } from "@testing-library/react";
+import { mockUseAuth, render } from "../../../../../../test/utils/testUtils";
+import { SuggestionsSidebar, type SuggestionsSidebarProps } from "./SuggestionsSidebar";
+import type { CortexIssueWithId } from "../../../../../agents/types";
 
-// Mock the UserProfileButton component
-vi.mock("../../../../ConfigScreen/components/UserProfileButton", () => ({
-  UserProfileButton: ({ onSignOut }: { onSignOut: () => void }) => (
-    <button data-testid="user-profile-button" onClick={onSignOut}>
-      Sign Out
-    </button>
-  ),
-}));
-
-// Helper to create mock suggestion
-function createMockSuggestion(overrides: Partial<Suggestion> = {}): Suggestion {
+function makeIssue(overrides: Partial<CortexIssueWithId> = {}): CortexIssueWithId {
   return {
-    original: "Sample issue text",
-    suggestion: "Sample replacement",
-    explanation: "Sample explanation",
-    position: {
-      start_index: 0,
-    },
-    severity: Severity.MEDIUM,
-    category: IssueCategory.GRAMMAR,
-    subcategory: GrammarCategory.SPELLING,
+    id: "issue-1",
+    groupKey: "group-1",
+    status: "active",
+    agent: "style_agent",
+    category: "tone",
+    confidence: 0.9,
+    severity: "medium",
+    explanation: "x",
+    suggestion: "fixed",
+    suggestions: undefined,
+    position: { start: 0, end: 5, sentence: "Spain" },
+    original: "Spain",
     ...overrides,
-  } as Suggestion;
+  };
 }
 
-describe("SuggestionsSidebar", () => {
-  const mockOnCheck = vi.fn();
-  const mockOnApplySuggestion = vi.fn();
-  const mockOnDismissSuggestion = vi.fn();
-  const mockOnSelectSuggestion = vi.fn();
-  const mockOnCategoryChange = vi.fn();
-  const mockOnSeverityChange = vi.fn();
-  const mockOnConfigChange = vi.fn();
-  const mockOnSignOut = vi.fn();
-
-  const defaultProps: SuggestionsSidebarProps = {
-    suggestions: [],
-    filteredSuggestions: [],
-    suggestionToOriginalIndex: new Map(),
+function defaultProps(overrides: Partial<SuggestionsSidebarProps> = {}): SuggestionsSidebarProps {
+  const issues: CortexIssueWithId[] = [];
+  const issueToOriginalIndex = new Map<CortexIssueWithId, number>();
+  return {
+    issues,
+    filteredIssues: issues,
+    issueToOriginalIndex,
     exitingIndices: new Set(),
     isLoading: false,
-    onCheck: mockOnCheck,
-    onApplySuggestion: mockOnApplySuggestion,
-    onDismissSuggestion: mockOnDismissSuggestion,
-    onSelectSuggestion: mockOnSelectSuggestion,
-    selectedSuggestionIndex: null,
-    selectedCategories: new Set(),
+    hasRunScan: false,
+    hasEnabledAgent: true,
+    checkError: null,
+    onDismissCheckError: vi.fn(),
+    onCheck: vi.fn(),
+    onOpenAgentSettings: vi.fn(),
+    onApplyIssue: vi.fn(),
+    onApplyAllMatching: vi.fn(),
+    onDismissIssue: vi.fn(),
+    onSelectIssue: vi.fn(),
+    selectedIssueIndex: null,
     selectedSeverities: new Set(),
-    onCategoryChange: mockOnCategoryChange,
-    onSeverityChange: mockOnSeverityChange,
-    config: {
-      dialect: Dialects.AMERICAN_ENGLISH,
-      tone: Tones.PROFESSIONAL,
-    },
-    onConfigChange: mockOnConfigChange,
-    constants: {
-      dialects: [Dialects.AMERICAN_ENGLISH, Dialects.BRITISH_ENGLISH],
-      tones: [Tones.PROFESSIONAL, Tones.CONVERSATIONAL],
-    } as ConstantsResponse,
-    styleGuides: [],
-    onSignOut: mockOnSignOut,
+    onSeverityChange: vi.fn(),
+    selectedAgentFilterIds: null,
+    onAgentFilterChange: vi.fn(),
+    viewMode: "list",
+    onViewModeChange: vi.fn(),
+    styleAgentApplyAllPeerCountByIssueId: new Map(),
+    onSignOut: vi.fn(),
     totalIssueCount: 0,
     appliedCount: 0,
     dismissedCount: 0,
+    ...overrides,
   };
+}
 
-  beforeEach(() => {
-    vi.clearAllMocks();
+describe("SuggestionsSidebar", () => {
+  it("shows READY headline + Click Check subtext before any scan", () => {
+    const { getByRole, getByText } = render(<SuggestionsSidebar {...defaultProps()} />);
+    expect(getByRole("heading", { level: 3 })).toHaveTextContent("READY");
+    expect(getByText(/click check to analyze/i)).toBeInTheDocument();
   });
 
-  describe("Header and Branding", () => {
-    it("renders the Markup AI logo and title", () => {
-      render(<SuggestionsSidebar {...defaultProps} />);
-
-      expect(screen.getByAltText("Markup AI")).toBeInTheDocument();
-      expect(screen.getByText("Markup AI")).toBeInTheDocument();
-    });
+  it("hint copy switches when no agent is enabled", () => {
+    const { getByText } = render(
+      <SuggestionsSidebar {...defaultProps({ hasEnabledAgent: false })} />,
+    );
+    expect(getByText(/enable an agent in settings to check/i)).toBeInTheDocument();
   });
 
-  describe("Risk Level Display", () => {
-    it("displays 'ALL CLEAR' when no suggestions", () => {
-      render(<SuggestionsSidebar {...defaultProps} />);
-
-      expect(screen.getByText("ALL CLEAR")).toBeInTheDocument();
-      expect(screen.getByText("No issues detected")).toBeInTheDocument();
-    });
-
-    it("displays 'HIGH RISK' when high severity suggestions exist", () => {
-      const suggestions = [createMockSuggestion({ severity: Severity.HIGH })];
-      const suggestionMap = new Map<Suggestion, number>();
-      suggestionMap.set(suggestions[0], 0);
-
-      render(
-        <SuggestionsSidebar
-          {...defaultProps}
-          suggestions={suggestions}
-          filteredSuggestions={suggestions}
-          suggestionToOriginalIndex={suggestionMap}
-        />,
-      );
-
-      expect(screen.getByText("HIGH RISK")).toBeInTheDocument();
-      expect(screen.getByText("1 issue detected")).toBeInTheDocument();
-    });
-
-    it("displays 'MEDIUM RISK' when medium severity suggestions exist (no high)", () => {
-      const suggestions = [createMockSuggestion({ severity: Severity.MEDIUM })];
-      const suggestionMap = new Map<Suggestion, number>();
-      suggestionMap.set(suggestions[0], 0);
-
-      render(
-        <SuggestionsSidebar
-          {...defaultProps}
-          suggestions={suggestions}
-          filteredSuggestions={suggestions}
-          suggestionToOriginalIndex={suggestionMap}
-        />,
-      );
-
-      expect(screen.getByText("MEDIUM RISK")).toBeInTheDocument();
-    });
-
-    it("displays 'LOW RISK' when only low severity suggestions exist", () => {
-      const suggestions = [createMockSuggestion({ severity: Severity.LOW })];
-      const suggestionMap = new Map<Suggestion, number>();
-      suggestionMap.set(suggestions[0], 0);
-
-      render(
-        <SuggestionsSidebar
-          {...defaultProps}
-          suggestions={suggestions}
-          filteredSuggestions={suggestions}
-          suggestionToOriginalIndex={suggestionMap}
-        />,
-      );
-
-      expect(screen.getByText("LOW RISK")).toBeInTheDocument();
-    });
-
-    it("displays 'ANALYZING...' when loading", () => {
-      render(<SuggestionsSidebar {...defaultProps} isLoading={true} />);
-
-      expect(screen.getByText("ANALYZING...")).toBeInTheDocument();
-    });
-
-    it("displays plural 'issues' for multiple suggestions", () => {
-      const suggestions = [
-        createMockSuggestion({ severity: Severity.HIGH }),
-        createMockSuggestion({
-          severity: Severity.MEDIUM,
-          position: { start_index: 20 },
-        }),
-      ];
-      const suggestionMap = new Map<Suggestion, number>();
-      suggestions.forEach((s, i) => suggestionMap.set(s, i));
-
-      render(
-        <SuggestionsSidebar
-          {...defaultProps}
-          suggestions={suggestions}
-          filteredSuggestions={suggestions}
-          suggestionToOriginalIndex={suggestionMap}
-        />,
-      );
-
-      expect(screen.getByText("2 issues detected")).toBeInTheDocument();
-    });
+  it("shows ANALYZING when isLoading", () => {
+    const { getByRole } = render(<SuggestionsSidebar {...defaultProps({ isLoading: true })} />);
+    expect(getByRole("heading", { level: 3 })).toHaveTextContent(/ANALYZING/);
   });
 
-  describe("Loading State", () => {
-    it("shows spinner and message when loading", () => {
-      render(<SuggestionsSidebar {...defaultProps} isLoading={true} />);
-
-      expect(screen.getByText("Analyzing content...")).toBeInTheDocument();
-    });
-
-    it("disables check button when loading", () => {
-      render(<SuggestionsSidebar {...defaultProps} isLoading={true} />);
-
-      const checkButton = screen.getByRole("button", { name: /check/i });
-      expect(checkButton).toBeDisabled();
-    });
+  it("shows CHECK FAILED when checkError is set", () => {
+    const { getByRole } = render(
+      <SuggestionsSidebar {...defaultProps({ checkError: "boom", hasRunScan: true })} />,
+    );
+    expect(getByRole("heading", { level: 3 })).toHaveTextContent(/CHECK FAILED/);
   });
 
-  describe("Check Error State", () => {
-    it("shows error panel when checkError is set", () => {
-      const errorMessage = "Style guide does not exist";
-      render(
-        <SuggestionsSidebar
-          {...defaultProps}
-          checkError={errorMessage}
-          onDismissCheckError={vi.fn()}
-        />,
-      );
-
-      expect(screen.getByRole("alert")).toBeInTheDocument();
-      expect(screen.getByText("Check failed")).toBeInTheDocument();
-      expect(screen.getByText(errorMessage)).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: /try again/i })).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: /dismiss/i })).toBeInTheDocument();
-    });
-
-    it("calls onDismissCheckError when Dismiss is clicked", () => {
-      const onDismissCheckError = vi.fn();
-      render(
-        <SuggestionsSidebar
-          {...defaultProps}
-          checkError="Something went wrong"
-          onDismissCheckError={onDismissCheckError}
-        />,
-      );
-
-      fireEvent.click(screen.getByRole("button", { name: /dismiss/i }));
-      expect(onDismissCheckError).toHaveBeenCalledTimes(1);
-    });
-
-    it("calls onCheck when Try again is clicked", () => {
-      const onCheck = vi.fn();
-      render(
-        <SuggestionsSidebar
-          {...defaultProps}
-          checkError="Something went wrong"
-          onCheck={onCheck}
-        />,
-      );
-
-      fireEvent.click(screen.getByRole("button", { name: /try again/i }));
-      expect(onCheck).toHaveBeenCalledTimes(1);
-    });
+  it("calls onCheck when the Check button is clicked", () => {
+    const onCheck = vi.fn();
+    const { getByRole } = render(<SuggestionsSidebar {...defaultProps({ onCheck })} />);
+    fireEvent.click(getByRole("button", { name: /^check$/i }));
+    expect(onCheck).toHaveBeenCalledTimes(1);
   });
 
-  describe("Empty State", () => {
-    it("shows 'Everything looks great!' when no suggestions", () => {
-      render(<SuggestionsSidebar {...defaultProps} />);
-
-      expect(screen.getByText("Everything looks great!")).toBeInTheDocument();
-      expect(screen.getByText("Your content is polished and ready.")).toBeInTheDocument();
-      expect(screen.getByText("Zero issues found.")).toBeInTheDocument();
-    });
-
-    it("shows filter empty state when suggestions exist but none match filters", () => {
-      const suggestions = [createMockSuggestion()];
-      const suggestionMap = new Map<Suggestion, number>();
-      suggestionMap.set(suggestions[0], 0);
-
-      render(
-        <SuggestionsSidebar
-          {...defaultProps}
-          suggestions={suggestions}
-          filteredSuggestions={[]} // All filtered out
-          suggestionToOriginalIndex={suggestionMap}
-        />,
-      );
-
-      expect(screen.getByText("No suggestions match your filters.")).toBeInTheDocument();
-    });
+  it("disables the Check button when no agent is enabled", () => {
+    const onCheck = vi.fn();
+    const { getByRole } = render(
+      <SuggestionsSidebar {...defaultProps({ onCheck, hasEnabledAgent: false })} />,
+    );
+    fireEvent.click(getByRole("button", { name: /^check$/i }));
+    expect(onCheck).not.toHaveBeenCalled();
   });
 
-  describe("Check Button", () => {
-    it("calls onCheck when clicked", () => {
-      render(<SuggestionsSidebar {...defaultProps} />);
-
-      const checkButton = screen.getByRole("button", { name: /check/i });
-      fireEvent.click(checkButton);
-
-      expect(mockOnCheck).toHaveBeenCalledTimes(1);
-    });
+  it("calls onOpenAgentSettings when the gear is clicked", () => {
+    const onOpenAgentSettings = vi.fn();
+    const { getByRole } = render(<SuggestionsSidebar {...defaultProps({ onOpenAgentSettings })} />);
+    fireEvent.click(getByRole("button", { name: /agent settings/i }));
+    expect(onOpenAgentSettings).toHaveBeenCalledTimes(1);
   });
 
-  describe("Severity Filter Pills", () => {
-    it("renders all severity pills", () => {
-      render(<SuggestionsSidebar {...defaultProps} />);
-
-      expect(screen.getByTitle("High severity")).toBeInTheDocument();
-      expect(screen.getByTitle("Medium severity")).toBeInTheDocument();
-      expect(screen.getByTitle("Low severity")).toBeInTheDocument();
+  it("forwards onOpenAbout to the footer user-profile menu", () => {
+    // The footer UserProfileButton only shows the About item when the user is
+    // signed in; override the auth hook for this test (and reset after) so the
+    // authenticated dropdown renders.
+    const previous = mockUseAuth.getMockImplementation();
+    mockUseAuth.mockReturnValue({
+      isLoading: false,
+      isAuthenticated: true,
+      user: { email: "test@markup.ai" },
+      token: "tok",
+      error: null,
+      loginWithPopup: vi.fn().mockResolvedValue(null),
+      getAccessToken: vi.fn().mockResolvedValue("tok"),
+      logout: vi.fn().mockResolvedValue(undefined),
     });
 
-    it("shows severity counts", () => {
-      const suggestions = [
-        createMockSuggestion({ severity: Severity.HIGH }),
-        createMockSuggestion({
-          severity: Severity.HIGH,
-          position: { start_index: 10 },
-        }),
-        createMockSuggestion({
-          severity: Severity.MEDIUM,
-          position: { start_index: 30 },
-        }),
-      ];
-      const suggestionMap = new Map<Suggestion, number>();
-      suggestions.forEach((s, i) => suggestionMap.set(s, i));
-
-      render(
-        <SuggestionsSidebar
-          {...defaultProps}
-          suggestions={suggestions}
-          filteredSuggestions={suggestions}
-          suggestionToOriginalIndex={suggestionMap}
-        />,
+    try {
+      const onOpenAbout = vi.fn();
+      const { getByRole, getByText } = render(
+        <SuggestionsSidebar {...defaultProps({ onOpenAbout })} />,
       );
-
-      // High: 2, Medium: 1, Low: 0
-      expect(screen.getByText(/High.*2/)).toBeInTheDocument();
-      expect(screen.getByText(/Medium.*1/)).toBeInTheDocument();
-      expect(screen.getByText(/Low.*0/)).toBeInTheDocument();
-    });
-
-    it("calls onSeverityChange when severity pill is clicked", () => {
-      render(<SuggestionsSidebar {...defaultProps} />);
-
-      const highPill = screen.getByTitle("High severity");
-      fireEvent.click(highPill);
-
-      expect(mockOnSeverityChange).toHaveBeenCalled();
-    });
-
-    it("does not call onSeverityChange when disabled (loading)", () => {
-      render(<SuggestionsSidebar {...defaultProps} isLoading={true} />);
-
-      const highPill = screen.getByTitle("High severity");
-      fireEvent.click(highPill);
-
-      expect(mockOnSeverityChange).not.toHaveBeenCalled();
-    });
+      fireEvent.click(getByRole("button", { name: /user profile/i }));
+      fireEvent.click(getByText("About"));
+      expect(onOpenAbout).toHaveBeenCalledTimes(1);
+    } finally {
+      if (previous) mockUseAuth.mockImplementation(previous);
+    }
   });
 
-  describe("Category Filter", () => {
-    it("opens category filter popover on button click", async () => {
-      render(<SuggestionsSidebar {...defaultProps} />);
-
-      const filterButton = screen.getByRole("button", { name: /filter by category/i });
-      fireEvent.click(filterButton);
-
-      await waitFor(() => {
-        expect(screen.getByText("Suggestion Type")).toBeInTheDocument();
-      });
-    });
-
-    it("shows all category options in filter", async () => {
-      render(<SuggestionsSidebar {...defaultProps} />);
-
-      const filterButton = screen.getByRole("button", { name: /filter by category/i });
-      fireEvent.click(filterButton);
-
-      await waitFor(() => {
-        expect(screen.getByText("Grammar")).toBeInTheDocument();
-        expect(screen.getByText("Consistency")).toBeInTheDocument();
-        expect(screen.getByText("Terminology")).toBeInTheDocument();
-        expect(screen.getByText("Clarity")).toBeInTheDocument();
-        expect(screen.getByText("Tone")).toBeInTheDocument();
-      });
-    });
-
-    it("calls onCategoryChange when checkbox is toggled", async () => {
-      render(<SuggestionsSidebar {...defaultProps} />);
-
-      const filterButton = screen.getByRole("button", { name: /filter by category/i });
-      fireEvent.click(filterButton);
-
-      await waitFor(() => {
-        expect(screen.getByText("Grammar")).toBeInTheDocument();
-      });
-
-      const grammarCheckbox = screen.getByLabelText("Grammar");
-      fireEvent.click(grammarCheckbox);
-
-      expect(mockOnCategoryChange).toHaveBeenCalled();
-    });
+  it("renders HIGH RISK when there's at least one high-severity issue", () => {
+    const high = makeIssue({ id: "h", severity: "high" });
+    const issues = [high];
+    const map = new Map<CortexIssueWithId, number>([[high, 0]]);
+    const { getByRole } = render(
+      <SuggestionsSidebar
+        {...defaultProps({
+          issues,
+          filteredIssues: issues,
+          issueToOriginalIndex: map,
+          totalIssueCount: 1,
+          hasRunScan: true,
+        })}
+      />,
+    );
+    expect(getByRole("heading", { level: 3 })).toHaveTextContent("HIGH RISK");
   });
 
-  describe("Suggestion Cards", () => {
-    it("renders suggestion cards for filtered suggestions", () => {
-      const suggestions = [
-        createMockSuggestion({ original: "First issue text" }),
-        createMockSuggestion({
-          original: "Second issue text",
-          position: { start_index: 20 },
-        }),
-      ];
-      const suggestionMap = new Map<Suggestion, number>();
-      suggestions.forEach((s, i) => suggestionMap.set(s, i));
-
-      render(
-        <SuggestionsSidebar
-          {...defaultProps}
-          suggestions={suggestions}
-          filteredSuggestions={suggestions}
-          suggestionToOriginalIndex={suggestionMap}
-        />,
-      );
-
-      // The component renders cards with Issue: labels - verify cards are rendered
-      // Cards show category badges (e.g. "Grammar") and severity
-      const grammarBadges = screen.getAllByText("Grammar");
-      expect(grammarBadges.length).toBe(2); // Two cards, each with Grammar category
-
-      // Also verify the "medium" severity badges are shown
-      const mediumBadges = screen.getAllByText("medium");
-      expect(mediumBadges.length).toBe(2);
-    });
-
-    it("sorts suggestions by start position", () => {
-      const suggestion1 = createMockSuggestion({
-        original: "Later issue",
-        position: { start_index: 50 },
-        category: IssueCategory.CONSISTENCY,
-      });
-      const suggestion2 = createMockSuggestion({
-        original: "Earlier issue",
-        position: { start_index: 10 },
-        category: IssueCategory.TERMINOLOGY,
-      });
-      const suggestions = [suggestion1, suggestion2];
-      const suggestionMap = new Map<Suggestion, number>();
-      suggestionMap.set(suggestion1, 0);
-      suggestionMap.set(suggestion2, 1);
-
-      render(
-        <SuggestionsSidebar
-          {...defaultProps}
-          suggestions={suggestions}
-          filteredSuggestions={suggestions}
-          suggestionToOriginalIndex={suggestionMap}
-        />,
-      );
-
-      // Get all category badges - they should be in position order
-      // Earlier (position 10) should be first with "Terminology"
-      // Later (position 50) should be second with "Consistency"
-      const categoryBadges = screen.getAllByText(/^(Terminology|Consistency)$/);
-      expect(categoryBadges[0]).toHaveTextContent("Terminology"); // Earlier
-      expect(categoryBadges[1]).toHaveTextContent("Consistency"); // Later
-    });
+  it("renders ALL CLEAR when scan completed with zero issues and no audit trail", () => {
+    const { getByRole, getByText } = render(
+      <SuggestionsSidebar {...defaultProps({ hasRunScan: true, totalIssueCount: 0 })} />,
+    );
+    expect(getByRole("heading", { level: 3 })).toHaveTextContent("ALL CLEAR");
+    expect(getByText(/no issues detected/i)).toBeInTheDocument();
   });
 
-  describe("Settings Popover", () => {
-    it("opens settings popover on gear icon click", async () => {
-      render(<SuggestionsSidebar {...defaultProps} />);
-
-      const settingsButton = screen.getByRole("button", { name: /settings/i });
-      fireEvent.click(settingsButton);
-
-      await waitFor(() => {
-        expect(screen.getByText("Style Guide")).toBeInTheDocument();
-        expect(screen.getByText("Dialect")).toBeInTheDocument();
-        expect(screen.getByText("Tone")).toBeInTheDocument();
-      });
-    });
-
-    it("shows save settings button in popover", async () => {
-      render(<SuggestionsSidebar {...defaultProps} />);
-
-      const settingsButton = screen.getByRole("button", { name: /settings/i });
-      fireEvent.click(settingsButton);
-
-      await waitFor(() => {
-        expect(screen.getByRole("button", { name: /save settings/i })).toBeInTheDocument();
-      });
-    });
-
-    it("calls onConfigChange when dialect is changed", async () => {
-      render(<SuggestionsSidebar {...defaultProps} />);
-
-      const settingsButton = screen.getByRole("button", { name: /settings/i });
-      fireEvent.click(settingsButton);
-
-      await waitFor(() => {
-        expect(screen.getByText("Dialect")).toBeInTheDocument();
-      });
-
-      // The dialect select should be available
-      const dialectSelect = screen.getAllByRole("combobox")[1]; // Second select is Dialect
-      fireEvent.change(dialectSelect, { target: { value: Dialects.BRITISH_ENGLISH } });
-
-      expect(mockOnConfigChange).toHaveBeenCalledWith({ dialect: Dialects.BRITISH_ENGLISH });
-    });
-
-    it("calls onConfigChange when tone is changed", async () => {
-      render(<SuggestionsSidebar {...defaultProps} />);
-
-      const settingsButton = screen.getByRole("button", { name: /settings/i });
-      fireEvent.click(settingsButton);
-
-      await waitFor(() => {
-        expect(screen.getByText("Tone")).toBeInTheDocument();
-      });
-
-      // Get the tone select - it's the third combobox in the settings popover
-      const comboboxes = screen.getAllByRole("combobox");
-      expect(comboboxes).toHaveLength(3); // Style Guide, Dialect, Tone
-      fireEvent.change(comboboxes[2], { target: { value: Tones.CONVERSATIONAL } });
-
-      // The component passes empty string as null, check it was called
-      expect(mockOnConfigChange).toHaveBeenCalled();
-    });
+  it("toggles severity pills via onSeverityChange", () => {
+    const issues = [makeIssue({ id: "h", severity: "high" })];
+    const map = new Map<CortexIssueWithId, number>([[issues[0], 0]]);
+    const onSeverityChange = vi.fn();
+    const { getByTitle } = render(
+      <SuggestionsSidebar
+        {...defaultProps({
+          issues,
+          filteredIssues: issues,
+          issueToOriginalIndex: map,
+          totalIssueCount: 1,
+          hasRunScan: true,
+          onSeverityChange,
+        })}
+      />,
+    );
+    // Severity pills carry a `title` attribute like "High severity" alongside their visible text.
+    fireEvent.click(getByTitle("High severity"));
+    const next = onSeverityChange.mock.calls[0][0] as Set<string>;
+    expect(next.has("high")).toBe(true);
   });
 
-  describe("Footer", () => {
-    it("renders user profile button", () => {
-      render(<SuggestionsSidebar {...defaultProps} />);
-
-      expect(screen.getByTestId("user-profile-button")).toBeInTheDocument();
-    });
-
-    it("calls onSignOut when sign out is clicked", () => {
-      render(<SuggestionsSidebar {...defaultProps} />);
-
-      const signOutButton = screen.getByTestId("user-profile-button");
-      fireEvent.click(signOutButton);
-
-      expect(mockOnSignOut).toHaveBeenCalledTimes(1);
-    });
+  it("toggles between Group and List via onViewModeChange", () => {
+    const issues = [makeIssue({ id: "h", severity: "high" })];
+    const map = new Map<CortexIssueWithId, number>([[issues[0], 0]]);
+    const onViewModeChange = vi.fn();
+    const { getByRole } = render(
+      <SuggestionsSidebar
+        {...defaultProps({
+          issues,
+          filteredIssues: issues,
+          issueToOriginalIndex: map,
+          totalIssueCount: 1,
+          hasRunScan: true,
+          onViewModeChange,
+        })}
+      />,
+    );
+    fireEvent.click(getByRole("button", { name: /^group$/i }));
+    expect(onViewModeChange).toHaveBeenCalledWith("grouped");
   });
 
-  describe("Issue Progress Bar", () => {
-    it("does not render progress bar when totalIssueCount is 0", () => {
-      render(<SuggestionsSidebar {...defaultProps} totalIssueCount={0} />);
-
-      expect(screen.queryByText(/remaining/)).not.toBeInTheDocument();
-    });
-
-    it("does not render progress bar when loading", () => {
-      render(<SuggestionsSidebar {...defaultProps} isLoading={true} totalIssueCount={5} />);
-
-      expect(screen.queryByText(/remaining/)).not.toBeInTheDocument();
-    });
-
-    it("shows remaining issues count when issues exist", () => {
-      const suggestions = [
-        createMockSuggestion({ severity: Severity.HIGH }),
-        createMockSuggestion({
-          severity: Severity.MEDIUM,
-          position: { start_index: 20 },
-        }),
-      ];
-      const suggestionMap = new Map<Suggestion, number>();
-      suggestions.forEach((s, i) => suggestionMap.set(s, i));
-
-      render(
-        <SuggestionsSidebar
-          {...defaultProps}
-          suggestions={suggestions}
-          filteredSuggestions={suggestions}
-          suggestionToOriginalIndex={suggestionMap}
-          totalIssueCount={5}
-          appliedCount={2}
-          dismissedCount={1}
-        />,
-      );
-
-      expect(screen.getByText("2 issues remaining")).toBeInTheDocument();
-    });
-
-    it("shows applied count with checkmark", () => {
-      const suggestions = [createMockSuggestion({ severity: Severity.HIGH })];
-      const suggestionMap = new Map<Suggestion, number>();
-      suggestionMap.set(suggestions[0], 0);
-
-      render(
-        <SuggestionsSidebar
-          {...defaultProps}
-          suggestions={suggestions}
-          filteredSuggestions={suggestions}
-          suggestionToOriginalIndex={suggestionMap}
-          totalIssueCount={3}
-          appliedCount={2}
-          dismissedCount={0}
-        />,
-      );
-
-      // Applied count should be displayed
-      const appliedStat = screen.getByTitle("Applied");
-      expect(appliedStat).toHaveTextContent("2");
-    });
-
-    it("shows dismissed count", () => {
-      const suggestions = [createMockSuggestion({ severity: Severity.MEDIUM })];
-      const suggestionMap = new Map<Suggestion, number>();
-      suggestionMap.set(suggestions[0], 0);
-
-      render(
-        <SuggestionsSidebar
-          {...defaultProps}
-          suggestions={suggestions}
-          filteredSuggestions={suggestions}
-          suggestionToOriginalIndex={suggestionMap}
-          totalIssueCount={5}
-          appliedCount={1}
-          dismissedCount={3}
-        />,
-      );
-
-      const dismissedStat = screen.getByTitle("Dismissed");
-      expect(dismissedStat).toHaveTextContent("3");
-    });
-
-    it("shows 'No issues remaining' when all issues are resolved", () => {
-      render(
-        <SuggestionsSidebar
-          {...defaultProps}
-          suggestions={[]}
-          filteredSuggestions={[]}
-          totalIssueCount={5}
-          appliedCount={3}
-          dismissedCount={2}
-        />,
-      );
-
-      expect(screen.getByText("No issues remaining")).toBeInTheDocument();
-    });
-
-    it("shows singular 'issue' for single remaining issue", () => {
-      const suggestions = [createMockSuggestion({ severity: Severity.LOW })];
-      const suggestionMap = new Map<Suggestion, number>();
-      suggestionMap.set(suggestions[0], 0);
-
-      render(
-        <SuggestionsSidebar
-          {...defaultProps}
-          suggestions={suggestions}
-          filteredSuggestions={suggestions}
-          suggestionToOriginalIndex={suggestionMap}
-          totalIssueCount={3}
-          appliedCount={1}
-          dismissedCount={1}
-        />,
-      );
-
-      expect(screen.getByText("1 issue remaining")).toBeInTheDocument();
-    });
-
-    it("does not show applied count when appliedCount is 0", () => {
-      const suggestions = [createMockSuggestion({ severity: Severity.HIGH })];
-      const suggestionMap = new Map<Suggestion, number>();
-      suggestionMap.set(suggestions[0], 0);
-
-      render(
-        <SuggestionsSidebar
-          {...defaultProps}
-          suggestions={suggestions}
-          filteredSuggestions={suggestions}
-          suggestionToOriginalIndex={suggestionMap}
-          totalIssueCount={1}
-          appliedCount={0}
-          dismissedCount={0}
-        />,
-      );
-
-      expect(screen.queryByTitle("Applied")).not.toBeInTheDocument();
-    });
-
-    it("does not show dismissed count when dismissedCount is 0", () => {
-      const suggestions = [createMockSuggestion({ severity: Severity.HIGH })];
-      const suggestionMap = new Map<Suggestion, number>();
-      suggestionMap.set(suggestions[0], 0);
-
-      render(
-        <SuggestionsSidebar
-          {...defaultProps}
-          suggestions={suggestions}
-          filteredSuggestions={suggestions}
-          suggestionToOriginalIndex={suggestionMap}
-          totalIssueCount={1}
-          appliedCount={0}
-          dismissedCount={0}
-        />,
-      );
-
-      expect(screen.queryByTitle("Dismissed")).not.toBeInTheDocument();
-    });
+  it("renders the error block with Try again + Dismiss when checkError is set", () => {
+    const onCheck = vi.fn();
+    const onDismissCheckError = vi.fn();
+    const { getByRole } = render(
+      <SuggestionsSidebar
+        {...defaultProps({
+          checkError: "Network error",
+          hasRunScan: true,
+          onCheck,
+          onDismissCheckError,
+        })}
+      />,
+    );
+    fireEvent.click(getByRole("button", { name: /try again/i }));
+    expect(onCheck).toHaveBeenCalledTimes(1);
+    fireEvent.click(getByRole("button", { name: /dismiss/i }));
+    expect(onDismissCheckError).toHaveBeenCalledTimes(1);
   });
 
-  describe("Style Guides", () => {
-    it("renders style guide options when available", async () => {
-      const styleGuides: StyleGuideResponse[] = [
-        { id: "sg1", name: "Marketing Guide" } as StyleGuideResponse,
-        { id: "sg2", name: "Technical Guide" } as StyleGuideResponse,
-      ];
+  it("renders the 'Everything looks great!' empty state when scan finds zero issues", () => {
+    const { getByText } = render(
+      <SuggestionsSidebar
+        {...defaultProps({ hasRunScan: true, issues: [], filteredIssues: [], totalIssueCount: 0 })}
+      />,
+    );
+    expect(getByText(/everything looks great/i)).toBeInTheDocument();
+    expect(getByText(/zero issues found/i)).toBeInTheDocument();
+  });
 
-      render(
-        <SuggestionsSidebar
-          {...defaultProps}
-          styleGuides={styleGuides}
-          config={{ ...defaultProps.config, styleGuide: "sg1" }}
-        />,
-      );
+  it("renders 'No suggestions match your filters' when filtering hides every issue", () => {
+    const issues = [makeIssue({ id: "a", severity: "high" })];
+    const map = new Map<CortexIssueWithId, number>([[issues[0], 0]]);
+    const { getByText } = render(
+      <SuggestionsSidebar
+        {...defaultProps({
+          issues,
+          filteredIssues: [],
+          issueToOriginalIndex: map,
+          totalIssueCount: 1,
+          hasRunScan: true,
+          selectedSeverities: new Set(["medium"]),
+        })}
+      />,
+    );
+    expect(getByText(/no suggestions match your filters/i)).toBeInTheDocument();
+  });
 
-      const settingsButton = screen.getByRole("button", { name: /settings/i });
-      fireEvent.click(settingsButton);
+  it("hides the progress bar and filter row when checkError is set", () => {
+    const issues = [makeIssue({ id: "a", severity: "high" })];
+    const map = new Map<CortexIssueWithId, number>([[issues[0], 0]]);
+    const { queryByLabelText, queryByTitle } = render(
+      <SuggestionsSidebar
+        {...defaultProps({
+          issues,
+          filteredIssues: issues,
+          issueToOriginalIndex: map,
+          totalIssueCount: 1,
+          hasRunScan: true,
+          checkError: "Network error",
+        })}
+      />,
+    );
+    expect(queryByLabelText("View audit trail")).toBeNull();
+    expect(queryByTitle("High severity")).toBeNull();
+  });
 
-      await waitFor(() => {
-        expect(screen.getByText("Style Guide")).toBeInTheDocument();
-      });
+  it("clamps a negative dismissedCount so the dismissed stat does not render", () => {
+    const issues = [makeIssue({ id: "a", severity: "high" })];
+    const map = new Map<CortexIssueWithId, number>([[issues[0], 0]]);
+    const { queryByTitle } = render(
+      <SuggestionsSidebar
+        {...defaultProps({
+          issues,
+          filteredIssues: issues,
+          issueToOriginalIndex: map,
+          totalIssueCount: 1,
+          hasRunScan: true,
+          appliedCount: 1,
+          dismissedCount: -1,
+        })}
+      />,
+    );
+    expect(queryByTitle("Dismissed")).toBeNull();
+  });
 
-      // Style guide select should have the guides as options
-      const styleGuideSelect = screen.getAllByRole("combobox")[0];
-      expect(styleGuideSelect).toBeInTheDocument();
-    });
+  it("excludes exiting items from the remaining count and severity pills", () => {
+    const a = makeIssue({ id: "a", severity: "high" });
+    const b = makeIssue({ id: "b", severity: "medium" });
+    const issues = [a, b];
+    const map = new Map<CortexIssueWithId, number>([
+      [a, 0],
+      [b, 1],
+    ]);
+    const { getByText, getByTitle } = render(
+      <SuggestionsSidebar
+        {...defaultProps({
+          issues,
+          filteredIssues: issues,
+          issueToOriginalIndex: map,
+          totalIssueCount: 2,
+          appliedCount: 1,
+          dismissedCount: 0,
+          hasRunScan: true,
+          exitingIndices: new Set([0]),
+        })}
+      />,
+    );
+    // 1 issue still active, 1 exiting → "1 issue remaining"
+    expect(getByText(/^1 issue remaining$/)).toBeInTheDocument();
+    // Severity pills reflect the non-exiting set: High 0, Medium 1
+    expect(getByTitle("High severity")).toHaveTextContent(/0/);
+    expect(getByTitle("Medium severity")).toHaveTextContent(/1/);
   });
 });

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.2](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.4.1...cloudinary-assets-v1.4.2) (2026-05-20)
+
+
+### Bug Fixes
+
+* **cloudinary2:** restore saved crop transformation on image editor reopen [ES-282] ([#8203](https://github.com/contentful/marketplace-partner-apps/issues/8203)) ([fbab6f6](https://github.com/contentful/marketplace-partner-apps/commit/fbab6f60a79c172d07f9d6bb974952d31a426e6a))
+
 ## [1.4.1](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.4.0...cloudinary-assets-v1.4.1) (2026-05-07)
 
 

@@ -298,5 +298,5 @@ export const createRichTextDocument = (text: string): Document => {
 export const isRichTextDocument = (value: unknown): value is Document => {
   if (!value || typeof value !== "object") return false;
   if (!("nodeType" in value)) return false;
-  return (value as { nodeType: unknown }).nodeType === BLOCKS.DOCUMENT;
+  return value.nodeType === BLOCKS.DOCUMENT;
 };

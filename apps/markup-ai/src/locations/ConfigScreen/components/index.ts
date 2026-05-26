@@ -1,4 +1,3 @@
 export { AuthSection } from "./AuthSection";
-export { ContentTypeSettingsPanel } from "./ContentTypeSettingsPanel";
+export { ContentTypeStyleGuideSelect } from "./ContentTypeStyleGuideSelect";
 export { UserProfileButton } from "./UserProfileButton";
-export { ContentTypeAccordion } from "./ContentTypeAccordion";

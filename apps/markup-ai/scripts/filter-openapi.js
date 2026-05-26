@@ -6,13 +6,17 @@ import fs from "node:fs";
 import https from "node:https";
 import http from "node:http";
 
-const OPENAPI_URL = "http://localhost:8000/docs/openapi.json";
+// Use dev OpenAPI spec so codegen works without a local API server; switch to localhost when developing API locally.
+const OPENAPI_URL = "https://api.dev.markup.ai/docs/openapi.json";
 const OUTPUT_FILE = "filtered-openapi.json";
 const INCLUDED_PATHS = [
-  "/v1/style/",
-  "/v1/internal/",
-  "/v1/style-guides",
+  "/agents/",
   "/internal/demo-feedback",
+  "/internal/targets",
+  "/v1/internal/",
+  "/v1/terminology/domains",
+  "/account/config",
+  "/style-agent/",
 ];
 
 function downloadOpenAPISpec(url) {

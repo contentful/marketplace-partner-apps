@@ -4,13 +4,13 @@ import { vi, beforeEach, describe, it, expect } from "vitest";
 import DialogRouter from "./DialogRouter";
 import type { DialogAppSDK } from "@contentful/app-sdk";
 
-// Mock the dialog components
-vi.mock("../../components/FieldCheckCard/MoreDetailsDialog", () => ({
-  MoreDetailsDialog: () => <div data-testid="more-details-dialog">More Details Dialog</div>,
-}));
-vi.mock("./Dialog", () => ({
+vi.mock("./FieldCheckDialog", () => ({
   __esModule: true,
-  default: () => <div data-testid="rewrite-dialog">Rewrite Dialog</div>,
+  default: () => <div data-testid="field-check-dialog">Field Check Dialog</div>,
+}));
+vi.mock("./SignInDialog", () => ({
+  __esModule: true,
+  default: () => <div data-testid="sign-in-dialog">Sign In Dialog</div>,
 }));
 
 let mockUseSDKReturn: Partial<DialogAppSDK> = {};
@@ -23,20 +23,20 @@ beforeEach(() => {
 });
 
 describe("DialogRouter", () => {
-  it("renders Rewrite Dialog when startRewrite param is present", () => {
+  it("renders SignInDialog when signIn param is present", () => {
     mockUseSDKReturn = {
-      parameters: { invocation: { startRewrite: true } },
+      parameters: { invocation: { signIn: true } },
     } as unknown as Partial<DialogAppSDK>;
     render(<DialogRouter />);
-    expect(screen.getByTestId("rewrite-dialog")).toBeInTheDocument();
+    expect(screen.getByTestId("sign-in-dialog")).toBeInTheDocument();
   });
 
-  it("renders MoreDetailsDialog when checkResponse param is present", () => {
+  it("renders FieldCheckDialog when fieldCheck param is present", () => {
     mockUseSDKReturn = {
-      parameters: { invocation: { checkResponse: { scores: { quality: { score: 90 } } } } },
+      parameters: { invocation: { fieldCheck: true } },
     } as unknown as Partial<DialogAppSDK>;
     render(<DialogRouter />);
-    expect(screen.getByTestId("more-details-dialog")).toBeInTheDocument();
+    expect(screen.getByTestId("field-check-dialog")).toBeInTheDocument();
   });
 
   it("renders fallback for unknown dialog type", () => {

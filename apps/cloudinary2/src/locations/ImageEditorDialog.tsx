@@ -69,7 +69,7 @@ const ImageEditorDialog = () => {
           layoutStyle: 'single',
           layout: 'tabs',
           image: {
-            transformation: [{ rawTransformation: asset.original_raw_transformation }],
+            transformation: [{ rawTransformation: asset.raw_transformation || asset.original_raw_transformation }],
             steps,
             resizeAndCrop: {
               toggleAspectRatio: true,
