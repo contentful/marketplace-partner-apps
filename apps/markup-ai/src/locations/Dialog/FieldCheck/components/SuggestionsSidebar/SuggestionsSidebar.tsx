@@ -1,94 +1,89 @@
 /**
- * Suggestions Sidebar component
- * Shows risk level, filters, and list of suggestion cards
+ * Suggestions sidebar — Contentful port of sidebar-app's agentic layout.
+ * Renders a status-text header (HIGH RISK / MEDIUM RISK / etc.), severity
+ * progress bar (clickable to open the audit-trail popover), severity pills,
+ * agent filter popover, Group/List view toggle, and the issue list (flat or
+ * grouped by agent). A gear in the header opens the agent-settings drawer.
  */
 
-import React, { useState, useMemo, useCallback, useRef, useEffect } from "react";
-import { Button, IconButton, Spinner, Popover, Select, Checkbox } from "@contentful/f36-components";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Button, IconButton, Spinner } from "@contentful/f36-components";
 import {
+  CardsIcon,
+  CheckCircleIcon,
   GearSixIcon,
   ListBulletsIcon,
-  CheckCircleIcon,
   MinusCircleIcon,
   WarningIcon,
 } from "@contentful/f36-icons";
-import { UserProfileButton } from "../../../../ConfigScreen/components/UserProfileButton";
 import styled from "@emotion/styled";
 import tokens from "@contentful/f36-tokens";
-import { Severity } from "../../../../../api-client/types.gen";
-import type {
-  Suggestion,
-  ConstantsResponse,
-  StyleGuideResponse,
-  Dialects,
-  Tones,
-} from "../../../../../api-client/types.gen";
+import { UserProfileButton } from "../../../../ConfigScreen/components/UserProfileButton";
+import type { CortexIssueWithId, CortexSeverity } from "../../../../../agents/types";
 import {
-  SEVERITY_COLORS,
-  SEVERITY_BAR_COLORS,
   APPLIED_BAR_COLOR,
   DISMISSED_BAR_COLOR,
+  SEVERITY_BAR_COLORS,
+  SEVERITY_COLORS,
 } from "../../../../../utils/scoreColors";
 import { SuggestionCard, type FeedbackPayload } from "./SuggestionCard";
-import { formatDialect, formatTone } from "../../utils/format";
+import { AgentsGroupedList } from "./AgentsGroupedList";
+import { AgentFilterPopover } from "./AgentFilterPopover";
+import { AuditTrailPopover } from "./AuditTrailPopover";
 import {
-  FILTER_CATEGORY_OPTIONS,
   SUGGESTIONS_SIDEBAR_DATA_ATTRIBUTE,
   SUGGESTIONS_SIDEBAR_DATA_VALUE,
 } from "../../utils/constants";
 
+export type SidebarViewMode = "list" | "grouped";
+
 export interface SuggestionsSidebarProps {
-  /** All suggestions (unfiltered, but dismissed ones removed) */
-  suggestions: Suggestion[];
-  /** Filtered suggestions to display in the list */
-  filteredSuggestions: Suggestion[];
-  /** Map from suggestion to its original index in activeSuggestions */
-  suggestionToOriginalIndex: Map<Suggestion, number>;
-  /** Set of indices that are currently exiting (animating out) */
+  issues: CortexIssueWithId[];
+  filteredIssues: CortexIssueWithId[];
+  issueToOriginalIndex: Map<CortexIssueWithId, number>;
   exitingIndices?: Set<number>;
   isLoading: boolean;
-  /** API error message from last check (e.g. invalid style guide). When set, shown in sidebar. */
+  /** True once the user has triggered at least one scan. */
+  hasRunScan: boolean;
+  /** True when at least one runnable agent is selected in settings. */
+  hasEnabledAgent: boolean;
   checkError?: string | null;
-  /** Clear the check error (e.g. when user dismisses or runs a new check). */
   onDismissCheckError?: () => void;
   onCheck: () => void;
-  onApplySuggestion: (suggestion: Suggestion, index: number) => void;
-  onDismissSuggestion: (suggestion: Suggestion, index: number) => void;
-  onSelectSuggestion: (suggestion: Suggestion | null, index: number) => void;
-  selectedSuggestionIndex: number | null;
-  // Filter state (controlled by parent for sync with editor)
-  selectedCategories: Set<string>;
-  selectedSeverities: Set<Severity>;
-  onCategoryChange: (categories: Set<string>) => void;
-  onSeverityChange: (severities: Set<Severity>) => void;
-  // Config props
-  config: {
-    dialect?: Dialects;
-    tone?: Tones | null;
-    styleGuide?: string;
-  };
-  onConfigChange: (config: {
-    dialect?: Dialects;
-    tone?: Tones | null;
-    styleGuide?: string;
-  }) => void;
-  constants?: ConstantsResponse;
-  styleGuides?: StyleGuideResponse[];
-  // User actions
+  onOpenAgentSettings: () => void;
+  onOpenAbout?: () => void;
+  onApplyIssue: (issue: CortexIssueWithId, index: number, appliedSuggestion?: string) => void;
+  onApplyAllMatching: (issue: CortexIssueWithId, appliedSuggestion?: string) => void;
+  onDismissIssue: (issue: CortexIssueWithId, index: number) => void;
+  onSelectIssue: (issue: CortexIssueWithId | null, index: number) => void;
+  selectedIssueIndex: number | null;
+  selectedSeverities: Set<CortexSeverity>;
+  onSeverityChange: (severities: Set<CortexSeverity>) => void;
+  selectedAgentFilterIds: Set<string> | null;
+  onAgentFilterChange: (next: Set<string> | null) => void;
+  viewMode: SidebarViewMode;
+  onViewModeChange: (next: SidebarViewMode) => void;
+  styleAgentApplyAllPeerCountByIssueId: Map<string, number>;
   onSignOut: () => void;
-  // Feedback
-  onSubmitFeedback?: (payload: FeedbackPayload, suggestionIndex: number) => Promise<void>;
+  onSubmitFeedback?: (payload: FeedbackPayload, issueIndex: number) => Promise<void>;
   isFeedbackLoading?: boolean;
-  // Progress tracking
-  /** Total number of issues from the initial analysis (before any apply/dismiss) */
+  /** Total number of issues from the initial scan (before any apply/dismiss). */
   totalIssueCount: number;
-  /** Number of suggestions the user explicitly applied */
   appliedCount: number;
-  /** Number of suggestions dismissed (manually or from overlapping issues on apply) */
   dismissedCount: number;
+  /**
+   * When set, the Check button is disabled and this string is surfaced via
+   * the button's `title` and the status subtext (e.g. "Pick a style guide
+   * before running Check"). Lets the parent express domain-specific block
+   * reasons without the sidebar caring about each one.
+   */
+  checkBlockedReason?: string | null;
 }
 
-// Styled components
+const SEVERITY_OPTIONS: CortexSeverity[] = ["high", "medium", "low"];
+
+type RiskLevel = "high" | "medium" | "low" | "clear" | "analyzing" | "idle" | "error";
+
 const SidebarContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -102,6 +97,9 @@ const SidebarContainer = styled.div`
 `;
 
 const SidebarHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${tokens.spacingS};
   padding: ${tokens.spacingS} ${tokens.spacingM};
   background: ${tokens.colorWhite};
   border-bottom: 1px solid ${tokens.gray200};
@@ -112,54 +110,48 @@ const HeaderTop = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: ${tokens.spacingS};
 `;
 
 const LogoSection = styled.div`
   display: flex;
   align-items: center;
   gap: ${tokens.spacingS};
+  flex-shrink: 0;
 `;
 
 const Logo = styled.img`
-  height: 20px;
+  height: 18px;
   width: auto;
 `;
 
-// Risk level types
-type RiskLevel = "high" | "medium" | "low" | "clear" | "analyzing";
+const HeaderActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${tokens.spacingXs};
+`;
 
-const getRiskLevel = (
-  highCount: number,
-  mediumCount: number,
-  _lowCount: number,
-  isLoading: boolean,
-): RiskLevel => {
-  if (isLoading) return "analyzing";
-  if (highCount > 0) return "high";
-  if (mediumCount > 0) return "medium";
-  if (_lowCount > 0) return "low";
-  return "clear";
-};
+const StatusRow = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: ${tokens.spacingS};
+`;
 
-const RISK_COLORS: Record<RiskLevel, { bg: string; text: string; badge: string }> = {
-  high: {
-    bg: SEVERITY_COLORS[Severity.HIGH].text,
-    text: SEVERITY_COLORS[Severity.HIGH].text,
-    badge: SEVERITY_COLORS[Severity.HIGH].text,
-  },
-  medium: {
-    bg: SEVERITY_COLORS[Severity.MEDIUM].text,
-    text: SEVERITY_COLORS[Severity.MEDIUM].text,
-    badge: SEVERITY_COLORS[Severity.MEDIUM].text,
-  },
-  low: {
-    bg: SEVERITY_COLORS[Severity.LOW].text,
-    text: SEVERITY_COLORS[Severity.LOW].text,
-    badge: SEVERITY_COLORS[Severity.LOW].text,
-  },
-  clear: { bg: "#2e7d32", text: "#2e7d32", badge: "#2e7d32" },
-  analyzing: { bg: tokens.gray400, text: tokens.gray600, badge: tokens.gray400 },
+const StatusText = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+`;
+
+const RISK_TEXT_COLOR: Record<RiskLevel, string> = {
+  high: SEVERITY_COLORS.high.text,
+  medium: SEVERITY_COLORS.medium.text,
+  low: SEVERITY_COLORS.low.text,
+  clear: tokens.green700,
+  analyzing: tokens.blue600,
+  idle: tokens.gray700,
+  error: tokens.red700,
 };
 
 const RISK_LABELS: Record<RiskLevel, string> = {
@@ -167,178 +159,52 @@ const RISK_LABELS: Record<RiskLevel, string> = {
   medium: "MEDIUM RISK",
   low: "LOW RISK",
   clear: "ALL CLEAR",
-  analyzing: "ANALYZING...",
+  analyzing: "ANALYZING…",
+  idle: "READY",
+  error: "CHECK FAILED",
 };
 
-const ScoreSection = styled.div`
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: ${tokens.spacingM};
-  margin-bottom: ${tokens.spacingS};
-`;
-
-const RiskInfoSection = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${tokens.spacingM};
-`;
-
-const RiskBadge = styled.div<{ riskLevel: RiskLevel }>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: ${tokens.borderRadiusMedium};
-  font-size: 24px;
-  font-weight: ${tokens.fontWeightDemiBold};
-  color: ${tokens.colorWhite};
-  background: ${(props) => RISK_COLORS[props.riskLevel].badge};
-  flex-shrink: 0;
-`;
-
-const RiskDetails = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-`;
-
-const RiskLevelText = styled.span<{ riskLevel: RiskLevel }>`
+const RiskHeadline = styled.h3<{ riskLevel: RiskLevel }>`
   font-size: ${tokens.fontSizeL};
   font-weight: ${tokens.fontWeightDemiBold};
-  color: ${(props) => RISK_COLORS[props.riskLevel].text};
+  color: ${(p) => RISK_TEXT_COLOR[p.riskLevel]};
+  margin: 0;
   line-height: 1.2;
+  letter-spacing: 0.5px;
+`;
+
+const StatusSubtext = styled.span`
+  font-size: ${tokens.fontSizeS};
+  color: ${tokens.gray600};
+  font-weight: ${tokens.fontWeightNormal};
 `;
 
 const IssueCountText = styled.span`
-  font-size: ${tokens.fontSizeL};
-  font-weight: ${tokens.fontWeightDemiBold};
-  color: ${tokens.gray700};
-`;
-
-const CheckButton = styled(Button)`
-  flex-shrink: 0;
-`;
-
-// All Clear celebration state
-const PerfectScoreContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: ${tokens.spacingXl} ${tokens.spacingM};
-  text-align: center;
-`;
-
-const PerfectScoreIcon = styled.div`
-  position: relative;
-  width: 80px;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: ${tokens.spacingM};
-
-  svg {
-    width: 64px;
-    height: 64px;
-    color: #2e7d32;
-  }
-
-  /* Decorative sparkles */
-  &::before,
-  &::after {
-    content: "+";
-    position: absolute;
-    font-size: 16px;
-    font-weight: bold;
-    color: #1976d2;
-  }
-
-  &::before {
-    top: 0;
-    right: 0;
-  }
-
-  &::after {
-    bottom: 0;
-    left: 0;
-  }
-`;
-
-const PerfectScoreTitle = styled.h3`
-  font-size: ${tokens.fontSizeXl};
-  font-weight: ${tokens.fontWeightDemiBold};
-  color: ${tokens.gray900};
-  margin: 0 0 ${tokens.spacingXs} 0;
-`;
-
-const PerfectScoreSubtitle = styled.p`
-  font-size: ${tokens.fontSizeM};
-  color: ${tokens.gray600};
-  margin: 0 0 ${tokens.spacingXs} 0;
-`;
-
-const PerfectScoreLink = styled.span`
-  font-size: ${tokens.fontSizeM};
-  color: #2e7d32;
-`;
-
-// --- Check Error Panel ---
-const CheckErrorContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: ${tokens.spacingXl} ${tokens.spacingM};
-  text-align: center;
-  background: ${tokens.red100};
-  border: 1px solid ${tokens.red300};
-  border-radius: ${tokens.borderRadiusMedium};
-  margin: ${tokens.spacingM};
-`;
-
-const CheckErrorIconWrap = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: ${tokens.spacingS};
-  color: ${tokens.red600};
-
-  svg {
-    width: 48px;
-    height: 48px;
-  }
-`;
-
-const CheckErrorTitle = styled.h3`
-  font-size: ${tokens.fontSizeM};
-  font-weight: ${tokens.fontWeightDemiBold};
-  color: ${tokens.gray900};
-  margin: 0 0 ${tokens.spacingXs} 0;
-`;
-
-const CheckErrorMessage = styled.p`
+  display: inline-flex;
+  align-items: baseline;
+  gap: ${tokens.spacing2Xs};
   font-size: ${tokens.fontSizeS};
   color: ${tokens.gray700};
-  margin: 0 0 ${tokens.spacingM} 0;
-  line-height: ${tokens.lineHeightDefault};
+
+  strong {
+    font-size: ${tokens.fontSizeL};
+    font-weight: ${tokens.fontWeightDemiBold};
+    color: ${tokens.gray800};
+  }
 `;
 
-const CheckErrorActions = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${tokens.spacingS};
-  justify-content: center;
-`;
-
-// --- Issue Progress Bar ---
-const ProgressBarSection = styled.div`
+const ProgressBarContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${tokens.spacing2Xs};
-  margin-bottom: ${tokens.spacingS};
+`;
+
+const ProgressBarTrigger = styled.button`
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  width: 100%;
 `;
 
 const ProgressBarTrack = styled.div`
@@ -351,9 +217,9 @@ const ProgressBarTrack = styled.div`
 `;
 
 const ProgressSegment = styled.div<{ widthPercent: number; color: string }>`
-  width: ${(props) => props.widthPercent}%;
+  width: ${(p) => p.widthPercent}%;
   height: 100%;
-  background: ${(props) => props.color};
+  background: ${(p) => p.color};
   transition: width 0.4s ease;
 `;
 
@@ -394,24 +260,26 @@ const StatDismissed = styled(StatItem)`
   color: ${tokens.gray500};
 `;
 
-// --- End Issue Progress Bar ---
-
-const SuggestionsFiltersRow = styled.div`
+const FiltersRow = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: ${tokens.spacingXs};
 `;
 
 const SeverityFilters = styled.div`
   display: flex;
   align-items: center;
   gap: ${tokens.spacingXs};
+  flex-wrap: wrap;
 `;
 
-const SeverityPill = styled.button<{ severity: Severity; isActive: boolean; isDisabled?: boolean }>`
-  display: flex;
+const SeverityPill = styled.button<{
+  severity: CortexSeverity;
+  isActive: boolean;
+  isDisabled?: boolean;
+}>`
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: ${tokens.spacing2Xs};
   height: 26px;
   padding: 0 ${tokens.spacingS};
@@ -419,36 +287,20 @@ const SeverityPill = styled.button<{ severity: Severity; isActive: boolean; isDi
   border-radius: 13px;
   font-size: ${tokens.fontSizeS};
   font-weight: ${tokens.fontWeightMedium};
-  cursor: ${(props) => (props.isDisabled ? "not-allowed" : "pointer")};
-  transition: all 0.15s ease;
+  cursor: ${(p) => (p.isDisabled ? "not-allowed" : "pointer")};
   white-space: nowrap;
-  opacity: ${(props) => (props.isDisabled ? 0.5 : 1)};
+  opacity: ${(p) => (p.isDisabled ? 0.5 : 1)};
+  transition: all 0.15s ease;
 
-  ${(props) => {
-    const { severity, isActive, isDisabled } = props;
-
-    if (isDisabled) {
-      return `
-        background: ${tokens.gray100};
-        border-color: ${tokens.gray300};
-        color: ${tokens.gray500};
-      `;
+  ${(p) => {
+    if (p.isDisabled) {
+      return `background: ${tokens.gray100}; border-color: ${tokens.gray300}; color: ${tokens.gray500};`;
     }
-
-    const c = SEVERITY_COLORS[severity];
-
-    if (isActive) {
-      return `
-        background: ${c.bg};
-        border-color: ${c.border};
-        color: ${c.text};
-      `;
+    const c = SEVERITY_COLORS[p.severity];
+    if (p.isActive) {
+      return `background: ${c.bg}; border-color: ${c.border}; color: ${c.text};`;
     }
-    return `
-      background: ${tokens.colorWhite};
-      border-color: ${tokens.gray300};
-      color: ${tokens.gray500};
-    `;
+    return `background: ${tokens.colorWhite}; border-color: ${tokens.gray300}; color: ${tokens.gray500};`;
   }}
 
   &:hover {
@@ -456,269 +308,244 @@ const SeverityPill = styled.button<{ severity: Severity; isActive: boolean; isDi
   }
 `;
 
-const FilterPopoverContent = styled.div`
-  padding: ${tokens.spacingS};
-  min-width: 180px;
+const SeverityDot = styled.span<{ severity: CortexSeverity }>`
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: ${(p) => SEVERITY_BAR_COLORS[p.severity]};
 `;
 
-const FilterPopoverTitle = styled.div`
-  font-size: ${tokens.fontSizeS};
-  font-weight: ${tokens.fontWeightDemiBold};
-  color: ${tokens.gray700};
-  margin-bottom: ${tokens.spacing2Xs};
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-`;
-
-const FilterPopoverHint = styled.div`
-  font-size: ${tokens.fontSizeS};
-  color: ${tokens.gray500};
-  margin-bottom: ${tokens.spacingS};
-  line-height: ${tokens.lineHeightDefault};
-`;
-
-const FilterCheckboxGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${tokens.spacingXs};
-`;
-
-const FilterCheckboxRow = styled.div`
+const FilterControlsRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: ${tokens.spacingS};
+  flex-wrap: wrap;
 `;
 
-const FilterCount = styled.span`
+const ViewModeGroup = styled.div`
+  display: inline-flex;
+  align-items: stretch;
+  height: 26px;
+  border: 1px solid ${tokens.gray300};
+  border-radius: 13px;
+  background: ${tokens.gray100};
+  padding: 2px;
+`;
+
+const ViewModeButton = styled.button<{ isActive: boolean }>`
+  display: inline-flex;
+  align-items: center;
+  gap: ${tokens.spacing2Xs};
+  height: 100%;
+  padding: 0 ${tokens.spacingS};
+  border: none;
+  border-radius: 11px;
+  background: ${(p) => (p.isActive ? tokens.colorWhite : "transparent")};
+  color: ${(p) => (p.isActive ? tokens.gray800 : tokens.gray500)};
   font-size: ${tokens.fontSizeS};
-  color: ${tokens.gray500};
+  font-weight: ${tokens.fontWeightMedium};
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: ${(p) => (p.isActive ? `0 1px 2px rgba(0,0,0,0.08)` : "none")};
+
+  svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  &:hover {
+    color: ${tokens.gray800};
+  }
 `;
 
-const SuggestionsList = styled.div`
+const IssueList = styled.div`
   flex: 1 1 0;
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
+  /* Reserve scrollbar gutter so card width stays constant whether or not the
+     scrollbar is visible (mirrors sidebar-app's scrollbar-gutter-stable). */
+  scrollbar-gutter: stable;
   padding: ${tokens.spacingS};
   display: flex;
   flex-direction: column;
   gap: ${tokens.spacingS};
-
-  /* Ensure scrollbar is always visible when content overflows */
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: ${tokens.gray100};
-    border-radius: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: ${tokens.gray400};
-    border-radius: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: ${tokens.gray500};
-  }
 `;
 
-const EmptyState = styled.div`
+const EmptyBlock = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   padding: ${tokens.spacingXl};
   text-align: center;
   color: ${tokens.gray500};
 `;
 
-const LoadingState = styled.div`
+const LoadingBlock = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   padding: ${tokens.spacingXl};
   gap: ${tokens.spacingS};
+`;
+
+const ErrorBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: ${tokens.spacingXl} ${tokens.spacingM};
+  text-align: center;
+  background: ${tokens.red100};
+  border: 1px solid ${tokens.red300};
+  border-radius: ${tokens.borderRadiusMedium};
+  margin: ${tokens.spacingM};
+
+  svg {
+    width: 36px;
+    height: 36px;
+    color: ${tokens.red600};
+    margin-bottom: ${tokens.spacingS};
+  }
 `;
 
 const SidebarFooter = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: ${tokens.spacingS} ${tokens.spacingM};
   border-top: 1px solid ${tokens.gray200};
   background: ${tokens.gray100};
   flex-shrink: 0;
 `;
 
-const FooterLeft = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${tokens.spacingXs};
-`;
+function getRiskLevel(
+  counts: Record<CortexSeverity, number>,
+  isLoading: boolean,
+  hasRunScan: boolean,
+  hasError: boolean,
+): RiskLevel {
+  if (isLoading) return "analyzing";
+  if (hasError) return "error";
+  if (!hasRunScan) return "idle";
+  if (counts.high > 0) return "high";
+  if (counts.medium > 0) return "medium";
+  if (counts.low > 0) return "low";
+  return "clear";
+}
 
-const FooterRight = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${tokens.spacingXs};
-`;
-
-const SettingsPopoverContent = styled.div`
-  padding: ${tokens.spacingM};
-  min-width: 220px;
-  display: flex;
-  flex-direction: column;
-  gap: ${tokens.spacingM};
-`;
-
-const SettingsField = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${tokens.spacingXs};
-`;
-
-const SettingsLabel = styled.label`
-  font-size: ${tokens.fontSizeS};
-  font-weight: ${tokens.fontWeightMedium};
-  color: ${tokens.gray700};
-`;
-
-// Severity options for filtering (using API enum values)
-const SEVERITY_OPTIONS: Severity[] = [Severity.HIGH, Severity.MEDIUM, Severity.LOW];
+function getStatusSubtext(
+  riskLevel: RiskLevel,
+  hasEnabledAgent: boolean,
+  appliedCount: number,
+  dismissedCount: number,
+): string | null {
+  if (riskLevel === "analyzing") return "Aggregating findings…";
+  if (riskLevel === "idle") {
+    return hasEnabledAgent ? "Click Check to analyze" : "Enable an agent in settings to check";
+  }
+  if (riskLevel === "clear") {
+    return appliedCount > 0 || dismissedCount > 0 ? "No issues left" : "No issues detected";
+  }
+  return null;
+}
 
 export const SuggestionsSidebar: React.FC<SuggestionsSidebarProps> = ({
-  suggestions,
-  filteredSuggestions,
-  suggestionToOriginalIndex,
+  issues,
+  filteredIssues,
+  issueToOriginalIndex,
   exitingIndices = new Set(),
   isLoading,
+  hasRunScan,
+  hasEnabledAgent,
   checkError = null,
   onDismissCheckError,
   onCheck,
-  onApplySuggestion,
-  onDismissSuggestion,
-  onSelectSuggestion,
-  selectedSuggestionIndex,
-  selectedCategories,
+  onOpenAgentSettings,
+  onOpenAbout,
+  onApplyIssue,
+  onApplyAllMatching,
+  onDismissIssue,
+  onSelectIssue,
+  selectedIssueIndex,
   selectedSeverities,
-  onCategoryChange,
   onSeverityChange,
-  config,
-  onConfigChange,
-  constants,
-  styleGuides,
+  selectedAgentFilterIds,
+  onAgentFilterChange,
+  viewMode,
+  onViewModeChange,
+  styleAgentApplyAllPeerCountByIssueId,
   onSignOut,
   onSubmitFeedback,
   isFeedbackLoading,
   totalIssueCount,
   appliedCount,
   dismissedCount,
+  checkBlockedReason = null,
 }) => {
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-
-  // Refs for card elements to enable scroll-to-view
+  const [isAuditTrailOpen, setIsAuditTrailOpen] = useState(false);
   const cardRefs = useRef<Map<number, HTMLDivElement>>(new Map());
 
-  // Scroll the selected card into view when selectedSuggestionIndex changes
   useEffect(() => {
-    if (selectedSuggestionIndex === null || selectedSuggestionIndex < 0) return;
+    if (selectedIssueIndex === null || selectedIssueIndex < 0) return;
+    cardRefs.current
+      .get(selectedIssueIndex)
+      ?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [selectedIssueIndex]);
 
-    const cardEl = cardRefs.current.get(selectedSuggestionIndex);
-    if (cardEl) {
-      cardEl.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-      });
-    }
-  }, [selectedSuggestionIndex]);
+  /**
+   * Issues that are still actively shown — excludes items currently sliding out.
+   * Counts and progress math use this so that a just-applied / just-dismissed
+   * card doesn't double-count (apply increments `appliedCount` immediately while
+   * `dismissedIndices` updates after the 300ms exit animation; without this
+   * filter the progress bar can transiently exceed 100%).
+   */
+  const nonExitingIssues = useMemo(() => {
+    if (exitingIndices.size === 0) return issues;
+    return issues.filter((issue) => {
+      const idx = issueToOriginalIndex.get(issue);
+      return idx === undefined ? true : !exitingIndices.has(idx);
+    });
+  }, [issues, exitingIndices, issueToOriginalIndex]);
 
-  // Count suggestions by severity (from all visible suggestions, not filtered)
   const severityCounts = useMemo(() => {
-    const counts: Record<Severity, number> = {
-      [Severity.HIGH]: 0,
-      [Severity.MEDIUM]: 0,
-      [Severity.LOW]: 0,
-    };
-    suggestions.forEach((s) => {
-      if (s.severity in counts) {
-        counts[s.severity]++;
-      }
+    const counts: Record<CortexSeverity, number> = { high: 0, medium: 0, low: 0 };
+    nonExitingIssues.forEach((s) => {
+      counts[s.severity] += 1;
     });
     return counts;
-  }, [suggestions]);
+  }, [nonExitingIssues]);
 
-  // Count suggestions by category (from all visible suggestions, not filtered)
-  const categoryCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    suggestions.forEach((s) => {
-      const cat = s.category?.toLowerCase() || "other";
-      counts[cat] = (counts[cat] || 0) + 1;
-    });
-    return counts;
-  }, [suggestions]);
+  /** Clamp at the UI boundary: parent computes `dismissedIndices.size - appliedCount`,
+      which can transiently go negative between `applyIssue` and the 300ms exit timeout. */
+  const safeDismissedCount = Math.max(0, dismissedCount);
 
-  // Sort filtered suggestions by start offset (ascending order)
-  const sortedFilteredSuggestions = useMemo(() => {
-    return [...filteredSuggestions].sort((a, b) => a.position.start_index - b.position.start_index);
-  }, [filteredSuggestions]);
-
-  // Toggle category filter
-  const toggleCategory = useCallback(
-    (categoryId: string) => {
-      const next = new Set(selectedCategories);
-      if (next.has(categoryId)) {
-        next.delete(categoryId);
-      } else {
-        next.add(categoryId);
-      }
-      onCategoryChange(next);
-    },
-    [selectedCategories, onCategoryChange],
+  const sortedFiltered = useMemo(
+    () => [...filteredIssues].sort((a, b) => a.position.start - b.position.start),
+    [filteredIssues],
   );
 
-  // Toggle severity filter
   const toggleSeverity = useCallback(
-    (severity: Severity) => {
+    (severity: CortexSeverity) => {
       const next = new Set(selectedSeverities);
-      if (next.has(severity)) {
-        next.delete(severity);
-      } else {
-        next.add(severity);
-      }
+      if (next.has(severity)) next.delete(severity);
+      else next.add(severity);
       onSeverityChange(next);
     },
     [selectedSeverities, onSeverityChange],
   );
 
-  // Progress bar segments: applied (green) | remaining-by-severity | dismissed (gray)
   const progressSegments = useMemo(() => {
     if (totalIssueCount === 0) return [];
-
     const segments: { key: string; widthPercent: number; color: string }[] = [];
     const pct = (count: number) => (count / totalIssueCount) * 100;
 
-    // 1. Applied (green) - first so it grows from the left
     if (appliedCount > 0) {
       segments.push({ key: "applied", widthPercent: pct(appliedCount), color: APPLIED_BAR_COLOR });
     }
 
-    // 2. Remaining by severity (ordered high -> medium -> low)
-    const remainingSeverityCounts: Record<Severity, number> = {
-      [Severity.HIGH]: 0,
-      [Severity.MEDIUM]: 0,
-      [Severity.LOW]: 0,
-    };
-    suggestions.forEach((s) => {
-      if (s.severity in remainingSeverityCounts) {
-        remainingSeverityCounts[s.severity]++;
-      }
-    });
-
-    for (const severity of SEVERITY_OPTIONS) {
-      const count = remainingSeverityCounts[severity];
+    SEVERITY_OPTIONS.forEach((severity) => {
+      const count = severityCounts[severity];
       if (count > 0) {
         segments.push({
           key: `remaining-${severity}`,
@@ -726,48 +553,43 @@ export const SuggestionsSidebar: React.FC<SuggestionsSidebarProps> = ({
           color: SEVERITY_BAR_COLORS[severity],
         });
       }
-    }
+    });
 
-    // 3. Dismissed (gray) - at the end
-    if (dismissedCount > 0) {
+    if (safeDismissedCount > 0) {
       segments.push({
         key: "dismissed",
-        widthPercent: pct(dismissedCount),
+        widthPercent: pct(safeDismissedCount),
         color: DISMISSED_BAR_COLOR,
       });
     }
 
     return segments;
-  }, [totalIssueCount, appliedCount, dismissedCount, suggestions]);
+  }, [totalIssueCount, appliedCount, safeDismissedCount, severityCounts]);
 
-  const remainingCount = suggestions.length;
-
-  // Calculate risk level based on severity counts
-  const riskLevel = getRiskLevel(
-    severityCounts[Severity.HIGH],
-    severityCounts[Severity.MEDIUM],
-    severityCounts[Severity.LOW],
-    isLoading,
+  const riskLevel = getRiskLevel(severityCounts, isLoading, hasRunScan, !!checkError);
+  const baseSubtext = getStatusSubtext(
+    riskLevel,
+    hasEnabledAgent,
+    appliedCount,
+    safeDismissedCount,
   );
-
-  // Build config options
-  const dialectOptions = (constants?.dialects || []).map((d) => ({
-    value: d,
-    label: formatDialect(d) || d,
-  }));
-
-  const toneOptions = [
-    { value: "", label: "None" },
-    ...(constants?.tones || []).map((t) => ({
-      value: t,
-      label: formatTone(t) || t,
-    })),
-  ];
-
-  const styleGuideOptions = (styleGuides || []).map((sg) => ({
-    value: sg.id,
-    label: sg.name,
-  }));
+  // Surface the parent-supplied block reason on the idle screen so the user
+  // sees *why* Check is disabled instead of a silent no-op.
+  const subtext =
+    !isLoading && riskLevel === "idle" && checkBlockedReason ? checkBlockedReason : baseSubtext;
+  const canCheck = hasEnabledAgent && !isLoading && !checkBlockedReason;
+  let checkDisabledHint: string | undefined;
+  if (checkBlockedReason) {
+    checkDisabledHint = checkBlockedReason;
+  } else if (!hasEnabledAgent) {
+    checkDisabledHint = "Enable an agent in settings to check";
+  }
+  const remainingCount = nonExitingIssues.length;
+  const remainingPlural = remainingCount === 1 ? "" : "s";
+  const remainingLabel =
+    remainingCount === 0
+      ? "No issues remaining"
+      : `${String(remainingCount)} issue${remainingPlural} remaining`;
 
   return (
     <SidebarContainer
@@ -781,147 +603,172 @@ export const SuggestionsSidebar: React.FC<SuggestionsSidebarProps> = ({
             <Logo src="logos/markup_Logo_Mark_Coral.svg" alt="Markup AI" />
             <span style={{ fontWeight: 600, color: tokens.gray800 }}>Markup AI</span>
           </LogoSection>
+          <HeaderActions>
+            <IconButton
+              aria-label="Agent settings"
+              icon={<GearSixIcon />}
+              variant="transparent"
+              size="small"
+              onClick={onOpenAgentSettings}
+            />
+          </HeaderActions>
         </HeaderTop>
 
-        <ScoreSection>
-          <RiskInfoSection>
-            <RiskBadge riskLevel={riskLevel}>
-              {(() => {
-                if (riskLevel === "clear") return <CheckCircleIcon />;
-                if (riskLevel === "analyzing") return <Spinner size="medium" />;
-                return riskLevel.charAt(0).toUpperCase();
-              })()}
-            </RiskBadge>
-            <RiskDetails>
-              <RiskLevelText riskLevel={riskLevel}>{RISK_LABELS[riskLevel]}</RiskLevelText>
-              {!isLoading && (
-                <IssueCountText>
-                  {(() => {
-                    if (suggestions.length === 0) return "No issues detected";
-                    const plural = suggestions.length === 1 ? "" : "s";
-                    return `${String(suggestions.length)} issue${plural} detected`;
-                  })()}
-                </IssueCountText>
+        <StatusRow>
+          <StatusText>
+            <RiskHeadline riskLevel={riskLevel}>
+              {isLoading ? (
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                  <Spinner size="small" />
+                  {RISK_LABELS.analyzing}
+                </span>
+              ) : (
+                RISK_LABELS[riskLevel]
               )}
-            </RiskDetails>
-          </RiskInfoSection>
-          <CheckButton variant="primary" size="small" onClick={onCheck} isDisabled={isLoading}>
+            </RiskHeadline>
+            {subtext && <StatusSubtext>{subtext}</StatusSubtext>}
+            {!isLoading && hasRunScan && riskLevel !== "error" && totalIssueCount > 0 && (
+              <IssueCountText>
+                <strong>{String(totalIssueCount)}</strong> issues found
+              </IssueCountText>
+            )}
+          </StatusText>
+          <Button
+            variant="primary"
+            size="small"
+            onClick={onCheck}
+            isDisabled={!canCheck}
+            title={checkDisabledHint}
+          >
             Check
-          </CheckButton>
-        </ScoreSection>
+          </Button>
+        </StatusRow>
 
-        {/* Issue Progress Bar - shown when there are issues to track */}
-        {!isLoading && totalIssueCount > 0 && (
-          <ProgressBarSection>
-            <ProgressBarTrack>
-              {progressSegments.map((seg) => (
-                <ProgressSegment key={seg.key} widthPercent={seg.widthPercent} color={seg.color} />
-              ))}
-            </ProgressBarTrack>
+        {!isLoading && !checkError && totalIssueCount > 0 && (
+          <ProgressBarContainer>
+            <AuditTrailPopover
+              isOpen={isAuditTrailOpen}
+              onOpenChange={setIsAuditTrailOpen}
+              severityCounts={severityCounts}
+              appliedCount={appliedCount}
+              dismissedCount={safeDismissedCount}
+              trigger={
+                <ProgressBarTrigger
+                  type="button"
+                  aria-label="View audit trail"
+                  onClick={() => {
+                    setIsAuditTrailOpen((v) => !v);
+                  }}
+                >
+                  <ProgressBarTrack>
+                    {progressSegments.map((seg) => (
+                      <ProgressSegment
+                        key={seg.key}
+                        widthPercent={seg.widthPercent}
+                        color={seg.color}
+                      />
+                    ))}
+                  </ProgressBarTrack>
+                </ProgressBarTrigger>
+              }
+            />
             <ProgressStats>
-              <ProgressStatsLeft>
-                {remainingCount === 0
-                  ? "No issues remaining"
-                  : `${String(remainingCount)} issue${remainingCount === 1 ? "" : "s"} remaining`}
-              </ProgressStatsLeft>
+              <ProgressStatsLeft>{remainingLabel}</ProgressStatsLeft>
               <ProgressStatsRight>
                 {appliedCount > 0 && (
                   <StatApplied title="Applied">
                     <CheckCircleIcon /> {String(appliedCount)}
                   </StatApplied>
                 )}
-                {dismissedCount > 0 && (
+                {safeDismissedCount > 0 && (
                   <StatDismissed title="Dismissed">
-                    <MinusCircleIcon /> {String(dismissedCount)}
+                    <MinusCircleIcon /> {String(safeDismissedCount)}
                   </StatDismissed>
                 )}
               </ProgressStatsRight>
             </ProgressStats>
-          </ProgressBarSection>
+          </ProgressBarContainer>
         )}
 
-        <SuggestionsFiltersRow>
-          <SeverityFilters>
-            {SEVERITY_OPTIONS.map((severity) => (
-              <SeverityPill
-                key={severity}
-                severity={severity}
-                isActive={selectedSeverities.has(severity)}
-                isDisabled={isLoading}
-                onClick={() => {
-                  if (!isLoading) toggleSeverity(severity);
-                }}
-                title={`${severity.charAt(0).toUpperCase()}${severity.slice(1).toLowerCase()} severity`}
-              >
-                {severity.charAt(0).toUpperCase() + severity.slice(1).toLowerCase()}{" "}
-                {isLoading ? "-" : String(severityCounts[severity])}
-              </SeverityPill>
-            ))}
-          </SeverityFilters>
-          <Popover
-            isOpen={isFilterOpen}
-            onClose={() => {
-              setIsFilterOpen(false);
-            }}
-          >
-            <Popover.Trigger>
-              <IconButton
-                aria-label="Filter by category"
-                icon={<ListBulletsIcon />}
-                variant="transparent"
-                size="small"
-                onClick={() => {
-                  setIsFilterOpen(!isFilterOpen);
-                }}
+        {hasRunScan && !checkError && (
+          <FiltersRow>
+            <SeverityFilters>
+              {SEVERITY_OPTIONS.map((severity) => (
+                <SeverityPill
+                  key={severity}
+                  severity={severity}
+                  isActive={selectedSeverities.has(severity)}
+                  isDisabled={isLoading}
+                  onClick={() => {
+                    if (!isLoading) toggleSeverity(severity);
+                  }}
+                  title={`${severity.charAt(0).toUpperCase()}${severity.slice(1)} severity`}
+                >
+                  <SeverityDot severity={severity} />
+                  {severity.charAt(0).toUpperCase() + severity.slice(1)}{" "}
+                  {isLoading ? "-" : String(severityCounts[severity])}
+                </SeverityPill>
+              ))}
+            </SeverityFilters>
+            <FilterControlsRow>
+              <AgentFilterPopover
+                allActiveIssues={issues}
+                selectedAgentFilterIds={selectedAgentFilterIds}
+                onChange={onAgentFilterChange}
               />
-            </Popover.Trigger>
-            <Popover.Content>
-              <FilterPopoverContent>
-                <FilterPopoverTitle>Suggestion Type</FilterPopoverTitle>
-                <FilterPopoverHint>
-                  Select types to show; all shown when none selected.
-                </FilterPopoverHint>
-                <FilterCheckboxGroup>
-                  {FILTER_CATEGORY_OPTIONS.map((cat) => (
-                    <FilterCheckboxRow key={cat.id}>
-                      <Checkbox
-                        id={`filter-${cat.id}`}
-                        isChecked={selectedCategories.has(cat.id)}
-                        onChange={() => {
-                          toggleCategory(cat.id);
-                        }}
-                      >
-                        {cat.label}
-                      </Checkbox>
-                      <FilterCount>({categoryCounts[cat.id] || 0})</FilterCount>
-                    </FilterCheckboxRow>
-                  ))}
-                </FilterCheckboxGroup>
-              </FilterPopoverContent>
-            </Popover.Content>
-          </Popover>
-        </SuggestionsFiltersRow>
+              <ViewModeGroup role="group" aria-label="Issue view">
+                <ViewModeButton
+                  type="button"
+                  isActive={viewMode === "grouped"}
+                  onClick={() => {
+                    onViewModeChange("grouped");
+                  }}
+                  aria-pressed={viewMode === "grouped"}
+                >
+                  <CardsIcon />
+                  Group
+                </ViewModeButton>
+                <ViewModeButton
+                  type="button"
+                  isActive={viewMode === "list"}
+                  onClick={() => {
+                    onViewModeChange("list");
+                  }}
+                  aria-pressed={viewMode === "list"}
+                >
+                  <ListBulletsIcon />
+                  List
+                </ViewModeButton>
+              </ViewModeGroup>
+            </FilterControlsRow>
+          </FiltersRow>
+        )}
       </SidebarHeader>
 
-      <SuggestionsList>
+      <IssueList>
         {(() => {
           if (isLoading) {
             return (
-              <LoadingState>
+              <LoadingBlock>
                 <Spinner size="medium" />
-                <span>Analyzing content...</span>
-              </LoadingState>
+                <span>Analyzing content…</span>
+              </LoadingBlock>
             );
           }
           if (checkError) {
             return (
-              <CheckErrorContainer role="alert" aria-live="polite">
-                <CheckErrorIconWrap>
-                  <WarningIcon variant="negative" />
-                </CheckErrorIconWrap>
-                <CheckErrorTitle>Check failed</CheckErrorTitle>
-                <CheckErrorMessage>{checkError}</CheckErrorMessage>
-                <CheckErrorActions>
+              <ErrorBlock role="alert" aria-live="polite">
+                <WarningIcon />
+                <strong>Check failed</strong>
+                <p
+                  style={{
+                    margin: `${tokens.spacing2Xs} 0 ${tokens.spacingM}`,
+                    fontSize: tokens.fontSizeS,
+                  }}
+                >
+                  {checkError}
+                </p>
+                <div style={{ display: "flex", gap: tokens.spacingS, flexWrap: "wrap" }}>
                   <Button variant="primary" size="small" onClick={onCheck}>
                     Try again
                   </Button>
@@ -930,54 +777,79 @@ export const SuggestionsSidebar: React.FC<SuggestionsSidebarProps> = ({
                       Dismiss
                     </Button>
                   )}
-                </CheckErrorActions>
-              </CheckErrorContainer>
+                </div>
+              </ErrorBlock>
             );
           }
-          if (suggestions.length === 0) {
+          if (!hasRunScan) {
             return (
-              <PerfectScoreContainer>
-                <PerfectScoreIcon>
-                  <CheckCircleIcon />
-                </PerfectScoreIcon>
-                <PerfectScoreTitle>Everything looks great!</PerfectScoreTitle>
-                <PerfectScoreSubtitle>Your content is polished and ready.</PerfectScoreSubtitle>
-                <PerfectScoreLink>Zero issues found.</PerfectScoreLink>
-              </PerfectScoreContainer>
+              <EmptyBlock>
+                <strong style={{ marginTop: tokens.spacingS }}>Ready to analyze</strong>
+                <span style={{ marginTop: tokens.spacing2Xs, maxWidth: 280 }}>
+                  {hasEnabledAgent
+                    ? "Click Check above to run your selected agents."
+                    : "Open Agent settings to enable at least one agent, then Check."}
+                </span>
+              </EmptyBlock>
             );
           }
-          if (sortedFilteredSuggestions.length === 0) {
-            return <EmptyState>No suggestions match your filters.</EmptyState>;
+          if (issues.length === 0) {
+            return (
+              <EmptyBlock>
+                <CheckCircleIcon size="medium" />
+                <strong style={{ marginTop: tokens.spacingS }}>Everything looks great!</strong>
+                <span style={{ marginTop: tokens.spacing2Xs }}>Zero issues found.</span>
+              </EmptyBlock>
+            );
           }
-          return sortedFilteredSuggestions.map((suggestion) => {
-            // Get the original index from the map (index in activeSuggestions)
-            const originalIndex = suggestionToOriginalIndex.get(suggestion) ?? -1;
+          if (sortedFiltered.length === 0) {
+            return <EmptyBlock>No suggestions match your filters.</EmptyBlock>;
+          }
+          if (viewMode === "grouped") {
+            return (
+              <AgentsGroupedList
+                issues={sortedFiltered}
+                issueToOriginalIndex={issueToOriginalIndex}
+                exitingIndices={exitingIndices}
+                selectedIssueIndex={selectedIssueIndex}
+                onSelectIssue={onSelectIssue}
+                onApplyIssue={onApplyIssue}
+                onApplyAllMatching={onApplyAllMatching}
+                onDismissIssue={onDismissIssue}
+                onSubmitFeedback={onSubmitFeedback}
+                isFeedbackLoading={isFeedbackLoading}
+                styleAgentApplyAllPeerCountByIssueId={styleAgentApplyAllPeerCountByIssueId}
+                cardRefs={cardRefs}
+              />
+            );
+          }
+          return sortedFiltered.map((issue) => {
+            const originalIndex = issueToOriginalIndex.get(issue) ?? -1;
             const isExiting = exitingIndices.has(originalIndex);
             return (
               <SuggestionCard
-                key={`suggestion-${String(originalIndex)}-${String(suggestion.position.start_index)}`}
+                key={`issue-${issue.id}`}
                 ref={(el) => {
-                  if (el) {
-                    cardRefs.current.set(originalIndex, el);
-                  } else {
-                    cardRefs.current.delete(originalIndex);
-                  }
+                  if (el) cardRefs.current.set(originalIndex, el);
+                  else cardRefs.current.delete(originalIndex);
                 }}
-                suggestion={suggestion}
-                isExpanded={selectedSuggestionIndex === originalIndex}
+                issue={issue}
+                isExpanded={selectedIssueIndex === originalIndex}
                 isExiting={isExiting}
-                onToggle={() => {
-                  if (selectedSuggestionIndex === originalIndex) {
-                    onSelectSuggestion(null, -1);
-                  } else {
-                    onSelectSuggestion(suggestion, originalIndex);
+                onExpand={() => {
+                  if (selectedIssueIndex !== originalIndex) {
+                    onSelectIssue(issue, originalIndex);
                   }
                 }}
-                onApply={() => {
-                  onApplySuggestion(suggestion, originalIndex);
+                onApply={(appliedSuggestion) => {
+                  onApplyIssue(issue, originalIndex, appliedSuggestion);
+                }}
+                styleAgentApplyAllPeerCount={styleAgentApplyAllPeerCountByIssueId.get(issue.id)}
+                onApplyAllMatching={(appliedSuggestion) => {
+                  onApplyAllMatching(issue, appliedSuggestion);
                 }}
                 onDismiss={() => {
-                  onDismissSuggestion(suggestion, originalIndex);
+                  onDismissIssue(issue, originalIndex);
                 }}
                 onSubmitFeedback={
                   onSubmitFeedback
@@ -989,104 +861,15 @@ export const SuggestionsSidebar: React.FC<SuggestionsSidebarProps> = ({
             );
           });
         })()}
-      </SuggestionsList>
+      </IssueList>
 
       <SidebarFooter>
-        <FooterLeft>
-          <Popover
-            isOpen={isSettingsOpen}
-            onClose={() => {
-              setIsSettingsOpen(false);
-            }}
-          >
-            <Popover.Trigger>
-              <IconButton
-                aria-label="Settings"
-                icon={<GearSixIcon />}
-                variant="transparent"
-                size="small"
-                onClick={() => {
-                  setIsSettingsOpen(!isSettingsOpen);
-                }}
-              />
-            </Popover.Trigger>
-            <Popover.Content>
-              <SettingsPopoverContent>
-                <SettingsField>
-                  <SettingsLabel>Style Guide</SettingsLabel>
-                  <Select
-                    aria-label="Style Guide"
-                    value={config.styleGuide || styleGuideOptions[0]?.value || ""}
-                    onChange={(e) => {
-                      onConfigChange({ styleGuide: e.target.value });
-                    }}
-                    size="small"
-                  >
-                    {styleGuideOptions.map((sg) => (
-                      <Select.Option key={sg.value} value={sg.value}>
-                        {sg.label}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </SettingsField>
-
-                <SettingsField>
-                  <SettingsLabel>Dialect</SettingsLabel>
-                  <Select
-                    aria-label="Dialect"
-                    value={(() => {
-                      if (config.dialect) return config.dialect;
-                      return dialectOptions[0]?.value ?? "";
-                    })()}
-                    onChange={(e) => {
-                      onConfigChange({ dialect: e.target.value as Dialects });
-                    }}
-                    size="small"
-                  >
-                    {dialectOptions.map((d) => (
-                      <Select.Option key={d.value} value={d.value}>
-                        {d.label}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </SettingsField>
-
-                <SettingsField>
-                  <SettingsLabel>Tone</SettingsLabel>
-                  <Select
-                    aria-label="Tone"
-                    value={config.tone || ""}
-                    onChange={(e) => {
-                      onConfigChange({ tone: (e.target.value || null) as Tones | null });
-                    }}
-                    size="small"
-                  >
-                    {toneOptions.map((t) => (
-                      <Select.Option key={t.value} value={t.value}>
-                        {t.label}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </SettingsField>
-
-                <Button
-                  variant="secondary"
-                  size="small"
-                  isFullWidth
-                  onClick={() => {
-                    setIsSettingsOpen(false);
-                  }}
-                >
-                  Save settings
-                </Button>
-              </SettingsPopoverContent>
-            </Popover.Content>
-          </Popover>
-        </FooterLeft>
-
-        <FooterRight>
-          <UserProfileButton onSignOut={onSignOut} hideSignInPrompt dropdownPosition="above" />
-        </FooterRight>
+        <UserProfileButton
+          onSignOut={onSignOut}
+          hideSignInPrompt
+          dropdownPosition="above"
+          onOpenAbout={onOpenAbout}
+        />
       </SidebarFooter>
     </SidebarContainer>
   );

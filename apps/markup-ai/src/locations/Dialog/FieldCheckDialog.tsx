@@ -1,35 +1,54 @@
 /**
- * Field Check Dialog - Main component integrating all FieldCheck functionality
- * Redesigned with two-panel layout: Content Preview (left) + Suggestions Sidebar (right)
+ * Field Check Dialog — Cortex multi-agent scan flow.
+ *
+ * Submits content to the Cortex parallel executor with the user's selected agents,
+ * streams agent_result events via SSE, and renders Cortex issues in a split-pane UI.
  */
 
-import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DialogAppSDK } from "@contentful/app-sdk";
-import { useSDK, useAutoResizer } from "@contentful/react-apps-toolkit";
-import { Heading, Button } from "@contentful/f36-components";
-import { CopySimpleIcon, CheckCircleIcon } from "@contentful/f36-icons";
+import { useAutoResizer, useSDK } from "@contentful/react-apps-toolkit";
+import { Button, Heading } from "@contentful/f36-components";
+import { CheckCircleIcon, CopySimpleIcon } from "@contentful/f36-icons";
 import styled from "@emotion/styled";
 import tokens from "@contentful/f36-tokens";
 import type { Document } from "@contentful/rich-text-types";
 import SignInCard from "../../components/UserSettings/SignInCard";
 import { useAuth } from "../../contexts/AuthContext";
-import { useSuggestions } from "../../hooks/useSuggestions";
+import { useAgenticScan } from "../../hooks/useAgenticScan";
+import { useAgentSelection } from "../../hooks/useAgentSelection";
+import { useAgentConfig } from "../../hooks/useAgentConfig";
 import { useFeedback } from "../../hooks/useFeedback";
-import { useUserSettings } from "../../hooks/useUserSettings";
-import { useConfigData } from "../../contexts/ConfigDataContext";
-import { useFieldCheckState } from "./FieldCheck/hooks";
-import { EditorPanel } from "./FieldCheck/components/EditorPanel";
-import { SuggestionsSidebar } from "./FieldCheck/components/SuggestionsSidebar";
-import { Severity } from "../../api-client/types.gen";
-import type { Suggestion, Dialects, Tones } from "../../api-client/types.gen";
-import type { FieldCheckDialogParams } from "./dialogTypes";
+import { useStyleTargets } from "../../hooks/useStyleTargets";
+import { useEffectiveStyleGuide } from "../../hooks/useEffectiveStyleGuide";
+import { useAgentAvailability } from "../../hooks/useAgentAvailability";
+import { getUserSettings } from "../../utils/userSettings";
+import { toBackendAgentIds } from "../../agents/agenticConfig";
+import { filterRunnableAgentIds, unavailabilityReasonsFor } from "../../agents/agentAvailability";
+import type { CortexIssueWithId, CortexSeverity } from "../../agents/types";
+import { getAgenticSuggestionChoices } from "../../agents/utils/agenticSuggestions";
 import {
-  isRichTextDocument,
-  convertRichTextToHtml,
+  buildStyleAgentApplyAllPeerCountByIssueId,
+  getStyleAgentApplyAllClusterKey,
+  styleAgentIssueAcceptsSuggestion,
+} from "../../agents/utils/styleAgentApplyAllCluster";
+import { EditorPanel } from "./FieldCheck/components/EditorPanel";
+import {
+  SuggestionsSidebar,
+  type SidebarViewMode,
+} from "./FieldCheck/components/SuggestionsSidebar";
+import { AgentSettingsPanel } from "./FieldCheck/components/AgentSettingsPanel";
+import { AboutView } from "../../components/About/AboutView";
+import type { IssueSourceFormat } from "./FieldCheck/components/IssueHighlights/types";
+import type { FieldCheckDialogParams } from "./dialogTypes";
+import type { AppInstallationParameters } from "../../types/appConfig";
+import {
   convertHtmlToRichText,
+  convertRichTextToHtml,
+  isRichTextDocument,
   type TextNodeWithId,
 } from "../../utils/richTextUtils";
-import { TONE_NONE } from "../../utils/userSettings";
+import { detectSyntaxKind } from "./FieldCheck/utils";
 import { getApiErrorMessage } from "../../utils/errorMessage";
 
 const DialogContainer = styled.div`
@@ -105,12 +124,6 @@ const PreviewHeader = styled.div`
   flex-shrink: 0;
 `;
 
-const PreviewTitle = styled(Heading)`
-  margin: 0;
-  font-size: ${tokens.fontSizeL};
-  color: ${tokens.gray800};
-`;
-
 const PreviewSubtitle = styled.p`
   margin: ${tokens.spacingXs} 0 0;
   font-size: ${tokens.fontSizeS};
@@ -128,7 +141,7 @@ const EditorWrapper = styled.div`
   overflow: hidden;
 `;
 
-const EditorContent = styled.div`
+const EditorContentWrap = styled.div`
   flex: 1;
   min-height: 0;
   display: flex;
@@ -151,40 +164,45 @@ const SidebarSection = styled.div`
   }
 `;
 
+function inferSourceFormat(isRichText: boolean, content: string): IssueSourceFormat {
+  if (isRichText) return "html";
+  const syntax = detectSyntaxKind(content);
+  if (syntax === "html" || syntax === "xml") return "html";
+  if (syntax === "markdown") return "markdown";
+  return "plain";
+}
+
 const FieldCheckDialog: React.FC = () => {
   useAutoResizer();
   const sdk = useSDK<DialogAppSDK>();
   const params = sdk.parameters.invocation as unknown as FieldCheckDialogParams;
-  const { isAuthenticated } = useAuth();
-  const hasRunCheck = useRef(false);
+  const { isAuthenticated, token } = useAuth();
   const editorContentRef = useRef<(() => string) | null>(null);
-  const applySuggestionRef = useRef<((index: number) => void) | null>(null);
+  const applyIssueRef = useRef<((index: number, replacement?: string) => void) | null>(null);
+  const applyIssuesRef = useRef<((indices: number[], replacement: string) => void) | null>(null);
   const lastAppliedFilteredPosition = useRef<number>(-1);
-  const filteredSuggestionsRef = useRef<Suggestion[]>([]);
-  const suggestionToOriginalIndexRef = useRef<Map<Suggestion, number>>(new Map());
+  const filteredIssuesRef = useRef<CortexIssueWithId[]>([]);
+  const issueToOriginalIndexRef = useRef<Map<CortexIssueWithId, number>>(new Map());
+
   const [appliedCount, setAppliedCount] = useState(0);
-  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState<number | null>(null);
+  const [selectedIssueIndex, setSelectedIssueIndex] = useState<number | null>(null);
   const [dismissedIndices, setDismissedIndices] = useState<Set<number>>(new Set());
   const [exitingIndices, setExitingIndices] = useState<Set<number>>(new Set());
-  // Check ID increments only when a new check is run - used to tell EditorPanel when to rebuild decorations
-  const [checkId, setCheckId] = useState(0);
-  // Initial loading state - true from dialog open until first check completes
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
-  // API error from last check (e.g. invalid style guide) – shown in sidebar
+  const [scanId, setScanId] = useState(0);
+  const [hasRunInitialScan, setHasRunInitialScan] = useState(false);
   const [checkError, setCheckError] = useState<string | null>(null);
-  // Workflow ID copy state
   const [workflowIdCopied, setWorkflowIdCopied] = useState(false);
+  const [sidebarView, setSidebarView] = useState<"main" | "settings" | "about">("main");
+  const [selectedAgentFilterIds, setSelectedAgentFilterIds] = useState<Set<string> | null>(null);
+  const [viewMode, setViewMode] = useState<SidebarViewMode>("list");
+  const [selectedSeverities, setSelectedSeverities] = useState<Set<CortexSeverity>>(
+    () => new Set(),
+  );
 
-  // Filter state: empty = show all (enable-to-include). Non-empty = show only selected.
-  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(() => new Set());
-  const [selectedSeverities, setSelectedSeverities] = useState<Set<Severity>>(() => new Set());
-
-  // RichText handling - convert Document to HTML for editing
   const isRichText = params.fieldFormat === "RichText";
   const originalRichTextDoc = useRef<Document | null>(null);
   const richTextNodeMap = useRef<Map<string, TextNodeWithId>>(new Map());
 
-  // Compute initial content - for RichText, convert to HTML
   const initialEditorContent = useMemo(() => {
     if (isRichText && isRichTextDocument(params.fieldContent)) {
       originalRichTextDoc.current = params.fieldContent;
@@ -192,11 +210,21 @@ const FieldCheckDialog: React.FC = () => {
       richTextNodeMap.current = nodeMap;
       return html;
     }
-    // For text fields, content is already a string
     return typeof params.fieldContent === "string" ? params.fieldContent : "";
   }, [isRichText, params.fieldContent]);
 
-  // Ensure we sync the iframe height after first layout
+  /**
+   * Content actually submitted to Cortex for the latest scan. Issue offsets are
+   * in this string's coordinate space, so the offset mapper must use it (not
+   * `initialEditorContent`, which would diverge once the user edits the field).
+   */
+  const [scannedContent, setScannedContent] = useState<string>(initialEditorContent);
+
+  const sourceFormat: IssueSourceFormat = useMemo(
+    () => inferSourceFormat(isRichText, scannedContent),
+    [isRichText, scannedContent],
+  );
+
   useEffect(() => {
     sdk.window.updateHeight();
     requestAnimationFrame(() => {
@@ -204,268 +232,276 @@ const FieldCheckDialog: React.FC = () => {
     });
   }, [sdk.window]);
 
-  // Get user settings with field context
-  const { effectiveSettings, updateDialect, updateTone, updateStyleGuide } = useUserSettings({
+  const apiKey = token ?? getUserSettings().apiKey;
+  const { selectedAgentIds, toggleAgent } = useAgentSelection();
+  const { agentConfig, setAgentConfigKey, flattenConfigForRequest } = useAgentConfig();
+  const { unavailable: unavailableAgents } = useAgentAvailability();
+
+  // Single fetch of style guide targets shared by the sidebar picker (and any
+  // future consumer) — react-query also dedupes via query key, but lifting the
+  // call here makes it explicit that we never fan out per-component.
+  const {
+    targets: styleGuideTargets,
+    isLoading: styleGuidesLoading,
+    isError: styleGuidesError,
+  } = useStyleTargets(apiKey);
+
+  // Pull the per-content-type default straight from `sdk.parameters.installation`
+  // rather than threading it through invocation params — that way every dialog
+  // open reads the freshest value Contentful saved on the config screen,
+  // independent of how the field iframe constructed the invocation payload.
+  // Default to {} so a missing/undefined installation block doesn't throw.
+  const installationParams: AppInstallationParameters =
+    (sdk.parameters.installation as AppInstallationParameters | undefined) ?? {};
+  const contentTypeDefault = installationParams.contentTypeSettings?.[params.contentTypeId];
+  const spaceId = sdk.ids.space;
+  const environmentId = sdk.ids.environmentAlias ?? sdk.ids.environment;
+
+  const { effectiveStyleGuideId, setFieldStyleGuide } = useEffectiveStyleGuide({
+    spaceId,
+    environmentId,
     contentTypeId: params.contentTypeId,
     fieldId: params.fieldId,
-    contentTypeDefaults: params.contentTypeDefaults,
+    contentTypeDefault,
   });
 
-  // Get constants and style guides from context
-  const { constants, styleGuides } = useConfigData();
+  const { issues, startScan, scanInFlight, workflowId, error: scanError } = useAgenticScan(apiKey);
+  const { submitFeedback, isLoading: isFeedbackLoading } = useFeedback({ apiKey: apiKey ?? "" });
 
-  // State management
-  const {
-    setActiveScores,
-    activeSuggestions,
-    setActiveSuggestions,
-    config,
-    updateConfig,
-    resetAll,
-  } = useFieldCheckState();
+  /**
+   * `target_id` lives in per-field localStorage, but the agent settings panel
+   * still needs to render it so users can edit it from either surface. We
+   * project the effective value into the panel's view of `agentConfig` and
+   * route panel writes through `setFieldStyleGuide`, keeping both pickers in
+   * lockstep regardless of which one the user changes.
+   */
+  const agentConfigForPanel = useMemo<Record<string, Record<string, unknown>>>(() => {
+    const existingStyle: Record<string, unknown> = Object.hasOwn(agentConfig, "style_agent")
+      ? agentConfig.style_agent
+      : {};
+    return {
+      ...agentConfig,
+      style_agent: { ...existingStyle, target_id: effectiveStyleGuideId ?? "" },
+    };
+  }, [agentConfig, effectiveStyleGuideId]);
 
-  // Sync config changes to localStorage
-  const handleConfigChange = useCallback(
-    (newConfig: Partial<typeof config>) => {
-      updateConfig(newConfig);
-
-      if (newConfig.dialect !== undefined) {
-        updateDialect(newConfig.dialect);
+  const handleAgentConfigKeyChange = useCallback(
+    (agentId: string, key: string, value: unknown) => {
+      if (agentId === "style_agent" && key === "target_id") {
+        setFieldStyleGuide(typeof value === "string" && value.length > 0 ? value : null);
+        return;
       }
-      if (newConfig.tone !== undefined) {
-        updateTone(newConfig.tone || null);
-      }
-      if (newConfig.styleGuide !== undefined) {
-        updateStyleGuide(newConfig.styleGuide || null);
-      }
+      setAgentConfigKey(agentId, key, value);
     },
-    [updateConfig, updateDialect, updateTone, updateStyleGuide],
+    [setAgentConfigKey, setFieldStyleGuide],
   );
 
-  // Helper to convert tone value for API (TONE_NONE -> undefined)
-  const getToneForApi = useCallback((tone: string | null | undefined): Tones | undefined => {
-    if (!tone || tone === TONE_NONE) {
-      return undefined;
-    }
-    return tone as Tones;
-  }, []);
+  const runScan = useCallback(
+    async (content: string) => {
+      setCheckError(null);
+      const backendIds = toBackendAgentIds(selectedAgentIds, unavailableAgents);
+      if (backendIds.length === 0) {
+        setCheckError("Select at least one agent in settings.");
+        return;
+      }
+      // Flip hasRunScan first so the sidebar stops showing the pristine "READY" state
+      // while the scan is in flight. scanId is bumped after the stream completes so
+      // the editor's decoration effect picks up the final issues in one pass.
+      setHasRunInitialScan(true);
+      // Snapshot the content sent to Cortex so the offset mapper can translate
+      // returned `position.start` / `position.end` against the exact same string.
+      setScannedContent(content);
+      try {
+        // The picker is the single source of truth for `target_id`. We
+        // overwrite (or, when cleared, delete) it on the freshly-flattened
+        // config so a leftover sessionStorage entry can never re-send a
+        // stale value behind the user's back.
+        const finalAgentConfig: Record<string, unknown> = flattenConfigForRequest(selectedAgentIds);
+        if (effectiveStyleGuideId) {
+          finalAgentConfig.target_id = effectiveStyleGuideId;
+        } else {
+          delete finalAgentConfig.target_id;
+        }
 
-  // Create API config
-  const apiConfig = useMemo(
-    () => ({
-      apiKey: effectiveSettings.apiKey || "",
-      dialect: (config.dialect || effectiveSettings.dialect || undefined) as Dialects | undefined,
-      tone: getToneForApi(config.tone === undefined ? effectiveSettings.tone : config.tone),
-      styleGuide: config.styleGuide || effectiveSettings.styleGuide || undefined,
-    }),
+        await startScan({
+          text: content,
+          documentName: `${params.contentTypeId}/${params.fieldId}`,
+          backendIds,
+          agentConfig: finalAgentConfig,
+        });
+        setScanId((n) => n + 1);
+      } catch (error) {
+        console.error("Scan failed:", error);
+        setCheckError(getApiErrorMessage(error));
+      }
+    },
     [
-      effectiveSettings.apiKey,
-      effectiveSettings.dialect,
-      effectiveSettings.tone,
-      effectiveSettings.styleGuide,
-      config.dialect,
-      config.tone,
-      config.styleGuide,
-      getToneForApi,
+      startScan,
+      selectedAgentIds,
+      unavailableAgents,
+      flattenConfigForRequest,
+      params.contentTypeId,
+      params.fieldId,
+      effectiveStyleGuideId,
     ],
   );
 
-  // Initialize config from effectiveSettings
-  const hasInitialized = useRef(false);
   useEffect(() => {
-    if (hasInitialized.current) return;
-    if (!constants && !styleGuides) return;
+    if (scanError) setCheckError(scanError);
+  }, [scanError]);
 
-    hasInitialized.current = true;
-    updateConfig({
-      dialect: effectiveSettings.dialect as Dialects,
-      tone: getToneForApi(effectiveSettings.tone),
-      styleGuide: effectiveSettings.styleGuide ?? undefined,
-    });
-  }, [
-    constants,
-    styleGuides,
-    effectiveSettings.dialect,
-    effectiveSettings.tone,
-    effectiveSettings.styleGuide,
-    updateConfig,
-    getToneForApi,
-  ]);
+  /**
+   * Reason the Check button must stay disabled, or null when ready.
+   *
+   * Order of checks (first match wins):
+   *   1. The user's selection ∩ org-available agents is empty — surface the
+   *      org-level reason(s). Today this only fires when style_agent is the
+   *      sole selection and the org has it disabled; tomorrow with more
+   *      agents it will only fire if *every* selected agent is blocked.
+   *   2. style_agent is in the runnable subset but no style guide is
+   *      picked — Cortex would fall back to a server-side default or skip
+   *      the agent, neither of which matches the user's intent.
+   */
+  const runnableAgentIds = useMemo(
+    () => filterRunnableAgentIds(selectedAgentIds, unavailableAgents),
+    [selectedAgentIds, unavailableAgents],
+  );
 
-  // API hooks
-  const {
-    getSuggestions,
-    isPolling: isLoadingSuggestions,
-    lastWorkflowId,
-  } = useSuggestions(apiConfig);
+  const checkBlockedReason = useMemo<string | null>(() => {
+    if (selectedAgentIds.length > 0 && runnableAgentIds.length === 0) {
+      return (
+        unavailabilityReasonsFor(selectedAgentIds, unavailableAgents) ??
+        "Selected agents are not available."
+      );
+    }
+    if (runnableAgentIds.includes("style_agent") && !effectiveStyleGuideId) {
+      return "Pick a style guide before running Check.";
+    }
+    return null;
+  }, [selectedAgentIds, runnableAgentIds, unavailableAgents, effectiveStyleGuideId]);
 
-  // Feedback hook
-  const { submitFeedback, isLoading: isFeedbackLoading } = useFeedback(apiConfig);
+  // `hasEnabledAgent` is the sidebar's "is the Check button reachable?" flag.
+  // We can't substitute `runnableAgentIds.length > 0` here: that filter is
+  // by unavailability only, while `toBackendAgentIds` *also* filters by
+  // `SELECTABLE_AGENT_BACKEND_IDS`. They produce identical results today
+  // (only style_agent has a backend mapping) but a future "selected,
+  // available, no backend mapping" agent would diverge — the sidebar would
+  // claim "ready" while the scan submits zero agents. Memoizing the call
+  // gives us the DRY win without losing the second filter.
+  const hasEnabledAgent = useMemo(
+    () => toBackendAgentIds(selectedAgentIds, unavailableAgents).length > 0,
+    [selectedAgentIds, unavailableAgents],
+  );
 
-  // Auto-run suggestions on mount if authenticated
-  useEffect(() => {
-    if (!isAuthenticated || hasRunCheck.current || !initialEditorContent) return;
-
-    hasRunCheck.current = true;
-
-    void (async () => {
-      try {
-        const result = await getSuggestions(initialEditorContent, isRichText);
-        setCheckError(null);
-        if (result.original) {
-          setActiveScores(result.original.scores ?? null);
-          setActiveSuggestions(result.original.issues ?? []);
-          // Increment checkId to trigger decoration rebuild in EditorPanel
-          setCheckId((prev) => prev + 1);
-        }
-      } catch (error) {
-        console.error("Error running initial check:", error);
-        setCheckError(getApiErrorMessage(error));
-      } finally {
-        // Initial loading complete
-        setIsInitialLoading(false);
-      }
-    })();
-  }, [
-    isAuthenticated,
-    initialEditorContent,
-    isRichText,
-    getSuggestions,
-    setActiveScores,
-    setActiveSuggestions,
-  ]);
-
-  // Handler functions
   const handleCheck = useCallback(async () => {
     if (!editorContentRef.current) return;
-
     const content = editorContentRef.current();
     if (!content.trim()) return;
-
-    // Only reset selection, keep everything else as-is until new results arrive
-    setSelectedSuggestionIndex(null);
-
-    setCheckError(null);
-    try {
-      const result = await getSuggestions(content, isRichText);
-      if (result.original) {
-        // Reset all state and update with new results
-        resetAll();
-        setAppliedCount(0);
-        setDismissedIndices(new Set());
-        setActiveScores(result.original.scores ?? null);
-        setActiveSuggestions(result.original.issues ?? []);
-        // Increment checkId to trigger decoration rebuild in EditorPanel
-        setCheckId((prev) => prev + 1);
-      }
-    } catch (error) {
-      console.error("Error checking content:", error);
-      setCheckError(getApiErrorMessage(error));
+    if (checkBlockedReason) {
+      setCheckError(checkBlockedReason);
+      return;
     }
-  }, [getSuggestions, isRichText, resetAll, setActiveScores, setActiveSuggestions]);
+    setSelectedIssueIndex(null);
+    setAppliedCount(0);
+    setDismissedIndices(new Set());
+    await runScan(content);
+  }, [runScan, checkBlockedReason]);
 
-  const handleApplySuggestion = useCallback((suggestion: Suggestion, index: number) => {
-    // Find current position in filtered list before applying (using refs to avoid stale closure)
-    const currentFilteredIndex = filteredSuggestionsRef.current.findIndex(
-      (s) => suggestionToOriginalIndexRef.current.get(s) === index,
-    );
-    lastAppliedFilteredPosition.current = currentFilteredIndex;
+  const handleApplyIssue = useCallback(
+    (_issue: CortexIssueWithId, index: number, appliedSuggestion?: string) => {
+      const currentFilteredIndex = filteredIssuesRef.current.findIndex(
+        (s) => issueToOriginalIndexRef.current.get(s) === index,
+      );
+      lastAppliedFilteredPosition.current = currentFilteredIndex;
+      applyIssueRef.current?.(index, appliedSuggestion);
+      setAppliedCount((n) => n + 1);
+    },
+    [],
+  );
 
-    // Apply the suggestion in the editor
-    // The onSuggestionsRemoved callback will handle updating dismissedIndices
-    applySuggestionRef.current?.(index);
+  const issuesRef = useRef<CortexIssueWithId[]>([]);
 
-    // Mark as applied (count increments by 1 for each apply action)
-    setAppliedCount((prev) => prev + 1);
-    // Don't clear selection here - handleSuggestionsRemoved will auto-select next
-  }, []);
+  const handleApplyAllMatching = useCallback(
+    (issue: CortexIssueWithId, appliedSuggestion?: string) => {
+      const text =
+        appliedSuggestion ?? getAgenticSuggestionChoices(issue).at(0) ?? issue.suggestion ?? "";
+      if (!text) return;
+      const allIssues = issuesRef.current;
+      const clusterKey = getStyleAgentApplyAllClusterKey(issue);
+      const matches: number[] = [];
+      allIssues.forEach((candidate, idx) => {
+        if (candidate.agent !== "style_agent") return;
+        if (dismissedIndices.has(idx)) return;
+        if (getStyleAgentApplyAllClusterKey(candidate) !== clusterKey) return;
+        if (!styleAgentIssueAcceptsSuggestion(candidate, text)) return;
+        matches.push(idx);
+      });
+      if (matches.length === 0) return;
+      const targetIdx = issuesRef.current.indexOf(issue);
+      const currentFilteredIndex =
+        targetIdx >= 0
+          ? filteredIssuesRef.current.findIndex(
+              (s) => issueToOriginalIndexRef.current.get(s) === targetIdx,
+            )
+          : -1;
+      lastAppliedFilteredPosition.current = currentFilteredIndex;
+      applyIssuesRef.current?.(matches, text);
+      setAppliedCount((n) => n + matches.length);
+    },
+    [dismissedIndices],
+  );
 
-  // Callback when suggestions are removed (applied + overlapping)
-  // First animate out, then dismiss after animation completes
-  const handleSuggestionsRemoved = useCallback((indices: number[]) => {
+  const handleIssuesRemoved = useCallback((indices: number[]) => {
     const removedSet = new Set(indices);
-
-    // Start exit animation
-    setExitingIndices((prev) => {
+    const addAll = (prev: Set<number>): Set<number> => {
       const next = new Set(prev);
       indices.forEach((i) => next.add(i));
       return next;
-    });
-
-    // After animation (300ms), actually dismiss them and auto-select next card
+    };
+    const removeAll = (prev: Set<number>): Set<number> => {
+      const next = new Set(prev);
+      indices.forEach((i) => next.delete(i));
+      return next;
+    };
+    setExitingIndices(addAll);
     setTimeout(() => {
-      setDismissedIndices((prev) => {
-        const next = new Set(prev);
-        indices.forEach((i) => next.add(i));
-        return next;
-      });
-      // Clear exiting state
-      setExitingIndices((prev) => {
-        const next = new Set(prev);
-        indices.forEach((i) => next.delete(i));
-        return next;
-      });
+      setDismissedIndices(addAll);
+      setExitingIndices(removeAll);
 
-      // Auto-select the next card
-      const currentFiltered = filteredSuggestionsRef.current;
-      const indexMap = suggestionToOriginalIndexRef.current;
-
-      // Find remaining suggestions (not in the removed set)
+      const currentFiltered = filteredIssuesRef.current;
+      const indexMap = issueToOriginalIndexRef.current;
       const remaining = currentFiltered.filter((s) => {
         const origIdx = indexMap.get(s);
         return origIdx !== undefined && !removedSet.has(origIdx);
       });
 
       if (remaining.length === 0) {
-        setSelectedSuggestionIndex(null);
+        setSelectedIssueIndex(null);
         return;
       }
 
-      // Get the position where we were before applying
       const prevPosition = lastAppliedFilteredPosition.current;
-
-      // If we were at position N, try to select what's now at position N (items shifted up)
-      // If N >= remaining length, wrap to first (position 0)
       let nextPosition = prevPosition;
-      if (nextPosition >= remaining.length) {
-        nextPosition = 0; // Wrap to first card
-      }
-      if (nextPosition < 0) {
-        nextPosition = 0;
-      }
-
-      const nextSuggestion = remaining[nextPosition];
-      const nextOriginalIndex = indexMap.get(nextSuggestion);
-
-      if (nextOriginalIndex !== undefined) {
-        setSelectedSuggestionIndex(nextOriginalIndex);
-      }
+      if (nextPosition >= remaining.length || nextPosition < 0) nextPosition = 0;
+      const nextIssue = remaining[nextPosition];
+      const nextOriginalIndex = indexMap.get(nextIssue);
+      if (nextOriginalIndex !== undefined) setSelectedIssueIndex(nextOriginalIndex);
     }, 300);
   }, []);
 
-  const handleDismissSuggestion = useCallback((suggestion: Suggestion, index: number) => {
+  const handleDismissIssue = useCallback((_issue: CortexIssueWithId, index: number) => {
     setDismissedIndices((prev) => {
       const next = new Set(prev);
       next.add(index);
       return next;
     });
-    setSelectedSuggestionIndex(null);
+    setSelectedIssueIndex(null);
   }, []);
 
-  const handleSelectSuggestion = useCallback((suggestion: Suggestion | null, index: number) => {
-    setSelectedSuggestionIndex(index >= 0 ? index : null);
+  const handleSelectIssue = useCallback((_issue: CortexIssueWithId | null, index: number) => {
+    setSelectedIssueIndex(index >= 0 ? index : null);
   }, []);
 
-  // Filter callbacks for SuggestionsSidebar
-  const handleCategoryChange = useCallback((categories: Set<string>) => {
-    setSelectedCategories(categories);
-  }, []);
-
-  const handleSeverityChange = useCallback((severities: Set<Severity>) => {
-    setSelectedSeverities(severities);
-  }, []);
-
-  // Handle feedback submission
   const handleSubmitFeedback = useCallback(
     async (
       payload: {
@@ -475,17 +511,15 @@ const FieldCheckDialog: React.FC = () => {
         suggestion: string;
         category: string | null;
       },
-      suggestionIndex: number,
+      issueIndex: number,
     ) => {
-      if (!lastWorkflowId) {
+      if (!workflowId) {
         console.error("No workflow ID available for feedback");
         return;
       }
-
       await submitFeedback({
-        workflowId: lastWorkflowId,
-        // Use suggestion index as a unique request identifier within this workflow
-        requestId: `suggestion-${String(suggestionIndex)}`,
+        workflowId,
+        requestId: `issue-${String(issueIndex)}`,
         helpful: payload.helpful,
         feedback: payload.feedbackText || undefined,
         original: payload.original || undefined,
@@ -493,94 +527,97 @@ const FieldCheckDialog: React.FC = () => {
         category: payload.category || undefined,
       });
     },
-    [lastWorkflowId, submitFeedback],
+    [workflowId, submitFeedback],
   );
 
-  // Filter out dismissed suggestions (base list) - keep track of original indices
-  const visibleSuggestionsWithIndices = useMemo(() => {
-    return activeSuggestions
-      .map((s, index) => ({ suggestion: s, originalIndex: index }))
+  const visibleIssuesWithIndices = useMemo(() => {
+    return issues
+      .map((s, index) => ({ issue: s, originalIndex: index }))
       .filter(({ originalIndex }) => !dismissedIndices.has(originalIndex));
-  }, [activeSuggestions, dismissedIndices]);
+  }, [issues, dismissedIndices]);
 
-  const visibleSuggestions = useMemo(() => {
-    return visibleSuggestionsWithIndices.map(({ suggestion }) => suggestion);
-  }, [visibleSuggestionsWithIndices]);
+  const visibleIssues = useMemo(
+    () => visibleIssuesWithIndices.map(({ issue }) => issue),
+    [visibleIssuesWithIndices],
+  );
 
-  // Map from suggestion to its original index in activeSuggestions
-  const suggestionToOriginalIndex = useMemo(() => {
-    const map = new Map<Suggestion, number>();
-    visibleSuggestionsWithIndices.forEach(({ suggestion, originalIndex }) => {
-      map.set(suggestion, originalIndex);
+  const issueToOriginalIndex = useMemo(() => {
+    const map = new Map<CortexIssueWithId, number>();
+    visibleIssuesWithIndices.forEach(({ issue, originalIndex }) => {
+      map.set(issue, originalIndex);
     });
     return map;
-  }, [visibleSuggestionsWithIndices]);
+  }, [visibleIssuesWithIndices]);
 
-  // Apply category and severity filters (empty set = show all; non-empty = show only selected)
-  const filteredSuggestions = useMemo(() => {
-    return visibleSuggestions.filter((s) => {
-      const category = s.category?.toLowerCase() || "other";
+  const filteredIssues = useMemo(() => {
+    return visibleIssues.filter((s) => {
       const severity = s.severity;
-      const categoryMatch = selectedCategories.size === 0 || selectedCategories.has(category);
+      const agentMatch = selectedAgentFilterIds === null || selectedAgentFilterIds.has(s.agent);
       const severityMatch = selectedSeverities.size === 0 || selectedSeverities.has(severity);
-      return categoryMatch && severityMatch;
+      return agentMatch && severityMatch;
     });
-  }, [visibleSuggestions, selectedCategories, selectedSeverities]);
+  }, [visibleIssues, selectedAgentFilterIds, selectedSeverities]);
 
-  // Sort filtered suggestions by start offset (matching sidebar display order)
-  const sortedFilteredSuggestions = useMemo(() => {
-    return [...filteredSuggestions].sort((a, b) => a.position.start_index - b.position.start_index);
-  }, [filteredSuggestions]);
-
-  // Keep refs in sync for use in callbacks (use sorted list for correct next-card logic)
-  useEffect(() => {
-    filteredSuggestionsRef.current = sortedFilteredSuggestions;
-  }, [sortedFilteredSuggestions]);
+  const sortedFilteredIssues = useMemo(
+    () => [...filteredIssues].sort((a, b) => a.position.start - b.position.start),
+    [filteredIssues],
+  );
 
   useEffect(() => {
-    suggestionToOriginalIndexRef.current = suggestionToOriginalIndex;
-  }, [suggestionToOriginalIndex]);
+    filteredIssuesRef.current = sortedFilteredIssues;
+  }, [sortedFilteredIssues]);
 
-  // For the editor, we only show suggestions that pass the current filters
-  const editorSuggestions = useMemo(() => {
-    return activeSuggestions.filter((s, index) => {
-      // Skip dismissed
-      if (dismissedIndices.has(index)) return false;
-      // Apply filters (empty set = show all; non-empty = show only selected)
-      const category = s.category?.toLowerCase() || "other";
-      const severity = s.severity;
-      const categoryMatch = selectedCategories.size === 0 || selectedCategories.has(category);
-      const severityMatch = selectedSeverities.size === 0 || selectedSeverities.has(severity);
-      return categoryMatch && severityMatch;
-    });
-  }, [activeSuggestions, dismissedIndices, selectedCategories, selectedSeverities]);
+  useEffect(() => {
+    issueToOriginalIndexRef.current = issueToOriginalIndex;
+  }, [issueToOriginalIndex]);
 
-  // Define all callbacks before conditional returns to satisfy React hooks rules
+  useEffect(() => {
+    issuesRef.current = issues;
+  }, [issues]);
+
+  const styleAgentApplyAllPeerCountByIssueId = useMemo(
+    () => buildStyleAgentApplyAllPeerCountByIssueId(visibleIssues),
+    [visibleIssues],
+  );
+
+  const editorVisibleIndices = useMemo(() => {
+    return issues
+      .map((s, index) => ({ issue: s, originalIndex: index }))
+      .filter(({ issue, originalIndex }) => {
+        if (dismissedIndices.has(originalIndex)) return false;
+        const severity = issue.severity;
+        const agentMatch =
+          selectedAgentFilterIds === null || selectedAgentFilterIds.has(issue.agent);
+        const severityMatch = selectedSeverities.size === 0 || selectedSeverities.has(severity);
+        return agentMatch && severityMatch;
+      })
+      .map(({ originalIndex }) => originalIndex);
+  }, [issues, dismissedIndices, selectedAgentFilterIds, selectedSeverities]);
+
   const handleClose = useCallback(() => {
     sdk.close();
   }, [sdk]);
-
-  const handleCopyWorkflowId = useCallback(async () => {
-    if (!lastWorkflowId) return;
-    try {
-      await navigator.clipboard.writeText(lastWorkflowId);
-      setWorkflowIdCopied(true);
-      setTimeout(() => {
-        setWorkflowIdCopied(false);
-      }, 1500);
-    } catch {
-      // Clipboard might be unavailable in some contexts
-    }
-  }, [lastWorkflowId]);
 
   const handleSignOut = useCallback(() => {
     sdk.close();
   }, [sdk]);
 
+  const handleCopyWorkflowId = useCallback(async () => {
+    if (!workflowId) return;
+    try {
+      await navigator.clipboard.writeText(workflowId);
+      setWorkflowIdCopied(true);
+      setTimeout(() => {
+        setWorkflowIdCopied(false);
+      }, 1500);
+    } catch {
+      // clipboard may be unavailable
+    }
+  }, [workflowId]);
+
   const handleAcceptAndSave = useCallback(() => {
     if (editorContentRef.current) {
       const updatedContent = editorContentRef.current();
-
       if (isRichText && originalRichTextDoc.current) {
         const updatedDoc = convertHtmlToRichText(
           updatedContent,
@@ -598,7 +635,6 @@ const FieldCheckDialog: React.FC = () => {
 
   const hasChanges = appliedCount > 0;
 
-  // Show sign-in card if not authenticated
   if (!isAuthenticated) {
     return (
       <DialogContainer style={{ justifyContent: "center", alignItems: "center" }}>
@@ -611,32 +647,37 @@ const FieldCheckDialog: React.FC = () => {
     <DialogContainer>
       <ContentPreviewSection>
         <PreviewHeader>
-          <PreviewTitle>Content Preview</PreviewTitle>
+          <Heading marginBottom="none">Content Preview</Heading>
           <PreviewSubtitle>
-            Click on highlighted text or sidebar cards to view suggestions
+            {hasRunInitialScan
+              ? "Click on highlighted text or sidebar cards to view suggestions"
+              : "Configure your agents and click Check to analyze this content"}
           </PreviewSubtitle>
         </PreviewHeader>
 
         <EditorWrapper>
-          <EditorContent>
+          <EditorContentWrap>
             <EditorPanel
               initialContent={initialEditorContent}
-              suggestions={activeSuggestions}
-              visibleIndices={editorSuggestions.map((s) => activeSuggestions.indexOf(s))}
-              checkId={checkId}
-              isBusy={isInitialLoading || isLoadingSuggestions}
+              issues={issues}
+              visibleIndices={editorVisibleIndices}
+              sourceFormat={sourceFormat}
+              sourceText={scannedContent}
+              scanId={scanId}
+              isBusy={scanInFlight}
               editorContentRef={editorContentRef}
               isRichText={isRichText}
-              selectedSuggestionIndex={selectedSuggestionIndex}
-              onSuggestionSelect={handleSelectSuggestion}
-              applySuggestionRef={applySuggestionRef}
-              onSuggestionsRemoved={handleSuggestionsRemoved}
+              selectedIssueIndex={selectedIssueIndex}
+              onIssueSelect={handleSelectIssue}
+              applyIssueRef={applyIssueRef}
+              applyIssuesRef={applyIssuesRef}
+              onIssuesRemoved={handleIssuesRemoved}
             />
-          </EditorContent>
+          </EditorContentWrap>
 
           <DialogFooter>
             <FooterLeftGroup>
-              {lastWorkflowId && (
+              {workflowId && (
                 <WorkflowIdButton
                   onClick={() => {
                     void handleCopyWorkflowId();
@@ -671,40 +712,72 @@ const FieldCheckDialog: React.FC = () => {
       </ContentPreviewSection>
 
       <SidebarSection>
-        <SuggestionsSidebar
-          suggestions={visibleSuggestions}
-          filteredSuggestions={filteredSuggestions}
-          suggestionToOriginalIndex={suggestionToOriginalIndex}
-          exitingIndices={exitingIndices}
-          isLoading={isInitialLoading || isLoadingSuggestions}
-          checkError={checkError}
-          onDismissCheckError={() => {
-            setCheckError(null);
-          }}
-          onCheck={handleCheck}
-          onApplySuggestion={handleApplySuggestion}
-          onDismissSuggestion={handleDismissSuggestion}
-          onSelectSuggestion={handleSelectSuggestion}
-          selectedSuggestionIndex={selectedSuggestionIndex}
-          selectedCategories={selectedCategories}
-          selectedSeverities={selectedSeverities}
-          onCategoryChange={handleCategoryChange}
-          onSeverityChange={handleSeverityChange}
-          config={{
-            dialect: config.dialect,
-            tone: config.tone,
-            styleGuide: config.styleGuide,
-          }}
-          onConfigChange={handleConfigChange}
-          constants={constants}
-          styleGuides={styleGuides}
-          onSignOut={handleSignOut}
-          onSubmitFeedback={handleSubmitFeedback}
-          isFeedbackLoading={isFeedbackLoading}
-          totalIssueCount={activeSuggestions.length}
-          appliedCount={appliedCount}
-          dismissedCount={dismissedIndices.size - appliedCount}
-        />
+        {sidebarView === "settings" && (
+          <AgentSettingsPanel
+            onBack={() => {
+              setSidebarView("main");
+            }}
+            selectedAgentIds={selectedAgentIds}
+            toggleAgent={toggleAgent}
+            agentConfig={agentConfigForPanel}
+            onAgentConfigKeyChange={handleAgentConfigKeyChange}
+            apiKey={apiKey}
+            styleGuideTargets={styleGuideTargets}
+            styleGuidesLoading={styleGuidesLoading}
+            styleGuidesError={styleGuidesError}
+            unavailableAgents={unavailableAgents}
+          />
+        )}
+        {sidebarView === "about" && (
+          <AboutView
+            onBack={() => {
+              setSidebarView("main");
+            }}
+          />
+        )}
+        {sidebarView === "main" && (
+          <SuggestionsSidebar
+            issues={visibleIssues}
+            filteredIssues={filteredIssues}
+            issueToOriginalIndex={issueToOriginalIndex}
+            exitingIndices={exitingIndices}
+            isLoading={scanInFlight}
+            hasRunScan={hasRunInitialScan}
+            hasEnabledAgent={hasEnabledAgent}
+            checkError={checkError}
+            onDismissCheckError={() => {
+              setCheckError(null);
+            }}
+            onCheck={() => {
+              void handleCheck();
+            }}
+            onOpenAgentSettings={() => {
+              setSidebarView("settings");
+            }}
+            onOpenAbout={() => {
+              setSidebarView("about");
+            }}
+            onApplyIssue={handleApplyIssue}
+            onApplyAllMatching={handleApplyAllMatching}
+            onDismissIssue={handleDismissIssue}
+            onSelectIssue={handleSelectIssue}
+            selectedIssueIndex={selectedIssueIndex}
+            selectedSeverities={selectedSeverities}
+            onSeverityChange={setSelectedSeverities}
+            selectedAgentFilterIds={selectedAgentFilterIds}
+            onAgentFilterChange={setSelectedAgentFilterIds}
+            viewMode={viewMode}
+            onViewModeChange={setViewMode}
+            styleAgentApplyAllPeerCountByIssueId={styleAgentApplyAllPeerCountByIssueId}
+            onSignOut={handleSignOut}
+            onSubmitFeedback={handleSubmitFeedback}
+            isFeedbackLoading={isFeedbackLoading}
+            totalIssueCount={issues.length}
+            appliedCount={appliedCount}
+            dismissedCount={dismissedIndices.size - appliedCount}
+            checkBlockedReason={checkBlockedReason}
+          />
+        )}
       </SidebarSection>
     </DialogContainer>
   );

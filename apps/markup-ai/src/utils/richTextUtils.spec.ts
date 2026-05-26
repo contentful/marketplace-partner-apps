@@ -2,7 +2,7 @@
  * Tests for RichText utilities
  */
 
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { BLOCKS, MARKS, INLINES } from "@contentful/rich-text-types";
 import type { Document } from "@contentful/rich-text-types";
 import {
@@ -11,6 +11,7 @@ import {
   convertHtmlToRichText,
   createRichTextDocument,
   isRichTextDocument,
+  type TextNodeWithId,
 } from "./richTextUtils";
 
 describe("richTextUtils", () => {
@@ -870,6 +871,80 @@ describe("richTextUtils", () => {
       // Should not throw
       const { html } = convertRichTextToHtml(doc);
       expect(html).toBeDefined();
+    });
+  });
+
+  describe("convertHtmlToRichText error handling (updateNodeAtPath throws)", () => {
+    const baseDoc: Document = {
+      nodeType: BLOCKS.DOCUMENT,
+      data: {},
+      content: [
+        {
+          nodeType: BLOCKS.PARAGRAPH,
+          data: {},
+          content: [{ nodeType: "text", value: "hi", marks: [], data: {} }],
+        },
+      ],
+    };
+
+    beforeEach(() => {
+      vi.spyOn(console, "error").mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    const stubTextNode: TextNodeWithId["node"] = {
+      nodeType: "text",
+      value: "",
+      marks: [],
+      data: {},
+    };
+    const makeNodeMap = (id: string, path: number[]): Map<string, TextNodeWithId> =>
+      new Map([[id, { node: stubTextNode, path, id }]]);
+
+    it("logs and skips when nodeMap path points to a non-existent index", () => {
+      const html = `<span data-node-id="bogus">replacement</span>`;
+      const result = convertHtmlToRichText(html, baseDoc, makeNodeMap("bogus", [99]));
+      expect(result).toEqual(baseDoc);
+      expect(console.error).toHaveBeenCalledWith(
+        "Error updating node bogus:",
+        expect.objectContaining({
+          message: expect.stringContaining("no node found at index") as unknown as string,
+        }),
+      );
+    });
+
+    it("logs and skips when the path is empty", () => {
+      const html = `<span data-node-id="empty">x</span>`;
+      convertHtmlToRichText(html, baseDoc, makeNodeMap("empty", []));
+      expect(console.error).toHaveBeenCalledWith(
+        "Error updating node empty:",
+        expect.objectContaining({ message: "Invalid path: path array is empty" }),
+      );
+    });
+
+    it("logs and skips when the path traverses into a node without content", () => {
+      const html = `<span data-node-id="bad">x</span>`;
+      convertHtmlToRichText(html, baseDoc, makeNodeMap("bad", [0, 0, 0]));
+      expect(console.error).toHaveBeenCalledWith(
+        "Error updating node bad:",
+        expect.objectContaining({
+          message: expect.stringContaining("does not have content") as unknown as string,
+        }),
+      );
+    });
+
+    it("logs and skips when the target node at the final path step is not a text node", () => {
+      const html = `<span data-node-id="wrong-type">x</span>`;
+      convertHtmlToRichText(html, baseDoc, makeNodeMap("wrong-type", [0]));
+      expect(console.error).toHaveBeenCalledWith(
+        "Error updating node wrong-type:",
+        expect.objectContaining({
+          message: expect.stringContaining("expected text node") as unknown as string,
+        }),
+      );
     });
   });
 });

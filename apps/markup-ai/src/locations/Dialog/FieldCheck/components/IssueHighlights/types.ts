@@ -1,21 +1,27 @@
-/**
- * Types for IssueHighlights extension
- */
-
 import type { DecorationSet } from "@tiptap/pm/view";
-import type { Suggestion } from "../../../../../api-client/types.gen";
+import type { CortexIssueWithId, CortexSeverity } from "../../../../../agents/types";
+
+/** Source format submitted to Cortex; offsets come back in this coordinate space. */
+export type IssueSourceFormat = "html" | "markdown" | "plain";
 
 export interface SuggestItem {
   id: string;
+  /** ProseMirror document position (start). */
   from: number;
+  /** ProseMirror document position (end). */
   to: number;
-  startIndex: number;
-  length: number;
-  original: string;
+  /** Offset in the source text we submitted to Cortex. */
+  sourceStart: number;
+  sourceEnd: number;
+  agent: string;
+  severity: CortexSeverity;
+  category?: string;
+  confidence: number;
+  explanation: string;
   suggestion: string;
-  category: string | null | undefined;
-  subcategory: string | number | null | undefined;
-  /** Original index in the suggestions array */
+  /** Exact matched text from the submitted source. */
+  original: string;
+  /** Index into the original unfiltered issues array. */
   originalIndex: number;
 }
 
@@ -27,13 +33,11 @@ export interface AppliedRange {
 export interface PluginState {
   decos: DecorationSet;
   items: Record<string, SuggestItem>;
-  /** Original suggestions array for lookup */
-  suggestions: Suggestion[];
-  /** Set of original indices that should be visible (for filtering) */
+  issues: CortexIssueWithId[];
+  /** Set of original indices that should be visible (for filtering). */
   visibleIndices?: Set<number>;
   activeId?: string | null;
   navRequest?: "first" | "next" | "prev" | "goto";
   gotoIndex?: number;
-  /** Ranges of applied fixes, highlighted green in the editor */
   appliedRanges?: AppliedRange[];
 }

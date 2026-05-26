@@ -1,11 +1,13 @@
-import React, { useEffect, useCallback, useRef, useState } from "react";
+import React, { useEffect, useCallback, useMemo, useRef, useState } from "react";
 import { FieldAppSDK } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
 import getField from "./utils";
 import { FieldContainer, ControlBar } from "./Field.styles";
 import { FieldHeader } from "./components";
 import { useAuth } from "../../contexts/AuthContext";
-import { useContentTypeDefaults } from "../../hooks/useContentTypeDefaults";
+import { useAgentAvailability } from "../../hooks/useAgentAvailability";
+import { useAgentSelection } from "../../hooks/useAgentSelection";
+import { filterRunnableAgentIds, unavailabilityReasonsFor } from "../../agents/agentAvailability";
 
 import "codemirror/lib/codemirror.css";
 
@@ -16,7 +18,26 @@ interface SignInDialogResult {
 const Field: React.FC = () => {
   const sdk = useSDK<FieldAppSDK>();
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
-  const { defaults: contentTypeDefaults } = useContentTypeDefaults();
+
+  const contentTypeId = sdk.entry.getSys().contentType.sys.id;
+  const fieldId = sdk.field.id;
+
+  // Org-level capability gates which catalog agents the user is *allowed*
+  // to run. When the runnable subset of the user's selection is empty, we
+  // disable Check entirely and surface the reason in a tooltip — the same
+  // copy is rendered inside the dialog's Agent settings panel.
+  const { unavailable: unavailableAgents } = useAgentAvailability();
+  const { selectedAgentIds } = useAgentSelection();
+  const runnableAgentIds = useMemo(
+    () => filterRunnableAgentIds(selectedAgentIds, unavailableAgents),
+    [selectedAgentIds, unavailableAgents],
+  );
+  const hasNoRunnableAgent = selectedAgentIds.length > 0 && runnableAgentIds.length === 0;
+  const checkBlockedReason = useMemo(
+    () =>
+      hasNoRunnableAgent ? unavailabilityReasonsFor(selectedAgentIds, unavailableAgents) : null,
+    [hasNoRunnableAgent, selectedAgentIds, unavailableAgents],
+  );
 
   // Key to force re-render of field editor after external value updates (needed for RichText)
   const [externalValueUpdateKey, setExternalValueUpdateKey] = useState("default");
@@ -59,13 +80,15 @@ const Field: React.FC = () => {
   // Open the full editor dialog
   const openEditorDialog = useCallback(async () => {
     const fieldFormat = sdk.field.type;
-    const contentTypeId = sdk.entry.getSys().contentType.sys.id;
 
     // Get field value - for RichText this is a Document object, for Text/Symbol it's a string
     const fieldValue: unknown = sdk.field.getValue();
     // For RichText, pass the Document as-is; for text fields, fallback to empty string
     const fieldContent = fieldFormat === "RichText" ? fieldValue : fieldValue || "";
 
+    // Per-content-type style guide defaults are read by the dialog directly
+    // from `sdk.parameters.installation`, so we don't need to pipe them
+    // through invocation params here.
     const answer: unknown = await sdk.dialogs.openCurrentApp({
       shouldCloseOnOverlayClick: false,
       shouldCloseOnEscapePress: true,
@@ -75,14 +98,8 @@ const Field: React.FC = () => {
         fieldCheck: true,
         fieldContent,
         fieldFormat,
-        fieldId: sdk.field.id,
+        fieldId,
         contentTypeId,
-        // Pass content type defaults so the dialog can use them as fallback
-        contentTypeDefaults: {
-          styleGuide: contentTypeDefaults.styleGuide ?? null,
-          dialect: contentTypeDefaults.dialect ?? null,
-          tone: contentTypeDefaults.tone ?? null,
-        },
       } as unknown as Record<string, string>,
     });
 
@@ -96,7 +113,7 @@ const Field: React.FC = () => {
         setExternalValueUpdateKey(newKey);
       }
     }
-  }, [sdk.dialogs, sdk.field, sdk.entry, contentTypeDefaults]);
+  }, [sdk.dialogs, sdk.field, contentTypeId, fieldId]);
 
   // Main handler: check auth and open appropriate dialog
   const handleCheckClick = useCallback(async () => {
@@ -126,7 +143,8 @@ const Field: React.FC = () => {
           onCheckClick={() => {
             void handleCheckClick();
           }}
-          isDisabled={isAuthLoading}
+          isDisabled={isAuthLoading || hasNoRunnableAgent}
+          checkDisabledReason={checkBlockedReason}
         />
       </ControlBar>
       <div key={externalValueUpdateKey}>{getField(sdk)}</div>
