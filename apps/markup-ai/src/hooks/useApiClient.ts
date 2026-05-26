@@ -3,6 +3,7 @@
 import { QueryClient } from "@tanstack/react-query";
 import { createClient } from "../api-client/client";
 import type { PlatformConfig } from "../types/content";
+import { INTEGRATION_ID } from "../constants/app";
 
 export const queryClient = new QueryClient();
 
@@ -37,7 +38,7 @@ export function useApiClient(config?: PlatformConfig) {
     baseUrl,
     auth: apiKey,
     headers: {
-      "x-integration-id": "markupai-contentful-app",
+      "x-integration-id": INTEGRATION_ID,
     },
   });
 }

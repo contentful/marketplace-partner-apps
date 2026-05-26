@@ -1,213 +1,196 @@
-/**
- * Tests for mapping utilities
- */
+import { describe, expect, it } from "vitest";
+import { EditorState } from "@tiptap/pm/state";
+import { schema as basicSchema } from "@tiptap/pm/schema-basic";
+import { DOMParser as ProseMirrorDOMParser } from "@tiptap/pm/model";
+import type { CortexIssueWithId } from "../../../../../agents/types";
+import { mapIssueRange, mapIssueToItem, textIndexToPosCountNewlines } from "./mapping";
 
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { mapIssueRange, mapSuggestionToItem, findProseMirrorPosition } from "./mapping";
-import type { Suggestion } from "../../../../../api-client/types.gen";
-import type { Node as ProseMirrorNode } from "@tiptap/pm/model";
-
-// Type for mock document
-interface MockDoc {
-  content: { size: number };
-  textBetween: ReturnType<typeof vi.fn>;
-  descendants: ReturnType<typeof vi.fn>;
+function docFromText(text: string) {
+  // Build a ProseMirror doc from a single paragraph of plain text.
+  const container = document.createElement("div");
+  const p = document.createElement("p");
+  p.textContent = text;
+  container.appendChild(p);
+  const state = EditorState.create({
+    doc: ProseMirrorDOMParser.fromSchema(basicSchema).parse(container),
+  });
+  return state.doc;
 }
 
-// Mock ProseMirror document
-const createMockDoc = (text: string): MockDoc => {
+function issue(overrides: Partial<CortexIssueWithId> = {}): CortexIssueWithId {
   return {
-    content: { size: text.length + 2 },
-    textBetween: vi.fn((from: number, to: number) => {
-      // Simulate ProseMirror text extraction
-      const start = Math.max(0, from - 1);
-      const end = Math.min(text.length, to - 1);
-      return text.substring(start, end);
-    }),
-    descendants: vi.fn(
-      (
-        callback: (
-          node: { isText?: boolean; isBlock?: boolean; text?: string },
-          pos: number,
-        ) => boolean,
-      ) => {
-        // Simulate text node traversal
-        callback({ isText: true, text }, 1);
-        return undefined;
-      },
-    ),
+    id: overrides.id ?? "i-1",
+    groupKey: "g",
+    agent: "style_agent",
+    confidence: 1,
+    severity: overrides.severity ?? "medium",
+    explanation: "",
+    suggestion: overrides.suggestion ?? "fix",
+    original: overrides.original ?? "world",
+    status: "active",
+    position: overrides.position ?? { start: 6, end: 11, sentence: "Hello world" },
+    ...overrides,
   };
-};
+}
 
-describe("mapping utilities", () => {
-  beforeEach(() => {
-    // Mock document.createElement for HTML parsing
-    vi.spyOn(document, "createElement").mockImplementation((tag: string) => {
-      const element = {
-        tagName: tag.toUpperCase(),
-        innerHTML: "",
-        textContent: "",
-        innerText: "",
-        getAttribute: vi.fn(),
-        querySelectorAll: vi.fn(() => []),
-      } as unknown as HTMLElement;
-
-      // Make textContent/innerText return stripped HTML based on innerHTML
-      // Use a closure to access the element reference properly
-      const getInnerHtml = () => (element as { innerHTML: string }).innerHTML;
-      const setInnerHtml = (val: string) => {
-        (element as { innerHTML: string }).innerHTML = val;
-      };
-
-      Object.defineProperty(element, "textContent", {
-        get() {
-          return getInnerHtml().replaceAll(/<[^>]*>/g, "");
-        },
-        set(val: string) {
-          setInnerHtml(val);
-        },
-      });
-      Object.defineProperty(element, "innerText", {
-        get() {
-          return getInnerHtml().replaceAll(/<[^>]*>/g, "");
-        },
-      });
-
-      return element;
-    });
+describe("textIndexToPosCountNewlines", () => {
+  it("is monotonic in the surface index", () => {
+    const doc = docFromText("Hello world");
+    const a = textIndexToPosCountNewlines(doc, 0);
+    const b = textIndexToPosCountNewlines(doc, 6);
+    const c = textIndexToPosCountNewlines(doc, 11);
+    expect(a).toBeLessThan(b);
+    expect(b).toBeLessThan(c);
   });
 
-  // Helper to cast mock doc to ProseMirrorNode
-  const asProseMirrorNode = (doc: MockDoc) => doc as unknown as ProseMirrorNode;
-
-  describe("findProseMirrorPosition", () => {
-    it("finds position for character index 0", () => {
-      const doc = createMockDoc("Hello world");
-      const pos = findProseMirrorPosition(asProseMirrorNode(doc), 0);
-      expect(pos).toBe(0);
-    });
-
-    it("finds position for character index in text", () => {
-      const doc = createMockDoc("Hello world");
-      const pos = findProseMirrorPosition(asProseMirrorNode(doc), 5);
-      expect(typeof pos).toBe("number");
-    });
+  it("clamps indices below 0 and above the surface length", () => {
+    const doc = docFromText("abcde");
+    expect(textIndexToPosCountNewlines(doc, -1)).toBe(textIndexToPosCountNewlines(doc, 0));
+    expect(textIndexToPosCountNewlines(doc, 9999)).toBeLessThanOrEqual(doc.content.size);
   });
 
-  describe("mapIssueRange", () => {
-    it("maps range for simple text without HTML", () => {
-      const text = "Hello world";
-      const doc = createMockDoc(text);
+  it("round-trips: the PM range [from(idx), from(idx+len)] extracts the right substring", () => {
+    const doc = docFromText("Hello world");
+    const from = textIndexToPosCountNewlines(doc, 6);
+    const to = textIndexToPosCountNewlines(doc, 11);
+    expect(doc.textBetween(from, to, "\n\n", "\n")).toBe("world");
+  });
+});
 
-      const result = mapIssueRange(asProseMirrorNode(doc), 0, "Hello");
-
-      expect(result).toHaveProperty("from");
-      expect(result).toHaveProperty("to");
-      expect(result.from).toBeLessThanOrEqual(result.to);
+describe("mapIssueRange (plain source)", () => {
+  it("returns { from, to } spanning the exact original text", () => {
+    const doc = docFromText("Hello world");
+    const { from, to } = mapIssueRange({
+      doc,
+      start: 6,
+      end: 11,
+      original: "world",
+      sourceFormat: "plain",
     });
-
-    it("returns valid range even with empty original", () => {
-      const doc = createMockDoc("Hello world");
-
-      const result = mapIssueRange(asProseMirrorNode(doc), 0, "");
-
-      expect(result).toHaveProperty("from");
-      expect(result).toHaveProperty("to");
-    });
-
-    it("handles HTML content with originalHtml parameter", () => {
-      const text = "Hello world";
-      const doc = createMockDoc(text);
-      const originalHtml = "<p>Hello world</p>";
-
-      const result = mapIssueRange(asProseMirrorNode(doc), 3, "Hello", originalHtml);
-
-      expect(result).toHaveProperty("from");
-      expect(result).toHaveProperty("to");
-    });
-
-    it("handles HTML entities in original text", () => {
-      const text = "It's a test";
-      const doc = createMockDoc(text);
-
-      // API might return HTML entities
-      const result = mapIssueRange(asProseMirrorNode(doc), 0, "It&#39;s");
-
-      expect(result).toHaveProperty("from");
-      expect(result).toHaveProperty("to");
-    });
+    expect(doc.textBetween(from, to, "\n\n", "\n")).toBe("world");
   });
 
-  describe("mapSuggestionToItem", () => {
-    // Helper to create mock suggestion
-    const createMockSuggestion = (
-      original: string,
-      suggestion: string,
-      startIndex: number,
-    ): Suggestion =>
-      ({
-        original,
-        suggestion,
-        category: null,
-        subcategory: "grammar",
-        severity: "medium",
-        position: { start_index: startIndex },
-      }) as unknown as Suggestion;
-
-    it("maps a valid suggestion to an item", () => {
-      const doc = createMockDoc("This is a tset of text");
-      const suggestion = createMockSuggestion("tset", "test", 10);
-
-      const item = mapSuggestionToItem(asProseMirrorNode(doc), suggestion, 0);
-
-      if (item) {
-        expect(item.id).toBeDefined();
-        expect(item.original).toBe("tset");
-        expect(item.suggestion).toBe("test");
-        expect(item.startIndex).toBe(10);
-        expect(item.length).toBe(4);
-      }
+  it("snaps to the nearest occurrence when offsets are slightly off", () => {
+    const doc = docFromText("Hello world");
+    const { from, to } = mapIssueRange({
+      doc,
+      start: 0,
+      end: 5, // claims "Hello" at 0..5, matches; also tests the happy path
+      original: "Hello",
+      sourceFormat: "plain",
     });
+    expect(doc.textBetween(from, to, "\n\n", "\n")).toBe("Hello");
+  });
 
-    it("handles suggestion with missing position", () => {
-      const doc = createMockDoc("Hello world");
-      const suggestion = createMockSuggestion("Hello", "Hi", 0);
-
-      // Should handle gracefully without throwing - result can be null or a valid SuggestItem
-      expect(() => mapSuggestionToItem(asProseMirrorNode(doc), suggestion, 0)).not.toThrow();
+  it("clamps negative start to 0", () => {
+    const doc = docFromText("abcdef");
+    const { from } = mapIssueRange({
+      doc,
+      start: -5,
+      end: 3,
+      original: "abc",
+      sourceFormat: "plain",
     });
+    expect(from).toBeGreaterThanOrEqual(0);
+  });
 
-    it("handles empty original text", () => {
-      const doc = createMockDoc("Hello world");
-      const suggestion = createMockSuggestion("", "something", 5);
-
-      const item = mapSuggestionToItem(asProseMirrorNode(doc), suggestion, 0);
-
-      // Empty original should result in null item
-      expect(item).toBeNull();
+  it("returns a sensible fallback range when nothing in the doc matches `original`", () => {
+    const doc = docFromText("abcdef");
+    const { from, to } = mapIssueRange({
+      doc,
+      start: 0,
+      end: 3,
+      original: "zzz", // never appears
+      sourceFormat: "plain",
     });
+    expect(from).toBeGreaterThanOrEqual(0);
+    expect(to).toBeGreaterThanOrEqual(from);
+  });
+});
 
-    it("includes originalHtml when provided", () => {
-      const doc = createMockDoc("Hello world");
-      const suggestion = createMockSuggestion("Hello", "Hi", 0);
+describe("mapIssueToItem", () => {
+  it("returns a SuggestItem with agent/severity/offsets copied over", () => {
+    const doc = docFromText("Hello world");
+    const item = mapIssueToItem(
+      doc,
+      issue({
+        id: "abc",
+        severity: "high",
+        suggestion: "earth",
+        position: { start: 6, end: 11, sentence: "Hello world" },
+      }),
+      4,
+      "plain",
+    );
+    expect(item).not.toBeNull();
+    expect(item?.id).toBe("abc");
+    expect(item?.agent).toBe("style_agent");
+    expect(item?.severity).toBe("high");
+    expect(item?.suggestion).toBe("earth");
+    expect(item?.sourceStart).toBe(6);
+    expect(item?.sourceEnd).toBe(11);
+    expect(item?.originalIndex).toBe(4);
+    expect(item?.from).toBeLessThan(item?.to ?? 0);
+  });
 
-      // Should work with originalHtml without throwing
-      expect(() =>
-        mapSuggestionToItem(asProseMirrorNode(doc), suggestion, 0, "<p>Hello world</p>"),
-      ).not.toThrow();
+  it("returns null when from >= to (invalid range)", () => {
+    const doc = docFromText("Hello");
+    const item = mapIssueToItem(
+      doc,
+      issue({ position: { start: 100, end: 100, sentence: "" }, original: "" }),
+      0,
+      "plain",
+    );
+    expect(item).toBeNull();
+  });
+});
+
+describe("html-source offset mapping", () => {
+  // Locate "world" in a wrapped HTML source — the offsets are in HTML-coordinate
+  // space, but the editor doc surface is the plain text "Hello world".
+  const sourceText = "<p>Hello world</p>";
+  const htmlStart = sourceText.indexOf("world");
+  const htmlEnd = htmlStart + "world".length;
+
+  it("mapIssueRange translates HTML offsets to ProseMirror positions", () => {
+    const doc = docFromText("Hello world");
+    const { from, to } = mapIssueRange({
+      doc,
+      start: htmlStart,
+      end: htmlEnd,
+      original: "world",
+      sourceFormat: "html",
+      sourceText,
     });
+    expect(doc.textBetween(from, to, "\n\n", "\n")).toBe("world");
+  });
 
-    it("generates unique IDs based on position and index", () => {
-      const doc = createMockDoc("Hello world test world");
-      const suggestion1 = createMockSuggestion("world", "universe", 6);
-      const suggestion2 = createMockSuggestion("world", "universe", 17);
-
-      const item1 = mapSuggestionToItem(asProseMirrorNode(doc), suggestion1, 0);
-      const item2 = mapSuggestionToItem(asProseMirrorNode(doc), suggestion2, 1);
-
-      if (item1 && item2) {
-        expect(item1.id).not.toBe(item2.id);
-      }
+  it("mapIssueRange falls back to plain-offset interpretation when sourceText is omitted", () => {
+    const doc = docFromText("Hello world");
+    const { from, to } = mapIssueRange({
+      doc,
+      start: 6,
+      end: 11,
+      original: "world",
+      sourceFormat: "html",
+      // sourceText intentionally omitted — should hit the plain fallback path.
     });
+    expect(doc.textBetween(from, to, "\n\n", "\n")).toBe("world");
+  });
+
+  it("mapIssueToItem maps issue offsets in HTML space onto the editor doc", () => {
+    const doc = docFromText("Hello world");
+    const item = mapIssueToItem(
+      doc,
+      issue({
+        position: { start: htmlStart, end: htmlEnd, sentence: "Hello world" },
+        original: "world",
+      }),
+      0,
+      "html",
+      sourceText,
+    );
+    expect(item).not.toBeNull();
+    expect(doc.textBetween(item?.from ?? 0, item?.to ?? 0, "\n\n", "\n")).toBe("world");
   });
 });

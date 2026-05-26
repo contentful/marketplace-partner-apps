@@ -1,7 +1,7 @@
 import { extract, setProviderList } from '@extractus/oembed-extractor';
+import type { OembedData } from '@extractus/oembed-extractor';
 
-export interface OembedMetadata {
-  type: string;
+export interface OembedMetadata extends OembedData {
   url: string;
   title: string;
   html: string;
@@ -13,38 +13,64 @@ export interface OembedMetadata {
   embedType: 'full-height' | 'scrollable';
 }
 
+export function parseCerosUrl(experienceUrl: string): URL | null {
+  try {
+    const url = new URL(experienceUrl);
+    const host = url.hostname;
+    if (url.protocol !== 'https:') {
+      return null;
+    }
+
+    const isViewCeros = host === 'view.ceros.com';
+    if (!isViewCeros && !host.endsWith('.ceros.site')) {
+      return null;
+    }
+
+    const pathSegments = url?.pathname.split('/').filter(Boolean) ?? [];
+    if (isViewCeros && pathSegments.length < 2) {
+      return null;
+    }
+
+    return url;
+  } catch {
+    /* invalid URL */
+  }
+  return null;
+}
+
 export async function getExperienceMetadata(experienceUrl: string): Promise<OembedMetadata | null> {
-  // Set up the oembed provider list
-  const providers = [
+  const url = parseCerosUrl(experienceUrl);
+
+  if (!url) {
+    console.trace(`Experience URL '${experienceUrl}' isn't valid. Make sure it looks like
+        'https://<account>.ceros.site/experience' or 'https://view.ceros.com/account/experience'`);
+    return null;
+  }
+
+  const canonicalUrl = url.origin + url.pathname;
+  const providers: Parameters<typeof setProviderList>[0] = [
     {
       provider_name: 'Ceros',
       provider_url: 'https://www.ceros.com/',
       endpoints: [
         {
-          schemes: ['https://view.ceros.com/*'],
-          url: 'https://view.ceros.com/oembed',
+          schemes: [`${url.origin}/*`],
+          url: `${url.origin}/oembed`,
           discovery: true,
         },
       ],
     },
   ];
+
   setProviderList(providers);
-
-  // Parse URL
-  // Regular expression to remove the /p/1 from the end of a URL like https://view.ceros.com/account/experience/p/1
-  const regex = /(https:\/\/view\.ceros\.com\/[a-zA-Z0-9-_]+\/[a-zA-Z0-9-_]+)(?:.*)$/;
-  let result = regex.exec(experienceUrl);
-
-  if (!result) {
-    console.trace(`Experience URL '${experienceUrl}' isn't valid. Make sure it looks like
-        'https://view.ceros.com/account/experience'`);
-    return null;
-  }
 
   // Fetch the oembed data
   try {
-    const oembed = await extract(result[1]);
-    return oembed as OembedMetadata;
+    const metadata = (await extract(canonicalUrl)) as OembedMetadata;
+    if (!metadata.url) {
+      metadata.url = canonicalUrl;
+    }
+    return metadata;
   } catch (err) {
     console.trace(err);
     return null;

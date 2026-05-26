@@ -53,6 +53,23 @@ vi.mock("../../hooks/useContentTypeDefaults", () => ({
   })),
 }));
 
+const mockUseAgentAvailability = vi.fn(() => ({
+  unavailable: new Map(),
+  isLoading: false,
+  isError: false,
+}));
+vi.mock("../../hooks/useAgentAvailability", () => ({
+  useAgentAvailability: () => mockUseAgentAvailability(),
+}));
+
+vi.mock("../../hooks/useAgentSelection", () => ({
+  useAgentSelection: () => ({
+    selectedAgentIds: ["style_agent"],
+    toggleAgent: vi.fn(),
+    setSelectedAgentIds: vi.fn(),
+  }),
+}));
+
 const createMockSdk = () => ({
   window: {
     startAutoResizer: vi.fn(),
@@ -73,6 +90,14 @@ const createMockSdk = () => ({
   },
   dialogs: {
     openCurrentApp: vi.fn(),
+  },
+  parameters: {
+    installation: {},
+  },
+  ids: {
+    space: "space-test",
+    environment: "master",
+    environmentAlias: undefined,
   },
 });
 
@@ -256,5 +281,40 @@ describe("Field", () => {
 
     const button = screen.getByRole("button", { name: /Markup AI/i });
     expect(button).toBeDisabled();
+  });
+
+  it("disables button when style_agent is the only selection and is unavailable", async () => {
+    mockUseAuth.mockReturnValue({
+      isLoading: false,
+      isAuthenticated: true,
+      user: { email: "test@example.com" },
+      token: "test-token",
+      error: null,
+      loginWithPopup: vi.fn(),
+      getAccessToken: vi.fn(),
+      logout: vi.fn(),
+    });
+    const reason = "Style agent is disabled for your organization. Contact support to enable it.";
+    mockUseAgentAvailability.mockReturnValue({
+      unavailable: new Map([["style_agent", { reason }]]),
+      isLoading: false,
+      isError: false,
+    });
+
+    render(<Field />);
+
+    // Two role="button" elements now: the DisabledTooltipTarget wrapper span
+    // and the inner native button. Pick the native one for the disabled
+    // assertion.
+    const buttons = screen.getAllByRole("button", { name: /Markup AI/i });
+    const button = buttons.find((b) => b.tagName === "BUTTON") as HTMLButtonElement;
+    expect(button).toBeDisabled();
+    // Confirm the gate prevents the dialog from opening even if the user
+    // tries to click. The Tooltip popover is f36's responsibility and isn't
+    // reliable under jsdom, so we don't assert on its visible text here.
+    fireEvent.click(button);
+    await waitFor(() => {
+      expect(mockSdk.dialogs.openCurrentApp).not.toHaveBeenCalled();
+    });
   });
 });
