@@ -212,7 +212,7 @@ export const OrganizationSwitcher: React.FC = () => {
     const items = itemRefs.current.filter((el): el is HTMLButtonElement => el != null);
     if (items.length === 0) return;
     const activeIndex = items.findIndex((el) => el.dataset.current === "true");
-    items[activeIndex >= 0 ? activeIndex : 0].focus();
+    items[Math.max(activeIndex, 0)].focus();
   }, [isExpanded]);
 
   const isCurrent = (org: Organization): boolean =>

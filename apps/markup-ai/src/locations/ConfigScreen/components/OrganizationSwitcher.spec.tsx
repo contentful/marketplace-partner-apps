@@ -227,4 +227,78 @@ describe("OrganizationSwitcher", () => {
     fireEvent.mouseDown(document.body);
     expect(screen.queryByRole("menu")).toBeNull();
   });
+
+  it("jumps to the first/last row with Home and End", () => {
+    setAuth({ currentOrgId: "org_a", currentOrgName: "acme" });
+    mockUseOrganizations.mockReturnValue({
+      organizations: [
+        org("org_a", "acme", "Acme Inc"),
+        org("org_b", "beta", "Beta LLC"),
+        org("org_c", "gamma", "Gamma Co"),
+      ],
+    });
+    render(<OrganizationSwitcher />);
+    fireEvent.click(screen.getByRole("button", { name: /acme/i }));
+
+    const menu = screen.getByRole("menu");
+    const acmeItem = screen.getByRole("menuitem", { name: /acme inc/i });
+    const gammaItem = screen.getByRole("menuitem", { name: /gamma co/i });
+
+    fireEvent.keyDown(menu, { key: "End" });
+    expect(gammaItem).toHaveFocus();
+    fireEvent.keyDown(menu, { key: "Home" });
+    expect(acmeItem).toHaveFocus();
+  });
+
+  it("opens the menu when ArrowDown is pressed on the trigger", () => {
+    setAuth({ currentOrgId: "org_a", currentOrgName: "acme" });
+    mockUseOrganizations.mockReturnValue({
+      organizations: [org("org_a", "acme", "Acme Inc"), org("org_b", "beta", "Beta LLC")],
+    });
+    render(<OrganizationSwitcher />);
+    const trigger = screen.getByRole("button", { name: /acme/i });
+    expect(screen.queryByRole("menu")).toBeNull();
+
+    fireEvent.keyDown(trigger, { key: "ArrowDown" });
+    expect(screen.getByRole("menu")).toBeInTheDocument();
+  });
+
+  it("collapses the menu when the trigger is clicked again", () => {
+    setAuth({ currentOrgId: "org_a", currentOrgName: "acme" });
+    mockUseOrganizations.mockReturnValue({
+      organizations: [org("org_a", "acme", "Acme Inc"), org("org_b", "beta", "Beta LLC")],
+    });
+    render(<OrganizationSwitcher />);
+    const trigger = screen.getByRole("button", { name: /acme/i });
+
+    fireEvent.click(trigger);
+    expect(screen.getByRole("menu")).toBeInTheDocument();
+    fireEvent.click(trigger);
+    expect(screen.queryByRole("menu")).toBeNull();
+  });
+
+  it("renders the org logo when a picture is provided, else initials", () => {
+    setAuth({ currentOrgId: "org_a", currentOrgName: "acme" });
+    mockUseOrganizations.mockReturnValue({
+      organizations: [
+        org("org_a", "acme", "Acme Inc"),
+        org("org_b", "beta", "Beta LLC", "https://logo.example/beta.png"),
+      ],
+    });
+    const { container } = render(<OrganizationSwitcher />);
+    fireEvent.click(screen.getByRole("button", { name: /acme/i }));
+
+    const logo = container.querySelector('img[src="https://logo.example/beta.png"]');
+    expect(logo).toBeInTheDocument();
+  });
+
+  it("falls back to the org name when a row has no display_name", () => {
+    setAuth({ currentOrgId: "org_a", currentOrgName: "acme" });
+    mockUseOrganizations.mockReturnValue({
+      organizations: [org("org_a", "acme", "Acme Inc"), org("org_b", "beta", "")],
+    });
+    render(<OrganizationSwitcher />);
+    fireEvent.click(screen.getByRole("button", { name: /acme/i }));
+    expect(screen.getByRole("menuitem", { name: /beta/i })).toBeInTheDocument();
+  });
 });
