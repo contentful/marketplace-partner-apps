@@ -161,7 +161,7 @@ export const OrganizationSwitcher: React.FC = () => {
   const isCurrent = (org: Organization): boolean =>
     (currentOrgId != null && org.id === currentOrgId) ||
     (currentOrgName != null && org.name === currentOrgName) ||
-    (currentOrg != null && org.name === currentOrg.name);
+    org.name === currentOrg?.name;
 
   const currentLabel =
     currentOrg?.display_name ??

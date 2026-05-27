@@ -23,7 +23,7 @@ export function decodeJwtPayload(token: string): Record<string, unknown> | null 
   const padded = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), "=");
   try {
     const binary = atob(padded);
-    const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+    const bytes = Uint8Array.from(binary, (char) => char.codePointAt(0) ?? 0);
     const jsonText =
       typeof TextDecoder === "undefined" ? binary : new TextDecoder("utf-8").decode(bytes);
     return JSON.parse(jsonText) as Record<string, unknown>;
