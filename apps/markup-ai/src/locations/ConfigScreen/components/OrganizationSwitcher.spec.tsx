@@ -1,6 +1,18 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render as rtlRender, screen, fireEvent, waitFor } from "@testing-library/react";
+import React from "react";
+import { LocalizationProvider } from "../../../contexts/LocalizationContext";
 import { OrganizationSwitcher } from "./OrganizationSwitcher";
+
+// OrganizationSwitcher reads user-facing labels via useTranslation(), which
+// requires a LocalizationProvider; wrap every render with one (sync init so
+// t() resolves to the English strings immediately).
+const render = (ui: React.ReactElement) =>
+  rtlRender(ui, {
+    wrapper: ({ children }) => (
+      <LocalizationProvider initializeSync>{children}</LocalizationProvider>
+    ),
+  });
 
 const mockUseAuth = vi.fn();
 vi.mock("../../../contexts/AuthContext", () => ({

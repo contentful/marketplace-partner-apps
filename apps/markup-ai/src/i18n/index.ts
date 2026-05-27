@@ -36,6 +36,8 @@ const enTranslations = {
   analysis_configuration: "Analysis Configuration",
   style_guide_type: "Style Guide",
   dialect: "Dialect",
+  organization: "Organization",
+  organizations: "Organizations",
 };
 
 // Initialize i18next

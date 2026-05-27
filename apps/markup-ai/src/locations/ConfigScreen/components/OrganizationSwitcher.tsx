@@ -15,6 +15,7 @@ import { BuildingIcon, CaretDownIcon, CaretRightIcon, CheckIcon } from "@content
 import styled from "@emotion/styled";
 import tokens from "@contentful/f36-tokens";
 import { useAuth } from "../../../contexts/AuthContext";
+import { useTranslation } from "../../../contexts/LocalizationContext";
 import { useAccount } from "../../../hooks/useAccount";
 import { useOrganizations, type Organization } from "../../../hooks/useOrganizations";
 
@@ -150,6 +151,7 @@ function initialsFor(label: string): string {
 export const OrganizationSwitcher: React.FC = () => {
   const { currentOrgId, currentOrgName, isSwitchingOrg, switchOrganization, isAuthenticated } =
     useAuth();
+  const { t } = useTranslation();
   const { organization: currentOrg } = useAccount();
   const { organizations } = useOrganizations();
 
@@ -173,7 +175,7 @@ export const OrganizationSwitcher: React.FC = () => {
   if (!currentLabel && organizations.length === 0) return null;
 
   const hasMultiple = organizations.length > 1;
-  const headerLabel = currentLabel ?? "Organization";
+  const headerLabel = currentLabel ?? t("organization");
 
   const handleToggle = () => {
     if (isSwitchingOrg) return;
@@ -200,7 +202,7 @@ export const OrganizationSwitcher: React.FC = () => {
 
   return (
     <Wrapper>
-      <SectionLabel>Organization</SectionLabel>
+      <SectionLabel>{t("organization")}</SectionLabel>
       <CurrentRow
         type="button"
         $interactive={hasMultiple}
@@ -218,7 +220,7 @@ export const OrganizationSwitcher: React.FC = () => {
       </CurrentRow>
 
       {hasMultiple && isExpanded && (
-        <OrgList role="menu" aria-label="Organizations">
+        <OrgList role="menu" aria-label={t("organizations")}>
           {organizations.map((org) => {
             const label = org.display_name || org.name;
             const current = isCurrent(org);
