@@ -26,6 +26,40 @@ export interface DefaultFieldProps {
   control?: Control & { field: FieldAPI };
 }
 
+interface ResourceLinkUrnInfo {
+  spaceId: string;
+  environmentId: string;
+  entityType: "entries" | "assets";
+  entityId: string;
+}
+
+interface ResourceLinkValue {
+  sys: {
+    urn: string;
+  };
+}
+
+type ResourceLinkFieldValue = ResourceLinkValue | ResourceLinkValue[] | undefined;
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null;
+
+const isResourceLinkValue = (value: unknown): value is ResourceLinkValue => {
+  if (!isRecord(value) || !isRecord(value.sys)) {
+    return false;
+  }
+
+  return typeof value.sys.urn === "string";
+};
+
+const normalizeResourceLinkValue = (value: unknown): ResourceLinkFieldValue => {
+  if (Array.isArray(value)) {
+    return value.filter(isResourceLinkValue);
+  }
+
+  return isResourceLinkValue(value) ? value : undefined;
+};
+
 // Reusable component for external reference note
 const ExternalReferenceNote = () => (
   <Box marginTop="spacingXs">
@@ -47,7 +81,7 @@ const CustomWidgetNote = () => (
 );
 
 // Reusable component for displaying a single ResourceLink
-const ResourceLinkBox = ({ urnInfo }: { urnInfo: { spaceId: string; environmentId: string; entityType: string; entityId: string } }) => {
+const ResourceLinkBox = ({ urnInfo }: { urnInfo: ResourceLinkUrnInfo }) => {
   const handleClick = () => {
     const entityPath = urnInfo.entityType === 'entries' ? 'entries' : 'assets';
     const url = `https://app.contentful.com/spaces/${urnInfo.spaceId}/environments/${urnInfo.environmentId}/${entityPath}/${urnInfo.entityId}`;
@@ -76,25 +110,30 @@ const ResourceLinkBox = ({ urnInfo }: { urnInfo: { spaceId: string; environmentI
 
 // Helper component to display ResourceLink field values
 const ResourceLinkDisplay = ({ sdk }: { sdk: FieldAppSDK }) => {
-  const [value, setValue] = React.useState<any>(sdk.field.getValue());
+  const [value, setValue] = React.useState<ResourceLinkFieldValue>(() =>
+    normalizeResourceLinkValue(sdk.field.getValue())
+  );
 
   React.useEffect(() => {
-    const detach = sdk.field.onValueChanged((newValue: any) => {
-      setValue(newValue);
+    const detach = sdk.field.onValueChanged((newValue: unknown) => {
+      setValue(normalizeResourceLinkValue(newValue));
     });
     return () => detach();
   }, [sdk.field]);
 
   // Parse URN to extract information
-  const parseUrn = (urn: string) => {
+  const parseUrn = (urn: string): ResourceLinkUrnInfo | null => {
     const match = urn.match(
       /crn:contentful:::content:spaces\/([^/]+)\/environments\/([^/]+)\/(entries|assets)\/([^/]+)/
     );
     if (!match) return null;
+    const entityType = match[3];
+    if (entityType !== "entries" && entityType !== "assets") return null;
+
     return {
       spaceId: match[1],
       environmentId: match[2],
-      entityType: match[3],
+      entityType,
       entityId: match[4],
     };
   };
@@ -107,7 +146,7 @@ const ResourceLinkDisplay = ({ sdk }: { sdk: FieldAppSDK }) => {
   if (Array.isArray(value)) {
     return (
       <Stack flexDirection="column" spacing="spacingS">
-        {value.map((item: any, index: number) => {
+        {value.map((item, index: number) => {
           const urnInfo = item?.sys?.urn ? parseUrn(item.sys.urn) : null;
           
           if (!urnInfo) return null;
@@ -144,6 +183,11 @@ const DefaultField = (props: DefaultFieldProps) => {
     control?.widgetId === "resourceLinkEditor" ||
     control?.widgetId === "entryResourceLinkEditor" ||
     control?.widgetId === "assetResourceLinkEditor";
+  const canRenderBuiltinField =
+    !isResourceLinkEditor &&
+    control?.widgetId !== "objectEditor" &&
+    control?.widgetNamespace === "builtin" &&
+    widgetId !== null;
 
   return (
     <FieldWrapper
@@ -179,12 +223,10 @@ const DefaultField = (props: DefaultFieldProps) => {
       )}
 
       {/* Handle standard fields (not ResourceLink, not objectEditor, builtin) */}
-      {!isResourceLinkEditor && 
-       control?.widgetId !== "objectEditor" && 
-       control?.widgetNamespace === "builtin" && (
+      {canRenderBuiltinField && (
         <Field
           sdk={sdk}
-          widgetId={widgetId!}
+          widgetId={widgetId}
           getOptions={(widgetId, _sdk) => ({
             [widgetId]: {
               parameters: {
