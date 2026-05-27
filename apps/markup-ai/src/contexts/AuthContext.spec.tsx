@@ -617,6 +617,40 @@ describe("AuthContext", () => {
     expect(authContext.error).toBe("Popup closed");
   });
 
+  it("switchOrganization throws and stays unauthenticated when no token is returned", async () => {
+    mockAuthMethods.isAuthenticated.mockResolvedValue(false);
+
+    let authContext!: AuthContextType;
+    const TestComponentWithAuth = () => {
+      authContext = useAuth();
+      return <TestComponent />;
+    };
+
+    render(
+      <AuthProvider>
+        <TestComponentWithAuth />
+      </AuthProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("loading")).toHaveTextContent("false");
+    });
+
+    // Popup "succeeds" but the silent token fetch yields nothing — the context
+    // must not flip to isAuthenticated=true with a null token.
+    mockAuthMethods.loginWithPopup.mockResolvedValue(undefined);
+    mockAuthMethods.getTokenSilently.mockResolvedValue(null);
+    mockAuthMethods.getUser.mockResolvedValue({ email: "test@example.com" });
+
+    await expect(authContext.switchOrganization("org_acme")).rejects.toThrow(/no access token/i);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("authenticated")).toHaveTextContent("false");
+    });
+    expect(screen.getByTestId("token")).toHaveTextContent("no-token");
+    expect(authContext.isSwitchingOrg).toBe(false);
+  });
+
   it("should handle non-Error exceptions during initialization", async () => {
     mockAuthMethods.isAuthenticated.mockRejectedValue("String error");
 

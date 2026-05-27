@@ -11,8 +11,7 @@ import { Auth0Client, PopupLoginOptions } from "@auth0/auth0-spa-js";
 import { getUserSettings, setApiKey, clearAllUserSettings } from "../utils/userSettings";
 import { useAppConfig } from "../hooks/useAppConfig";
 import { queryClient } from "../hooks/useApiClient";
-import { AGENT_SELECTION_STORAGE_KEY } from "../hooks/useAgentSelection";
-import { AGENT_CONFIG_STORAGE_KEY } from "../hooks/useAgentConfig";
+import { AGENT_SELECTION_STORAGE_KEY, AGENT_CONFIG_STORAGE_KEY } from "../constants/storageKeys";
 import { getOrgInfoFromToken } from "../utils/jwt";
 
 type AuthState = {
@@ -395,13 +394,24 @@ export function AuthProvider({ children }: Readonly<AuthProviderProps>) {
       const accessToken = await auth0Ref.current.getTokenSilently({
         authorizationParams: { organization: organizationId },
       });
+      // A successful popup that yields no token would otherwise leave the
+      // context lying (isAuthenticated=true, token=null). Treat it as a failed
+      // switch: throw so the catch below resets isSwitchingOrg and surfaces the
+      // error, and the success setState is never reached.
+      if (!accessToken) {
+        throw new Error("No access token returned after organization switch");
+      }
       const userInfo = await auth0Ref.current.getUser();
-      if (accessToken) setApiKey(accessToken);
+      setApiKey(accessToken);
 
       // The previous org's agent selection/config (sessionStorage) and cached
       // API responses (react-query) reference targets / style guides from the
       // old org. Token-fingerprinted query keys already prevent cross-org
       // bleed, but we clear both so nothing stale flashes before refetch.
+      // The global queryClient.clear() is safe here: the only non-org-scoped
+      // data is the Auth0 app config, which lives in useAppConfig's plain React
+      // state (not react-query), so clearing the cache can't trigger a
+      // user-visible config refetch mid-popup.
       sessionStorage.removeItem(AGENT_SELECTION_STORAGE_KEY);
       sessionStorage.removeItem(AGENT_CONFIG_STORAGE_KEY);
       queryClient.clear();

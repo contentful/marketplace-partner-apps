@@ -38,6 +38,7 @@ const enTranslations = {
   dialect: "Dialect",
   organization: "Organization",
   organizations: "Organizations",
+  organization_switch_failed: "Couldn't switch organization. Please try again.",
 };
 
 // Initialize i18next

@@ -15,7 +15,15 @@ export interface JwtOrgInfo {
   orgName: string | null;
 }
 
-/** Decode a JWT's payload (second segment) into a claims object, or null if malformed. */
+/**
+ * Decode a JWT's payload (second segment) into a claims object, or null if
+ * malformed.
+ *
+ * ⚠️ Display only — this does NOT verify the token's signature, so the returned
+ * claims are not trustworthy for any authorization decision. Use it solely to
+ * read non-sensitive display hints (e.g. the active org name) from a token the
+ * backend already validates.
+ */
 export function decodeJwtPayload(token: string): Record<string, unknown> | null {
   const parts = token.split(".");
   if (parts.length < 2) return null;
@@ -23,7 +31,9 @@ export function decodeJwtPayload(token: string): Record<string, unknown> | null 
   const padded = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), "=");
   try {
     const binary = atob(padded);
-    const bytes = Uint8Array.from(binary, (char) => char.codePointAt(0) ?? 0);
+    // `atob` yields a Latin-1 binary string, so each char is a single byte;
+    // charCodeAt is the conventional read and avoids implying multibyte input.
+    const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
     const jsonText =
       typeof TextDecoder === "undefined" ? binary : new TextDecoder("utf-8").decode(bytes);
     return JSON.parse(jsonText) as Record<string, unknown>;

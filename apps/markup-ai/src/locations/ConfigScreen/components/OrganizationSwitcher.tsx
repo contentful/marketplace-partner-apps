@@ -9,9 +9,15 @@
  * row is matched against the JWT's `org_id` / `org_name` claims.
  */
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Spinner } from "@contentful/f36-components";
-import { BuildingIcon, CaretDownIcon, CaretRightIcon, CheckIcon } from "@contentful/f36-icons";
+import {
+  BuildingIcon,
+  CaretDownIcon,
+  CaretRightIcon,
+  CheckIcon,
+  WarningIcon,
+} from "@contentful/f36-icons";
 import styled from "@emotion/styled";
 import tokens from "@contentful/f36-tokens";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -116,6 +122,23 @@ const CurrentCheck = styled(CheckIcon)`
   color: ${tokens.green600};
 `;
 
+const ErrorRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${tokens.spacingXs};
+  margin-top: ${tokens.spacing2Xs};
+  padding: ${tokens.spacingXs} ${tokens.spacingS};
+  border-radius: ${tokens.borderRadiusMedium};
+  background: ${tokens.red100};
+  color: ${tokens.red700};
+  font-size: ${tokens.fontSizeS};
+
+  svg {
+    color: ${tokens.red600};
+    flex-shrink: 0;
+  }
+`;
+
 const OrgLogo = styled.span`
   display: inline-flex;
   align-items: center;
@@ -157,6 +180,40 @@ export const OrganizationSwitcher: React.FC = () => {
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [pendingOrgId, setPendingOrgId] = useState<string | null>(null);
+  const [switchFailed, setSwitchFailed] = useState(false);
+
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const closeMenu = useCallback(() => {
+    setIsExpanded(false);
+    setSwitchFailed(false);
+  }, []);
+
+  // Collapse the switch list when the user clicks outside the component.
+  useEffect(() => {
+    if (!isExpanded) return;
+    const onPointerDown = (e: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+        closeMenu();
+      }
+    };
+    document.addEventListener("mousedown", onPointerDown);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+    };
+  }, [isExpanded, closeMenu]);
+
+  // Move focus into the menu when it opens so keyboard users land on a row
+  // (the active org if present, otherwise the first item).
+  useEffect(() => {
+    if (!isExpanded) return;
+    const items = itemRefs.current.filter((el): el is HTMLButtonElement => el != null);
+    if (items.length === 0) return;
+    const activeIndex = items.findIndex((el) => el.dataset.current === "true");
+    items[activeIndex >= 0 ? activeIndex : 0].focus();
+  }, [isExpanded]);
 
   const isCurrent = (org: Organization): boolean =>
     (currentOrgId != null && org.id === currentOrgId) ||
@@ -177,39 +234,103 @@ export const OrganizationSwitcher: React.FC = () => {
   const hasMultiple = organizations.length > 1;
   const headerLabel = currentLabel ?? t("organization");
 
+  const openMenu = () => {
+    setSwitchFailed(false);
+    setIsExpanded(true);
+  };
+
   const handleToggle = () => {
     if (isSwitchingOrg) return;
-    setIsExpanded((prev) => !prev);
+    if (isExpanded) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
   };
 
   const handleSelect = async (org: Organization) => {
     if (isSwitchingOrg) return;
     if (isCurrent(org)) {
-      setIsExpanded(false);
+      closeMenu();
       return;
     }
+    setSwitchFailed(false);
     setPendingOrgId(org.id);
     try {
       await switchOrganization(org.id);
-      setIsExpanded(false);
+      closeMenu();
     } catch {
-      // Failure (incl. user-cancelled popup) is surfaced via the auth error
-      // state; just stop the spinner and stay put.
+      // Surface the failure inline and keep the list open so the user sees it
+      // sits on the row they clicked (auth.error stays the out-of-band detail).
+      setSwitchFailed(true);
     } finally {
       setPendingOrgId(null);
     }
   };
 
+  // Roving focus: arrow keys move between menu items, Home/End jump to the
+  // ends, Escape closes the menu and returns focus to the trigger.
+  const moveFocus = (target: number | "first" | "last") => {
+    const items = itemRefs.current.filter((el): el is HTMLButtonElement => el != null);
+    if (items.length === 0) return;
+    let next: number;
+    if (target === "first") {
+      next = 0;
+    } else if (target === "last") {
+      next = items.length - 1;
+    } else {
+      const curr = items.indexOf(document.activeElement as HTMLButtonElement);
+      next = (curr + target + items.length) % items.length;
+    }
+    items[next].focus();
+  };
+
+  const handleMenuKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        moveFocus(1);
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        moveFocus(-1);
+        break;
+      case "Home":
+        e.preventDefault();
+        moveFocus("first");
+        break;
+      case "End":
+        e.preventDefault();
+        moveFocus("last");
+        break;
+      case "Escape":
+        e.preventDefault();
+        closeMenu();
+        triggerRef.current?.focus();
+        break;
+    }
+  };
+
+  const handleTriggerKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (!hasMultiple || isSwitchingOrg) return;
+    if (e.key === "ArrowDown" && !isExpanded) {
+      e.preventDefault();
+      openMenu();
+    }
+  };
+
   return (
-    <Wrapper>
+    <Wrapper ref={wrapperRef}>
       <SectionLabel>{t("organization")}</SectionLabel>
       <CurrentRow
+        ref={triggerRef}
         type="button"
         $interactive={hasMultiple}
         disabled={!hasMultiple || isSwitchingOrg}
         aria-haspopup={hasMultiple ? "menu" : undefined}
         aria-expanded={hasMultiple ? isExpanded : undefined}
         onClick={hasMultiple ? handleToggle : undefined}
+        onKeyDown={handleTriggerKeyDown}
       >
         <RowLeft>
           <BuildingIcon size="tiny" />
@@ -220,16 +341,21 @@ export const OrganizationSwitcher: React.FC = () => {
       </CurrentRow>
 
       {hasMultiple && isExpanded && (
-        <OrgList role="menu" aria-label={t("organizations")}>
-          {organizations.map((org) => {
+        <OrgList role="menu" aria-label={t("organizations")} onKeyDown={handleMenuKeyDown}>
+          {organizations.map((org, index) => {
             const label = org.display_name || org.name;
             const current = isCurrent(org);
             const pending = pendingOrgId === org.id;
             return (
               <OrgItem
                 key={org.id}
+                ref={(el) => {
+                  itemRefs.current[index] = el;
+                }}
+                data-current={current ? "true" : "false"}
                 type="button"
                 role="menuitem"
+                tabIndex={-1}
                 $current={current}
                 disabled={isSwitchingOrg && !pending}
                 aria-current={current ? "true" : undefined}
@@ -252,6 +378,13 @@ export const OrganizationSwitcher: React.FC = () => {
             );
           })}
         </OrgList>
+      )}
+
+      {hasMultiple && isExpanded && switchFailed && (
+        <ErrorRow role="alert">
+          <WarningIcon size="tiny" />
+          <span>{t("organization_switch_failed")}</span>
+        </ErrorRow>
       )}
     </Wrapper>
   );
