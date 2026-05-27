@@ -36,7 +36,7 @@ const generateNodeId = (path: number[]): string => {
  * so this round-trips losslessly.
  */
 const escapeHtml = (value: string): string =>
-  value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 
 /**
  * Validate that a node is a valid Rich Text node
@@ -291,8 +291,8 @@ export const convertHtmlToRichText = (
         } else {
           pendingBreak = true;
         }
-      } else if (child instanceof Element) {
-        const id = child.getAttribute("data-node-id") ?? ancestorId;
+      } else if (child instanceof HTMLElement) {
+        const id = child.dataset.nodeId ?? ancestorId;
         walk(child, id);
       }
     });
