@@ -17,6 +17,7 @@ import styled from "@emotion/styled";
 import tokens from "@contentful/f36-tokens";
 import { useAuth } from "../../../contexts/AuthContext";
 import { MARKUP_CONSOLE_URL, MARKUP_DEVELOPER_PORTAL_URL } from "../../../utils/markupUrls";
+import { OrganizationSwitcher } from "./OrganizationSwitcher";
 
 const ProfileWrapper = styled.div`
   position: relative;
@@ -245,6 +246,7 @@ export const UserProfileButton: React.FC<UserProfileButtonProps> = ({
             <>
               <StatusText>Signed in as</StatusText>
               <UserEmail>{(user?.email as string) || (user?.name as string) || "User"}</UserEmail>
+              <OrganizationSwitcher />
               <MenuList>
                 <MenuItem
                   href={MARKUP_CONSOLE_URL}

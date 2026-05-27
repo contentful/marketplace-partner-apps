@@ -3,7 +3,8 @@ import type { AgentID } from "../agents/agents";
 import { AGENTS } from "../agents/agents";
 import { DEFAULT_SELECTED_AGENT_IDS, SELECTABLE_AGENT_BACKEND_IDS } from "../agents/agenticConfig";
 
-const STORAGE_KEY = "markupai.agentSelection";
+export const AGENT_SELECTION_STORAGE_KEY = "markupai.agentSelection";
+const STORAGE_KEY = AGENT_SELECTION_STORAGE_KEY;
 
 function sanitizeSelection(ids: unknown): AgentID[] {
   if (!Array.isArray(ids)) return [];

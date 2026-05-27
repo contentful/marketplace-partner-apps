@@ -251,11 +251,21 @@ export type AccessPolicyRead = {
    * Scope
    */
   scope: string | null;
+  scope_type: AccessPolicyScopeType;
   /**
    * Created At
    */
   created_at: string;
 };
+
+/**
+ * AccessPolicyScopeType
+ */
+export enum AccessPolicyScopeType {
+  GLOBAL = "global",
+  ORGANIZATION = "organization",
+  SLS_STYLEGUIDE = "sls_styleguide",
+}
 
 /**
  * AccessPolicySubjectType
@@ -438,76 +448,17 @@ export type ActivityEventRequest = {
 };
 
 /**
- * AdminStyleGuideResponse
+ * AddGroupMemberRequest
  *
- * Admin response schema for style guides with full details including prompts and domains.
+ * Add-member payload — admins only specify the user. `source` is
+ * server-set to 'manual' (clients can't fabricate IDP memberships)
+ * and `binding_id` stays NULL.
  */
-export type AdminStyleGuideResponse = {
+export type AddGroupMemberRequest = {
   /**
-   * Id
+   * User Id
    */
-  id: string;
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Created At
-   */
-  created_at: string;
-  /**
-   * Created By
-   */
-  created_by: string;
-  /**
-   * Status
-   */
-  status: string;
-  /**
-   * Updated At
-   */
-  updated_at?: string | null;
-  /**
-   * Updated By
-   */
-  updated_by?: string | null;
-  /**
-   * Deleted At
-   */
-  deleted_at?: string | null;
-  /**
-   * Deleted By
-   */
-  deleted_by?: string | null;
-  /**
-   * Summary
-   */
-  summary?: string | null;
-  base_style_guide_type?: BaseStyleGuideType | null;
-  /**
-   * Organization Id
-   */
-  organization_id?: string | null;
-  /**
-   * Consistency Prompt
-   */
-  consistency_prompt?: string | null;
-  /**
-   * Tone Prompt
-   */
-  tone_prompt?: string | null;
-  /**
-   * Clarity Sentence Structure Prompt
-   */
-  clarity_sentence_structure_prompt?: string | null;
-  /**
-   * Clarity Simple Vocabulary Prompt
-   */
-  clarity_simple_vocabulary_prompt?: string | null;
-  /**
-   * Terminology Domains
-   */
-  terminology_domains?: Array<TerminologyDomainInfo> | null;
+  user_id: string;
 };
 
 /**
@@ -1320,6 +1271,72 @@ export type CategoryUpdateRequest = {
 };
 
 /**
+ * ChartResponse[DailyActiveUsersRow]
+ */
+export type ChartResponseDailyActiveUsersRow = {
+  /**
+   * Data
+   */
+  data: Array<DailyActiveUsersRow>;
+  window: ChartWindow | null;
+};
+
+/**
+ * ChartResponse[DailyAvgScoreRow]
+ */
+export type ChartResponseDailyAvgScoreRow = {
+  /**
+   * Data
+   */
+  data: Array<DailyAvgScoreRow>;
+  window: ChartWindow | null;
+};
+
+/**
+ * ChartResponse[DailyCheckCountRow]
+ */
+export type ChartResponseDailyCheckCountRow = {
+  /**
+   * Data
+   */
+  data: Array<DailyCheckCountRow>;
+  window: ChartWindow | null;
+};
+
+/**
+ * ChartResponse[DailyDocumentCountRow]
+ */
+export type ChartResponseDailyDocumentCountRow = {
+  /**
+   * Data
+   */
+  data: Array<DailyDocumentCountRow>;
+  window: ChartWindow | null;
+};
+
+/**
+ * ChartWindow
+ *
+ * The resolved date window the response covers, inclusive on both ends.
+ *
+ * Mirrors the four-corner pad-window resolution in
+ * `queries._common.resolve_pad_window`. When the caller passes
+ * explicit bounds, these mirror them. When the caller passes
+ * nothing, these reflect server-side defaults (earliest row through
+ * today UTC).
+ */
+export type ChartWindow = {
+  /**
+   * Start Date
+   */
+  start_date: string;
+  /**
+   * End Date
+   */
+  end_date: string;
+};
+
+/**
  * ClarityCategory
  */
 export enum ClarityCategory {
@@ -1390,6 +1407,58 @@ export type ConfigOptions = {
   dialect?: Dialects | null;
   style_guide?: StyleGuide | null;
   tone?: Tones | null;
+};
+
+/**
+ * ConnectionDomainAliasOut
+ */
+export type ConnectionDomainAliasOut = {
+  /**
+   * Id
+   *
+   * Alias row ID.
+   */
+  id: string | null;
+  /**
+   * Domain
+   */
+  domain: string;
+  /**
+   * Is Primary
+   *
+   * True for the org's primary email_domain — auto-verified and non-removable.
+   */
+  is_primary?: boolean;
+  /**
+   * Verification Status
+   *
+   * 'pending' or 'verified'.
+   */
+  verification_status: string;
+  /**
+   * The DNS TXT record to publish to verify this alias. Present only while the alias is pending; null once verified (and for the primary domain).
+   */
+  dns_verification?: DnsVerification | null;
+  /**
+   * Verified At
+   */
+  verified_at: string | null;
+  /**
+   * Created At
+   */
+  created_at: string | null;
+  /**
+   * Created By
+   */
+  created_by: string | null;
+  /**
+   * Organization Id
+   */
+  organization_id: string;
+  /**
+   * Connection Id
+   */
+  connection_id: string;
 };
 
 /**
@@ -1491,6 +1560,18 @@ export enum ContextPolarity {
 }
 
 /**
+ * CreateAliasRequest
+ */
+export type CreateAliasRequest = {
+  /**
+   * Domain
+   *
+   * Domain to add as an alias, e.g. 'acme.eu'.
+   */
+  domain: string;
+};
+
+/**
  * CreatorResponse
  */
 export type CreatorResponse = {
@@ -1578,6 +1659,62 @@ export type CustomFieldValueResponse = {
 };
 
 /**
+ * DailyActiveUsersRow
+ */
+export type DailyActiveUsersRow = {
+  /**
+   * Report Date
+   */
+  report_date: string;
+  /**
+   * Active Users
+   */
+  active_users: number;
+};
+
+/**
+ * DailyAvgScoreRow
+ */
+export type DailyAvgScoreRow = {
+  /**
+   * Report Date
+   */
+  report_date: string;
+  /**
+   * Avg Score
+   */
+  avg_score: number | null;
+};
+
+/**
+ * DailyCheckCountRow
+ */
+export type DailyCheckCountRow = {
+  /**
+   * Report Date
+   */
+  report_date: string;
+  /**
+   * Num Checks
+   */
+  num_checks: number;
+};
+
+/**
+ * DailyDocumentCountRow
+ */
+export type DailyDocumentCountRow = {
+  /**
+   * Report Date
+   */
+  report_date: string;
+  /**
+   * Num Docs
+   */
+  num_docs: number;
+};
+
+/**
  * Dialects
  */
 export enum Dialects {
@@ -1585,6 +1722,26 @@ export enum Dialects {
   BRITISH_ENGLISH = "british_english",
   CANADIAN_ENGLISH = "canadian_english",
 }
+
+/**
+ * DnsVerification
+ *
+ * The DNS TXT record an admin publishes to prove domain ownership.
+ */
+export type DnsVerification = {
+  /**
+   * Record Name
+   *
+   * DNS TXT record name, e.g. '_markup-verification.acme.eu'.
+   */
+  record_name: string;
+  /**
+   * Record Value
+   *
+   * DNS TXT record value — the alias's verification token.
+   */
+  record_value: string;
+};
 
 /**
  * DomainCreateRequest
@@ -1664,58 +1821,6 @@ export type DomainUpdateRequest = {
    * Description
    */
   description?: string | null;
-};
-
-/**
- * DuplicateStyleGuideRequest
- *
- * Request to duplicate a style guide to another organization.
- */
-export type DuplicateStyleGuideRequest = {
-  /**
-   * Source Style Guide Id
-   *
-   * The ID of the style guide to duplicate
-   */
-  source_style_guide_id: string;
-  /**
-   * New Name
-   *
-   * Optional new name for the duplicated style guide. If not provided, uses the source name.
-   */
-  new_name?: string | null;
-};
-
-/**
- * DuplicateStyleGuideResponse
- *
- * Response after duplicating a style guide.
- */
-export type DuplicateStyleGuideResponse = {
-  /**
-   * Id
-   *
-   * The ID of the newly created style guide
-   */
-  id: string;
-  /**
-   * Name
-   *
-   * The name of the duplicated style guide
-   */
-  name: string;
-  /**
-   * Organization Id
-   *
-   * The target organization ID
-   */
-  organization_id: string;
-  /**
-   * Message
-   *
-   * Success message
-   */
-  message: string;
 };
 
 /**
@@ -1817,6 +1922,34 @@ export type FeedbackRequest = {
    * Category
    */
   category?: string | null;
+};
+
+/**
+ * FilterOption
+ */
+export type FilterOption = {
+  /**
+   * Value
+   */
+  value: string;
+  /**
+   * Label
+   */
+  label: string;
+};
+
+/**
+ * FilterOptionsResult
+ */
+export type FilterOptionsResult = {
+  /**
+   * Data
+   */
+  data: Array<FilterOption>;
+  /**
+   * Truncated
+   */
+  truncated: boolean;
 };
 
 /**
@@ -2048,6 +2181,116 @@ export type GrammarScore = {
    * Issues
    */
   issues?: number | null;
+};
+
+/**
+ * GroupCreateRequest
+ *
+ * Create payload — admins only specify the display name. A created
+ * group has no bindings, so it is a manual group by construction; there
+ * are no IDP identity fields to fabricate.
+ */
+export type GroupCreateRequest = {
+  /**
+   * Display Name
+   */
+  display_name: string;
+};
+
+/**
+ * GroupMemberResponse
+ */
+export type GroupMemberResponse = {
+  /**
+   * User Id
+   */
+  user_id: string;
+  /**
+   * Email
+   */
+  email: string | null;
+  /**
+   * First Name
+   */
+  first_name: string | null;
+  /**
+   * Last Name
+   */
+  last_name: string | null;
+  source: GroupMembershipSource;
+  /**
+   * Created At
+   */
+  created_at: string;
+  /**
+   * In Organization
+   *
+   * True when the user is currently a member of the organization. False flags a stale membership for a user who has left the org — the membership row is still here and can be removed.
+   */
+  in_organization: boolean;
+};
+
+/**
+ * GroupMembershipSource
+ *
+ * How a group membership was established. Per-source uniqueness lets
+ * idp / scim / manual coexist for the same user+group; reconciliation
+ * runs per source so one source's writes don't clobber another's.
+ */
+export enum GroupMembershipSource {
+  IDP = "idp",
+  SCIM = "scim",
+  MANUAL = "manual",
+}
+
+/**
+ * GroupRenameRequest
+ *
+ * Rename payload — only `display_name` is editable.
+ */
+export type GroupRenameRequest = {
+  /**
+   * Display Name
+   */
+  display_name: string;
+};
+
+/**
+ * GroupResponse
+ */
+export type GroupResponse = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Organization Id
+   */
+  organization_id: string;
+  /**
+   * Display Name
+   */
+  display_name: string;
+  /**
+   * Created At
+   */
+  created_at: string;
+  /**
+   * Updated At
+   */
+  updated_at: string;
+  /**
+   * Is Manual
+   *
+   * True when the group is admin-created (manual); False when it is fed by one or more enterprise SSO connections.
+   */
+  is_manual: boolean;
+  /**
+   * Member Count
+   *
+   * Number of group_memberships rows for this group. Includes stale rows for users who have left the org; admins clear those via the membership management surface.
+   */
+  member_count: number;
 };
 
 /**
@@ -2456,6 +2699,54 @@ export type OAuthTokenRequest = {
    * Refresh token (required when grant_type=refresh_token)
    */
   refresh_token?: string | null;
+};
+
+/**
+ * OrgDomainAliasOut
+ */
+export type OrgDomainAliasOut = {
+  /**
+   * Id
+   *
+   * Alias row ID.
+   */
+  id: string | null;
+  /**
+   * Domain
+   */
+  domain: string;
+  /**
+   * Is Primary
+   *
+   * True for the org's primary email_domain — auto-verified and non-removable.
+   */
+  is_primary?: boolean;
+  /**
+   * Verification Status
+   *
+   * 'pending' or 'verified'.
+   */
+  verification_status: string;
+  /**
+   * The DNS TXT record to publish to verify this alias. Present only while the alias is pending; null once verified (and for the primary domain).
+   */
+  dns_verification?: DnsVerification | null;
+  /**
+   * Verified At
+   */
+  verified_at: string | null;
+  /**
+   * Created At
+   */
+  created_at: string | null;
+  /**
+   * Created By
+   */
+  created_by: string | null;
+  /**
+   * Organization Id
+   */
+  organization_id: string;
 };
 
 /**
@@ -3002,13 +3293,41 @@ export type PageAccessPolicyRead = {
 };
 
 /**
- * Page[AdminStyleGuideResponse]
+ * Page[GroupMemberResponse]
  */
-export type PageAdminStyleGuideResponse = {
+export type PageGroupMemberResponse = {
   /**
    * Items
    */
-  items: Array<AdminStyleGuideResponse>;
+  items: Array<GroupMemberResponse>;
+  /**
+   * Total Items
+   */
+  total_items: number;
+  /**
+   * Page
+   */
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+  /**
+   * Total Pages
+   *
+   * The total number of pages.
+   */
+  readonly total_pages: number;
+};
+
+/**
+ * Page[GroupResponse]
+ */
+export type PageGroupResponse = {
+  /**
+   * Items
+   */
+  items: Array<GroupResponse>;
   /**
    * Total Items
    */
@@ -3472,6 +3791,18 @@ export enum ReadingGoal {
 }
 
 /**
+ * ResyncResult
+ */
+export type ResyncResult = {
+  /**
+   * Synced
+   *
+   * True if the Auth0 domain_aliases PATCH succeeded. False means the connection is still flagged out-of-sync — retry later.
+   */
+  synced: boolean;
+};
+
+/**
  * RetryPolicy
  *
  * Retry policy configuration for agent execution.
@@ -3507,6 +3838,42 @@ export type RetryPolicy = {
    * Error types that should never be retried (deterministic bugs)
    */
   non_retryable_error_types?: Array<string>;
+};
+
+/**
+ * ReverseVisibilityGroup
+ */
+export type ReverseVisibilityGroup = {
+  /**
+   * Group Id
+   */
+  group_id: string;
+  /**
+   * Display Name
+   */
+  display_name: string;
+  /**
+   * Is Default
+   */
+  is_default: boolean;
+};
+
+/**
+ * ReverseVisibilityResponse
+ */
+export type ReverseVisibilityResponse = {
+  /**
+   * Groups
+   */
+  groups: Array<ReverseVisibilityGroup>;
+  /**
+   * Org Wide
+   */
+  org_wide: boolean;
+  /**
+   * Org Default
+   */
+  org_default: boolean;
 };
 
 /**
@@ -3604,6 +3971,18 @@ export enum Seniority {
 }
 
 /**
+ * SetModeRequest
+ */
+export type SetModeRequest = {
+  /**
+   * Mode
+   *
+   * 'inherit': effective domain_aliases = primary email_domain + verified org-level aliases. 'custom': effective = primary + verified per-connection aliases.
+   */
+  mode: "inherit" | "custom";
+};
+
+/**
  * SetupTicketRequest
  */
 export type SetupTicketRequest = {
@@ -3663,6 +4042,88 @@ export enum SkepticismLevel {
   HIGH = "high",
   VERY_HIGH = "very_high",
 }
+
+/**
+ * SlsStyleGuideAttributesPatchRequest
+ *
+ * Body for the attributes PATCH endpoints.
+ *
+ * Merge semantics: keys present in the body are merged in, keys
+ * absent are left untouched. Explicit `null` removes a key. Unknown
+ * keys 422 via `extra="forbid"`. Per-key validation runs before the
+ * merge (see endpoint bodies).
+ *
+ * Read `payload.model_fields_set` to distinguish "key omitted" from
+ * "key explicit-null". The defaulted `None` on the field is the
+ * omitted shape; only act on the value when the key name is in
+ * `model_fields_set`.
+ */
+export type SlsStyleGuideAttributesPatchRequest = {
+  /**
+   * Default Style Guide Target Id
+   *
+   * Target to pin as the subject's default style guide. Pass `null` to clear. Omit the key to leave the existing value untouched.
+   */
+  default_style_guide_target_id?: string | null;
+};
+
+/**
+ * SlsStyleGuideGrantResponseItem
+ *
+ * One row in the GET response.
+ *
+ * `target_id` is the SLS-owned id; `is_default` is True when the
+ * subject's `attributes.default_style_guide_target_id` matches.
+ */
+export type SlsStyleGuideGrantResponseItem = {
+  /**
+   * Target Id
+   */
+  target_id: string;
+  /**
+   * Is Default
+   */
+  is_default: boolean;
+};
+
+/**
+ * SlsStyleGuideGrantsRequest
+ *
+ * Body for the POST grant endpoints.
+ *
+ * Per-target writes are idempotent so retries are safe. `default_target_id`,
+ * if provided, must appear in `target_ids` OR already be held by the
+ * subject; the endpoint will fail validation otherwise. To pin only a
+ * default without granting new visibilities, pass `target_ids=[]`.
+ */
+export type SlsStyleGuideGrantsRequest = {
+  /**
+   * Target Ids
+   *
+   * SLS target_ids to grant visibility on. May be empty.
+   */
+  target_ids?: Array<string>;
+  /**
+   * Default Target Id
+   *
+   * If set, pin this target as the subject's default in the same transaction as the grants. Must be visible to the subject (either being granted in this call or already granted).
+   */
+  default_target_id?: string | null;
+};
+
+/**
+ * SlsStyleGuideGrantsResponse
+ */
+export type SlsStyleGuideGrantsResponse = {
+  /**
+   * Target Ids
+   */
+  target_ids: Array<SlsStyleGuideGrantResponseItem>;
+  /**
+   * Default Target Id
+   */
+  default_target_id?: string | null;
+};
 
 /**
  * SsoAttributeConfig
@@ -3769,6 +4230,12 @@ export type SsoConnection = {
    * True if the connection has at least one claim-mapping attribute configured.
    */
   mapping_configured: boolean;
+  /**
+   * Domain Aliases Sync Failed At
+   *
+   * Set when the last Auth0 domain-alias sync for this connection failed. Null means either no sync has been attempted or the last sync succeeded.
+   */
+  domain_aliases_sync_failed_at?: string | null;
 };
 
 /**
@@ -4562,22 +5029,6 @@ export enum TermType {
   PREFERRED = "preferred",
   PROHIBITED = "prohibited",
 }
-
-/**
- * TerminologyDomainInfo
- *
- * Basic domain info for display in style guide responses.
- */
-export type TerminologyDomainInfo = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Name
-   */
-  name: string;
-};
 
 /**
  * TerminologyScore
@@ -5493,6 +5944,14 @@ export type HeliosOneDatabaseModelsOrganizationOrganization = {
    * Id
    */
   id?: string;
+  /**
+   * Attributes
+   *
+   * Loose, additive per-org settings (v1 key: default_style_guide_target_id). Validated app-side per key. Whole-bag replace; merge semantics live at the CRUD layer.
+   */
+  attributes?: {
+    [key: string]: unknown;
+  };
 };
 
 /**
@@ -5811,13 +6270,35 @@ export type PageAccessPolicyReadWritable = {
 };
 
 /**
- * Page[AdminStyleGuideResponse]
+ * Page[GroupMemberResponse]
  */
-export type PageAdminStyleGuideResponseWritable = {
+export type PageGroupMemberResponseWritable = {
   /**
    * Items
    */
-  items: Array<AdminStyleGuideResponse>;
+  items: Array<GroupMemberResponse>;
+  /**
+   * Total Items
+   */
+  total_items: number;
+  /**
+   * Page
+   */
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+};
+
+/**
+ * Page[GroupResponse]
+ */
+export type PageGroupResponseWritable = {
+  /**
+   * Items
+   */
+  items: Array<GroupResponse>;
   /**
    * Total Items
    */
@@ -6271,14 +6752,14 @@ export type TerminologyUpdateDomainResponses = {
 export type TerminologyUpdateDomainResponse =
   TerminologyUpdateDomainResponses[keyof TerminologyUpdateDomainResponses];
 
-export type InternalSubmitFeedbackData = {
-  body: FeedbackRequest;
+export type AccountGetAccountData = {
+  body?: never;
   path?: never;
   query?: never;
-  url: "/internal/demo-feedback";
+  url: "/account";
 };
 
-export type InternalSubmitFeedbackErrors = {
+export type AccountGetAccountErrors = {
   /**
    * Unprocessable Entity
    */
@@ -6289,18 +6770,50 @@ export type InternalSubmitFeedbackErrors = {
   500: ErrorResponse;
 };
 
-export type InternalSubmitFeedbackError =
-  InternalSubmitFeedbackErrors[keyof InternalSubmitFeedbackErrors];
+export type AccountGetAccountError = AccountGetAccountErrors[keyof AccountGetAccountErrors];
 
-export type InternalSubmitFeedbackResponses = {
+export type AccountGetAccountResponses = {
   /**
    * Successful Response
    */
-  204: void;
+  200: AccountResponse;
 };
 
-export type InternalSubmitFeedbackResponse =
-  InternalSubmitFeedbackResponses[keyof InternalSubmitFeedbackResponses];
+export type AccountGetAccountResponse =
+  AccountGetAccountResponses[keyof AccountGetAccountResponses];
+
+export type AuthenticationGetUserOrganizationsData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/auth/organizations";
+};
+
+export type AuthenticationGetUserOrganizationsErrors = {
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type AuthenticationGetUserOrganizationsError =
+  AuthenticationGetUserOrganizationsErrors[keyof AuthenticationGetUserOrganizationsErrors];
+
+export type AuthenticationGetUserOrganizationsResponses = {
+  /**
+   * Response Authentication-Get User Organizations
+   *
+   * Successful Response
+   */
+  200: Array<HeliosOneApiModulesAuthMainOrganization>;
+};
+
+export type AuthenticationGetUserOrganizationsResponse =
+  AuthenticationGetUserOrganizationsResponses[keyof AuthenticationGetUserOrganizationsResponses];
 
 export type InternalListTargetsData = {
   body?: never;

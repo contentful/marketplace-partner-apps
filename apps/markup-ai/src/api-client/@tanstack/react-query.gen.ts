@@ -4,7 +4,9 @@ import { queryOptions, type UseMutationOptions } from "@tanstack/react-query";
 
 import { client } from "../client.gen";
 import {
+  accountGetAccount,
   accountGetAccountConfig,
+  authenticationGetUserOrganizations,
   cortexActivityEventsTrackActivityEvent,
   cortexAgentsGetAgent,
   cortexAgentsListCategories,
@@ -15,7 +17,6 @@ import {
   cortexWorkflowsStreamWorkflowEvents,
   getAdminConstants,
   internalListTargets,
-  internalSubmitFeedback,
   type Options,
   terminologyCreateDomain,
   terminologyDeleteDomain,
@@ -27,6 +28,12 @@ import type {
   AccountGetAccountConfigData,
   AccountGetAccountConfigError,
   AccountGetAccountConfigResponse,
+  AccountGetAccountData,
+  AccountGetAccountError,
+  AccountGetAccountResponse,
+  AuthenticationGetUserOrganizationsData,
+  AuthenticationGetUserOrganizationsError,
+  AuthenticationGetUserOrganizationsResponse,
   CortexActivityEventsTrackActivityEventData,
   CortexActivityEventsTrackActivityEventError,
   CortexActivityEventsTrackActivityEventResponse,
@@ -56,9 +63,6 @@ import type {
   InternalListTargetsData,
   InternalListTargetsError,
   InternalListTargetsResponse,
-  InternalSubmitFeedbackData,
-  InternalSubmitFeedbackError,
-  InternalSubmitFeedbackResponse,
   TerminologyCreateDomainData,
   TerminologyCreateDomainError,
   TerminologyCreateDomainResponse,
@@ -271,32 +275,62 @@ export const terminologyUpdateDomainMutation = (
   return mutationOptions;
 };
 
+export const accountGetAccountQueryKey = (options?: Options<AccountGetAccountData>) =>
+  createQueryKey("accountGetAccount", options);
+
 /**
- * Submit Feedback
+ * Get Account
+ *
+ * Get account information for the authenticated user's organization
  */
-export const internalSubmitFeedbackMutation = (
-  options?: Partial<Options<InternalSubmitFeedbackData>>,
-): UseMutationOptions<
-  InternalSubmitFeedbackResponse,
-  InternalSubmitFeedbackError,
-  Options<InternalSubmitFeedbackData>
-> => {
-  const mutationOptions: UseMutationOptions<
-    InternalSubmitFeedbackResponse,
-    InternalSubmitFeedbackError,
-    Options<InternalSubmitFeedbackData>
-  > = {
-    mutationFn: async (fnOptions) => {
-      const { data } = await internalSubmitFeedback({
+export const accountGetAccountOptions = (options?: Options<AccountGetAccountData>) =>
+  queryOptions<
+    AccountGetAccountResponse,
+    AccountGetAccountError,
+    AccountGetAccountResponse,
+    ReturnType<typeof accountGetAccountQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await accountGetAccount({
         ...options,
-        ...fnOptions,
+        ...queryKey[0],
+        signal,
         throwOnError: true,
       });
       return data;
     },
-  };
-  return mutationOptions;
-};
+    queryKey: accountGetAccountQueryKey(options),
+  });
+
+export const authenticationGetUserOrganizationsQueryKey = (
+  options?: Options<AuthenticationGetUserOrganizationsData>,
+) => createQueryKey("authenticationGetUserOrganizations", options);
+
+/**
+ * Get User Organizations
+ *
+ * Get organizations that the authenticated user belongs to.
+ */
+export const authenticationGetUserOrganizationsOptions = (
+  options?: Options<AuthenticationGetUserOrganizationsData>,
+) =>
+  queryOptions<
+    AuthenticationGetUserOrganizationsResponse,
+    AuthenticationGetUserOrganizationsError,
+    AuthenticationGetUserOrganizationsResponse,
+    ReturnType<typeof authenticationGetUserOrganizationsQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await authenticationGetUserOrganizations({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: authenticationGetUserOrganizationsQueryKey(options),
+  });
 
 export const internalListTargetsQueryKey = (options?: Options<InternalListTargetsData>) =>
   createQueryKey("internalListTargets", options);

@@ -18,7 +18,6 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useAgenticScan } from "../../hooks/useAgenticScan";
 import { useAgentSelection } from "../../hooks/useAgentSelection";
 import { useAgentConfig } from "../../hooks/useAgentConfig";
-import { useFeedback } from "../../hooks/useFeedback";
 import { useStyleTargets } from "../../hooks/useStyleTargets";
 import { useEffectiveStyleGuide } from "../../hooks/useEffectiveStyleGuide";
 import { useAgentAvailability } from "../../hooks/useAgentAvailability";
@@ -195,7 +194,7 @@ const FieldCheckDialog: React.FC = () => {
   const [workflowIdCopied, setWorkflowIdCopied] = useState(false);
   const [sidebarView, setSidebarView] = useState<"main" | "settings" | "about">("main");
   const [selectedAgentFilterIds, setSelectedAgentFilterIds] = useState<Set<string> | null>(null);
-  const [viewMode, setViewMode] = useState<SidebarViewMode>("list");
+  const [viewMode, setViewMode] = useState<SidebarViewMode>("grouped");
   const [selectedSeverities, setSelectedSeverities] = useState<Set<CortexSeverity>>(
     () => new Set(),
   );
@@ -268,7 +267,6 @@ const FieldCheckDialog: React.FC = () => {
   });
 
   const { issues, startScan, scanInFlight, workflowId, error: scanError } = useAgenticScan(apiKey);
-  const { submitFeedback, isLoading: isFeedbackLoading } = useFeedback({ apiKey: apiKey ?? "" });
 
   /**
    * `target_id` lives in per-field localStorage, but the agent settings panel
@@ -525,34 +523,6 @@ const FieldCheckDialog: React.FC = () => {
     setSelectedIssueIndex(index >= 0 ? index : null);
   }, []);
 
-  const handleSubmitFeedback = useCallback(
-    async (
-      payload: {
-        helpful: boolean;
-        feedbackText: string;
-        original: string;
-        suggestion: string;
-        category: string | null;
-      },
-      issueIndex: number,
-    ) => {
-      if (!workflowId) {
-        console.error("No workflow ID available for feedback");
-        return;
-      }
-      await submitFeedback({
-        workflowId,
-        requestId: `issue-${String(issueIndex)}`,
-        helpful: payload.helpful,
-        feedback: payload.feedbackText || undefined,
-        original: payload.original || undefined,
-        suggestion: payload.suggestion || undefined,
-        category: payload.category || undefined,
-      });
-    },
-    [workflowId, submitFeedback],
-  );
-
   const visibleIssuesWithIndices = useMemo(() => {
     return issues
       .map((s, index) => ({ issue: s, originalIndex: index }))
@@ -793,8 +763,6 @@ const FieldCheckDialog: React.FC = () => {
             onViewModeChange={setViewMode}
             styleAgentApplyAllPeerCountByIssueId={styleAgentApplyAllPeerCountByIssueId}
             onSignOut={handleSignOut}
-            onSubmitFeedback={handleSubmitFeedback}
-            isFeedbackLoading={isFeedbackLoading}
             totalIssueCount={issues.length}
             appliedCount={appliedCount}
             dismissedCount={dismissedIndices.size - appliedCount}

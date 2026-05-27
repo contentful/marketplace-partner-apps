@@ -48,6 +48,12 @@ vi.mock("../hooks/useAppConfig", () => ({
     mockUseAppConfig() as ReturnType<typeof import("../hooks/useAppConfig").useAppConfig>,
 }));
 
+/** Build an unsigned JWT carrying the given claims (e.g. org_id / org_name). */
+function makeJwt(payload: Record<string, unknown>): string {
+  const b64url = (obj: unknown) => Buffer.from(JSON.stringify(obj)).toString("base64url");
+  return `${b64url({ alg: "none", typ: "JWT" })}.${b64url(payload)}.`;
+}
+
 // Test component that uses the auth context
 const TestComponent = () => {
   const auth = useAuth();
@@ -542,6 +548,73 @@ describe("AuthContext", () => {
     expect(screen.getByTestId("token")).toHaveTextContent("no-token");
     expect(userSettings.clearAllUserSettings).toHaveBeenCalled();
     expect(mockAuthMethods.logout).toHaveBeenCalledWith({ openUrl: false });
+  });
+
+  it("switchOrganization re-auths with the org param and updates the current org", async () => {
+    mockAuthMethods.isAuthenticated.mockResolvedValue(false);
+
+    let authContext!: AuthContextType;
+    const TestComponentWithAuth = () => {
+      authContext = useAuth();
+      return <div data-testid="org-name">{authContext.currentOrgName ?? "none"}</div>;
+    };
+
+    render(
+      <AuthProvider>
+        <TestComponentWithAuth />
+      </AuthProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("org-name")).toHaveTextContent("none");
+    });
+
+    const orgToken = makeJwt({ org_id: "org_acme", org_name: "acme" });
+    mockAuthMethods.loginWithPopup.mockResolvedValue(undefined);
+    mockAuthMethods.getTokenSilently.mockResolvedValue(orgToken);
+    mockAuthMethods.getUser.mockResolvedValue({ email: "test@example.com" });
+
+    await act(async () => {
+      await authContext.switchOrganization("org_acme");
+    });
+
+    expect(mockAuthMethods.loginWithPopup).toHaveBeenCalledWith({
+      authorizationParams: { organization: "org_acme" },
+    });
+    expect(userSettings.setApiKey).toHaveBeenCalledWith(orgToken);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("org-name")).toHaveTextContent("acme");
+    });
+  });
+
+  it("switchOrganization surfaces an error and clears the switching flag on failure", async () => {
+    mockAuthMethods.isAuthenticated.mockResolvedValue(false);
+
+    let authContext!: AuthContextType;
+    const TestComponentWithAuth = () => {
+      authContext = useAuth();
+      return <div data-testid="switching">{authContext.isSwitchingOrg.toString()}</div>;
+    };
+
+    render(
+      <AuthProvider>
+        <TestComponentWithAuth />
+      </AuthProvider>,
+    );
+
+    await waitFor(() => {
+      expect(authContext).toBeDefined();
+    });
+
+    mockAuthMethods.loginWithPopup.mockRejectedValue(new Error("Popup closed"));
+
+    await expect(authContext.switchOrganization("org_acme")).rejects.toThrow("Popup closed");
+
+    await waitFor(() => {
+      expect(screen.getByTestId("switching")).toHaveTextContent("false");
+    });
+    expect(authContext.error).toBe("Popup closed");
   });
 
   it("should handle non-Error exceptions during initialization", async () => {

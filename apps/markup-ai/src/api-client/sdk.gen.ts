@@ -6,6 +6,12 @@ import type {
   AccountGetAccountConfigData,
   AccountGetAccountConfigErrors,
   AccountGetAccountConfigResponses,
+  AccountGetAccountData,
+  AccountGetAccountErrors,
+  AccountGetAccountResponses,
+  AuthenticationGetUserOrganizationsData,
+  AuthenticationGetUserOrganizationsErrors,
+  AuthenticationGetUserOrganizationsResponses,
   CortexActivityEventsTrackActivityEventData,
   CortexActivityEventsTrackActivityEventErrors,
   CortexActivityEventsTrackActivityEventResponses,
@@ -36,9 +42,6 @@ import type {
   InternalListTargetsData,
   InternalListTargetsErrors,
   InternalListTargetsResponses,
-  InternalSubmitFeedbackData,
-  InternalSubmitFeedbackErrors,
-  InternalSubmitFeedbackResponses,
   TerminologyCreateDomainData,
   TerminologyCreateDomainErrors,
   TerminologyCreateDomainResponses,
@@ -178,23 +181,39 @@ export const terminologyUpdateDomain = <ThrowOnError extends boolean = false>(
   });
 
 /**
- * Submit Feedback
+ * Get Account
+ *
+ * Get account information for the authenticated user's organization
  */
-export const internalSubmitFeedback = <ThrowOnError extends boolean = false>(
-  options: Options<InternalSubmitFeedbackData, ThrowOnError>,
+export const accountGetAccount = <ThrowOnError extends boolean = false>(
+  options?: Options<AccountGetAccountData, ThrowOnError>,
 ) =>
-  (options.client ?? client).post<
-    InternalSubmitFeedbackResponses,
-    InternalSubmitFeedbackErrors,
+  (options?.client ?? client).get<
+    AccountGetAccountResponses,
+    AccountGetAccountErrors,
     ThrowOnError
   >({
     security: [{ scheme: "bearer", type: "http" }],
-    url: "/internal/demo-feedback",
+    url: "/account",
     ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
+  });
+
+/**
+ * Get User Organizations
+ *
+ * Get organizations that the authenticated user belongs to.
+ */
+export const authenticationGetUserOrganizations = <ThrowOnError extends boolean = false>(
+  options?: Options<AuthenticationGetUserOrganizationsData, ThrowOnError>,
+) =>
+  (options?.client ?? client).get<
+    AuthenticationGetUserOrganizationsResponses,
+    AuthenticationGetUserOrganizationsErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/auth/organizations",
+    ...options,
   });
 
 /**

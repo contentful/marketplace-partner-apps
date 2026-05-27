@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
-const STORAGE_KEY = "markupai.agentConfig";
+export const AGENT_CONFIG_STORAGE_KEY = "markupai.agentConfig";
+const STORAGE_KEY = AGENT_CONFIG_STORAGE_KEY;
 
 export type AgentConfigMap = Record<string, Record<string, unknown>>;
 
