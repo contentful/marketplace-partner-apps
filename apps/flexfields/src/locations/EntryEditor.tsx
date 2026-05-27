@@ -91,7 +91,7 @@ const EntryEditor = () => {
       return;
     }
 
-    const fieldChangeListeners: Function[] = [];
+    const fieldChangeListeners: Array<() => void> = [];
     const contentType = sdk.contentType;
 
     // Only attach listeners to reference fields (Link or Array of Links)
@@ -118,9 +118,10 @@ const EntryEditor = () => {
     return () => {
       fieldChangeListeners.forEach((removeListener) => removeListener());
     };
-  }, [entryId, sdk]);
+    // sdk is intentionally excluded because useSDK returns the stable App SDK instance for this location.
+  }, [entryId]);
 
-  let hasLocailizedFields = false;
+  let hasLocalizedFields = false;
   return (
 
     <Form
@@ -198,7 +199,7 @@ const EntryEditor = () => {
           field.localized ||
           localeSetings.focused === sdk.locales.default
         ) {
-          hasLocailizedFields = true;
+          hasLocalizedFields = true;
           return (
             <DefaultField
               key={`${field.id}-${localeSetings.focused}`}
@@ -212,7 +213,7 @@ const EntryEditor = () => {
         }
         return null;
       })}
-      {!hasLocailizedFields && localeSetings.focused && (
+      {!hasLocalizedFields && localeSetings.focused && (
         <NoLocalizedFields
           localeName={getLocaleName(sdk, localeSetings.focused)}
         />

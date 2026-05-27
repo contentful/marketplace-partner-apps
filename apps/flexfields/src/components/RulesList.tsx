@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import type { AppExtensionSDK } from "@contentful/app-sdk";
 import { Flex, SectionHeading, Text } from "@contentful/f36-components";
 import { css } from "@emotion/css";
-import { useCMA } from "@contentful/react-apps-toolkit";
+import { useCMA, useSDK } from "@contentful/react-apps-toolkit";
 import { KeyValueMap } from "contentful-management";
 
 import {
@@ -56,14 +57,30 @@ const RulesList = (props: any) => {
   };
 
   const cma = useCMA();
+  const sdk = useSDK<AppExtensionSDK>();
 
   useEffect(() => {
-    cma.contentType
-      .getMany({})
-      .then((response) => {
+    let isMounted = true;
+
+    const fetchContentTypes = async () => {
+      try {
+        const response = await cma.contentType.getMany({});
+        if (!isMounted) {
+          return;
+        }
+
         setAllContentTypes(response.items);
-      });
-  }, [cma]);
+      } catch (error) {
+        sdk.notifier.error("Unable to load content types for rule summaries.");
+      }
+    };
+
+    fetchContentTypes();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [cma, sdk.notifier]);
 
   // Fetch entry names for all linkedEntryIds in rules
   useEffect(() => {
@@ -152,10 +169,10 @@ const RulesList = (props: any) => {
             const entry = await cma.entry.get({ entryId: id });
             const fields = entry.fields || {};
             
-            // Get the content type to find the displayField
+            // Use cached content types to find the display field without an extra CMA call per entry.
             const entryContentTypeId = entry.sys.contentType.sys.id;
-            const entryContentType = await cma.contentType.get({ contentTypeId: entryContentTypeId });
-            const displayFieldId = entryContentType.displayField;
+            const entryContentType = allContentTypes.find((contentType) => contentType.sys.id === entryContentTypeId);
+            const displayFieldId = entryContentType?.displayField;
             
             let name = undefined;
             if (displayFieldId && fields[displayFieldId]) {
@@ -181,7 +198,7 @@ const RulesList = (props: any) => {
     if (props.rules?.length > 0) {
       fetchEntryNames();
     }
-  }, [props.rules, cma]);
+  }, [props.rules, cma, allContentTypes]);
 
   useEffect(() => {
     // Add event listener for window resize
