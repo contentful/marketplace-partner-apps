@@ -26,14 +26,12 @@ const initialState = (sdk) => ({
   contentTypes: [],
   meta: sdk.entry.fields.meta?.getValue() || {},
   featureFlag: sdk.entry.fields.featureFlag.getValue() || {},
-  entries: {},
 });
 
 const actionTypes = {
   SET_INITIAL_DATA: 'SET_INITIAL_DATA',
   SET_LOADING: 'SET_LOADING',
   SET_FEATURE_FLAG: 'SET_FEATURE_FLAG',
-  SET_ENTRIES: 'SET_ENTRIES',
   SET_ERROR: 'SET_ERROR',
   SET_META: 'SET_META',
 };
@@ -46,15 +44,12 @@ const reducer = (state, action) => {
         ...state,
         featureFlag: action.payload.featureFlag,
         contentTypes: action.payload.contentTypes,
-        entries: action.payload.entries,
         error: action.payload.error,
       };
     case actionTypes.SET_LOADING:
       return { ...state, loading: action.payload };
     case actionTypes.SET_FEATURE_FLAG:
       return { ...state, featureFlag: action.payload };
-    case actionTypes.SET_ENTRIES:
-      return { ...state, entries: action.payload };
     case actionTypes.SET_ERROR:
       return { ...state, error: action.payload };
     case actionTypes.SET_META:
@@ -79,11 +74,7 @@ const EntryEditor = (props) => {
   const vwoService = useMemo(() => new VwoAppActionService(props.sdk), [props.sdk]);
   
   const fetchInitialData = useCallback(async () => {
-    const space  = props.sdk.space;
-    const [contentTypes, entries] = await Promise.all([
-      space.getContentTypes({ order: 'name', limit: 1000}),
-      space.getEntries({ skip: 0, limit: 1000})
-    ]);
+    const contentTypes = await props.sdk.space.getContentTypes({ order: 'name', limit: 1000 });
     const featureFlag = props.sdk.entry.fields.featureFlag.getValue();
     let error = '';
     if(featureFlag?.id){
@@ -99,7 +90,6 @@ const EntryEditor = (props) => {
     return {
       featureFlag: featureFlag,
       contentTypes: contentTypes.items,
-      entries: entries.items,
       error: error
     }
   }, [props.sdk.entry.fields.featureFlag, props.sdk.notifier, vwoService, props.sdk.space]);
@@ -172,23 +162,7 @@ const EntryEditor = (props) => {
     });
   }
 
-  const updateContentfulEntries = useCallback(async (updatedEntry) => {
-    if(updatedEntry){
-      await props.sdk.space.getEntries({ skip: 0, limit: 1000}).then(resp => {
-          let entries = resp.items.map(entry => {
-            if(updatedEntry.entity.sys.id === entry.sys.id){
-              return updatedEntry.entity;
-            }
-            return entry;
-          });
-          dispatch({ type: actionTypes.SET_ENTRIES, payload: entries });
-      });
-    } else {
-      props.sdk.space.getEntries({ skip: 0, limit: 1000}).then(resp => dispatch({ type: actionTypes.SET_ENTRIES, payload: resp.items }));
-    }
-  }, [props.sdk.space]);
-
-  const updateVwoVariationContent = async (variation, contentId, updateEntries) => {
+  const updateVwoVariationContent = async (variation, contentId) => {
     // Default variation cannot be edited directly. Update variable instead and default variations will be updated
     if(variation.id === 1){
       let featureFlag = state.featureFlag;      
@@ -203,9 +177,6 @@ const EntryEditor = (props) => {
         updatedFeatureFlag.variations.sort((a,b) => b.id-a.id);
         dispatch({ type: actionTypes.SET_FEATURE_FLAG, payload: updatedFeatureFlag });
         props.sdk.entry.fields.featureFlag.setValue(updatedFeatureFlag);
-        if(updateEntries){
-          updateContentfulEntries();
-        }
         props.sdk.notifier.success('VWO Variations updated successfully');
       })
       .catch(err => {
@@ -227,9 +198,6 @@ const EntryEditor = (props) => {
         featureFlag.variations = variations;
         dispatch({ type: actionTypes.SET_FEATURE_FLAG, payload: featureFlag });
         props.sdk.entry.fields.featureFlag.setValue(featureFlag);
-        if(updateEntries){
-          updateContentfulEntries();
-        }
       })
       .catch(err => {
         props.sdk.notifier.error(err);
@@ -271,7 +239,7 @@ const EntryEditor = (props) => {
       [vwoVariation.id]: data.sys.id
     });
 
-    updateVwoVariationContent(vwoVariation, data.sys.id, false);
+    updateVwoVariationContent(vwoVariation, data.sys.id);
   }
 
   const onCreateVariationEntry = async(vwoVariation, contentType) => {
@@ -280,8 +248,6 @@ const EntryEditor = (props) => {
     }).then(async (updatedEntry) => {
       return updatedEntry;
    });
-
-   await updateContentfulEntries(data);
 
     if(!data){
       return;
@@ -294,7 +260,7 @@ const EntryEditor = (props) => {
       [vwoVariation.id]: data.entity.sys.id
     });
 
-    updateVwoVariationContent(vwoVariation, data.entity.sys.id, true);
+    updateVwoVariationContent(vwoVariation, data.entity.sys.id);
   };
 
   useEffect( () => {
@@ -342,9 +308,7 @@ const EntryEditor = (props) => {
             contentTypes={state.contentTypes}
             onCreateVariationEntry={onCreateVariationEntry}
             linkExistingEntry={linkExistingEntry}
-            updateContentfulEntries={updateContentfulEntries}
-            updateVwoVariationContent={updateVwoVariationContent}
-            entries = {state.entries}/>
+            updateVwoVariationContent={updateVwoVariationContent}/>
         }
         <Modal onClose={() => dispatch({ type: actionTypes.SET_ERROR, payload: '' })} isShown={!!state.error && !state.loading}>
           {() => (
