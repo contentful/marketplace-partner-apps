@@ -41,7 +41,9 @@ function CreateContent(props) {
   const editContent = (vwoVariation) => {
     setSelectContentType(false);
     props.sdk.navigator.openEntry(vwoVariation.variables[0].value, { slideIn: { waitForClose: true } }).then((updatedEntry) => {
-      props.updateContentfulEntries(updatedEntry);
+      if (updatedEntry && props.onRefreshVariationEntries) {
+        props.onRefreshVariationEntries();
+      }
     });
   };
 
@@ -59,7 +61,7 @@ function CreateContent(props) {
       if (vwoVariation) {
         delete meta[vwoVariation.id];
         props.sdk.entry.fields.meta.setValue(meta);
-        props.updateVwoVariationContent(vwoVariation, '', false);
+        props.updateVwoVariationContent(vwoVariation, '');
       }
     },
     [props]
