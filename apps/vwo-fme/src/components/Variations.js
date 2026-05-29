@@ -78,7 +78,7 @@ function Variations(props) {
           sdk={props.sdk}
           variation={defaultVariation}
           contentTypes={props.contentTypes}
-          updateContentfulEntries={props.updateContentfulEntries}
+          onRefreshVariationEntries={fetchMappedVariations}
           linkExistingEntry={props.linkExistingEntry}
           onCreateVariationEntry={props.onCreateVariationEntry}
           updateVwoVariationContent={props.updateVwoVariationContent}
@@ -117,7 +117,7 @@ function Variations(props) {
                         variation={variation}
                         linkExistingEntry={props.linkExistingEntry}
                         contentTypes={props.contentTypes}
-                        updateContentfulEntries={props.updateContentfulEntries}
+                        onRefreshVariationEntries={fetchMappedVariations}
                         updateVwoVariationName={props.updateVwoVariationName}
                         onCreateVariationEntry={props.onCreateVariationEntry}
                         updateVwoVariationContent={props.updateVwoVariationContent}

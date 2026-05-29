@@ -92,7 +92,7 @@ function VariationItem(props) {
           <CreateContent
             sdk={props.sdk}
             variation={props.variation}
-            updateContentfulEntries={props.updateContentfulEntries}
+            onRefreshVariationEntries={props.onRefreshVariationEntries}
             contentTypes={props.contentTypes}
             linkExistingEntry={props.linkExistingEntry}
             updateVwoVariationContent={props.updateVwoVariationContent}
