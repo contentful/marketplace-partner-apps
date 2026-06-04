@@ -1,6 +1,6 @@
-# BWX Contentful App - Frontend
+# wxrks Contentful App
 
-This repository contains the frontend of the application designed to run within the Contentful platform. The primary objective of this application is to facilitate project creation and integration with BWX translations, using the resources available in Contentful.
+This repository contains the frontend of the application designed to run within the Contentful platform. The primary objective of this application is to facilitate project creation and integration with wxrks translations, using the resources available in Contentful.
 
 ## Available Scripts
 
@@ -32,6 +32,24 @@ It correctly bundles React in production mode and optimizes the build for the be
 
 The build is minified and the filenames include the hashes.
 Your app is ready to be deployed!
+
+#### `npm run app-definition:dry-run`
+
+Prints the App Definition payload from `contentful-app-definition.json` without calling Contentful.
+
+#### `npm run app-definition:upsert`
+
+Creates or updates the Contentful App Definition from `contentful-app-definition.json`.
+
+Required environment variables:
+
+- `CONTENTFUL_ACCESS_TOKEN`
+- `CONTENTFUL_ORG_ID`
+- `CONTENTFUL_APP_HOST` to replace the `<host>` placeholder in `contentful-app-definition.json`
+
+Optional environment variable:
+
+- `CONTENTFUL_APP_DEF_ID` or `CONTENTFUL_APP_DEFINITION_ID` to update an existing definition. Without it, the script creates a new definition.
 
 ## Libraries to use
 
