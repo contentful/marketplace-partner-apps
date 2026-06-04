@@ -49,6 +49,3 @@ export interface AppInstallationParameters {
   workflows: string;
 }
 
-export interface EditorInterfaceAssignment {
-  [key: string]: { [key: string]: { position: number } };
-}

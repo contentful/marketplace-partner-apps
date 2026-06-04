@@ -6,9 +6,11 @@ import { parseWorkflows } from '../workflows';
 
 const BASE_URL = process.env.REACT_APP_LAMBDA_API ? `/${process.env.REACT_APP_LAMBDA_API}/api/bwx` : '/api/bwx';
 
-const headers = (sdk: ConfigAppSDK) => ({
-  "x-contentful-bwx-token": sessionStorage.getItem(`bwxToken-${sdk.ids.space}`)
-});
+const headers = (sdk: ConfigAppSDK): Record<string, string> => {
+  const token = sessionStorage.getItem(`bwxToken-${sdk.ids.space}`);
+
+  return token ? { "x-contentful-bwx-token": token } : {};
+};
 
 async function checkAuth (sdk: ConfigAppSDK, cma: CMAClient) {
   const token = sessionStorage.getItem(`bwxToken-${sdk.ids.space}`);

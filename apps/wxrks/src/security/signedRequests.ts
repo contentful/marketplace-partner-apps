@@ -1,6 +1,8 @@
 import { CMAClient, ConfigAppSDK } from '@contentful/app-sdk';
 import { CreateAppSignedRequestProps } from 'contentful-management/dist/typings/entities/app-signed-request';
 
+type SignedRequestHeaders = NonNullable<CreateAppSignedRequestProps['headers']>;
+
 const getSignedPath = (url: string): string => {
   const parsedUrl = new URL(url, window.location.origin);
   const stage = process.env.REACT_APP_LAMBDA_API;
@@ -16,19 +18,20 @@ async function fetchWithSignedRequest(
   url: string,
   sdk: ConfigAppSDK,
   cma: CMAClient,
-  headers: any = {},
+  headers: SignedRequestHeaders = {},
   method: CreateAppSignedRequestProps['method'] = 'GET',
-  body?: any | undefined
+  body?: unknown
 ): Promise<Response> {
-  
+  const requestBody = body === undefined ? undefined : JSON.stringify(body);
+  const requestHeaders: SignedRequestHeaders = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json'
+  };
   const req = {
     url: url,
     method: method,
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json'
-    },
-    body: body ? JSON.stringify(body) : undefined,
+    headers: requestHeaders,
+    body: requestBody,
   };
 
   // add request verification signing secret to request headers

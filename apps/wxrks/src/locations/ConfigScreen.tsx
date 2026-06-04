@@ -20,7 +20,7 @@ import { Image } from '@contentful/f36-image';
 import BwxConfigInput from '../components/BwxConfigInput';
 import BwxMultiselectWorkflows from '../components/BwxMultiselectWorkflows';
 
-import { AppInstallationParameters, EditorInterfaceAssignment, Workflow } from '../interfaces';
+import { AppInstallationParameters, Workflow } from '../interfaces';
 
 import bwxApi from '../api/api';
 import { parseWorkflows, serializeWorkflows } from '../workflows';
@@ -96,11 +96,6 @@ const ConfigScreen = () => {
   };
 
   const onConfigure = useCallback(async () => {
-    const [currentState, contentTypeResult] = await Promise.all([
-      sdk.app.getCurrentState(),
-      cma.contentType.getMany({ limit: 1000 }),
-    ]);
-
     const formIsValid =
       isConnected &&
       !!installationParameters.apiKey &&
@@ -116,22 +111,10 @@ const ConfigScreen = () => {
       throw new Error('Invalid app configuration');
     }
 
-    const editorInterface: EditorInterfaceAssignment = (contentTypeResult.items ?? []).reduce(
-      (acc, contentType) => ({
-        ...acc,
-        [contentType.sys.id]: { sidebar: { position: 1 } },
-      }),
-      {}
-    );
-
     return {
       parameters: installationParameters,
-      targetState: {
-        ...currentState,
-        EditorInterface: editorInterface,
-      },
     };
-  }, [cma.contentType, installationParameters, isConnected, sdk, workflows.length]);
+  }, [installationParameters, isConnected, workflows.length]);
 
   useEffect(() => {
     sdk.app.onConfigure(() => onConfigure());
