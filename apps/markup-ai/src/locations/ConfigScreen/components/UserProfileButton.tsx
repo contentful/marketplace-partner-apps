@@ -5,10 +5,18 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { Button, Spinner } from "@contentful/f36-components";
-import { UserIcon } from "@contentful/f36-icons";
+import {
+  ArrowSquareOutIcon,
+  FileCodeIcon,
+  GlobeIcon,
+  InfoIcon,
+  SignOutIcon,
+  UserIcon,
+} from "@contentful/f36-icons";
 import styled from "@emotion/styled";
 import tokens from "@contentful/f36-tokens";
 import { useAuth } from "../../../contexts/AuthContext";
+import { MARKUP_CONSOLE_URL, MARKUP_DEVELOPER_PORTAL_URL } from "../../../utils/markupUrls";
 
 const ProfileWrapper = styled.div`
   position: relative;
@@ -92,6 +100,64 @@ const SignInText = styled.p`
   line-height: 1.4;
 `;
 
+const MenuList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${tokens.spacing2Xs};
+  margin: ${tokens.spacingXs} 0 ${tokens.spacing2Xs};
+`;
+
+const MenuItem = styled.a<{ as?: "a" | "button" }>`
+  display: flex;
+  align-items: center;
+  gap: ${tokens.spacingXs};
+  width: 100%;
+  padding: ${tokens.spacingXs} ${tokens.spacingS};
+  border: none;
+  border-radius: ${tokens.borderRadiusMedium};
+  background: transparent;
+  color: ${tokens.gray800};
+  font-size: ${tokens.fontSizeS};
+  font-weight: ${tokens.fontWeightMedium};
+  text-decoration: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    background: ${tokens.gray100};
+    text-decoration: none;
+    color: ${tokens.gray900};
+  }
+
+  svg {
+    color: ${tokens.gray600};
+    flex-shrink: 0;
+  }
+`;
+
+const MenuItemLabel = styled.span`
+  flex: 1;
+`;
+
+const MenuItemTrailingIcon = styled.span`
+  display: inline-flex;
+  align-items: center;
+  color: ${tokens.gray500};
+
+  svg {
+    width: 12px;
+    height: 12px;
+  }
+`;
+
+const MenuDivider = styled.div`
+  height: 1px;
+  background: ${tokens.gray200};
+  margin: ${tokens.spacing2Xs} 0;
+`;
+
 export interface UserProfileButtonProps {
   /** Optional callback when user signs out */
   onSignOut?: () => void;
@@ -99,12 +165,19 @@ export interface UserProfileButtonProps {
   hideSignInPrompt?: boolean;
   /** Position of the dropdown relative to the button. Defaults to "below" */
   dropdownPosition?: "above" | "below";
+  /**
+   * Optional callback when the user clicks "About". When provided, the parent
+   * is responsible for showing the AboutView. When omitted, the About item is
+   * hidden — pass `onOpenAbout` from any host that owns view state.
+   */
+  onOpenAbout?: () => void;
 }
 
 export const UserProfileButton: React.FC<UserProfileButtonProps> = ({
   onSignOut,
   hideSignInPrompt = false,
   dropdownPosition = "below",
+  onOpenAbout,
 }) => {
   const { isLoading, isAuthenticated, user, loginWithPopup, logout, error } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
@@ -172,7 +245,57 @@ export const UserProfileButton: React.FC<UserProfileButtonProps> = ({
             <>
               <StatusText>Signed in as</StatusText>
               <UserEmail>{(user?.email as string) || (user?.name as string) || "User"}</UserEmail>
-              <Button variant="negative" size="small" isFullWidth onClick={handleSignOut}>
+              <MenuList>
+                <MenuItem
+                  href={MARKUP_CONSOLE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => {
+                    setIsOpen(false);
+                  }}
+                >
+                  <GlobeIcon size="tiny" />
+                  <MenuItemLabel>Open Console</MenuItemLabel>
+                  <MenuItemTrailingIcon aria-hidden>
+                    <ArrowSquareOutIcon />
+                  </MenuItemTrailingIcon>
+                </MenuItem>
+                <MenuItem
+                  href={MARKUP_DEVELOPER_PORTAL_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => {
+                    setIsOpen(false);
+                  }}
+                >
+                  <FileCodeIcon size="tiny" />
+                  <MenuItemLabel>Developer Portal</MenuItemLabel>
+                  <MenuItemTrailingIcon aria-hidden>
+                    <ArrowSquareOutIcon />
+                  </MenuItemTrailingIcon>
+                </MenuItem>
+                {onOpenAbout && (
+                  <MenuItem
+                    as="button"
+                    type="button"
+                    onClick={() => {
+                      setIsOpen(false);
+                      onOpenAbout();
+                    }}
+                  >
+                    <InfoIcon size="tiny" />
+                    <MenuItemLabel>About</MenuItemLabel>
+                  </MenuItem>
+                )}
+              </MenuList>
+              <MenuDivider />
+              <Button
+                variant="negative"
+                size="small"
+                isFullWidth
+                onClick={handleSignOut}
+                startIcon={<SignOutIcon size="tiny" />}
+              >
                 Sign out
               </Button>
             </>

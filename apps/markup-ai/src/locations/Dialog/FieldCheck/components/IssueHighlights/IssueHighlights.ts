@@ -1,54 +1,180 @@
 /**
- * TipTap extension for issue highlighting and interaction
- * Simplified - no popup cards, bidirectional sync with sidebar
+ * TipTap extension for Cortex issue highlighting and interaction.
+ *
+ * Consumes CortexIssueWithId[] directly; offsets are translated from source-text
+ * (html/markdown/plain) coordinates to ProseMirror positions via the offset mapper.
  */
 
-import { Severity } from "../../../../../api-client/types.gen";
-import type { Suggestion } from "../../../../../api-client/types.gen";
 import { Extension } from "@tiptap/core";
-import { Plugin, PluginKey } from "@tiptap/pm/state";
+import { Plugin, PluginKey, type Transaction } from "@tiptap/pm/state";
+import type { Mapping } from "@tiptap/pm/transform";
 import { Decoration, DecorationSet } from "@tiptap/pm/view";
 import tokens from "@contentful/f36-tokens";
+import type { CortexIssueWithId, CortexSeverity } from "../../../../../agents/types";
 import { SEVERITY_COLORS } from "../../../../../utils/scoreColors";
 import { buildState } from "./decorations";
-import type { AppliedRange, PluginState, SuggestItem } from "./types";
+import type { AppliedRange, IssueSourceFormat, PluginState, SuggestItem } from "./types";
 import { SUGGESTIONS_SIDEBAR_SELECTOR } from "../../utils/constants";
 
-export type IssueHighlightsOptions = {
-  suggestions: Suggestion[];
-  /** Original HTML string for position mapping when rendering HTML content */
-  originalHtml?: string;
-  /** Called when an issue is clicked in the editor - passes the suggestion and its index */
-  onIssueClick?: (payload: { suggestion: Suggestion; index: number }) => void;
-};
+export interface IssueHighlightsOptions {
+  issues: CortexIssueWithId[];
+  sourceFormat: IssueSourceFormat;
+  /** The raw string submitted to Cortex; required when sourceFormat !== "plain". */
+  sourceText?: string;
+  onIssueClick?: (payload: { issue: CortexIssueWithId; index: number }) => void;
+}
 
 const pluginKey = new PluginKey("issue-highlights");
-const SEVERITY_RENDER_ORDER: Severity[] = [Severity.HIGH, Severity.MEDIUM, Severity.LOW];
+const SEVERITY_RENDER_ORDER: CortexSeverity[] = ["high", "medium", "low"];
 const UNDERLINE_THICKNESS_PX = 2;
 const UNDERLINE_LANE_GAP_PX = 1;
 const UNDERLINE_TEXT_GAP_PX = 2;
-const SEVERITY_UNDERLINE_GAPS: Record<Severity, number> = {
-  // Gap from text baseline to each severity lane.
-  [Severity.HIGH]: UNDERLINE_TEXT_GAP_PX,
-  [Severity.MEDIUM]: UNDERLINE_TEXT_GAP_PX + UNDERLINE_LANE_GAP_PX,
-  [Severity.LOW]: UNDERLINE_TEXT_GAP_PX + UNDERLINE_LANE_GAP_PX * 2,
+const SEVERITY_UNDERLINE_GAPS: Record<CortexSeverity, number> = {
+  high: UNDERLINE_TEXT_GAP_PX,
+  medium: UNDERLINE_TEXT_GAP_PX + UNDERLINE_LANE_GAP_PX,
+  low: UNDERLINE_TEXT_GAP_PX + UNDERLINE_LANE_GAP_PX * 2,
 };
-const UNDERLINE_PADDING_BOTTOM_PX =
-  SEVERITY_UNDERLINE_GAPS[Severity.LOW] + UNDERLINE_THICKNESS_PX + 1;
+const UNDERLINE_PADDING_BOTTOM_PX = SEVERITY_UNDERLINE_GAPS.low + UNDERLINE_THICKNESS_PX + 1;
 
-const severityPriority: Record<Severity, number> = {
-  [Severity.HIGH]: 3,
-  [Severity.MEDIUM]: 2,
-  [Severity.LOW]: 1,
+const severityPriority: Record<CortexSeverity, number> = {
+  high: 3,
+  medium: 2,
+  low: 1,
 };
-
-function getSeverityForItem(item: SuggestItem, suggestions: Suggestion[]): Severity {
-  const suggestion = suggestions[item.originalIndex];
-  return suggestion.severity;
-}
 
 function rangesOverlap(aFrom: number, aTo: number, bFrom: number, bTo: number): boolean {
   return !(aTo <= bFrom || aFrom >= bTo);
+}
+
+const waitForScrollEnd = (
+  target: HTMLElement | typeof globalThis,
+  idleMs = 180,
+  maxWaitMs = 1500,
+): Promise<void> =>
+  new Promise((resolve) => {
+    let idleTimer: ReturnType<typeof setTimeout> | undefined;
+    const done = () => {
+      if (idleTimer) clearTimeout(idleTimer);
+      clearTimeout(maxTimer);
+      target.removeEventListener("scroll", onScroll, true);
+      resolve();
+    };
+    const onScroll = () => {
+      if (idleTimer) clearTimeout(idleTimer);
+      idleTimer = setTimeout(done, idleMs);
+    };
+    target.addEventListener("scroll", onScroll, true);
+    onScroll();
+    const maxTimer = setTimeout(done, maxWaitMs);
+  });
+
+const findItemIdsOverlappingTargets = (
+  itemsMap: Record<string, SuggestItem>,
+  targets: SuggestItem[],
+): string[] =>
+  Object.values(itemsMap)
+    .filter((it) => targets.some((t) => rangesOverlap(it.from, it.to, t.from, t.to)))
+    .map((it) => it.id);
+
+interface IssueHighlightsMeta {
+  issues?: CortexIssueWithId[];
+  sourceFormat?: IssueSourceFormat;
+  sourceText?: string;
+  clear?: boolean;
+  removeId?: string;
+  removeIds?: string[];
+  removeRange?: { from: number; to: number };
+  activeId?: string | null;
+  navRequest?: "first" | "next" | "prev" | "goto" | null;
+  gotoIndex?: number;
+  visibleIndices?: number[];
+  appliedRange?: AppliedRange;
+  appliedRanges?: AppliedRange[];
+}
+
+function createClearedState(): PluginState {
+  return {
+    decos: DecorationSet.empty,
+    items: {},
+    issues: [],
+    appliedRanges: [],
+    activeId: null,
+    navRequest: undefined,
+  };
+}
+
+function remapItemsForDoc(
+  items: Record<string, SuggestItem>,
+  mapping: Mapping,
+): Record<string, SuggestItem> {
+  const result: Record<string, SuggestItem> = {};
+  for (const [id, item] of Object.entries(items)) {
+    const newFrom = mapping.map(item.from, -1);
+    const newTo = mapping.map(item.to, 1);
+    if (newFrom >= newTo) continue;
+    result[id] = { ...item, from: newFrom, to: newTo };
+  }
+  return result;
+}
+
+function remapAppliedRanges(ranges: AppliedRange[] | undefined, mapping: Mapping): AppliedRange[] {
+  return (ranges ?? [])
+    .map((range) => ({
+      from: mapping.map(range.from, -1),
+      to: mapping.map(range.to, 1),
+    }))
+    .filter((range) => range.from < range.to);
+}
+
+function remapStateForDocChange(oldState: PluginState, tr: Transaction): PluginState {
+  return {
+    decos: oldState.decos.map(tr.mapping, tr.doc),
+    items: remapItemsForDoc(oldState.items, tr.mapping),
+    issues: oldState.issues,
+    appliedRanges: remapAppliedRanges(oldState.appliedRanges, tr.mapping),
+    visibleIndices: oldState.visibleIndices,
+    activeId: oldState.activeId,
+    navRequest: oldState.navRequest,
+    gotoIndex: oldState.gotoIndex,
+  };
+}
+
+function appendAppliedRange(state: PluginState, range: AppliedRange | undefined): PluginState {
+  if (!range || range.from >= range.to) return state;
+  return { ...state, appliedRanges: [...(state.appliedRanges ?? []), range] };
+}
+
+function appendAppliedRanges(state: PluginState, ranges: AppliedRange[] | undefined): PluginState {
+  if (!ranges) return state;
+  const valid = ranges.filter((r) => r.from < r.to);
+  if (valid.length === 0) return state;
+  return { ...state, appliedRanges: [...(state.appliedRanges ?? []), ...valid] };
+}
+
+function omitItemsByIds(
+  items: Record<string, SuggestItem>,
+  ids: readonly string[],
+): Record<string, SuggestItem> {
+  const idSet = new Set(ids);
+  return Object.fromEntries(Object.entries(items).filter(([id]) => !idSet.has(id)));
+}
+
+function omitItemsByRange(
+  items: Record<string, SuggestItem>,
+  from: number,
+  to: number,
+): Record<string, SuggestItem> {
+  return Object.fromEntries(
+    Object.entries(items).filter(([, it]) => !rangesOverlap(it.from, it.to, from, to)),
+  );
+}
+
+/** Look up the SuggestItem in `items` whose `originalIndex` matches the given issue index. */
+function findItemByIndex(
+  items: Record<string, SuggestItem>,
+  originalIndex: number,
+): SuggestItem | undefined {
+  return Object.values(items).find((item) => item.originalIndex === originalIndex);
 }
 
 function getVisibleItems(stateLike: PluginState): SuggestItem[] {
@@ -89,32 +215,24 @@ function buildSweepIndex(visibleItems: SuggestItem[]): {
 
   for (const item of visibleItems) {
     const startList = startsAt.get(item.from);
-    if (startList) {
-      startList.push(item);
-    } else {
-      startsAt.set(item.from, [item]);
-    }
+    if (startList) startList.push(item);
+    else startsAt.set(item.from, [item]);
 
     const endList = endsAt.get(item.to);
-    if (endList) {
-      endList.push(item);
-    } else {
-      endsAt.set(item.to, [item]);
-    }
+    if (endList) endList.push(item);
+    else endsAt.set(item.to, [item]);
   }
 
   return { boundaries, startsAt, endsAt };
 }
 
-function getRenderedSeverities(segmentItems: SuggestItem[], suggestions: Suggestion[]): Severity[] {
-  const severitiesPresent = new Set<Severity>();
-  for (const item of segmentItems) {
-    severitiesPresent.add(getSeverityForItem(item, suggestions));
-  }
-  return SEVERITY_RENDER_ORDER.filter((severity) => severitiesPresent.has(severity));
+function getRenderedSeverities(segmentItems: SuggestItem[]): CortexSeverity[] {
+  const present = new Set<CortexSeverity>();
+  for (const item of segmentItems) present.add(item.severity);
+  return SEVERITY_RENDER_ORDER.filter((s) => present.has(s));
 }
 
-function buildUnderlineStyle(renderedSeverities: Severity[]): string {
+function buildUnderlineStyle(renderedSeverities: CortexSeverity[]): string {
   const backgroundImage = renderedSeverities
     .map((severity) => {
       const underlineColor = SEVERITY_COLORS[severity].text;
@@ -135,21 +253,15 @@ function buildUnderlineStyle(renderedSeverities: Severity[]): string {
   return `text-decoration: none; padding-bottom: ${String(UNDERLINE_PADDING_BOTTOM_PX)}px; background-image: ${backgroundImage}; background-repeat: no-repeat; background-size: ${backgroundSize}; background-position: ${backgroundPosition}; box-decoration-break: clone; -webkit-box-decoration-break: clone; cursor: pointer;`;
 }
 
-function pickAnchorItem(segmentItems: SuggestItem[], suggestions: Suggestion[]): SuggestItem {
+function pickAnchorItem(segmentItems: SuggestItem[]): SuggestItem {
   return [...segmentItems].sort((a, b) => {
-    const aSeverity = getSeverityForItem(a, suggestions);
-    const bSeverity = getSeverityForItem(b, suggestions);
-    const bySeverity = severityPriority[bSeverity] - severityPriority[aSeverity];
+    const bySeverity = severityPriority[b.severity] - severityPriority[a.severity];
     if (bySeverity !== 0) return bySeverity;
     return a.to - a.from - (b.to - b.from);
   })[0];
 }
 
-function appendSegmentDecorations(
-  rebuilt: Decoration[],
-  visibleItems: SuggestItem[],
-  suggestions: Suggestion[],
-): void {
+function appendSegmentDecorations(rebuilt: Decoration[], visibleItems: SuggestItem[]): void {
   const { boundaries, startsAt, endsAt } = buildSweepIndex(visibleItems);
   const activeById = new Map<string, SuggestItem>();
 
@@ -159,30 +271,23 @@ function appendSegmentDecorations(
     if (segFrom >= segTo) continue;
 
     const endingItems = endsAt.get(segFrom);
-    if (endingItems) {
-      for (const item of endingItems) {
-        activeById.delete(item.id);
-      }
-    }
+    if (endingItems) for (const item of endingItems) activeById.delete(item.id);
     const startingItems = startsAt.get(segFrom);
-    if (startingItems) {
-      for (const item of startingItems) {
-        activeById.set(item.id, item);
-      }
-    }
+    if (startingItems) for (const item of startingItems) activeById.set(item.id, item);
 
     const segmentItems = Array.from(activeById.values());
     if (segmentItems.length === 0) continue;
 
-    const renderedSeverities = getRenderedSeverities(segmentItems, suggestions);
+    const renderedSeverities = getRenderedSeverities(segmentItems);
     const style = buildUnderlineStyle(renderedSeverities);
-    const anchor = pickAnchorItem(segmentItems, suggestions);
+    const anchor = pickAnchorItem(segmentItems);
 
     rebuilt.push(
       Decoration.inline(segFrom, segTo, {
         class: "wp-issue-underline",
+        "data-agent": anchor.agent,
         "data-category": anchor.category ?? "",
-        "data-subcategory": String(anchor.subcategory ?? ""),
+        "data-severity": anchor.severity,
         "data-suggest-id": anchor.id,
         "data-suggest-ids": segmentItems.map((item) => item.id).join(","),
         "data-suggestion": anchor.suggestion,
@@ -216,20 +321,21 @@ function toPluginState(
   return {
     decos: DecorationSet.create(doc, rebuilt),
     items: stateLike.items,
-    suggestions: stateLike.suggestions,
+    issues: stateLike.issues,
     appliedRanges: stateLike.appliedRanges,
     visibleIndices: stateLike.visibleIndices,
     activeId: stateLike.activeId,
     navRequest: stateLike.navRequest,
     gotoIndex: stateLike.gotoIndex,
-  } as PluginState;
+  };
 }
 
 export const IssueHighlights = Extension.create<IssueHighlightsOptions>({
   name: "issueHighlights",
   addOptions() {
     return {
-      suggestions: [],
+      issues: [],
+      sourceFormat: "plain",
     };
   },
   addProseMirrorPlugins() {
@@ -238,165 +344,60 @@ export const IssueHighlights = Extension.create<IssueHighlightsOptions>({
       new Plugin({
         key: pluginKey,
         state: {
-          init: () =>
-            ({
-              decos: DecorationSet.empty,
-              items: {},
-              suggestions: [],
-              appliedRanges: [],
-            }) as PluginState,
+          init: (): PluginState => ({
+            decos: DecorationSet.empty,
+            items: {},
+            issues: [],
+            appliedRanges: [],
+          }),
           apply: (tr, oldState: PluginState) => {
-            const meta = tr.getMeta(pluginKey) as
-              | {
-                  suggestions?: Suggestion[];
-                  clear?: boolean;
-                  removeId?: string;
-                  removeIds?: string[];
-                  removeRange?: { from: number; to: number };
-                  activeId?: string | null;
-                  navRequest?: "first" | "next" | "prev" | "goto" | null;
-                  gotoIndex?: number;
-                  visibleIndices?: number[];
-                  appliedRange?: AppliedRange;
-                }
-              | undefined;
-            if (meta?.clear) {
-              return {
-                decos: DecorationSet.empty,
-                items: {},
-                suggestions: [],
-                appliedRanges: [],
-                activeId: null,
-                navRequest: undefined,
-              } as PluginState;
-            }
-            if (meta?.suggestions) {
-              // Pass originalHtml from meta or from options for HTML position mapping
-              const originalHtml =
-                (meta as { originalHtml?: string }).originalHtml ?? opts.originalHtml;
-              const base = buildState(tr.doc, meta.suggestions, originalHtml);
-              return {
-                ...base,
-                appliedRanges: [],
-                activeId: null,
-                navRequest: undefined,
-              } as PluginState;
-            }
-            let next = oldState;
-            if (tr.docChanged) {
-              const mapped = oldState.decos.map(tr.mapping, tr.doc);
-              const newItems: Record<string, SuggestItem> = {};
-              for (const [id, item] of Object.entries(oldState.items)) {
-                // Use assoc=-1 for 'from' to stick to left of insertion
-                // Use assoc=1 for 'to' to stick to right of insertion
-                const newFrom = tr.mapping.map(item.from, -1);
-                const newTo = tr.mapping.map(item.to, 1);
-                // Skip items that have collapsed (from >= to)
-                if (newFrom >= newTo) continue;
-                newItems[id] = {
-                  ...item,
-                  from: newFrom,
-                  to: newTo,
-                };
-              }
-              // Map applied ranges through document changes
-              const mappedAppliedRanges: AppliedRange[] = (oldState.appliedRanges ?? [])
-                .map((range) => ({
-                  from: tr.mapping.map(range.from, -1),
-                  to: tr.mapping.map(range.to, 1),
-                }))
-                .filter((range) => range.from < range.to);
+            const meta = tr.getMeta(pluginKey) as IssueHighlightsMeta | undefined;
 
-              next = {
-                decos: mapped,
-                items: newItems,
-                suggestions: oldState.suggestions,
-                appliedRanges: mappedAppliedRanges,
-                visibleIndices: oldState.visibleIndices,
-                activeId: oldState.activeId,
-                navRequest: oldState.navRequest,
-                gotoIndex: oldState.gotoIndex,
-              } as PluginState;
+            if (meta?.clear) return createClearedState();
+            if (meta?.issues) {
+              const sourceFormat = meta.sourceFormat ?? opts.sourceFormat;
+              const sourceText = meta.sourceText ?? opts.sourceText;
+              const base = buildState(tr.doc, meta.issues, sourceFormat, sourceText);
+              return { ...base, appliedRanges: [], activeId: null, navRequest: undefined };
             }
-            // Helper to rebuild all decorations from items, with active highlight
-            // Only creates decorations for items whose originalIndex is in visibleIndices (if set)
+
+            let next = tr.docChanged ? remapStateForDocChange(oldState, tr) : oldState;
+
             const rebuildFrom = (stateLike: PluginState) => {
               const rebuilt: Decoration[] = [];
               const visibleItems = getVisibleItems(stateLike);
               appendActiveDecorations(rebuilt, visibleItems, stateLike.activeId);
-              appendSegmentDecorations(rebuilt, visibleItems, stateLike.suggestions);
+              appendSegmentDecorations(rebuilt, visibleItems);
               appendAppliedRangeDecorations(rebuilt, stateLike.appliedRanges);
               return toPluginState(tr.doc, stateLike, rebuilt);
             };
-            // Handle appliedRange from applySuggestionByIndex
-            if (meta && Object.hasOwn(meta, "appliedRange")) {
-              const newRange = (meta as { appliedRange?: AppliedRange }).appliedRange;
-              if (newRange && newRange.from < newRange.to) {
-                next = {
-                  ...next,
-                  appliedRanges: [...(next.appliedRanges ?? []), newRange],
-                };
-              }
-            }
-            if (meta?.removeIds && meta.removeIds.length > 0) {
-              const restEntries = Object.entries(next.items).filter(
-                ([id]) => !(meta.removeIds ?? []).includes(id),
-              );
-              const reduced: PluginState = {
-                ...next,
-                items: Object.fromEntries(restEntries),
-              };
-              next = rebuildFrom(reduced);
+
+            next = appendAppliedRange(next, meta?.appliedRange);
+            next = appendAppliedRanges(next, meta?.appliedRanges);
+
+            if (meta?.removeIds?.length) {
+              next = rebuildFrom({ ...next, items: omitItemsByIds(next.items, meta.removeIds) });
             }
             if (meta?.removeRange) {
               const from = tr.mapping.map(meta.removeRange.from);
               const to = tr.mapping.map(meta.removeRange.to);
-              const overlaps = (aFrom: number, aTo: number) => !(aTo <= from || aFrom >= to);
-              const restEntries = Object.entries(next.items).filter(
-                ([, it]) => !overlaps(it.from, it.to),
-              );
-              const reduced: PluginState = {
-                ...next,
-                items: Object.fromEntries(restEntries),
-              };
-              next = rebuildFrom(reduced);
+              next = rebuildFrom({ ...next, items: omitItemsByRange(next.items, from, to) });
             }
-            if (meta?.removeId) {
-              const id = meta.removeId;
-              if (Object.hasOwn(next.items, id)) {
-                const rest = Object.fromEntries(
-                  Object.entries(next.items).filter(([key]) => key !== id),
-                );
-                const reduced: PluginState = {
-                  ...next,
-                  items: rest,
-                };
-                next = rebuildFrom(reduced);
-              }
+            if (meta?.removeId && Object.hasOwn(next.items, meta.removeId)) {
+              next = rebuildFrom({ ...next, items: omitItemsByIds(next.items, [meta.removeId]) });
             }
             if (meta && Object.hasOwn(meta, "activeId")) {
-              const updated: PluginState = {
-                ...next,
-                activeId: meta.activeId ?? null,
-              };
-              next = rebuildFrom(updated);
+              next = rebuildFrom({ ...next, activeId: meta.activeId ?? null });
             }
             if (meta && Object.hasOwn(meta, "navRequest")) {
-              const updated: PluginState = {
+              next = rebuildFrom({
                 ...next,
                 navRequest: meta.navRequest ?? undefined,
                 gotoIndex: meta.gotoIndex,
-              };
-              next = rebuildFrom(updated);
+              });
             }
-            // Handle visibility filter change
             if (meta && Object.hasOwn(meta, "visibleIndices")) {
-              const newVisibleSet = new Set(meta.visibleIndices ?? []);
-              const updated: PluginState = {
-                ...next,
-                visibleIndices: newVisibleSet,
-              };
-              next = rebuildFrom(updated);
+              next = rebuildFrom({ ...next, visibleIndices: new Set(meta.visibleIndices ?? []) });
             }
             return next;
           },
@@ -408,27 +409,19 @@ export const IssueHighlights = Extension.create<IssueHighlightsOptions>({
           let activeAnchorId: string | null = null;
 
           function findAnchorById(anchorId: string): HTMLElement | null {
-            // Search within the editor's DOM for better scoping
             const nodes = view.dom.querySelectorAll(".wp-issue-underline");
             for (const node of Array.from(nodes)) {
               const el = node as HTMLElement;
-              if (el.dataset.suggestId === anchorId) {
-                return el;
-              }
+              if (el.dataset.suggestId === anchorId) return el;
             }
-            // Fallback to document search if not found in editor
             const allNodes = document.querySelectorAll(".wp-issue-underline");
             for (const node of Array.from(allNodes)) {
               const el = node as HTMLElement;
-              if (el.dataset.suggestId === anchorId) {
-                return el;
-              }
+              if (el.dataset.suggestId === anchorId) return el;
             }
             return null;
           }
 
-          // Click handler - notify parent component, set active highlight
-          // For overlapping suggestions, prioritize by click proximity first, then severity.
           const handleClick = (ev: MouseEvent) => {
             const target = ev.target as HTMLElement | null;
             if (!target) return;
@@ -446,8 +439,7 @@ export const IssueHighlights = Extension.create<IssueHighlightsOptions>({
               .map((x) => x.trim())
               .filter((x) => x.length > 0);
 
-            // Prefer item IDs attached to this rendered segment. Fallback to single id + overlap.
-            let candidateItems: SuggestItem[] = [];
+            let candidateItems: SuggestItem[];
             if (segmentIds.length > 0) {
               candidateItems = segmentIds.map((segmentId) => state.items[segmentId]);
             } else {
@@ -465,11 +457,12 @@ export const IssueHighlights = Extension.create<IssueHighlightsOptions>({
               .filter((it) => !visibleSet || visibleSet.has(it.originalIndex))
               .map((it) => ({
                 item: it,
-                suggestion: state.suggestions[it.originalIndex] as Suggestion | undefined,
+                issue: state.issues[it.originalIndex] as CortexIssueWithId | undefined,
               }))
-              .filter((x): x is { item: SuggestItem; suggestion: Suggestion } => !!x.suggestion);
+              .filter(
+                (x): x is { item: SuggestItem; issue: CortexIssueWithId } => x.issue !== undefined,
+              );
 
-            // If available, narrow to candidates that contain the click position.
             const proximityCandidates =
               clickPos === undefined
                 ? overlappingCandidates
@@ -479,59 +472,36 @@ export const IssueHighlights = Extension.create<IssueHighlightsOptions>({
             const candidates =
               proximityCandidates.length > 0 ? proximityCandidates : overlappingCandidates;
 
-            // Sort by proximity first, then severity
             candidates.sort((a, b) => {
               const aDistance =
                 clickPos === undefined ? 0 : Math.abs(clickPos - (a.item.from + a.item.to) / 2);
               const bDistance =
                 clickPos === undefined ? 0 : Math.abs(clickPos - (b.item.from + b.item.to) / 2);
-              if (aDistance !== bDistance) {
-                return aDistance - bDistance;
-              }
+              if (aDistance !== bDistance) return aDistance - bDistance;
 
-              const aPriority = severityPriority[a.suggestion.severity] || 0;
-              const bPriority = severityPriority[b.suggestion.severity] || 0;
-              if (aPriority !== bPriority) {
-                return bPriority - aPriority;
-              }
+              const aPriority = severityPriority[a.item.severity] || 0;
+              const bPriority = severityPriority[b.item.severity] || 0;
+              if (aPriority !== bPriority) return bPriority - aPriority;
 
-              // Final tie-breaker for deterministic behavior: shorter range wins
-              const aLen = a.item.to - a.item.from;
-              const bLen = b.item.to - b.item.from;
-              return aLen - bLen;
+              return a.item.to - a.item.from - (b.item.to - b.item.from);
             });
 
-            const bestMatch = candidates[0] as
-              | { item: SuggestItem; suggestion: Suggestion }
-              | undefined;
-            if (!bestMatch) return;
+            if (candidates.length === 0) return;
+            const { item, issue } = candidates[0];
 
-            const { item, suggestion } = bestMatch;
+            opts.onIssueClick?.({ issue, index: item.originalIndex });
 
-            opts.onIssueClick?.({
-              suggestion,
-              index: item.originalIndex,
-            });
-
-            // Set active highlight for selected item
             const tr = view.state.tr;
             tr.setMeta(pluginKey, { activeId: item.id });
             view.dispatch(tr);
             activeAnchorId = item.id;
           };
 
-          // Clear active highlight on outside click
           const handleOutsideClick = (ev: MouseEvent) => {
             const target = ev.target as HTMLElement | null;
             if (!target) return;
-            if (target.closest(".wp-issue-underline")) {
-              return;
-            }
-            // Keep current highlight when interacting with the suggestions sidebar
-            // (e.g. thumbs up/down feedback). Highlight should remain while card is expanded.
-            if (target.closest(SUGGESTIONS_SIDEBAR_SELECTOR)) {
-              return;
-            }
+            if (target.closest(".wp-issue-underline")) return;
+            if (target.closest(SUGGESTIONS_SIDEBAR_SELECTOR)) return;
             if (activeAnchorId) {
               const tr = view.state.tr;
               tr.setMeta(pluginKey, { activeId: null });
@@ -540,45 +510,11 @@ export const IssueHighlights = Extension.create<IssueHighlightsOptions>({
             }
           };
 
-          const waitForScrollEnd = (
-            target: HTMLElement | typeof globalThis,
-            idleMs = 180,
-            maxWaitMs = 1500,
-          ): Promise<void> => {
-            return new Promise((resolve) => {
-              let idleTimer: ReturnType<typeof setTimeout> | undefined;
-              const done = () => {
-                if (idleTimer) clearTimeout(idleTimer);
-                clearTimeout(maxTimer);
-                target.removeEventListener("scroll", onScroll, true);
-                resolve();
-              };
-              const onScroll = () => {
-                if (idleTimer) clearTimeout(idleTimer);
-                idleTimer = setTimeout(done, idleMs);
-              };
-              target.addEventListener("scroll", onScroll, true);
-              // Arm timers immediately in case no scroll occurs
-              onScroll();
-              const maxTimer = setTimeout(done, maxWaitMs);
-            });
-          };
-
           function scrollAnchorIntoView(anchorId: string): Promise<void> {
             const anchor = findAnchorById(anchorId);
-            if (!anchor) {
-              console.warn("[IssueHighlights] Anchor not found for ID:", anchorId);
-              return Promise.resolve();
-            }
-
-            // Use native scrollIntoView which handles finding the correct scroll container
-            anchor.scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-              inline: "nearest",
-            });
-
-            return waitForScrollEnd(window);
+            if (!anchor) return Promise.resolve();
+            anchor.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+            return waitForScrollEnd(globalThis);
           }
 
           document.addEventListener("mousedown", handleOutsideClick, true);
@@ -589,32 +525,23 @@ export const IssueHighlights = Extension.create<IssueHighlightsOptions>({
               const st = pluginKey.getState(viewInstance.state) as PluginState;
               if (!st.navRequest) return;
 
-              // Capture the navRequest and gotoIndex before clearing it
               const navRequest = st.navRequest;
               const gotoIndex = st.gotoIndex;
 
-              // Clear navRequest IMMEDIATELY to prevent re-entrancy
               const clearTr = viewInstance.state.tr;
               clearTr.setMeta(pluginKey, { navRequest: null, gotoIndex: undefined });
               viewInstance.dispatch(clearTr);
 
-              // For "goto" navigation from sidebar, find the item by index and scroll to it
               if (navRequest === "goto" && gotoIndex !== undefined) {
-                // Find the item with this originalIndex
                 const targetItem = Object.values(st.items).find(
                   (item) => item.originalIndex === gotoIndex,
                 );
                 if (targetItem) {
-                  // activeId was already set by the goToIssueGroup command, just update local tracker
                   activeAnchorId = targetItem.id;
-
-                  // Wait for DOM to update with decorations before scrolling
-                  // Use requestAnimationFrame + setTimeout to ensure decorations are rendered
-                  requestAnimationFrame(() => {
-                    setTimeout(() => {
-                      void scrollAnchorIntoView(targetItem.id);
-                    }, 50);
-                  });
+                  const triggerScroll = () => {
+                    void scrollAnchorIntoView(targetItem.id);
+                  };
+                  requestAnimationFrame(() => setTimeout(triggerScroll, 50));
                 }
               }
             },
@@ -629,50 +556,27 @@ export const IssueHighlights = Extension.create<IssueHighlightsOptions>({
   },
   addCommands() {
     return {
-      setSuggestionHighlights:
-        (suggestions: Suggestion[], originalHtml?: string) =>
+      setIssueHighlights:
+        (issues: CortexIssueWithId[], sourceFormat: IssueSourceFormat, sourceText?: string) =>
         ({ tr, dispatch }) => {
           if (!dispatch) return false;
-          dispatch(tr.setMeta(pluginKey, { suggestions, originalHtml }));
+          dispatch(tr.setMeta(pluginKey, { issues, sourceFormat, sourceText }));
           return true;
         },
-      clearSuggestionHighlights:
+      clearIssueHighlights:
         () =>
         ({ tr, dispatch }) => {
           if (!dispatch) return false;
           dispatch(tr.setMeta(pluginKey, { clear: true }));
           return true;
         },
-      firstIssueGroup:
-        () =>
-        ({ tr, dispatch }) => {
-          if (!dispatch) return false;
-          dispatch(tr.setMeta(pluginKey, { navRequest: "first" }));
-          return true;
-        },
-      nextIssueGroup:
-        () =>
-        ({ tr, dispatch }) => {
-          if (!dispatch) return false;
-          dispatch(tr.setMeta(pluginKey, { navRequest: "next" }));
-          return true;
-        },
-      prevIssueGroup:
-        () =>
-        ({ tr, dispatch }) => {
-          if (!dispatch) return false;
-          dispatch(tr.setMeta(pluginKey, { navRequest: "prev" }));
-          return true;
-        },
-      goToIssueGroup:
+      goToIssueByIndex:
         (index: number) =>
         ({ state, tr, dispatch }) => {
           if (!dispatch) return false;
           const st = pluginKey.getState(state) as PluginState;
-          // Find the item with this originalIndex
-          const targetItem = Object.values(st.items).find((item) => item.originalIndex === index);
+          const targetItem = findItemByIndex(st.items, index);
           if (targetItem) {
-            // Set activeId for immediate highlighting AND navRequest to trigger scrolling in update
             dispatch(
               tr.setMeta(pluginKey, {
                 activeId: targetItem.id,
@@ -683,49 +587,83 @@ export const IssueHighlights = Extension.create<IssueHighlightsOptions>({
           }
           return true;
         },
-      applySuggestionByIndex:
-        (index: number) =>
+      applyIssueByIndex:
+        (index: number, replacement?: string) =>
         ({ state, tr, dispatch }) => {
           if (!dispatch) return false;
           const st = pluginKey.getState(state) as PluginState;
-          // Find the item with this originalIndex
-          const targetItem = Object.values(st.items).find((item) => item.originalIndex === index);
+          const targetItem = findItemByIndex(st.items, index);
           if (!targetItem) return false;
 
-          // Get all overlapping items to remove together
           const overlaps = (aFrom: number, aTo: number) =>
             !(aTo <= targetItem.from || aFrom >= targetItem.to);
           const overlappingIds = Object.values(st.items)
             .filter((it) => overlaps(it.from, it.to))
             .map((it) => it.id);
 
-          let replacementText = targetItem.suggestion;
-
-          // Check if the suggestion contains HTML tags - if so, extract just the text content
-          // This is for rich text mode where the API returns HTML but we insert as text
+          let replacementText = replacement ?? targetItem.suggestion;
           const containsHtml = /<[^>]+>/.test(replacementText);
           if (containsHtml) {
             const tempDiv = document.createElement("div");
             tempDiv.innerHTML = replacementText;
-            replacementText = tempDiv.textContent || tempDiv.innerText || "";
+            replacementText = tempDiv.textContent || "";
           }
 
-          // Use a single insertText call which properly maintains position mappings
-          // This replaces the range [from, to) with the new text atomically
           const newTr = tr.insertText(replacementText, targetItem.from, targetItem.to);
-
-          // Calculate the range of the newly inserted text for green highlighting
           const appliedRange: AppliedRange = {
             from: targetItem.from,
             to: targetItem.from + replacementText.length,
           };
-
-          // Remove all overlapping highlights and record the applied range
           newTr.setMeta(pluginKey, { removeIds: overlappingIds, activeId: null, appliedRange });
           dispatch(newTr);
           return true;
         },
-      setVisibleSuggestions:
+      applyIssuesByIndices:
+        (indices: number[], replacement: string) =>
+        ({ state, tr, dispatch }) => {
+          if (!dispatch) return false;
+          if (indices.length === 0) return false;
+          const st = pluginKey.getState(state) as PluginState;
+          // Build an originalIndex → SuggestItem map once so the per-index lookup is O(1)
+          // instead of scanning Object.values(st.items) for every requested index.
+          const itemByOriginalIndex = new Map<number, SuggestItem>();
+          for (const item of Object.values(st.items)) {
+            itemByOriginalIndex.set(item.originalIndex, item);
+          }
+          const targets = indices
+            .map((i) => itemByOriginalIndex.get(i))
+            .filter((x): x is SuggestItem => x !== undefined)
+            .sort((a, b) => b.from - a.from);
+          if (targets.length === 0) return false;
+
+          let replacementText = replacement;
+          const containsHtml = /<[^>]+>/.test(replacementText);
+          if (containsHtml) {
+            const tempDiv = document.createElement("div");
+            tempDiv.innerHTML = replacementText;
+            replacementText = tempDiv.textContent || "";
+          }
+
+          const overlappingIds = findItemIdsOverlappingTargets(st.items, targets);
+
+          const appliedRanges: AppliedRange[] = [];
+          let newTr = tr;
+          for (const target of targets) {
+            newTr = newTr.insertText(replacementText, target.from, target.to);
+            appliedRanges.push({
+              from: target.from,
+              to: target.from + replacementText.length,
+            });
+          }
+          newTr.setMeta(pluginKey, {
+            removeIds: overlappingIds,
+            activeId: null,
+            appliedRanges,
+          });
+          dispatch(newTr);
+          return true;
+        },
+      setVisibleIssues:
         (indices: number[]) =>
         ({ tr, dispatch }) => {
           if (!dispatch) return false;
@@ -739,18 +677,16 @@ export const IssueHighlights = Extension.create<IssueHighlightsOptions>({
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
     issueHighlights: {
-      setSuggestionHighlights: (suggestions: Suggestion[], originalHtml?: string) => ReturnType;
-      clearSuggestionHighlights: () => ReturnType;
-      firstIssueGroup: () => ReturnType;
-      nextIssueGroup: () => ReturnType;
-      prevIssueGroup: () => ReturnType;
-      goToIssueGroup: (index: number) => ReturnType;
-      applySuggestionByIndex: (index: number) => ReturnType;
-      /** Set which suggestion indices should be visible (for filtering) */
-      setVisibleSuggestions: (indices: number[]) => ReturnType;
+      setIssueHighlights: (
+        issues: CortexIssueWithId[],
+        sourceFormat: IssueSourceFormat,
+        sourceText?: string,
+      ) => ReturnType;
+      clearIssueHighlights: () => ReturnType;
+      goToIssueByIndex: (index: number) => ReturnType;
+      applyIssueByIndex: (index: number, replacement?: string) => ReturnType;
+      applyIssuesByIndices: (indices: number[], replacement: string) => ReturnType;
+      setVisibleIssues: (indices: number[]) => ReturnType;
     };
   }
 }
-
-// Minimal styles for the underline are applied inline via style attribute in decorations.
-// If we need more control across themes, we can also export a class name here.

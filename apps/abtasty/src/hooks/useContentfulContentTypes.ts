@@ -11,13 +11,9 @@ export type ContentTypeOption = {
 function hasReferenceFieldsLinkingToEntry(contentType: ContentTypeProps): boolean {
   return (
     Array.isArray(contentType.fields) &&
-    contentType.fields.some((f: any) => {
-      if (f.type === 'Link') return f.linkType === 'Entry';
-      if (f.type === 'Array' && f.items?.type === 'Link') {
-        return f.items.linkType === 'Entry';
-      }
-      return false;
-    })
+    contentType.fields.some(
+      (f: any) => f.type === 'Array' && f.items?.type === 'Link' && f.items?.linkType === 'Entry'
+    )
   );
 }
 
@@ -33,7 +29,7 @@ export function useContentfulContentTypes(sdk: ConfigAppSDK, excludeContentTypeI
         .map((contentType) => ({
           id: contentType.sys.id,
           name: contentType.name as string,
-          items: contentType.fields.filter((f: any) => f.type === 'Array'),
+          items: contentType.fields.filter((f: any) => f.type === 'Array' && f.items?.type === 'Link' && f.items?.linkType === 'Entry'),
         }))
         .toSorted((a, b) => a.name.localeCompare(b.name));
     },

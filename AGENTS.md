@@ -1,164 +1,124 @@
-# Agents Rules for Contentful Apps
+# Agent Guide — contentful/marketplace-partner-apps
 
-You are an AI coding assistant specialized in Contentful Apps built with the Contentful App Framework. When context is missing or ambiguous, state assumptions or ask for clarification.
+## Table of Contents
 
-## 1) Context & Scope
-
-- This repo contains multiple **Contentful Apps** built with the **App Framework** (React + TypeScript).
-- Apps are bundled with **Vite** and tested with **Vitest**.
-- Apps must follow Contentful design and UX conventions using **Forma 36** components.
-- Agents must:
-  - Load the **entire repository** into context (not just a single app).
-  - Prefer **reuse** of existing components, hooks, utilities, and patterns.
-  - Respect the repository’s **ESLint / Prettier / TypeScript** configuration.
-  - Suggest solutions aligned with **Vite** build tooling (avoid Webpack/CRA assumptions).
+| Document | Purpose |
+|----------|---------|
+| [README.md](README.md) | Repo overview |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | Monorepo structure, app archetypes, CI/CD pipeline, key differences from `contentful/apps` |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Dev setup, test/build commands, branching, release process |
+| `apps/<name>/AGENTS.md` | Per-app sharp edges, locations, and invariants |
+| `packages/contentful-app-components/` | Shared `@contentful/app-components` library |
 
 ---
 
-## 2) Golden Rules (TL;DR)
+## Context & Scope
 
-1. **Use React + TypeScript + Vite + Vitest + Forma 36** in all solutions.
-2. **Use official Contentful SDKs and APIs** and reference documentation when proposing solutions.
-3. **Inspect `package.json` first** in the workspace and app:
-   - Reuse installed libraries and versions.
-   - Add new dependencies only if required and provide justification.
-4. **Do not use deprecated APIs** (Contentful, Forma 36, React, Vite, or other libraries).
-5. **TypeScript strictness**: avoid `any` unless absolutely unavoidable; prefer precise types.
-6. **Clean Code + SOLID principles**: small units, single responsibility, dependency inversion.
-7. Prefer **small, incremental changes** with clear scope and checklists. Do not add changes that were not requested.
-8. When commiting changes to git, create atomic commmits and use **Conventional Commits** (https://www.conventionalcommits.org/en/v1.0.0/).
+- This repo contains **38 partner-contributed Contentful Marketplace apps** plus a shared component library.
+- Apps are built with **React + TypeScript + Vite + Vitest + Forma 36** (standard), with exceptions noted below.
+- **Partner ownership**: each app is maintained by an external partner. Contentful's role is governance. Keep changes minimal and backwards-compatible unless coordinated with the partner.
+- **Read the target app's `AGENTS.md` first** — it documents locations, key dependencies, and sharp edges for that specific app.
+- Base branch is **`main`** (not `master`).
 
 ---
 
-## 3) Official Tooling & Documentation
+## Critical Differences from `contentful/apps`
 
-- App Framework & App SDK  
-  https://www.contentful.com/developers/docs/extensibility/app-framework/  
-  https://www.contentful.com/developers/docs/extensibility/app-framework/sdk/
-- App Actions
-  https://www.contentful.com/developers/docs/extensibility/app-framework/app-actions/
-- App Functions
-  https://www.contentful.com/developers/docs/extensibility/app-framework/functions/#use-case-app-actions
-- Forma 36 (Design System & React UI Library)  
-  https://f36.contentful.com/  
-  https://www.contentful.com/developers/docs/extensibility/app-framework/forma-36/
-- API references (index)  
-  https://www.contentful.com/developers/docs/references/
-  - Content Management API (CMA): https://www.contentful.com/developers/docs/references/content-management-api/
-  - Content Delivery API (CDA): https://www.contentful.com/developers/docs/references/content-delivery-api/
-  - GraphQL Content API: https://www.contentful.com/developers/docs/references/graphql/
-  - Images API: https://www.contentful.com/developers/docs/references/images-api/
-  - Preview API: https://www.contentful.com/developers/docs/references/content-preview-api/
+These will cause mistakes if you carry assumptions from that repo:
+
+| Topic | `contentful/apps` | This repo |
+|-------|-------------------|-----------|
+| CI | CircleCI | **GitHub Actions** |
+| Base branch | `master` | **`main`** |
+| Releases | `lerna version` | **`release-please`** — never manually bump versions |
+| Install command | `lerna bootstrap` | **`npm run install-ci`** per app |
+| Node | ≥ 16 | **≥ 18, < 22** |
+| npm | ≥ 8 | **≥ 9, < 11** |
 
 ---
 
-## 4) Dependencies & Libraries Policy
+## App Archetypes (quick reference)
 
-- **Inspect `package.json`** in the target app.
-- **Reuse** installed libraries and versions.
-- **Do not introduce** new dependencies unless:
-  - No adequate existing library is available, and
-  - The ROI is clear (maintainability, reliability, performance).
-- If adding a dependency, provide:
-  - Short justification and rejected alternatives.
-  - License, maintenance, and compatibility check.
-  - Versioning consistent with repo conventions.
-- **No deprecated APIs** (always check release notes).
+See [ARCHITECTURE.md](ARCHITECTURE.md) for full details.
+
+| Archetype | Marker | Examples |
+|-----------|--------|---------|
+| Standard Vite | `src/locations/` dir | Most apps |
+| DAM base | depends on `@contentful/dam-app-base` | `frontify`, `bynder` (partial) |
+| Ecommerce base | depends on `@contentful/ecommerce-app-base` | `shopify` |
+| Next.js | `next.config.js` + `pages/` | `translationstudio` |
 
 ---
 
-## 5) TypeScript, Coding Standards & Architecture
+## Golden Rules
 
-- Follow standard TypeScript and React coding conventions.
-- **TypeScript**
-  - Avoid `any`. Use explicit, narrow types (interfaces, unions, generics).
-  - Export types for public interfaces; keep internal types scoped.
-- **Clean Code + SOLID**
-  - Single Responsibility: each module does one thing.
-  - Open/Closed: extend via composition.
-  - Liskov, Interface Segregation, Dependency Inversion: stable boundaries, injected collaborators.
-  - Clear names, small functions, shallow nesting.
-- **Error handling & UX**
-  - Fail gracefully with Forma 36 notifications and accessible messages.
-  - Wrap CMA calls in try/catch blocks
-- **Performance**
-  - Debounce field value change listeners if triggering heavy operations.
-  - Use `useMemo` for expensive field calculations.
-  - Lazy load large lists or field editors when possible.
-  - Batch CMA operations where possible
-- **Accessibility**
-  - Use Forma 36 components (a11y-ready). Add labels/roles/alt text where required.
-- **Loading & Empty States**
-  - Use `Note` component for empty states with helpful guidance
-  - Disable UI controls during save operations
-- **SDK Usage**
-  - Always use `useSDK()` hooks from `@contentful/react-apps-toolkit`
-  - Call `sdk.app.setReady()` after async initialization in Config Screen
-  - Use `useAutoResizer()` for Field, Entry, Sidebar and Dialog locations that need dynamic sizing
+1. **Use React + TypeScript + Vite + Vitest + Forma 36** in standard apps.
+2. **`useSDK()`** from `@contentful/react-apps-toolkit` — never access the SDK directly.
+3. **`useAutoResizer()`** in Field, Sidebar, EntryEditor, and Dialog locations.
+4. **`sdk.app.setReady()`** after async initialization in ConfigScreen.
+5. **Inspect `package.json` first** — reuse installed libraries; justify new dependencies.
+6. **No deprecated APIs** — check Forma 36, App SDK, contentful-management changelogs.
+7. **No `any` in TypeScript** — use explicit, narrow types.
+8. **Conventional Commits** for every commit — `release-please` reads these for versioning.
+9. **Small, incremental changes** — do not add unrequested changes.
+10. **Check `@contentful/app-components`** in `packages/` before building custom shared components.
 
 ---
 
-## 6) UI with Forma 36 (mandatory)
+## Exceptions to Standard Rules
 
-- Always use **Forma 36** components, tokens, spacing, and density rules.
-- Avoid plain HTML and ad-hoc CSS; prefer F36 tokens for styling.
-- Use Forma 36 icons and layout primitives for consistent spacing and typography.
-
----
-
-## 7) Folder Organization
-
-- All apps must reside in the `/apps` directory.
-- Each app should be self-contained and avoid cross-app dependencies.
+- **`sfmc-studio`**: uses Ant Design (`antd`) + Redux — not Forma 36. Do not apply F36 rules here.
+- **`translationstudio`**: Next.js app — Vite patterns do not apply. Check `next.config.js`.
+- **`transifex`**, **`voucherify`**, **`shopify`**: JSX (not TSX) — TypeScript strictness does not apply.
+- **`bynder`**: hybrid — uses `dam-app-base` as a base but also has a custom `Sidebar` location.
 
 ---
 
-## 8) Testing Requirements
+## Never / Always
 
-When adding tests:
+**Never:**
+- Manually bump package versions — `release-please` owns all versioning.
+- Run `lerna version` or `lerna publish` manually.
+- Run `lerna run build` without `--since main` unless building for full deployment.
+- Commit API keys, CMA tokens, or org/space IDs.
+- Add cross-app `import` dependencies — each app must be self-contained.
+- Skip `sdk.app.setReady()` in a ConfigScreen — the app will appear stuck loading.
+- Apply `contentful/apps` CI patterns (CircleCI, `lerna bootstrap`) to this repo.
 
-- Use **Vitest** as the default testing framework.
-- Use **React Testing Library** for component testing.
-- What to test:
-  - Cover critical logic paths and edge cases.
-  - Prefer tests that resemble real user scenarios.
-- Tests must run correctly under Vite + Vitest setup.
+**Always:**
+- Read the target app's `AGENTS.md` before proposing changes.
+- Run `npm run build` in the app directory to verify your change compiles.
+- Use Forma 36 `Note` for empty states, `Notification` for user-facing errors (standard apps).
+- Wrap all CMA calls in try/catch and surface errors via notifications.
+- Check `apps/<name>/package.json` for specific library versions before referencing SDK APIs.
+- Treat `main` (not `master`) as the base branch for all `--since` flags.
 
 ---
 
-## 9) Code Suggestions scope
+## Official Documentation
 
-- Keep proposed code simple and to the point.
-- UI matches **Forma 36** guidelines and accessibility requirements.
-- Confirmed **no deprecated** methods by checking documentation.
-- Propose to add tests after a code change.
+- App Framework: https://www.contentful.com/developers/docs/extensibility/app-framework/
+- App SDK reference: https://www.contentful.com/developers/docs/extensibility/app-framework/sdk/
+- App Actions: https://www.contentful.com/developers/docs/extensibility/app-framework/app-actions/
+- Forma 36 components: https://f36.contentful.com/
+- CMA reference: https://www.contentful.com/developers/docs/references/content-management-api/
 
-After adding or changing code, post a short explanation. Explanation must include:
+---
 
-- **Goal** (what changes and why).
-- **Approach** (high level) + links to the exact SDK/API/F36 docs.
-- **Scope** (files/areas affected) and **dependencies** (reuse existing; propose new only if necessary).
+## Required Response Structure
 
+After code changes, always include:
 
-## 10) Before Responding - Verification Checklist
+- **Goal** — what is changing and why
+- **Approach** — high-level solution + links to official docs used
+- **Scope** — files affected and dependency usage
+- **Git commit proposal** — Conventional Commit format
+- **Next steps** — tests, docs, or follow-ups (if applicable)
 
-After making code changes, verify:
-
-- Code builds successfully (`npm run build` in app directory)
-- No linter errors (`read_lints` on modified files)
-- TypeScript types are correct (no `any`, proper imports)
-- All imports are valid and from correct packages
-- Forma 36 components used correctly (check component API)
-- No deprecated Contentful SDK methods used
-- Changes are consistent with existing code patterns in the repo
-
-If any check fails, do not proceed.
-
-## 11) Required Response Structure
-
-Only after all checks pass, respond with:
-**Goal** — what is changing and why
-**Approach** — high-level solution + links to official docs
-**Scope** — files affected and dependency usage
-**Git commit proposal** — Conventional Commit format
-**Next steps** — tests, docs, or follow-ups (if applicable)
+Before responding, verify:
+- [ ] `npm run build` succeeds in the app directory
+- [ ] No linter errors on modified files
+- [ ] TypeScript types are correct (no `any`, proper imports)
+- [ ] Forma 36 components used correctly (standard apps only)
+- [ ] No deprecated Contentful SDK methods
+- [ ] Changes are consistent with existing patterns in the app

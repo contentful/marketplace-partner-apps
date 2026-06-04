@@ -8,7 +8,7 @@ import { productDataTransformer, collectionDataTransformer, removeHttpsAndTraili
 
 import { validateParameters } from './utils/validation';
 import { previewsToProductVariants } from './dataTransformer';
-import { SHOPIFY_API_VERSION, SHOPIFY_ENTITY_LIMIT } from './constants';
+import { SHOPIFY_ENTITY_LIMIT, resolveShopifyApiVersion } from './constants';
 import { convertStringToBase64, convertBase64ToString, convertCollectionToBase64, convertProductToBase64 } from './utils/base64';
 import { retryWithBackoff } from './utils/retry';
 import { createFallbackPreview } from './utils/fallback';
@@ -20,10 +20,11 @@ export async function makeShopifyClient(config) {
   }
 
   const { storefrontAccessToken, apiEndpoint } = config;
+  const apiVersion = resolveShopifyApiVersion(config);
 
   return createStorefrontApiClient({
     storeDomain: removeHttpsAndTrailingSlash(apiEndpoint),
-    apiVersion: SHOPIFY_API_VERSION,
+    apiVersion,
     publicAccessToken: storefrontAccessToken,
   });
 }
@@ -47,7 +48,8 @@ const getFetch = () => {
 
 const graphqlRequest = async (config, query) => {
   const { apiEndpoint, storefrontAccessToken } = config;
-  const url = `https://${removeHttpsAndTrailingSlash(apiEndpoint)}/api/${SHOPIFY_API_VERSION}/graphql`;
+  const apiVersion = resolveShopifyApiVersion(config);
+  const url = `https://${removeHttpsAndTrailingSlash(apiEndpoint)}/api/${apiVersion}/graphql`;
 
   return retryWithBackoff(async () => {
     const fetchFn = getFetch();

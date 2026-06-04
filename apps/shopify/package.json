@@ -1,6 +1,6 @@
 {
   "name": "@contentful/shopify-sku",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "description": "Contentful app for importing Shopify products using the Storefront API",
   "private": true,
   "devDependencies": {
@@ -16,7 +16,7 @@
     "vite": "^7.2.2"
   },
   "dependencies": {
-    "@contentful/ecommerce-app-base": "^4.0.40",
+    "@contentful/ecommerce-app-base": "^4.1.2",
     "@contentful/f36-components": "^4.81.1",
     "@contentful/f36-icons": "^4.29.1",
     "@contentful/f36-tokens": "^4.0.5",

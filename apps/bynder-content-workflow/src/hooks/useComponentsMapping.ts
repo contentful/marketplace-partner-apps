@@ -26,7 +26,7 @@ export default function useComponentsMapping() {
       });
       return existing.sys.id;
     } catch (error: any) {
-      if (error?.code === "NotFound") {
+      if (error?.message === "The resource could not be found.") {
         if (!credentials.current) {
             throw new Error("App cofinguration is missing");
         }

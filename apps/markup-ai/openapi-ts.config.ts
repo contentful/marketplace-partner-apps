@@ -14,6 +14,10 @@ export default defineConfig({
       enums: "typescript",
       name: "@hey-api/typescript",
     },
-    "@tanstack/react-query",
+    {
+      name: "@tanstack/react-query",
+      // Infinite query variants use v5 type signatures; the project pins react-query v4.
+      infiniteQueryOptions: false,
+    },
   ],
 });

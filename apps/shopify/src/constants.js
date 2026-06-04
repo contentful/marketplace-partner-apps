@@ -2,9 +2,19 @@
 // returned with this unfortunate title, and there is no other way to check
 // whether the returned variant is the default one or not
 export const DEFAULT_SHOPIFY_VARIANT_TITLE = 'Default Title';
-// upgrade API version to next stable version every quarter
-export const SHOPIFY_API_VERSION = '2024-10';
 export const SHOPIFY_ENTITY_LIMIT = 250;
+export const SHOPIFY_SUPPORTED_API_VERSIONS = ['2025-07', '2025-10', '2026-01', '2026-04'];
+export const SHOPIFY_DEFAULT_API_VERSION = '2025-07';
+
+export function resolveShopifyApiVersion(config = {}) {
+  const apiVersion = config.apiVersion;
+
+  if (SHOPIFY_SUPPORTED_API_VERSIONS.includes(apiVersion)) {
+    return apiVersion;
+  }
+
+  return SHOPIFY_DEFAULT_API_VERSION;
+}
 
 export const ENTITY_TYPE = {
   product: 'product',

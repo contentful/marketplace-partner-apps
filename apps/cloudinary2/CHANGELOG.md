@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.4.2](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.4.1...cloudinary-assets-v1.4.2) (2026-05-20)
+
+
+### Bug Fixes
+
+* **cloudinary2:** restore saved crop transformation on image editor reopen [ES-282] ([#8203](https://github.com/contentful/marketplace-partner-apps/issues/8203)) ([fbab6f6](https://github.com/contentful/marketplace-partner-apps/commit/fbab6f60a79c172d07f9d6bb974952d31a426e6a))
+
+## [1.4.1](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.4.0...cloudinary-assets-v1.4.1) (2026-05-07)
+
+
+### Bug Fixes
+
+* **cloudinary2:** undefined in video thumbnail URLs [ES-229] ([#8181](https://github.com/contentful/marketplace-partner-apps/issues/8181)) ([f2e6e45](https://github.com/contentful/marketplace-partner-apps/commit/f2e6e451888c92684d2f9c9226f473683a352cfd))
+* **deps:** bump picomatch in /apps/cloudinary2 ([#7983](https://github.com/contentful/marketplace-partner-apps/issues/7983)) ([56ce7c2](https://github.com/contentful/marketplace-partner-apps/commit/56ce7c214a181aa3d5099f850975eb26e6987828))
+
 ## [1.4.0](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.3.1...cloudinary-assets-v1.4.0) (2026-03-04)
 
 

@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import type { EditorAppSDK } from '@contentful/app-sdk';
+import type { EntryReference } from '@/types';
 
 type EntryType = { id: string; name: string };
 
@@ -22,7 +23,7 @@ export const useEntrySummaries = ({ sdk, entries, env, selectedCampaign, selecte
 
   const loadEntrySummary = useCallback(async (entryId: string) => {
     try {
-      const entry: any = await sdk.cma.entry.get({ entryId });
+      const entry = await sdk.cma.entry.get({ entryId }) as EntryReference & { fields?: { name?: Record<string, string> } };
       const contentTypeId: string | undefined = entry?.sys?.contentType?.sys?.id;
       const entryName: string | undefined = entry?.fields?.name?.[sdk.locales.default];
       const contentTypeName = entries.find((ct) => ct.id === contentTypeId)?.name || contentTypeId || undefined;
@@ -79,14 +80,14 @@ export const useEntrySummaries = ({ sdk, entries, env, selectedCampaign, selecte
   const cleanVariationsField = (meta: Record<string, string>) => {
     const metaEntryIds = Object.values(meta);
     const currentVariations = sdk.entry.fields['variations']?.getValue() || [];
-    const cleaned = currentVariations.filter((v: any) => metaEntryIds.includes(v.sys?.id));
+    const cleaned = currentVariations.filter((v: EntryReference) => metaEntryIds.includes(v.sys?.id));
     sdk.entry.fields['variations']?.setValue(cleaned);
   };
 
   const pushLinkToVariations = (entryId: string) => {
     const newLink = { sys: { type: 'Link', linkType: 'Entry', id: entryId } };
     const currentVariations = sdk.entry.fields['variations']?.getValue() || [];
-    const filtered = currentVariations.filter((v: any) => v.sys?.id !== entryId);
+    const filtered = currentVariations.filter((v: EntryReference) => v.sys?.id !== entryId);
     sdk.entry.fields['variations']?.setValue([...filtered, newLink]);
   };
 
@@ -105,11 +106,12 @@ export const useEntrySummaries = ({ sdk, entries, env, selectedCampaign, selecte
     const entryId = currentMeta[variationKey];
     if (!entryId) return;
 
-    const { [variationKey]: _, ...rest } = currentMeta;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { [variationKey]: _removed, ...rest } = currentMeta;
     sdk.entry.fields['meta']?.setValue(rest);
 
     const currentVariations = sdk.entry.fields['variations']?.getValue() || [];
-    const cleaned = currentVariations.filter((v: any) => v.sys?.id !== entryId);
+    const cleaned = currentVariations.filter((v: EntryReference) => v.sys?.id !== entryId);
     sdk.entry.fields['variations']?.setValue(cleaned);
 
     sdk.notifier.success('Link removed for this variation');

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.14](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.13...bynder-content-workflow-v1.0.14) (2026-04-30)
+
+
+### Bug Fixes
+
+* Fail to map Component -&gt; Reference field [GC-7555] ([#8162](https://github.com/contentful/marketplace-partner-apps/issues/8162)) ([bddb6d8](https://github.com/contentful/marketplace-partner-apps/commit/bddb6d895948886900b2993b8a22bcf984def62d))
+
 ## [1.0.13](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.12...bynder-content-workflow-v1.0.13) (2026-04-09)
 
 
