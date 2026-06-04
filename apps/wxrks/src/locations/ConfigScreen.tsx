@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ConfigAppSDK } from '@contentful/app-sdk';
 import { useCMA, useSDK } from '@contentful/react-apps-toolkit';
@@ -14,17 +14,16 @@ import {
   Notification,
   Spinner,
 } from '@contentful/f36-components';
-import { SectionHeading, Text } from '@contentful/f36-typography';
-import { Multiselect } from '@contentful/f36-multiselect';
+import { SectionHeading } from '@contentful/f36-typography';
 import { Image } from '@contentful/f36-image';
-import { ContentTypeProps } from 'contentful-management';
 
 import BwxConfigInput from '../components/BwxConfigInput';
 import BwxMultiselectWorkflows from '../components/BwxMultiselectWorkflows';
 
-import { AppInstallationParameters, EditorInterfaceAssignment } from '../interfaces';
+import { AppInstallationParameters, EditorInterfaceAssignment, Workflow } from '../interfaces';
 
 import bwxApi from '../api/api';
+import { parseWorkflows, serializeWorkflows } from '../workflows';
 
 const emptyState: AppInstallationParameters = {
   apiKey: '',
@@ -32,11 +31,8 @@ const emptyState: AppInstallationParameters = {
   configUuid: '',
   orgUnitUuid: '',
   contactUuid: '',
-  workflows: [],
-  selectedContentTypes: [],
+  workflows: '',
 };
-
-type EditorInterfaceState = Record<string, { sidebar?: { position: number } }>;
 
 const ConfigScreen = () => {
   const sdk = useSDK<ConfigAppSDK>();
@@ -46,54 +42,40 @@ const ConfigScreen = () => {
   const [secretKey, setSecretKey] = useState<string>('');
   const [configUuid, setConfigUuid] = useState<string>('');
   const [workflows, setWorkflows] = useState<string[]>([]);
+  const [workflowOptions, setWorkflowOptions] = useState<Workflow[]>([]);
+  const [loadingWorkflows, setLoadingWorkflows] = useState<boolean>(false);
+  const [workflowLoadError, setWorkflowLoadError] = useState<boolean>(false);
   const [orgUnitUuid, setOrgUnitUuid] = useState<string>('');
   const [contactUuid, setContactUuid] = useState<string>('');
-  const [selectedContentTypes, setSelectedContentTypes] = useState<string[]>([]);
-  const [contentTypes, setContentTypes] = useState<ContentTypeProps[]>([]);
-  const [filteredContentTypes, setFilteredContentTypes] = useState<ContentTypeProps[]>([]);
   const [firstInstallation, setFirstInstallation] = useState<boolean>(true);
+  const [hasSavedSecret, setHasSavedSecret] = useState<boolean>(false);
   const [loadingConnection, setLoadingConnection] = useState<boolean>(false);
   const [loadingScreen, setLoadingScreen] = useState<boolean>(true);
   const [isConnected, setIsConnected] = useState<boolean>(false);
 
-  const installationParameters = useMemo<AppInstallationParameters>(() => {
-    return {
-      apiKey: apiKey.trim(),
-      secretKey: secretKey.trim(),
-      configUuid: configUuid.trim(),
-      orgUnitUuid: orgUnitUuid.trim(),
-      contactUuid: contactUuid.trim(),
-      workflows,
-      selectedContentTypes,
-    };
-  }, [apiKey, secretKey, configUuid, orgUnitUuid, contactUuid, workflows, selectedContentTypes]);
+  const installationParameters = useMemo<AppInstallationParameters>(() => ({
+    apiKey: apiKey.trim(),
+    secretKey: secretKey.trim(),
+    configUuid: configUuid.trim(),
+    orgUnitUuid: orgUnitUuid.trim(),
+    contactUuid: contactUuid.trim(),
+    workflows: serializeWorkflows(workflows),
+  }), [apiKey, configUuid, contactUuid, orgUnitUuid, secretKey, workflows]);
 
-  const handleSearchContentTypes = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.trim().toLowerCase();
-    if (!value) {
-      setFilteredContentTypes(contentTypes);
-      return;
+  const loadWorkflowOptions = useCallback(async () => {
+    setLoadingWorkflows(true);
+    setWorkflowLoadError(false);
+    try {
+      const loadedWorkflows = await bwxApi.getWorkflows(sdk, cma);
+      setWorkflowOptions(loadedWorkflows);
+    } catch (err) {
+      console.error(err);
+      setWorkflowOptions([]);
+      setWorkflowLoadError(true);
+    } finally {
+      setLoadingWorkflows(false);
     }
-
-    const nextItems = contentTypes.filter((item) => {
-      const byName = item.name.toLowerCase().includes(value);
-      const byId = item.sys.id.toLowerCase().includes(value);
-      return byName || byId;
-    });
-
-    setFilteredContentTypes(nextItems);
-  };
-
-  const onSelectContentType = (event: ChangeEvent<HTMLInputElement>) => {
-    const { checked, value } = event.target;
-
-    if (checked) {
-      setSelectedContentTypes((prev) => (prev.includes(value) ? prev : [...prev, value]));
-      return;
-    }
-
-    setSelectedContentTypes((prev) => prev.filter((item) => item !== value));
-  };
+  }, [sdk, cma]);
 
   const testConnection = async (event?: FormEvent<HTMLFormElement>) => {
     event?.preventDefault();
@@ -101,11 +83,11 @@ const ConfigScreen = () => {
     setIsConnected(false);
 
     try {
-      await bwxApi.login(apiKey.trim(), secretKey.trim(), sdk, cma);
+      await bwxApi.login(apiKey.trim(), secretKey.trim() || undefined, sdk, cma);
       setIsConnected(true);
       Notification.success('Successfully authenticated with wxrks.');
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
       setIsConnected(false);
       Notification.error('Failed to authenticate with wxrks. Check your credentials and try again.');
     } finally {
@@ -114,26 +96,30 @@ const ConfigScreen = () => {
   };
 
   const onConfigure = useCallback(async () => {
-    const currentState = await sdk.app.getCurrentState();
+    const [currentState, contentTypeResult] = await Promise.all([
+      sdk.app.getCurrentState(),
+      cma.contentType.getMany({ limit: 1000 }),
+    ]);
 
     const formIsValid =
+      isConnected &&
       !!installationParameters.apiKey &&
       !!installationParameters.secretKey &&
       !!installationParameters.configUuid &&
-      installationParameters.selectedContentTypes.length > 0;
+      workflows.length > 0;
 
     if (!formIsValid) {
       Notification.error(
-        'Please fill in API ID, Secret Key, Connector Config UUID and select at least one content type for the sidebar.',
+        'Please fill in API ID, Secret Key, Connector Config UUID, and workflows.',
         { title: 'Invalid Configuration' }
       );
       throw new Error('Invalid app configuration');
     }
 
-    const editorInterface: EditorInterfaceAssignment = installationParameters.selectedContentTypes.reduce(
-      (acc, contentTypeId) => ({
+    const editorInterface: EditorInterfaceAssignment = (contentTypeResult.items ?? []).reduce(
+      (acc, contentType) => ({
         ...acc,
-        [contentTypeId]: { sidebar: { position: 1 } },
+        [contentType.sys.id]: { sidebar: { position: 1 } },
       }),
       {}
     );
@@ -145,49 +131,33 @@ const ConfigScreen = () => {
         EditorInterface: editorInterface,
       },
     };
-  }, [installationParameters, sdk]);
+  }, [cma.contentType, installationParameters, isConnected, sdk, workflows.length]);
 
   useEffect(() => {
     sdk.app.onConfigure(() => onConfigure());
   }, [sdk, onConfigure]);
 
   useEffect(() => {
+    if (isConnected) {
+      loadWorkflowOptions();
+    }
+  }, [isConnected, loadWorkflowOptions]);
+
+  useEffect(() => {
     const init = async () => {
       try {
-        const [currentParameters, currentState, contentTypeResult] = await Promise.all([
-          sdk.app.getParameters(),
-          sdk.app.getCurrentState(),
-          cma.contentType.getMany({ limit: 1000 }),
-        ]);
-
-        if (contentTypeResult?.items) {
-          setContentTypes(contentTypeResult.items);
-          setFilteredContentTypes(contentTypeResult.items);
-        }
+        const currentParameters = await sdk.app.getParameters();
 
         if (currentParameters) {
           setFirstInstallation(false);
           setApiKey(currentParameters.apiKey ?? emptyState.apiKey);
-          setSecretKey(currentParameters.secretKey ?? emptyState.secretKey);
           setConfigUuid(currentParameters.configUuid ?? emptyState.configUuid);
           setContactUuid(currentParameters.contactUuid ?? emptyState.contactUuid);
           setOrgUnitUuid(currentParameters.orgUnitUuid ?? emptyState.orgUnitUuid);
-          setWorkflows(currentParameters.workflows ?? emptyState.workflows);
+          setWorkflows(parseWorkflows(currentParameters.workflows));
 
-          const selectedFromParams = currentParameters.selectedContentTypes ?? [];
-          if (selectedFromParams.length > 0) {
-            setSelectedContentTypes(selectedFromParams);
-          }
-        }
-
-        if (!currentParameters?.selectedContentTypes?.length) {
-          const editorInterface = (currentState?.EditorInterface ?? {}) as EditorInterfaceState;
-          const selectedFromTargetState = Object.keys(editorInterface).filter(
-            (contentTypeId) => editorInterface[contentTypeId]?.sidebar
-          );
-
-          if (selectedFromTargetState.length > 0) {
-            setSelectedContentTypes(selectedFromTargetState);
+          if (currentParameters.secretKey) {
+            setHasSavedSecret(true);
           }
         }
       } finally {
@@ -197,7 +167,7 @@ const ConfigScreen = () => {
     };
 
     init();
-  }, [sdk, cma]);
+  }, [sdk]);
 
   if (loadingScreen) {
     return (
@@ -217,7 +187,7 @@ const ConfigScreen = () => {
       />
 
       <Flex flexDirection="column" style={{ width: '60%' }} gap="spacingS">
-        <SectionHeading marginBottom="spacingS">Authentication Settings (1/3)</SectionHeading>
+        <SectionHeading marginBottom="spacingS">Authentication Settings (1/2)</SectionHeading>
         <Card style={{ padding: '30px' }}>
           <Form onSubmit={testConnection}>
             <FormControl isRequired>
@@ -234,7 +204,7 @@ const ConfigScreen = () => {
               variant="primary"
               type="submit"
               isLoading={loadingConnection}
-              isDisabled={loadingConnection || !apiKey.trim() || !secretKey.trim()}
+              isDisabled={loadingConnection || !apiKey.trim() || (!secretKey.trim() && !hasSavedSecret)}
               isFullWidth
             >
               {loadingConnection ? 'Testing credentials' : 'Test Connection'}
@@ -243,72 +213,46 @@ const ConfigScreen = () => {
 
           {isConnected && (
             <Flex flexDirection="column" gap="spacingS" alignItems="center">
-              <Text fontColor="green600" fontWeight="fontWeightDemiBold">
-                You are connected with wxrks
-              </Text>
+              <br></br>
+              <Note style={{ padding: '10px' }} variant="positive"><b>You are connected with wxrks</b></Note>
             </Flex>
           )}
         </Card>
       </Flex>
 
-      <Flex flexDirection="column" style={{ width: '60%' }} gap="spacingS">
-        <SectionHeading marginTop="spacingS" marginBottom="spacingS">Project Settings (2/3)</SectionHeading>
-        <Card style={{ padding: '30px', paddingBottom: '0px' }}>
-          <Flex flexDirection="column">
-            <BwxConfigInput onInput={setConfigUuid} configUuid={configUuid} />
-            <BwxMultiselectWorkflows onInput={setWorkflows} workflowsValue={workflows} hideTip={false} />
-          </Flex>
-        </Card>
-      </Flex>
-
-      <Flex flexDirection="column" style={{ width: '60%' }} gap="spacingS">
-        <SectionHeading marginTop="spacingS" marginBottom="spacingS">Content Model Assignment (3/3)</SectionHeading>
-        <Card style={{ padding: '30px' }}>
-          <FormControl isRequired>
-            <FormControl.Label>Content Types with wxrks sidebar</FormControl.Label>
-            <Multiselect
-              placeholder="Select content types"
-              searchProps={{
-                searchPlaceholder: 'Search content types',
-                onSearchValueChange: handleSearchContentTypes,
-              }}
-              popoverProps={{ isFullWidth: true }}
-              currentSelection={selectedContentTypes}
-            >
-              {filteredContentTypes.map((item) => (
-                <Multiselect.Option
-                  key={item.sys.id}
-                  itemId={item.sys.id}
-                  value={item.sys.id}
-                  label={item.name}
-                  onSelectItem={onSelectContentType}
-                  isChecked={selectedContentTypes.includes(item.sys.id)}
+      {isConnected && (
+        <>
+          <Flex flexDirection="column" style={{ width: '60%' }} gap="spacingS">
+            <SectionHeading marginTop="spacingS" marginBottom="spacingS">Project Settings (2/2)</SectionHeading>
+            <Card style={{ padding: '30px', paddingBottom: '0px' }}>
+              <Flex flexDirection="column">
+                <BwxConfigInput onInput={setConfigUuid} configUuid={configUuid} />
+                <BwxMultiselectWorkflows
+                  onInput={setWorkflows}
+                  workflowsValue={workflows}
+                  hideTip={false}
+                  workflowOptions={workflowOptions}
+                  workflowsLoading={loadingWorkflows}
+                  workflowsError={workflowLoadError}
                 />
-              ))}
-            </Multiselect>
-            <FormControl.HelpText>
-              Select only the content types where editors should see the wxrks sidebar.
-            </FormControl.HelpText>
-          </FormControl>
+                <br></br>
+              </Flex>
+            </Card>
+          </Flex>
+        </>
+      )}
 
-          {selectedContentTypes.length === 0 && (
-            <Note variant="warning">Select at least one content type to finish app installation.</Note>
-          )}
-        </Card>
-      </Flex>
-
-      {!firstInstallation && (
+      {!firstInstallation && isConnected && (
         <Note style={{ width: '60%' }} variant="warning">
-          Changes may take a few seconds to reflect in app installations.
+          Changes may take a few seconds to reflect in the app installations.
         </Note>
       )}
 
       <Note style={{ width: '60%' }} variant="neutral">
-        For further details on how to configure, please visit: <a href="https://wxrks.com" target="_blank" rel="noreferrer">wxrks</a>
+        For further details on how to configure, please visit: <a href="https://support.wxrks.com/en/articles/10430113-bureau-works-contentful-integration" target="_blank" rel="noreferrer">wxrks</a>
       </Note>
     </Flex>
   );
 };
 
 export default ConfigScreen;
-

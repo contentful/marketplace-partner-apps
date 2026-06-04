@@ -1,68 +1,149 @@
 import React from 'react';
-import { FormControl, Grid, Badge } from '@contentful/f36-components';
+import { Badge, Flex, FormControl, Grid, Note, Spinner, Text } from '@contentful/f36-components';
 import { SectionHeading } from '@contentful/f36-typography';
 import { Multiselect } from '@contentful/f36-multiselect';
-import { Workflow, WorkflowType } from '../interfaces';
-
-const workflowsState: Workflow[] = [
-  { key: WorkflowType.TRANSLATION, description: "TRANSLATION" },
-  { key: WorkflowType.PROOFREADING, description: "PROOFREADING" },
-  { key: WorkflowType.REVIEW, description: "REVIEW" },
-  { key: WorkflowType.REVIEW_2, description: "REVIEW 2" },
-  { key: WorkflowType.REVIEW_3, description: "REVIEW 3" },
-  { key: WorkflowType.ICR, description: "ICR" },
-  { key: WorkflowType.REGIONAL_APPROVAL, description: "REGIONAL APPROVAL" },
-  { key: WorkflowType.ICR_2, description: "ICR 2" },
-  { key: WorkflowType.WEB_QA, description: "WEB QA" },
-  { key: WorkflowType.FEEDBACK_IMPLEMENTATION, description: "FEEDBACK IMPLEMENTATION" }
-];
+import { Workflow } from '../interfaces';
 
 interface Props {
   workflowsValue: string[];
   hideTip: boolean;
   onInput: (data: string[]) => void;
+  workflowOptions?: Workflow[];
+  workflowsLoading?: boolean;
+  workflowsError?: boolean;
 }
 
-function WorkflowMultiselect({ onInput, workflowsValue, hideTip } : Props) {
-  const workflows = React.useMemo(() => workflowsState, []);
-  
-  const wValues = workflowsValue ? workflowsValue.map(w => w.replace("_", " ").toUpperCase()) : [];
-  const [selected, setSelected] = React.useState<string[]>(wValues ?? []);
+interface WorkflowOption extends Workflow {
+  unavailable?: boolean;
+}
+
+const normalizeWorkflowCode = (value: string) => {
+  return value
+    .trim()
+    .toUpperCase()
+    .replace(/[^A-Z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+};
+
+const normalizeWorkflowValues = (values?: string[]) => {
+  return Array.from(new Set((values ?? []).map(normalizeWorkflowCode).filter(Boolean)));
+};
+
+const workflowTitle = (workflow: WorkflowOption) => {
+  const title = workflow.title || workflow.description || workflow.code.replace(/_/g, ' ');
+  return workflow.unavailable ? `${title} (not available)` : title;
+};
+
+const sameValues = (left: string[], right: string[]) => {
+  return left.length === right.length && left.every((value, index) => value === right[index]);
+};
+
+function WorkflowMultiselect({
+  onInput,
+  workflowsValue,
+  hideTip,
+  workflowOptions = [],
+  workflowsLoading = false,
+  workflowsError = false
+}: Props) {
+  const normalizedWorkflowValues = React.useMemo(
+    () => normalizeWorkflowValues(workflowsValue),
+    [workflowsValue]
+  );
+
+  const [selected, setSelected] = React.useState<string[]>(normalizedWorkflowValues);
   const [hide] = React.useState<boolean>(hideTip ?? false);
 
   React.useEffect(() => {
-    const selectedWorkflows = selected.map(w => w.replace(" ", "_").toUpperCase());
-    onInput(selectedWorkflows);
-  }, [selected, onInput]); 
-  
+    setSelected((current) => sameValues(current, normalizedWorkflowValues) ? current : normalizedWorkflowValues);
+  }, [normalizedWorkflowValues]);
+
+  const workflows = React.useMemo(() => {
+    return workflowOptions
+      .map((workflow) => ({
+        ...workflow,
+        code: normalizeWorkflowCode(workflow.code)
+      }))
+      .filter((workflow) => workflow.code)
+      .sort((left, right) => {
+        const leftSequence = left.sequence ?? Number.MAX_SAFE_INTEGER;
+        const rightSequence = right.sequence ?? Number.MAX_SAFE_INTEGER;
+
+        if (leftSequence !== rightSequence) {
+          return leftSequence - rightSequence;
+        }
+
+        return workflowTitle(left).localeCompare(workflowTitle(right));
+      });
+  }, [workflowOptions]);
+
+  const workflowsByCode = React.useMemo(() => {
+    return workflows.reduce((acc, workflow) => {
+      acc.set(workflow.code, workflow);
+      return acc;
+    }, new Map<string, Workflow>());
+  }, [workflows]);
+
+  const unmatchedSelected = React.useMemo(() => {
+    if (workflowsLoading) {
+      return [];
+    }
+
+    return selected.filter((code) => !workflowsByCode.has(code));
+  }, [selected, workflowsByCode, workflowsLoading]);
+
+  const renderedWorkflows = React.useMemo(() => {
+    return [
+      ...workflows,
+      ...unmatchedSelected.map((code) => ({
+        code,
+        title: code,
+        unavailable: true
+      }))
+    ];
+  }, [workflows, unmatchedSelected]);
+
+  React.useEffect(() => {
+    onInput(selected);
+  }, [selected, onInput]);
+
   const handleSelectItem = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { checked, value } = event.target;
     if (checked) {
-      setSelected((prevState) => [...prevState, value]);
+      setSelected((prevState) => Array.from(new Set([...prevState, value])));
     } else {
-      setSelected((prevState) =>
-      prevState.filter((space) => space !== value),
-      );
+      setSelected((prevState) => prevState.filter((workflow) => workflow !== value));
     }
   };
 
   const toggleAll = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { checked } = event.target;
     if (checked) {
-      setSelected(workflows.map(v => v.key));
+      setSelected(workflows.map((workflow) => workflow.code));
     } else {
       setSelected([]);
     }
   };
 
   const areAllSelected = React.useMemo(() => {
-    return workflows.every((element) => selected.includes(element.key));
+    return workflows.length > 0 && workflows.every((workflow) => selected.includes(workflow.code));
   }, [selected, workflows]);
+
+  const selectedLabel = (code: string) => {
+    const workflow = workflowsByCode.get(code);
+    return workflow ? workflowTitle(workflow) : code;
+  };
 
   return (
     <Grid>
-      <FormControl style={{marginBottom: "0"}}>
+      <FormControl style={{ marginBottom: "0" }}>
         <FormControl.Label isRequired>Workflows</FormControl.Label>
+        {workflowsLoading && (
+          <Flex alignItems="center" gap="spacingXs" marginBottom="spacingXs">
+            <Text fontColor="blue500" fontWeight="fontWeightDemiBold">Loading workflows</Text>
+            <Spinner variant="primary" />
+          </Flex>
+        )}
         <Multiselect
           key="multiselect-workflows"
           currentSelection={selected}
@@ -73,21 +154,21 @@ function WorkflowMultiselect({ onInput, workflowsValue, hideTip } : Props) {
             onSelectItem={toggleAll}
             isChecked={areAllSelected}
           />
-          {workflows.map((workflow, index) => {
-            const val = workflow.description
+          {renderedWorkflows.map((workflow, index) => {
+            const label = workflowTitle(workflow);
             return (
               <Multiselect.Option
-                key={`${index}-${val}`}
-                itemId={`${index}-workflow-${val}`}
-                value={workflow.key}
-                label={workflow.description}
+                key={`${workflow.code}-${index}`}
+                itemId={`${index}-workflow-${workflow.code}`}
+                value={workflow.code}
+                label={label}
                 onSelectItem={handleSelectItem}
-                isChecked={selected.includes(workflow.key)}
+                isChecked={selected.includes(workflow.code)}
               />
             );
           })}
         </Multiselect>
-        { !hide && (
+        {!hide && (
           <Grid>
             <FormControl.HelpText>
               Please select at least one workflow to define the workflow in your projects on wxrks.
@@ -96,9 +177,29 @@ function WorkflowMultiselect({ onInput, workflowsValue, hideTip } : Props) {
           </Grid>)
         }
       </FormControl>
-      
-      {!hide && selected.length > 0 && (<SectionHeading marginBottom="none" marginTop="spacingS">Selected workflows</SectionHeading>)}
-      
+
+      {workflowsError && (
+        <Note style={{ marginTop: "10px" }} variant="warning">
+          Could not load workflows from wxrks. Test the connection again before changing this configuration.
+        </Note>
+      )}
+
+      {!workflowsLoading && workflows.length === 0 && !workflowsError && (
+        <Note style={{ marginTop: "10px" }} variant="warning">
+          No active workflows were found for this wxrks account.
+        </Note>
+      )}
+
+      {unmatchedSelected.length > 0 && (
+        <Note style={{ marginTop: "10px" }} variant="warning">
+          Some saved workflows are not available in this wxrks account: {unmatchedSelected.join(', ')}.
+        </Note>
+      )}
+
+      {!hide && selected.length > 0 && (
+        <SectionHeading marginBottom="none" marginTop="spacingS">Selected workflows</SectionHeading>
+      )}
+
       {!hide && (
         <Grid
           columns="1fr 1fr 1fr"
@@ -107,7 +208,7 @@ function WorkflowMultiselect({ onInput, workflowsValue, hideTip } : Props) {
           marginTop="spacingS">
           {selected.map((item) => (
             <Grid.Item key={item}>
-              <Badge variant="primary-filled"><span style={{textTransform: "uppercase"}}>{item}</span></Badge>
+              <Badge variant="primary-filled"><span style={{ textTransform: "uppercase" }}>{selectedLabel(item)}</span></Badge>
             </Grid.Item>
           ))}
         </Grid>

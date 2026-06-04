@@ -22,11 +22,14 @@ interface CollectionsState {
 }
 
 const ENTRIES_LIMIT = 50;
+const logoSrc = process.env.REACT_APP_LAMBDA_API
+  ? `${process.env.PUBLIC_URL}/${process.env.REACT_APP_LAMBDA_API}/frontend/assets/wxrks.svg`
+  : `${process.env.PUBLIC_URL}/assets/wxrks.svg`;
 
 export default function ProjectCreation({ contentTypes }: ProjectCreationProps) {
   const sdk = useSDK<PageAppSDK>();
   const cma = useCMA();
-  
+
   const [data, setData] = useState<CollectionsState>({ total: 0, items: [] });
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(20);
@@ -40,18 +43,18 @@ export default function ProjectCreation({ contentTypes }: ProjectCreationProps) 
 
   useEffect(() => {
     const fetchData = async () => {
-      const params: any = { 
-        query: { 
-          'order': '-sys.updatedAt', 
-          'skip': page*itemsPerPage, 
+      const params: any = {
+        query: {
+          'order': '-sys.updatedAt',
+          'skip': page*itemsPerPage,
           'limit': itemsPerPage
         }
       }
-      
+
       if (querySearch) {
         params.query['query'] = querySearch
       }
-      
+
       if (contentTypeSearch) {
         params.query['sys.contentType.sys.id[in]'] = contentTypeSearch
       }
@@ -63,12 +66,12 @@ export default function ProjectCreation({ contentTypes }: ProjectCreationProps) 
       if (createdByMe) {
         params.query['sys.createdBy.sys.id'] = sdk.user.sys.id
       }
-      
+
       const resp: any = await cma.entry
         .getMany(params)
         .then((resp) => resp)
         .catch(() => ({ total: 0, items: [] }));
-    
+
       setData({ total: resp.total, items: resp.items });
     }
 
@@ -76,7 +79,7 @@ export default function ProjectCreation({ contentTypes }: ProjectCreationProps) 
       fetchData();
     }, 500);
 
-    return () => clearTimeout(debounce);    
+    return () => clearTimeout(debounce);
   }, [page, itemsPerPage, createdByMe, querySearch, contentTypeSearch, tagsSearch, cma.entry, sdk.user.sys.id])
 
   const createdProject = () => {
@@ -100,14 +103,14 @@ export default function ProjectCreation({ contentTypes }: ProjectCreationProps) 
       : selectedEntries.includes(entryIds)
       ? selectedEntries.filter((id) => id !== entryIds)
       : [...selectedEntries, entryIds]
-  
+
     if (updatedSelectedEntries.length > ENTRIES_LIMIT) {
       Notification.warning(`The maximum limit of ${ENTRIES_LIMIT} entries per project has been reached.`)
       return
     }
-  
+
     setSelectedEntries(updatedSelectedEntries);
-  
+
     if (!Array.isArray(entryIds)) {
       const references = await fetchReferences(entryIds)
       const referenceIds = references.map((ref) => ref.sys.id)
@@ -123,10 +126,10 @@ export default function ProjectCreation({ contentTypes }: ProjectCreationProps) 
         entryId,
         include: 1
       });
-  
+
       const references = response.includes?.Entry?.filter((entry) => entry.fields) || []
       const referenceIds = references.map((ref) => ref.sys.id)
-      
+
       setSelectedReferences((prev) => Array.from(new Set([...prev, ...referenceIds])))
       return references;
     } catch (error) {
@@ -140,7 +143,7 @@ export default function ProjectCreation({ contentTypes }: ProjectCreationProps) 
       : selectedReferences.includes(referenceIds)
       ? selectedReferences.filter((id) => id !== referenceIds)
       : [...selectedReferences, referenceIds]
-  
+
       setSelectedReferences(Array.from(new Set(updatedSelectedReferences)))
   };
 
@@ -154,7 +157,7 @@ export default function ProjectCreation({ contentTypes }: ProjectCreationProps) 
       const references = expandedEntries[entryId] || await fetchReferences(entryId)
       setExpandedEntries((prev) => ({ ...prev, [entryId]: references }))
     }
-  };  
+  };
 
   const prepareProjectEntries = () => {
     const allEntryIDs = new Set<string>();
@@ -162,7 +165,7 @@ export default function ProjectCreation({ contentTypes }: ProjectCreationProps) 
     selectedEntries.forEach((entryId) => allEntryIDs.add(entryId))
     selectedReferences.forEach((refId) => allEntryIDs.add(refId))
     return Array.from(allEntryIDs);
-  };  
+  };
 
   return (
     <Flex flexDirection="column" marginTop="spacingXl">
@@ -170,11 +173,11 @@ export default function ProjectCreation({ contentTypes }: ProjectCreationProps) 
         alt='wxrks logo'
         height="100px"
         width="230px"
-        src={`${process.env.PUBLIC_URL}/assets/wxrks.svg`}
+        src={logoSrc}
       />
 
       <Button isDisabled={!selectedEntries.length} variant="primary" onClick={() => setIsExpanded(!isExpanded) } startIcon={<PlusIcon />} endIcon={!isExpanded ? <ChevronDownIcon /> : <ChevronUpIcon />}>Create New Project</Button>
-      
+
       <Collapse style={{ maxWidth: '500px' }} isExpanded={isExpanded}>
         <br />
         {isExpanded && (
@@ -190,7 +193,7 @@ export default function ProjectCreation({ contentTypes }: ProjectCreationProps) 
       <Box marginTop="spacingXl">
         <Heading as="h2">Select the set of entries to include in the project you are creating</Heading>
         <Paragraph>Note that the maximum number of entries per project is 50.</Paragraph>
-        
+
         {selectedEntries.length ? (
         <SectionHeading marginBottom="spacingS">
           Total selected: <Badge variant="featured">{selectedEntries.length}</Badge>
@@ -203,11 +206,11 @@ export default function ProjectCreation({ contentTypes }: ProjectCreationProps) 
             placeholder="Type to search for entries"
             onChange={(e) => setQuerySearch(e.target.value)}
           />
-          
+
           <MultiselectTags onSelect={setTagsSearch}/>
-          
+
           <MultiselectSearchContentType contentTypes={contentTypes} onSelect={setContentTypeSearch}/>
-          
+
           <Switch
             name="filter-created-by-me"
             id="filter-created-by-me"
@@ -227,13 +230,13 @@ export default function ProjectCreation({ contentTypes }: ProjectCreationProps) 
           onSelected={onSelected}
           expandedItems={expandedEntries}
           onExpand={handleToggleExpand}
-          selectedReferences={selectedReferences} 
+          selectedReferences={selectedReferences}
           onSelectedReferences={onSelectedReferences}
           isCreateProject={true}
         />
-        
+
         <br></br>
-        
+
         <Pagination
           activePage={page}
           onPageChange={setPage}

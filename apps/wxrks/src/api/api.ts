@@ -1,17 +1,17 @@
 import { CMAClient, ConfigAppSDK } from '@contentful/app-sdk';
 import fetchWithSignedRequest from '../security/signedRequests';
 
-import { ProjectCreation, TmChange } from '../interfaces';
+import { ProjectCreation, TmChange, Workflow } from '../interfaces';
+import { parseWorkflows } from '../workflows';
 
 const BASE_URL = process.env.REACT_APP_LAMBDA_API ? `/${process.env.REACT_APP_LAMBDA_API}/api/bwx` : '/api/bwx';
-const getTokenStorageKey = (sdk: ConfigAppSDK) => `bwxToken-${sdk.ids.space}`;
 
-const headers = (sdk: ConfigAppSDK): Record<string, string> => ({
-  "x-contentful-bwx-token": sessionStorage.getItem(getTokenStorageKey(sdk)) ?? ''
+const headers = (sdk: ConfigAppSDK) => ({
+  "x-contentful-bwx-token": sessionStorage.getItem(`bwxToken-${sdk.ids.space}`)
 });
 
 async function checkAuth (sdk: ConfigAppSDK, cma: CMAClient) {
-  const token = sessionStorage.getItem(getTokenStorageKey(sdk));
+  const token = sessionStorage.getItem(`bwxToken-${sdk.ids.space}`);
 
   if (!token) {
     await newLogin(sdk, cma);
@@ -29,35 +29,20 @@ async function checkAuth (sdk: ConfigAppSDK, cma: CMAClient) {
 
 async function newLogin(sdk: ConfigAppSDK, cma: CMAClient) {
   const apiKey = sdk.parameters.installation['apiKey'];
-  const secretKey = sdk.parameters.installation['secretKey'];
   
   if (!apiKey) {
-    throw new Error("Invalid app configuration. Missing API ID.");
+    throw new Error("Invalid credentials");
   }
 
-  if (!secretKey) {
-    throw new Error("Invalid app configuration. Missing Secret Key.");
-  }
-
-  await login(apiKey, secretKey, sdk, cma);
+  await login(apiKey, undefined, sdk, cma);
 }
 
-async function login (apiKey: string, secretKey: string, sdk: ConfigAppSDK, cma: CMAClient): Promise<any> {
-  const payload = {
-    accessKey: apiKey,
-    secret: secretKey
-  }
+async function login (apiKey: string, secretKey: string | undefined, sdk: ConfigAppSDK, cma: CMAClient): Promise<any> {
+  const payload = secretKey
+    ? { accessKey: apiKey, secret: secretKey }
+    : { accessKey: apiKey };
 
-  const req = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json'
-    },
-    body: JSON.stringify(payload)
-  };
-
-  const response = await fetch(`${BASE_URL}/auth`, req);
+  const response = await fetchWithSignedRequest(`${BASE_URL}/auth`, sdk, cma, {}, 'POST', payload);
 
   if (!response.ok) {
     throw new Error("Invalid credentials to connect with wxrks.");
@@ -66,7 +51,7 @@ async function login (apiKey: string, secretKey: string, sdk: ConfigAppSDK, cma:
   const token = response.headers.get('Bwx-Auth-Token');
   
   if (token) {
-    sessionStorage.setItem(getTokenStorageKey(sdk), token);
+    sessionStorage.setItem(`bwxToken-${sdk.ids.space}`, token);
   }
 
   return {
@@ -166,6 +151,20 @@ async function getConfigs(sdk: ConfigAppSDK, cma: CMAClient, requestId?: string)
   return response;
 }
 
+async function getWorkflows(sdk: ConfigAppSDK, cma: CMAClient, requestId?: string): Promise<Workflow[]> {
+  await checkAuth(sdk, cma);
+
+  const payload = buildPayload('', [], '', sdk, requestId);
+
+  const response = await fetchWithSignedRequest(`${BASE_URL}/workflows`, sdk, cma, headers(sdk), 'POST', payload);
+
+  if (!response.ok) {
+    throw new Error("Error to get workflows from wxrks");
+  }
+
+  return await response.json();
+}
+
 async function sendTmChanges(changes: TmChange[], sdk: ConfigAppSDK, cma: CMAClient): Promise<any> {
   await checkAuth(sdk, cma);
   
@@ -203,7 +202,7 @@ function buildPayload (entryId: string, entryIds: string[], projectUuid: string,
   return {
     configUuid: sdk.parameters.installation.configUuid,
     contactUuid: sdk.parameters.installation.contactUuid,
-    workflows: params?.workflows || sdk.parameters.installation.workflows,
+    workflows: params?.workflows || parseWorkflows(sdk.parameters.installation.workflows),
     environment: sdk.ids.environment,
     environmentAlias: sdk.ids.environmentAlias ?? null,
     entryId,
@@ -239,9 +238,9 @@ const bwxService = {
   getEntries,
   fetchTranslations,
   getConfigs,
+  getWorkflows,
   sendTmChanges,
   changeProjectStatus
 }
 
 export default bwxService;
-

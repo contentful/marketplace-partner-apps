@@ -1,75 +1,49 @@
-# wxrks Contentful App (Frontend)
+# BWX Contentful App - Frontend
 
-This app integrates Contentful with wxrks to create translation projects, monitor project status, and fetch translations.
-
-## Overview
-
-The app provides:
-
-- **Entry Sidebar** actions for single-entry project creation and translation sync.
-- **App Page** workflows for multi-entry project creation and project tracking.
-- **Signed requests** to the backend proxy for request verification.
-
-## Requirements
-
-- Contentful space with app installation permissions.
-- wxrks account with **API ID** and **Secret Key**.
-- wxrks Connector Configuration UUID (`configUuid`).
-
-## Installation and Configuration
-
-1. Install the app in Contentful.
-2. Open **App Configuration**.
-3. In **Authentication Settings**:
-   - Provide **API ID**.
-   - Provide **Secret Key** and click **Test Connection**.
-   - Credentials are stored in app installation parameters for space-scoped authentication.
-4. In **Project Settings**:
-   - Provide Connector Config UUID.
-   - Select default workflows.
-5. In **Content Model Assignment**:
-   - Select the Content Types that should show the wxrks sidebar.
-6. Save/Install the app.
-
-## Authentication Model
-
-- Authentication is **space-scoped** and configured once in App Configuration.
-- App installation stores API ID and Secret Key in installation parameters.
-- Editors do not need to provide credentials individually after the app is configured.
+This repository contains the frontend of the application designed to run within the Contentful platform. The primary objective of this application is to facilitate project creation and integration with BWX translations, using the resources available in Contentful.
 
 ## Available Scripts
 
-- `npm run start` - starts the app in development mode.
-- `npm run install-ci` - installs dependencies using `npm ci`.
-- `npm run build` - builds app bundle for production proxy path (default build command).
-- `npm run build:dev` - builds app bundle for dev proxy path.
-- `npm run build:demo` - builds app bundle for demo proxy path.
-- `npm run build:prod` - builds app bundle for production proxy path.
-- `npm run test` - runs tests in non-watch mode and passes when no tests are present.
-- `npm run lint` - lints source files.
-- `npm run upload` - uploads build bundle with `contentful-app-scripts`.
+In the project directory, you can run:
 
-## Official Integration Guide (wxrks)
+#### `npm run start`
 
-Detailed walkthrough from wxrks:
+Runs the app in development mode.
+Open your app to view it in the browser.
 
-- [wxrks - Contentful Integration](https://support.wxrks.com/en/articles/10430113-bureau-works-contentful-integration)
+Your application will be running in [http://localhost:3000](http://localhost:3000).
 
-## Support
+The page will reload if you make edits.
+You will also see any lint errors in the console.
 
-For setup and operational support:
+#### `npm run build:dev`
 
-- wxrks Help Center article above (step-by-step guide).
-- wxrks support via the Help Center contact flow:
-  [wxrks Help Center](https://support.wxrks.com)
+Builds the app for <b>devops</b> to the `build` folder.
 
-## Tech Stack
+#### `npm run build:demo`
 
-- React + TypeScript
-- Contentful App SDK + React Apps Toolkit
-- Forma 36
-- Contentful App Scripts
+Builds the app for <b>demo</b> to the `build` folder.
 
-## License
+#### `npm run build:prod`
 
-This project is licensed under the MIT License. See the `LICENSE` file.
+Builds the app for <b>production</b> to the `build` folder.
+
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.
+Your app is ready to be deployed!
+
+## Libraries to use
+
+To make your app look and feel like Contentful use the following libraries:
+
+- [Forma 36](https://f36.contentful.com/) – Contentful's design system
+- [Contentful Field Editors](https://www.contentful.com/developers/docs/extensibility/field-editors/) – Contentful's field editor React components
+
+## Learn More
+
+This project was bootstrapped with [Create Contentful App](https://github.com/contentful/create-contentful-app).
+
+[Read more](https://www.contentful.com/developers/docs/extensibility/app-framework/create-contentful-app/) and check out the video on how to use the CLI.
+
+Create Contentful App uses [Create React App](https://create-react-app.dev/). You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started) and how to further customize your app.

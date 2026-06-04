@@ -7,13 +7,14 @@ import { Button, Note, Select, Spinner, Flex, Text } from '@contentful/f36-compo
 import { Form, TextInput, FormControl } from '@contentful/f36-forms';
 import { CloudUploadIcon } from '@contentful/f36-icons';
 
-import BwxMultiselectWorkflows from './BwxMultiselectWorkflows';
-import BwxMultiselectLocales from './BwxMultiselectLocales';
+import BwxMultiselectWorkflows from '../components/BwxMultiselectWorkflows';
+import BwxMultiselectLocales from '../components/BwxMultiselectLocales';
 import BwxMultiselectReferences from './BwxMultiselectReferences';
 
-import { ConfigGroup, ProjectCreation } from '../interfaces';
+import { ConfigGroup, ProjectCreation, Workflow } from '../interfaces';
 
 import bwxApi from '../api/api';
+import { parseWorkflows } from '../workflows';
 
 interface Props {
   onCreate: () => void;
@@ -31,9 +32,12 @@ function SendEntriesToBWX({ onCreate, withName, bulk, entryIds, referenceIds } :
   const [isAuth, setIsAuth] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingConfigs, setLoadingConfigs] = useState<boolean>(false);
+  const [loadingWorkflows, setLoadingWorkflows] = useState<boolean>(false);
+  const [workflowLoadError, setWorkflowLoadError] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
 
-  const [workflows, setWorkflows] = useState<string[]>(sdkConfig.parameters.installation.workflows ?? []);
+  const [workflows, setWorkflows] = useState<string[]>(parseWorkflows(sdkConfig.parameters.installation.workflows));
+  const [workflowOptions, setWorkflowOptions] = useState<Workflow[]>([]);
   const [locales, setLocales] = useState<string[]>([]);
   const [localesState, setLocalesState] = useState<string[]>([]);
   const [configs, setConfigs] = useState<ConfigGroup[]>([]);
@@ -161,6 +165,25 @@ function SendEntriesToBWX({ onCreate, withName, bulk, entryIds, referenceIds } :
     loadConfigs()
   }, [sdkConfig, cma, setConfigs, setLocales, setLoadingConfigs, setSelectedConfig]);
 
+  useEffect(() => {
+    const loadWorkflows = async () => {
+      setLoadingWorkflows(true);
+      setWorkflowLoadError(false);
+      try {
+        const loadedWorkflows = await bwxApi.getWorkflows(sdkConfig, cma);
+        setWorkflowOptions(loadedWorkflows);
+      } catch (error) {
+        console.error(error);
+        setWorkflowOptions([]);
+        setWorkflowLoadError(true);
+      } finally {
+        setLoadingWorkflows(false);
+      }
+    }
+
+    loadWorkflows()
+  }, [sdkConfig, cma]);
+
   const onSelectConfig = (event: any) => {
     const configUuid = event.target.value;
     setSelectedConfig(configUuid);
@@ -201,7 +224,14 @@ function SendEntriesToBWX({ onCreate, withName, bulk, entryIds, referenceIds } :
             />
           )}
                   
-          <BwxMultiselectWorkflows onInput={setWorkflows} workflowsValue={workflows} hideTip={true}  />
+          <BwxMultiselectWorkflows
+            onInput={setWorkflows}
+            workflowsValue={workflows}
+            hideTip={true}
+            workflowOptions={workflowOptions}
+            workflowsLoading={loadingWorkflows}
+            workflowsError={workflowLoadError}
+          />
           
           <div style={{marginTop: "10px"}} >
             <BwxMultiselectLocales onInput={setLocales} localesValue={locales} initialLocales={localesState} hideTip={true} />
@@ -236,7 +266,7 @@ function SendEntriesToBWX({ onCreate, withName, bulk, entryIds, referenceIds } :
             isFullWidth
             onClick={send}
             isLoading={loading} 
-            isDisabled={loading || !selectedConfig || (!locales || locales.length === 0)|| (!workflows || workflows.length === 0) || (withName && !projectName)}
+            isDisabled={loading || loadingWorkflows || !selectedConfig || (!locales || locales.length === 0)|| (!workflows || workflows.length === 0) || (withName && !projectName)}
           >
               Send to wxrks
           </Button>
@@ -269,4 +299,3 @@ function SendEntriesToBWX({ onCreate, withName, bulk, entryIds, referenceIds } :
 }
 
 export default SendEntriesToBWX;
-

@@ -36,7 +36,7 @@ const Sidebar = () => {
   const [error, setError] = useState<boolean>(true);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [projectStatus, setProjectStatus] = useState<ProjectStatus | null>(null);
-
+  
   const getProgress = useCallback(async () => {
     setLoading(true);
     setError(false);
@@ -79,31 +79,31 @@ const Sidebar = () => {
       locale.replaceAll('_', '-').toLowerCase() === locEntry[0].toLowerCase()
     );
     return loc ? loc[1] : locale;
-  };
+  }
 
   const getVariantStatus = (status: string) => {
     if (status === 'IN_PROGRESS') {
-      return 'featured';
+      return 'featured'
     }
 
     if (status === 'COMPLETED') {
-      return 'positive';
+      return 'positive'
     }
 
-    return 'warning';
-  };
+    return 'warning'
+  }
 
   const getVariantProgress = (value: number) => {
     if (value < 1) {
-      return 'primary';
+      return 'primary'
     }
 
     if (value >= 1) {
-      return 'positive';
+      return 'positive'
     }
 
-    return 'secondary';
-  };
+    return 'secondary'
+  }
 
   return (
     <>
@@ -113,77 +113,84 @@ const Sidebar = () => {
           <Spinner variant="primary" />
         </Flex>
       )}
-
+      
       {!loadingApp && (
-        <>
-          <Button variant="primary" onClick={() => setIsExpanded(!isExpanded)} isFullWidth startIcon={<PlusIcon />} endIcon={!isExpanded ? <ChevronDownIcon /> : <ChevronUpIcon />}>
-            Create project on wxrks
+      <>
+      
+      <Button variant="primary" onClick={() => setIsExpanded(!isExpanded) } isFullWidth startIcon={<PlusIcon />} endIcon={!isExpanded ? <ChevronDownIcon /> : <ChevronUpIcon />}>Create project on wxrks</Button>
+      
+      <Collapse isExpanded={isExpanded}>
+        <br></br>
+        {isExpanded && <BwxCreateProject 
+        bulk
+        onCreate={getProgress} />}
+      </Collapse>
+
+      <br></br>
+      
+      {projectStatus && 
+        <Flex justifyContent="space-between" alignItems="center" style={{ width: '291px' }}>
+          <Text><b>Translation Status</b></Text>
+          <Button size="small" 
+                  startIcon={<CycleIcon variant="muted" />} 
+                  variant="transparent" 
+                  onClick={getProgress} 
+                  isLoading={loading}
+                  isDisabled={loading}>              
           </Button>
-
-          <Collapse isExpanded={isExpanded}>
-            <br></br>
-            {isExpanded && <BwxCreateProject bulk onCreate={getProgress} />}
-          </Collapse>
-
+          <Badge variant={getVariantStatus(projectStatus.status)}><span style={{textTransform: "uppercase"}}>{projectStatus.status.replaceAll('_', ' ')}</span></Badge>
+        </Flex>
+      }
+      
+      {projectStatus && projectStatus.status === 'NOT_FOUND' &&
+        <div>
           <br></br>
-
-          {projectStatus && (
-            <Flex justifyContent="space-between" alignItems="center" style={{ width: '291px' }}>
-              <Text><b>Translation Status</b></Text>
-              <Button size="small" startIcon={<CycleIcon variant="muted" />} variant="transparent" onClick={getProgress} isLoading={loading} isDisabled={loading}></Button>
-              <Badge variant={getVariantStatus(projectStatus.status)}><span style={{ textTransform: 'uppercase' }}>{projectStatus.status.replaceAll('_', ' ')}</span></Badge>
-            </Flex>
-          )}
-
-          {projectStatus && projectStatus.status === 'NOT_FOUND' && (
-            <div>
-              <br></br>
-              <Flex justifyContent="space-between" alignItems="center" style={{ width: '291px' }}>
-                <br></br>
-                <Note variant="neutral">
-                  This entry has not been submitted to wxrks yet. Click the button when ready to create the project.
-                </Note>
-              </Flex>
-            </div>
-          )}
-
-          {projectStatus && projectStatus.entriesProgress && projectStatus.entriesProgress.map((item) => (
-            <Flex key={item.language} justifyContent="space-between" alignItems="center">
-              <Text>{getLocale(item.language)}</Text>
-              <Badge variant={getVariantProgress(item.progress)} size="small">{(item.progress * 100).toFixed(0)}%</Badge>
-            </Flex>
-          ))}
-
-          {projectStatus && projectStatus.entriesProgress && projectStatus.status === 'IN_PROGRESS' && !projectStatus.entriesProgress.length && (
-            <Note>
-              The project's entry creation is still ongoing. Click the refresh button to see progress.
+          <Flex justifyContent="space-between" alignItems="center" style={{ width: '291px' }}>
+            <br></br>
+            <Note variant="neutral">
+              This entry has not been submitted to wxrks yet. Click the button when ready to create the project.
             </Note>
-          )}
+          </Flex>    
+        </div>
+      }
+      
+      {projectStatus && projectStatus.entriesProgress && projectStatus.entriesProgress.map((item) => (
+        <Flex key={item.language} justifyContent="space-between" alignItems="center">
+          <Text>{getLocale(item.language)}</Text>
+          <Badge variant={getVariantProgress(item.progress)} size="small">{(item.progress * 100).toFixed(0)}%</Badge>
+        </Flex>
+      ))}
 
-          {error && (
-            <div>
-              <Note variant="negative">
-                Failed to load status in wxrks. Please try again later.
-              </Note>
-              <br></br>
-              <Button variant="secondary" onClick={checkApp} isFullWidth>
-                Try again
-              </Button>
-            </div>
-          )}
-
-          {projectStatus && projectStatus.status !== 'NOT_FOUND' && (
-            <div>
-              <br></br>
-              <BwxFetchTranslations />
-            </div>
-          )}
-        </>
+      {projectStatus && projectStatus.entriesProgress && projectStatus.status === 'IN_PROGRESS' && !projectStatus.entriesProgress.length && (
+        <Note>
+          The project's entry creation is still ongoing. Click the refresh button to see progress.
+        </Note>
       )}
-      <TMUpdates />
+
+      {error && (
+        <div>
+          <Note variant="negative">
+            Failed to load status in wxrks. Please try again later.
+          </Note>
+          <br></br>
+          <Button variant="secondary" onClick={checkApp} isFullWidth>
+            Try again
+          </Button>
+        </div>)
+      }
+    
+      {projectStatus && projectStatus.status !== 'NOT_FOUND' &&
+        <div>
+          <br></br>
+          <BwxFetchTranslations />
+        </div>
+      }
+      </>
+      )
+    }
+    <TMUpdates />
     </>
   );
 };
 
 export default Sidebar;
-

@@ -21,6 +21,14 @@ interface Props {
 const ERROR_MESSAGE = 'Failed to fetch translations from wxrks. Please try again later.';
 const ERROR_AUTH_MESSAGE = 'Authentication failed with wxrks. Please verify your credentials and reinstall the app with the correct credentials.';
 
+const mapToObject = (map: Map<string, Project>): { [key: string]: Project } => {
+  return Object.fromEntries(map);
+};
+
+const objectToMap = (obj: { [key: string]: Project }): Map<string, Project> => {
+  return new Map(Object.entries(obj) as [string, Project][]);
+};
+
 function BwxFetchTranslations({ project } : Props) {
   const sdkConfig = useSDK<ConfigAppSDK>();
   const sdkSideBar = useSDK<SidebarAppSDK>();
@@ -36,14 +44,6 @@ function BwxFetchTranslations({ project } : Props) {
 
   const projectRequestRef = useRef<any>(null);
 
-  const mapToObject = (map: Map<string, Project>): { [key: string]: Project } => {
-    return Object.fromEntries(map);
-  };
-  
-  const objectToMap = (obj: { [key: string]: Project }): Map<string, Project> => {
-    return new Map(Object.entries(obj) as [string, Project][]);
-  };
-  
   const getStoredProjects = useCallback((): Map<string, Project> => {
     const storedProjects = localStorage.getItem('bwx-translations-projects');
     return storedProjects ? objectToMap(JSON.parse(storedProjects)) : new Map();
@@ -202,4 +202,3 @@ function BwxFetchTranslations({ project } : Props) {
 }
 
 export default BwxFetchTranslations;
-

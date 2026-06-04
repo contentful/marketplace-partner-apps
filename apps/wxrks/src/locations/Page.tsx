@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Route, BrowserRouter, Routes } from 'react-router-dom';
+import { Route, BrowserRouter, Navigate, Routes } from 'react-router-dom';
 
 import { Heading, Box } from '@contentful/f36-components';
 
@@ -28,12 +28,13 @@ const Page = () => {
 
   useEffect(() => {
     cma.contentType.getMany({}).then((result) => result?.items && setContentTypes(result.items));
-  }, [cma]);
+  }, [cma.contentType]);
 
   return (
     <Box className="page" paddingLeft="spacingM" paddingRight="spacingM">
       <Routes>
         <Route path="/" element={<PageLayout />}>
+          <Route index element={<Navigate to="/content" replace />} />
           <Route path="/content" element={<ProjectCreation contentTypes={contentTypes} />} />
           <Route path="/projects" element={<Projects contentTypes={contentTypes} />} />
           <Route path="/*" element={<NotFound />} />

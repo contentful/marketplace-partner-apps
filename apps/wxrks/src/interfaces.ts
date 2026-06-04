@@ -1,16 +1,3 @@
-export enum WorkflowType {
-  TRANSLATION = "TRANSLATION",
-  PROOFREADING = "PROOFREADING",
-  REVIEW = "REVIEW",
-  REVIEW_2 = "REVIEW 2",
-  REVIEW_3 = "REVIEW 3",
-  ICR = "ICR",
-  REGIONAL_APPROVAL = "REGIONAL APPROVAL",
-  ICR_2 = "ICR 2",
-  WEB_QA = "WEB QA",
-  FEEDBACK_IMPLEMENTATION = "FEEDBACK IMPLEMENTATION"
-}
-
 export enum FieldType {
   Symbol = "Symbol",
   Text = "Text",
@@ -18,8 +5,12 @@ export enum FieldType {
 }
 
 export interface Workflow {
-  key: WorkflowType;
-  description: string;
+  uuid?: string;
+  code: string;
+  title?: string;
+  description?: string;
+  sequence?: number;
+  active?: boolean;
 }
 
 export interface Locale {
@@ -55,8 +46,7 @@ export interface AppInstallationParameters {
   configUuid: string;
   orgUnitUuid: string;
   contactUuid: string;
-  workflows: string[];
-  selectedContentTypes: string[];
+  workflows: string;
 }
 
 export interface EditorInterfaceAssignment {

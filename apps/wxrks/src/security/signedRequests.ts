@@ -1,14 +1,24 @@
 import { CMAClient, ConfigAppSDK } from '@contentful/app-sdk';
+import { CreateAppSignedRequestProps } from 'contentful-management/dist/typings/entities/app-signed-request';
 
-type HttpMethod = 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH' | 'HEAD';
+const getSignedPath = (url: string): string => {
+  const parsedUrl = new URL(url, window.location.origin);
+  const stage = process.env.REACT_APP_LAMBDA_API;
+  const stagePrefix = stage ? `/${stage}` : '';
+  const pathname = stagePrefix && parsedUrl.pathname.startsWith(`${stagePrefix}/`)
+    ? parsedUrl.pathname.slice(stagePrefix.length)
+    : parsedUrl.pathname;
+
+  return `${pathname}${parsedUrl.search}`;
+};
 
 async function fetchWithSignedRequest(
   url: string,
   sdk: ConfigAppSDK,
   cma: CMAClient,
-  headers: Record<string, string> = {},
-  method: HttpMethod = 'GET',
-  body?: unknown
+  headers: any = {},
+  method: CreateAppSignedRequestProps['method'] = 'GET',
+  body?: any | undefined
 ): Promise<Response> {
   
   const req = {
@@ -29,7 +39,7 @@ async function fetchWithSignedRequest(
     {
       method: req.method,
       headers: req.headers,
-      path: url,
+      path: getSignedPath(url),
       body: req.body,
     }
   );

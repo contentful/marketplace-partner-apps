@@ -11,35 +11,49 @@ interface InvocationParams {
   path?: string;
 }
 
+const TAB_PATHS = ['/content', '/projects'];
+const DEFAULT_TAB_PATH = '/content';
+
+const getTabPath = (path?: string) => {
+  return path && TAB_PATHS.includes(path) ? path : DEFAULT_TAB_PATH;
+};
+
 export const PageLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
   const sdk = useSDK();
 
-  const currentTab = useRef('/');
+  const lastInvocationPath = useRef<string>();
 
-  // check if the page already opened with an existing path from the invocation parameters
   useEffect(() => {
-    const initialInvocationParameters = sdk.parameters.invocation as InvocationParams;
-    if (
-      initialInvocationParameters.path &&
-      initialInvocationParameters.path !== currentTab.current
-    ) {
-      navigate(initialInvocationParameters.path);
-      currentTab.current = initialInvocationParameters.path;
+    const invocationParameters = sdk.parameters.invocation as InvocationParams;
+    const invocationPath = getTabPath(invocationParameters.path);
+
+    if (invocationPath === lastInvocationPath.current) {
+      return;
     }
-  }, [sdk.parameters.invocation, navigate]);
+
+    lastInvocationPath.current = invocationPath;
+
+    if (invocationPath !== location.pathname) {
+      navigate(invocationPath, { replace: true });
+    }
+  }, [sdk.parameters.invocation, location.pathname, navigate]);
 
   const onTabChange = (tabId: string) => {
-    sdk.navigator.openCurrentAppPage({ path: tabId });
-    currentTab.current = tabId;
-    navigate(tabId);
+    const tabPath = getTabPath(tabId);
+
+    if (tabPath !== location.pathname) {
+      navigate(tabPath);
+    }
+
+    sdk.navigator.openCurrentAppPage({ path: tabPath });
   };
 
   return (
     <div>
-      <Tabs currentTab={location.pathname} onTabChange={onTabChange}>
+      <Tabs currentTab={getTabPath(location.pathname)} onTabChange={onTabChange}>
         <Tabs.List variant="horizontal-divider">
           <Tabs.Tab panelId="/content">
             <Flex alignItems="center">
@@ -66,4 +80,3 @@ export const PageLayout = () => {
     </div>
   );
 };
-
