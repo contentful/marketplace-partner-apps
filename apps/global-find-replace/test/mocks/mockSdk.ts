@@ -17,7 +17,7 @@ const mockSdk: any = {
   },
   cma: {
     contentType: {
-      getMany: vi.fn().mockResolvedValue({ items: [] }),
+      getMany: vi.fn().mockResolvedValue({ items: [], total: 0 }),
     },
   },
 };

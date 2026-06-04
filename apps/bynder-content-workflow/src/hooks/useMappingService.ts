@@ -257,20 +257,22 @@ export default function useMappingService() {
       templatePromises.push(getSingleTemplate(credentials, templateId));
     }
     const templates = await Promise.all(templatePromises);
-    const adaptedTemplates = templates.map<ExtendedGCTemplate>((template) => {
-      const mapping = findMappedModelConfig(
-        models.items as ContentTypeProps[],
-        template.data.id.toString()
-      );
-      return {
-        ...template.data,
-        id: template.data.id.toString(),
-        project_id: template.data.project_id.toString(),
-        structure: template.related.structure,
-        mappedCFModel: mapping?.modelId,
-        mappingConfig: mapping?.config,
-      };
-    });
+    const adaptedTemplates = templates
+      .filter((template) => template.code !== 404)
+      .map<ExtendedGCTemplate>((template) => {
+        const mapping = findMappedModelConfig(
+          models.items as ContentTypeProps[],
+          template.data.id.toString()
+        );
+        return {
+          ...template.data,
+          id: template.data.id.toString(),
+          project_id: template.data.project_id.toString(),
+          structure: template.related.structure,
+          mappedCFModel: mapping?.modelId,
+          mappingConfig: mapping?.config,
+        };
+      });
     let templatesProjects: Promise<any>[] = [];
     const templateProjIds = new Set(
       adaptedTemplates.map((template) => template.project_id)
