@@ -18,7 +18,6 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useAgenticScan } from "../../hooks/useAgenticScan";
 import { useAgentSelection } from "../../hooks/useAgentSelection";
 import { useAgentConfig } from "../../hooks/useAgentConfig";
-import { useFeedback } from "../../hooks/useFeedback";
 import { useStyleTargets } from "../../hooks/useStyleTargets";
 import { useEffectiveStyleGuide } from "../../hooks/useEffectiveStyleGuide";
 import { useAgentAvailability } from "../../hooks/useAgentAvailability";
@@ -27,6 +26,7 @@ import { toBackendAgentIds } from "../../agents/agenticConfig";
 import { filterRunnableAgentIds, unavailabilityReasonsFor } from "../../agents/agentAvailability";
 import type { CortexIssueWithId, CortexSeverity } from "../../agents/types";
 import { getAgenticSuggestionChoices } from "../../agents/utils/agenticSuggestions";
+import { buildDocumentRef, extensionForFieldAndContent } from "../../agents/utils/documentMeta";
 import {
   buildStyleAgentApplyAllPeerCountByIssueId,
   getStyleAgentApplyAllClusterKey,
@@ -194,7 +194,7 @@ const FieldCheckDialog: React.FC = () => {
   const [workflowIdCopied, setWorkflowIdCopied] = useState(false);
   const [sidebarView, setSidebarView] = useState<"main" | "settings" | "about">("main");
   const [selectedAgentFilterIds, setSelectedAgentFilterIds] = useState<Set<string> | null>(null);
-  const [viewMode, setViewMode] = useState<SidebarViewMode>("list");
+  const [viewMode, setViewMode] = useState<SidebarViewMode>("grouped");
   const [selectedSeverities, setSelectedSeverities] = useState<Set<CortexSeverity>>(
     () => new Set(),
   );
@@ -244,6 +244,7 @@ const FieldCheckDialog: React.FC = () => {
     targets: styleGuideTargets,
     isLoading: styleGuidesLoading,
     isError: styleGuidesError,
+    defaultTargetId: defaultStyleTarget,
   } = useStyleTargets(apiKey);
 
   // Pull the per-content-type default straight from `sdk.parameters.installation`
@@ -266,7 +267,6 @@ const FieldCheckDialog: React.FC = () => {
   });
 
   const { issues, startScan, scanInFlight, workflowId, error: scanError } = useAgenticScan(apiKey);
-  const { submitFeedback, isLoading: isFeedbackLoading } = useFeedback({ apiKey: apiKey ?? "" });
 
   /**
    * `target_id` lives in per-field localStorage, but the agent settings panel
@@ -312,20 +312,39 @@ const FieldCheckDialog: React.FC = () => {
       // returned `position.start` / `position.end` against the exact same string.
       setScannedContent(content);
       try {
-        // The picker is the single source of truth for `target_id`. We
-        // overwrite (or, when cleared, delete) it on the freshly-flattened
-        // config so a leftover sessionStorage entry can never re-send a
-        // stale value behind the user's back.
+        // The picker is the single source of truth for `target_id` when the
+        // user (or admin) has picked one. When nothing has been picked we
+        // fall back to the org default chosen by `useStyleTargets` (Main →
+        // API is_default → first enabled). The backend does not always pick
+        // a default when the field is omitted, so always sending one keeps
+        // analyses from coming back with `targetDisplayName=null`.
         const finalAgentConfig: Record<string, unknown> = flattenConfigForRequest(selectedAgentIds);
-        if (effectiveStyleGuideId) {
-          finalAgentConfig.target_id = effectiveStyleGuideId;
+        const resolvedTargetId = effectiveStyleGuideId ?? defaultStyleTarget ?? null;
+        if (resolvedTargetId) {
+          finalAgentConfig.target_id = resolvedTargetId;
         } else {
           delete finalAgentConfig.target_id;
         }
 
+        // `document_name` carries the entry title (e.g. "My Article"); we
+        // also build a unique `document_ref` from title + field id + a file
+        // extension derived from the field type, refined by detected syntax
+        // so a Symbol that contains markdown still gets `.md`.
+        const extension = extensionForFieldAndContent(
+          params.fieldFormat,
+          detectSyntaxKind(content),
+        );
+        const documentName = params.entryTitle?.trim() || undefined;
+        const documentRef = buildDocumentRef({
+          title: documentName,
+          fieldId: params.fieldId,
+          extension,
+        });
+
         await startScan({
           text: content,
-          documentName: `${params.contentTypeId}/${params.fieldId}`,
+          documentName,
+          documentRef,
           backendIds,
           agentConfig: finalAgentConfig,
         });
@@ -340,9 +359,11 @@ const FieldCheckDialog: React.FC = () => {
       selectedAgentIds,
       unavailableAgents,
       flattenConfigForRequest,
-      params.contentTypeId,
+      params.fieldFormat,
       params.fieldId,
+      params.entryTitle,
       effectiveStyleGuideId,
+      defaultStyleTarget,
     ],
   );
 
@@ -501,34 +522,6 @@ const FieldCheckDialog: React.FC = () => {
   const handleSelectIssue = useCallback((_issue: CortexIssueWithId | null, index: number) => {
     setSelectedIssueIndex(index >= 0 ? index : null);
   }, []);
-
-  const handleSubmitFeedback = useCallback(
-    async (
-      payload: {
-        helpful: boolean;
-        feedbackText: string;
-        original: string;
-        suggestion: string;
-        category: string | null;
-      },
-      issueIndex: number,
-    ) => {
-      if (!workflowId) {
-        console.error("No workflow ID available for feedback");
-        return;
-      }
-      await submitFeedback({
-        workflowId,
-        requestId: `issue-${String(issueIndex)}`,
-        helpful: payload.helpful,
-        feedback: payload.feedbackText || undefined,
-        original: payload.original || undefined,
-        suggestion: payload.suggestion || undefined,
-        category: payload.category || undefined,
-      });
-    },
-    [workflowId, submitFeedback],
-  );
 
   const visibleIssuesWithIndices = useMemo(() => {
     return issues
@@ -770,8 +763,6 @@ const FieldCheckDialog: React.FC = () => {
             onViewModeChange={setViewMode}
             styleAgentApplyAllPeerCountByIssueId={styleAgentApplyAllPeerCountByIssueId}
             onSignOut={handleSignOut}
-            onSubmitFeedback={handleSubmitFeedback}
-            isFeedbackLoading={isFeedbackLoading}
             totalIssueCount={issues.length}
             appliedCount={appliedCount}
             dismissedCount={dismissedIndices.size - appliedCount}

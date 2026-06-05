@@ -6,6 +6,12 @@ import type {
   AccountGetAccountConfigData,
   AccountGetAccountConfigErrors,
   AccountGetAccountConfigResponses,
+  AccountGetAccountData,
+  AccountGetAccountErrors,
+  AccountGetAccountResponses,
+  AuthenticationGetUserOrganizationsData,
+  AuthenticationGetUserOrganizationsErrors,
+  AuthenticationGetUserOrganizationsResponses,
   CortexActivityEventsTrackActivityEventData,
   CortexActivityEventsTrackActivityEventErrors,
   CortexActivityEventsTrackActivityEventResponses,
@@ -36,18 +42,6 @@ import type {
   InternalListTargetsData,
   InternalListTargetsErrors,
   InternalListTargetsResponses,
-  InternalSubmitFeedbackData,
-  InternalSubmitFeedbackErrors,
-  InternalSubmitFeedbackResponses,
-  StyleAgentGetStyleAgentConfigData,
-  StyleAgentGetStyleAgentConfigErrors,
-  StyleAgentGetStyleAgentConfigResponses,
-  StyleAgentListStyleAgentContentProfilesData,
-  StyleAgentListStyleAgentContentProfilesErrors,
-  StyleAgentListStyleAgentContentProfilesResponses,
-  StyleAgentListStyleAgentTargetsData,
-  StyleAgentListStyleAgentTargetsErrors,
-  StyleAgentListStyleAgentTargetsResponses,
   TerminologyCreateDomainData,
   TerminologyCreateDomainErrors,
   TerminologyCreateDomainResponses,
@@ -187,23 +181,39 @@ export const terminologyUpdateDomain = <ThrowOnError extends boolean = false>(
   });
 
 /**
- * Submit Feedback
+ * Get Account
+ *
+ * Get account information for the authenticated user's organization
  */
-export const internalSubmitFeedback = <ThrowOnError extends boolean = false>(
-  options: Options<InternalSubmitFeedbackData, ThrowOnError>,
+export const accountGetAccount = <ThrowOnError extends boolean = false>(
+  options?: Options<AccountGetAccountData, ThrowOnError>,
 ) =>
-  (options.client ?? client).post<
-    InternalSubmitFeedbackResponses,
-    InternalSubmitFeedbackErrors,
+  (options?.client ?? client).get<
+    AccountGetAccountResponses,
+    AccountGetAccountErrors,
     ThrowOnError
   >({
     security: [{ scheme: "bearer", type: "http" }],
-    url: "/internal/demo-feedback",
+    url: "/account",
     ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
+  });
+
+/**
+ * Get User Organizations
+ *
+ * Get organizations that the authenticated user belongs to.
+ */
+export const authenticationGetUserOrganizations = <ThrowOnError extends boolean = false>(
+  options?: Options<AuthenticationGetUserOrganizationsData, ThrowOnError>,
+) =>
+  (options?.client ?? client).get<
+    AuthenticationGetUserOrganizationsResponses,
+    AuthenticationGetUserOrganizationsErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/auth/organizations",
+    ...options,
   });
 
 /**
@@ -399,53 +409,5 @@ export const accountGetAccountConfig = <ThrowOnError extends boolean = false>(
   >({
     security: [{ scheme: "bearer", type: "http" }],
     url: "/account/config",
-    ...options,
-  });
-
-/**
- * Get Style Agent Config
- */
-export const styleAgentGetStyleAgentConfig = <ThrowOnError extends boolean = false>(
-  options?: Options<StyleAgentGetStyleAgentConfigData, ThrowOnError>,
-) =>
-  (options?.client ?? client).get<
-    StyleAgentGetStyleAgentConfigResponses,
-    StyleAgentGetStyleAgentConfigErrors,
-    ThrowOnError
-  >({
-    security: [{ scheme: "bearer", type: "http" }],
-    url: "/style-agent/config",
-    ...options,
-  });
-
-/**
- * List Style Agent Targets
- */
-export const styleAgentListStyleAgentTargets = <ThrowOnError extends boolean = false>(
-  options?: Options<StyleAgentListStyleAgentTargetsData, ThrowOnError>,
-) =>
-  (options?.client ?? client).get<
-    StyleAgentListStyleAgentTargetsResponses,
-    StyleAgentListStyleAgentTargetsErrors,
-    ThrowOnError
-  >({
-    security: [{ scheme: "bearer", type: "http" }],
-    url: "/style-agent/targets",
-    ...options,
-  });
-
-/**
- * List Style Agent Content Profiles
- */
-export const styleAgentListStyleAgentContentProfiles = <ThrowOnError extends boolean = false>(
-  options?: Options<StyleAgentListStyleAgentContentProfilesData, ThrowOnError>,
-) =>
-  (options?.client ?? client).get<
-    StyleAgentListStyleAgentContentProfilesResponses,
-    StyleAgentListStyleAgentContentProfilesErrors,
-    ThrowOnError
-  >({
-    security: [{ scheme: "bearer", type: "http" }],
-    url: "/style-agent/content-profiles",
     ...options,
   });

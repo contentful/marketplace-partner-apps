@@ -173,6 +173,55 @@ describe("useAgenticScan — startScan validation", () => {
   });
 });
 
+describe("useAgenticScan — request body", () => {
+  it("sends both document_name and document_ref when provided", async () => {
+    queueSseEvents([{ type: "completion" }]);
+    const { result } = renderHook(() => useAgenticScan("api-key"));
+    await act(async () => {
+      await result.current.startScan({
+        text: "hello",
+        documentName: "My Article",
+        documentRef: "My-Article_body.md",
+        backendIds: [STYLE_BACKEND_ID],
+      });
+    });
+    expect(mockCortexAgentsRunAgent).toHaveBeenCalledTimes(1);
+    const callBody = (mockCortexAgentsRunAgent.mock.calls[0][0] as { body: unknown }).body;
+    expect(callBody).toMatchObject({
+      text: "hello",
+      document_name: "My Article",
+      document_ref: "My-Article_body.md",
+    });
+  });
+
+  it("omits document_name and document_ref when not provided", async () => {
+    queueSseEvents([{ type: "completion" }]);
+    const { result } = renderHook(() => useAgenticScan("api-key"));
+    await act(async () => {
+      await result.current.startScan({ text: "hello", backendIds: [STYLE_BACKEND_ID] });
+    });
+    const callBody = (
+      mockCortexAgentsRunAgent.mock.calls[0][0] as { body: Record<string, unknown> }
+    ).body;
+    expect(callBody).not.toHaveProperty("document_name");
+    expect(callBody).not.toHaveProperty("document_ref");
+  });
+
+  it("passes target_id from agentConfig through into the request body", async () => {
+    queueSseEvents([{ type: "completion" }]);
+    const { result } = renderHook(() => useAgenticScan("api-key"));
+    await act(async () => {
+      await result.current.startScan({
+        text: "hello",
+        backendIds: [STYLE_BACKEND_ID],
+        agentConfig: { target_id: "ap" },
+      });
+    });
+    const callBody = (mockCortexAgentsRunAgent.mock.calls[0][0] as { body: unknown }).body;
+    expect(callBody).toMatchObject({ target_id: "ap" });
+  });
+});
+
 describe("useAgenticScan — SSE event handling", () => {
   it("transitions to complete on a completion SSE event", async () => {
     queueSseEvents([{ type: "completion" }]);
