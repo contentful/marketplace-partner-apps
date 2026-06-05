@@ -20,13 +20,15 @@ async function fetchWithSignedRequest(
   cma: CMAClient,
   headers: SignedRequestHeaders = {},
   method: CreateAppSignedRequestProps['method'] = 'GET',
-  body?: unknown
+  body?: unknown,
+  useSignedRequest = true
 ): Promise<Response> {
   const requestBody = body === undefined ? undefined : JSON.stringify(body);
   const requestHeaders: SignedRequestHeaders = {
     'Content-Type': 'application/json',
     Accept: 'application/json'
   };
+
   const req = {
     url: url,
     method: method,
@@ -34,20 +36,23 @@ async function fetchWithSignedRequest(
     body: requestBody,
   };
 
-  // add request verification signing secret to request headers
-  const { additionalHeaders: signedHeaders } = await cma.appSignedRequest.create(
-    {
-      appDefinitionId: sdk.ids.app,
-    },
-    {
-      method: req.method,
-      headers: req.headers,
-      path: getSignedPath(url),
-      body: req.body,
-    }
-  );
+  if (useSignedRequest) {
+    const { additionalHeaders: signedHeaders } = await cma.appSignedRequest.create(
+      {
+        appDefinitionId: sdk.ids.app,
+      },
+      {
+        method: req.method,
+        headers: req.headers,
+        path: getSignedPath(url),
+        body: req.body,
+      }
+    );
 
-  Object.assign(req.headers, headers, signedHeaders);
+    Object.assign(req.headers, headers, signedHeaders);
+  } else {
+    Object.assign(req.headers, headers);
+  }
 
   return await fetch(req.url, req);
 }

@@ -12,39 +12,39 @@ const headers = (sdk: ConfigAppSDK): Record<string, string> => {
   return token ? { "x-contentful-bwx-token": token } : {};
 };
 
-async function checkAuth (sdk: ConfigAppSDK, cma: CMAClient) {
+async function checkAuth (sdk: ConfigAppSDK, cma: CMAClient, useSignedRequest = true) {
   const token = sessionStorage.getItem(`bwxToken-${sdk.ids.space}`);
 
   if (!token) {
-    await newLogin(sdk, cma);
+    await newLogin(sdk, cma, useSignedRequest);
     return;
   }
 
-  const response = await fetchWithSignedRequest(`${BASE_URL}/auth/check`, sdk, cma, headers(sdk), 'POST');
+  const response = await fetchWithSignedRequest(`${BASE_URL}/auth/check`, sdk, cma, headers(sdk), 'POST', undefined, useSignedRequest);
 
   if (!response.ok) {
-    await newLogin(sdk, cma);
+    await newLogin(sdk, cma, useSignedRequest);
   }
 
   return true;
 }
 
-async function newLogin(sdk: ConfigAppSDK, cma: CMAClient) {
+async function newLogin(sdk: ConfigAppSDK, cma: CMAClient, useSignedRequest = true) {
   const apiKey = sdk.parameters.installation['apiKey'];
   
   if (!apiKey) {
     throw new Error("Invalid credentials");
   }
 
-  await login(apiKey, undefined, sdk, cma);
+  await login(apiKey, undefined, sdk, cma, useSignedRequest);
 }
 
-async function login (apiKey: string, secretKey: string | undefined, sdk: ConfigAppSDK, cma: CMAClient): Promise<any> {
+async function login (apiKey: string, secretKey: string | undefined, sdk: ConfigAppSDK, cma: CMAClient, useSignedRequest = true): Promise<any> {
   const payload = secretKey
     ? { accessKey: apiKey, secret: secretKey }
     : { accessKey: apiKey };
 
-  const response = await fetchWithSignedRequest(`${BASE_URL}/auth`, sdk, cma, {}, 'POST', payload);
+  const response = await fetchWithSignedRequest(`${BASE_URL}/auth`, sdk, cma, {}, 'POST', payload, useSignedRequest);
 
   if (!response.ok) {
     throw new Error("Invalid credentials to connect with wxrks.");
@@ -153,12 +153,12 @@ async function getConfigs(sdk: ConfigAppSDK, cma: CMAClient, requestId?: string)
   return response;
 }
 
-async function getWorkflows(sdk: ConfigAppSDK, cma: CMAClient, requestId?: string): Promise<Workflow[]> {
-  await checkAuth(sdk, cma);
+async function getWorkflows(sdk: ConfigAppSDK, cma: CMAClient, requestId?: string, useSignedRequest = true): Promise<Workflow[]> {
+  await checkAuth(sdk, cma, useSignedRequest);
 
   const payload = buildPayload('', [], '', sdk, requestId);
 
-  const response = await fetchWithSignedRequest(`${BASE_URL}/workflows`, sdk, cma, headers(sdk), 'POST', payload);
+  const response = await fetchWithSignedRequest(`${BASE_URL}/workflows`, sdk, cma, headers(sdk), 'POST', payload, useSignedRequest);
 
   if (!response.ok) {
     throw new Error("Error to get workflows from wxrks");
@@ -201,10 +201,12 @@ async function changeProjectStatus(projectUuid: string, newStatus: string, sdk: 
 }
 
 function buildPayload (entryId: string, entryIds: string[], projectUuid: string, sdk: ConfigAppSDK, requestId?: string, params?: ProjectCreation, page?: number, pageSize?: number, projectName?: string) {
+  const installation = sdk.parameters.installation ?? {};
+
   return {
-    configUuid: sdk.parameters.installation.configUuid,
-    contactUuid: sdk.parameters.installation.contactUuid,
-    workflows: params?.workflows || parseWorkflows(sdk.parameters.installation.workflows),
+    configUuid: installation.configUuid,
+    contactUuid: installation.contactUuid,
+    workflows: params?.workflows || parseWorkflows(installation.workflows),
     environment: sdk.ids.environment,
     environmentAlias: sdk.ids.environmentAlias ?? null,
     entryId,
@@ -222,8 +224,10 @@ function buildPayload (entryId: string, entryIds: string[], projectUuid: string,
 }
 
 function buildTmPayload (sdk: ConfigAppSDK, changes: TmChange[]) {
+  const installation = sdk.parameters.installation ?? {};
+
   return {
-    configUuid: sdk.parameters.installation.configUuid,
+    configUuid: installation.configUuid,
     environment: sdk.ids.environment,
     environmentAlias: sdk.ids.environmentAlias ?? null,
     changes: changes

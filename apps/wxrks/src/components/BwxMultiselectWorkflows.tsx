@@ -1,6 +1,5 @@
 import React from 'react';
 import { Badge, Flex, FormControl, Grid, Note, Spinner, Text } from '@contentful/f36-components';
-import { SectionHeading } from '@contentful/f36-typography';
 import { Multiselect } from '@contentful/f36-multiselect';
 import { Workflow } from '../interfaces';
 
@@ -129,10 +128,16 @@ function WorkflowMultiselect({
     return workflows.length > 0 && workflows.every((workflow) => selected.includes(workflow.code));
   }, [selected, workflows]);
 
-  const selectedLabel = (code: string) => {
-    const workflow = workflowsByCode.get(code);
-    return workflow ? workflowTitle(workflow) : code;
-  };
+  const selectedWorkflows = React.useMemo(() => {
+    return selected.map((code) => {
+      const workflow = workflowsByCode.get(code);
+      return {
+        code,
+        label: workflow ? workflowTitle(workflow) : code,
+        unavailable: !workflow
+      };
+    });
+  }, [selected, workflowsByCode]);
 
   return (
     <Grid>
@@ -196,22 +201,23 @@ function WorkflowMultiselect({
         </Note>
       )}
 
-      {!hide && selected.length > 0 && (
-        <SectionHeading marginBottom="none" marginTop="spacingS">Selected workflows</SectionHeading>
-      )}
-
-      {!hide && (
-        <Grid
-          columns="1fr 1fr 1fr"
-          columnGap="spacingS"
-          rowGap="spacingS"
-          marginTop="spacingS">
-          {selected.map((item) => (
-            <Grid.Item key={item}>
-              <Badge variant="primary-filled"><span style={{ textTransform: "uppercase" }}>{selectedLabel(item)}</span></Badge>
-            </Grid.Item>
-          ))}
-        </Grid>
+      {!hide && selectedWorkflows.length > 0 && (
+        <Flex flexDirection="column" gap="spacingXs" marginTop="spacingS">
+          <Flex alignItems="center" gap="spacingXs">
+            <Text fontWeight="fontWeightDemiBold">Selected workflows</Text>
+            <Badge variant="primary">{selectedWorkflows.length}</Badge>
+          </Flex>
+          <Flex flexWrap="wrap" gap="spacingXs">
+            {selectedWorkflows.map((workflow) => (
+              <Badge
+                key={workflow.code}
+                variant={workflow.unavailable ? 'warning' : 'primary-filled'}
+              >
+                {workflow.label}
+              </Badge>
+            ))}
+          </Flex>
+        </Flex>
       )}
     </Grid>
   );

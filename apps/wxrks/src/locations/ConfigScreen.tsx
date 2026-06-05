@@ -66,7 +66,7 @@ const ConfigScreen = () => {
     setLoadingWorkflows(true);
     setWorkflowLoadError(false);
     try {
-      const loadedWorkflows = await bwxApi.getWorkflows(sdk, cma);
+      const loadedWorkflows = await bwxApi.getWorkflows(sdk, cma, undefined, !firstInstallation);
       setWorkflowOptions(loadedWorkflows);
     } catch (err) {
       console.error(err);
@@ -75,7 +75,7 @@ const ConfigScreen = () => {
     } finally {
       setLoadingWorkflows(false);
     }
-  }, [sdk, cma]);
+  }, [sdk, cma, firstInstallation]);
 
   const testConnection = async (event?: FormEvent<HTMLFormElement>) => {
     event?.preventDefault();
@@ -83,7 +83,7 @@ const ConfigScreen = () => {
     setIsConnected(false);
 
     try {
-      await bwxApi.login(apiKey.trim(), secretKey.trim() || undefined, sdk, cma);
+      await bwxApi.login(apiKey.trim(), secretKey.trim() || undefined, sdk, cma, !firstInstallation);
       setIsConnected(true);
       Notification.success('Successfully authenticated with wxrks.');
     } catch (err) {
@@ -164,12 +164,12 @@ const ConfigScreen = () => {
     <Flex flexDirection="column" gap="spacingS" alignItems="center" justifyContent="center" style={{ marginBottom: '50px' }}>
       <Image
         alt="wxrks logo"
-        height="281px"
-        width="400px"
-        src={`${process.env.PUBLIC_URL}/assets/wxrks.svg`}
+        height="121px"
+        width="419px"
+        src={`${process.env.PUBLIC_URL}/assets/wxrks-sponsor.png`}
       />
 
-      <Flex flexDirection="column" style={{ width: '60%' }} gap="spacingS">
+      <Flex flexDirection="column" style={{ width: '60%', marginTop: '50px' }} gap="spacingS">
         <SectionHeading marginBottom="spacingS">Authentication Settings (1/2)</SectionHeading>
         <Card style={{ padding: '30px' }}>
           <Form onSubmit={testConnection}>
