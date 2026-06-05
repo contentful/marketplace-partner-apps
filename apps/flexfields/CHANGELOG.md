@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.3.3...thrillworks-flex-fields-app-v1.4.0) (2026-06-04)
+
+
+### Features
+
+* [flex field] Add Contentful App to Main Navigation ([#7921](https://github.com/contentful/marketplace-partner-apps/issues/7921)) ([17de2c4](https://github.com/contentful/marketplace-partner-apps/commit/17de2c432727903090cb5acef21e5555a417ae01))
+
 ## [1.3.3](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.3.2...thrillworks-flex-fields-app-v1.3.3) (2026-03-31)
 
 
