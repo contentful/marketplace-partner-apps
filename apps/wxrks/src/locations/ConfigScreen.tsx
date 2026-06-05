@@ -164,9 +164,9 @@ const ConfigScreen = () => {
     <Flex flexDirection="column" gap="spacingS" alignItems="center" justifyContent="center" style={{ marginBottom: '50px' }}>
       <Image
         alt="wxrks logo"
-        height="121px"
-        width="419px"
-        src={`${process.env.PUBLIC_URL}/assets/wxrks-sponsor.png`}
+        height="281px"
+        width="400px"
+        src={`${process.env.PUBLIC_URL}/assets/wxrks.svg`}
       />
 
       <Flex flexDirection="column" style={{ width: '60%', marginTop: '50px' }} gap="spacingS">
