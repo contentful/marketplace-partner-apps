@@ -47,11 +47,14 @@ const ConfigScreen = () => {
   const [workflowLoadError, setWorkflowLoadError] = useState<boolean>(false);
   const [orgUnitUuid, setOrgUnitUuid] = useState<string>('');
   const [contactUuid, setContactUuid] = useState<string>('');
-  const [firstInstallation, setFirstInstallation] = useState<boolean>(true);
+  const [isFirstInstallation, setIsFirstInstallation] = useState<boolean>(true);
   const [hasSavedSecret, setHasSavedSecret] = useState<boolean>(false);
   const [loadingConnection, setLoadingConnection] = useState<boolean>(false);
   const [loadingScreen, setLoadingScreen] = useState<boolean>(true);
   const [isConnected, setIsConnected] = useState<boolean>(false);
+
+  const isExistingInstallation = !isFirstInstallation;
+  const canUseSignedRequest = isExistingInstallation;
 
   const installationParameters = useMemo<AppInstallationParameters>(() => ({
     apiKey: apiKey.trim(),
@@ -66,7 +69,7 @@ const ConfigScreen = () => {
     setLoadingWorkflows(true);
     setWorkflowLoadError(false);
     try {
-      const loadedWorkflows = await bwxApi.getWorkflows(sdk, cma, undefined, !firstInstallation);
+      const loadedWorkflows = await bwxApi.getWorkflows(sdk, cma, undefined, canUseSignedRequest);
       setWorkflowOptions(loadedWorkflows);
     } catch (err) {
       console.error(err);
@@ -75,7 +78,7 @@ const ConfigScreen = () => {
     } finally {
       setLoadingWorkflows(false);
     }
-  }, [sdk, cma, firstInstallation]);
+  }, [sdk, cma, canUseSignedRequest]);
 
   const testConnection = async (event?: FormEvent<HTMLFormElement>) => {
     event?.preventDefault();
@@ -83,7 +86,7 @@ const ConfigScreen = () => {
     setIsConnected(false);
 
     try {
-      await bwxApi.login(apiKey.trim(), secretKey.trim() || undefined, sdk, cma, !firstInstallation);
+      await bwxApi.login(apiKey.trim(), secretKey.trim() || undefined, sdk, cma, canUseSignedRequest);
       setIsConnected(true);
       Notification.success('Successfully authenticated with wxrks.');
     } catch (err) {
@@ -132,7 +135,7 @@ const ConfigScreen = () => {
         const currentParameters = await sdk.app.getParameters();
 
         if (currentParameters) {
-          setFirstInstallation(false);
+          setIsFirstInstallation(false);
           setApiKey(currentParameters.apiKey ?? emptyState.apiKey);
           setConfigUuid(currentParameters.configUuid ?? emptyState.configUuid);
           setContactUuid(currentParameters.contactUuid ?? emptyState.contactUuid);
@@ -225,7 +228,7 @@ const ConfigScreen = () => {
         </>
       )}
 
-      {!firstInstallation && isConnected && (
+      {isExistingInstallation && isConnected && (
         <Note style={{ width: '60%' }} variant="warning">
           Changes may take a few seconds to reflect in the app installations.
         </Note>
