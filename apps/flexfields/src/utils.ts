@@ -24,14 +24,66 @@ const isFieldHidden = (fieldId: string, contentType: string, rules: Rule[], entr
   );
 };
 
-export const isRuleValid = (rule: Rule, entryFields: any, entryContentType: string) => {
+interface EntryFieldValueAccessor {
+  value?: unknown;
+  getValue?: () => unknown;
+}
+
+interface LinkLikeValue {
+  sys?: {
+    id?: string;
+    urn?: string;
+  };
+}
+
+type EntryFields = Record<string, EntryFieldValueAccessor>;
+
+const getReferenceCount = (value: unknown): number => (Array.isArray(value) ? value.length : value ? 1 : 0);
+
+const getLinkId = (value: unknown): string | undefined => {
+  if (!value || typeof value !== 'object') {
+    return undefined;
+  }
+
+  const linkValue = value as LinkLikeValue;
+  return linkValue.sys?.id || linkValue.sys?.urn;
+};
+
+const getRuleLinkedEntryIds = (rule: Rule): string[] => rule.linkedEntryIds || (rule.linkedEntryId ? [rule.linkedEntryId] : []);
+
+const toNumber = (value: unknown): number | null => {
+  const parsedValue = typeof value === 'number' ? value : Number(value);
+  return Number.isNaN(parsedValue) ? null : parsedValue;
+};
+
+const includesConditionValue = (fieldValue: unknown, conditionValue: string): boolean => {
+  if (typeof fieldValue === 'string') {
+    return fieldValue.includes(conditionValue);
+  }
+
+  if (Array.isArray(fieldValue)) {
+    return fieldValue.includes(conditionValue);
+  }
+
+  return false;
+};
+
+const isEmptyFieldValue = (fieldValue: unknown): boolean => {
+  if (Array.isArray(fieldValue)) {
+    return fieldValue.length === 0;
+  }
+
+  return !fieldValue;
+};
+
+export const isRuleValid = (rule: Rule, entryFields: EntryFields, entryContentType: string) => {
   if (rule.contentType !== entryContentType) {
     return false;
   }
 
   const contentTypeField = rule.contentTypeField;
 
-  if (!entryFields.hasOwnProperty(contentTypeField)) {
+  if (!Object.prototype.hasOwnProperty.call(entryFields, contentTypeField)) {
     return false;
   }
 
@@ -40,7 +92,14 @@ export const isRuleValid = (rule: Rule, entryFields: any, entryContentType: stri
   let isValid = false;
 
   //get content type field value
-  const contentTypeFieldValue = entryFields[contentTypeField].value || entryFields[contentTypeField].getValue?.();
+  const fieldValueSource = entryFields[contentTypeField];
+  const contentTypeFieldValue = fieldValueSource.value ?? fieldValueSource.getValue?.();
+  const numericFieldValue = toNumber(contentTypeFieldValue);
+  const numericConditionValue = toNumber(conditionValue);
+  const numericConditionValueMin = toNumber(rule.conditionValueMin);
+  const numericConditionValueMax = toNumber(rule.conditionValueMax);
+  const referenceCount = getReferenceCount(contentTypeFieldValue);
+  const linkedEntryIds = getRuleLinkedEntryIds(rule);
 
   switch (condition) {
     case 'is equal':
@@ -49,14 +108,70 @@ export const isRuleValid = (rule: Rule, entryFields: any, entryContentType: stri
     case 'is not equal':
       isValid = contentTypeFieldValue !== conditionValue;
       break;
+    // Text fields expose both labels, but they use the same substring semantics.
     case 'contains':
-      isValid = contentTypeFieldValue?.includes(conditionValue);
+    case 'includes':
+      isValid = includesConditionValue(contentTypeFieldValue, conditionValue);
+      break;
+    case 'less than':
+      isValid = numericFieldValue !== null && numericConditionValue !== null && numericFieldValue < numericConditionValue;
+      break;
+    case 'greater than':
+      isValid = numericFieldValue !== null && numericConditionValue !== null && numericFieldValue > numericConditionValue;
+      break;
+    case 'between':
+      isValid =
+        numericFieldValue !== null &&
+        numericConditionValueMin !== null &&
+        numericConditionValueMax !== null &&
+        numericFieldValue >= numericConditionValueMin &&
+        numericFieldValue <= numericConditionValueMax;
+      break;
+    case 'equal':
+      isValid = numericFieldValue !== null && numericConditionValue !== null && numericFieldValue === numericConditionValue;
+      break;
+    case 'not equal':
+      isValid = numericFieldValue !== null && numericConditionValue !== null && numericFieldValue !== numericConditionValue;
+      break;
+    case 'reference count less than':
+      isValid = numericConditionValue !== null && referenceCount < numericConditionValue;
+      break;
+    case 'reference count greater than':
+      isValid = numericConditionValue !== null && referenceCount > numericConditionValue;
+      break;
+    case 'reference count between':
+      isValid =
+        numericConditionValueMin !== null &&
+        numericConditionValueMax !== null &&
+        referenceCount >= numericConditionValueMin &&
+        referenceCount <= numericConditionValueMax;
+      break;
+    case 'reference count equal':
+      isValid = numericConditionValue !== null && referenceCount === numericConditionValue;
+      break;
+    case 'reference count not equal':
+      isValid = numericConditionValue !== null && referenceCount !== numericConditionValue;
+      break;
+    case 'includes entry':
+    case 'includes asset': {
+      const fieldValues = Array.isArray(contentTypeFieldValue) ? contentTypeFieldValue : [contentTypeFieldValue];
+      isValid = fieldValues.some((fieldValue) => {
+        const linkId = getLinkId(fieldValue);
+        return linkId ? linkedEntryIds.includes(linkId) : false;
+      });
+      break;
+    }
+    case 'is true':
+      isValid = contentTypeFieldValue === true;
+      break;
+    case 'is false':
+      isValid = contentTypeFieldValue === false;
       break;
     case 'is empty':
-      isValid = Boolean(!contentTypeFieldValue);
+      isValid = isEmptyFieldValue(contentTypeFieldValue);
       break;
     case 'is not empty':
-      isValid = Boolean(contentTypeFieldValue);
+      isValid = !isEmptyFieldValue(contentTypeFieldValue);
       break;
     default:
       break;
