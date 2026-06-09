@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.12](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.11...vwo-fme-v1.0.12) (2026-06-09)
+
+
+### Bug Fixes
+
+* **vwo-fme:** resolve entries BadRequest and app action NotFound in production [] ([#8306](https://github.com/contentful/marketplace-partner-apps/issues/8306)) ([afa4a15](https://github.com/contentful/marketplace-partner-apps/commit/afa4a156f341956f83094c34e2caaedd455264ad))
+
 ## [1.0.11](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.10...vwo-fme-v1.0.11) (2026-05-27)
 
 
