@@ -23,7 +23,7 @@ class VwoAppActionService {
    */
   async initialize() {
     try {
-      const appActions = await this.cma.appAction.getManyForEnvironment({});
+      const appActions = await this.cma.appAction.getManyForEnvironment({ appDefinitionId: this.sdk.ids.app });
 
       const appAction = appActions.items.find((action) => action.name === globalConstants.VWO_APP_ACTION_NAME);
 
