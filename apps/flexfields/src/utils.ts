@@ -8,7 +8,19 @@ const getFieldAPI = (fieldId: string, sdk: EditorAppSDK, locale: string) => sdk.
 // Creates a <FieldAppSDK> type that can be passed to components from the default-field-editors package
 export const getFieldAppSdk = (fieldId: string, sdk: EditorAppSDK, locale?: string) => {
   const fieldAPI = getFieldAPI(fieldId, sdk, locale || sdk.locales.default);
-  return Object.assign({ field: fieldAPI }, sdk) as FieldAppSDK;
+  
+  // Create a proper FieldAppSDK with ids.field set correctly
+  // This is critical for Live Preview to work - it uses sdk.ids.field for data-contentful-field-id
+  const fieldAppSdk = {
+    ...sdk,
+    field: fieldAPI,
+    ids: {
+      ...sdk.ids,
+      field: fieldId, // ✅ FIX: Set the field ID (e.g., "title", "entryName") instead of content type ID
+    },
+  } as FieldAppSDK;
+  
+  return fieldAppSdk;
 };
 
 // Get localization setting for a field
@@ -50,6 +62,7 @@ export const isRuleValid = (rule: Rule, entryFields: any, entryContentType: stri
       isValid = contentTypeFieldValue !== conditionValue;
       break;
     case 'contains':
+    case 'includes':
       isValid = contentTypeFieldValue?.includes(conditionValue);
       break;
     case 'is empty':

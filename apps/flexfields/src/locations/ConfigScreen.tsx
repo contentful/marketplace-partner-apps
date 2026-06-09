@@ -34,7 +34,7 @@ interface CustomSelectProps {
   sdk?: any;
 }
 
-const COMPARISON_CONDITIONS = ['contains', 'is equal', 'is not equal', 'is empty', 'is not empty'];
+const COMPARISON_CONDITIONS = ['contains', 'includes', 'is equal', 'is not equal', 'is empty', 'is not empty'];
 
 const COMPARISON_CONDITIONS_NON_TEXT_FIELD = ['is empty', 'is not empty'];
 
@@ -530,9 +530,12 @@ const ConfigScreen = () => {
                     }))}
                     handleChange={updateInput}
                   />
-                  {/* only show if condition is contains, is equal or is not equal */}
-                  {(condition === 'contains' || condition === 'is equal' || condition === 'is not equal') &&
-                    (conditionValueOptions.length && condition !== 'contains' ? (
+                  {/* Symbol/Text: value UI for contains, includes, is equal, is not equal */}
+                  {(condition === 'contains' ||
+                    condition === 'includes' ||
+                    condition === 'is equal' ||
+                    condition === 'is not equal') &&
+                    (conditionValueOptions.length && condition !== 'contains' && condition !== 'includes' ? (
                       <CustomSelect
                         className={css({
                           width: '200px !important',
@@ -594,8 +597,8 @@ const ConfigScreen = () => {
                     {targetEntityFields.map((tef: any) => {
                       return (
                         <Multiselect.Option
-                          key={`key-${tef.id}}`}
-                          itemId={`space-${tef.id}}`}
+                          key={`key-${tef.id}`}
+                          itemId={`space-${tef.id}`}
                           value={tef.id}
                           label={`${tef.name} ${tef.disabled ? '(Hidden when editing)' : ''}`}
                           onSelectItem={(ev) => {
