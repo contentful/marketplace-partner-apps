@@ -657,12 +657,16 @@ const ConfigScreen = () => {
               return fetchEntryName(id);
             }
           })
-        ).then((names) => {
-          setLinkedEntryNames(names);
-        });
+        )
+          .then((names) => {
+            setLinkedEntryNames(names);
+          })
+          .catch(() => {
+            sdk.notifier.error('Failed to fetch names for selected entries');
+          });
       }
     } catch (error) {
-      // Error opening entry selector
+      sdk.notifier.error('Failed to open entry selector');
     }
   };
 
