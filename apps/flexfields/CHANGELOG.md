@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.4.0...thrillworks-flex-fields-app-v1.5.0) (2026-06-10)
+
+
+### Features
+
+* **flexfields:** add condition types, fix external references, Live Preview, and deploy failure [] ([#8313](https://github.com/contentful/marketplace-partner-apps/issues/8313)) ([25cbf17](https://github.com/contentful/marketplace-partner-apps/commit/25cbf17d560a2b6d1c1f001e29dd6c2816bc6c3e))
+
 ## [1.4.0](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.3.3...thrillworks-flex-fields-app-v1.4.0) (2026-06-04)
 
 
