@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.29](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.28...image-hotspot-creator-v1.0.29) (2026-06-11)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.13.2 to 1.13.5 in /apps/imageHotspotCreator ([#7783](https://github.com/contentful/marketplace-partner-apps/issues/7783)) ([1367ab0](https://github.com/contentful/marketplace-partner-apps/commit/1367ab0715e525e846edbb16bfb084aa36d7f0f5))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /apps/imageHotspotCreator ([#7597](https://github.com/contentful/marketplace-partner-apps/issues/7597)) ([ad43723](https://github.com/contentful/marketplace-partner-apps/commit/ad4372323e1c57d187e784e2e06ec2d31d70c2f6))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/imageHotspotCreator ([#7817](https://github.com/contentful/marketplace-partner-apps/issues/7817)) ([e213dc9](https://github.com/contentful/marketplace-partner-apps/commit/e213dc98571e504b36f9ebf0df7d113e1722f2c7))
+* **deps:** Bump rollup from 4.44.1 to 4.59.0 in /apps/imageHotspotCreator ([#7875](https://github.com/contentful/marketplace-partner-apps/issues/7875)) ([515d7ab](https://github.com/contentful/marketplace-partner-apps/commit/515d7ab8bb73a09c11d2f7ff920097b0a177d7e5))
+
 ## [1.0.28](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.27...image-hotspot-creator-v1.0.28) (2025-10-16)
 
 
