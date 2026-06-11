@@ -56,17 +56,6 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      # Restore Nx build cache to skip rebuilding unchanged code
-      # Nx caches build outputs (dist/build folders) based on file hashes
-      # This can reduce build time from minutes to seconds for unchanged apps
-      - name: Restore Nx cache
-        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
-        with:
-          path: /tmp/nxcache
-          key: nx-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            nx-${{ runner.os }}-
-
       # Install root-level dependencies (lerna, nx, etc.)
       # Required before we can run lerna commands
       - name: Install root-level project
