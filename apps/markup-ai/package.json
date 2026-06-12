@@ -82,7 +82,7 @@
     "react-dom": "^19.2.5"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "2.5.11",
+    "@contentful/app-scripts": "2.5.12",
     "@emotion/jest": "11.14.2",
     "@eslint/js": "^10.0.1",
     "@hey-api/openapi-ts": "0.94.5",
@@ -94,7 +94,7 @@
     "@types/node": "25.6.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "5.1.4",
+    "@vitejs/plugin-react": "5.2.0",
     "@vitest/coverage-v8": "4.1.4",
     "cross-env": "10.1.0",
     "eslint": "10.2.0",
@@ -103,7 +103,7 @@
     "prettier-plugin-packagejson": "3.0.2",
     "typescript": "5.9.3",
     "typescript-eslint": "8.58.2",
-    "vite": "7.3.2",
+    "vite": "8.0.16",
     "vitest": "4.1.4"
   }
 }
