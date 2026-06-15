@@ -33,7 +33,7 @@ const Sidebar = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingApp, setLoadingApp] = useState<boolean>(true);
-  const [error, setError] = useState<boolean>(true);
+  const [error, setError] = useState<boolean>(false);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [projectStatus, setProjectStatus] = useState<ProjectStatus | null>(null);
   
