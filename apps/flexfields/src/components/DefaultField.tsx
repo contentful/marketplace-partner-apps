@@ -7,6 +7,7 @@ import {
   Note,
   Text,
   Stack,
+  Spinner,
 } from "@contentful/f36-components";
 import { CombinedLinkActions } from "@contentful/field-editor-reference";
 import { type CustomActionProps } from "@contentful/field-editor-reference";
@@ -256,7 +257,7 @@ const DefaultField = (props: DefaultFieldProps) => {
 
       {/* Handle JSON Object Editor — lazy-loaded to keep main chunk under 10 MB limit */}
       {control?.widgetId === "objectEditor" && (
-        <React.Suspense fallback={null}>
+        <React.Suspense fallback={<Spinner size="small" />}>
           <JsonEditor field={sdk.field} isInitiallyDisabled={false} />
         </React.Suspense>
       )}
