@@ -7,12 +7,12 @@ export default class VwoClient {
     this.accountId = params.accountId;
     this.accessToken = params.authToken;
     this.featureId = '';
-    this.baseUrl = 'https://app.vwo.com/api/v2';
+    this.baseUrl = 'https://app.wingify.com/api/v2';
     this.onReauth = params.onReauth;
   }
 
   createFeatureFlag = async (featureFlag) => {
-    let url = `https://app.vwo.com/api/v2/accounts/${this.accountId}/features`;
+    let url = `https://app.wingify.com/api/v2/accounts/${this.accountId}/features`;
     const response = await fetch(url, {
       method: 'POST',
       body: JSON.stringify(featureFlag),
@@ -38,7 +38,7 @@ export default class VwoClient {
     if (!this.featureId) {
       this.featureId = featureId;
     }
-    let url = `https://app.vwo.com/api/v2/accounts/${this.accountId}/features/${this.featureId}`;
+    let url = `https://app.wingify.com/api/v2/accounts/${this.accountId}/features/${this.featureId}`;
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -61,7 +61,7 @@ export default class VwoClient {
   updateFeatureFlag = async (featureFlag) => {
     featureFlag.variations = featureFlag?.variations?.filter((variation) => variation.id !== 1) ?? [];
     this.featureId = this.featureId || featureFlag.id;
-    let url = `https://app.vwo.com/api/v2/accounts/${this.accountId}/features/${this.featureId}`;
+    let url = `https://app.wingify.com/api/v2/accounts/${this.accountId}/features/${this.featureId}`;
     const response = await fetch(url, {
       method: 'PATCH',
       body: JSON.stringify(featureFlag),
@@ -80,7 +80,7 @@ export default class VwoClient {
   };
 
   updateVariations = async (variations, featureId) => {
-    let url = `https://app.vwo.com/api/v2/accounts/${this.accountId}/features/${featureId}`;
+    let url = `https://app.wingify.com/api/v2/accounts/${this.accountId}/features/${featureId}`;
     const response = await fetch(url, {
       method: 'PATCH',
       body: JSON.stringify(variations),

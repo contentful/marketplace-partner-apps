@@ -2,12 +2,12 @@
   "functions": [
     {
       "id": "handleVWOCalls",
-      "name": "VWO Calls",
+      "name": "Wingify Calls",
       "description": "Template for creating custom app actions. Add your own code to define how your app should respond when an action is triggered.",
       "path": "functions/handleVWOCalls.js",
       "entryFile": "functions/handleVWOCalls.js",
       "allowNetworks": [
-        "https://*.vwo.com"
+        "https://*.wingify.com"
       ],
       "accepts": [
         "appaction.call"
@@ -17,7 +17,7 @@
   "actions": [
     {
       "id": "handleVWOActions",
-      "name": "VWO Actions",
+      "name": "Wingify Actions",
       "type": "function-invocation",
       "functionId": "handleVWOCalls",
       "category": "Custom",

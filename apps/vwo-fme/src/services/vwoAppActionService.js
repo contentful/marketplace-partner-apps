@@ -25,11 +25,10 @@ class VwoAppActionService {
     try {
       const appActions = await this.cma.appAction.getManyForEnvironment({ appDefinitionId: this.sdk.ids.app });
 
-      const appAction = appActions.items.find((action) => action.name === globalConstants.VWO_APP_ACTION_NAME);
+      const appAction = appActions.items.find((action) => action.name === globalConstants.WINGIFY_APP_ACTION_NAME);
 
       if (!appAction) {
-        console.warn('App action not found');
-        throw new Error('App action not found');
+        throw new Error('Wingify app action not found.');
       }
 
       this.actionId = appAction.sys.id;
@@ -58,7 +57,7 @@ class VwoAppActionService {
         },
         {
           parameters: {
-            action: globalConstants.VWO_GET_FEATURE_FLAG_ACTION,
+            action: globalConstants.WINGIFY_GET_FEATURE_FLAG_ACTION,
             payload: JSON.stringify({ id: featureFlagId }),
           },
         }
@@ -103,7 +102,7 @@ class VwoAppActionService {
         },
         {
           parameters: {
-            action: globalConstants.VWO_CREATE_FEATURE_FLAG_ACTION,
+            action: globalConstants.WINGIFY_CREATE_FEATURE_FLAG_ACTION,
             payload: JSON.stringify(featureFlag),
           },
         }
@@ -148,7 +147,7 @@ class VwoAppActionService {
         },
         {
           parameters: {
-            action: globalConstants.VWO_UPDATE_FEATURE_FLAG_ACTION,
+            action: globalConstants.WINGIFY_UPDATE_FEATURE_FLAG_ACTION,
             payload: JSON.stringify(updatedFeatureFlag),
           },
         }
@@ -196,14 +195,14 @@ class VwoAppActionService {
         },
         {
           parameters: {
-            action: globalConstants.VWO_UPDATE_VARIATIONS_ACTION,
+            action: globalConstants.WINGIFY_UPDATE_VARIATIONS_ACTION,
             payload: JSON.stringify({ variations: filteredVwoVariations, featureId }),
           },
         }
       );
 
       if (response.statusCode !== 200) {
-        throw new Error('Something went wrong while updating VWO Variations. Please try again');
+        throw new Error('Something went wrong while updating Wingify Variations. Please try again');
       }
 
       const { _data, _errors } = JSON.parse(response.body);
@@ -212,7 +211,7 @@ class VwoAppActionService {
       } else if (_errors) {
         throw new Error(_errors[0].message);
       } else {
-        throw new Error('Something went wrong while updating VWO Variations. Please try again');
+        throw new Error('Something went wrong while updating Wingify Variations. Please try again');
       }
     } catch (err) {
       throw new Error(err.message || 'Failed to update variations');

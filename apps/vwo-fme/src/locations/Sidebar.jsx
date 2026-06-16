@@ -72,7 +72,7 @@ const Sidebar = (props) => {
     .then((featureFlag) => {
       setFeatureFlag(featureFlag);
       props.sdk.entry.fields.title.setValue(featureFlag.name);
-      props.sdk.notifier.success('VWO Feature flag updated successfully');
+      props.sdk.notifier.success('Wingify Feature flag updated successfully');
     })
     .catch((err) => {
       props.sdk.notifier.success(err);
@@ -106,10 +106,10 @@ const Sidebar = (props) => {
           isDisabled={!isFeatureFlagAdded}
           endIcon={<ExternalLinkIcon />}
           size='small'
-          href={`https://app.vwo.com/#/full-stack/feature-flag/${featureFlag?.id}/edit/variables/`}
+          href={`https://app.wingify.com/#/full-stack/feature-flag/${featureFlag?.id}/edit/variables/`}
           as={isFeatureFlagAdded? 'a': 'button'}
           target="_blank">
-          View this feature flag in VWO
+          View this feature flag in Wingify
         </Button>
       <Flex flexDirection='column' marginBottom='spacingM'>
           <Flex alignItems='center' justifyContent='space-between' marginBottom={nameEditing? 'spacing2Xs': 'none'}>

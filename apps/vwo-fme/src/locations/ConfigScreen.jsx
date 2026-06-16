@@ -64,7 +64,7 @@ export default class ConfigScreen extends React.Component {
       sys: {
         id: VARIATION_CONTAINER_ID,
       },
-      name: "VWO FME Wrapper",
+      name: "Wingify FME Wrapper",
       displayField: "title",
       fields: [
         {
@@ -75,7 +75,7 @@ export default class ConfigScreen extends React.Component {
           "required": false,
           "validations": [],
           "defaultValue": {
-            [this.props.sdk.locales.default]: '[VWO] FME Entry',
+            [this.props.sdk.locales.default]: '[Wingify] FME Entry',
           },
           "disabled": false,
           "omitted": false
@@ -201,14 +201,14 @@ export default class ConfigScreen extends React.Component {
   areAllInputsProvided = () => {
     if (!this.state.config.accountId) {
       this.props.sdk.notifier.error(
-        "You must provide a VWO access token to connect to the VWO app!"
+        "You must provide a Wingify access token to connect to the Wingify app!"
       );
       return false;
     }
 
     if (!this.state.config.accessToken) {
       this.props.sdk.notifier.error(
-        "You must provide an api key to connect to the VWO app!"
+        "You must provide an api key to connect to the Wingify app!"
       );
       return false;
     }
@@ -219,7 +219,7 @@ export default class ConfigScreen extends React.Component {
   onConfigure = async () => {
     if (!this.props.accessToken) {
       this.props.sdk.notifier.error(
-        "You must be connect to the VWO in order to configure/install the app!"
+        "You must be connect to the Wingify in order to configure/install the app!"
       );
       return false;
     }
@@ -368,18 +368,18 @@ export default class ConfigScreen extends React.Component {
               <Flex alignItems='center' justifyContent='space-between' marginBottom='spacingL'>
                 <Heading marginBottom='none'>Configuration</Heading>
                 <TextLink
-                  href='https://app.vwo.com/'
+                  href='https://app.wingify.com/'
                   target='_blank'
                   icon={<ExternalLinkIcon />}
                   alignIcon='start'
-                  rel="noopener noreferrer">Open VWO</TextLink>
+                  rel="noopener noreferrer">Open Wingify</TextLink>
               </Flex>
               <FormControl className={styles.formItem}>
                   <FormControl.Label isRequired>Account ID</FormControl.Label>
                   <TextInput
                     value={this.state.config.accountId}
                     onChange={(e) => this.onAccountIdChange(e.target.value)}/>
-                  <Paragraph marginTop='spacingS'>Locate account ID in settings page. See <TextLink href='https://help.vwo.com/hc/en-us/articles/40825355345177-Integrating-VWO-Feature-Flags-with-Contentful-CMS' target='_blank' rel="noopener noreferrer">knowledge base</TextLink> for more details.</Paragraph>
+                  <Paragraph marginTop='spacingS'>Locate account ID in settings page. See <TextLink href='https://help.wingify.com/hc/en-us/articles/40825355345177-Integrating-Wingify-Feature-Flags-with-Contentful-CMS' target='_blank' rel="noopener noreferrer">knowledge base</TextLink> for more details.</Paragraph>
               </FormControl>
               <FormControl className={styles.formItem}>
                   <FormControl.Label isRequired>API Key</FormControl.Label>
@@ -387,17 +387,17 @@ export default class ConfigScreen extends React.Component {
                     type='password'
                     value={this.state.config.accessToken}
                     onChange={(e) => this.onApiKeyChange(e.target.value)}/>
-                  <Paragraph marginTop='spacingS'>View the auth token in Integrations &gt; Contentful &gt; Config section. See <TextLink href='https://help.vwo.com/hc/en-us/articles/40825355345177-Integrating-VWO-Feature-Flags-with-Contentful-CMS' target='_blank' rel="noopener noreferrer">knowledge base</TextLink> for more details.</Paragraph>
+                  <Paragraph marginTop='spacingS'>View the auth token in Integrations &gt; Contentful &gt; Config section. See <TextLink href='https://help.wingify.com/hc/en-us/articles/40825355345177-Integrating-Wingify-Feature-Flags-with-Contentful-CMS' target='_blank' rel="noopener noreferrer">knowledge base</TextLink> for more details.</Paragraph>
               </FormControl>
-              <Note marginBottom='spacingXl'>This token grants read-only access to organization-level information stored in VWO. It is accessible via API by any users within the current Contentful space.</Note>
-              <Button variant='primary' onClick={this.connectToVwo} isLoading={this.state.loading}>Connect with VWO</Button>
+              <Note marginBottom='spacingXl'>This token grants read-only access to organization-level information stored in Wingify. It is accessible via API by any users within the current Contentful space.</Note>
+              <Button variant='primary' onClick={this.connectToVwo} isLoading={this.state.loading}>Connect with Wingify</Button>
             </Flex>}
             {/* After connecting to VWO */}
             {!!this.props.accessToken && !isInstalled
               && <Flex flexDirection='column' alignItems='start' className={styles.body}>
               <Stepper currentStep={2}/>
               <Heading marginBottom='spacingXl'>Just one more step!</Heading>
-              <Note variant='warning' marginBottom='spacingL'>To complete setup, click 'Install' in the top-right corner and start using the VWO FME app.</Note>
+              <Note variant='warning' marginBottom='spacingL'>To complete setup, click 'Install' in the top-right corner and start using the Wingify FME app.</Note>
             </Flex>}
 
             {/* After installing the VWO */}

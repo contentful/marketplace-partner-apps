@@ -133,7 +133,7 @@ const EntryEditor = (props) => {
     return updateVariationsInVwo(updatedVwoVariations)
     .then(variations => {
       variations.sort((a,b) => b.id-a.id);
-      props.sdk.notifier.success('VWO Variation name updated successfully');
+      props.sdk.notifier.success('Wingify Variation name updated successfully');
       return true;
     })
     .catch(err => {
@@ -153,7 +153,7 @@ const EntryEditor = (props) => {
       featureFlag.variations = variations;
       dispatch({ type: actionTypes.SET_FEATURE_FLAG, payload: featureFlag });
       props.sdk.entry.fields.featureFlag.setValue(featureFlag);
-      props.sdk.notifier.success('VWO Variation added successfully');
+      props.sdk.notifier.success('Wingify Variation added successfully');
       return true;
     })
     .catch(err => {
@@ -177,7 +177,7 @@ const EntryEditor = (props) => {
         updatedFeatureFlag.variations.sort((a,b) => b.id-a.id);
         dispatch({ type: actionTypes.SET_FEATURE_FLAG, payload: updatedFeatureFlag });
         props.sdk.entry.fields.featureFlag.setValue(updatedFeatureFlag);
-        props.sdk.notifier.success('VWO Variations updated successfully');
+        props.sdk.notifier.success('Wingify Variations updated successfully');
       })
       .catch(err => {
         props.sdk.notifier.error(err);
@@ -318,17 +318,17 @@ const EntryEditor = (props) => {
                   Feature flag not found
                 </Heading>
                 <Paragraph fontSize='fontSizeL' marginBottom='spacingXl'>
-                  We couldn't locate the feature flag <strong>{state.featureFlag?.name}</strong>. It may have been removed from the VWO app, or there was an issue retrieving it.
+                  We couldn't locate the feature flag <strong>{state.featureFlag?.name}</strong>. It may have been removed from the Wingify app, or there was an issue retrieving it.
                 </Paragraph>
                 <Button
                   className={styles.button}
                   endIcon={<ExternalLinkIcon />}
                   variant='negative'
                   size='small'
-                  href={`https://app.vwo.com/#/full-stack/feature-flag/${state.featureFlag?.id}/edit/variables/`}
+                  href={`https://app.wingify.com/#/full-stack/feature-flag/${state.featureFlag?.id}/edit/variables/`}
                   as='a'
                   target="_blank">
-                  View this feature flag in VWO
+                  View this feature flag in Wingify
                 </Button>
               </Flex>
             </>

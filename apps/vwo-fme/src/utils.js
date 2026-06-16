@@ -19,7 +19,7 @@ export const validateCredentials = async (accountId, apiToken) => {
     return false;
   }
 
-  let url = `https://app.vwo.com/api/v2/accounts/${accountId}/smartcode`;
+  let url = `https://app.wingify.com/api/v2/accounts/${accountId}/smartcode`;
   const response = await fetch(url, {
     method: 'GET',
     headers: {
@@ -31,7 +31,7 @@ export const validateCredentials = async (accountId, apiToken) => {
   if (response.ok) {
     return {
       code: 200,
-      message: 'User autherized with the VWO',
+      message: 'User autherized with the Wingify',
     };
   } else {
     const resp = await response.json();
@@ -92,9 +92,11 @@ export const mapVwoVariationsAndContent = async (vwoVariations, contentTypes, de
 };
 
 export const globalConstants = {
-  VWO_APP_ACTION_NAME: 'VWO Actions', // Find it in contentful-app-manifest.json
-  VWO_GET_FEATURE_FLAG_ACTION: 'get',
-  VWO_UPDATE_FEATURE_FLAG_ACTION: 'update',
-  VWO_UPDATE_VARIATIONS_ACTION: 'updateVariations',
-  VWO_CREATE_FEATURE_FLAG_ACTION: 'create',
+  WINGIFY_APP_ACTION_ID: 'handleVWOActions', // Find it in contentful-app-manifest.json
+  WINGIFY_APP_ACTION_NAME: 'Wingify Actions', // Find it in contentful-app-manifest.json
+  WINGIFY_LEGACY_APP_ACTION_NAME: 'VWO Actions',
+  WINGIFY_GET_FEATURE_FLAG_ACTION: 'get',
+  WINGIFY_UPDATE_FEATURE_FLAG_ACTION: 'update',
+  WINGIFY_UPDATE_VARIATIONS_ACTION: 'updateVariations',
+  WINGIFY_CREATE_FEATURE_FLAG_ACTION: 'create',
 };

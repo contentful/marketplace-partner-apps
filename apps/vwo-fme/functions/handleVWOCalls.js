@@ -15,14 +15,14 @@ import VwoClient from './vwo-client.js';
  */
 function initVwoClient({ accountId, accessToken }) {
   if (!accountId || !accessToken) {
-    throw new Error('VWO_ACCOUNT_ID and VWO_AUTH_TOKEN environment variables are required. Please configure them in your app settings.');
+    throw new Error('Wingify account ID and access token are required. Please configure them in your app settings.');
   }
 
   return new VwoClient({
     accountId,
     authToken: accessToken,
     onReauth: () => {
-      console.log('VWO authentication failed. Please check your credentials.');
+      console.log('Wingify authentication failed. Please check your credentials.');
     },
   });
 }
@@ -129,7 +129,7 @@ export const handler = async (event, context) => {
 
     return result;
   } catch (error) {
-    console.error('VWO Feature Flag Handler Error:', error);
+    console.error('Wingify Feature Flag Handler Error:', error);
     return {
       success: false,
       error: error.message || 'An unexpected error occurred',
