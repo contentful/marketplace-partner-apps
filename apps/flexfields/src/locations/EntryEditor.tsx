@@ -64,6 +64,12 @@ const EntryEditor = () => {
   }, [handlePageHide]);
 
   useEffect(() => {
+    sdk.app.onConfigurationChanged(() => {
+      window.location.reload();
+    });
+  }, [sdk.app]);
+
+  useEffect(() => {
     sdk.editor.onLocaleSettingsChanged((localeSetings) =>
       setLocaleSetings(localeSetings)
     );
