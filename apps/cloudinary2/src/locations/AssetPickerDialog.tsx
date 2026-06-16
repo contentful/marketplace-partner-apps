@@ -144,7 +144,7 @@ const AssetPickerDialog = () => {
             isDisabled={pendingAssets.length === 0}
             onClick={handleDone}
           >
-            Insert {pendingAssets.length > 0 ? `(${pendingAssets.length})` : ''}
+            Add to field {pendingAssets.length > 0 ? `(${pendingAssets.length})` : ''}
           </Button>
         </div>
       )}
