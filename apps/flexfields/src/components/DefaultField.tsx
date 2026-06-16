@@ -7,6 +7,7 @@ import {
   Note,
   Text,
   Stack,
+  Spinner,
 } from "@contentful/f36-components";
 import { CombinedLinkActions } from "@contentful/field-editor-reference";
 import { type CustomActionProps } from "@contentful/field-editor-reference";
@@ -14,7 +15,10 @@ import type { Control } from "contentful-management";
 import { css } from "@emotion/css";
 import React from "react";
 import { getLocaleName } from "../utils";
-import { JsonEditor } from "@contentful/field-editor-json";
+
+const JsonEditor = React.lazy(() =>
+  import("@contentful/field-editor-json").then((m) => ({ default: m.JsonEditor }))
+);
 
 // Prop types for DefaultField component
 export interface DefaultFieldProps {
@@ -251,9 +255,11 @@ const DefaultField = (props: DefaultFieldProps) => {
         />
       )}
 
-      {/* Handle JSON Object Editor */}
+      {/* Handle JSON Object Editor — lazy-loaded to keep main chunk under 10 MB limit */}
       {control?.widgetId === "objectEditor" && (
-        <JsonEditor field={sdk.field} isInitiallyDisabled={false} />
+        <React.Suspense fallback={<Spinner size="small" />}>
+          <JsonEditor field={sdk.field} isInitiallyDisabled={false} />
+        </React.Suspense>
       )}
 
       {/* Show note for custom field widgets ONLY (not ResourceLink, not objectEditor, not builtin) */}
