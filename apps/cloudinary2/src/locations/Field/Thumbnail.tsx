@@ -11,7 +11,7 @@ import { useCallback, useMemo } from 'react';
 import logo from '../../assets/logo.svg';
 import { VALID_IMAGE_FORMATS } from '../../constants';
 import { AppInstallationParameters, CloudinaryAsset, MediaLibraryResult } from '../../types';
-import { extractAsset, mediaLibraryFilter } from '../../utils';
+import { extractAsset, getDeliveryHostname, mediaLibraryFilter } from '../../utils';
 
 const styles = {
   dragHandle: css({
@@ -243,9 +243,13 @@ export function Thumbnail({ asset, isDisabled, onDelete, onReplace }: Props) {
 }
 
 function getUrlFromAsset(installationParams: AppInstallationParameters, asset: CloudinaryAsset): string | undefined {
+  const deliveryHostname = getDeliveryHostname(asset.secure_url ?? asset.url);
   const cloudinary = new cloudinaryCore({
     cloud_name: installationParams.cloudName,
     api_key: installationParams.apiKey,
+    ...(deliveryHostname
+      ? { cname: deliveryHostname, secure_distribution: deliveryHostname, private_cdn: true }
+      : {}),
   });
 
   const transformations = `${asset.raw_transformation ?? ''}/c_fill,g_auto,h_149,w_194`;
