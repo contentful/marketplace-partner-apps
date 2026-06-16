@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { EditorAppSDK, EditorLocaleSettings } from "@contentful/app-sdk";
+import { EditorAppSDK, EditorLocaleSettings, ConfigAppSDK } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
 import { getDefaultWidgetId } from "@contentful/default-field-editors";
 import { Stack, Form, Heading, Text } from "@contentful/f36-components";
@@ -64,10 +64,12 @@ const EntryEditor = () => {
   }, [handlePageHide]);
 
   useEffect(() => {
-    sdk.app.onConfigurationChanged(() => {
+    // onConfigurationCompleted fires after the config screen saves new installation parameters.
+    // EditorAppSDK doesn't expose `app` in its type but the runtime SDK always has it.
+    (sdk as unknown as ConfigAppSDK).app.onConfigurationCompleted(() => {
       window.location.reload();
     });
-  }, [sdk.app]);
+  }, [sdk]);
 
   useEffect(() => {
     sdk.editor.onLocaleSettingsChanged((localeSetings) =>
