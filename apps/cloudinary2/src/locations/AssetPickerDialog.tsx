@@ -1,5 +1,5 @@
 import { DialogAppSDK } from '@contentful/app-sdk';
-import { useSDK } from '@contentful/react-apps-toolkit';
+import { useAutoResizer, useSDK } from '@contentful/react-apps-toolkit';
 import { injectGlobal } from '@emotion/css';
 import { css } from '@emotion/react';
 import { Button } from '@contentful/f36-components';
@@ -35,6 +35,7 @@ const styles = {
 
 const AssetPickerDialog = () => {
   const sdk = useSDK<DialogAppSDK<AppInstallationParameters>>();
+  useAutoResizer();
   const invocationParams = sdk.parameters.invocation as Record<string, unknown>;
   const expression = invocationParams.expression as string;
   const [pendingAssets, setPendingAssets] = useState<MediaLibraryResultAsset[]>([]);
@@ -104,8 +105,10 @@ const AssetPickerDialog = () => {
               // Single-asset field: close immediately (original behavior)
               sdk.close(data);
             } else {
-              // Multi-asset field: accumulate and keep widget open
-              const next = [...pendingRef.current, ...data.assets];
+              // Multi-asset field: accumulate up to maxFiles limit and keep widget open
+              const remaining = maxFiles - pendingRef.current.length;
+              if (remaining <= 0) return;
+              const next = [...pendingRef.current, ...data.assets.slice(0, remaining)];
               pendingRef.current = next;
               setPendingAssets([...next]);
             }
