@@ -1,10 +1,11 @@
 import { DialogAppSDK } from '@contentful/app-sdk';
-import { useSDK } from '@contentful/react-apps-toolkit';
+import { useAutoResizer, useSDK } from '@contentful/react-apps-toolkit';
 import { injectGlobal } from '@emotion/css';
 import { css } from '@emotion/react';
-import { useCallback } from 'react';
+import { Button } from '@contentful/f36-components';
+import { useCallback, useRef, useState } from 'react';
 import { APP_ENV, APP_VERSION } from '../constants';
-import { AppInstallationParameters } from '../types';
+import { AppInstallationParameters, MediaLibraryResultAsset } from '../types';
 import { loadScript } from '../utils';
 import { ShowOptions } from './types';
 
@@ -12,12 +13,37 @@ const styles = {
   container: css({
     height: '100%',
   }),
+  doneBar: css({
+    position: 'fixed',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: '8px',
+    padding: '12px 16px',
+    background: 'white',
+    borderTop: '1px solid #e5ebed',
+    zIndex: 10,
+  }),
+  doneLabel: css({
+    fontSize: '14px',
+    color: '#536171',
+  }),
 };
 
 const AssetPickerDialog = () => {
   const sdk = useSDK<DialogAppSDK<AppInstallationParameters>>();
+  useAutoResizer();
   const invocationParams = sdk.parameters.invocation as Record<string, unknown>;
   const expression = invocationParams.expression as string;
+  const [pendingAssets, setPendingAssets] = useState<MediaLibraryResultAsset[]>([]);
+  const pendingRef = useRef<MediaLibraryResultAsset[]>([]);
+
+  const handleDone = useCallback(() => {
+    sdk.close(pendingRef.current.length > 0 ? { assets: pendingRef.current, mlId: '' } : undefined);
+  }, [sdk]);
 
   /**
    * Initialization is triggered using the div's ref to ensure the container exists in the DOM
@@ -74,7 +100,19 @@ const AssetPickerDialog = () => {
         };
 
         const instance = window.cloudinary.createMediaLibrary(options, {
-          insertHandler: (data) => sdk.close(data),
+          insertHandler: (data) => {
+            if (maxFiles <= 1) {
+              // Single-asset field: close immediately (original behavior)
+              sdk.close(data);
+            } else {
+              // Multi-asset field: accumulate up to maxFiles limit and keep widget open
+              const remaining = maxFiles - pendingRef.current.length;
+              if (remaining <= 0) return;
+              const next = [...pendingRef.current, ...data.assets.slice(0, remaining)];
+              pendingRef.current = next;
+              setPendingAssets([...next]);
+            }
+          },
         });
 
         const showOptions: ShowOptions = {
@@ -86,10 +124,35 @@ const AssetPickerDialog = () => {
         instance.show(showOptions);
       })();
     },
-    [sdk],
+    [sdk, invocationParams, expression],
   );
 
-  return <div ref={init} id="container" css={styles.container} />;
+  const maxFiles = 'maxFiles' in invocationParams ? Number(invocationParams.maxFiles) : sdk.parameters.installation.maxFiles;
+  const isMulti = maxFiles > 1;
+
+  return (
+    <>
+      <div ref={init} id="container" css={styles.container} />
+      {isMulti && (
+        <div css={styles.doneBar}>
+          {pendingAssets.length > 0 && (
+            <span css={styles.doneLabel}>{pendingAssets.length} selected</span>
+          )}
+          <Button variant="secondary" size="small" onClick={() => sdk.close(undefined)}>
+            Cancel
+          </Button>
+          <Button
+            variant="primary"
+            size="small"
+            isDisabled={pendingAssets.length === 0}
+            onClick={handleDone}
+          >
+            Add to field {pendingAssets.length > 0 ? `(${pendingAssets.length})` : ''}
+          </Button>
+        </div>
+      )}
+    </>
+  );
 };
 
 export default AssetPickerDialog;
