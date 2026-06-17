@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.3](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.4.2...cloudinary-assets-v1.4.3) (2026-06-17)
+
+
+### Bug Fixes
+
+* **cloudinary:** keep widget open for multi-insert on multi-asset fields [] ([#8377](https://github.com/contentful/marketplace-partner-apps/issues/8377)) ([982c52f](https://github.com/contentful/marketplace-partner-apps/commit/982c52fc6ae294b68410277f08487ffe0c84ce6b))
+
 ## [1.4.2](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.4.1...cloudinary-assets-v1.4.2) (2026-05-20)
 
 
