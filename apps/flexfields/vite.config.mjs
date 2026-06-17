@@ -1,19 +1,27 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   base: '', // relative paths
+  resolve: {
+    alias: {
+      // Prevent codemirror from entering the bundle: @contentful/default-field-editors/Field.js
+      // statically imports MarkdownEditor from field-editor-markdown, which pulls in codemirror
+      // (~400 KB). We render markdown fields as MultipleLineEditor instead (see DefaultField.tsx).
+      '@contentful/field-editor-markdown': path.resolve(__dirname, 'src/stubs/field-editor-markdown-stub.ts'),
+    },
+  },
   build: {
     outDir: 'build',
-    // Warn at 9 MB so we notice before hitting the 10 MB AppBundle API per-file limit.
-    // The main chunk previously hit 10,561 KB (over the limit); it was brought down to
-    // ~10,485 KB via lazy-loading codemirror/markdown. This guard + manualChunks below
-    // keeps headroom visible as deps evolve.
     chunkSizeWarningLimit: 9000,
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          // Rich-text editor pulls in Slate.js (~800 KB) — isolate it
+          // Rich-text editor pulls in Slate.js (~7.7 MB) — isolate it
           if (id.includes('@contentful/field-editor-rich-text') || id.includes('@udecode/') || id.includes('slate')) {
             return 'vendor-richtext';
           }
