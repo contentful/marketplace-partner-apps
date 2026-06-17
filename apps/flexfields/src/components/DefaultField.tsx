@@ -1,5 +1,6 @@
 import { FieldAppSDK, FieldAPI } from "@contentful/app-sdk";
 import { FieldWrapper, Field } from "@contentful/default-field-editors";
+import { MultipleLineEditor } from "@contentful/field-editor-multiple-line";
 import {
   HelpText,
   FormLabel,
@@ -174,27 +175,15 @@ const ResourceLinkDisplay = ({ sdk }: { sdk: FieldAppSDK }) => {
 const DefaultField = (props: DefaultFieldProps) => {
   const { control, name, sdk, locale, widgetId } = props;
   
-  // Lazy-load the markdown editor (codemirror is ~1.5 MB) only when the field uses it.
-  // ref: https://github.com/contentful/field-editors/blob/master/packages/markdown/stories/MarkdownEditor.stories.tsx#L93
-  React.useEffect(() => {
-    if (control?.widgetId !== "markdown") return;
-    Promise.all([
-      import("@contentful/field-editor-markdown"),
-      import("codemirror/lib/codemirror.css"),
-    ]).then(([{ openMarkdownDialog }]) => {
-      // @ts-ignore - openCurrent is not in the SDK type definitions but is required for markdown dialogs
-      sdk.dialogs.openCurrent = openMarkdownDialog(sdk);
-    });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [control?.widgetId]);
-
   // Check if this is a ResourceLink field
-  const isResourceLinkEditor = 
+  const isResourceLinkEditor =
     control?.widgetId === "resourceLinkEditor" ||
     control?.widgetId === "entryResourceLinkEditor" ||
     control?.widgetId === "assetResourceLinkEditor";
+  const isMarkdownField = control?.widgetId === "markdown";
   const canRenderBuiltinField =
     !isResourceLinkEditor &&
+    !isMarkdownField &&
     control?.widgetId !== "objectEditor" &&
     control?.widgetNamespace === "builtin" &&
     widgetId !== null;
@@ -262,8 +251,14 @@ const DefaultField = (props: DefaultFieldProps) => {
         </React.Suspense>
       )}
 
+      {/* Markdown fields: render as plain multi-line text to keep codemirror out of the bundle */}
+      {isMarkdownField && (
+        <MultipleLineEditor field={sdk.field} locales={sdk.locales} isInitiallyDisabled={false} />
+      )}
+
       {/* Show note for custom field widgets ONLY (not ResourceLink, not objectEditor, not builtin) */}
-      {!isResourceLinkEditor && 
+      {!isResourceLinkEditor &&
+       !isMarkdownField &&
        control?.widgetId !== "objectEditor" &&
        control?.widgetNamespace !== "builtin" && (
         <CustomWidgetNote />
