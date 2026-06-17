@@ -1,0 +1,69 @@
+{
+  "name": "wxrks",
+  "src": "<host>/frontend/index.html",
+  "locations": [
+    {
+      "location": "entry-sidebar"
+    },
+    {
+      "location": "dialog"
+    },
+    {
+      "location": "app-config"
+    },
+    {
+      "location": "page",
+      "navigationItem": {
+        "name": "wxrks",
+        "path": "/content"
+      }
+    }
+  ],
+  "parameters": {
+    "instance": [],
+    "installation": [
+      {
+        "name": "Secret Key",
+        "description": "wxrks Secret Key used by backend authentication",
+        "default": "",
+        "id": "secretKey",
+        "type": "Secret",
+        "required": true
+      },
+      {
+        "name": "API ID",
+        "description": "The wxrks API identifier used to authenticate this Contentful app installation.",
+        "id": "apiKey",
+        "type": "Symbol",
+        "required": true
+      },
+      {
+        "name": "Config UUID",
+        "description": "The wxrks connector configuration UUID associated with this Contentful space.",
+        "id": "configUuid",
+        "type": "Symbol",
+        "required": true
+      },
+      {
+        "name": "Workflows",
+        "description": "The wxrks workflow identifiers available for translation project creation from Contentful.",
+        "default": "",
+        "id": "workflows",
+        "type": "Symbol",
+        "required": true
+      },
+      {
+        "name": "Organization Unit UUID",
+        "description": "The wxrks organization unit UUID associated with this app installation.",
+        "id": "orgUnitUuid",
+        "type": "Symbol"
+      },
+      {
+        "name": "Contact UUID",
+        "description": "The wxrks contact UUID used as the default contact for projects created from Contentful.",
+        "id": "contactUuid",
+        "type": "Symbol"
+      }
+    ]
+  }
+}
