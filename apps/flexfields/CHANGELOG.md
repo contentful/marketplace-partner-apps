@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.6.0...thrillworks-flex-fields-app-v1.6.1) (2026-06-17)
+
+
+### Bug Fixes
+
+* keep flexfields bundle under 10 MB AppBundle limit [] ([#8391](https://github.com/contentful/marketplace-partner-apps/issues/8391)) ([66e1b44](https://github.com/contentful/marketplace-partner-apps/commit/66e1b448ba8349cb446f6ed8925e2a47fbb82a64))
+
 ## [1.6.0](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.5.0...thrillworks-flex-fields-app-v1.6.0) (2026-06-17)
 
 
