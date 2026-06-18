@@ -36,15 +36,15 @@
     "@types/node": "^22.9.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "@vitejs/plugin-react": "^4.7.0",
+    "@vitejs/plugin-react": "^6.0.2",
     "eslint": "^9.39.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "happy-dom": "^20.8.9",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.2",
-    "vite": "^6.4.1",
-    "vitest": "^2.1.5"
+    "vite": "^8.0.16",
+    "vitest": "^4.1.9"
   },
   "overrides": {
     "slate": "0.94.1",
