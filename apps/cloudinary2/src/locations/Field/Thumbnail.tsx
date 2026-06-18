@@ -242,6 +242,52 @@ export function Thumbnail({ asset, isDisabled, onDelete, onReplace }: Props) {
   );
 }
 
+/** Animated AVIF previews of long videos freeze the Contentful field editor. */
+const MAX_ANIMATED_PREVIEW_DURATION_SECONDS = 30;
+/** Cap animated previews when duration is unknown to avoid processing entire videos. */
+const ANIMATED_PREVIEW_CLIP_SECONDS = 5;
+
+function getEffectiveVideoDuration(asset: CloudinaryAsset): number | null {
+  const originalDuration = asset.duration;
+  if (originalDuration == null || originalDuration <= 0) {
+    return null;
+  }
+
+  const rawTransformation = asset.raw_transformation;
+  if (!rawTransformation) {
+    return originalDuration;
+  }
+
+  const soMatch = rawTransformation.match(/so_([0-9.]+)/);
+  const eoMatch = rawTransformation.match(/eo_([0-9.]+)/);
+
+  if (!soMatch && !eoMatch) {
+    return originalDuration;
+  }
+
+  const so = soMatch ? parseFloat(soMatch[1]) : 0;
+  const eo = eoMatch ? parseFloat(eoMatch[1]) : originalDuration;
+  if (isNaN(so) || isNaN(eo) || eo <= so) {
+    return originalDuration;
+  }
+
+  return eo - so;
+}
+
+function getVideoPreviewTransformation(asset: CloudinaryAsset, effectiveDuration: number | null): string {
+  const userTransformation = asset.raw_transformation ?? '';
+
+  if (effectiveDuration !== null && effectiveDuration > MAX_ANIMATED_PREVIEW_DURATION_SECONDS) {
+    return `/so_0/h_149/c_fill,g_auto,w_194/${userTransformation}`;
+  }
+
+  if (effectiveDuration === null) {
+    return `/so_0,eo_${ANIMATED_PREVIEW_CLIP_SECONDS}/h_149/f_avif,fl_animated,e_loop/${userTransformation}`;
+  }
+
+  return `/h_149/f_avif,fl_animated,e_loop/${userTransformation}`;
+}
+
 function getUrlFromAsset(installationParams: AppInstallationParameters, asset: CloudinaryAsset): string | undefined {
   const cloudinary = new cloudinaryCore({
     cloud_name: installationParams.cloudName,
@@ -269,16 +315,41 @@ function getUrlFromAsset(installationParams: AppInstallationParameters, asset: C
     return cloudinary.url(asset.public_id, options);
   }
   if (asset.resource_type === 'video') {
+    const effectiveDuration = getEffectiveVideoDuration(asset);
+    const previewTransformation = getVideoPreviewTransformation(asset, effectiveDuration);
+    const useStaticPoster =
+      effectiveDuration !== null && effectiveDuration > MAX_ANIMATED_PREVIEW_DURATION_SECONDS;
+
+    if (useStaticPoster) {
+      const staticOptions =
+        asset.version != null
+          ? {
+              type: asset.type,
+              resource_type: 'video',
+              format: 'jpg',
+              rawTransformation: previewTransformation,
+              version: String(asset.version),
+            }
+          : {
+              type: asset.type,
+              resource_type: 'video',
+              format: 'jpg',
+              rawTransformation: previewTransformation,
+            };
+
+      return cloudinary.url(asset.public_id, staticOptions);
+    }
+
     const videoOptions =
       asset.version != null
         ? {
             type: asset.type,
-            rawTransformation: `/h_149/f_avif,fl_animated,e_loop/${asset.raw_transformation ?? ''}`,
+            rawTransformation: previewTransformation,
             version: String(asset.version),
           }
         : {
             type: asset.type,
-            rawTransformation: `/h_149/f_avif,fl_animated,e_loop/${asset.raw_transformation ?? ''}`,
+            rawTransformation: previewTransformation,
           };
 
     return cloudinary.video_url(asset.public_id, videoOptions);
