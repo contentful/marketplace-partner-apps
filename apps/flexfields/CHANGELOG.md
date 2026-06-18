@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.2](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.6.1...thrillworks-flex-fields-app-v1.6.2) (2026-06-18)
+
+
+### Reverts
+
+* fix(cloudinary): keep widget open for multi-insert on multi-asset fields [] ([#8394](https://github.com/contentful/marketplace-partner-apps/issues/8394)) ([ad1e2ac](https://github.com/contentful/marketplace-partner-apps/commit/ad1e2ace943d72ad31294c045c9090c41923a813))
+
 ## [1.6.1](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.6.0...thrillworks-flex-fields-app-v1.6.1) (2026-06-17)
 
 
