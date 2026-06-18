@@ -10,7 +10,7 @@ function replaceSimpleValue(value: any, find: string, replace: string, caseSensi
   if (!strVal.toLowerCase().includes(find.toLowerCase())) return null;
 
   if (!caseSensitive) {
-    const updated = strVal.replace(new RegExp(find, 'gi'), replace);
+    const updated = strVal.replace(new RegExp(escapeRegex(find), 'gi'), replace);
     return {
       original: strVal,
       updated,
@@ -18,14 +18,16 @@ function replaceSimpleValue(value: any, find: string, replace: string, caseSensi
     };
   }
 
-  if (!strVal.includes(find)) return null;
-
   const result = strVal.replaceAll(find, replace);
   return {
     original: strVal,
     updated: result,
     diffLines: getRelevantDiff(value, find, replace, caseSensitive),
   };
+}
+
+function escapeRegex(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 /**
@@ -176,7 +178,7 @@ const getRelevantDiff = (value: any, find: string, replace: string, caseSensitiv
   const diffLines: DiffLine[] = [];
   for (const snippet of originalSnippets) {
     const originalText = snippet;
-    const updatedText = caseSensitive ? snippet.replaceAll(find, replace) : snippet.replace(new RegExp(find, 'gi'), replace);
+    const updatedText = caseSensitive ? snippet.replaceAll(find, replace) : snippet.replace(new RegExp(escapeRegex(find), 'gi'), replace);
     diffLines.push({ diffOriginal: originalText, diffUpdated: updatedText });
   }
 
