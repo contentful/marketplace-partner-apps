@@ -36,7 +36,7 @@
     "@vitejs/plugin-react": "^4.0.3",
     "jsdom": "^26.0.0",
     "typescript": "^5.7.2",
-    "vite": "^7.1.12",
+    "vite": "^7.3.2",
     "vitest": "^3.0.9"
   },
   "eslintConfig": {
