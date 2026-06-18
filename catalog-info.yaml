@@ -210,7 +210,7 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: imageHotspotCreator
+  name: image-hotspot-creator
   annotations:
     github.com/project-slug: contentful/marketplace-partner-apps/imageHotspotCreator
     contentful.com/service-tier: '2'
