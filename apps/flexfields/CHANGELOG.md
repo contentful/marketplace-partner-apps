@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.6.3](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.6.2...thrillworks-flex-fields-app-v1.6.3) (2026-06-18)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.13.5 to 1.15.0 in /apps/flexfields ([#8141](https://github.com/contentful/marketplace-partner-apps/issues/8141)) ([ee23b5c](https://github.com/contentful/marketplace-partner-apps/commit/ee23b5ce88e00be9a158f6cd5cf9ca901475cc3d))
+* **deps:** bump qs from 6.14.2 to 6.15.2 in /apps/flexfields ([#8229](https://github.com/contentful/marketplace-partner-apps/issues/8229)) ([efc821e](https://github.com/contentful/marketplace-partner-apps/commit/efc821e602f7fb016a14e0a87121e72cb0215f76))
+
 ## [1.6.2](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.6.1...thrillworks-flex-fields-app-v1.6.2) (2026-06-18)
 
 
