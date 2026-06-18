@@ -41,7 +41,7 @@
     ]
   },
   "devDependencies": {
-    "@contentful/app-scripts": "^2.2.0",
+    "@contentful/app-scripts": "^2.5.12",
     "@cypress/code-coverage": "^3.14.5",
     "@cypress/react18": "^2.0.1",
     "@types/node": "^22.13.5",
