@@ -31,7 +31,7 @@
     "serve": "^14.2.5"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "^2.5.6",
+    "@contentful/app-scripts": "^2.5.12",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.1",
     "@types/node": "22.14.0",

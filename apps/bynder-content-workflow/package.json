@@ -18,7 +18,7 @@
     "react-dom": "18.2.0",
     "react-top-loading-bar": "^2.3.1",
     "showdown": "^2.1.0",
-    "uuid": "^9.0.1"
+    "uuid": "^14.0.0"
   },
   "scripts": {
     "install-ci": "npm ci",
@@ -31,17 +31,17 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.30.0",
+    "@contentful/app-scripts": "3.0.1",
     "@testing-library/react": "16.3.0",
     "@types/node": "^20",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "@types/showdown": "^2.0.6",
     "@types/uuid": "^9.0.8",
-    "@vitejs/plugin-react": "4.7.0",
+    "@vitejs/plugin-react": "6.0.2",
     "happy-dom": "20.8.9",
     "typescript": "5.9.3",
-    "vite": "^5.4.21",
-    "vitest": "3.2.4"
+    "vite": "^8.0.16",
+    "vitest": "4.1.8"
   }
 }

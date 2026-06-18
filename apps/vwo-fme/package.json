@@ -5,11 +5,11 @@
   "dependencies": {
     "@contentful/app-sdk": "^4.51.4",
     "@contentful/f36-components": "4.81.1",
-    "@contentful/f36-tokens": "^4.0.5",
+    "@contentful/f36-tokens": "^6.1.2",
     "@contentful/react-apps-toolkit": "1.2.19",
     "contentful-management": "11.69.2",
     "emotion": "10.0.27",
-    "lodash": "^4.17.23",
+    "lodash": "^4.18.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-scripts": "5.0.1"
@@ -43,7 +43,7 @@
     ]
   },
   "devDependencies": {
-    "@contentful/app-scripts": "^2.5.8",
+    "@contentful/app-scripts": "^2.5.12",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",
     "cross-env": "^10.1.0"
