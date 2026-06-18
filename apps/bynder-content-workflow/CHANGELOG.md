@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.15](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.14...bynder-content-workflow-v1.0.15) (2026-06-18)
+
+
+### Bug Fixes
+
+* **deps:** bump esbuild, @vitejs/plugin-react, vite and vitest in /apps/bynder-content-workflow ([#8322](https://github.com/contentful/marketplace-partner-apps/issues/8322)) ([7cfccde](https://github.com/contentful/marketplace-partner-apps/commit/7cfccdec494314ebe13c8dec8d03bc880b3865ee))
+* **deps:** bump qs from 6.14.2 to 6.15.2 in /apps/bynder-content-workflow ([#8225](https://github.com/contentful/marketplace-partner-apps/issues/8225)) ([f5af2e0](https://github.com/contentful/marketplace-partner-apps/commit/f5af2e0009c39b2c5c0449fdd468f70f19669256))
+* **deps:** bump tmp and @contentful/app-scripts in /apps/bynder-content-workflow ([#8251](https://github.com/contentful/marketplace-partner-apps/issues/8251)) ([faa88bd](https://github.com/contentful/marketplace-partner-apps/commit/faa88bd05de0065bed900e640eddf3938a2269f4))
+* **deps:** bump uuid from 9.0.1 to 14.0.0 ([#8211](https://github.com/contentful/marketplace-partner-apps/issues/8211)) ([83aa77d](https://github.com/contentful/marketplace-partner-apps/commit/83aa77d0ab2a8416678472fcfb5a741f7138717a))
+* **deps:** bump uuid from 9.0.1 to 14.0.0 in /apps/bynder-content-workflow ([#8158](https://github.com/contentful/marketplace-partner-apps/issues/8158)) ([5f13852](https://github.com/contentful/marketplace-partner-apps/commit/5f13852b1744fca84e2c9b5739b94d6655345e05))
+
 ## [1.0.14](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.13...bynder-content-workflow-v1.0.14) (2026-04-30)
 
 
