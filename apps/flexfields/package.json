@@ -43,7 +43,7 @@
     ]
   },
   "devDependencies": {
-    "@contentful/app-scripts": "2.5.6",
+    "@contentful/app-scripts": "2.5.12",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "12.1.5",
     "@types/node": "^20",
@@ -51,13 +51,13 @@
     "@types/react-dom": "17.0.2",
     "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@typescript-eslint/parser": "^8.18.0",
-    "@vitejs/plugin-react": "^4.7.0",
-    "@vitest/browser": "^2.1.8",
+    "@vitejs/plugin-react": "^6.0.2",
+    "@vitest/browser": "^4.1.9",
     "happy-dom": "^20.0.10",
     "playwright": "^1.56.1",
     "typescript": "5.4.3",
-    "vite": "^7.3.5",
-    "vitest": "^2.0.5"
+    "vite": "^8.0.16",
+    "vitest": "^4.1.9"
   },
   "overrides": {
     "typescript": "5.4.3"
