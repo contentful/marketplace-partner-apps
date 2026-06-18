@@ -1,8 +1,8 @@
 import { DialogAppSDK } from '@contentful/app-sdk';
-import { useAutoResizer, useSDK } from '@contentful/react-apps-toolkit';
+import { Button } from '@contentful/f36-components';
+import { useSDK } from '@contentful/react-apps-toolkit';
 import { injectGlobal } from '@emotion/css';
 import { css } from '@emotion/react';
-import { Button } from '@contentful/f36-components';
 import { useCallback, useRef, useState } from 'react';
 import { APP_ENV, APP_VERSION } from '../constants';
 import { AppInstallationParameters, MediaLibraryResultAsset } from '../types';
@@ -10,14 +10,18 @@ import { loadScript } from '../utils';
 import { ShowOptions } from './types';
 
 const styles = {
-  container: css({
+  root: css({
     height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  }),
+  container: css({
+    flex: 1,
+    minHeight: 0,
+    overflow: 'hidden',
   }),
   doneBar: css({
-    position: 'fixed',
-    bottom: 0,
-    left: 0,
-    right: 0,
+    flexShrink: 0,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
@@ -25,7 +29,6 @@ const styles = {
     padding: '12px 16px',
     background: 'white',
     borderTop: '1px solid #e5ebed',
-    zIndex: 10,
   }),
   doneLabel: css({
     fontSize: '14px',
@@ -35,7 +38,6 @@ const styles = {
 
 const AssetPickerDialog = () => {
   const sdk = useSDK<DialogAppSDK<AppInstallationParameters>>();
-  useAutoResizer();
   const invocationParams = sdk.parameters.invocation as Record<string, unknown>;
   const expression = invocationParams.expression as string;
   const [pendingAssets, setPendingAssets] = useState<MediaLibraryResultAsset[]>([]);
@@ -131,27 +133,20 @@ const AssetPickerDialog = () => {
   const isMulti = maxFiles > 1;
 
   return (
-    <>
+    <div css={styles.root}>
       <div ref={init} id="container" css={styles.container} />
       {isMulti && (
         <div css={styles.doneBar}>
-          {pendingAssets.length > 0 && (
-            <span css={styles.doneLabel}>{pendingAssets.length} selected</span>
-          )}
+          {pendingAssets.length > 0 && <span css={styles.doneLabel}>{pendingAssets.length} selected</span>}
           <Button variant="secondary" size="small" onClick={() => sdk.close(undefined)}>
             Cancel
           </Button>
-          <Button
-            variant="primary"
-            size="small"
-            isDisabled={pendingAssets.length === 0}
-            onClick={handleDone}
-          >
+          <Button variant="primary" size="small" isDisabled={pendingAssets.length === 0} onClick={handleDone}>
             Add to field {pendingAssets.length > 0 ? `(${pendingAssets.length})` : ''}
           </Button>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
