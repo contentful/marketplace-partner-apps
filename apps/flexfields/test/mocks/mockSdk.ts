@@ -4,7 +4,6 @@ const mockSdk: any = {
     getParameters: vi.fn().mockReturnValueOnce({}),
     setReady: vi.fn(),
     getCurrentState: vi.fn(),
-    onConfigurationCompleted: vi.fn(),
   },
   ids: {
     app: 'test-app',
