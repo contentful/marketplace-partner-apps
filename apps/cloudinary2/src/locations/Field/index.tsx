@@ -40,11 +40,11 @@ const Field = () => {
         {assets.length > 0 && (
           <Thumbnails
             assets={assets}
-            onChange={(asset) => {
-              if (asset.length === 0) {
+            onChange={(assets) => {
+              if (assets.length === 0) {
                 return sdk.field.removeValue();
               } else {
-                return setAssets(asset);
+                return setAssets(assets);
               }
             }}
             isDisabled={!editingEnabled}
