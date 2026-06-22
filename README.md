@@ -62,6 +62,17 @@ When you are ready to submit your app to the [marketplace apps repo](https://git
 - Prevent / reduce references to external resources and code. The `marketplace-partner-apps` is intended to be open and transparent and any external resources will be _highly_ scrutinized.
 - Submit the [Contentful Marketplace Listing Questionnaire](https://contentful.typeform.com/to/fHkaviJq) if you haven't already.
 
+### Automated Code Suggestions
+
+The repository includes automated code suggestion capabilities that help improve app quality and consistency. The system:
+
+- Runs weekly to analyze all apps for potential improvements
+- Creates pull requests with suggested code enhancements
+- Focuses on best practices like proper package.json metadata, ESLint configuration, comprehensive documentation, and TypeScript setup
+- Can be manually triggered for specific apps
+
+PRs created by this system are labeled `automated-suggestions` and should be carefully reviewed before merging.
+
 ### Keeping dependencies up to date
 
 It is the responsibility of all partner app developers to ensure their app is kept up to date with the latest versions of all dependencies required by their app. This is required not only to ensure their app continues to function as expected alongside the constantly evolving Contentful platform, but also to ensure that critical security updates are applied in a timely fashion and are not slowed down by out of date cross dependencies.
