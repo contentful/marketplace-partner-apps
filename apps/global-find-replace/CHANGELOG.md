@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.2.7](https://github.com/contentful/marketplace-partner-apps/compare/global-find-replace-v0.2.6...global-find-replace-v0.2.7) (2026-06-18)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group across 1 directory with 6 updates ([#8438](https://github.com/contentful/marketplace-partner-apps/issues/8438)) ([0a59de5](https://github.com/contentful/marketplace-partner-apps/commit/0a59de5f09aedc8bcdf7a7ddeeb08c2ca47f9ef9))
+
+## [0.2.6](https://github.com/contentful/marketplace-partner-apps/compare/global-find-replace-v0.2.5...global-find-replace-v0.2.6) (2026-06-18)
+
+
+### Bug Fixes
+
+* **deps:** bump qs from 6.14.2 to 6.15.2 in /apps/global-find-replace ([#8215](https://github.com/contentful/marketplace-partner-apps/issues/8215)) ([9b88cc1](https://github.com/contentful/marketplace-partner-apps/commit/9b88cc1c259d1f1bc70432bb45605111e43ff4c6))
+* **deps:** bump tar and @contentful/app-scripts in /apps/global-find-replace ([#8363](https://github.com/contentful/marketplace-partner-apps/issues/8363)) ([b9aa3a1](https://github.com/contentful/marketplace-partner-apps/commit/b9aa3a1b141fd7fdcb0c3b846e5289be7041666c))
+* **deps:** bump ws from 8.19.0 to 8.20.1 in /apps/global-find-replace ([#8206](https://github.com/contentful/marketplace-partner-apps/issues/8206)) ([d434f01](https://github.com/contentful/marketplace-partner-apps/commit/d434f0159228339d30cc9c98867de8df12e2f778))
+
 ## [0.2.5](https://github.com/contentful/marketplace-partner-apps/compare/global-find-replace-v0.2.4...global-find-replace-v0.2.5) (2026-04-03)
 
 
