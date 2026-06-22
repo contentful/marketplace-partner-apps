@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.6](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.4.5...cloudinary-assets-v1.4.6) (2026-06-22)
+
+
+### Bug Fixes
+
+* **deps:** bump tmp and @contentful/app-scripts in /apps/cloudinary2 ([#8249](https://github.com/contentful/marketplace-partner-apps/issues/8249)) ([691281d](https://github.com/contentful/marketplace-partner-apps/commit/691281de24c36cd6be3d1cc0f9a598de5c8500e8))
+
 ## [1.4.5](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.4.4...cloudinary-assets-v1.4.5) (2026-06-22)
 
 
