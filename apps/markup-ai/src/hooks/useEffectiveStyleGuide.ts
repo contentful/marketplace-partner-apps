@@ -11,7 +11,7 @@ export interface UseEffectiveStyleGuideArgs extends Partial<FieldStyleGuideScope
 }
 
 export interface UseEffectiveStyleGuideResult {
-  /** The id Cortex should use as `target_id`, or null if nothing has been picked. */
+  /** The id Cortex should use as `style_guide_id`, or null if nothing has been picked. */
   effectiveStyleGuideId: string | null;
   /** Where the effective value came from — useful for the UI to label "field override" / "content type". */
   source: StyleGuideSource;

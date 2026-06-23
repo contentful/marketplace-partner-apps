@@ -207,18 +207,18 @@ describe("useAgenticScan — request body", () => {
     expect(callBody).not.toHaveProperty("document_ref");
   });
 
-  it("passes target_id from agentConfig through into the request body", async () => {
+  it("passes style_guide_id from agentConfig through into the request body", async () => {
     queueSseEvents([{ type: "completion" }]);
     const { result } = renderHook(() => useAgenticScan("api-key"));
     await act(async () => {
       await result.current.startScan({
         text: "hello",
         backendIds: [STYLE_BACKEND_ID],
-        agentConfig: { target_id: "ap" },
+        agentConfig: { style_guide_id: "ap" },
       });
     });
     const callBody = (mockCortexAgentsRunAgent.mock.calls[0][0] as { body: unknown }).body;
-    expect(callBody).toMatchObject({ target_id: "ap" });
+    expect(callBody).toMatchObject({ style_guide_id: "ap" });
   });
 });
 

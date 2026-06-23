@@ -18,7 +18,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useAgenticScan } from "../../hooks/useAgenticScan";
 import { useAgentSelection } from "../../hooks/useAgentSelection";
 import { useAgentConfig } from "../../hooks/useAgentConfig";
-import { useStyleTargets } from "../../hooks/useStyleTargets";
+import { useStyleGuides } from "../../hooks/useStyleGuides";
 import { useEffectiveStyleGuide } from "../../hooks/useEffectiveStyleGuide";
 import { useAgentAvailability } from "../../hooks/useAgentAvailability";
 import { getUserSettings } from "../../utils/userSettings";
@@ -237,15 +237,15 @@ const FieldCheckDialog: React.FC = () => {
   const { agentConfig, setAgentConfigKey, flattenConfigForRequest } = useAgentConfig();
   const { unavailable: unavailableAgents } = useAgentAvailability();
 
-  // Single fetch of style guide targets shared by the sidebar picker (and any
+  // Single fetch of style guides shared by the sidebar picker (and any
   // future consumer) — react-query also dedupes via query key, but lifting the
   // call here makes it explicit that we never fan out per-component.
   const {
-    targets: styleGuideTargets,
+    styleGuides,
     isLoading: styleGuidesLoading,
     isError: styleGuidesError,
-    defaultTargetId: defaultStyleTarget,
-  } = useStyleTargets(apiKey);
+    defaultStyleGuideId: defaultStyleGuide,
+  } = useStyleGuides(apiKey);
 
   // Pull the per-content-type default straight from `sdk.parameters.installation`
   // rather than threading it through invocation params — that way every dialog
@@ -269,8 +269,8 @@ const FieldCheckDialog: React.FC = () => {
   const { issues, startScan, scanInFlight, workflowId, error: scanError } = useAgenticScan(apiKey);
 
   /**
-   * `target_id` lives in per-field localStorage, but the agent settings panel
-   * still needs to render it so users can edit it from either surface. We
+   * `style_guide_id` lives in per-field localStorage, but the agent settings
+   * panel still needs to render it so users can edit it from either surface. We
    * project the effective value into the panel's view of `agentConfig` and
    * route panel writes through `setFieldStyleGuide`, keeping both pickers in
    * lockstep regardless of which one the user changes.
@@ -281,13 +281,13 @@ const FieldCheckDialog: React.FC = () => {
       : {};
     return {
       ...agentConfig,
-      style_agent: { ...existingStyle, target_id: effectiveStyleGuideId ?? "" },
+      style_agent: { ...existingStyle, style_guide_id: effectiveStyleGuideId ?? "" },
     };
   }, [agentConfig, effectiveStyleGuideId]);
 
   const handleAgentConfigKeyChange = useCallback(
     (agentId: string, key: string, value: unknown) => {
-      if (agentId === "style_agent" && key === "target_id") {
+      if (agentId === "style_agent" && key === "style_guide_id") {
         setFieldStyleGuide(typeof value === "string" && value.length > 0 ? value : null);
         return;
       }
@@ -312,18 +312,18 @@ const FieldCheckDialog: React.FC = () => {
       // returned `position.start` / `position.end` against the exact same string.
       setScannedContent(content);
       try {
-        // The picker is the single source of truth for `target_id` when the
-        // user (or admin) has picked one. When nothing has been picked we
-        // fall back to the org default chosen by `useStyleTargets` (Main →
+        // The picker is the single source of truth for `style_guide_id` when
+        // the user (or admin) has picked one. When nothing has been picked we
+        // fall back to the org default chosen by `useStyleGuides` (Main →
         // API is_default → first enabled). The backend does not always pick
         // a default when the field is omitted, so always sending one keeps
-        // analyses from coming back with `targetDisplayName=null`.
+        // analyses from coming back with `styleGuideDisplayName=null`.
         const finalAgentConfig: Record<string, unknown> = flattenConfigForRequest(selectedAgentIds);
-        const resolvedTargetId = effectiveStyleGuideId ?? defaultStyleTarget ?? null;
-        if (resolvedTargetId) {
-          finalAgentConfig.target_id = resolvedTargetId;
+        const resolvedStyleGuideId = effectiveStyleGuideId ?? defaultStyleGuide ?? null;
+        if (resolvedStyleGuideId) {
+          finalAgentConfig.style_guide_id = resolvedStyleGuideId;
         } else {
-          delete finalAgentConfig.target_id;
+          delete finalAgentConfig.style_guide_id;
         }
 
         // `document_name` carries the entry title (e.g. "My Article"); we
@@ -363,7 +363,7 @@ const FieldCheckDialog: React.FC = () => {
       params.fieldId,
       params.entryTitle,
       effectiveStyleGuideId,
-      defaultStyleTarget,
+      defaultStyleGuide,
     ],
   );
 
@@ -715,7 +715,7 @@ const FieldCheckDialog: React.FC = () => {
             agentConfig={agentConfigForPanel}
             onAgentConfigKeyChange={handleAgentConfigKeyChange}
             apiKey={apiKey}
-            styleGuideTargets={styleGuideTargets}
+            styleGuides={styleGuides}
             styleGuidesLoading={styleGuidesLoading}
             styleGuidesError={styleGuidesError}
             unavailableAgents={unavailableAgents}

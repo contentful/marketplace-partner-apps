@@ -24,11 +24,11 @@ export interface AgentSettingsPanelProps {
   /** API key passed to config fields for API-backed option fetches. */
   apiKey?: string | null;
   /**
-   * Style guide targets pre-fetched once at the dialog level. Threading them
+   * Style guides pre-fetched once at the dialog level. Threading them
    * through props avoids a second `/internal/targets` call from the panel's
-   * target-id selector.
+   * style-guide selector.
    */
-  styleGuideTargets?: TargetResponse[];
+  styleGuides?: TargetResponse[];
   styleGuidesLoading?: boolean;
   styleGuidesError?: boolean;
   /**
@@ -100,7 +100,7 @@ interface AgentRowItemProps {
   onToggle: () => void;
   onConfigKeyChange: (key: string, value: unknown) => void;
   apiKey?: string | null;
-  styleGuideTargets?: TargetResponse[];
+  styleGuides?: TargetResponse[];
   styleGuidesLoading?: boolean;
   styleGuidesError?: boolean;
 }
@@ -114,7 +114,7 @@ const AgentRowItem: React.FC<AgentRowItemProps> = ({
   onToggle,
   onConfigKeyChange,
   apiKey,
-  styleGuideTargets,
+  styleGuides,
   styleGuidesLoading,
   styleGuidesError,
 }) => {
@@ -172,7 +172,7 @@ const AgentRowItem: React.FC<AgentRowItemProps> = ({
                 onConfigKeyChange(key, value);
               }}
               apiKey={apiKey}
-              styleGuideTargets={styleGuideTargets}
+              styleGuides={styleGuides}
               styleGuidesLoading={styleGuidesLoading}
               styleGuidesError={styleGuidesError}
             />
@@ -190,7 +190,7 @@ export const AgentSettingsPanel: React.FC<AgentSettingsPanelProps> = ({
   agentConfig,
   onAgentConfigKeyChange,
   apiKey,
-  styleGuideTargets,
+  styleGuides,
   styleGuidesLoading,
   styleGuidesError,
   unavailableAgents,
@@ -239,7 +239,7 @@ export const AgentSettingsPanel: React.FC<AgentSettingsPanelProps> = ({
                   onAgentConfigKeyChange(agent.id, key, value);
                 }}
                 apiKey={apiKey}
-                styleGuideTargets={styleGuideTargets}
+                styleGuides={styleGuides}
                 styleGuidesLoading={styleGuidesLoading}
                 styleGuidesError={styleGuidesError}
               />

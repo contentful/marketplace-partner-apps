@@ -3,7 +3,7 @@ import { authenticationGetUserOrganizations } from "../api-client/sdk.gen";
 import type { HeliosOneApiModulesAuthMainOrganization } from "../api-client/types.gen";
 import { useApiClient } from "./useApiClient";
 import { useAuth } from "../contexts/AuthContext";
-import { fingerprintApiKey } from "../utils/styleTargetsCache";
+import { fingerprintApiKey } from "../utils/styleGuidesCache";
 
 export type Organization = HeliosOneApiModulesAuthMainOrganization;
 

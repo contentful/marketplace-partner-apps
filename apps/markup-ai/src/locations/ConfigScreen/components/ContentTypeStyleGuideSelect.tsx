@@ -16,7 +16,7 @@ export interface ContentTypeStyleGuideSelectProps {
   /** Currently configured style guide id for this content type, or null. */
   value: string | null;
   /** Style guide options pre-fetched once at the screen level. */
-  targets: TargetResponse[];
+  styleGuides: TargetResponse[];
   isLoading: boolean;
   isError: boolean;
   /** False when the user is not signed in — keeps the dropdown disabled. */
@@ -26,20 +26,20 @@ export interface ContentTypeStyleGuideSelectProps {
 
 /**
  * Per-content-type default style guide picker for the app config screen.
- * Pure presentational: receives `targets` from a single fetch up the tree
+ * Pure presentational: receives `styleGuides` from a single fetch up the tree
  * so we never trigger N requests for N content types.
  */
 export const ContentTypeStyleGuideSelect: React.FC<ContentTypeStyleGuideSelectProps> = ({
   contentTypeId,
   value,
-  targets,
+  styleGuides,
   isLoading,
   isError,
   isAuthenticated,
   onChange,
 }) => {
-  const enabledTargets = targets.filter((t) => t.enabled);
-  const hasOptions = enabledTargets.length > 0;
+  const enabledStyleGuides = styleGuides.filter((g) => g.enabled);
+  const hasOptions = enabledStyleGuides.length > 0;
   const isDisabled = !isAuthenticated || isLoading || isError || !hasOptions;
 
   let helpText: string;
@@ -62,9 +62,9 @@ export const ContentTypeStyleGuideSelect: React.FC<ContentTypeStyleGuideSelectPr
           }}
         >
           <Select.Option value="">No default</Select.Option>
-          {enabledTargets.map((t) => (
-            <Select.Option key={t.id} value={t.id}>
-              {t.display_name}
+          {enabledStyleGuides.map((g) => (
+            <Select.Option key={g.id} value={g.id}>
+              {g.display_name}
             </Select.Option>
           ))}
         </Select>

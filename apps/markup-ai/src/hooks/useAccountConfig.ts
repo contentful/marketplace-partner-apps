@@ -3,7 +3,7 @@ import { accountGetAccountConfig } from "../api-client/sdk.gen";
 import type { OrganizationConfigResponse } from "../api-client/types.gen";
 import { useApiClient } from "./useApiClient";
 import { useAuth } from "../contexts/AuthContext";
-import { fingerprintApiKey } from "../utils/styleTargetsCache";
+import { fingerprintApiKey } from "../utils/styleGuidesCache";
 
 export interface UseAccountConfigResult {
   config: OrganizationConfigResponse | null;
@@ -19,7 +19,7 @@ export interface UseAccountConfigResult {
  * The response drives `useAgentAvailability` (which agents the user is
  * allowed to run). Org config rarely changes inside a session, so the
  * 5-minute staleTime keeps the network footprint small without needing a
- * cross-iframe localStorage layer the way `useStyleTargets` does. Add one
+ * cross-iframe localStorage layer the way `useStyleGuides` does. Add one
  * later if N field-iframes per page show up as a real cost.
  *
  * Fail-open: while loading or on error, callers see `config === null`.
@@ -33,7 +33,7 @@ export function useAccountConfig(): UseAccountConfigResult {
   // Key the query by a fingerprint of the auth token so a within-iframe
   // account/org switch (the cross-location auth sync in AuthContext) can
   // never serve user A's `/account/config` to user B from react-query's
-  // cache. Same pattern as `useStyleTargets`.
+  // cache. Same pattern as `useStyleGuides`.
   const apiKeyFp = token ? fingerprintApiKey(token) : "anonymous";
 
   // Also gate on token presence: AuthContext's silent-restore briefly has

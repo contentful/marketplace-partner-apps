@@ -3,7 +3,7 @@ import { accountGetAccount } from "../api-client/sdk.gen";
 import type { AccountResponse, OrganizationResponseFull } from "../api-client/types.gen";
 import { useApiClient } from "./useApiClient";
 import { useAuth } from "../contexts/AuthContext";
-import { fingerprintApiKey } from "../utils/styleTargetsCache";
+import { fingerprintApiKey } from "../utils/styleGuidesCache";
 
 export interface UseAccountResult {
   account: AccountResponse | null;

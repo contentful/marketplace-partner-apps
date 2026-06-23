@@ -27,7 +27,7 @@ function saveConfig(config: AgentConfigMap): void {
 
 export interface UseAgentConfigResult {
   agentConfig: AgentConfigMap;
-  /** Set a single config key for a given agent (e.g. setAgentConfigKey("style_agent", "target_id", "ap")). */
+  /** Set a single config key for a given agent (e.g. setAgentConfigKey("style_agent", "style_guide_id", "ap")). */
   setAgentConfigKey: (agentId: string, key: string, value: unknown) => void;
   /** Replace all config keys for a given agent. */
   setAgentConfigForAgent: (agentId: string, config: Record<string, unknown>) => void;

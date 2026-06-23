@@ -28,7 +28,7 @@ export interface ScanOptions {
   /** Caller-built unique document identifier; mapped to API `document_ref`. */
   documentRef?: string;
   backendIds: string[];
-  /** Flat agent config passed through to the parallel executor (e.g. target_id, domain_ids). */
+  /** Flat agent config passed through to the parallel executor (e.g. style_guide_id, domain_ids). */
   agentConfig?: Record<string, unknown>;
   onAgentResult?: (agentName: string, issues: CortexIssueWithId[]) => void;
   onStreamComplete?: () => void;
