@@ -6,6 +6,12 @@ import type {
   AccountGetAccountConfigData,
   AccountGetAccountConfigErrors,
   AccountGetAccountConfigResponses,
+  AccountGetAccountData,
+  AccountGetAccountErrors,
+  AccountGetAccountResponses,
+  AuthenticationGetUserOrganizationsData,
+  AuthenticationGetUserOrganizationsErrors,
+  AuthenticationGetUserOrganizationsResponses,
   CortexActivityEventsTrackActivityEventData,
   CortexActivityEventsTrackActivityEventErrors,
   CortexActivityEventsTrackActivityEventResponses,
@@ -30,24 +36,9 @@ import type {
   CortexWorkflowsStreamWorkflowEventsData,
   CortexWorkflowsStreamWorkflowEventsErrors,
   CortexWorkflowsStreamWorkflowEventsResponses,
-  GetAdminConstantsData,
-  GetAdminConstantsErrors,
-  GetAdminConstantsResponses,
-  InternalListTargetsData,
-  InternalListTargetsErrors,
-  InternalListTargetsResponses,
-  InternalSubmitFeedbackData,
-  InternalSubmitFeedbackErrors,
-  InternalSubmitFeedbackResponses,
-  StyleAgentGetStyleAgentConfigData,
-  StyleAgentGetStyleAgentConfigErrors,
-  StyleAgentGetStyleAgentConfigResponses,
-  StyleAgentListStyleAgentContentProfilesData,
-  StyleAgentListStyleAgentContentProfilesErrors,
-  StyleAgentListStyleAgentContentProfilesResponses,
-  StyleAgentListStyleAgentTargetsData,
-  StyleAgentListStyleAgentTargetsErrors,
-  StyleAgentListStyleAgentTargetsResponses,
+  StyleAgentListStyleGuidesData,
+  StyleAgentListStyleGuidesErrors,
+  StyleAgentListStyleGuidesResponses,
   TerminologyCreateDomainData,
   TerminologyCreateDomainErrors,
   TerminologyCreateDomainResponses,
@@ -83,23 +74,9 @@ export type Options<
 };
 
 /**
- * Get Admin Constants
- */
-export const getAdminConstants = <ThrowOnError extends boolean = false>(
-  options?: Options<GetAdminConstantsData, ThrowOnError>,
-) =>
-  (options?.client ?? client).get<
-    GetAdminConstantsResponses,
-    GetAdminConstantsErrors,
-    ThrowOnError
-  >({
-    security: [{ scheme: "bearer", type: "http" }],
-    url: "/v1/internal/constants",
-    ...options,
-  });
-
-/**
  * List Domains
+ *
+ * @deprecated
  */
 export const terminologyListDomains = <ThrowOnError extends boolean = false>(
   options?: Options<TerminologyListDomainsData, ThrowOnError>,
@@ -116,6 +93,8 @@ export const terminologyListDomains = <ThrowOnError extends boolean = false>(
 
 /**
  * Create Domain
+ *
+ * @deprecated
  */
 export const terminologyCreateDomain = <ThrowOnError extends boolean = false>(
   options: Options<TerminologyCreateDomainData, ThrowOnError>,
@@ -136,6 +115,8 @@ export const terminologyCreateDomain = <ThrowOnError extends boolean = false>(
 
 /**
  * Delete Domain
+ *
+ * @deprecated
  */
 export const terminologyDeleteDomain = <ThrowOnError extends boolean = false>(
   options: Options<TerminologyDeleteDomainData, ThrowOnError>,
@@ -152,6 +133,8 @@ export const terminologyDeleteDomain = <ThrowOnError extends boolean = false>(
 
 /**
  * Get Domain
+ *
+ * @deprecated
  */
 export const terminologyGetDomain = <ThrowOnError extends boolean = false>(
   options: Options<TerminologyGetDomainData, ThrowOnError>,
@@ -168,6 +151,8 @@ export const terminologyGetDomain = <ThrowOnError extends boolean = false>(
 
 /**
  * Update Domain
+ *
+ * @deprecated
  */
 export const terminologyUpdateDomain = <ThrowOnError extends boolean = false>(
   options: Options<TerminologyUpdateDomainData, ThrowOnError>,
@@ -187,38 +172,56 @@ export const terminologyUpdateDomain = <ThrowOnError extends boolean = false>(
   });
 
 /**
- * Submit Feedback
+ * List Style Guides
+ *
+ * List the style guides available to your organization.
  */
-export const internalSubmitFeedback = <ThrowOnError extends boolean = false>(
-  options: Options<InternalSubmitFeedbackData, ThrowOnError>,
+export const styleAgentListStyleGuides = <ThrowOnError extends boolean = false>(
+  options?: Options<StyleAgentListStyleGuidesData, ThrowOnError>,
 ) =>
-  (options.client ?? client).post<
-    InternalSubmitFeedbackResponses,
-    InternalSubmitFeedbackErrors,
+  (options?.client ?? client).get<
+    StyleAgentListStyleGuidesResponses,
+    StyleAgentListStyleGuidesErrors,
     ThrowOnError
   >({
     security: [{ scheme: "bearer", type: "http" }],
-    url: "/internal/demo-feedback",
+    url: "/style-agent/style-guides",
     ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
   });
 
 /**
- * List Targets
+ * Get Account
+ *
+ * Get account information for the authenticated user's organization
  */
-export const internalListTargets = <ThrowOnError extends boolean = false>(
-  options?: Options<InternalListTargetsData, ThrowOnError>,
+export const accountGetAccount = <ThrowOnError extends boolean = false>(
+  options?: Options<AccountGetAccountData, ThrowOnError>,
 ) =>
   (options?.client ?? client).get<
-    InternalListTargetsResponses,
-    InternalListTargetsErrors,
+    AccountGetAccountResponses,
+    AccountGetAccountErrors,
     ThrowOnError
   >({
     security: [{ scheme: "bearer", type: "http" }],
-    url: "/internal/targets",
+    url: "/account",
+    ...options,
+  });
+
+/**
+ * Get User Organizations
+ *
+ * Get organizations that the authenticated user belongs to.
+ */
+export const authenticationGetUserOrganizations = <ThrowOnError extends boolean = false>(
+  options?: Options<AuthenticationGetUserOrganizationsData, ThrowOnError>,
+) =>
+  (options?.client ?? client).get<
+    AuthenticationGetUserOrganizationsResponses,
+    AuthenticationGetUserOrganizationsErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/auth/organizations",
     ...options,
   });
 
@@ -399,53 +402,5 @@ export const accountGetAccountConfig = <ThrowOnError extends boolean = false>(
   >({
     security: [{ scheme: "bearer", type: "http" }],
     url: "/account/config",
-    ...options,
-  });
-
-/**
- * Get Style Agent Config
- */
-export const styleAgentGetStyleAgentConfig = <ThrowOnError extends boolean = false>(
-  options?: Options<StyleAgentGetStyleAgentConfigData, ThrowOnError>,
-) =>
-  (options?.client ?? client).get<
-    StyleAgentGetStyleAgentConfigResponses,
-    StyleAgentGetStyleAgentConfigErrors,
-    ThrowOnError
-  >({
-    security: [{ scheme: "bearer", type: "http" }],
-    url: "/style-agent/config",
-    ...options,
-  });
-
-/**
- * List Style Agent Targets
- */
-export const styleAgentListStyleAgentTargets = <ThrowOnError extends boolean = false>(
-  options?: Options<StyleAgentListStyleAgentTargetsData, ThrowOnError>,
-) =>
-  (options?.client ?? client).get<
-    StyleAgentListStyleAgentTargetsResponses,
-    StyleAgentListStyleAgentTargetsErrors,
-    ThrowOnError
-  >({
-    security: [{ scheme: "bearer", type: "http" }],
-    url: "/style-agent/targets",
-    ...options,
-  });
-
-/**
- * List Style Agent Content Profiles
- */
-export const styleAgentListStyleAgentContentProfiles = <ThrowOnError extends boolean = false>(
-  options?: Options<StyleAgentListStyleAgentContentProfilesData, ThrowOnError>,
-) =>
-  (options?.client ?? client).get<
-    StyleAgentListStyleAgentContentProfilesResponses,
-    StyleAgentListStyleAgentContentProfilesErrors,
-    ThrowOnError
-  >({
-    security: [{ scheme: "bearer", type: "http" }],
-    url: "/style-agent/content-profiles",
     ...options,
   });

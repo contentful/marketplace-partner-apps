@@ -2,6 +2,15 @@ import { defaultPlugins, defineConfig } from "@hey-api/openapi-ts";
 
 export default defineConfig({
   input: "./filtered-openapi.json",
+  parser: {
+    filters: {
+      // Prune schema components not referenced by any included operation so the
+      // generated client only emits types in use. Without this, the path filter
+      // in scripts/filter-openapi.js leaves orphaned `components.schemas` (e.g.
+      // the now-unused TargetResponse / ConstantsResponse) in the output.
+      orphans: false,
+    },
+  },
   output: {
     format: "prettier",
     path: "src/api-client",

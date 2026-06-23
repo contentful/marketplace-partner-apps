@@ -1,8 +1,8 @@
 import React from "react";
 import { FormControl, Select, TextInput } from "@contentful/f36-components";
 import { AGENT_CONFIG_KEY_META } from "../../../../../agents/agents";
-import type { TargetResponse } from "../../../../../api-client/types.gen";
-import { useStyleTargets } from "../../../../../hooks/useStyleTargets";
+import type { StyleGuideSummaryResponse } from "../../../../../api-client/types.gen";
+import { useStyleGuides } from "../../../../../hooks/useStyleGuides";
 
 function toCsvString(value: unknown): string {
   if (Array.isArray(value)) return (value as string[]).join(", ");
@@ -11,15 +11,15 @@ function toCsvString(value: unknown): string {
 }
 
 export interface AgentConfigFieldProps {
-  /** Config key (e.g. "target_id", "domain_ids"). */
+  /** Config key (e.g. "style_guide_id", "domain_ids"). */
   configKey: string;
   value: unknown;
   onChange: (value: unknown) => void;
   isDisabled?: boolean;
-  /** API key — only used when prefetched targets are not provided. */
+  /** API key — only used when prefetched style guides are not provided. */
   apiKey?: string | null;
-  /** Pre-fetched style guide targets. Passing these avoids a duplicate `/style-agent/targets` call. */
-  styleGuideTargets?: TargetResponse[];
+  /** Pre-fetched style guides. Passing these avoids a duplicate `/style-agent/style-guides` call. */
+  styleGuides?: StyleGuideSummaryResponse[];
   styleGuidesLoading?: boolean;
   styleGuidesError?: boolean;
 }
@@ -35,23 +35,23 @@ export const AgentConfigField: React.FC<AgentConfigFieldProps> = ({
   onChange,
   isDisabled,
   apiKey,
-  styleGuideTargets,
+  styleGuides,
   styleGuidesLoading,
   styleGuidesError,
 }) => {
   const meta = AGENT_CONFIG_KEY_META[configKey];
   if (!meta) return null;
 
-  if (meta.inputType === "target_select") {
+  if (meta.inputType === "style_guide_select") {
     return (
-      <TargetSelectField
+      <StyleGuideSelectField
         configKey={configKey}
         meta={meta}
         value={value}
         onChange={onChange}
         isDisabled={isDisabled}
         apiKey={apiKey}
-        prefetchedTargets={styleGuideTargets}
+        prefetchedStyleGuides={styleGuides}
         prefetchedLoading={styleGuidesLoading}
         prefetchedError={styleGuidesError}
       />
@@ -97,7 +97,7 @@ export const AgentConfigField: React.FC<AgentConfigFieldProps> = ({
   );
 };
 
-interface TargetSelectFieldProps {
+interface StyleGuideSelectFieldProps {
   configKey: string;
   meta: NonNullable<(typeof AGENT_CONFIG_KEY_META)[string]>;
   value: unknown;
@@ -105,37 +105,37 @@ interface TargetSelectFieldProps {
   isDisabled?: boolean;
   apiKey?: string | null;
   /** When provided, skip the local fetch and use these instead. */
-  prefetchedTargets?: TargetResponse[];
+  prefetchedStyleGuides?: StyleGuideSummaryResponse[];
   prefetchedLoading?: boolean;
   prefetchedError?: boolean;
 }
 
 /**
- * Style-guide picker. When the parent passes `prefetchedTargets`, we reuse
- * them instead of firing another `/style-agent/targets` request — that's how
+ * Style-guide picker. When the parent passes `prefetchedStyleGuides`, we reuse
+ * them instead of firing another `/style-agent/style-guides` request — that's how
  * the dialog ensures a single network call is shared between the header
  * picker and this control.
  */
-const TargetSelectField: React.FC<TargetSelectFieldProps> = ({
+const StyleGuideSelectField: React.FC<StyleGuideSelectFieldProps> = ({
   configKey,
   meta,
   value,
   onChange,
   isDisabled,
   apiKey,
-  prefetchedTargets,
+  prefetchedStyleGuides,
   prefetchedLoading,
   prefetchedError,
 }) => {
-  const fallback = useStyleTargets(prefetchedTargets ? null : apiKey);
-  const targets = prefetchedTargets ?? fallback.targets;
-  const isLoading = prefetchedTargets ? Boolean(prefetchedLoading) : fallback.isLoading;
-  const isError = prefetchedTargets ? Boolean(prefetchedError) : fallback.isError;
+  const fallback = useStyleGuides(prefetchedStyleGuides ? null : apiKey);
+  const styleGuides = prefetchedStyleGuides ?? fallback.styleGuides;
+  const isLoading = prefetchedStyleGuides ? Boolean(prefetchedLoading) : fallback.isLoading;
+  const isError = prefetchedStyleGuides ? Boolean(prefetchedError) : fallback.isError;
 
   const stringValue = typeof value === "string" ? value : "";
-  const enabledTargets = targets.filter((t) => t.enabled);
-  const hasOptions = enabledTargets.length > 0;
-  const valueIsKnown = !stringValue || enabledTargets.some((t) => t.id === stringValue);
+  const enabledStyleGuides = styleGuides.filter((g) => g.enabled);
+  const hasOptions = enabledStyleGuides.length > 0;
+  const valueIsKnown = !stringValue || enabledStyleGuides.some((g) => g.id === stringValue);
 
   let helpText: string | undefined;
   if (isError) helpText = "Failed to load style guides.";
@@ -160,10 +160,10 @@ const TargetSelectField: React.FC<TargetSelectFieldProps> = ({
         {!isLoading && !valueIsKnown && stringValue && (
           <Select.Option value={stringValue}>Saved style guide (unavailable)</Select.Option>
         )}
-        {enabledTargets.map((target) => (
-          <Select.Option key={target.id} value={target.id}>
-            {target.display_name}
-            {target.is_default ? " (default)" : ""}
+        {enabledStyleGuides.map((styleGuide) => (
+          <Select.Option key={styleGuide.id} value={styleGuide.id}>
+            {styleGuide.display_name}
+            {styleGuide.is_default ? " (default)" : ""}
           </Select.Option>
         ))}
       </Select>

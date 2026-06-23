@@ -64,6 +64,7 @@ const RESERVED_BODY_KEYS: ReadonlySet<string> = new Set([
   "text",
   "agents",
   "document_name",
+  "document_ref",
   "url",
   "webhook_url",
 ]);

@@ -145,7 +145,9 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
 
   const contentAsText = useCallback(() => {
     if (!editor) return "";
-    if (isRichText) return editor.getHTML();
+    // TipTap's getHTML() emits bare void tags (<br>, <hr>); the Language Server
+    // parses the submitted HTML as XHTML and rejects them, so self-close them.
+    if (isRichText) return editor.getHTML().replace(/<(br|hr)\s*\/?>/gi, "<$1 />");
     const doc = editor.state.doc;
     return doc.textBetween(0, doc.content.size, "\n\n", "\n");
   }, [editor, isRichText]);

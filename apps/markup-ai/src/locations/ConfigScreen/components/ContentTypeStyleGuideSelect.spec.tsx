@@ -2,9 +2,9 @@ import { describe, expect, it, vi } from "vitest";
 import { fireEvent } from "@testing-library/react";
 import { render } from "../../../../test/utils/testUtils";
 import { ContentTypeStyleGuideSelect } from "./ContentTypeStyleGuideSelect";
-import type { TargetResponse } from "../../../api-client/types.gen";
+import type { StyleGuideSummaryResponse } from "../../../api-client/types.gen";
 
-const baseTargets: TargetResponse[] = [
+const baseStyleGuides: StyleGuideSummaryResponse[] = [
   { id: "ap", display_name: "AP", is_default: true, enabled: true },
   { id: "chicago", display_name: "Chicago", is_default: false, enabled: true },
   { id: "disabled", display_name: "Disabled", is_default: false, enabled: false },
@@ -16,7 +16,7 @@ function defaultProps(
   return {
     contentTypeId: "blogPost",
     value: null,
-    targets: baseTargets,
+    styleGuides: baseStyleGuides,
     isLoading: false,
     isError: false,
     isAuthenticated: true,
@@ -26,11 +26,11 @@ function defaultProps(
 }
 
 describe("ContentTypeStyleGuideSelect", () => {
-  it("renders enabled targets and the no-default placeholder", () => {
+  it("renders enabled style guides and the no-default placeholder", () => {
     const { getByRole } = render(<ContentTypeStyleGuideSelect {...defaultProps()} />);
     const select = getByRole("combobox") as HTMLSelectElement;
     const optionValues = Array.from(select.options).map((o) => o.value);
-    // "" placeholder + AP + Chicago. Disabled target excluded.
+    // "" placeholder + AP + Chicago. Disabled style guide excluded.
     expect(optionValues).toEqual(["", "ap", "chicago"]);
   });
 
@@ -58,18 +58,18 @@ describe("ContentTypeStyleGuideSelect", () => {
     expect(getByText(/failed to load style guides/i)).toBeInTheDocument();
   });
 
-  it("shows 'No style guides' help when the targets list has no enabled entries", () => {
+  it("shows 'No style guides' help when the style guides list has no enabled entries", () => {
     const { getByText } = render(
       <ContentTypeStyleGuideSelect
         {...defaultProps({
-          targets: [{ id: "off", display_name: "Off", is_default: false, enabled: false }],
+          styleGuides: [{ id: "off", display_name: "Off", is_default: false, enabled: false }],
         })}
       />,
     );
     expect(getByText(/no style guides available for this account/i)).toBeInTheDocument();
   });
 
-  it("emits onChange with the picked id when the user selects a target", () => {
+  it("emits onChange with the picked id when the user selects a style guide", () => {
     const onChange = vi.fn();
     const { getByRole } = render(<ContentTypeStyleGuideSelect {...defaultProps({ onChange })} />);
     fireEvent.change(getByRole("combobox"), { target: { value: "chicago" } });

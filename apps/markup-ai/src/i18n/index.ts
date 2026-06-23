@@ -36,6 +36,9 @@ const enTranslations = {
   analysis_configuration: "Analysis Configuration",
   style_guide_type: "Style Guide",
   dialect: "Dialect",
+  organization: "Organization",
+  organizations: "Organizations",
+  organization_switch_failed: "Couldn't switch organization. Please try again.",
 };
 
 // Initialize i18next

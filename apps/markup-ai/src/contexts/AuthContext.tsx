@@ -10,6 +10,9 @@ import React, {
 import { Auth0Client, PopupLoginOptions } from "@auth0/auth0-spa-js";
 import { getUserSettings, setApiKey, clearAllUserSettings } from "../utils/userSettings";
 import { useAppConfig } from "../hooks/useAppConfig";
+import { queryClient } from "../hooks/useApiClient";
+import { AGENT_SELECTION_STORAGE_KEY, AGENT_CONFIG_STORAGE_KEY } from "../constants/storageKeys";
+import { getOrgInfoFromToken } from "../utils/jwt";
 
 type AuthState = {
   isLoading: boolean;
@@ -17,6 +20,8 @@ type AuthState = {
   user: Record<string, unknown> | null;
   token: string | null;
   error: string | null;
+  /** True while a `switchOrganization` re-auth is in flight. */
+  isSwitchingOrg: boolean;
 };
 
 export type AuthContextType = {
@@ -25,9 +30,22 @@ export type AuthContextType = {
   user: Record<string, unknown> | null;
   token: string | null;
   error: string | null;
+  /** Auth0 organization id (e.g. `org_xxx`) from the current access token's `org_id` claim. */
+  currentOrgId: string | null;
+  /** Auth0 organization machine name from the current access token's `org_name` claim. */
+  currentOrgName: string | null;
+  /** True while a `switchOrganization` re-auth is in flight. */
+  isSwitchingOrg: boolean;
   loginWithPopup: (options?: PopupLoginOptions) => Promise<string | null>;
   getAccessToken: () => Promise<string | null>;
   logout: () => Promise<void>;
+  /**
+   * Re-authenticate into a different Auth0 organization via popup, scoping the
+   * new access token (and its `org_id` / `org_name` claims) to `organizationId`.
+   * On success `currentOrgId` / `currentOrgName` update and org-scoped caches
+   * are dropped so the next reads resolve against the new org.
+   */
+  switchOrganization: (organizationId: string) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -40,15 +58,15 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: Readonly<AuthProviderProps>) {
   const auth0Ref = useRef<Auth0Client | null>(null);
-  const [{ isLoading, isAuthenticated, user, token, error }, setState] = useState<AuthState>(
-    () => ({
+  const [{ isLoading, isAuthenticated, user, token, error, isSwitchingOrg }, setState] =
+    useState<AuthState>(() => ({
       isLoading: true,
       isAuthenticated: false,
       user: null,
       token: null,
       error: null,
-    }),
-  );
+      isSwitchingOrg: false,
+    }));
 
   // Fetch configuration from API instead of environment variables
   const { config: appConfig, isLoading: configLoading, error: configError } = useAppConfig();
@@ -80,6 +98,7 @@ export function AuthProvider({ children }: Readonly<AuthProviderProps>) {
           user: null,
           token: null,
           error: null,
+          isSwitchingOrg: false,
         });
       }
     };
@@ -109,6 +128,7 @@ export function AuthProvider({ children }: Readonly<AuthProviderProps>) {
         user: userInfo || null,
         token: accessToken,
         error: null,
+        isSwitchingOrg: false,
       });
     }
   }, []);
@@ -219,6 +239,7 @@ export function AuthProvider({ children }: Readonly<AuthProviderProps>) {
               user: null,
               token: null,
               error: null,
+              isSwitchingOrg: false,
             };
           } else if (nowAuthenticated && !currentApiKey) {
             // Session exists but API key was cleared - restore it
@@ -307,6 +328,7 @@ export function AuthProvider({ children }: Readonly<AuthProviderProps>) {
         user: userInfo || null,
         token: accessToken,
         error: null,
+        isSwitchingOrg: false,
       };
       setState(newState);
       return accessToken;
@@ -341,6 +363,7 @@ export function AuthProvider({ children }: Readonly<AuthProviderProps>) {
       user: null,
       token: null,
       error: null,
+      isSwitchingOrg: false,
     };
     setState(newState);
     if (auth0Ref.current) {
@@ -349,6 +372,75 @@ export function AuthProvider({ children }: Readonly<AuthProviderProps>) {
     }
   }, []);
 
+  // Re-authenticate into a different Auth0 organization. Auth0's SDK has no
+  // "switch org" primitive, so we re-run the popup login with the
+  // `organization` parameter; on success the new access token carries the
+  // target org's `org_id` / `org_name` claims.
+  const switchOrganization = useCallback(async (organizationId: string) => {
+    if (!auth0Ref.current) {
+      throw new Error("Authentication is not configured");
+    }
+    if (!organizationId) {
+      return;
+    }
+    setState((s) => ({ ...s, isSwitchingOrg: true, error: null }));
+    try {
+      await auth0Ref.current.loginWithPopup({
+        authorizationParams: { organization: organizationId },
+      });
+      // Fetch explicitly scoped to the new org rather than a bare
+      // getTokenSilently(), which could return a token for the previous org
+      // from the SDK cache during this transition.
+      const accessToken = await auth0Ref.current.getTokenSilently({
+        authorizationParams: { organization: organizationId },
+      });
+      // A successful popup that yields no token would otherwise leave the
+      // context lying (isAuthenticated=true, token=null). Treat it as a failed
+      // switch: throw so the catch below resets isSwitchingOrg and surfaces the
+      // error, and the success setState is never reached.
+      if (!accessToken) {
+        throw new Error("No access token returned after organization switch");
+      }
+      const userInfo = await auth0Ref.current.getUser();
+      setApiKey(accessToken);
+
+      // The previous org's agent selection/config (sessionStorage) and cached
+      // API responses (react-query) reference targets / style guides from the
+      // old org. Token-fingerprinted query keys already prevent cross-org
+      // bleed, but we clear both so nothing stale flashes before refetch.
+      // The global queryClient.clear() is safe here: the only non-org-scoped
+      // data is the Auth0 app config, which lives in useAppConfig's plain React
+      // state (not react-query), so clearing the cache can't trigger a
+      // user-visible config refetch mid-popup.
+      sessionStorage.removeItem(AGENT_SELECTION_STORAGE_KEY);
+      sessionStorage.removeItem(AGENT_CONFIG_STORAGE_KEY);
+      queryClient.clear();
+
+      setState((s) => ({
+        ...s,
+        isAuthenticated: true,
+        user: userInfo || null,
+        token: accessToken,
+        error: null,
+        isSwitchingOrg: false,
+      }));
+    } catch (err) {
+      setState((s) => ({
+        ...s,
+        isSwitchingOrg: false,
+        error: err instanceof Error ? err.message : String(err),
+      }));
+      throw err instanceof Error ? err : new Error(String(err));
+    }
+  }, []);
+
+  // Derive the active org from the access token's claims. Present only when the
+  // user authenticated against a specific Auth0 organization.
+  const { orgId: currentOrgId, orgName: currentOrgName } = useMemo(
+    () => (token ? getOrgInfoFromToken(token) : { orgId: null, orgName: null }),
+    [token],
+  );
+
   const contextValue: AuthContextType = useMemo(
     () => ({
       isLoading: isLoading || configLoading, // Include configuration loading in overall loading state
@@ -356,9 +448,13 @@ export function AuthProvider({ children }: Readonly<AuthProviderProps>) {
       user,
       token,
       error: error || configError, // Include configuration errors
+      currentOrgId,
+      currentOrgName,
+      isSwitchingOrg,
       loginWithPopup,
       getAccessToken,
       logout,
+      switchOrganization,
     }),
     [
       isLoading,
@@ -368,9 +464,13 @@ export function AuthProvider({ children }: Readonly<AuthProviderProps>) {
       token,
       error,
       configError,
+      currentOrgId,
+      currentOrgName,
+      isSwitchingOrg,
       loginWithPopup,
       getAccessToken,
       logout,
+      switchOrganization,
     ],
   );
 
