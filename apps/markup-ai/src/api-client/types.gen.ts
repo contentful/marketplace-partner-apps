@@ -259,6 +259,32 @@ export type AccessPolicyRead = {
 };
 
 /**
+ * AccessPolicyRoleInfo
+ *
+ * Inline role data returned alongside an access policy when the
+ * caller opts in via `include_roles=true`. Lets a consumer render
+ * role-name chips without a second `/roles` round trip.
+ *
+ * Mirrors the public-facing fields of `RoleRead`; `ref` is omitted
+ * deliberately because it is an internal identifier that the role
+ * model explicitly forbids exposing to the frontend.
+ */
+export type AccessPolicyRoleInfo = {
+  /**
+   * Name
+   *
+   * Human-readable role name.
+   */
+  name: string;
+  /**
+   * Description
+   *
+   * Role description; may be null when the role has none.
+   */
+  description?: string | null;
+};
+
+/**
  * AccessPolicyScopeType
  */
 export enum AccessPolicyScopeType {
@@ -280,6 +306,47 @@ export enum AccessPolicySubjectType {
   ORG_APIKEY = "org_apikey",
   GROUP = "group",
 }
+
+/**
+ * AccessPolicyWithRoleRead
+ *
+ * `AccessPolicyRead` plus the joined role data. `role` is always
+ * present in the payload and is null unless the caller passes
+ * `include_roles=true`; this makes the field additive for opted-in
+ * consumers while leaving the shape stable for callers that don't
+ * opt in.
+ */
+export type AccessPolicyWithRoleRead = {
+  /**
+   * The subject type of the access policy (e.g., everyone, user, etc.).
+   */
+  subject_type: AccessPolicySubjectType;
+  /**
+   * Subject Id
+   *
+   * The subject the access policy applies to. Can be a user ID, API key ID, group ID, etc.
+   */
+  subject_id?: string | null;
+  /**
+   * Role Id
+   *
+   * The role assigned by this access policy.
+   */
+  role_id: string;
+  /**
+   * Scope
+   */
+  scope: string | null;
+  scope_type: AccessPolicyScopeType;
+  /**
+   * Created At
+   */
+  created_at: string;
+  /**
+   * Joined role data — name and description. Null when the caller did not pass `include_roles=true`, or when the row's role has been deleted out from under it.
+   */
+  role?: AccessPolicyRoleInfo | null;
+};
 
 /**
  * AccessPolicyWrite
@@ -320,11 +387,11 @@ export type AccountMetadata = {
   /**
    * Job Title
    */
-  job_title: string;
+  job_title?: string | null;
   /**
    * User Role
    */
-  user_role: string;
+  user_role?: string | null;
   /**
    * Marketing Consent
    */
@@ -600,11 +667,11 @@ export type AgentRunRequest = {
    */
   document_name?: string | null;
   /**
-   * Target Id
+   * Style Guide Id
    *
-   * Language-service target ID for style checking.
+   * Style guide ID to check the document against. ``target_id`` is a deprecated alias for this field; send exactly one of the two names.
    */
-  target_id?: string | null;
+  style_guide_id?: string | null;
   /**
    * Content Profile Id
    *
@@ -743,6 +810,99 @@ export type AnalysisScore = {
 };
 
 /**
+ * AnnotatedExemplar
+ *
+ * An on-brand text passage with annotation explaining what makes it good.
+ */
+export type AnnotatedExemplar = {
+  /**
+   * Passage
+   */
+  passage: string;
+  /**
+   * Annotation
+   */
+  annotation?: string;
+  /**
+   * Fingerprint Names
+   */
+  fingerprint_names?: Array<string>;
+  /**
+   * Confidence
+   */
+  confidence?: number;
+};
+
+/**
+ * AuthAction
+ *
+ * Account-lifecycle actions, carried in ``event_data.action`` (dash-separated).
+ *
+ * Defined once and reused by the handler, the signup emit, and tests — never
+ * hand-type these literals.
+ */
+export enum AuthAction {
+  AUTH_SIGNUP = "auth-signup",
+  AUTH_LOGIN = "auth-login",
+  AUTH_LOGOUT = "auth-logout",
+  EXTENSION_INSTALLED = "extension-installed",
+}
+
+/**
+ * AuthEventRequest
+ *
+ * Request body for client-emitted account-lifecycle events (login/logout/install).
+ *
+ * Client-supplied fields — including ``action`` — are serialized into
+ * ``event_data``. No ``session_id``: these events aren't document-scoped, so the
+ * extension has no meaningful session to attach (the server-side login
+ * heuristic carries the Auth0 ``sid`` as ``session_id`` instead). Signup is
+ * emitted server-side and does not use this request model.
+ */
+export type AuthEventRequest = {
+  /**
+   * The account-lifecycle action
+   */
+  action: AuthAction;
+  /**
+   * Source
+   *
+   * Client surface that emitted the event (e.g. 'chrome_extension')
+   */
+  source?: string | null;
+  /**
+   * Reason
+   *
+   * chrome.runtime.onInstalled reason (install/update/chrome_update/...)
+   */
+  reason?: string | null;
+  /**
+   * Previous Version
+   *
+   * Previous extension version (present for 'update' reason)
+   */
+  previous_version?: string | null;
+  /**
+   * Extension Version
+   *
+   * Extension version from the manifest
+   */
+  extension_version?: string | null;
+  /**
+   * Installed At
+   *
+   * Client timestamp when the install/update occurred
+   */
+  installed_at?: string | null;
+  /**
+   * Timestamp
+   *
+   * Client timestamp when the event occurred
+   */
+  timestamp?: string | null;
+};
+
+/**
  * AuthResponse
  */
 export type AuthResponse = {
@@ -818,9 +978,35 @@ export enum BaseStyleGuideType {
 }
 
 /**
- * Body_Advanced Terminology-import_xml_dump_endpoint
+ * Body_Brand Terms-import_terminology
  */
-export type BodyAdvancedTerminologyImportXmlDumpEndpoint = {
+export type BodyBrandTermsImportTerminology = {
+  /**
+   * File
+   *
+   * CSV or ACTIF XML file containing terminology data
+   */
+  file: Blob | File;
+};
+
+/**
+ * Body_Intakes-submit_materials
+ */
+export type BodyIntakesSubmitMaterials = {
+  /**
+   * Items
+   */
+  items: string;
+  /**
+   * Files
+   */
+  files?: Array<Blob | File> | null;
+};
+
+/**
+ * Body_Style Agent Terminology-import_xml_dump_endpoint
+ */
+export type BodyStyleAgentTerminologyImportXmlDumpEndpoint = {
   /**
    * File
    */
@@ -855,6 +1041,25 @@ export type BodyTerminologyImportTerminology = {
    * CSV or ACTIF XML file containing terminology data
    */
   file: Blob | File;
+};
+
+/**
+ * BrandVoiceGenerationOutput
+ */
+export type BrandVoiceGenerationOutput = {
+  /**
+   * Processing Type
+   */
+  processing_type?: "brand_voice";
+  /**
+   * Operation
+   */
+  operation?: "create" | "update";
+  /**
+   * Target Id
+   */
+  target_id?: string | null;
+  result?: IntakeWorkflowResult | null;
 };
 
 /**
@@ -1279,6 +1484,25 @@ export type ChartResponseDailyActiveUsersRow = {
    */
   data: Array<DailyActiveUsersRow>;
   window: ChartWindow | null;
+  /**
+   * Granularity
+   */
+  granularity?: "day" | "week" | "month";
+};
+
+/**
+ * ChartResponse[DailyAvgScoreByGoalRow]
+ */
+export type ChartResponseDailyAvgScoreByGoalRow = {
+  /**
+   * Data
+   */
+  data: Array<DailyAvgScoreByGoalRow>;
+  window: ChartWindow | null;
+  /**
+   * Granularity
+   */
+  granularity?: "day" | "week" | "month";
 };
 
 /**
@@ -1290,6 +1514,10 @@ export type ChartResponseDailyAvgScoreRow = {
    */
   data: Array<DailyAvgScoreRow>;
   window: ChartWindow | null;
+  /**
+   * Granularity
+   */
+  granularity?: "day" | "week" | "month";
 };
 
 /**
@@ -1301,6 +1529,10 @@ export type ChartResponseDailyCheckCountRow = {
    */
   data: Array<DailyCheckCountRow>;
   window: ChartWindow | null;
+  /**
+   * Granularity
+   */
+  granularity?: "day" | "week" | "month";
 };
 
 /**
@@ -1312,6 +1544,10 @@ export type ChartResponseDailyDocumentCountRow = {
    */
   data: Array<DailyDocumentCountRow>;
   window: ChartWindow | null;
+  /**
+   * Granularity
+   */
+  granularity?: "day" | "week" | "month";
 };
 
 /**
@@ -1418,17 +1654,19 @@ export type ConnectionDomainAliasOut = {
    *
    * Alias row ID.
    */
-  id: string | null;
+  id: string;
+  /**
+   * Organization Id
+   */
+  organization_id: string;
+  /**
+   * Connection Id
+   */
+  connection_id: string;
   /**
    * Domain
    */
   domain: string;
-  /**
-   * Is Primary
-   *
-   * True for the org's primary email_domain — auto-verified and non-removable.
-   */
-  is_primary?: boolean;
   /**
    * Verification Status
    *
@@ -1436,7 +1674,7 @@ export type ConnectionDomainAliasOut = {
    */
   verification_status: string;
   /**
-   * The DNS TXT record to publish to verify this alias. Present only while the alias is pending; null once verified (and for the primary domain).
+   * The DNS TXT record to publish to verify this alias. Present only while the alias is pending; null once verified.
    */
   dns_verification?: DnsVerification | null;
   /**
@@ -1452,13 +1690,11 @@ export type ConnectionDomainAliasOut = {
    */
   created_by: string | null;
   /**
-   * Organization Id
+   * Also Verified In Other Orgs
+   *
+   * Names of OTHER organizations that already have this domain verified — a non-blocking cross-org signal the frontend uses to confirm before a force-verify. Populated on list / add / force-verify; null where it isn't computed.
    */
-  organization_id: string;
-  /**
-   * Connection Id
-   */
-  connection_id: string;
+  also_verified_in_other_orgs?: Array<string> | null;
 };
 
 /**
@@ -1597,10 +1833,87 @@ export enum CurrentPriority {
   BRAND_AUTHENTICITY = "brand_authenticity",
   LOYALTY_PROGRAMS = "loyalty_programs",
   AI_ADOPTION = "ai_adoption",
-  CDP_EVALUATION = "cdp_evaluation",
   CHANNEL_EXPANSION = "channel_expansion",
   RETENTION = "retention",
 }
+
+/**
+ * CustomFieldDefinitionResponse
+ *
+ * A custom field's definition (independent of any term's value).
+ *
+ * Used by the term editor to render every applicable field — including ones
+ * a term has no value for yet — and to source the option set for category
+ * fields. `value_range_type_id` is the `AdvCategoryType` the field's
+ * CATEGORY/CATEGORIES options are drawn from (null for string fields).
+ */
+export type CustomFieldDefinitionResponse = {
+  /**
+   * Field Id
+   */
+  field_id: string;
+  /**
+   * Field Uuid
+   */
+  field_uuid: string;
+  /**
+   * Name
+   */
+  name: string;
+  /**
+   * Displayname
+   */
+  displayname: string;
+  /**
+   * Type
+   */
+  type: string;
+  /**
+   * Isconceptlevel
+   */
+  isconceptlevel: boolean;
+  /**
+   * Ismultiline
+   */
+  ismultiline: boolean;
+  /**
+   * Isnullable
+   */
+  isnullable: boolean;
+  /**
+   * Location
+   */
+  location: number;
+  /**
+   * Value Range Type Id
+   */
+  value_range_type_id?: string | null;
+};
+
+/**
+ * CustomFieldValueInput
+ *
+ * One custom field's value(s) to persist for a term.
+ *
+ * `string_value` carries TEXT/HTML/IMAGE_URL fields; `category_ids` carries
+ * CATEGORY (one id) and CATEGORIES (many ids) fields. They are mutually
+ * exclusive per field — the field's type decides which applies. An empty
+ * `category_ids` with no `string_value` clears the field for that term.
+ */
+export type CustomFieldValueInput = {
+  /**
+   * Field Id
+   */
+  field_id: string;
+  /**
+   * String Value
+   */
+  string_value?: string | null;
+  /**
+   * Category Ids
+   */
+  category_ids?: Array<string>;
+};
 
 /**
  * CustomFieldValueResponse
@@ -1673,6 +1986,24 @@ export type DailyActiveUsersRow = {
 };
 
 /**
+ * DailyAvgScoreByGoalRow
+ */
+export type DailyAvgScoreByGoalRow = {
+  /**
+   * Report Date
+   */
+  report_date: string;
+  /**
+   * Goal Display Name
+   */
+  goal_display_name: string;
+  /**
+   * Avg Score
+   */
+  avg_score: number;
+};
+
+/**
  * DailyAvgScoreRow
  */
 export type DailyAvgScoreRow = {
@@ -1712,6 +2043,43 @@ export type DailyDocumentCountRow = {
    * Num Docs
    */
   num_docs: number;
+};
+
+/**
+ * DashboardResponse
+ *
+ * Combined response envelope for the Style Agent dashboard.
+ *
+ * Bundles all four chart series for the dashboard page into one
+ * response. Unlike the per-chart `ChartResponse[RowT]` envelopes,
+ * `window` + `granularity` live at the top level rather than being
+ * repeated per series — the combined endpoint forces every series to
+ * share them by construction (one wide-query call, one padded row
+ * list), so repeating them per series would be wasted bytes on the
+ * wire and would read confusingly in OpenAPI as if they could differ.
+ */
+export type DashboardResponse = {
+  /**
+   * Documents
+   */
+  documents: Array<DailyDocumentCountRow>;
+  /**
+   * Active Users
+   */
+  active_users: Array<DailyActiveUsersRow>;
+  /**
+   * Checks
+   */
+  checks: Array<DailyCheckCountRow>;
+  /**
+   * Avg Score
+   */
+  avg_score: Array<DailyAvgScoreRow>;
+  window: ChartWindow | null;
+  /**
+   * Granularity
+   */
+  granularity?: "day" | "week" | "month";
 };
 
 /**
@@ -1891,6 +2259,83 @@ export type ExemplarPayload = {
 };
 
 /**
+ * ExtensionFeedbackRequest
+ *
+ * Unified feedback payload from the Chrome extension.
+ *
+ * The extension mints ``feedback_id`` (a uuid) so the same id is shared by the
+ * content-free PostHog event and the S3 content object, letting triage follow
+ * one id from the analytics dashboard to the full content in S3.
+ */
+export type ExtensionFeedbackRequest = {
+  /**
+   * Feedback Id
+   *
+   * Client-minted feedback id (uuid). Shared with the PostHog event and used as the S3 object id.
+   */
+  feedback_id: string;
+  /**
+   * Feedback
+   */
+  feedback:
+    | ({
+        feedback_type: "helpful";
+      } & HelpfulFeedback)
+    | ({
+        feedback_type: "issue_quality";
+      } & IssueQualityFeedback)
+    | ({
+        feedback_type: "highlight";
+      } & HighlightFeedback)
+    | ({
+        feedback_type: "other";
+      } & OtherFeedback)
+    | ({
+        feedback_type: "general";
+      } & GeneralFeedback);
+  /**
+   * Workflow Id
+   */
+  workflow_id?: string | null;
+  /**
+   * Request Id
+   */
+  request_id?: string | null;
+  /**
+   * Site Type
+   */
+  site_type?: string | null;
+  /**
+   * Document Url
+   */
+  document_url?: string | null;
+  /**
+   * Document Storage Key
+   */
+  document_storage_key?: string | null;
+  /**
+   * Document Title
+   */
+  document_title?: string | null;
+  /**
+   * Extension Version
+   */
+  extension_version?: string | null;
+  /**
+   * Browser
+   */
+  browser?: string | null;
+  /**
+   * User Agent
+   */
+  user_agent?: string | null;
+  /**
+   * Os Platform
+   */
+  os_platform?: string | null;
+};
+
+/**
  * FeedbackRequest
  */
 export type FeedbackRequest = {
@@ -1953,6 +2398,24 @@ export type FilterOptionsResult = {
 };
 
 /**
+ * Fingerprint
+ */
+export type Fingerprint = {
+  /**
+   * Name
+   */
+  name: string;
+  /**
+   * Description
+   */
+  description: string;
+  /**
+   * Source
+   */
+  source?: "defined" | "discovered";
+};
+
+/**
  * FingerprintPayload
  */
 export type FingerprintPayload = {
@@ -1971,17 +2434,37 @@ export type FingerprintPayload = {
 };
 
 /**
+ * GeneralFeedback
+ *
+ * Session-level general feedback not tied to a specific issue.
+ */
+export type GeneralFeedback = {
+  /**
+   * Feedback Type
+   */
+  feedback_type?: "general";
+  /**
+   * Rating
+   */
+  rating?: number | null;
+  /**
+   * Comment
+   */
+  comment?: string | null;
+};
+
+/**
  * GenerateBrandVoiceRequest
  */
 export type GenerateBrandVoiceRequest = {
   /**
    * Guide Text
    */
-  guide_text: string;
+  guide_text?: string;
   /**
-   * Exemplar Texts
+   * Example Texts
    */
-  exemplar_texts?: Array<string>;
+  example_texts?: Array<string>;
 };
 
 /**
@@ -1994,31 +2477,32 @@ export type GenerateBrandVoiceResponse = {
 /**
  * GeneratePersonaRequest
  *
- * Request to generate a persona from a text description.
+ * Request to generate one or more personas from a guide and/or example writing.
  */
 export type GeneratePersonaRequest = {
   /**
-   * Description
+   * Guide Text
    */
-  description: string;
+  guide_text?: string;
+  /**
+   * Example Texts
+   */
+  example_texts?: Array<string>;
 };
 
 /**
  * GeneratePersonaResponse
+ *
+ * Up to N personas extracted from the submitted brand content.
+ *
+ * The workflow caps the list (see ``MAX_GENERATED_PERSONAS``) and filters out
+ * any names that collide with personas already in the org.
  */
 export type GeneratePersonaResponse = {
   /**
-   * Persona
-   *
-   * Generated persona fields (without id/timestamps)
+   * Personas
    */
-  persona: {
-    [key: string]: unknown;
-  };
-  /**
-   * Uncertain Fields
-   */
-  uncertain_fields: Array<UncertainField>;
+  personas?: Array<GeneratedPersona>;
 };
 
 /**
@@ -2082,6 +2566,40 @@ export type GenerateRulesResponse = {
 };
 
 /**
+ * GenerateTermSetRequest
+ *
+ * Request to generate a term set (as proposed rules) from a guide and/or example writing.
+ */
+export type GenerateTermSetRequest = {
+  /**
+   * Guide Text
+   */
+  guide_text?: string;
+  /**
+   * Example Texts
+   */
+  example_texts?: Array<string>;
+};
+
+/**
+ * GenerateTermSetResponse
+ *
+ * A proposed term set — merged, deduplicated rules from the guide + example extractors.
+ */
+export type GenerateTermSetResponse = {
+  /**
+   * Rules
+   */
+  rules?: Array<GeneratedTermRule>;
+  /**
+   * Conflicts
+   *
+   * Terminology disagreements found while merging (guide vs. example, or generated vs. already-stored terms). Surfaced for review; the listed rules already reflect the applied resolution.
+   */
+  conflicts?: Array<TermConflict>;
+};
+
+/**
  * GeneratedBrandVoiceProfile
  */
 export type GeneratedBrandVoiceProfile = {
@@ -2105,6 +2623,151 @@ export type GeneratedBrandVoiceProfile = {
    * Exemplars
    */
   exemplars?: Array<ExemplarPayload>;
+};
+
+/**
+ * GeneratedPersona
+ *
+ * A single persona produced by the content-driven generator.
+ */
+export type GeneratedPersona = {
+  /**
+   * Persona
+   *
+   * Generated persona fields (without id/timestamps)
+   */
+  persona: {
+    [key: string]: unknown;
+  };
+  /**
+   * Source
+   *
+   * How this persona was identified — 'described' when the about content explicitly named it, 'inferred' when it was deduced from the writing or implied without an explicit ICP block.
+   */
+  source?: "described" | "inferred";
+  /**
+   * Uncertain Fields
+   */
+  uncertain_fields?: Array<UncertainField>;
+};
+
+/**
+ * GeneratedPersonaData
+ *
+ * Persona fields as produced by the persona_creator agent.
+ *
+ * All fields are optional since LLM output may omit any field.
+ * ``extra="allow"`` preserves fields not explicitly modeled here.
+ */
+export type GeneratedPersonaData = {
+  /**
+   * Name
+   */
+  name?: string;
+  /**
+   * Title
+   */
+  title?: string | null;
+  /**
+   * Seniority
+   */
+  seniority?: string | null;
+  /**
+   * Industry
+   */
+  industry?: string | null;
+  /**
+   * Technical Level
+   */
+  technical_level?: string | null;
+  /**
+   * Skepticism Level
+   */
+  skepticism_level?: string | null;
+  /**
+   * Effort Tolerance
+   */
+  effort_tolerance?: string | null;
+  /**
+   * Reading Goal
+   */
+  reading_goal?: string | null;
+  /**
+   * Buying Authority
+   */
+  buying_authority?: string | null;
+  /**
+   * Tone Preference
+   */
+  tone_preference?: string | null;
+  /**
+   * Trust Triggers
+   */
+  trust_triggers?: Array<string>;
+  /**
+   * Pet Peeves
+   */
+  pet_peeves?: Array<string>;
+  /**
+   * Current Priorities
+   */
+  current_priorities?: Array<string>;
+  /**
+   * Pain Points
+   */
+  pain_points?: Array<string>;
+  [key: string]: unknown;
+};
+
+/**
+ * GeneratedPersonaEntry
+ *
+ * A single persona produced by the persona_creator agent.
+ *
+ * The API response DTO ``helios_one...schemas.responses.GeneratedPersona`` is a
+ * parallel, intentionally distinct type. Keep these names disambiguated so the
+ * OpenAPI schema emits a single clean ``GeneratedPersona`` for the public client.
+ */
+export type GeneratedPersonaEntry = {
+  persona?: GeneratedPersonaData;
+  /**
+   * Source
+   */
+  source?: "described" | "inferred";
+  /**
+   * Uncertain Fields
+   */
+  uncertain_fields?: Array<PersonaUncertainField>;
+};
+
+/**
+ * GeneratedTermRule
+ *
+ * A single rule produced by the content-driven terminology extractor.
+ */
+export type GeneratedTermRule = {
+  /**
+   * Terms
+   */
+  terms?: Array<string>;
+  /**
+   * Term Type
+   */
+  term_type: "prohibited" | "preferred";
+  /**
+   * Replacements
+   */
+  replacements?: Array<string>;
+  /**
+   * Context
+   */
+  context?: string;
+  /**
+   * Source
+   *
+   * Which input the rule came from -- 'guide' for the about-content extractor, 'example' for the example-writing extractor.
+   */
+  source: "guide" | "example";
 };
 
 /**
@@ -2195,6 +2858,102 @@ export type GroupCreateRequest = {
    * Display Name
    */
   display_name: string;
+};
+
+/**
+ * GroupIdpBindingCreateRequest
+ */
+export type GroupIdpBindingCreateRequest = {
+  /**
+   * Connection Id
+   */
+  connection_id: string;
+  /**
+   * Attribute Name
+   */
+  attribute_name: string;
+  /**
+   * Idp Identifier
+   */
+  idp_identifier: string;
+};
+
+/**
+ * GroupIdpBindingProjection
+ *
+ * Lightweight projection embedded on GroupResponse for the list-card
+ * chips. The dedicated /idp-bindings endpoints return the full
+ * GroupIdpBindingResponse with timestamps.
+ */
+export type GroupIdpBindingProjection = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Connection Id
+   */
+  connection_id: string;
+  /**
+   * Connection Display Name
+   *
+   * Friendly connection name from `sso_connection_configs.display_name`. NULL until the /sso/connections list endpoint has populated the cache for this connection; UI falls back to `connection_id`.
+   */
+  connection_display_name: string | null;
+  /**
+   * Attribute Name
+   */
+  attribute_name: string;
+  /**
+   * Idp Identifier
+   */
+  idp_identifier: string;
+};
+
+/**
+ * GroupIdpBindingResponse
+ *
+ * Full per-binding payload returned by the dedicated /idp-bindings
+ * endpoints. The list-view chips use the lighter
+ * GroupIdpBindingProjection embedded on GroupResponse.
+ */
+export type GroupIdpBindingResponse = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Group Id
+   */
+  group_id: string;
+  /**
+   * Connection Id
+   */
+  connection_id: string;
+  /**
+   * Connection Display Name
+   */
+  connection_display_name: string | null;
+  /**
+   * Attribute Name
+   */
+  attribute_name: string;
+  /**
+   * Idp Identifier
+   */
+  idp_identifier: string;
+  /**
+   * Last Seen In Idp At
+   */
+  last_seen_in_idp_at: string | null;
+  /**
+   * Created At
+   */
+  created_at: string;
+  /**
+   * Updated At
+   */
+  updated_at: string;
 };
 
 /**
@@ -2291,6 +3050,12 @@ export type GroupResponse = {
    * Number of group_memberships rows for this group. Includes stale rows for users who have left the org; admins clear those via the membership management surface.
    */
   member_count: number;
+  /**
+   * Idp Bindings
+   *
+   * Bindings that feed this group. Empty for a manual group. Embedded so the Groups list can render per-card chips in one request; the dedicated /idp-bindings endpoints are the mutation surface.
+   */
+  idp_bindings: Array<GroupIdpBindingProjection>;
 };
 
 /**
@@ -2301,6 +3066,143 @@ export type GuidedModeSwitchFeedbackRequest = {
    * Note
    */
   note: string;
+};
+
+/**
+ * GuidelineBreakdownExportResult
+ */
+export type GuidelineBreakdownExportResult = {
+  /**
+   * Data
+   */
+  data: Array<GuidelineBreakdownExportRow>;
+  /**
+   * Truncated
+   */
+  truncated: boolean;
+};
+
+/**
+ * GuidelineBreakdownExportRow
+ *
+ * One fully-qualified leaf row of the drill-down for CSV export.
+ *
+ * Unlike the interactive `GuidelineBreakdownRow` (one drill level at a
+ * time), this carries the full path — guideline + word + context — on
+ * every row so a flat CSV reproduces the entire tree. Higher-level
+ * totals are the sums of these rows.
+ */
+export type GuidelineBreakdownExportRow = {
+  /**
+   * Guideline Name
+   */
+  guideline_name: string;
+  /**
+   * Category
+   */
+  category?: string | null;
+  /**
+   * Word Highlighted
+   */
+  word_highlighted: string;
+  /**
+   * Context Surface
+   */
+  context_surface: string;
+  /**
+   * Count
+   */
+  count: number;
+};
+
+/**
+ * GuidelineBreakdownResult
+ */
+export type GuidelineBreakdownResult = {
+  /**
+   * Data
+   */
+  data: Array<GuidelineBreakdownRow>;
+  /**
+   * Truncated
+   */
+  truncated: boolean;
+};
+
+/**
+ * GuidelineBreakdownRow
+ */
+export type GuidelineBreakdownRow = {
+  /**
+   * Label
+   */
+  label: string;
+  /**
+   * Category
+   */
+  category?: string | null;
+  /**
+   * Count
+   */
+  count: number;
+};
+
+/**
+ * HelpfulFeedback
+ *
+ * Quick positive signal — the user found the issue helpful.
+ */
+export type HelpfulFeedback = {
+  /**
+   * Comment
+   */
+  comment?: string | null;
+  /**
+   * Problem
+   */
+  problem?: string | null;
+  /**
+   * Expected Text
+   */
+  expected_text?: string | null;
+  /**
+   * Actual Highlighted Text
+   */
+  actual_highlighted_text?: string | null;
+  issue: IssueSnapshot;
+  /**
+   * Feedback Type
+   */
+  feedback_type?: "helpful";
+};
+
+/**
+ * HighlightFeedback
+ *
+ * Feedback about highlight positioning / rendering.
+ */
+export type HighlightFeedback = {
+  /**
+   * Comment
+   */
+  comment?: string | null;
+  /**
+   * Problem
+   */
+  problem?: string | null;
+  /**
+   * Expected Text
+   */
+  expected_text?: string | null;
+  /**
+   * Actual Highlighted Text
+   */
+  actual_highlighted_text?: string | null;
+  issue: IssueSnapshot;
+  /**
+   * Feedback Type
+   */
+  feedback_type?: "highlight";
 };
 
 /**
@@ -2352,6 +3254,195 @@ export enum Industry {
   HEALTHCARE = "healthcare",
   MEDIA = "media",
 }
+
+/**
+ * IntakeCommitRequest
+ *
+ * Reviewed config promoted from an intake draft into stored config.
+ */
+export type IntakeCommitRequest = {
+  brand_voice?: BrandVoiceProfileCreate | null;
+  /**
+   * Personas
+   */
+  personas?: Array<PersonaRequest>;
+  /**
+   * Term Sets
+   */
+  term_sets?: Array<TermSetCreateRequest>;
+};
+
+/**
+ * IntakeCommitResponse
+ */
+export type IntakeCommitResponse = {
+  /**
+   * Brand Voice Profile Id
+   */
+  brand_voice_profile_id?: string | null;
+  /**
+   * Persona Ids
+   */
+  persona_ids?: Array<string>;
+  /**
+   * Term Set Ids
+   */
+  term_set_ids?: Array<string>;
+};
+
+/**
+ * IntakeDraft
+ *
+ * Versioned envelope persisted to ``intakes.drafts``. Bump
+ * ``schema_version`` when the draft shape changes.
+ */
+export type IntakeDraft = {
+  /**
+   * Schema Version
+   */
+  schema_version?: number;
+  /**
+   * Generation Results
+   */
+  generation_results?: Array<
+    | ({
+        processing_type: "brand_voice";
+      } & BrandVoiceGenerationOutput)
+    | ({
+        processing_type: "personas";
+      } & PersonaGenerationOutput)
+    | ({
+        processing_type: "terminology";
+      } & TermSetGenerationOutput)
+    | ({
+        processing_type: "accuracy";
+      } & RagProcessingOutput)
+  >;
+  /**
+   * Generation Failures
+   */
+  generation_failures?: Array<ProcessingType>;
+};
+
+/**
+ * IntakeMaterialsSummary
+ */
+export type IntakeMaterialsSummary = {
+  /**
+   * Total
+   */
+  total: number;
+  /**
+   * Queued
+   */
+  queued: number;
+  /**
+   * Processing
+   */
+  processing: number;
+  /**
+   * Ready
+   */
+  ready: number;
+  /**
+   * Error
+   */
+  error: number;
+};
+
+/**
+ * IntakeResponse
+ */
+export type IntakeResponse = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Organization Id
+   */
+  organization_id: string;
+  /**
+   * Workflow Id
+   */
+  workflow_id: string;
+  status: IntakeStatus;
+  drafts?: IntakeDraft | null;
+  /**
+   * Materials
+   */
+  materials?: Array<MaterialResponse>;
+  /**
+   * Created At
+   */
+  created_at: string;
+  /**
+   * Updated At
+   */
+  updated_at: string;
+};
+
+/**
+ * IntakeStatus
+ */
+export enum IntakeStatus {
+  PROCESSING = "processing",
+  READY = "ready",
+  PARTIAL = "partial",
+  FAILED = "failed",
+}
+
+/**
+ * IntakeSummary
+ */
+export type IntakeSummary = {
+  /**
+   * Id
+   */
+  id: string;
+  status: IntakeStatus;
+  /**
+   * Has Drafts
+   */
+  has_drafts: boolean;
+  materials: IntakeMaterialsSummary;
+  /**
+   * Created At
+   */
+  created_at: string;
+  /**
+   * Updated At
+   */
+  updated_at: string;
+};
+
+/**
+ * IntakeWorkflowResult
+ *
+ * Truncated, confidence-sorted brand voice profile ready for storage.
+ */
+export type IntakeWorkflowResult = {
+  /**
+   * Name
+   */
+  name: string;
+  /**
+   * Identity
+   */
+  identity: Array<string>;
+  /**
+   * Bright Lines
+   */
+  bright_lines: Array<string>;
+  /**
+   * Fingerprints
+   */
+  fingerprints?: Array<Fingerprint>;
+  /**
+   * Exemplars
+   */
+  exemplars?: Array<AnnotatedExemplar>;
+};
 
 /**
  * Invitation
@@ -2444,12 +3535,152 @@ export enum IssueCategory {
 }
 
 /**
+ * IssueCountRow
+ */
+export type IssueCountRow = {
+  /**
+   * Label
+   */
+  label: string;
+  /**
+   * Count
+   */
+  count: number;
+};
+
+/**
+ * IssueCountsResult
+ */
+export type IssueCountsResult = {
+  /**
+   * Data
+   */
+  data: Array<IssueCountRow>;
+  /**
+   * Truncated
+   */
+  truncated: boolean;
+};
+
+/**
+ * IssueQualityFeedback
+ *
+ * Negative feedback about issue correctness / relevance.
+ */
+export type IssueQualityFeedback = {
+  /**
+   * Comment
+   */
+  comment?: string | null;
+  /**
+   * Problem
+   */
+  problem?: string | null;
+  /**
+   * Expected Text
+   */
+  expected_text?: string | null;
+  /**
+   * Actual Highlighted Text
+   */
+  actual_highlighted_text?: string | null;
+  issue: IssueSnapshot;
+  /**
+   * Feedback Type
+   */
+  feedback_type?: "issue_quality";
+};
+
+/**
+ * IssueSnapshot
+ *
+ * Frozen copy of a ``CortexIssueWithId`` at the moment feedback is given.
+ *
+ * Field names follow the extension's ``CortexIssueWithId`` shape
+ * (``types.ts``): ``agent_id``/``agent_name`` map to ``agent``/``agentName``,
+ * the flattened ``position_*``/``context_*`` fields map to the nested
+ * ``position`` object, and ``group_key``/``highlight_status`` map to
+ * ``groupKey``/``highlightStatus``.
+ */
+export type IssueSnapshot = {
+  /**
+   * Issue Id
+   */
+  issue_id: string;
+  /**
+   * Group Key
+   */
+  group_key: string;
+  /**
+   * Agent Id
+   */
+  agent_id: string;
+  /**
+   * Agent Name
+   */
+  agent_name?: string | null;
+  /**
+   * Severity
+   */
+  severity: string;
+  /**
+   * Confidence
+   */
+  confidence: number;
+  /**
+   * Category
+   */
+  category?: string | null;
+  /**
+   * Explanation
+   */
+  explanation: string;
+  /**
+   * Suggestion
+   */
+  suggestion?: string | null;
+  /**
+   * Matched Text
+   */
+  matched_text?: string | null;
+  /**
+   * Position Start
+   */
+  position_start?: number | null;
+  /**
+   * Position End
+   */
+  position_end?: number | null;
+  /**
+   * Position Sentence
+   */
+  position_sentence?: string | null;
+  /**
+   * Context Before
+   */
+  context_before?: string | null;
+  /**
+   * Context After
+   */
+  context_after?: string | null;
+  /**
+   * Status
+   */
+  status?: string | null;
+  /**
+   * Highlight Status
+   */
+  highlight_status?: string | null;
+  positioning?: PositioningSnapshot | null;
+};
+
+/**
  * LabsAgentAccessBulkUpdate
  *
  * Body for the bulk PUT endpoint.
  *
  * If `agent_ids` is omitted, applies `enabled` to every *current* labs agent
- * (the "enable all / disable all" button in the admin UI).
+ * (the "enable all / disable all" button in the admin UI and the console).
  */
 export type LabsAgentAccessBulkUpdate = {
   /**
@@ -2515,7 +3746,7 @@ export type LabsAgentAccessList = {
   /**
    * Agents
    */
-  agents: Array<LabsAgentAccessEntry>;
+  agents?: Array<LabsAgentAccessEntry>;
   /**
    * Can Update
    *
@@ -2567,6 +3798,102 @@ export type MatchedTerm = {
 };
 
 /**
+ * MaterialKind
+ */
+export enum MaterialKind {
+  FILE = "file",
+  URL = "url",
+  TEXT = "text",
+}
+
+/**
+ * MaterialResponse
+ *
+ * A material attached to an intake.
+ */
+export type MaterialResponse = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Organization Id
+   */
+  organization_id: string;
+  /**
+   * Intake Id
+   */
+  intake_id: string;
+  kind: MaterialKind;
+  role: MaterialRole;
+  /**
+   * Source Url
+   */
+  source_url?: string | null;
+  /**
+   * Original Uri
+   */
+  original_uri?: string | null;
+  /**
+   * Original Filename
+   */
+  original_filename?: string | null;
+  /**
+   * Last Content Hash
+   */
+  last_content_hash?: string | null;
+  /**
+   * Converted Uri
+   */
+  converted_uri?: string | null;
+  status: MaterialStatus;
+  /**
+   * Error Detail
+   */
+  error_detail?: string | null;
+  /**
+   * Created At
+   */
+  created_at: string;
+  /**
+   * Updated At
+   */
+  updated_at: string;
+};
+
+/**
+ * MaterialRole
+ */
+export enum MaterialRole {
+  GUIDE = "guide",
+  EXAMPLE = "example",
+}
+
+/**
+ * MaterialStatus
+ */
+export enum MaterialStatus {
+  QUEUED = "queued",
+  PROCESSING = "processing",
+  READY = "ready",
+  ERROR = "error",
+}
+
+/**
+ * MaterialsSubmitResponse
+ */
+export type MaterialsSubmitResponse = {
+  /**
+   * Intake Id
+   */
+  intake_id: string;
+  /**
+   * Materials
+   */
+  materials: Array<MaterialResponse>;
+};
+
+/**
  * Member
  */
 export type Member = {
@@ -2574,6 +3901,34 @@ export type Member = {
    * Role
    */
   role?: string | null;
+};
+
+/**
+ * MemberGroupRef
+ *
+ * Minimal group ref attached to a member row: id + admin-set
+ * display name. Used by the team-management UI to render group
+ * chips per member without an N+1 join from the frontend.
+ *
+ * `is_removable` is True iff the membership is *only* manually
+ * sourced — DELETE /groups/.../members/{user_id} drops only
+ * `source='manual'` rows, so an IDP-fed (or mixed manual+IDP)
+ * membership stays even after a successful 204. The UI hides the
+ * chip's x button when this is False so the affordance can't lie.
+ */
+export type MemberGroupRef = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Display Name
+   */
+  display_name: string;
+  /**
+   * Is Removable
+   */
+  is_removable: boolean;
 };
 
 /**
@@ -2702,54 +4057,6 @@ export type OAuthTokenRequest = {
 };
 
 /**
- * OrgDomainAliasOut
- */
-export type OrgDomainAliasOut = {
-  /**
-   * Id
-   *
-   * Alias row ID.
-   */
-  id: string | null;
-  /**
-   * Domain
-   */
-  domain: string;
-  /**
-   * Is Primary
-   *
-   * True for the org's primary email_domain — auto-verified and non-removable.
-   */
-  is_primary?: boolean;
-  /**
-   * Verification Status
-   *
-   * 'pending' or 'verified'.
-   */
-  verification_status: string;
-  /**
-   * The DNS TXT record to publish to verify this alias. Present only while the alias is pending; null once verified (and for the primary domain).
-   */
-  dns_verification?: DnsVerification | null;
-  /**
-   * Verified At
-   */
-  verified_at: string | null;
-  /**
-   * Created At
-   */
-  created_at: string | null;
-  /**
-   * Created By
-   */
-  created_by: string | null;
-  /**
-   * Organization Id
-   */
-  organization_id: string;
-};
-
-/**
  * OrganizationConfigResponse
  *
  * Org-level configuration slice that drives client-side behaviour.
@@ -2795,6 +4102,18 @@ export type OrganizationMember = {
    * Is Staff
    */
   is_staff?: boolean;
+  /**
+   * Groups
+   */
+  groups?: Array<MemberGroupRef>;
+  /**
+   * Scim Provisioned
+   */
+  scim_provisioned?: boolean;
+  /**
+   * Scim Managed
+   */
+  scim_managed?: boolean;
 };
 
 /**
@@ -3089,18 +4408,6 @@ export type OrganizationSignupRequest = {
    */
   display_name: string;
   /**
-   * User Role
-   *
-   * User role in the organization
-   */
-  user_role?: string | null;
-  /**
-   * Country
-   *
-   * Country of the organization
-   */
-  country?: string | null;
-  /**
    * First Name
    *
    * First name of the user
@@ -3113,11 +4420,11 @@ export type OrganizationSignupRequest = {
    */
   last_name?: string | null;
   /**
-   * Job Title
+   * Signup Url
    *
-   * Job title of the user
+   * URL the user signed up from, including UTM parameters
    */
-  job_title?: string | null;
+  signup_url?: string | null;
   /**
    * Marketing Consent
    *
@@ -3237,6 +4544,35 @@ export type OriginalContent = {
 };
 
 /**
+ * OtherFeedback
+ *
+ * Negative feedback that doesn't fit issue_quality or highlight.
+ */
+export type OtherFeedback = {
+  /**
+   * Comment
+   */
+  comment?: string | null;
+  /**
+   * Problem
+   */
+  problem?: string | null;
+  /**
+   * Expected Text
+   */
+  expected_text?: string | null;
+  /**
+   * Actual Highlighted Text
+   */
+  actual_highlighted_text?: string | null;
+  issue: IssueSnapshot;
+  /**
+   * Feedback Type
+   */
+  feedback_type?: "other";
+};
+
+/**
  * Page[APIKeyRead]
  */
 export type PageApiKeyRead = {
@@ -3265,13 +4601,13 @@ export type PageApiKeyRead = {
 };
 
 /**
- * Page[AccessPolicyRead]
+ * Page[AccessPolicyWithRoleRead]
  */
-export type PageAccessPolicyRead = {
+export type PageAccessPolicyWithRoleRead = {
   /**
    * Items
    */
-  items: Array<AccessPolicyRead>;
+  items: Array<AccessPolicyWithRoleRead>;
   /**
    * Total Items
    */
@@ -3519,7 +4855,7 @@ export type PaginatedTermsResponse = {
   /**
    * Terms
    */
-  terms: Array<HeliosOneApiModulesAdvancedTerminologySchemasTermsTermResponse>;
+  terms: Array<StyleAgentTermResponse>;
   /**
    * Total Count
    */
@@ -3562,7 +4898,6 @@ export type PaginationInfo = {
  * PainPoint
  */
 export enum PainPoint {
-  LEAN_TEAM = "lean_team",
   OVEREXTENDED = "overextended",
   TOOL_FRAGMENTATION = "tool_fragmentation",
   PROVING_ROI = "proving_roi",
@@ -3570,7 +4905,6 @@ export enum PainPoint {
   LACK_OF_CREATIVE_IDEAS = "lack_of_creative_ideas",
   TECHNICAL_DEBT = "technical_debt",
   CROSS_TEAM_ALIGNMENT = "cross_team_alignment",
-  NEW_LEADERSHIP_PRESSURE = "new_leadership_pressure",
 }
 
 /**
@@ -3597,6 +4931,42 @@ export type PermissionsCheckResponse = {
   has_permissions?: {
     [key: string]: boolean;
   };
+};
+
+/**
+ * PersonaDraft
+ *
+ * A single persona draft enriched with a create/update marker.
+ *
+ * ``operation == "update"`` means the Console should patch the existing
+ * persona identified by ``target_id``; ``"create"`` means it should insert a
+ * net-new persona. New personas are marked agent-sourced on approval so future
+ * intakes can identify and modify them.
+ */
+export type PersonaDraft = {
+  /**
+   * Operation
+   */
+  operation?: "create" | "update";
+  /**
+   * Target Id
+   */
+  target_id?: string | null;
+  persona: GeneratedPersonaEntry;
+};
+
+/**
+ * PersonaGenerationOutput
+ */
+export type PersonaGenerationOutput = {
+  /**
+   * Processing Type
+   */
+  processing_type?: "personas";
+  /**
+   * Personas
+   */
+  personas?: Array<PersonaDraft>;
 };
 
 /**
@@ -3740,6 +5110,30 @@ export type PersonaSuggestionsResponse = {
 };
 
 /**
+ * PersonaUncertainField
+ *
+ * A persona field where the agent was uncertain about the chosen value.
+ */
+export type PersonaUncertainField = {
+  /**
+   * Field
+   */
+  field?: string;
+  /**
+   * Chosen Value
+   */
+  chosen_value?: string | Array<string>;
+  /**
+   * Explanation
+   */
+  explanation?: string;
+  /**
+   * Alternatives
+   */
+  alternatives?: Array<string>;
+};
+
+/**
  * PetPeeve
  */
 export enum PetPeeve {
@@ -3749,8 +5143,6 @@ export enum PetPeeve {
   SALES_SPEAK = "sales_speak",
   JARGON = "jargon",
   EXCESSIVE_HEDGING = "excessive_hedging",
-  SLOW_PACING = "slow_pacing",
-  LACK_OF_SPECIFICS = "lack_of_specifics",
   CONDESCENDING_TONE = "condescending_tone",
 }
 
@@ -3767,6 +5159,112 @@ export type Position = {
 };
 
 /**
+ * PositioningSnapshot
+ *
+ * Full positioning-pipeline state for an issue highlight at feedback time.
+ *
+ * Mirrors the extension's issue-positioning instance state plus the on-screen
+ * ``TextMatch`` and resolution metadata. ``expected_text`` and
+ * ``matched_screen_text`` are document content and stay in the S3 payload only.
+ */
+export type PositioningSnapshot = {
+  /**
+   * Position State
+   */
+  position_state?: string | null;
+  /**
+   * Resolved Start
+   */
+  resolved_start?: number | null;
+  /**
+   * Resolved End
+   */
+  resolved_end?: number | null;
+  /**
+   * Expected Text
+   */
+  expected_text?: string | null;
+  /**
+   * Screen Left
+   */
+  screen_left?: number | null;
+  /**
+   * Screen Top
+   */
+  screen_top?: number | null;
+  /**
+   * Screen Width
+   */
+  screen_width?: number | null;
+  /**
+   * Screen Height
+   */
+  screen_height?: number | null;
+  /**
+   * Matched Screen Text
+   */
+  matched_screen_text?: string | null;
+  /**
+   * Coordinate Space
+   */
+  coordinate_space?: string | null;
+  /**
+   * Display Scale
+   */
+  display_scale?: number | null;
+  /**
+   * Rect Count
+   */
+  rect_count?: number | null;
+  /**
+   * Rects
+   */
+  rects?: Array<{
+    [key: string]: number;
+  }> | null;
+  /**
+   * Resolution Method
+   */
+  resolution_method?: string | null;
+  /**
+   * Text Search Score
+   */
+  text_search_score?: number | null;
+  /**
+   * Coverage Ratio
+   */
+  coverage_ratio?: number | null;
+  /**
+   * Is Substantial Match
+   */
+  is_substantial_match?: boolean | null;
+  /**
+   * Stability Result
+   */
+  stability_result?: string | null;
+  /**
+   * Max Vertical Jump
+   */
+  max_vertical_jump?: number | null;
+  /**
+   * Stack Index
+   */
+  stack_index?: number | null;
+};
+
+/**
+ * ProcessingType
+ *
+ * Types of processing that can be applied to intake materials.
+ */
+export enum ProcessingType {
+  BRAND_VOICE = "brand_voice",
+  PERSONAS = "personas",
+  TERMINOLOGY = "terminology",
+  ACCURACY = "accuracy",
+}
+
+/**
  * QualityScore
  */
 export type QualityScore = {
@@ -3777,6 +5275,20 @@ export type QualityScore = {
   grammar?: GrammarScore | null;
   consistency?: ConsistencyScore | null;
   terminology?: TerminologyScore | null;
+};
+
+/**
+ * RAGProcessingOutput
+ */
+export type RagProcessingOutput = {
+  /**
+   * Processing Type
+   */
+  processing_type?: "accuracy";
+  /**
+   * Total Stored
+   */
+  total_stored?: number;
 };
 
 /**
@@ -3950,11 +5462,522 @@ export type RoleRead = {
 };
 
 /**
+ * ScimStatusResponse
+ *
+ * Per-connection SCIM state for the console SCIM tab: the Auth0
+ * provisioning side (enabled + tokens + endpoint), the Helios pause flag, and
+ * the ingest activity figures.
+ */
+export type ScimStatusResponse = {
+  /**
+   * Enabled
+   *
+   * SCIM is provisioned in Auth0 (a SCIM config exists).
+   */
+  enabled: boolean;
+  /**
+   * Paused
+   *
+   * Helios is ignoring inbound SCIM events for this connection. Independent of `enabled`: a connection can be provisioned in Auth0 and paused on the Helios side. SSO logins are unaffected either way.
+   */
+  paused: boolean;
+  /**
+   * Paused At
+   *
+   * When SCIM was paused, or null if active.
+   */
+  paused_at?: string | null;
+  /**
+   * Endpoint Url
+   *
+   * SCIM 2.0 base URL the customer points their IdP at. Always present (derived from the connection id), even before SCIM is provisioned.
+   */
+  endpoint_url: string;
+  /**
+   * Tokens
+   *
+   * Active SCIM bearer tokens (metadata only).
+   */
+  tokens?: Array<ScimTokenInfo>;
+  /**
+   * Token List Error
+   *
+   * True when SCIM is enabled but the token list couldn't be read from Auth0 — lets the UI distinguish 'no tokens' from 'list unavailable'.
+   */
+  token_list_error?: boolean;
+  /**
+   * Last Event At
+   *
+   * When the last SCIM event for this connection arrived, or null.
+   */
+  last_event_at?: string | null;
+  /**
+   * Events Last 7D
+   *
+   * SCIM events received in the last 7 days. 0 until the webhook ingester is live.
+   */
+  events_last_7d?: number;
+  /**
+   * Max Tokens
+   *
+   * Auth0's per-connection token cap, for the UI's rotation copy.
+   */
+  max_tokens: number;
+};
+
+/**
+ * ScimTokenCreatedResponse
+ *
+ * The one-time response of minting a SCIM token: the secret is shown ONCE
+ * here and never again, so the console must surface it immediately.
+ */
+export type ScimTokenCreatedResponse = {
+  /**
+   * Token Id
+   *
+   * Auth0 SCIM token id.
+   */
+  token_id?: string | null;
+  /**
+   * Token
+   *
+   * The bearer-token secret. Returned once at mint time only.
+   */
+  token?: string | null;
+  /**
+   * Scopes
+   *
+   * Granted SCIM scopes.
+   */
+  scopes?: Array<string>;
+  /**
+   * Created At
+   *
+   * ISO-8601 mint time.
+   */
+  created_at?: string | null;
+  /**
+   * Valid Until
+   *
+   * ISO-8601 expiry, or null when it never expires.
+   */
+  valid_until?: string | null;
+  /**
+   * Endpoint Url
+   *
+   * SCIM 2.0 base URL to pair the token with in the IdP.
+   */
+  endpoint_url: string;
+};
+
+/**
+ * ScimTokenInfo
+ *
+ * One SCIM bearer token's metadata (never the secret, which Auth0 returns
+ * only at mint time). Backs the token table on the SCIM status card.
+ */
+export type ScimTokenInfo = {
+  /**
+   * Token Id
+   *
+   * Auth0 SCIM token id.
+   */
+  token_id?: string | null;
+  /**
+   * Token Preview
+   *
+   * Non-sensitive prefix of the bearer secret (e.g. 'scim_live_g2sc'), stamped at mint time. null if the token predates preview capture or its prefix wasn't recorded. The console renders it as the token's identity in the table + revoke dialog.
+   */
+  token_preview?: string | null;
+  /**
+   * Scopes
+   *
+   * Granted SCIM scopes, e.g. 'get:users'.
+   */
+  scopes?: Array<string>;
+  /**
+   * Created At
+   *
+   * ISO-8601 mint time, as Auth0 reports it.
+   */
+  created_at?: string | null;
+  /**
+   * Valid Until
+   *
+   * ISO-8601 expiry, or null when the token never expires.
+   */
+  valid_until?: string | null;
+  /**
+   * Last Used At
+   *
+   * ISO-8601 last-use time, or null if never used.
+   */
+  last_used_at?: string | null;
+};
+
+/**
  * ScoreOutput
  */
 export type ScoreOutput = {
   quality?: QualityScore | null;
   analysis?: AnalysisScore | null;
+};
+
+/**
+ * Scorecard
+ *
+ * The composed scorecard returned by `organization_scorecard`.
+ *
+ * `quality_status` is the raw CH string value (currently observed
+ * as 'OK' / 'ATTENTION_REQUIRED' in dev fixtures — NOT colored
+ * 'green'/'yellow'/'red' as the PDF reference suggested). The
+ * frontend is responsible for mapping to user-facing color/label.
+ */
+export type Scorecard = {
+  /**
+   * Workflow Id
+   */
+  workflow_id: string;
+  /**
+   * Root Workflow Id
+   */
+  root_workflow_id: string;
+  /**
+   * Request Id
+   */
+  request_id: string;
+  /**
+   * Organization Id
+   */
+  organization_id: string;
+  /**
+   * Quality Score
+   */
+  quality_score: number;
+  /**
+   * Quality Status
+   */
+  quality_status: string;
+  metadata: ScorecardMetadata;
+  readability: ScorecardReadability;
+  /**
+   * Goals
+   */
+  goals: Array<ScorecardGoal>;
+};
+
+/**
+ * ScorecardArchiveItem
+ *
+ * One row in the archive list — one completed Style Agent workflow.
+ *
+ * Per-workflow projection of `core.acro_classic_scores_view`'s
+ * per-goal rows: metadata columns come from `any()` (identical
+ * across goal-rows for the same workflow_id), `issue_count` is
+ * `sum(goal_count)` across goals, `quality_score` is the workflow's
+ * overall Acrolinx score (also identical per goal-row).
+ *
+ * `style_guide_id` / `style_guide_display_name` are API names for
+ * the CH `target_id` / `target_display_name` columns (Acrolinx
+ * Classic vocab — same as elsewhere in the reports module).
+ */
+export type ScorecardArchiveItem = {
+  /**
+   * Workflow Id
+   */
+  workflow_id: string;
+  /**
+   * Root Workflow Id
+   */
+  root_workflow_id: string;
+  /**
+   * Request Id
+   */
+  request_id: string;
+  /**
+   * Event Stream Datetime
+   */
+  event_stream_datetime: string;
+  /**
+   * Document Name
+   */
+  document_name: string;
+  /**
+   * Document Url
+   */
+  document_url: string;
+  /**
+   * User Id
+   */
+  user_id: string;
+  /**
+   * User Email
+   */
+  user_email: string;
+  /**
+   * Quality Score
+   */
+  quality_score: number;
+  /**
+   * Issue Count
+   */
+  issue_count: number;
+  /**
+   * Words
+   */
+  words: number | null;
+  /**
+   * Style Guide Id
+   */
+  style_guide_id: string;
+  /**
+   * Style Guide Display Name
+   */
+  style_guide_display_name: string;
+  /**
+   * Content Profile Id
+   */
+  content_profile_id: string;
+  /**
+   * Content Profile Display Name
+   */
+  content_profile_display_name: string;
+};
+
+/**
+ * ScorecardArchiveResponse
+ *
+ * Paginated archive of completed Style Agent workflows.
+ *
+ * Mirrors the `ScorecardArchivePage` query-layer model field-for-field;
+ * repeated here so FastAPI's OpenAPI emits a concrete `helios_one`
+ * response class (rather than referencing `helios_reporting`'s
+ * internal Pydantic model) and `@hey-api/openapi-ts` generates a
+ * clean `ScorecardArchiveResponse` type on the FE.
+ *
+ * `total` is the full filter-matching row count across all pages,
+ * not just the items on this page — the FE uses it for "page N of M"
+ * + pagination controls. `page` / `page_size` are echoes of the
+ * request after server-side clamping/flooring.
+ */
+export type ScorecardArchiveResponse = {
+  /**
+   * Items
+   */
+  items: Array<ScorecardArchiveItem>;
+  /**
+   * Total
+   */
+  total: number;
+  /**
+   * Page
+   */
+  page: number;
+  /**
+   * Page Size
+   */
+  page_size: number;
+};
+
+/**
+ * ScorecardGoal
+ *
+ * One goal-row from the scores view, projected for the scorecard.
+ */
+export type ScorecardGoal = {
+  /**
+   * Goal Id
+   */
+  goal_id: string;
+  /**
+   * Goal Display Name
+   */
+  goal_display_name: string;
+  /**
+   * Goal Score
+   */
+  goal_score: number;
+  /**
+   * Goal Count
+   */
+  goal_count: number;
+};
+
+/**
+ * ScorecardIssue
+ *
+ * One issue row from the issues view.
+ *
+ * The issues view does NOT carry goal_id/goal_display_name (it pulls
+ * from a different JSON branch than the scores view's per-goal ARRAY
+ * JOIN). What it DOES carry is `issue_category`, which is the raw
+ * category string the model attached to the issue (e.g. 'clarity',
+ * 'wordiness', 'passive_voice', 'jargon'). These do NOT map 1:1 to
+ * the scores view's goal_id values — there are issue categories
+ * (jargon, wordiness, capitalization, passive_voice) with no
+ * corresponding goal_id.
+ *
+ * Fields are surfaced verbatim from the view columns. The frontend
+ * decides how to group / display them; the backend's job is to
+ * preserve fidelity.
+ */
+export type ScorecardIssue = {
+  /**
+   * Issue Id
+   */
+  issue_id: string;
+  /**
+   * Issue Category
+   */
+  issue_category: string;
+  /**
+   * Issue Severity
+   */
+  issue_severity: string;
+  /**
+   * Issue Confidence
+   */
+  issue_confidence: number;
+  /**
+   * Issue Context Surface
+   */
+  issue_context_surface: string;
+  /**
+   * Issue Word Highlighted
+   */
+  issue_word_highlighted: string | null;
+  /**
+   * Issue Explanation
+   */
+  issue_explanation: string;
+  /**
+   * Guideline Name
+   */
+  guideline_name: string;
+  /**
+   * Suggestion
+   */
+  suggestion: string;
+  /**
+   * Suggestions Array
+   */
+  suggestions_array: Array<string>;
+};
+
+/**
+ * ScorecardMetadata
+ *
+ * Document / check metadata pulled from any row of the goal-rows
+ * set — all of these columns are identical across goal-rows for the
+ * same workflow_id (they pre-date the per-goal ARRAY JOIN).
+ */
+export type ScorecardMetadata = {
+  /**
+   * User Email
+   */
+  user_email: string;
+  /**
+   * Event Stream Datetime
+   */
+  event_stream_datetime: string;
+  /**
+   * Document Name
+   */
+  document_name: string;
+  /**
+   * Document Id
+   */
+  document_id: string;
+  /**
+   * Document Url
+   */
+  document_url: string;
+  /**
+   * Style Guide Id
+   */
+  style_guide_id: string;
+  /**
+   * Style Guide Display Name
+   */
+  style_guide_display_name: string;
+  /**
+   * Content Profile Id
+   */
+  content_profile_id: string;
+  /**
+   * Content Profile Display Name
+   */
+  content_profile_display_name: string;
+  /**
+   * Words
+   */
+  words: number | null;
+  /**
+   * Sentences
+   */
+  sentences: number | null;
+  /**
+   * Total Doc Tokens
+   */
+  total_doc_tokens: number;
+};
+
+/**
+ * ScorecardReadability
+ *
+ * Readability indices from the scores view.
+ *
+ * `clarity_index`, `informality_index`, `liveliness_index`, and
+ * `flesch_reading_ease` are all emitted by the language service on a
+ * 0-100 scale — the same scale as the overall quality_score and the
+ * per-goal scores — so the tone bands (>= 80 / >= 60) and color
+ * treatments apply uniformly and the values are passed through
+ * unchanged. (See the SLS contract markupai/scalable-language-
+ * servers#921; real captures are e.g. clarityIndex=51.87.)
+ *
+ * `avg_sentence_length` is computed in Python as words / sentences
+ * and is None when either is missing or sentences == 0.
+ */
+export type ScorecardReadability = {
+  /**
+   * Clarity Index
+   */
+  clarity_index: number | null;
+  /**
+   * Flesch Reading Ease
+   */
+  flesch_reading_ease: number | null;
+  /**
+   * Informality Index
+   */
+  informality_index: number | null;
+  /**
+   * Liveliness Index
+   */
+  liveliness_index: number | null;
+  /**
+   * Avg Sentence Length
+   */
+  avg_sentence_length: number | null;
+};
+
+/**
+ * ScorecardResponse
+ *
+ * Per-workflow Style Agent scorecard envelope.
+ *
+ * Bundles the composed scorecard (metadata + readability + per-goal
+ * scores) with the issue list. Issues are kept as a sibling field
+ * rather than nested into `scorecard.goals[].issues` because issues
+ * don't carry a goal mapping in the source view — see
+ * `ScorecardIssue`'s docstring for the data-shape rationale.
+ */
+export type ScorecardResponse = {
+  scorecard: Scorecard;
+  /**
+   * Issues
+   */
+  issues: Array<ScorecardIssue>;
 };
 
 /**
@@ -3969,18 +5992,6 @@ export enum Seniority {
   VP = "vp",
   C_SUITE = "c_suite",
 }
-
-/**
- * SetModeRequest
- */
-export type SetModeRequest = {
-  /**
-   * Mode
-   *
-   * 'inherit': effective domain_aliases = primary email_domain + verified org-level aliases. 'custom': effective = primary + verified per-connection aliases.
-   */
-  mode: "inherit" | "custom";
-};
 
 /**
  * SetupTicketRequest
@@ -4004,6 +6015,12 @@ export type SetupTicketRequest = {
    * Auth0 connection ID. When set, mints an edit ticket for that connection (user reconfigure flow). When absent, mints a create ticket and `connection_name` must be present.
    */
   connection_id?: string | null;
+  /**
+   * Provision Scim
+   *
+   * Create mode only: also provision SCIM during the self-service flow, so the admin sets up the SCIM token on the same hosted form as SSO. The minted token carries the full provisioning scope set (users + groups read/write). Ignored when editing an existing connection (use the per-connection SCIM token endpoint instead).
+   */
+  provision_scim?: boolean;
 };
 
 /**
@@ -4065,6 +6082,45 @@ export type SlsStyleGuideAttributesPatchRequest = {
    * Target to pin as the subject's default style guide. Pass `null` to clear. Omit the key to leave the existing value untouched.
    */
   default_style_guide_target_id?: string | null;
+};
+
+/**
+ * SlsStyleGuideCatalogItem
+ *
+ * One SLS target in the org's full catalog, enriched for the
+ * visibility-management UI.
+ *
+ * Unlike `/style-agent/targets` (user-facing, visibility-filtered, lean)
+ * this is the complete org catalog: the universe an admin grants from,
+ * plus the display metadata the management table renders (`language` /
+ * `language_variant` compose the `en-US`-style label, `description` the
+ * blurb). `extra="ignore"` drops the rest of the raw SLS payload.
+ */
+export type SlsStyleGuideCatalogItem = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Display Name
+   */
+  display_name: string;
+  /**
+   * Description
+   */
+  description?: string | null;
+  /**
+   * Language
+   */
+  language?: string | null;
+  /**
+   * Language Variant
+   */
+  language_variant?: string | null;
+  /**
+   * Enabled
+   */
+  enabled?: boolean;
 };
 
 /**
@@ -4157,7 +6213,7 @@ export type SsoAttributeConfig = {
  *
  * Per-connection SSO group-mapping config.
  *
- * An empty config (`attributes=[]`, no primary, no ignores) is the valid
+ * An empty config (`attributes=[]`, no ignores) is the valid
  * initial state. Field names form the contract with the post-login Action
  * and must stay stable.
  */
@@ -4174,18 +6230,12 @@ export type SsoConfig = {
    * Per-connection list of canonical (post-prefix-strip) group identifiers to drop from the extracted groups set.
    */
   ignore_groups?: Array<string>;
-  /**
-   * Primary Group Attribute
-   *
-   * Optional. Names one of `attributes[].attribute`; the first value the IDP emits for that attribute becomes the user's primary group.
-   */
-  primary_group_attribute?: string | null;
 };
 
 /**
  * SsoConnection
  *
- * Public projection of an Auth0 SSO connection in the caller's org.
+ * Public projection of an Auth0 SSO connection in an org.
  */
 export type SsoConnection = {
   /**
@@ -4236,6 +6286,41 @@ export type SsoConnection = {
    * Set when the last Auth0 domain-alias sync for this connection failed. Null means either no sync has been attempted or the last sync succeeded.
    */
   domain_aliases_sync_failed_at?: string | null;
+  /**
+   * Domain Aliases
+   *
+   * Domains authorized to log in via this connection, in creation order. Includes both verified (in effect in Auth0) and pending (awaiting DNS TXT) entries. Per-connection only — a domain can belong to at most one connection per org.
+   */
+  domain_aliases?: Array<SsoConnectionDomain>;
+  /**
+   * Deletable
+   *
+   * False when the connection can't be deleted right now, so the UI can hide the delete action. The staff SSO connector on the reference org is non-deletable while a customer org still holds it (deleting it would 409 and orphan those orgs); everything else is deletable.
+   */
+  deletable?: boolean;
+};
+
+/**
+ * SsoConnectionDomain
+ *
+ * One domain authorized to log in via a connection, with its current
+ * verification status. Used by the list-connections endpoint so the
+ * console can render each row's domain set + inline Pending markers
+ * without fanning out per-connection alias lookups.
+ */
+export type SsoConnectionDomain = {
+  /**
+   * Domain
+   *
+   * Email domain, e.g. 'acme.com'.
+   */
+  domain: string;
+  /**
+   * Status
+   *
+   * 'verified' = primary email_domain or an alias whose DNS TXT was confirmed. 'pending' = an alias whose verification token has not yet been observed in DNS.
+   */
+  status: "verified" | "pending";
 };
 
 /**
@@ -4245,7 +6330,7 @@ export type SsoConnectionsResponse = {
   /**
    * Connections
    *
-   * Every SSO connection currently enabled for the caller's org. Empty list means no SSO is configured. An org may have multiple connections per strategy.
+   * Every SSO connection currently enabled for the org. Empty list means no SSO is configured. An org may have multiple connections per strategy.
    */
   connections?: Array<SsoConnection>;
 };
@@ -4297,6 +6382,74 @@ export type StaffUpdate = {
 };
 
 /**
+ * StyleAgentAnalysis
+ *
+ * Style guide, content profile, and readability metadata forwarded from SLS.
+ *
+ * Cortex populates this from the language-service ``data.analysis`` block
+ * (legacy ``targetId`` naming) and helios_one republishes it on the
+ * style-agent API surface. ``styleGuideId`` / ``styleGuideDisplayName`` are
+ * the canonical public keys; the legacy ``targetId`` / ``targetDisplayName``
+ * keys carry the same values (and are marked deprecated in the schema) until
+ * removed in a future API version. The mirror runs on validation, so results
+ * persisted before the rename gain the canonical keys when re-validated.
+ */
+export type StyleAgentAnalysis = {
+  /**
+   * Styleguideid
+   */
+  styleGuideId?: string | null;
+  /**
+   * Styleguidedisplayname
+   */
+  styleGuideDisplayName?: string | null;
+  /**
+   * Targetid
+   *
+   * @deprecated
+   */
+  targetId?: string | null;
+  /**
+   * Targetdisplayname
+   *
+   * @deprecated
+   */
+  targetDisplayName?: string | null;
+  /**
+   * Contentprofileid
+   */
+  contentProfileId?: string | null;
+  /**
+   * Contentprofiledisplayname
+   */
+  contentProfileDisplayName?: string | null;
+  /**
+   * Words
+   */
+  words?: number | null;
+  /**
+   * Sentences
+   */
+  sentences?: number | null;
+  /**
+   * Clarityindex
+   */
+  clarityIndex?: number | null;
+  /**
+   * Informalityindex
+   */
+  informalityIndex?: number | null;
+  /**
+   * Livelinessindex
+   */
+  livelinessIndex?: number | null;
+  /**
+   * Fleschreadingease
+   */
+  fleschReadingEase?: number | null;
+};
+
+/**
  * StyleAgentMode
  */
 export enum StyleAgentMode {
@@ -4304,6 +6457,349 @@ export enum StyleAgentMode {
   ENABLED = "enabled",
   ENABLED_TERMINOLOGY = "enabled_terminology",
 }
+
+/**
+ * StyleAgentResult
+ *
+ * Result of a Style Agent content check.
+ *
+ * Only the ``analysis`` block is typed here — issues, quality scores, and
+ * any agent-specific keys flow through unchanged (``extra="allow"``).
+ * Validating ``analysis`` at this edge also mirrors the legacy
+ * ``targetId`` naming onto the canonical ``styleGuideId`` keys for results
+ * persisted before the rename.
+ */
+export type StyleAgentResult = {
+  /**
+   * Style guide, content profile, and readability metadata for the checked document. Omitted while the run is in progress and for organizations without numeric scoring.
+   */
+  analysis?: StyleAgentAnalysis | null;
+  [key: string]: unknown;
+};
+
+/**
+ * StyleAgentRunRequest
+ *
+ * Request body for a Style Agent content check.
+ *
+ * A focused subset of the generic agent-run request: it carries only the
+ * fields the Style Agent uses and omits the ones scoped to other agents
+ * (``agents`` sub-agents, ``goal``, ``persona_id``, ``voice_profile_id``).
+ * Dropping ``agents`` also means this endpoint can only ever run the Style
+ * Agent.
+ */
+export type StyleAgentRunRequest = {
+  /**
+   * Text
+   *
+   * Document text to analyze.
+   */
+  text: string;
+  /**
+   * Style Guide Id
+   *
+   * Style guide ID to check the document against. ``target_id`` is a deprecated alias for this field; send exactly one of the two names.
+   */
+  style_guide_id?: string | null;
+  /**
+   * Content Profile Id
+   *
+   * Language-service content profile ID for style checking.
+   */
+  content_profile_id?: string | null;
+  /**
+   * Domain Ids
+   *
+   * Terminology domain IDs.
+   */
+  domain_ids?: Array<string> | null;
+  /**
+   * Document Ref
+   *
+   * Caller-provided document identifier for tracking across scans.
+   */
+  document_ref?: string | null;
+  /**
+   * Url
+   *
+   * Document URL.
+   */
+  url?: string | null;
+  /**
+   * Document Name
+   *
+   * Document name or title.
+   */
+  document_name?: string | null;
+  /**
+   * Webhook Url
+   *
+   * Optional webhook URL for async result delivery.
+   */
+  webhook_url?: string | null;
+};
+
+/**
+ * StyleAgentRunResponse
+ *
+ * Response for a Style Agent content-check run, with the result envelope
+ * typed so the ``analysis`` naming contract is part of the published
+ * schema. The generic ``/agents`` endpoints keep the untyped result.
+ */
+export type StyleAgentRunResponse = {
+  /**
+   * Workflow Id
+   *
+   * Workflow ID for tracking
+   */
+  workflow_id: string;
+  /**
+   * Request Id
+   *
+   * Request tracking ID
+   */
+  request_id?: string | null;
+  /**
+   * Workflow status
+   */
+  status: HeliosSharedCortexModelsResponseWorkflowStatus;
+  /**
+   * Document Ref
+   *
+   * Caller-provided document identifier.
+   */
+  document_ref?: string | null;
+  /**
+   * Execution result (if completed)
+   */
+  result?: StyleAgentResult | null;
+  /**
+   * Started At
+   *
+   * Workflow start time
+   */
+  started_at: string;
+  /**
+   * Completed At
+   *
+   * Workflow completion time
+   */
+  completed_at?: string | null;
+  /**
+   * Duration Seconds
+   *
+   * Execution duration
+   */
+  duration_seconds?: number | null;
+};
+
+/**
+ * StyleAgentTermCreateRequest
+ */
+export type StyleAgentTermCreateRequest = {
+  /**
+   * Surface
+   */
+  surface: string;
+  /**
+   * Language Id
+   */
+  language_id: string;
+  /**
+   * Status Id
+   */
+  status_id: string;
+  /**
+   * Msr Id
+   */
+  msr_id?: string | null;
+  /**
+   * Masterterm Id
+   *
+   * Link to existing head term. If null, creates a new head term.
+   */
+  masterterm_id?: string | null;
+  /**
+   * Variantsconfigurations
+   */
+  variantsconfigurations?: string | null;
+  /**
+   * Category Ids
+   */
+  category_ids?: Array<string> | null;
+  /**
+   * Concept Id
+   *
+   * Human-readable concept ID. Defaults to surface text.
+   */
+  concept_id?: string | null;
+  /**
+   * Custom Field Values
+   */
+  custom_field_values?: Array<CustomFieldValueInput> | null;
+};
+
+/**
+ * StyleAgentTermResponse
+ */
+export type StyleAgentTermResponse = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Uuid
+   */
+  uuid: string;
+  /**
+   * External Id
+   */
+  external_id: string;
+  /**
+   * Conceptid
+   */
+  conceptid: string;
+  /**
+   * Conceptuuid
+   */
+  conceptuuid: string;
+  /**
+   * Isconcept
+   */
+  isconcept: string;
+  surface?: SurfaceResponse | null;
+  language?: CategoryResponse | null;
+  status?: CategoryResponse | null;
+  msr?: CategoryResponse | null;
+  /**
+   * Categories
+   */
+  categories?: Array<CategoryResponse>;
+  /**
+   * Variantsconfigurations
+   */
+  variantsconfigurations?: string | null;
+  /**
+   * Frequency
+   */
+  frequency?: number;
+  /**
+   * Creationdate
+   */
+  creationdate?: string | null;
+  /**
+   * Creator
+   */
+  creator?: string | null;
+  /**
+   * Lastmodificationdate
+   */
+  lastmodificationdate?: string | null;
+  /**
+   * Lastmodifier
+   */
+  lastmodifier?: string | null;
+  /**
+   * Linked Term Count
+   */
+  linked_term_count?: number;
+  /**
+   * Member Count
+   */
+  member_count?: number;
+  /**
+   * Custom Fields
+   */
+  custom_fields?: {
+    [key: string]: string | null;
+  };
+  /**
+   * Custom Field Values
+   */
+  custom_field_values?: Array<CustomFieldValueResponse>;
+};
+
+/**
+ * StyleAgentTermUpdateRequest
+ */
+export type StyleAgentTermUpdateRequest = {
+  /**
+   * Surface
+   */
+  surface?: string | null;
+  /**
+   * Language Id
+   */
+  language_id?: string | null;
+  /**
+   * Status Id
+   */
+  status_id?: string | null;
+  /**
+   * Msr Id
+   */
+  msr_id?: string | null;
+  /**
+   * Variantsconfigurations
+   */
+  variantsconfigurations?: string | null;
+  /**
+   * Category Ids
+   */
+  category_ids?: Array<string> | null;
+  /**
+   * Custom Field Values
+   */
+  custom_field_values?: Array<CustomFieldValueInput> | null;
+};
+
+/**
+ * StyleAgentWorkflowStatusResponse
+ *
+ * Status of a Style Agent content-check run, with the result envelope
+ * typed so the ``analysis`` naming contract is part of the published
+ * schema.
+ */
+export type StyleAgentWorkflowStatusResponse = {
+  /**
+   * Workflow Id
+   *
+   * Workflow ID
+   */
+  workflow_id: string;
+  /**
+   * Agent Id
+   *
+   * Agent that ran this workflow
+   */
+  agent_id?: string;
+  /**
+   * Document Ref
+   *
+   * Caller-provided document identifier.
+   */
+  document_ref?: string | null;
+  /**
+   * Current status
+   */
+  status: HeliosSharedCortexModelsResponseWorkflowStatus;
+  /**
+   * Result (if completed)
+   */
+  result?: StyleAgentResult | null;
+  /**
+   * Started At
+   *
+   * Start time
+   */
+  started_at: string;
+  /**
+   * Completed At
+   *
+   * Workflow completion time
+   */
+  completed_at?: string | null;
+};
 
 /**
  * StyleCheckRequestBody
@@ -4363,13 +6859,235 @@ export type StyleGuide = {
 };
 
 /**
+ * StyleGuideCompoundOption
+ *
+ * One selectable option for a multi-option ("compound") guideline.
+ */
+export type StyleGuideCompoundOption = {
+  /**
+   * Id
+   */
+  id?: string | null;
+  /**
+   * Display Name
+   */
+  display_name?: string | null;
+};
+
+/**
+ * StyleGuideDetailResponse
+ *
+ * Full style guide configuration (goals, groups, and guidelines), as
+ * returned by ``GET /style-agent/style-guides/{style_guide_id}``.
+ */
+export type StyleGuideDetailResponse = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Display Name
+   */
+  display_name: string;
+  /**
+   * Description
+   */
+  description?: string | null;
+  /**
+   * Enabled
+   */
+  enabled?: boolean;
+  language: StyleGuideLanguage;
+  language_variant?: StyleGuideLanguageVariant | null;
+  /**
+   * Goals
+   */
+  goals?: Array<StyleGuideGoal>;
+};
+
+/**
+ * StyleGuideGoal
+ */
+export type StyleGuideGoal = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Identifier
+   */
+  identifier: string;
+  /**
+   * Display Name
+   */
+  display_name?: string | null;
+  /**
+   * Color
+   */
+  color?: string | null;
+  /**
+   * Sort Key
+   */
+  sort_key?: number | null;
+  /**
+   * Goal Groups
+   */
+  goal_groups?: Array<StyleGuideGoalGroup>;
+};
+
+/**
+ * StyleGuideGoalGroup
+ */
+export type StyleGuideGoalGroup = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Display Name
+   */
+  display_name?: string | null;
+  /**
+   * Sort Key
+   */
+  sort_key?: number | null;
+  /**
+   * Guidelines
+   */
+  guidelines?: Array<StyleGuideGuideline>;
+};
+
+/**
+ * StyleGuideGuideline
+ *
+ * A single guideline (rule) within a style guide goal group.
+ *
+ * ``presets`` and other SLS-internal metadata are intentionally omitted: the
+ * customer-facing view renders only the resolved state for the selected
+ * preset. Nested ``parameters`` / ``compound_available_values`` use narrow
+ * models (not opaque dicts) so internal fields can't leak through either.
+ */
+export type StyleGuideGuideline = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Identifier
+   */
+  identifier: string;
+  /**
+   * Display Name
+   */
+  display_name: string;
+  /**
+   * Guideline Type
+   */
+  guideline_type: string;
+  /**
+   * Context Configurable
+   */
+  context_configurable?: boolean;
+  /**
+   * Active
+   */
+  active?: boolean;
+  /**
+   * Parameters
+   */
+  parameters?: Array<StyleGuideParameter> | null;
+  /**
+   * Parameter Value
+   */
+  parameter_value?: {
+    [key: string]: unknown;
+  } | null;
+  /**
+   * Contexts
+   */
+  contexts?: Array<string> | null;
+  /**
+   * Contexts Filter Type
+   */
+  contexts_filter_type?: string | null;
+  /**
+   * Contexts Active
+   */
+  contexts_active?: boolean;
+  /**
+   * Compound Selected Value
+   */
+  compound_selected_value?: string | null;
+  /**
+   * Compound Available Values
+   */
+  compound_available_values?: Array<StyleGuideCompoundOption>;
+};
+
+/**
+ * StyleGuideLanguage
+ */
+export type StyleGuideLanguage = {
+  /**
+   * Display Name
+   */
+  display_name: string;
+  /**
+   * Abbreviation
+   */
+  abbreviation: string;
+};
+
+/**
+ * StyleGuideLanguageVariant
+ */
+export type StyleGuideLanguageVariant = {
+  /**
+   * Identifier
+   */
+  identifier: string;
+  /**
+   * Display Name
+   */
+  display_name: string;
+};
+
+/**
+ * StyleGuideParameter
+ *
+ * A parameter definition for a guideline.
+ *
+ * Narrowed to the fields the console actually renders (the key and its human
+ * label); SLS-internal fields (min/max bounds, type, external models, source
+ * metadata) are dropped here rather than passed through as an opaque dict.
+ */
+export type StyleGuideParameter = {
+  /**
+   * Name
+   */
+  name?: string | null;
+  /**
+   * Id
+   */
+  id?: string | null;
+  /**
+   * Label
+   */
+  label?: string | null;
+  /**
+   * Display Name
+   */
+  display_name?: string | null;
+};
+
+/**
  * StyleGuideRequestBody
  */
 export type StyleGuideRequestBody = {
   /**
    * File Upload
    *
-   * The document to analyze. We accept PDF files (.pdf) up to 2 MB. Required unless copy_from is provided.
+   * The document to analyze. We accept PDF files (.pdf) up to 4 MB. Required unless copy_from is provided.
    */
   file_upload?: Blob | File | null;
   /**
@@ -4465,6 +7183,50 @@ export enum StyleGuideStatus {
   FAILED = "failed",
   NOT_FOUND = "not_found",
 }
+
+/**
+ * StyleGuideSummaryResponse
+ *
+ * Style guide summary, as returned by ``GET /style-agent/style-guides``.
+ */
+export type StyleGuideSummaryResponse = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Display Name
+   */
+  display_name: string;
+  /**
+   * Is Default
+   */
+  is_default: boolean;
+  /**
+   * Enabled
+   */
+  enabled: boolean;
+  /**
+   * Description
+   */
+  description?: string | null;
+  /**
+   * Language
+   */
+  language?: string | null;
+  /**
+   * Language Name
+   */
+  language_name?: string | null;
+  /**
+   * Language Variant
+   */
+  language_variant?: string | null;
+  /**
+   * Language Variant Name
+   */
+  language_variant_name?: string | null;
+};
 
 /**
  * StyleGuides
@@ -4636,7 +7398,47 @@ export type SurfaceResponse = {
 };
 
 /**
+ * TargetDetailResponse
+ *
+ * Full style guide configuration: goals -> groups -> guidelines.
+ *
+ * Trimmed from the SLS ``TargetResponse``: presets and internal source
+ * metadata are dropped so the customer-facing console renders only what the
+ * read-only view needs.
+ */
+export type TargetDetailResponse = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Display Name
+   */
+  display_name: string;
+  /**
+   * Description
+   */
+  description?: string | null;
+  /**
+   * Enabled
+   */
+  enabled?: boolean;
+  language: StyleGuideLanguage;
+  language_variant?: StyleGuideLanguageVariant | null;
+  /**
+   * Goals
+   */
+  goals?: Array<StyleGuideGoal>;
+};
+
+/**
  * TargetResponse
+ *
+ * Flattened style guide (target) summary returned by list endpoints.
+ *
+ * Mirrors the Scalable Language Server ``TargetListResponse`` shape; the
+ * language fields are flattened (``language`` is an abbreviation here, not a
+ * nested object as in the detail response).
  */
 export type TargetResponse = {
   /**
@@ -4655,6 +7457,26 @@ export type TargetResponse = {
    * Enabled
    */
   enabled: boolean;
+  /**
+   * Description
+   */
+  description?: string | null;
+  /**
+   * Language
+   */
+  language?: string | null;
+  /**
+   * Language Name
+   */
+  language_name?: string | null;
+  /**
+   * Language Variant
+   */
+  language_variant?: string | null;
+  /**
+   * Language Variant Name
+   */
+  language_variant_name?: string | null;
 };
 
 /**
@@ -4666,6 +7488,70 @@ export enum TechnicalLevel {
   HIGH = "high",
   VERY_HIGH = "very_high",
 }
+
+/**
+ * TermConflict
+ *
+ * A terminology disagreement detected while merging generated rules.
+ *
+ * Surfaced (rather than silently dropped) so a downstream review step can show
+ * the user where a newly generated rule contradicts another source.
+ */
+export type TermConflict = {
+  /**
+   * Term
+   *
+   * The colliding term (lower-cased comparison key).
+   */
+  term: string;
+  /**
+   * Kind
+   */
+  kind: "guide_vs_example" | "new_vs_existing";
+  /**
+   * Fields
+   *
+   * Fields that disagree, e.g. ['term_type', 'replacements'].
+   */
+  fields?: Array<string>;
+  /**
+   * Resolution
+   *
+   * Which side was kept when resolving the conflict.
+   */
+  resolution: "guide_wins" | "existing_wins";
+  /**
+   * The generated rule that lost the conflict and was excluded.
+   */
+  dropped: GeneratedTermRule;
+  /**
+   * The winning generated rule (guide_vs_example only).
+   */
+  kept?: GeneratedTermRule | null;
+  /**
+   * Existing Term Type
+   *
+   * The stored term's type (new_vs_existing only).
+   */
+  existing_term_type?: "prohibited" | "preferred" | null;
+};
+
+/**
+ * TermCreateRequest
+ *
+ * Payload to create a new term for a term set.
+ */
+export type TermCreateRequest = {
+  /**
+   * Term
+   */
+  term: string;
+  type: TermType;
+  /**
+   * Case Sensitive
+   */
+  case_sensitive?: boolean;
+};
 
 /**
  * TermDetail
@@ -4682,6 +7568,10 @@ export type TermDetail = {
    */
   term: string;
   type: TermType;
+  /**
+   * Case Sensitive
+   */
+  case_sensitive?: boolean;
   /**
    * Created At
    */
@@ -4854,6 +7744,10 @@ export type TermItem = {
    * Type
    */
   type: string;
+  /**
+   * Case Sensitive
+   */
+  case_sensitive?: boolean;
 };
 
 /**
@@ -4865,9 +7759,46 @@ export enum TermReplaceCategory {
 }
 
 /**
+ * TermResponse
+ *
+ * DB-mapped representation of a term.
+ */
+export type TermResponse = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Term
+   */
+  term: string;
+  type: TermType;
+  /**
+   * Case Sensitive
+   */
+  case_sensitive?: boolean;
+  /**
+   * Created At
+   */
+  created_at: string;
+  /**
+   * Updated At
+   */
+  updated_at: string;
+  /**
+   * Created By
+   */
+  created_by?: string | null;
+  /**
+   * Updated By
+   */
+  updated_by?: string | null;
+};
+
+/**
  * TermSetCreateRequest
  *
- * Payload to create a new term set
+ * Payload to create a new term set.
  */
 export type TermSetCreateRequest = {
   /**
@@ -4879,7 +7810,7 @@ export type TermSetCreateRequest = {
   /**
    * Terms
    */
-  terms?: Array<HeliosOneApiModulesTerminologySchemasTermApiModelsTermCreateRequest> | null;
+  terms?: Array<TermCreateRequest> | null;
   /**
    * Domain Ids
    */
@@ -4903,7 +7834,25 @@ export type TermSetDetailResponse = {
   /**
    * Terms
    */
-  terms: Array<HeliosOneApiModulesAdvancedTerminologySchemasTermsTermResponse>;
+  terms: Array<StyleAgentTermResponse>;
+};
+
+/**
+ * TermSetGenerationOutput
+ */
+export type TermSetGenerationOutput = {
+  /**
+   * Processing Type
+   */
+  processing_type?: "terminology";
+  /**
+   * Rules
+   */
+  rules?: Array<GeneratedTermRule>;
+  /**
+   * Conflicts
+   */
+  conflicts?: Array<TermConflict>;
 };
 
 /**
@@ -5031,6 +7980,23 @@ export enum TermType {
 }
 
 /**
+ * TermUpdateRequest
+ *
+ * Payload to update an existing term
+ */
+export type TermUpdateRequest = {
+  /**
+   * Term
+   */
+  term: string;
+  type: TermType;
+  /**
+   * Case Sensitive
+   */
+  case_sensitive?: boolean | null;
+};
+
+/**
  * TerminologyScore
  */
 export type TerminologyScore = {
@@ -5151,11 +8117,9 @@ export enum TrustTrigger {
   PEER_REFERENCES = "peer_references",
   TECHNICAL_DEPTH = "technical_depth",
   EXECUTIVE_ENDORSEMENT = "executive_endorsement",
-  CLEAR_ROI = "clear_roi",
   TRANSPARENCY = "transparency",
   INNOVATION_TRACK_RECORD = "innovation_track_record",
   SPECIFICITY = "specificity",
-  CASE_STUDIES = "case_studies",
 }
 
 /**
@@ -5189,6 +8153,21 @@ export type UncertainField = {
 };
 
 /**
+ * UserOrganizationSource
+ *
+ * How an org membership was established. Mirrors GroupMembershipSource.
+ * Only `scim` rows are owned by the SCIM backstop reconcile sweep. `idp` (an
+ * auto-join on SSO login) and `manual` (invite / signup) rows are never touched
+ * by it, so attribution here is what keeps the sweep from deprovisioning a
+ * user it didn't provision.
+ */
+export enum UserOrganizationSource {
+  IDP = "idp",
+  SCIM = "scim",
+  MANUAL = "manual",
+}
+
+/**
  * UserOrganizationWithDetails
  */
 export type UserOrganizationWithDetails = {
@@ -5198,6 +8177,10 @@ export type UserOrganizationWithDetails = {
    * The role of the user in the organization.
    */
   role?: string | null;
+  /**
+   * How this org membership was established.
+   */
+  source?: UserOrganizationSource;
   /**
    * First Name
    *
@@ -5594,158 +8577,6 @@ export type HeliosOneApiModulesAdminOrganizationsPaginatedMembersResponse = {
 };
 
 /**
- * TermCreateRequest
- */
-export type HeliosOneApiModulesAdvancedTerminologySchemasTermsTermCreateRequest = {
-  /**
-   * Surface
-   */
-  surface: string;
-  /**
-   * Language Id
-   */
-  language_id: string;
-  /**
-   * Status Id
-   */
-  status_id: string;
-  /**
-   * Msr Id
-   */
-  msr_id?: string | null;
-  /**
-   * Masterterm Id
-   *
-   * Link to existing head term. If null, creates a new head term.
-   */
-  masterterm_id?: string | null;
-  /**
-   * Variantsconfigurations
-   */
-  variantsconfigurations?: string | null;
-  /**
-   * Category Ids
-   */
-  category_ids?: Array<string> | null;
-  /**
-   * Concept Id
-   *
-   * Human-readable concept ID. Defaults to surface text.
-   */
-  concept_id?: string | null;
-};
-
-/**
- * TermResponse
- */
-export type HeliosOneApiModulesAdvancedTerminologySchemasTermsTermResponse = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Uuid
-   */
-  uuid: string;
-  /**
-   * External Id
-   */
-  external_id: string;
-  /**
-   * Conceptid
-   */
-  conceptid: string;
-  /**
-   * Conceptuuid
-   */
-  conceptuuid: string;
-  /**
-   * Isconcept
-   */
-  isconcept: string;
-  surface?: SurfaceResponse | null;
-  language?: CategoryResponse | null;
-  status?: CategoryResponse | null;
-  msr?: CategoryResponse | null;
-  /**
-   * Categories
-   */
-  categories?: Array<CategoryResponse>;
-  /**
-   * Variantsconfigurations
-   */
-  variantsconfigurations?: string | null;
-  /**
-   * Frequency
-   */
-  frequency?: number;
-  /**
-   * Creationdate
-   */
-  creationdate?: string | null;
-  /**
-   * Creator
-   */
-  creator?: string | null;
-  /**
-   * Lastmodificationdate
-   */
-  lastmodificationdate?: string | null;
-  /**
-   * Lastmodifier
-   */
-  lastmodifier?: string | null;
-  /**
-   * Linked Term Count
-   */
-  linked_term_count?: number;
-  /**
-   * Member Count
-   */
-  member_count?: number;
-  /**
-   * Custom Fields
-   */
-  custom_fields?: {
-    [key: string]: string | null;
-  };
-  /**
-   * Custom Field Values
-   */
-  custom_field_values?: Array<CustomFieldValueResponse>;
-};
-
-/**
- * TermUpdateRequest
- */
-export type HeliosOneApiModulesAdvancedTerminologySchemasTermsTermUpdateRequest = {
-  /**
-   * Surface
-   */
-  surface?: string | null;
-  /**
-   * Language Id
-   */
-  language_id?: string | null;
-  /**
-   * Status Id
-   */
-  status_id?: string | null;
-  /**
-   * Msr Id
-   */
-  msr_id?: string | null;
-  /**
-   * Variantsconfigurations
-   */
-  variantsconfigurations?: string | null;
-  /**
-   * Category Ids
-   */
-  category_ids?: Array<string> | null;
-};
-
-/**
  * Organization
  */
 export type HeliosOneApiModulesAuthMainOrganization = {
@@ -5776,65 +8607,6 @@ export enum HeliosOneApiModulesEngineSchemasWorkflowsWorkflowStatus {
   FAILED = "failed",
   NOT_FOUND = "not_found",
 }
-
-/**
- * TermCreateRequest
- *
- * Payload to create a new term for a term set
- */
-export type HeliosOneApiModulesTerminologySchemasTermApiModelsTermCreateRequest = {
-  /**
-   * Term
-   */
-  term: string;
-  type: TermType;
-};
-
-/**
- * TermResponse
- *
- * DB-mapped representation of a term.
- */
-export type HeliosOneApiModulesTerminologySchemasTermApiModelsTermResponse = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Term
-   */
-  term: string;
-  type: TermType;
-  /**
-   * Created At
-   */
-  created_at: string;
-  /**
-   * Updated At
-   */
-  updated_at: string;
-  /**
-   * Created By
-   */
-  created_by?: string | null;
-  /**
-   * Updated By
-   */
-  updated_by?: string | null;
-};
-
-/**
- * TermUpdateRequest
- *
- * Payload to update an existing term
- */
-export type HeliosOneApiModulesTerminologySchemasTermApiModelsTermUpdateRequest = {
-  /**
-   * Term
-   */
-  term: string;
-  type: TermType;
-};
 
 /**
  * Organization
@@ -5952,6 +8724,12 @@ export type HeliosOneDatabaseModelsOrganizationOrganization = {
   attributes?: {
     [key: string]: unknown;
   };
+  /**
+   * Staff Connector Attached
+   *
+   * Whether the staff SSO connector is currently enabled on this org.
+   */
+  staff_connector_attached?: boolean;
 };
 
 /**
@@ -6248,13 +9026,13 @@ export type PageApiKeyReadWritable = {
 };
 
 /**
- * Page[AccessPolicyRead]
+ * Page[AccessPolicyWithRoleRead]
  */
-export type PageAccessPolicyReadWritable = {
+export type PageAccessPolicyWithRoleReadWritable = {
   /**
    * Items
    */
-  items: Array<AccessPolicyRead>;
+  items: Array<AccessPolicyWithRoleRead>;
   /**
    * Total Items
    */
@@ -6752,6 +9530,47 @@ export type TerminologyUpdateDomainResponses = {
 export type TerminologyUpdateDomainResponse =
   TerminologyUpdateDomainResponses[keyof TerminologyUpdateDomainResponses];
 
+export type StyleAgentListStyleGuidesData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/style-agent/style-guides";
+};
+
+export type StyleAgentListStyleGuidesErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type StyleAgentListStyleGuidesError =
+  StyleAgentListStyleGuidesErrors[keyof StyleAgentListStyleGuidesErrors];
+
+export type StyleAgentListStyleGuidesResponses = {
+  /**
+   * Response Style Agent-List Style Guides
+   *
+   * Successful Response
+   */
+  200: Array<StyleGuideSummaryResponse>;
+};
+
+export type StyleAgentListStyleGuidesResponse =
+  StyleAgentListStyleGuidesResponses[keyof StyleAgentListStyleGuidesResponses];
+
 export type AccountGetAccountData = {
   body?: never;
   path?: never;
@@ -6814,38 +9633,6 @@ export type AuthenticationGetUserOrganizationsResponses = {
 
 export type AuthenticationGetUserOrganizationsResponse =
   AuthenticationGetUserOrganizationsResponses[keyof AuthenticationGetUserOrganizationsResponses];
-
-export type InternalListTargetsData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: "/internal/targets";
-};
-
-export type InternalListTargetsErrors = {
-  /**
-   * Unprocessable Entity
-   */
-  422: ValidationErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type InternalListTargetsError = InternalListTargetsErrors[keyof InternalListTargetsErrors];
-
-export type InternalListTargetsResponses = {
-  /**
-   * Response Internal-List Targets
-   *
-   * Successful Response
-   */
-  200: Array<TargetResponse>;
-};
-
-export type InternalListTargetsResponse =
-  InternalListTargetsResponses[keyof InternalListTargetsResponses];
 
 export type CortexActivityEventsTrackActivityEventData = {
   body: ActivityEventRequest;
@@ -6933,6 +9720,10 @@ export type CortexWorkflowsListWorkflowsErrors = {
    * Forbidden
    */
   403: ErrorResponse;
+  /**
+   * Agent not found
+   */
+  404: ErrorResponse;
   /**
    * Unprocessable Entity
    */

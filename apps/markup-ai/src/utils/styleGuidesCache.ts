@@ -1,7 +1,7 @@
-import type { TargetResponse } from "../api-client/types.gen";
+import type { StyleGuideSummaryResponse } from "../api-client/types.gen";
 
 /**
- * Cross-iframe cache for the `/internal/targets` (style guides) response.
+ * Cross-iframe cache for the `/style-agent/style-guides` response.
  *
  * Each Markup AI-enabled field on the entry editor renders inside its own
  * iframe, so they each run a separate React tree and a separate react-query
@@ -17,7 +17,7 @@ interface CacheEntry {
   /** Hash of the api key that fetched this. Mismatch invalidates the entry. */
   apiKeyFingerprint: string;
   timestamp: number;
-  styleGuides: TargetResponse[];
+  styleGuides: StyleGuideSummaryResponse[];
 }
 
 /**
@@ -40,7 +40,9 @@ export function fingerprintApiKey(apiKey: string): string {
   return `len${String(apiKey.length)}_${hash.toString(36)}`;
 }
 
-export function readStyleGuidesCache(apiKey: string | null | undefined): TargetResponse[] | null {
+export function readStyleGuidesCache(
+  apiKey: string | null | undefined,
+): StyleGuideSummaryResponse[] | null {
   if (!apiKey || typeof localStorage === "undefined") return null;
   try {
     const raw = localStorage.getItem(CACHE_KEY);
@@ -57,7 +59,7 @@ export function readStyleGuidesCache(apiKey: string | null | undefined): TargetR
 
 export function writeStyleGuidesCache(
   apiKey: string | null | undefined,
-  styleGuides: TargetResponse[],
+  styleGuides: StyleGuideSummaryResponse[],
 ): void {
   if (!apiKey || typeof localStorage === "undefined") return;
   try {

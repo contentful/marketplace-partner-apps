@@ -16,8 +16,8 @@ import {
   cortexWorkflowsListWorkflows,
   cortexWorkflowsStreamWorkflowEvents,
   getAdminConstants,
-  internalListTargets,
   type Options,
+  styleAgentListStyleGuides,
   terminologyCreateDomain,
   terminologyDeleteDomain,
   terminologyGetDomain,
@@ -60,9 +60,9 @@ import type {
   GetAdminConstantsData,
   GetAdminConstantsError,
   GetAdminConstantsResponse,
-  InternalListTargetsData,
-  InternalListTargetsError,
-  InternalListTargetsResponse,
+  StyleAgentListStyleGuidesData,
+  StyleAgentListStyleGuidesError,
+  StyleAgentListStyleGuidesResponse,
   TerminologyCreateDomainData,
   TerminologyCreateDomainError,
   TerminologyCreateDomainResponse,
@@ -124,6 +124,8 @@ export const getAdminConstantsQueryKey = (options?: Options<GetAdminConstantsDat
 
 /**
  * Get Admin Constants
+ *
+ * @deprecated
  */
 export const getAdminConstantsOptions = (options?: Options<GetAdminConstantsData>) =>
   queryOptions<
@@ -149,6 +151,8 @@ export const terminologyListDomainsQueryKey = (options?: Options<TerminologyList
 
 /**
  * List Domains
+ *
+ * @deprecated
  */
 export const terminologyListDomainsOptions = (options?: Options<TerminologyListDomainsData>) =>
   queryOptions<
@@ -171,6 +175,8 @@ export const terminologyListDomainsOptions = (options?: Options<TerminologyListD
 
 /**
  * Create Domain
+ *
+ * @deprecated
  */
 export const terminologyCreateDomainMutation = (
   options?: Partial<Options<TerminologyCreateDomainData>>,
@@ -198,6 +204,8 @@ export const terminologyCreateDomainMutation = (
 
 /**
  * Delete Domain
+ *
+ * @deprecated
  */
 export const terminologyDeleteDomainMutation = (
   options?: Partial<Options<TerminologyDeleteDomainData>>,
@@ -228,6 +236,8 @@ export const terminologyGetDomainQueryKey = (options: Options<TerminologyGetDoma
 
 /**
  * Get Domain
+ *
+ * @deprecated
  */
 export const terminologyGetDomainOptions = (options: Options<TerminologyGetDomainData>) =>
   queryOptions<
@@ -250,6 +260,8 @@ export const terminologyGetDomainOptions = (options: Options<TerminologyGetDomai
 
 /**
  * Update Domain
+ *
+ * @deprecated
  */
 export const terminologyUpdateDomainMutation = (
   options?: Partial<Options<TerminologyUpdateDomainData>>,
@@ -274,6 +286,36 @@ export const terminologyUpdateDomainMutation = (
   };
   return mutationOptions;
 };
+
+export const styleAgentListStyleGuidesQueryKey = (
+  options?: Options<StyleAgentListStyleGuidesData>,
+) => createQueryKey("styleAgentListStyleGuides", options);
+
+/**
+ * List Style Guides
+ *
+ * List the style guides available to your organization.
+ */
+export const styleAgentListStyleGuidesOptions = (
+  options?: Options<StyleAgentListStyleGuidesData>,
+) =>
+  queryOptions<
+    StyleAgentListStyleGuidesResponse,
+    StyleAgentListStyleGuidesError,
+    StyleAgentListStyleGuidesResponse,
+    ReturnType<typeof styleAgentListStyleGuidesQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await styleAgentListStyleGuides({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: styleAgentListStyleGuidesQueryKey(options),
+  });
 
 export const accountGetAccountQueryKey = (options?: Options<AccountGetAccountData>) =>
   createQueryKey("accountGetAccount", options);
@@ -330,31 +372,6 @@ export const authenticationGetUserOrganizationsOptions = (
       return data;
     },
     queryKey: authenticationGetUserOrganizationsQueryKey(options),
-  });
-
-export const internalListTargetsQueryKey = (options?: Options<InternalListTargetsData>) =>
-  createQueryKey("internalListTargets", options);
-
-/**
- * List Targets
- */
-export const internalListTargetsOptions = (options?: Options<InternalListTargetsData>) =>
-  queryOptions<
-    InternalListTargetsResponse,
-    InternalListTargetsError,
-    InternalListTargetsResponse,
-    ReturnType<typeof internalListTargetsQueryKey>
-  >({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await internalListTargets({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: internalListTargetsQueryKey(options),
   });
 
 /**

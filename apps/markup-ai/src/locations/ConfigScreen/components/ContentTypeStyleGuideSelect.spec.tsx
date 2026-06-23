@@ -2,9 +2,9 @@ import { describe, expect, it, vi } from "vitest";
 import { fireEvent } from "@testing-library/react";
 import { render } from "../../../../test/utils/testUtils";
 import { ContentTypeStyleGuideSelect } from "./ContentTypeStyleGuideSelect";
-import type { TargetResponse } from "../../../api-client/types.gen";
+import type { StyleGuideSummaryResponse } from "../../../api-client/types.gen";
 
-const baseStyleGuides: TargetResponse[] = [
+const baseStyleGuides: StyleGuideSummaryResponse[] = [
   { id: "ap", display_name: "AP", is_default: true, enabled: true },
   { id: "chicago", display_name: "Chicago", is_default: false, enabled: true },
   { id: "disabled", display_name: "Disabled", is_default: false, enabled: false },

@@ -1,4 +1,4 @@
-import type { TargetResponse } from "../../api-client/types.gen";
+import type { StyleGuideSummaryResponse } from "../../api-client/types.gen";
 
 /**
  * Pick the preferred default style guide id from a list of style guides:
@@ -11,7 +11,7 @@ import type { TargetResponse } from "../../api-client/types.gen";
  *
  * Mirrors the sidebar-app implementation (INT-520).
  */
-export function defaultStyleGuideId(styleGuides: TargetResponse[]): string | undefined {
+export function defaultStyleGuideId(styleGuides: StyleGuideSummaryResponse[]): string | undefined {
   const enabled = styleGuides.filter((g) => g.enabled);
   const main = enabled.find((g) => g.display_name.trim() === "Main");
   if (main) return main.id;

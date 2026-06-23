@@ -2,12 +2,12 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import { fireEvent } from "@testing-library/react";
 import { render } from "../../../../../../test/utils/testUtils";
 import { AgentConfigField } from "./AgentConfigField";
-import type { TargetResponse } from "../../../../../api-client/types.gen";
+import type { StyleGuideSummaryResponse } from "../../../../../api-client/types.gen";
 
 // useStyleGuides is exercised by its own spec — stub it out here so the
 // AgentConfigField tests focus on the prefetched/fallback wiring.
 interface StyleGuidesResult {
-  styleGuides: TargetResponse[];
+  styleGuides: StyleGuideSummaryResponse[];
   isLoading: boolean;
   isError: boolean;
   defaultStyleGuideId: string | null;
@@ -17,7 +17,7 @@ vi.mock("../../../../../hooks/useStyleGuides", () => ({
   useStyleGuides: (apiKey?: string | null): StyleGuidesResult => mockUseStyleGuides(apiKey),
 }));
 
-const styleGuides: TargetResponse[] = [
+const styleGuides: StyleGuideSummaryResponse[] = [
   { id: "ap", display_name: "AP", is_default: true, enabled: true },
   { id: "chicago", display_name: "Chicago", is_default: false, enabled: true },
 ];

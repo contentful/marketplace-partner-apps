@@ -39,9 +39,9 @@ import type {
   GetAdminConstantsData,
   GetAdminConstantsErrors,
   GetAdminConstantsResponses,
-  InternalListTargetsData,
-  InternalListTargetsErrors,
-  InternalListTargetsResponses,
+  StyleAgentListStyleGuidesData,
+  StyleAgentListStyleGuidesErrors,
+  StyleAgentListStyleGuidesResponses,
   TerminologyCreateDomainData,
   TerminologyCreateDomainErrors,
   TerminologyCreateDomainResponses,
@@ -78,6 +78,8 @@ export type Options<
 
 /**
  * Get Admin Constants
+ *
+ * @deprecated
  */
 export const getAdminConstants = <ThrowOnError extends boolean = false>(
   options?: Options<GetAdminConstantsData, ThrowOnError>,
@@ -94,6 +96,8 @@ export const getAdminConstants = <ThrowOnError extends boolean = false>(
 
 /**
  * List Domains
+ *
+ * @deprecated
  */
 export const terminologyListDomains = <ThrowOnError extends boolean = false>(
   options?: Options<TerminologyListDomainsData, ThrowOnError>,
@@ -110,6 +114,8 @@ export const terminologyListDomains = <ThrowOnError extends boolean = false>(
 
 /**
  * Create Domain
+ *
+ * @deprecated
  */
 export const terminologyCreateDomain = <ThrowOnError extends boolean = false>(
   options: Options<TerminologyCreateDomainData, ThrowOnError>,
@@ -130,6 +136,8 @@ export const terminologyCreateDomain = <ThrowOnError extends boolean = false>(
 
 /**
  * Delete Domain
+ *
+ * @deprecated
  */
 export const terminologyDeleteDomain = <ThrowOnError extends boolean = false>(
   options: Options<TerminologyDeleteDomainData, ThrowOnError>,
@@ -146,6 +154,8 @@ export const terminologyDeleteDomain = <ThrowOnError extends boolean = false>(
 
 /**
  * Get Domain
+ *
+ * @deprecated
  */
 export const terminologyGetDomain = <ThrowOnError extends boolean = false>(
   options: Options<TerminologyGetDomainData, ThrowOnError>,
@@ -162,6 +172,8 @@ export const terminologyGetDomain = <ThrowOnError extends boolean = false>(
 
 /**
  * Update Domain
+ *
+ * @deprecated
  */
 export const terminologyUpdateDomain = <ThrowOnError extends boolean = false>(
   options: Options<TerminologyUpdateDomainData, ThrowOnError>,
@@ -178,6 +190,24 @@ export const terminologyUpdateDomain = <ThrowOnError extends boolean = false>(
       "Content-Type": "application/json",
       ...options.headers,
     },
+  });
+
+/**
+ * List Style Guides
+ *
+ * List the style guides available to your organization.
+ */
+export const styleAgentListStyleGuides = <ThrowOnError extends boolean = false>(
+  options?: Options<StyleAgentListStyleGuidesData, ThrowOnError>,
+) =>
+  (options?.client ?? client).get<
+    StyleAgentListStyleGuidesResponses,
+    StyleAgentListStyleGuidesErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/style-agent/style-guides",
+    ...options,
   });
 
 /**
@@ -213,22 +243,6 @@ export const authenticationGetUserOrganizations = <ThrowOnError extends boolean 
   >({
     security: [{ scheme: "bearer", type: "http" }],
     url: "/auth/organizations",
-    ...options,
-  });
-
-/**
- * List Targets
- */
-export const internalListTargets = <ThrowOnError extends boolean = false>(
-  options?: Options<InternalListTargetsData, ThrowOnError>,
-) =>
-  (options?.client ?? client).get<
-    InternalListTargetsResponses,
-    InternalListTargetsErrors,
-    ThrowOnError
-  >({
-    security: [{ scheme: "bearer", type: "http" }],
-    url: "/internal/targets",
     ...options,
   });
 

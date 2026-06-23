@@ -1,12 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { TargetResponse } from "../api-client/types.gen";
+import type { StyleGuideSummaryResponse } from "../api-client/types.gen";
 import {
   clearStyleGuidesCache,
   readStyleGuidesCache,
   writeStyleGuidesCache,
 } from "./styleGuidesCache";
 
-const sample: TargetResponse[] = [
+const sample: StyleGuideSummaryResponse[] = [
   { id: "sg-1", display_name: "AP", is_default: true, enabled: true },
   { id: "sg-2", display_name: "Chicago", is_default: false, enabled: true },
 ];

@@ -10,7 +10,7 @@ import {
 } from "../../../../../agents/agents";
 import { SELECTABLE_AGENT_BACKEND_IDS } from "../../../../../agents/agenticConfig";
 import type { AgentAvailabilityMap } from "../../../../../agents/agentAvailability";
-import type { TargetResponse } from "../../../../../api-client/types.gen";
+import type { StyleGuideSummaryResponse } from "../../../../../api-client/types.gen";
 import { SidebarPanelShell } from "../../../../../components/SidebarPanelShell/SidebarPanelShell";
 import { DisabledTooltipTarget } from "../../../../../components/DisabledTooltipTarget/DisabledTooltipTarget";
 import { AgentConfigField } from "../AgentConfigField";
@@ -28,7 +28,7 @@ export interface AgentSettingsPanelProps {
    * through props avoids a second `/internal/targets` call from the panel's
    * style-guide selector.
    */
-  styleGuides?: TargetResponse[];
+  styleGuides?: StyleGuideSummaryResponse[];
   styleGuidesLoading?: boolean;
   styleGuidesError?: boolean;
   /**
@@ -100,7 +100,7 @@ interface AgentRowItemProps {
   onToggle: () => void;
   onConfigKeyChange: (key: string, value: unknown) => void;
   apiKey?: string | null;
-  styleGuides?: TargetResponse[];
+  styleGuides?: StyleGuideSummaryResponse[];
   styleGuidesLoading?: boolean;
   styleGuidesError?: boolean;
 }

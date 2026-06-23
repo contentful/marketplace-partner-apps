@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { TargetResponse } from "../../api-client/types.gen";
+import type { StyleGuideSummaryResponse } from "../../api-client/types.gen";
 import { defaultStyleGuideId } from "./defaultStyleGuide";
 
-function styleGuide(overrides: Partial<TargetResponse> = {}): TargetResponse {
+function styleGuide(overrides: Partial<StyleGuideSummaryResponse> = {}): StyleGuideSummaryResponse {
   return {
     id: overrides.id ?? "t-1",
     display_name: overrides.display_name ?? "Guide 1",

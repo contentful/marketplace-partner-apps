@@ -2,7 +2,7 @@ import React from "react";
 import { FormControl, Select } from "@contentful/f36-components";
 import styled from "@emotion/styled";
 import tokens from "@contentful/f36-tokens";
-import type { TargetResponse } from "../../../api-client/types.gen";
+import type { StyleGuideSummaryResponse } from "../../../api-client/types.gen";
 
 const Wrapper = styled.div`
   margin-top: ${tokens.spacingS};
@@ -16,7 +16,7 @@ export interface ContentTypeStyleGuideSelectProps {
   /** Currently configured style guide id for this content type, or null. */
   value: string | null;
   /** Style guide options pre-fetched once at the screen level. */
-  styleGuides: TargetResponse[];
+  styleGuides: StyleGuideSummaryResponse[];
   isLoading: boolean;
   isError: boolean;
   /** False when the user is not signed in — keeps the dropdown disabled. */

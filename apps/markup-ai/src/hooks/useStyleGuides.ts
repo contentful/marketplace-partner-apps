@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { internalListTargets } from "../api-client/sdk.gen";
-import type { TargetResponse } from "../api-client/types.gen";
+import { styleAgentListStyleGuides } from "../api-client/sdk.gen";
+import type { StyleGuideSummaryResponse } from "../api-client/types.gen";
 import { useApiClient } from "./useApiClient";
 import { defaultStyleGuideId } from "../agents/utils/defaultStyleGuide";
 import {
@@ -11,13 +11,13 @@ import {
 } from "../utils/styleGuidesCache";
 
 export interface UseStyleGuidesResult {
-  styleGuides: TargetResponse[];
+  styleGuides: StyleGuideSummaryResponse[];
   isLoading: boolean;
   isError: boolean;
   defaultStyleGuideId: string | null;
 }
 
-const STYLE_GUIDES_QUERY_PREFIX = "internalListTargets";
+const STYLE_GUIDES_QUERY_PREFIX = "styleAgentListStyleGuides";
 
 /**
  * Fetches the list of style guides for the authenticated user.
@@ -40,7 +40,7 @@ export function useStyleGuides(apiKey?: string | null): UseStyleGuidesResult {
   // `undefined` is the "not yet read" sentinel; `null` means "read and the
   // cache was empty". Without the distinct sentinel, `??=` would re-read
   // localStorage on every render after a cache miss.
-  const cachedRef = useRef<TargetResponse[] | null | undefined>(undefined);
+  const cachedRef = useRef<StyleGuideSummaryResponse[] | null | undefined>(undefined);
   // Re-read the cache when `apiKey` changes — otherwise an in-iframe account
   // switch (sign-out + sign-in as a different user via the cross-location
   // auth sync) would keep showing the previous account's style guides, and the
@@ -54,10 +54,10 @@ export function useStyleGuides(apiKey?: string | null): UseStyleGuidesResult {
 
   const apiKeyFp = apiKey ? fingerprintApiKey(apiKey) : "anonymous";
 
-  const query = useQuery<TargetResponse[]>({
+  const query = useQuery<StyleGuideSummaryResponse[]>({
     queryKey: [STYLE_GUIDES_QUERY_PREFIX, apiKeyFp],
     queryFn: async ({ signal }) => {
-      const { data } = await internalListTargets({ client, signal, throwOnError: true });
+      const { data } = await styleAgentListStyleGuides({ client, signal, throwOnError: true });
       return data;
     },
     enabled: Boolean(apiKey) && !cached,
@@ -75,7 +75,7 @@ export function useStyleGuides(apiKey?: string | null): UseStyleGuidesResult {
     writeStyleGuidesCache(apiKey, query.data);
   }, [apiKey, query.data, cached]);
 
-  const styleGuides: TargetResponse[] = query.data ?? [];
+  const styleGuides: StyleGuideSummaryResponse[] = query.data ?? [];
 
   // Prefer a style guide named "Main" → API `is_default` → first enabled.
   // Sending a style_guide_id is required: the backend does not consistently

@@ -3,7 +3,7 @@ import { renderHook, waitFor } from "@testing-library/react";
 import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useStyleGuides } from "./useStyleGuides";
-import type { TargetResponse } from "../api-client/types.gen";
+import type { StyleGuideSummaryResponse } from "../api-client/types.gen";
 
 vi.mock("./useApiClient", () => ({
   useApiClient: vi.fn(() => ({
@@ -13,11 +13,11 @@ vi.mock("./useApiClient", () => ({
 }));
 
 // We build the query inline (no longer via the generated
-// `internalListTargetsOptions`) so the queryKey can include an auth
+// `styleAgentListStyleGuidesOptions`) so the queryKey can include an auth
 // fingerprint. Tests stub the SDK-level fetch instead.
-const mockInternalListTargets = vi.fn();
+const mockStyleAgentListStyleGuides = vi.fn();
 vi.mock("../api-client/sdk.gen", () => ({
-  internalListTargets: (options: unknown): unknown => mockInternalListTargets(options),
+  styleAgentListStyleGuides: (options: unknown): unknown => mockStyleAgentListStyleGuides(options),
 }));
 
 function createWrapper() {
@@ -28,7 +28,7 @@ function createWrapper() {
     React.createElement(QueryClientProvider, { client: queryClient }, children);
 }
 
-function styleGuide(overrides: Partial<TargetResponse> = {}): TargetResponse {
+function styleGuide(overrides: Partial<StyleGuideSummaryResponse> = {}): StyleGuideSummaryResponse {
   return {
     id: overrides.id ?? "t-1",
     display_name: overrides.display_name ?? "Guide 1",
@@ -37,8 +37,8 @@ function styleGuide(overrides: Partial<TargetResponse> = {}): TargetResponse {
   };
 }
 
-function mockStyleGuides(styleGuides: TargetResponse[]): void {
-  mockInternalListTargets.mockResolvedValue({ data: styleGuides });
+function mockStyleGuides(styleGuides: StyleGuideSummaryResponse[]): void {
+  mockStyleAgentListStyleGuides.mockResolvedValue({ data: styleGuides });
 }
 
 describe("useStyleGuides", () => {
@@ -52,7 +52,7 @@ describe("useStyleGuides", () => {
     const { result } = renderHook(() => useStyleGuides(), { wrapper: createWrapper() });
     expect(result.current.styleGuides).toEqual([]);
     expect(result.current.defaultStyleGuideId).toBeNull();
-    expect(mockInternalListTargets).not.toHaveBeenCalled();
+    expect(mockStyleAgentListStyleGuides).not.toHaveBeenCalled();
   });
 
   it("exposes loaded style guides and picks the is_default style guide as defaultStyleGuideId", async () => {
@@ -111,7 +111,7 @@ describe("useStyleGuides", () => {
   });
 
   it("surfaces query errors via isError", async () => {
-    mockInternalListTargets.mockRejectedValue(new Error("401"));
+    mockStyleAgentListStyleGuides.mockRejectedValue(new Error("401"));
     const { result } = renderHook(() => useStyleGuides("token"), { wrapper: createWrapper() });
     await waitFor(() => {
       expect(result.current.isError).toBe(true);
@@ -142,14 +142,14 @@ describe("useStyleGuides", () => {
 
     // Simulate user B signing in within the same iframe. The cache for B
     // doesn't exist yet, so a fresh fetch must fire.
-    mockInternalListTargets.mockClear();
+    mockStyleAgentListStyleGuides.mockClear();
     mockStyleGuides(userBStyleGuides);
     rerender({ key: "tokenB" });
 
     await waitFor(() => {
       expect(result.current.styleGuides.map((g) => g.id)).toEqual(["b-1"]);
     });
-    expect(mockInternalListTargets).toHaveBeenCalled();
+    expect(mockStyleAgentListStyleGuides).toHaveBeenCalled();
   });
 
   it("caches an empty style guide list (so accounts with zero style guides don't keep refetching)", async () => {
@@ -160,13 +160,13 @@ describe("useStyleGuides", () => {
     await waitFor(() => {
       expect(first.result.current.isLoading).toBe(false);
     });
-    expect(mockInternalListTargets).toHaveBeenCalledTimes(1);
+    expect(mockStyleAgentListStyleGuides).toHaveBeenCalledTimes(1);
 
     // A fresh mount in a different react tree (simulating another iframe)
     // hydrates from localStorage and skips the network entirely.
-    mockInternalListTargets.mockClear();
+    mockStyleAgentListStyleGuides.mockClear();
     const second = renderHook(() => useStyleGuides("token"), { wrapper: createWrapper() });
     expect(second.result.current.styleGuides).toEqual([]);
-    expect(mockInternalListTargets).not.toHaveBeenCalled();
+    expect(mockStyleAgentListStyleGuides).not.toHaveBeenCalled();
   });
 });

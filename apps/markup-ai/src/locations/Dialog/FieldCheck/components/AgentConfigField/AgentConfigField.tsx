@@ -1,7 +1,7 @@
 import React from "react";
 import { FormControl, Select, TextInput } from "@contentful/f36-components";
 import { AGENT_CONFIG_KEY_META } from "../../../../../agents/agents";
-import type { TargetResponse } from "../../../../../api-client/types.gen";
+import type { StyleGuideSummaryResponse } from "../../../../../api-client/types.gen";
 import { useStyleGuides } from "../../../../../hooks/useStyleGuides";
 
 function toCsvString(value: unknown): string {
@@ -19,7 +19,7 @@ export interface AgentConfigFieldProps {
   /** API key — only used when prefetched style guides are not provided. */
   apiKey?: string | null;
   /** Pre-fetched style guides. Passing these avoids a duplicate `/internal/targets` call. */
-  styleGuides?: TargetResponse[];
+  styleGuides?: StyleGuideSummaryResponse[];
   styleGuidesLoading?: boolean;
   styleGuidesError?: boolean;
 }
@@ -105,7 +105,7 @@ interface StyleGuideSelectFieldProps {
   isDisabled?: boolean;
   apiKey?: string | null;
   /** When provided, skip the local fetch and use these instead. */
-  prefetchedStyleGuides?: TargetResponse[];
+  prefetchedStyleGuides?: StyleGuideSummaryResponse[];
   prefetchedLoading?: boolean;
   prefetchedError?: boolean;
 }
