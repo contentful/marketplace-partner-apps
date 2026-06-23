@@ -9257,44 +9257,6 @@ export type SuggestionResponseWritable = {
   workflow: WorkflowInfo;
 };
 
-export type GetAdminConstantsData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: "/v1/internal/constants";
-};
-
-export type GetAdminConstantsErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * Unprocessable Entity
-   */
-  422: ValidationErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type GetAdminConstantsError = GetAdminConstantsErrors[keyof GetAdminConstantsErrors];
-
-export type GetAdminConstantsResponses = {
-  /**
-   * Successful Response
-   */
-  200: ConstantsResponse;
-};
-
-export type GetAdminConstantsResponse =
-  GetAdminConstantsResponses[keyof GetAdminConstantsResponses];
-
 export type TerminologyListDomainsData = {
   body?: never;
   path?: never;

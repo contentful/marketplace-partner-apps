@@ -11,7 +11,6 @@ const OPENAPI_URL = "https://api.dev.markup.ai/docs/openapi.json";
 const OUTPUT_FILE = "filtered-openapi.json";
 const INCLUDED_PATHS = [
   "/agents/",
-  "/v1/internal/",
   "/v1/terminology/domains",
   "/account/config",
   "/auth/organizations",

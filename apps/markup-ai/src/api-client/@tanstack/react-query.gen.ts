@@ -15,7 +15,6 @@ import {
   cortexWorkflowsGetWorkflowStatus,
   cortexWorkflowsListWorkflows,
   cortexWorkflowsStreamWorkflowEvents,
-  getAdminConstants,
   type Options,
   styleAgentListStyleGuides,
   terminologyCreateDomain,
@@ -57,9 +56,6 @@ import type {
   CortexWorkflowsListWorkflowsResponse,
   CortexWorkflowsStreamWorkflowEventsData,
   CortexWorkflowsStreamWorkflowEventsError,
-  GetAdminConstantsData,
-  GetAdminConstantsError,
-  GetAdminConstantsResponse,
   StyleAgentListStyleGuidesData,
   StyleAgentListStyleGuidesError,
   StyleAgentListStyleGuidesResponse,
@@ -118,33 +114,6 @@ const createQueryKey = <TOptions extends Options>(
   }
   return [params];
 };
-
-export const getAdminConstantsQueryKey = (options?: Options<GetAdminConstantsData>) =>
-  createQueryKey("getAdminConstants", options);
-
-/**
- * Get Admin Constants
- *
- * @deprecated
- */
-export const getAdminConstantsOptions = (options?: Options<GetAdminConstantsData>) =>
-  queryOptions<
-    GetAdminConstantsResponse,
-    GetAdminConstantsError,
-    GetAdminConstantsResponse,
-    ReturnType<typeof getAdminConstantsQueryKey>
-  >({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await getAdminConstants({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: getAdminConstantsQueryKey(options),
-  });
 
 export const terminologyListDomainsQueryKey = (options?: Options<TerminologyListDomainsData>) =>
   createQueryKey("terminologyListDomains", options);

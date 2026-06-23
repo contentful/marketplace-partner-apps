@@ -36,9 +36,6 @@ import type {
   CortexWorkflowsStreamWorkflowEventsData,
   CortexWorkflowsStreamWorkflowEventsErrors,
   CortexWorkflowsStreamWorkflowEventsResponses,
-  GetAdminConstantsData,
-  GetAdminConstantsErrors,
-  GetAdminConstantsResponses,
   StyleAgentListStyleGuidesData,
   StyleAgentListStyleGuidesErrors,
   StyleAgentListStyleGuidesResponses,
@@ -75,24 +72,6 @@ export type Options<
    */
   meta?: Record<string, unknown>;
 };
-
-/**
- * Get Admin Constants
- *
- * @deprecated
- */
-export const getAdminConstants = <ThrowOnError extends boolean = false>(
-  options?: Options<GetAdminConstantsData, ThrowOnError>,
-) =>
-  (options?.client ?? client).get<
-    GetAdminConstantsResponses,
-    GetAdminConstantsErrors,
-    ThrowOnError
-  >({
-    security: [{ scheme: "bearer", type: "http" }],
-    url: "/v1/internal/constants",
-    ...options,
-  });
 
 /**
  * List Domains

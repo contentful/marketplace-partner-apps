@@ -25,7 +25,7 @@ export interface AgentSettingsPanelProps {
   apiKey?: string | null;
   /**
    * Style guides pre-fetched once at the dialog level. Threading them
-   * through props avoids a second `/internal/targets` call from the panel's
+   * through props avoids a second `/style-agent/style-guides` call from the panel's
    * style-guide selector.
    */
   styleGuides?: StyleGuideSummaryResponse[];

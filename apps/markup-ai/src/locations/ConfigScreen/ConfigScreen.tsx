@@ -75,7 +75,7 @@ export const ConfigScreen = () => {
   const [activeView, setActiveView] = useState<"config" | "about">("config");
 
   // Fetch style guide options ONCE for the whole screen so we never make
-  // multiple `/internal/targets` calls when there are many content types.
+  // multiple `/style-agent/style-guides` calls when there are many content types.
   const {
     styleGuides,
     isLoading: styleGuidesLoading,
