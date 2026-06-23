@@ -112,4 +112,4 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           echo "Auto merging dependency-only release PR"
-          gh pr merge --auto "$PR_NUMBER"
+          gh pr merge --squash --auto "$PR_NUMBER" --repo "$GITHUB_REPOSITORY"

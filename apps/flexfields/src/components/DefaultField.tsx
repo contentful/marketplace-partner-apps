@@ -1,37 +1,193 @@
 import { FieldAppSDK, FieldAPI } from "@contentful/app-sdk";
 import { FieldWrapper, Field } from "@contentful/default-field-editors";
+import { MultipleLineEditor } from "@contentful/field-editor-multiple-line";
 import {
   HelpText,
   FormLabel,
   Box,
   Note,
   Text,
+  Stack,
+  Spinner,
 } from "@contentful/f36-components";
 import { CombinedLinkActions } from "@contentful/field-editor-reference";
 import { type CustomActionProps } from "@contentful/field-editor-reference";
-import { Control } from "contentful-management";
+import type { Control } from "contentful-management";
 import { css } from "@emotion/css";
 import React from "react";
 import { getLocaleName } from "../utils";
-import { openMarkdownDialog } from "@contentful/field-editor-markdown";
-import { JsonEditor } from "@contentful/field-editor-json";
+
+const JsonEditor = React.lazy(() =>
+  import("@contentful/field-editor-json").then((m) => ({ default: m.JsonEditor }))
+);
 
 // Prop types for DefaultField component
 export interface DefaultFieldProps {
   name: string;
   sdk: FieldAppSDK;
+  widgetId: string | null;
   locale?: string;
   control?: Control & { field: FieldAPI };
 }
 
+interface ResourceLinkUrnInfo {
+  spaceId: string;
+  environmentId: string;
+  entityType: "entries" | "assets";
+  entityId: string;
+}
+
+interface ResourceLinkValue {
+  sys: {
+    urn: string;
+  };
+}
+
+type ResourceLinkFieldValue = ResourceLinkValue | ResourceLinkValue[] | undefined;
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null;
+
+const isResourceLinkValue = (value: unknown): value is ResourceLinkValue => {
+  if (!isRecord(value) || !isRecord(value.sys)) {
+    return false;
+  }
+
+  return typeof value.sys.urn === "string";
+};
+
+const normalizeResourceLinkValue = (value: unknown): ResourceLinkFieldValue => {
+  if (Array.isArray(value)) {
+    return value.filter(isResourceLinkValue);
+  }
+
+  return isResourceLinkValue(value) ? value : undefined;
+};
+
+// Reusable component for external reference note
+const ExternalReferenceNote = () => (
+  <Box marginTop="spacingXs">
+    <Note>
+      This field was configured to use external references. Please use the
+      default Entry Editor to access the external references.
+    </Note>
+  </Box>
+);
+
+// Reusable component for custom widget note
+const CustomWidgetNote = () => (
+  <Box marginTop="spacingXs">
+    <Note>
+    This field was configured to use custom field widget. Please use the
+    default Entry Editor to access the custom field widget.
+    </Note>
+  </Box>
+);
+
+// Reusable component for displaying a single ResourceLink
+const ResourceLinkBox = ({ urnInfo }: { urnInfo: ResourceLinkUrnInfo }) => {
+  const handleClick = () => {
+    const entityPath = urnInfo.entityType === 'entries' ? 'entries' : 'assets';
+    const url = `https://app.contentful.com/spaces/${urnInfo.spaceId}/environments/${urnInfo.environmentId}/${entityPath}/${urnInfo.entityId}`;
+    window.open(url, '_blank');
+  };
+
+  return (
+    <Box
+      padding="spacingS"
+      style={{
+        backgroundColor: "#f7f9fa",
+        borderRadius: "6px",
+        border: "1px solid #e5ebed",
+        cursor: "pointer",
+      }}
+      onClick={handleClick}
+    >
+      <Text fontSize="fontSizeS">
+        {urnInfo.entityType === 'entries' ? 'Entry' : 'Asset'}: {urnInfo.entityId?.substring(0, 8)}... | 
+        Space: {urnInfo.spaceId?.substring(0, 8)}... | 
+        Env: {urnInfo.environmentId || 'N/A'}
+      </Text>
+    </Box>
+  );
+};
+
+// Helper component to display ResourceLink field values
+const ResourceLinkDisplay = ({ sdk }: { sdk: FieldAppSDK }) => {
+  const [value, setValue] = React.useState<ResourceLinkFieldValue>(() =>
+    normalizeResourceLinkValue(sdk.field.getValue())
+  );
+
+  React.useEffect(() => {
+    const detach = sdk.field.onValueChanged((newValue: unknown) => {
+      setValue(normalizeResourceLinkValue(newValue));
+    });
+    return () => detach();
+  }, [sdk.field]);
+
+  // Parse URN to extract information
+  const parseUrn = (urn: string): ResourceLinkUrnInfo | null => {
+    const match = urn.match(
+      /crn:contentful:::content:spaces\/([^/]+)\/environments\/([^/]+)\/(entries|assets)\/([^/]+)/
+    );
+    if (!match) return null;
+    const entityType = match[3];
+    if (entityType !== "entries" && entityType !== "assets") return null;
+
+    return {
+      spaceId: match[1],
+      environmentId: match[2],
+      entityType,
+      entityId: match[4],
+    };
+  };
+
+  if (!value) {
+    return null;
+  }
+
+  // Handle array of resources (multiple)
+  if (Array.isArray(value)) {
+    return (
+      <Stack flexDirection="column" spacing="spacingS">
+        {value.map((item, index: number) => {
+          const urnInfo = item?.sys?.urn ? parseUrn(item.sys.urn) : null;
+          
+          if (!urnInfo) return null;
+          
+          return <ResourceLinkBox key={index} urnInfo={urnInfo} />;
+        })}
+      </Stack>
+    );
+  }
+
+  // Handle single resource
+  const urnInfo = value?.sys?.urn ? parseUrn(value.sys.urn) : null;
+  
+  if (!urnInfo) {
+    return null;
+  }
+
+  return <ResourceLinkBox urnInfo={urnInfo} />;
+};
+
 // Render default contentful fields using Forma 36 Component
 const DefaultField = (props: DefaultFieldProps) => {
-  const { control, name, sdk, locale } = props;
-  // This is required to show the dialogs related to markdown (expanded mode and cheatsheet)
-  // ref: https://github.com/contentful/field-editors/blob/master/packages/markdown/stories/MarkdownEditor.stories.tsx#L93
-  if (control?.widgetId === 'markdown') {
-    sdk.dialogs.openCurrent = openMarkdownDialog(sdk);
-  }
+  const { control, name, sdk, locale, widgetId } = props;
+  
+  // Check if this is a ResourceLink field
+  const isResourceLinkEditor =
+    control?.widgetId === "resourceLinkEditor" ||
+    control?.widgetId === "entryResourceLinkEditor" ||
+    control?.widgetId === "assetResourceLinkEditor";
+  const isMarkdownField = control?.widgetId === "markdown";
+  const canRenderBuiltinField =
+    !isResourceLinkEditor &&
+    !isMarkdownField &&
+    control?.widgetId !== "objectEditor" &&
+    control?.widgetNamespace === "builtin" &&
+    widgetId !== null;
+
   return (
     <FieldWrapper
       name={name}
@@ -46,7 +202,7 @@ const DefaultField = (props: DefaultFieldProps) => {
       )}
       renderHeading={(name: string) => {
         return (
-          <FormLabel style={{ fontWeight: "normal" }}>
+          <FormLabel style={{ fontWeight: "normal", display: "block", marginBottom: "8px" }}>
             {name}
             {locale && (
               <Text fontColor="gray500"> | {getLocaleName(sdk, locale)}</Text>
@@ -57,37 +213,55 @@ const DefaultField = (props: DefaultFieldProps) => {
       sdk={sdk}
       showFocusBar={true}
     >
-      {control?.widgetId !== "objectEditor" && (
+      {/* Handle ResourceLink fields - display only */}
+      {isResourceLinkEditor && (
+        <>
+          <ResourceLinkDisplay sdk={sdk} />
+          <ExternalReferenceNote />
+        </>
+      )}
+
+      {/* Handle standard fields (not ResourceLink, not objectEditor, builtin) */}
+      {canRenderBuiltinField && (
         <Field
           sdk={sdk}
-          widgetId={control?.widgetId}
+          widgetId={widgetId}
           getOptions={(widgetId, _sdk) => ({
             [widgetId]: {
               parameters: {
                 instance: control?.settings,
               },
               ...(control?.field.type === "Array" ||
-              control?.field.type === "Link"
+                control?.field.type === "Link"
                 ? {
-                    renderCustomActions: (props: CustomActionProps) => (
-                      <CombinedLinkActions {...props} />
-                    ),
-                  }
+                  renderCustomActions: (props: CustomActionProps) => (
+                    <CombinedLinkActions {...props} />
+                  ),
+                }
                 : {}),
             },
           })}
         />
       )}
+
+      {/* Handle JSON Object Editor — lazy-loaded to keep main chunk under 10 MB limit */}
       {control?.widgetId === "objectEditor" && (
-        <JsonEditor field={sdk.field} isInitiallyDisabled={false} />
+        <React.Suspense fallback={<Spinner size="small" />}>
+          <JsonEditor field={sdk.field} isInitiallyDisabled={false} />
+        </React.Suspense>
       )}
-      {control?.widgetNamespace !== "builtin" && (
-        <Box marginTop="spacingXs">
-          <Note>
-            This field was configured to use custon field widget. Please use the
-            default Entry Editor to access the custom field widget.
-          </Note>
-        </Box>
+
+      {/* Markdown fields: render as plain multi-line text to keep codemirror out of the bundle */}
+      {isMarkdownField && (
+        <MultipleLineEditor field={sdk.field} locales={sdk.locales} isInitiallyDisabled={false} />
+      )}
+
+      {/* Show note for custom field widgets ONLY (not ResourceLink, not objectEditor, not builtin) */}
+      {!isResourceLinkEditor &&
+       !isMarkdownField &&
+       control?.widgetId !== "objectEditor" &&
+       control?.widgetNamespace !== "builtin" && (
+        <CustomWidgetNote />
       )}
     </FieldWrapper>
   );

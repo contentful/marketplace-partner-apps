@@ -26,12 +26,12 @@
     "@contentful/f36-components": "^4.81.1",
     "@contentful/f36-tokens": "^4.2.0",
     "@contentful/react-apps-toolkit": "^1.2.19",
-    "next": ">=16.1.7",
+    "next": ">=16.2.6",
     "react": ">=18.3.1",
     "serve": "^14.2.5"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "^2.5.6",
+    "@contentful/app-scripts": "^2.5.12",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.1",
     "@types/node": "22.14.0",

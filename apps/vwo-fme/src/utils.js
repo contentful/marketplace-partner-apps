@@ -39,31 +39,6 @@ export const validateCredentials = async (accountId, apiToken) => {
   }
 };
 
-export const buildEntrySelectForContentTypes = (contentTypes) => {
-  const fieldIds = new Set();
-
-  contentTypes.forEach((contentType) => {
-    if (contentType.displayField) {
-      fieldIds.add(contentType.displayField);
-    }
-
-    const descriptionField = contentType.fields?.filter((field) => field.id !== contentType.displayField).find((field) => field.type === 'Text');
-
-    if (descriptionField) {
-      fieldIds.add(descriptionField.id);
-    }
-  });
-
-  return [
-    'sys.id',
-    'sys.contentType',
-    'sys.archivedVersion',
-    'sys.publishedVersion',
-    'sys.version',
-    ...[...fieldIds].map((fieldId) => `fields.${fieldId}`),
-  ].join(',');
-};
-
 export const getRequiredEntryInformation = (entry, contentTypes, defaultLocale) => {
   const contentTypeId = get(entry, ['sys', 'contentType', 'sys', 'id']);
   const contentType = contentTypes.find((contentType) => contentType.sys.id === contentTypeId);
@@ -96,7 +71,6 @@ export const mapVwoVariationsAndContent = async (vwoVariations, contentTypes, de
   if (entryIds.length > 0) {
     const entries = await getEntries({
       'sys.id[in]': entryIds.join(','),
-      select: buildEntrySelectForContentTypes(contentTypes),
     });
     entryItems = entries.items;
   }

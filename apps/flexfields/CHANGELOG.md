@@ -1,5 +1,53 @@
 # Changelog
 
+## [1.6.3](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.6.2...thrillworks-flex-fields-app-v1.6.3) (2026-06-18)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.13.5 to 1.15.0 in /apps/flexfields ([#8141](https://github.com/contentful/marketplace-partner-apps/issues/8141)) ([ee23b5c](https://github.com/contentful/marketplace-partner-apps/commit/ee23b5ce88e00be9a158f6cd5cf9ca901475cc3d))
+* **deps:** bump qs from 6.14.2 to 6.15.2 in /apps/flexfields ([#8229](https://github.com/contentful/marketplace-partner-apps/issues/8229)) ([efc821e](https://github.com/contentful/marketplace-partner-apps/commit/efc821e602f7fb016a14e0a87121e72cb0215f76))
+
+## [1.6.2](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.6.1...thrillworks-flex-fields-app-v1.6.2) (2026-06-18)
+
+
+### Reverts
+
+* fix(cloudinary): keep widget open for multi-insert on multi-asset fields [] ([#8394](https://github.com/contentful/marketplace-partner-apps/issues/8394)) ([ad1e2ac](https://github.com/contentful/marketplace-partner-apps/commit/ad1e2ace943d72ad31294c045c9090c41923a813))
+
+## [1.6.1](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.6.0...thrillworks-flex-fields-app-v1.6.1) (2026-06-17)
+
+
+### Bug Fixes
+
+* keep flexfields bundle under 10 MB AppBundle limit [] ([#8391](https://github.com/contentful/marketplace-partner-apps/issues/8391)) ([66e1b44](https://github.com/contentful/marketplace-partner-apps/commit/66e1b448ba8349cb446f6ed8925e2a47fbb82a64))
+
+## [1.6.0](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.5.0...thrillworks-flex-fields-app-v1.6.0) (2026-06-17)
+
+
+### Features
+
+* **flexfields:** split bundle to stay well under 10 MB AppBundle API limit [] ([#8348](https://github.com/contentful/marketplace-partner-apps/issues/8348)) ([51cdcbb](https://github.com/contentful/marketplace-partner-apps/commit/51cdcbb72a7aa82c4b6605090722c0cd73aa08e1))
+
+
+### Bug Fixes
+
+* **cloudinary:** keep widget open for multi-insert on multi-asset fields [] ([#8377](https://github.com/contentful/marketplace-partner-apps/issues/8377)) ([982c52f](https://github.com/contentful/marketplace-partner-apps/commit/982c52fc6ae294b68410277f08487ffe0c84ce6b))
+
+## [1.5.0](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.4.0...thrillworks-flex-fields-app-v1.5.0) (2026-06-10)
+
+
+### Features
+
+* **flexfields:** add condition types, fix external references, Live Preview, and deploy failure [] ([#8313](https://github.com/contentful/marketplace-partner-apps/issues/8313)) ([25cbf17](https://github.com/contentful/marketplace-partner-apps/commit/25cbf17d560a2b6d1c1f001e29dd6c2816bc6c3e))
+
+## [1.4.0](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.3.3...thrillworks-flex-fields-app-v1.4.0) (2026-06-04)
+
+
+### Features
+
+* [flex field] Add Contentful App to Main Navigation ([#7921](https://github.com/contentful/marketplace-partner-apps/issues/7921)) ([17de2c4](https://github.com/contentful/marketplace-partner-apps/commit/17de2c432727903090cb5acef21e5555a417ae01))
+
 ## [1.3.3](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.3.2...thrillworks-flex-fields-app-v1.3.3) (2026-03-31)
 
 

@@ -1,5 +1,46 @@
 # Changelog
 
+## [1.0.13](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.12...vwo-fme-v1.0.13) (2026-06-18)
+
+
+### Bug Fixes
+
+* **deps:** bump @babel/plugin-transform-modules-systemjs from 7.27.1 to 7.29.4 in /apps/vwo-fme ([#8190](https://github.com/contentful/marketplace-partner-apps/issues/8190)) ([b4fa3b3](https://github.com/contentful/marketplace-partner-apps/commit/b4fa3b37ec0e321a220550a6cfdd1c609b302a98))
+* **deps:** bump @contentful/app-sdk from 4.51.4 to 4.58.0 in /apps/vwo-fme in the production-dependencies group across 1 directory ([#8429](https://github.com/contentful/marketplace-partner-apps/issues/8429)) ([d2bc022](https://github.com/contentful/marketplace-partner-apps/commit/d2bc022e924675771cc0fb5d85f64a57b805cf85))
+* **deps:** bump @contentful/f36-tokens from 4.2.0 to 6.1.2 in /apps/vwo-fme ([#8066](https://github.com/contentful/marketplace-partner-apps/issues/8066)) ([574deed](https://github.com/contentful/marketplace-partner-apps/commit/574deed4465a011439a651ab30216a752243802e))
+* **deps:** bump brace-expansion from 1.1.12 to 1.1.13 in /apps/vwo-fme ([#8041](https://github.com/contentful/marketplace-partner-apps/issues/8041)) ([33f44d4](https://github.com/contentful/marketplace-partner-apps/commit/33f44d43f1a1cc756c9b8e1edfeb84d27b4d6e8a))
+* **deps:** bump fast-uri from 3.0.6 to 3.1.2 in /apps/vwo-fme ([#8184](https://github.com/contentful/marketplace-partner-apps/issues/8184)) ([0c3749b](https://github.com/contentful/marketplace-partner-apps/commit/0c3749bded8db1f859391eef7f404f7b3b330234))
+* **deps:** bump follow-redirects from 1.15.11 to 1.16.0 in /apps/vwo-fme ([#8152](https://github.com/contentful/marketplace-partner-apps/issues/8152)) ([98f2548](https://github.com/contentful/marketplace-partner-apps/commit/98f254884761182158f78055a42cffc202efa256))
+* **deps:** bump lodash from 4.17.23 to 4.18.1 in /apps/vwo-fme ([#8075](https://github.com/contentful/marketplace-partner-apps/issues/8075)) ([5a58f9b](https://github.com/contentful/marketplace-partner-apps/commit/5a58f9b3b4468998ece17979ae5fb714ee2ffca1))
+* **deps:** bump path-to-regexp from 0.1.12 to 0.1.13 in /apps/vwo-fme ([#8058](https://github.com/contentful/marketplace-partner-apps/issues/8058)) ([0eb56f2](https://github.com/contentful/marketplace-partner-apps/commit/0eb56f2d5a3ff1d4a8ad538e582874ada33203e7))
+* **deps:** bump qs and express in /apps/vwo-fme ([#8218](https://github.com/contentful/marketplace-partner-apps/issues/8218)) ([fb57428](https://github.com/contentful/marketplace-partner-apps/commit/fb574288a87c44e1add6b8f47156af14e13ce87c))
+* **deps:** bump shell-quote from 1.8.3 to 1.8.4 in /apps/vwo-fme ([#8311](https://github.com/contentful/marketplace-partner-apps/issues/8311)) ([2fcd307](https://github.com/contentful/marketplace-partner-apps/commit/2fcd307200c8781030736724cc871f12af9990d5))
+* **deps:** bump tar and @contentful/app-scripts in /apps/vwo-fme ([#8360](https://github.com/contentful/marketplace-partner-apps/issues/8360)) ([ce25f6b](https://github.com/contentful/marketplace-partner-apps/commit/ce25f6ba5c9ed50ca8dbcfee594f9e3e314db109))
+
+## [1.0.13](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.12...vwo-fme-v1.0.13) (2026-06-18)
+
+
+### Bug Fixes
+
+* **deps:** bump @babel/plugin-transform-modules-systemjs from 7.27.1 to 7.29.4 in /apps/vwo-fme ([#8190](https://github.com/contentful/marketplace-partner-apps/issues/8190)) ([b4fa3b3](https://github.com/contentful/marketplace-partner-apps/commit/b4fa3b37ec0e321a220550a6cfdd1c609b302a98))
+* **deps:** bump @contentful/app-sdk from 4.51.4 to 4.58.0 in /apps/vwo-fme in the production-dependencies group across 1 directory ([#8429](https://github.com/contentful/marketplace-partner-apps/issues/8429)) ([d2bc022](https://github.com/contentful/marketplace-partner-apps/commit/d2bc022e924675771cc0fb5d85f64a57b805cf85))
+* **deps:** bump @contentful/f36-tokens from 4.2.0 to 6.1.2 in /apps/vwo-fme ([#8066](https://github.com/contentful/marketplace-partner-apps/issues/8066)) ([574deed](https://github.com/contentful/marketplace-partner-apps/commit/574deed4465a011439a651ab30216a752243802e))
+* **deps:** bump brace-expansion from 1.1.12 to 1.1.13 in /apps/vwo-fme ([#8041](https://github.com/contentful/marketplace-partner-apps/issues/8041)) ([33f44d4](https://github.com/contentful/marketplace-partner-apps/commit/33f44d43f1a1cc756c9b8e1edfeb84d27b4d6e8a))
+* **deps:** bump fast-uri from 3.0.6 to 3.1.2 in /apps/vwo-fme ([#8184](https://github.com/contentful/marketplace-partner-apps/issues/8184)) ([0c3749b](https://github.com/contentful/marketplace-partner-apps/commit/0c3749bded8db1f859391eef7f404f7b3b330234))
+* **deps:** bump follow-redirects from 1.15.11 to 1.16.0 in /apps/vwo-fme ([#8152](https://github.com/contentful/marketplace-partner-apps/issues/8152)) ([98f2548](https://github.com/contentful/marketplace-partner-apps/commit/98f254884761182158f78055a42cffc202efa256))
+* **deps:** bump lodash from 4.17.23 to 4.18.1 in /apps/vwo-fme ([#8075](https://github.com/contentful/marketplace-partner-apps/issues/8075)) ([5a58f9b](https://github.com/contentful/marketplace-partner-apps/commit/5a58f9b3b4468998ece17979ae5fb714ee2ffca1))
+* **deps:** bump path-to-regexp from 0.1.12 to 0.1.13 in /apps/vwo-fme ([#8058](https://github.com/contentful/marketplace-partner-apps/issues/8058)) ([0eb56f2](https://github.com/contentful/marketplace-partner-apps/commit/0eb56f2d5a3ff1d4a8ad538e582874ada33203e7))
+* **deps:** bump qs and express in /apps/vwo-fme ([#8218](https://github.com/contentful/marketplace-partner-apps/issues/8218)) ([fb57428](https://github.com/contentful/marketplace-partner-apps/commit/fb574288a87c44e1add6b8f47156af14e13ce87c))
+* **deps:** bump shell-quote from 1.8.3 to 1.8.4 in /apps/vwo-fme ([#8311](https://github.com/contentful/marketplace-partner-apps/issues/8311)) ([2fcd307](https://github.com/contentful/marketplace-partner-apps/commit/2fcd307200c8781030736724cc871f12af9990d5))
+* **deps:** bump tar and @contentful/app-scripts in /apps/vwo-fme ([#8360](https://github.com/contentful/marketplace-partner-apps/issues/8360)) ([ce25f6b](https://github.com/contentful/marketplace-partner-apps/commit/ce25f6ba5c9ed50ca8dbcfee594f9e3e314db109))
+
+## [1.0.12](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.11...vwo-fme-v1.0.12) (2026-06-09)
+
+
+### Bug Fixes
+
+* **vwo-fme:** resolve entries BadRequest and app action NotFound in production [] ([#8306](https://github.com/contentful/marketplace-partner-apps/issues/8306)) ([afa4a15](https://github.com/contentful/marketplace-partner-apps/commit/afa4a156f341956f83094c34e2caaedd455264ad))
+
 ## [1.0.11](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.10...vwo-fme-v1.0.11) (2026-05-27)
 
 

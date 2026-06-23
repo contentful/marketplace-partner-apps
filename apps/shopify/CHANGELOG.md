@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.3.1](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.3.0...shopify-sku-v2.3.1) (2026-06-22)
+
+
+### Bug Fixes
+
+* **deps:** bump @babel/plugin-transform-modules-systemjs from 7.28.5 to 7.29.4 in /apps/shopify ([#8193](https://github.com/contentful/marketplace-partner-apps/issues/8193)) ([2577b34](https://github.com/contentful/marketplace-partner-apps/commit/2577b34ad7c2ed64d42c85d753705af626b218a1))
+* **deps:** bump brace-expansion in /apps/shopify ([#8046](https://github.com/contentful/marketplace-partner-apps/issues/8046)) ([a3fbadf](https://github.com/contentful/marketplace-partner-apps/commit/a3fbadfbc18c1616ac2ed72627e7bdf30db62a12))
+* **deps:** bump shell-quote and concurrently in /apps/shopify ([#8308](https://github.com/contentful/marketplace-partner-apps/issues/8308)) ([989138b](https://github.com/contentful/marketplace-partner-apps/commit/989138b243f8aed594ec65f100af2da13ba44850))
+* **deps:** bump tar and @contentful/app-scripts in /apps/shopify ([#8349](https://github.com/contentful/marketplace-partner-apps/issues/8349)) ([9e6ae0d](https://github.com/contentful/marketplace-partner-apps/commit/9e6ae0df1e84d249abe1e8c6ad03e3e40f6d863e))
+
 ## [2.3.0](https://github.com/contentful/marketplace-partner-apps/compare/shopify-sku-v2.2.2...shopify-sku-v2.3.0) (2026-04-23)
 
 
