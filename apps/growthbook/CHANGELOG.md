@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.2.8](https://github.com/contentful/marketplace-partner-apps/compare/growthbook-contentful-app-v1.2.7...growthbook-contentful-app-v1.2.8) (2026-06-26)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.13.1 to 1.13.5 in /apps/growthbook ([#7780](https://github.com/contentful/marketplace-partner-apps/issues/7780)) ([6ff7c54](https://github.com/contentful/marketplace-partner-apps/commit/6ff7c54e3495ba8d6c4dea6e5ad8654590cb1c49))
+* **deps:** bump next from 15.5.10 to 15.5.14 in /apps/growthbook ([#7980](https://github.com/contentful/marketplace-partner-apps/issues/7980)) ([6a927b4](https://github.com/contentful/marketplace-partner-apps/commit/6a927b42382ab782e1f8e8fdea026fde7a33165d))
+* **deps:** bump next from 15.5.14 to 15.5.18 in /apps/growthbook ([#8196](https://github.com/contentful/marketplace-partner-apps/issues/8196)) ([e45e855](https://github.com/contentful/marketplace-partner-apps/commit/e45e855447979c0038db2b67cbb6db9a4fbec231))
+* **deps:** bump next from 15.5.9 to 15.5.10 in /apps/growthbook ([#7726](https://github.com/contentful/marketplace-partner-apps/issues/7726)) ([497ad80](https://github.com/contentful/marketplace-partner-apps/commit/497ad80afdbd1647125ed68943355b5e1e920b67))
+* **deps:** bump picomatch in /apps/growthbook ([#7997](https://github.com/contentful/marketplace-partner-apps/issues/7997)) ([ef63154](https://github.com/contentful/marketplace-partner-apps/commit/ef631547141064dec95a77e32c49d95b616ddcba))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/growthbook ([#7820](https://github.com/contentful/marketplace-partner-apps/issues/7820)) ([8cdeb7c](https://github.com/contentful/marketplace-partner-apps/commit/8cdeb7cf8102d6082c98d8c0344a630d1c283aa0))
+* **deps:** bump qs from 6.14.2 to 6.15.2 in /apps/growthbook ([#8240](https://github.com/contentful/marketplace-partner-apps/issues/8240)) ([8b61dc7](https://github.com/contentful/marketplace-partner-apps/commit/8b61dc7bc9932a39ed9690e2b8f8ba05aa29259b))
+* **deps:** bump tar and @contentful/app-scripts in /apps/growthbook ([#8350](https://github.com/contentful/marketplace-partner-apps/issues/8350)) ([ec4accd](https://github.com/contentful/marketplace-partner-apps/commit/ec4accd7f7e2111360cccb055701beb64d9795fd))
+
 ## [1.2.7](https://github.com/contentful/marketplace-partner-apps/compare/growthbook-contentful-app-v1.2.6...growthbook-contentful-app-v1.2.7) (2025-12-03)
 
 
