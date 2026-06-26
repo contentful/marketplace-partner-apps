@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.14](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.13...vwo-fme-v1.0.14) (2026-06-26)
+
+
+### Bug Fixes
+
+* **vwo-fme:** use sdk.cma instead of manual createClient [AIS-59] ([#8449](https://github.com/contentful/marketplace-partner-apps/issues/8449)) ([693519c](https://github.com/contentful/marketplace-partner-apps/commit/693519c353710315e83fc4fc8b4525abc32e748f))
+
 ## [1.0.13](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.12...vwo-fme-v1.0.13) (2026-06-18)
 
 
