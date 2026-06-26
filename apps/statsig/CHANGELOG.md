@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.1.8](https://github.com/contentful/marketplace-partner-apps/compare/statsig-v1.1.7...statsig-v1.1.8) (2026-06-26)
+
+
+### Bug Fixes
+
+* **deps:** bump @babel/plugin-transform-modules-systemjs from 7.27.1 to 7.29.4 in /apps/statsig ([#8188](https://github.com/contentful/marketplace-partner-apps/issues/8188)) ([2aac534](https://github.com/contentful/marketplace-partner-apps/commit/2aac53412a295719bff4c4880bec178b553bac6f))
+* **deps:** bump ajv in /apps/statsig ([#7844](https://github.com/contentful/marketplace-partner-apps/issues/7844)) ([bc6e356](https://github.com/contentful/marketplace-partner-apps/commit/bc6e356c7449ac5b0037603ef23db985f751cec1))
+* **deps:** bump axios from 1.13.1 to 1.13.5 in /apps/statsig ([#7768](https://github.com/contentful/marketplace-partner-apps/issues/7768)) ([79c9358](https://github.com/contentful/marketplace-partner-apps/commit/79c93583902cc3a20e54ea09da92eb55548cede6))
+* **deps:** bump brace-expansion in /apps/statsig ([#8039](https://github.com/contentful/marketplace-partner-apps/issues/8039)) ([428859c](https://github.com/contentful/marketplace-partner-apps/commit/428859c2c972075efdd22c2abdb068923df221e5))
+* **deps:** bump fast-uri from 3.0.6 to 3.1.2 in /apps/statsig ([#8183](https://github.com/contentful/marketplace-partner-apps/issues/8183)) ([b8362e9](https://github.com/contentful/marketplace-partner-apps/commit/b8362e9bfb4e07c704452774c4e35c2080318476))
+* **deps:** bump flatted from 3.3.3 to 3.4.1 in /apps/statsig ([#7945](https://github.com/contentful/marketplace-partner-apps/issues/7945)) ([2a0c50e](https://github.com/contentful/marketplace-partner-apps/commit/2a0c50ee885e58afc5752a2df1eb0f7153772e8b))
+* **deps:** bump flatted from 3.4.1 to 3.4.2 in /apps/statsig ([#7978](https://github.com/contentful/marketplace-partner-apps/issues/7978)) ([4b5f412](https://github.com/contentful/marketplace-partner-apps/commit/4b5f412369ec5bd0bac2acc89cdcf95de77c49b5))
+* **deps:** bump jsonpath from 1.1.1 to 1.2.0 in /apps/statsig ([#7751](https://github.com/contentful/marketplace-partner-apps/issues/7751)) ([d182048](https://github.com/contentful/marketplace-partner-apps/commit/d18204830801c3a1f624875e9ff47c476b2b637e))
+* **deps:** bump jsonpath from 1.2.0 to 1.2.1 in /apps/statsig ([#7798](https://github.com/contentful/marketplace-partner-apps/issues/7798)) ([429b84f](https://github.com/contentful/marketplace-partner-apps/commit/429b84f9fd00697b3a79cd65724e22a807541c98))
+* **deps:** bump minimatch in /apps/statsig ([#7849](https://github.com/contentful/marketplace-partner-apps/issues/7849)) ([e8db60c](https://github.com/contentful/marketplace-partner-apps/commit/e8db60ca3788e3167c7cb06466da5ac6a7a315ad))
+* **deps:** bump node-forge from 1.3.1 to 1.4.0 in /apps/statsig ([#8022](https://github.com/contentful/marketplace-partner-apps/issues/8022)) ([f7ee3c7](https://github.com/contentful/marketplace-partner-apps/commit/f7ee3c72793875ff00f604ff2c4e7509a3ad0434))
+* **deps:** bump path-to-regexp from 0.1.12 to 0.1.13 in /apps/statsig ([#8060](https://github.com/contentful/marketplace-partner-apps/issues/8060)) ([7584fbf](https://github.com/contentful/marketplace-partner-apps/commit/7584fbfb04f62f94279910494b9befc57a925059))
+* **deps:** bump qs and express in /apps/statsig ([#8239](https://github.com/contentful/marketplace-partner-apps/issues/8239)) ([6d412c4](https://github.com/contentful/marketplace-partner-apps/commit/6d412c4d1203f7905522c469ae040fff9b79654d))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/statsig ([#7806](https://github.com/contentful/marketplace-partner-apps/issues/7806)) ([ebbc6b7](https://github.com/contentful/marketplace-partner-apps/commit/ebbc6b75b189e7c8d86ab4750cda094036cacb8a))
+* **deps:** bump rollup from 2.79.2 to 2.80.0 in /apps/statsig ([#7866](https://github.com/contentful/marketplace-partner-apps/issues/7866)) ([e7c3b75](https://github.com/contentful/marketplace-partner-apps/commit/e7c3b75b1ba298705a915dd2f61cddfd4280bb8b))
+* **deps:** bump shell-quote from 1.8.3 to 1.8.4 in /apps/statsig ([#8310](https://github.com/contentful/marketplace-partner-apps/issues/8310)) ([eaf2689](https://github.com/contentful/marketplace-partner-apps/commit/eaf26892386d582811ff4655772f3fb70cc5eb56))
+* **deps:** bump tar and @contentful/app-scripts in /apps/statsig ([#8371](https://github.com/contentful/marketplace-partner-apps/issues/8371)) ([fc7c0a4](https://github.com/contentful/marketplace-partner-apps/commit/fc7c0a4b0ccaf052b0f3bf684892dfe6f602c2e4))
+* **deps:** bump the production-dependencies group in /apps/statsig with 3 updates ([#7731](https://github.com/contentful/marketplace-partner-apps/issues/7731)) ([4b9cac0](https://github.com/contentful/marketplace-partner-apps/commit/4b9cac001a70c6464c78cac279bfac5bae17cc16))
+* **deps:** bump the production-dependencies group in /apps/statsig with 4 updates ([#7902](https://github.com/contentful/marketplace-partner-apps/issues/7902)) ([77958f8](https://github.com/contentful/marketplace-partner-apps/commit/77958f8c085492b42d04ac2ee8583a365e8c6e5f))
+* **deps:** bump webpack from 5.99.9 to 5.105.0 in /apps/statsig ([#7755](https://github.com/contentful/marketplace-partner-apps/issues/7755)) ([71d631b](https://github.com/contentful/marketplace-partner-apps/commit/71d631b1cbb13888e4f31b5591673d763aec9773))
+* **deps:** bump yaml in /apps/statsig ([#8002](https://github.com/contentful/marketplace-partner-apps/issues/8002)) ([89002e9](https://github.com/contentful/marketplace-partner-apps/commit/89002e9cd713a7e21f1ceb4329c46b1ffadddb61))
+
 ## [1.1.7](https://github.com/contentful/marketplace-partner-apps/compare/statsig-v1.1.6...statsig-v1.1.7) (2025-08-05)
 
 
