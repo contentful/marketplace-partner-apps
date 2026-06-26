@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.1.6](https://github.com/contentful/marketplace-partner-apps/compare/amplitude-contentful-v1.1.5...amplitude-contentful-v1.1.6) (2026-06-26)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.12.2 to 1.13.5 in /apps/amplitude-experiment ([#7792](https://github.com/contentful/marketplace-partner-apps/issues/7792)) ([eeb275b](https://github.com/contentful/marketplace-partner-apps/commit/eeb275b3208be5800fa70077ac24c56ad862ff19))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/amplitude-experiment ([#7832](https://github.com/contentful/marketplace-partner-apps/issues/7832)) ([29746a5](https://github.com/contentful/marketplace-partner-apps/commit/29746a5a7982924d50dd59bf5631fe52bbb5e6dc))
+* **deps:** bump qs from 6.14.2 to 6.15.2 in /apps/amplitude-experiment ([#8223](https://github.com/contentful/marketplace-partner-apps/issues/8223)) ([2b6f8f0](https://github.com/contentful/marketplace-partner-apps/commit/2b6f8f0e25d571f102b4163177710b2a7f4a2758))
+* **deps:** Bump rollup from 4.44.1 to 4.59.0 in /apps/amplitude-experiment ([#7886](https://github.com/contentful/marketplace-partner-apps/issues/7886)) ([b03e132](https://github.com/contentful/marketplace-partner-apps/commit/b03e132dda821bed1b0c4f8228575870d396f690))
+* **deps:** bump tar and @contentful/app-scripts in /apps/amplitude-experiment ([#8356](https://github.com/contentful/marketplace-partner-apps/issues/8356)) ([8e497bf](https://github.com/contentful/marketplace-partner-apps/commit/8e497bf8c341b93308af026988d7b9642af8651a))
+
 ## [1.1.5](https://github.com/contentful/marketplace-partner-apps/compare/amplitude-contentful-v1.1.4...amplitude-contentful-v1.1.5) (2025-10-16)
 
 
