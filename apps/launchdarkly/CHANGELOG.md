@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.1](https://github.com/contentful/marketplace-partner-apps/compare/launchdarkly-contentful-app-v1.1.0...launchdarkly-contentful-app-v1.1.1) (2026-06-26)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.13.2 to 1.13.5 in /apps/launchdarkly ([#7778](https://github.com/contentful/marketplace-partner-apps/issues/7778)) ([75a5d3f](https://github.com/contentful/marketplace-partner-apps/commit/75a5d3f3ceff201c88ed87258a656f0f3ed497d3))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/launchdarkly ([#7815](https://github.com/contentful/marketplace-partner-apps/issues/7815)) ([2bf5149](https://github.com/contentful/marketplace-partner-apps/commit/2bf51496db2a803b6f4a8100ffb66955f4600d48))
+* **deps:** bump qs from 6.14.2 to 6.15.2 in /apps/launchdarkly ([#8235](https://github.com/contentful/marketplace-partner-apps/issues/8235)) ([0965b21](https://github.com/contentful/marketplace-partner-apps/commit/0965b21659302ddea696e01888d5baee84dec5de))
+* **deps:** Bump rollup from 4.52.5 to 4.59.0 in /apps/launchdarkly ([#7867](https://github.com/contentful/marketplace-partner-apps/issues/7867)) ([339d803](https://github.com/contentful/marketplace-partner-apps/commit/339d803ffdfd5bf8b9b0cbe4ade976a586227953))
+* **deps:** bump tar and @contentful/app-scripts in /apps/launchdarkly ([#8354](https://github.com/contentful/marketplace-partner-apps/issues/8354)) ([030e3cf](https://github.com/contentful/marketplace-partner-apps/commit/030e3cfc678ead96c6d05b009d8d8d2c7783f9b8))
+
 ## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/launchdarkly-contentful-app-v1.0.0...launchdarkly-contentful-app-v1.1.0) (2025-11-12)
 
 
