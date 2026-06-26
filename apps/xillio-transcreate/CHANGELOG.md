@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/xillio-transcreate-v1.0.3...xillio-transcreate-v1.0.4) (2026-06-26)
+
+
+### Bug Fixes
+
+* **deps:** bump follow-redirects from 1.15.9 to 1.16.0 in /apps/xillio-transcreate ([#8151](https://github.com/contentful/marketplace-partner-apps/issues/8151)) ([507134d](https://github.com/contentful/marketplace-partner-apps/commit/507134d6b3066725c79e97797d3a687dd10fbb5d))
+* **deps:** bump form-data from 4.0.4 to 4.0.6 in /apps/xillio-transcreate ([#8387](https://github.com/contentful/marketplace-partner-apps/issues/8387)) ([ff35326](https://github.com/contentful/marketplace-partner-apps/commit/ff353263f50a29ab75ca4e3ce8b6669c03e4a492))
+* **deps:** Bump minimatch in /apps/xillio-transcreate ([#7891](https://github.com/contentful/marketplace-partner-apps/issues/7891)) ([d0dd466](https://github.com/contentful/marketplace-partner-apps/commit/d0dd466bc5493c5c2046415775208c61459b2519))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/xillio-transcreate ([#7803](https://github.com/contentful/marketplace-partner-apps/issues/7803)) ([4aa3db3](https://github.com/contentful/marketplace-partner-apps/commit/4aa3db35e75f71b941d1ee265098799385cd4e28))
+* **deps:** bump qs from 6.14.2 to 6.15.2 in /apps/xillio-transcreate ([#8232](https://github.com/contentful/marketplace-partner-apps/issues/8232)) ([2b03691](https://github.com/contentful/marketplace-partner-apps/commit/2b036919448c101e9fcc9a1383783b4d173e05d0))
+* **deps:** bump rollup from 4.50.1 to 4.59.0 in /apps/xillio-transcreate ([#7863](https://github.com/contentful/marketplace-partner-apps/issues/7863)) ([2519fa1](https://github.com/contentful/marketplace-partner-apps/commit/2519fa148c924dc01de5609f1e962740abfa9e38))
+* **deps:** bump yaml from 1.10.2 to 1.10.3 in /apps/xillio-transcreate ([#7996](https://github.com/contentful/marketplace-partner-apps/issues/7996)) ([7cb0e43](https://github.com/contentful/marketplace-partner-apps/commit/7cb0e4398eed96581abd33bc06fec780afe2894a))
+
 ## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/xillio-transcreate-v1.0.2...xillio-transcreate-v1.0.3) (2025-07-02)
 
 
