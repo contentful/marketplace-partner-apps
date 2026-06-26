@@ -1,6 +1,6 @@
 {
   "name": "convox",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": true,
   "dependencies": {
     "@contentful/app-sdk": "4.45.0",
