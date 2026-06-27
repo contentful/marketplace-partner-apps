@@ -4,7 +4,7 @@ import { injectGlobal } from '@emotion/css';
 import { css } from '@emotion/react';
 import { useCallback, useRef } from 'react';
 import { AppInstallationParameters, CloudinaryAsset } from '../types';
-import { loadScript } from '../utils';
+import { createEditedAsset, getDeliveryHostname, getEditorTransformation, loadScript } from '../utils';
 import { MediaEditorWidget } from './types';
 
 const styles = {
@@ -46,6 +46,8 @@ const ImageEditorDialog = () => {
         editorRef.current = editorRef.current || window.cloudinary.mediaEditor({ appendTo: document.getElementById(container.id) });
 
         const configurationParams = sdk.parameters.installation;
+        const existingTransformation = getEditorTransformation(asset);
+        const deliveryHostname = getDeliveryHostname(asset.secure_url ?? asset.url);
 
         // samples/logo,samples/man-portrait
         const steps = ['resizeAndCrop'];
@@ -69,7 +71,11 @@ const ImageEditorDialog = () => {
           layoutStyle: 'single',
           layout: 'tabs',
           image: {
-            transformation: [{ rawTransformation: asset.raw_transformation || asset.original_raw_transformation }],
+            ...(existingTransformation
+              ? {
+                  transformation: [{ rawTransformation: existingTransformation }],
+                }
+              : {}),
             steps,
             resizeAndCrop: {
               toggleAspectRatio: true,
@@ -108,13 +114,14 @@ const ImageEditorDialog = () => {
             },
           },
           cloudName: configurationParams.cloudName,
+          ...(deliveryHostname ? { secureDistribution: deliveryHostname, cname: deliveryHostname, privateCdn: true } : {}),
           publicIds: [asset.public_id],
           mode: 'inline',
         });
 
         editorRef.current.show();
         editorRef.current.on('export', function (data) {
-          const newAsset = { ...asset, ...{ raw_transformation: data.transformation, secure_url: data.assets[0].url } };
+          const newAsset = createEditedAsset(asset, configurationParams, data.transformation);
           sdk.close({ assets: [newAsset] });
         });
       })();
