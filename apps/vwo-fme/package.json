@@ -15,10 +15,10 @@
     "react-scripts": "5.0.1"
   },
   "scripts": {
-    "start": "cross-env BROWSER=none react-scripts start",
-    "build": "react-scripts build && npm run build:functions",
+    "start": "cross-env BROWSER=none craco start",
+    "build": "craco build && npm run build:functions",
     "build:functions": "contentful-app-scripts build-functions --ci",
-    "test": "react-scripts test --passWithNoTests",
+    "test": "craco test --passWithNoTests",
     "eject": "react-scripts eject",
     "create-app-definition": "contentful-app-scripts create-app-definition",
     "upload": "contentful-app-scripts upload --bundle-dir ./build",
@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "@contentful/app-scripts": "^2.5.12",
+    "@craco/craco": "^7.1.0",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",
     "cross-env": "^10.1.0"
