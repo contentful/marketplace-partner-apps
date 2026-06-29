@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.15](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.14...vwo-fme-v1.0.15) (2026-06-29)
+
+
+### Bug Fixes
+
+* **vwo-fme:** bump @contentful/app-sdk to 4.61.1 [AIS-59] ([#8452](https://github.com/contentful/marketplace-partner-apps/issues/8452)) ([8dc2e18](https://github.com/contentful/marketplace-partner-apps/commit/8dc2e18379babe42068b68c9fecf38ae70d93c73))
+
 ## [1.0.14](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.13...vwo-fme-v1.0.14) (2026-06-26)
 
 
