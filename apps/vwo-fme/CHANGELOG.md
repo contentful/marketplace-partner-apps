@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.16](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.15...vwo-fme-v1.0.16) (2026-06-29)
+
+
+### Bug Fixes
+
+* **vwo-fme:** exclude .cjs from CRA file-loader via craco [AIS-59] ([#8455](https://github.com/contentful/marketplace-partner-apps/issues/8455)) ([28cab5c](https://github.com/contentful/marketplace-partner-apps/commit/28cab5c308c0b4c585039a5f65f34e53ed0f6a4a))
+
 ## [1.0.15](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.14...vwo-fme-v1.0.15) (2026-06-29)
 
 
