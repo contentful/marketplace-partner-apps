@@ -43,7 +43,7 @@
     ]
   },
   "devDependencies": {
-    "@contentful/app-scripts": "^2.5.12",
+    "@contentful/app-scripts": "^3.0.1",
     "@craco/craco": "^7.1.0",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",
