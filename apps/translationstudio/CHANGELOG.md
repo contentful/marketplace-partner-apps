@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.0.5](https://github.com/contentful/marketplace-partner-apps/compare/translationstudio-v1.0.4...translationstudio-v1.0.5) (2026-07-01)
+
+
+### Bug Fixes
+
+* **deps:** bump brace-expansion in /apps/translationstudio ([#8044](https://github.com/contentful/marketplace-partner-apps/issues/8044)) ([a25f2f0](https://github.com/contentful/marketplace-partner-apps/commit/a25f2f0faca3cb65681daa31e70811c103db68de))
+* **deps:** bump flatted from 3.3.3 to 3.4.2 in /apps/translationstudio ([#7963](https://github.com/contentful/marketplace-partner-apps/issues/7963)) ([a72fec4](https://github.com/contentful/marketplace-partner-apps/commit/a72fec495cc8e31fa08d8fbd78b924a255a6d39d))
+* **deps:** bump next from 16.1.6 to 16.1.7 in /apps/translationstudio ([#7951](https://github.com/contentful/marketplace-partner-apps/issues/7951)) ([0ad5786](https://github.com/contentful/marketplace-partner-apps/commit/0ad578607d883c64df7d9bbcb7c9871a0d124178))
+* **deps:** bump next from 16.1.7 to 16.2.6 in /apps/translationstudio ([#8197](https://github.com/contentful/marketplace-partner-apps/issues/8197)) ([8490677](https://github.com/contentful/marketplace-partner-apps/commit/84906772a0225fd762406abea890ba7390b08dca))
+* **deps:** bump picomatch in /apps/translationstudio ([#7992](https://github.com/contentful/marketplace-partner-apps/issues/7992)) ([9127131](https://github.com/contentful/marketplace-partner-apps/commit/9127131d90082b09862c0f9569da0731f7e7c8cb))
+* **deps:** bump tar and @contentful/app-scripts in /apps/translationstudio ([#8367](https://github.com/contentful/marketplace-partner-apps/issues/8367)) ([0d1b320](https://github.com/contentful/marketplace-partner-apps/commit/0d1b32058abe56258b092d77340e0dc8aded3b38))
+* **deps:** bump the production-dependencies group in /apps/translationstudio with 3 updates ([#7905](https://github.com/contentful/marketplace-partner-apps/issues/7905)) ([d710bfe](https://github.com/contentful/marketplace-partner-apps/commit/d710bfe454c4ebec7a0a7d7f8400360a16148d49))
+* **deps:** bump the production-dependencies group in /apps/translationstudio with 3 updates ([#8588](https://github.com/contentful/marketplace-partner-apps/issues/8588)) ([fc720d7](https://github.com/contentful/marketplace-partner-apps/commit/fc720d7252b9b2e40c34528b9498fe23711fb001))
+* **deps:** bump yaml from 1.10.2 to 1.10.3 in /apps/translationstudio ([#8001](https://github.com/contentful/marketplace-partner-apps/issues/8001)) ([28378d8](https://github.com/contentful/marketplace-partner-apps/commit/28378d8ee0387f730fb25bb16df33f0f68ed845f))
+
 ## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/translationstudio-v1.0.3...translationstudio-v1.0.4) (2025-12-03)
 
 
