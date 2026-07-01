@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "private": true,
   "dependencies": {
-    "@contentful/app-sdk": "^4.45.0",
+    "@contentful/app-sdk": "^4.58.2",
     "@contentful/dam-app-base": "^3.0.9",
     "@contentful/f36-components": "4.81.1",
     "@contentful/react-apps-toolkit": "^1.2.16",
@@ -12,9 +12,9 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@emotion/css": "^11.13.5",
     "@emotion/react": "^11.14.0",
-    "@imagekit/react": "^5.0.1",
+    "@imagekit/react": "^5.0.2",
     "file-size": "^1.0.0",
-    "imagekit-media-library-widget": "^2.1.1",
+    "imagekit-media-library-widget": "^2.4.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "lodash": "^4.17.21"
