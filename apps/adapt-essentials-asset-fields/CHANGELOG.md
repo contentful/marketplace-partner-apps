@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.2.2](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.2.1...adapt-essentials-asset-fields-v1.2.2) (2026-07-01)
+
+
+### Bug Fixes
+
+* **deps:** bump ajv from 6.12.6 to 6.14.0 in /apps/adapt-essentials-asset-fields ([#7841](https://github.com/contentful/marketplace-partner-apps/issues/7841)) ([c1e5dc6](https://github.com/contentful/marketplace-partner-apps/commit/c1e5dc621c590a102dfbf70a161d66460defda91))
+* **deps:** bump flatted from 3.3.3 to 3.4.1 in /apps/adapt-essentials-asset-fields ([#7943](https://github.com/contentful/marketplace-partner-apps/issues/7943)) ([28a0de3](https://github.com/contentful/marketplace-partner-apps/commit/28a0de31c49a94728149e999b711ec2fe86a49cd))
+* **deps:** bump flatted from 3.4.1 to 3.4.2 in /apps/adapt-essentials-asset-fields ([#7971](https://github.com/contentful/marketplace-partner-apps/issues/7971)) ([df9be09](https://github.com/contentful/marketplace-partner-apps/commit/df9be0995078bf2fe5fd7b658d32a8daa787cd1e))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/adapt-essentials-asset-fields ([#7833](https://github.com/contentful/marketplace-partner-apps/issues/7833)) ([9fd8e03](https://github.com/contentful/marketplace-partner-apps/commit/9fd8e03287fd34894b0bed5821231421eb647f65))
+* **deps:** bump react-router and react-router-dom in /apps/adapt-essentials-asset-fields ([#8372](https://github.com/contentful/marketplace-partner-apps/issues/8372)) ([f5de49e](https://github.com/contentful/marketplace-partner-apps/commit/f5de49ea42c10b8111383835701c4317a6a06263))
+* **deps:** Bump rollup from 4.44.1 to 4.59.0 in /apps/adapt-essentials-asset-fields ([#7887](https://github.com/contentful/marketplace-partner-apps/issues/7887)) ([be99678](https://github.com/contentful/marketplace-partner-apps/commit/be996789301e602be2bac9fb3b64bb0803fbc4ef))
+* **deps:** bump the production-dependencies group in /apps/adapt-essentials-asset-fields with 3 updates ([#8469](https://github.com/contentful/marketplace-partner-apps/issues/8469)) ([59586a4](https://github.com/contentful/marketplace-partner-apps/commit/59586a4d9706aba9ae24c774457c76c9c5ff8802))
+* **deps:** bump tmp and @contentful/app-scripts in /apps/adapt-essentials-asset-fields ([#8246](https://github.com/contentful/marketplace-partner-apps/issues/8246)) ([cf76077](https://github.com/contentful/marketplace-partner-apps/commit/cf76077ef74c62878f2611b4c300d77026b9830e))
+
 ## [1.2.1](https://github.com/contentful/marketplace-partner-apps/compare/adapt-essentials-asset-fields-v1.2.0...adapt-essentials-asset-fields-v1.2.1) (2025-08-01)
 
 
