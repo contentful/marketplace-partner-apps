@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.0.30](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.29...uploadcare-contentful-app-v1.0.30) (2026-07-01)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/react-apps-toolkit from 1.2.16 to 1.2.23 in /apps/uploadcare ([#8479](https://github.com/contentful/marketplace-partner-apps/issues/8479)) ([b112456](https://github.com/contentful/marketplace-partner-apps/commit/b11245626acaa44210c09bb3696ae4d4dbb9515f))
+* **deps:** bump esbuild from 0.28.0 to 0.28.1 in /apps/uploadcare ([#8426](https://github.com/contentful/marketplace-partner-apps/issues/8426)) ([0ca60ef](https://github.com/contentful/marketplace-partner-apps/commit/0ca60ef952968a3d7e9d636a8a47c96efac5c752))
+* **deps:** bump minimatch in /apps/uploadcare ([#7893](https://github.com/contentful/marketplace-partner-apps/issues/7893)) ([d8255d2](https://github.com/contentful/marketplace-partner-apps/commit/d8255d2144c283db7295e6f1a5bdc5aa36bc90fa))
+* **deps:** bump node-forge from 1.3.1 to 1.4.0 in /apps/uploadcare ([#8035](https://github.com/contentful/marketplace-partner-apps/issues/8035)) ([d646702](https://github.com/contentful/marketplace-partner-apps/commit/d646702069833aa93eef99023ebdfbb54059a228))
+* **deps:** bump qs and express in /apps/uploadcare ([#8224](https://github.com/contentful/marketplace-partner-apps/issues/8224)) ([8e0b47c](https://github.com/contentful/marketplace-partner-apps/commit/8e0b47c436023a0f57bfc972100a13215c59a697))
+* **deps:** bump the production-dependencies group in /apps/uploadcare with 2 updates ([#8462](https://github.com/contentful/marketplace-partner-apps/issues/8462)) ([aa82e78](https://github.com/contentful/marketplace-partner-apps/commit/aa82e7808a13baebf93b4ee7d416640db8a2b0fd))
+* **deps:** bump tmp and @contentful/app-scripts in /apps/uploadcare ([#8248](https://github.com/contentful/marketplace-partner-apps/issues/8248)) ([1b2da2a](https://github.com/contentful/marketplace-partner-apps/commit/1b2da2a11ed7e43a6bf5dfc89b45fb3b0b58513c))
+* **deps:** bump ws in /apps/uploadcare ([#8428](https://github.com/contentful/marketplace-partner-apps/issues/8428)) ([a2a9926](https://github.com/contentful/marketplace-partner-apps/commit/a2a9926da61f3995a40b6a4455c4d4864b159a37))
+* **deps:** bump yaml in /apps/uploadcare ([#7995](https://github.com/contentful/marketplace-partner-apps/issues/7995)) ([9171b9b](https://github.com/contentful/marketplace-partner-apps/commit/9171b9bba901f717b2cd4f57c22d5c2de4a8cb3f))
+
 ## [1.0.29](https://github.com/contentful/marketplace-partner-apps/compare/uploadcare-contentful-app-v1.0.28...uploadcare-contentful-app-v1.0.29) (2025-10-16)
 
 
