@@ -16,7 +16,7 @@
     "vite": "^8.0.16"
   },
   "dependencies": {
-    "@contentful/app-sdk": "^4.29.0",
+    "@contentful/app-sdk": "^4.58.2",
     "@contentful/dam-app-base": "^3.0.9",
     "@contentful/f36-components": "^4.80.0",
     "@contentful/f36-icons": "^4.29.0",
@@ -24,7 +24,7 @@
     "@contentful/react-apps-toolkit": "^1.2.19",
     "contentful-management": "^11.66.0",
     "graphql-scalars": "^1.25.0",
-    "graphql-yoga": "^5.18.0",
+    "graphql-yoga": "^5.21.2",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
