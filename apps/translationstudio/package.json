@@ -22,13 +22,13 @@
     "deploy": "contentful-app-scripts upload --ci --bundle-dir ./out --organization-id ${DEFINITIONS_ORG_ID} --definition-id 7FSju5TTAttraHZZr7Xfcr --token ${CONTENTFUL_CMA_TOKEN}"
   },
   "dependencies": {
-    "@contentful/app-sdk": "^4.51.4",
+    "@contentful/app-sdk": "^4.58.2",
     "@contentful/f36-components": "^4.81.1",
     "@contentful/f36-tokens": "^4.2.0",
     "@contentful/react-apps-toolkit": "^1.2.19",
-    "next": ">=16.2.6",
+    "next": ">=16.2.9",
     "react": ">=18.3.1",
-    "serve": "^14.2.5"
+    "serve": "^14.2.6"
   },
   "devDependencies": {
     "@contentful/app-scripts": "^2.5.12",
