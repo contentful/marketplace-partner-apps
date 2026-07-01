@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.5](https://github.com/contentful/marketplace-partner-apps/compare/docs-to-rich-text-v1.2.4...docs-to-rich-text-v1.2.5) (2026-07-01)
+
+
+### Bug Fixes
+
+* **deps:** bump flatted from 3.3.3 to 3.4.2 in /apps/docs-to-rich-text ([#7956](https://github.com/contentful/marketplace-partner-apps/issues/7956)) ([c3968be](https://github.com/contentful/marketplace-partner-apps/commit/c3968bec3dd327a68a0001ff1a003b5177e660e9))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/docs-to-rich-text ([#7825](https://github.com/contentful/marketplace-partner-apps/issues/7825)) ([d5ab7cb](https://github.com/contentful/marketplace-partner-apps/commit/d5ab7cb15fd7e72823f6604f01b31da92d234ae9))
+* **deps:** bump qs from 6.14.2 to 6.15.2 in /apps/docs-to-rich-text ([#8220](https://github.com/contentful/marketplace-partner-apps/issues/8220)) ([f7a71fb](https://github.com/contentful/marketplace-partner-apps/commit/f7a71fbdae93191c78cf6c4d2e241922bab51343))
+* **deps:** Bump rollup from 4.50.2 to 4.59.0 in /apps/docs-to-rich-text ([#7879](https://github.com/contentful/marketplace-partner-apps/issues/7879)) ([68cd225](https://github.com/contentful/marketplace-partner-apps/commit/68cd225bf0fc3f345de0dcf293b7e1f55e2da349))
+* **deps:** bump tar and @contentful/app-scripts in /apps/docs-to-rich-text ([#8370](https://github.com/contentful/marketplace-partner-apps/issues/8370)) ([4e3e77b](https://github.com/contentful/marketplace-partner-apps/commit/4e3e77b7d89db659474e4b86037b4f6c258530a6))
+* **deps:** bump uuid from 11.1.0 to 14.0.0 in /apps/docs-to-rich-text ([#8159](https://github.com/contentful/marketplace-partner-apps/issues/8159)) ([1e3c806](https://github.com/contentful/marketplace-partner-apps/commit/1e3c806f42773868d702a6a5087f5310de7bde42))
+
 ## [1.2.4](https://github.com/contentful/marketplace-partner-apps/compare/docs-to-rich-text-v1.2.3...docs-to-rich-text-v1.2.4) (2025-08-27)
 
 
