@@ -37,8 +37,8 @@
     "@storybook/blocks": "^8.3.1",
     "@storybook/react": "^8.3.1",
     "@storybook/react-vite": "^10.4.6",
-    "@storybook/test": "^8.3.1",
-    "@storybook/test-runner": "^0.24.1",
+    "@storybook/test": "^8.6.15",
+    "@storybook/test-runner": "^0.24.4",
     "@testing-library/react": "14.0.0",
     "@types/node": "^20",
     "@types/react": "18.2.14",
@@ -47,10 +47,10 @@
     "eslint": "^9.38.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "globals": "^15.9.0",
-    "prettier": "^3.3.3",
+    "prettier": "^3.8.4",
     "storybook": "^8.6.17",
     "typescript": "5.9.3",
-    "typescript-eslint": "^8.46.2",
+    "typescript-eslint": "^8.61.1",
     "vite": "8.0.16"
   }
 }
