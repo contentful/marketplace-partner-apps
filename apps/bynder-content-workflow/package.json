@@ -10,7 +10,7 @@
     "@contentful/react-apps-toolkit": "2.0.1",
     "@contentful/rich-text-html-renderer": "^16.3.0",
     "camelcase": "^8.0.0",
-    "constate": "^3.3.3",
+    "constate": "^4.0.0",
     "contentful-management": "11.62.0",
     "contentful-rich-text-html-parser": "^1.8.13",
     "emotion": "10.0.27",
