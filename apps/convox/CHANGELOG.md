@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/convox-v1.0.3...convox-v1.0.4) (2026-07-01)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/app-sdk from 4.45.0 to 4.58.2 in /apps/convox in the production-dependencies group ([#8570](https://github.com/contentful/marketplace-partner-apps/issues/8570)) ([e7cbc63](https://github.com/contentful/marketplace-partner-apps/commit/e7cbc6339c4cb95957fa742027966663a1ef6964))
+* **deps:** bump flatted from 3.3.3 to 3.4.2 in /apps/convox ([#7958](https://github.com/contentful/marketplace-partner-apps/issues/7958)) ([c54b902](https://github.com/contentful/marketplace-partner-apps/commit/c54b9020affbe5d3ec7532716b852aa7ef40fff1))
+* **deps:** bump qs from 6.14.1 to 6.14.2 in /apps/convox ([#7827](https://github.com/contentful/marketplace-partner-apps/issues/7827)) ([6029c5b](https://github.com/contentful/marketplace-partner-apps/commit/6029c5bb9cfb6163d345b0de217deefc0fce352f))
+* **deps:** bump qs from 6.14.2 to 6.15.2 in /apps/convox ([#8222](https://github.com/contentful/marketplace-partner-apps/issues/8222)) ([53642ea](https://github.com/contentful/marketplace-partner-apps/commit/53642ea0acb57e10b7c4133326a94157f5aa8721))
+* **deps:** bump rollup in /apps/convox ([#7856](https://github.com/contentful/marketplace-partner-apps/issues/7856)) ([94610e3](https://github.com/contentful/marketplace-partner-apps/commit/94610e33bb8c6c032d7dc4850a16863592777408))
+* **deps:** bump tar and @contentful/app-scripts in /apps/convox ([#8353](https://github.com/contentful/marketplace-partner-apps/issues/8353)) ([629b33e](https://github.com/contentful/marketplace-partner-apps/commit/629b33e0f941f6b92f46218829bec78967e33bb0))
+
 ## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/convox-v1.0.2...convox-v1.0.3) (2025-08-01)
 
 
