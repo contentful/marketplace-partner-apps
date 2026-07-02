@@ -231,7 +231,19 @@ export default class ConfigScreen extends React.Component {
     );
 
     if (needsVariationContainerInSpace) {
-      await this.createVariationContainerContentType();
+      try {
+        await this.createVariationContainerContentType();
+      } catch (e) {
+        const reasons = e?.details?.reasons || [];
+        const limitReached =
+          reasons.includes("usageExceeded") || e?.sys?.id === "AccessDenied";
+        this.props.sdk.notifier.error(
+          limitReached
+            ? "The VWO FME app needs to create a content type, but this environment has reached its content type limit. Free up a content type or raise the limit, then try installing again."
+            : "The VWO FME app could not create its content type. Please try again."
+        );
+        return false;
+      }
     }
 
     const res = await this.saveEnabledContentTypes(
