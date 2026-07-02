@@ -72,7 +72,7 @@ export async function getExperienceMetadata(experienceUrl: string): Promise<Oemb
     }
     return metadata;
   } catch (err) {
-    console.error('Failed to fetch oembed metadata:', err instanceof Error ? err.message : 'Unknown error');
+    console.error('Failed to fetch oembed metadata.');
     return null;
   }
 }
