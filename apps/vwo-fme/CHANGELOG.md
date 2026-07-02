@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.17](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.16...vwo-fme-v1.0.17) (2026-07-01)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-tokens from 6.1.2 to 6.1.3 in /apps/vwo-fme in the production-dependencies group ([#8530](https://github.com/contentful/marketplace-partner-apps/issues/8530)) ([c585ca5](https://github.com/contentful/marketplace-partner-apps/commit/c585ca5da992b55541fef63a269f17a21630467c))
+
 ## [1.0.16](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.15...vwo-fme-v1.0.16) (2026-06-29)
 
 
