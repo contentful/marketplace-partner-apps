@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.4.0](https://github.com/contentful/marketplace-partner-apps/compare/markup-ai-contentful-app-v1.3.1...markup-ai-contentful-app-v1.4.0) (2026-06-23)
+
+
+### Features
+
+* scan document metadata, remove issue-card feedback, add org switcher, default grouped view [] ([#8209](https://github.com/contentful/marketplace-partner-apps/issues/8209)) ([3e46c83](https://github.com/contentful/marketplace-partner-apps/commit/3e46c831cd5227dec5df563f5e12d9cab073be8c))
+
+## [1.3.1](https://github.com/contentful/marketplace-partner-apps/compare/markup-ai-contentful-app-v1.3.0...markup-ai-contentful-app-v1.3.1) (2026-06-18)
+
+
+### Bug Fixes
+
+* **deps:** bump defu from 6.1.4 to 6.1.6 in /apps/markup-ai ([#8076](https://github.com/contentful/marketplace-partner-apps/issues/8076)) ([5072fa3](https://github.com/contentful/marketplace-partner-apps/commit/5072fa3890379ae1b89d37efb3424c8d40d9dc48))
+* **deps:** bump dompurify from 3.4.0 to 3.4.9 in /apps/markup-ai ([#8381](https://github.com/contentful/marketplace-partner-apps/issues/8381)) ([6b3bac9](https://github.com/contentful/marketplace-partner-apps/commit/6b3bac996f986174ad78d684bc06909a70f783c6))
+* **deps:** bump dompurify from 3.4.9 to 3.4.11 in /apps/markup-ai ([#8420](https://github.com/contentful/marketplace-partner-apps/issues/8420)) ([312429c](https://github.com/contentful/marketplace-partner-apps/commit/312429c0d8a3be0c2a1f218df537d31e81753304))
+* **deps:** bump esbuild, @contentful/app-scripts, @vitejs/plugin-react and vite in /apps/markup-ai ([#8320](https://github.com/contentful/marketplace-partner-apps/issues/8320)) ([026c8d5](https://github.com/contentful/marketplace-partner-apps/commit/026c8d5b8b0742f06b34b4ac0942f70f03e8b1db))
+* **deps:** bump js-cookie from 3.0.5 to 3.0.7 in /apps/markup-ai ([#8210](https://github.com/contentful/marketplace-partner-apps/issues/8210)) ([cfe4c44](https://github.com/contentful/marketplace-partner-apps/commit/cfe4c44df79829cb929f85e04b8a07ccad0bf6da))
+* **deps:** bump qs from 6.15.0 to 6.15.2 in /apps/markup-ai ([#8244](https://github.com/contentful/marketplace-partner-apps/issues/8244)) ([8972582](https://github.com/contentful/marketplace-partner-apps/commit/89725826e7fe493aef16c9e9fc81eac997824f96))
+* **deps:** bump undici from 7.24.5 to 7.28.0 in /apps/markup-ai ([#8421](https://github.com/contentful/marketplace-partner-apps/issues/8421)) ([5589a17](https://github.com/contentful/marketplace-partner-apps/commit/5589a17cfca84e9481f7d338c0cedb7389e05191))
+
 ## [1.3.0](https://github.com/contentful/marketplace-partner-apps/compare/markup-ai-contentful-app-v1.2.0...markup-ai-contentful-app-v1.3.0) (2026-05-12)
 
 

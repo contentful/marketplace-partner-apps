@@ -18,8 +18,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useAgenticScan } from "../../hooks/useAgenticScan";
 import { useAgentSelection } from "../../hooks/useAgentSelection";
 import { useAgentConfig } from "../../hooks/useAgentConfig";
-import { useFeedback } from "../../hooks/useFeedback";
-import { useStyleTargets } from "../../hooks/useStyleTargets";
+import { useStyleGuides } from "../../hooks/useStyleGuides";
 import { useEffectiveStyleGuide } from "../../hooks/useEffectiveStyleGuide";
 import { useAgentAvailability } from "../../hooks/useAgentAvailability";
 import { getUserSettings } from "../../utils/userSettings";
@@ -27,6 +26,7 @@ import { toBackendAgentIds } from "../../agents/agenticConfig";
 import { filterRunnableAgentIds, unavailabilityReasonsFor } from "../../agents/agentAvailability";
 import type { CortexIssueWithId, CortexSeverity } from "../../agents/types";
 import { getAgenticSuggestionChoices } from "../../agents/utils/agenticSuggestions";
+import { buildDocumentRef, extensionForFieldAndContent } from "../../agents/utils/documentMeta";
 import {
   buildStyleAgentApplyAllPeerCountByIssueId,
   getStyleAgentApplyAllClusterKey,
@@ -194,7 +194,7 @@ const FieldCheckDialog: React.FC = () => {
   const [workflowIdCopied, setWorkflowIdCopied] = useState(false);
   const [sidebarView, setSidebarView] = useState<"main" | "settings" | "about">("main");
   const [selectedAgentFilterIds, setSelectedAgentFilterIds] = useState<Set<string> | null>(null);
-  const [viewMode, setViewMode] = useState<SidebarViewMode>("list");
+  const [viewMode, setViewMode] = useState<SidebarViewMode>("grouped");
   const [selectedSeverities, setSelectedSeverities] = useState<Set<CortexSeverity>>(
     () => new Set(),
   );
@@ -237,14 +237,15 @@ const FieldCheckDialog: React.FC = () => {
   const { agentConfig, setAgentConfigKey, flattenConfigForRequest } = useAgentConfig();
   const { unavailable: unavailableAgents } = useAgentAvailability();
 
-  // Single fetch of style guide targets shared by the sidebar picker (and any
+  // Single fetch of style guides shared by the sidebar picker (and any
   // future consumer) — react-query also dedupes via query key, but lifting the
   // call here makes it explicit that we never fan out per-component.
   const {
-    targets: styleGuideTargets,
+    styleGuides,
     isLoading: styleGuidesLoading,
     isError: styleGuidesError,
-  } = useStyleTargets(apiKey);
+    defaultStyleGuideId: defaultStyleGuide,
+  } = useStyleGuides(apiKey);
 
   // Pull the per-content-type default straight from `sdk.parameters.installation`
   // rather than threading it through invocation params — that way every dialog
@@ -266,11 +267,10 @@ const FieldCheckDialog: React.FC = () => {
   });
 
   const { issues, startScan, scanInFlight, workflowId, error: scanError } = useAgenticScan(apiKey);
-  const { submitFeedback, isLoading: isFeedbackLoading } = useFeedback({ apiKey: apiKey ?? "" });
 
   /**
-   * `target_id` lives in per-field localStorage, but the agent settings panel
-   * still needs to render it so users can edit it from either surface. We
+   * `style_guide_id` lives in per-field localStorage, but the agent settings
+   * panel still needs to render it so users can edit it from either surface. We
    * project the effective value into the panel's view of `agentConfig` and
    * route panel writes through `setFieldStyleGuide`, keeping both pickers in
    * lockstep regardless of which one the user changes.
@@ -281,13 +281,13 @@ const FieldCheckDialog: React.FC = () => {
       : {};
     return {
       ...agentConfig,
-      style_agent: { ...existingStyle, target_id: effectiveStyleGuideId ?? "" },
+      style_agent: { ...existingStyle, style_guide_id: effectiveStyleGuideId ?? "" },
     };
   }, [agentConfig, effectiveStyleGuideId]);
 
   const handleAgentConfigKeyChange = useCallback(
     (agentId: string, key: string, value: unknown) => {
-      if (agentId === "style_agent" && key === "target_id") {
+      if (agentId === "style_agent" && key === "style_guide_id") {
         setFieldStyleGuide(typeof value === "string" && value.length > 0 ? value : null);
         return;
       }
@@ -312,20 +312,39 @@ const FieldCheckDialog: React.FC = () => {
       // returned `position.start` / `position.end` against the exact same string.
       setScannedContent(content);
       try {
-        // The picker is the single source of truth for `target_id`. We
-        // overwrite (or, when cleared, delete) it on the freshly-flattened
-        // config so a leftover sessionStorage entry can never re-send a
-        // stale value behind the user's back.
+        // The picker is the single source of truth for `style_guide_id` when
+        // the user (or admin) has picked one. When nothing has been picked we
+        // fall back to the org default chosen by `useStyleGuides` (Main →
+        // API is_default → first enabled). The backend does not always pick
+        // a default when the field is omitted, so always sending one keeps
+        // analyses from coming back with `styleGuideDisplayName=null`.
         const finalAgentConfig: Record<string, unknown> = flattenConfigForRequest(selectedAgentIds);
-        if (effectiveStyleGuideId) {
-          finalAgentConfig.target_id = effectiveStyleGuideId;
+        const resolvedStyleGuideId = effectiveStyleGuideId ?? defaultStyleGuide ?? null;
+        if (resolvedStyleGuideId) {
+          finalAgentConfig.style_guide_id = resolvedStyleGuideId;
         } else {
-          delete finalAgentConfig.target_id;
+          delete finalAgentConfig.style_guide_id;
         }
+
+        // `document_name` carries the entry title (e.g. "My Article"); we
+        // also build a unique `document_ref` from title + field id + a file
+        // extension derived from the field type, refined by detected syntax
+        // so a Symbol that contains markdown still gets `.md`.
+        const extension = extensionForFieldAndContent(
+          params.fieldFormat,
+          detectSyntaxKind(content),
+        );
+        const documentName = params.entryTitle?.trim() || undefined;
+        const documentRef = buildDocumentRef({
+          title: documentName,
+          fieldId: params.fieldId,
+          extension,
+        });
 
         await startScan({
           text: content,
-          documentName: `${params.contentTypeId}/${params.fieldId}`,
+          documentName,
+          documentRef,
           backendIds,
           agentConfig: finalAgentConfig,
         });
@@ -340,9 +359,11 @@ const FieldCheckDialog: React.FC = () => {
       selectedAgentIds,
       unavailableAgents,
       flattenConfigForRequest,
-      params.contentTypeId,
+      params.fieldFormat,
       params.fieldId,
+      params.entryTitle,
       effectiveStyleGuideId,
+      defaultStyleGuide,
     ],
   );
 
@@ -501,34 +522,6 @@ const FieldCheckDialog: React.FC = () => {
   const handleSelectIssue = useCallback((_issue: CortexIssueWithId | null, index: number) => {
     setSelectedIssueIndex(index >= 0 ? index : null);
   }, []);
-
-  const handleSubmitFeedback = useCallback(
-    async (
-      payload: {
-        helpful: boolean;
-        feedbackText: string;
-        original: string;
-        suggestion: string;
-        category: string | null;
-      },
-      issueIndex: number,
-    ) => {
-      if (!workflowId) {
-        console.error("No workflow ID available for feedback");
-        return;
-      }
-      await submitFeedback({
-        workflowId,
-        requestId: `issue-${String(issueIndex)}`,
-        helpful: payload.helpful,
-        feedback: payload.feedbackText || undefined,
-        original: payload.original || undefined,
-        suggestion: payload.suggestion || undefined,
-        category: payload.category || undefined,
-      });
-    },
-    [workflowId, submitFeedback],
-  );
 
   const visibleIssuesWithIndices = useMemo(() => {
     return issues
@@ -722,7 +715,7 @@ const FieldCheckDialog: React.FC = () => {
             agentConfig={agentConfigForPanel}
             onAgentConfigKeyChange={handleAgentConfigKeyChange}
             apiKey={apiKey}
-            styleGuideTargets={styleGuideTargets}
+            styleGuides={styleGuides}
             styleGuidesLoading={styleGuidesLoading}
             styleGuidesError={styleGuidesError}
             unavailableAgents={unavailableAgents}
@@ -770,8 +763,6 @@ const FieldCheckDialog: React.FC = () => {
             onViewModeChange={setViewMode}
             styleAgentApplyAllPeerCountByIssueId={styleAgentApplyAllPeerCountByIssueId}
             onSignOut={handleSignOut}
-            onSubmitFeedback={handleSubmitFeedback}
-            isFeedbackLoading={isFeedbackLoading}
             totalIssueCount={issues.length}
             appliedCount={appliedCount}
             dismissedCount={dismissedIndices.size - appliedCount}

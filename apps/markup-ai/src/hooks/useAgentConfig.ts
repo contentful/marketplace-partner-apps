@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
-
-const STORAGE_KEY = "markupai.agentConfig";
+import { AGENT_CONFIG_STORAGE_KEY } from "../constants/storageKeys";
 
 export type AgentConfigMap = Record<string, Record<string, unknown>>;
 
 function loadConfig(): AgentConfigMap {
   if (typeof sessionStorage === "undefined") return {};
   try {
-    const raw = sessionStorage.getItem(STORAGE_KEY);
+    const raw = sessionStorage.getItem(AGENT_CONFIG_STORAGE_KEY);
     if (!raw) return {};
     const parsed: unknown = JSON.parse(raw);
     if (!parsed || typeof parsed !== "object") return {};
@@ -20,7 +19,7 @@ function loadConfig(): AgentConfigMap {
 function saveConfig(config: AgentConfigMap): void {
   if (typeof sessionStorage === "undefined") return;
   try {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+    sessionStorage.setItem(AGENT_CONFIG_STORAGE_KEY, JSON.stringify(config));
   } catch {
     // ignore
   }
@@ -28,7 +27,7 @@ function saveConfig(config: AgentConfigMap): void {
 
 export interface UseAgentConfigResult {
   agentConfig: AgentConfigMap;
-  /** Set a single config key for a given agent (e.g. setAgentConfigKey("style_agent", "target_id", "ap")). */
+  /** Set a single config key for a given agent (e.g. setAgentConfigKey("style_agent", "style_guide_id", "ap")). */
   setAgentConfigKey: (agentId: string, key: string, value: unknown) => void;
   /** Replace all config keys for a given agent. */
   setAgentConfigForAgent: (agentId: string, config: Record<string, unknown>) => void;

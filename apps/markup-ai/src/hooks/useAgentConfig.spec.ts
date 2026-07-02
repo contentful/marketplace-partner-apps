@@ -16,23 +16,25 @@ describe("useAgentConfig", () => {
     const { result } = renderHook(() => useAgentConfig());
 
     act(() => {
-      result.current.setAgentConfigKey("style_agent", "target_id", "ap");
+      result.current.setAgentConfigKey("style_agent", "style_guide_id", "ap");
     });
 
-    expect(result.current.agentConfig.style_agent).toEqual({ target_id: "ap" });
+    expect(result.current.agentConfig.style_agent).toEqual({ style_guide_id: "ap" });
   });
 
   it("flattens only the included agents' configs into a single request object", () => {
     const { result } = renderHook(() => useAgentConfig());
 
     act(() => {
-      result.current.setAgentConfigKey("style_agent", "target_id", "ap");
+      result.current.setAgentConfigKey("style_agent", "style_guide_id", "ap");
       result.current.setAgentConfigKey("terminology", "domain_ids", ["engineering"]);
     });
 
-    expect(result.current.flattenConfigForRequest(["style_agent"])).toEqual({ target_id: "ap" });
+    expect(result.current.flattenConfigForRequest(["style_agent"])).toEqual({
+      style_guide_id: "ap",
+    });
     expect(result.current.flattenConfigForRequest(["style_agent", "terminology"])).toEqual({
-      target_id: "ap",
+      style_guide_id: "ap",
       domain_ids: ["engineering"],
     });
   });
@@ -41,7 +43,7 @@ describe("useAgentConfig", () => {
     const { result } = renderHook(() => useAgentConfig());
 
     act(() => {
-      result.current.setAgentConfigKey("style_agent", "target_id", "");
+      result.current.setAgentConfigKey("style_agent", "style_guide_id", "");
       result.current.setAgentConfigKey("terminology", "domain_ids", []);
     });
 
@@ -52,10 +54,10 @@ describe("useAgentConfig", () => {
     const { result } = renderHook(() => useAgentConfig());
 
     act(() => {
-      result.current.setAgentConfigKey("style_agent", "target_id", "ap");
+      result.current.setAgentConfigKey("style_agent", "style_guide_id", "ap");
     });
 
     const stored = sessionStorage.getItem("markupai.agentConfig");
-    expect(JSON.parse(stored ?? "{}")).toEqual({ style_agent: { target_id: "ap" } });
+    expect(JSON.parse(stored ?? "{}")).toEqual({ style_agent: { style_guide_id: "ap" } });
   });
 });

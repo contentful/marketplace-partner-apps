@@ -13,7 +13,7 @@ function defaultProps(
     agentConfig: {},
     onAgentConfigKeyChange: vi.fn(),
     apiKey: "test-token",
-    styleGuideTargets: [],
+    styleGuides: [],
     styleGuidesLoading: false,
     styleGuidesError: false,
     ...overrides,

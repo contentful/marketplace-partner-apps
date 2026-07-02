@@ -31,6 +31,14 @@ const generateNodeId = (path: number[]): string => {
 };
 
 /**
+ * Escape text so it can be safely embedded as HTML element content.
+ * `convertHtmlToRichText` reads values back via `textContent`, which un-escapes,
+ * so this round-trips losslessly.
+ */
+const escapeHtml = (value: string): string =>
+  value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+
+/**
  * Validate that a node is a valid Rich Text node
  */
 const isValidNode = (node: RichTextNode): boolean => {
@@ -116,8 +124,13 @@ export const convertRichTextToHtml = (doc: Document): RichTextConversionResult =
       const id = generateNodeId(path);
       nodeMap.set(id, { node, path, id });
 
-      // Apply marks to the text
-      let text = node.value;
+      // Contentful stores soft line breaks (shift/⌘+enter) as a literal "\n"
+      // inside a text node's value. Emit them as a self-closing <br /> so the
+      // TipTap editor renders the break instead of collapsing the whitespace,
+      // and so the break survives the round-trip back into the document. The
+      // slash matters: the Language Server parses the submitted HTML as XHTML
+      // and rejects a bare <br>.
+      let text = escapeHtml(node.value).replace(/\r\n?|\n/g, "<br />");
       if (node.marks.length > 0) {
         for (const mark of node.marks) {
           const markType = mark.type as (typeof MARKS)[keyof typeof MARKS];
@@ -245,23 +258,55 @@ export const convertHtmlToRichText = (
   const tempDiv = document.createElement("div");
   tempDiv.innerHTML = html;
 
-  let updatedDoc = originalDoc;
+  // Reconstruct the updated text for each tracked node id, turning <br> back
+  // into the "\n" soft break Contentful stores inline. A single text node can
+  // render back either as one span with an inner break ("A<br>B") or as two
+  // same-id spans bridged by a structural break ("…</span><br><span…>")
+  // depending on how ProseMirror serializes the hard break; both collapse to
+  // "A\nB".
+  const textById = new Map<string, string>();
+  const append = (id: string, value: string) => {
+    textById.set(id, (textById.get(id) ?? "") + value);
+  };
 
-  // Find all spans with node IDs and update the corresponding nodes
-  const spans = tempDiv.querySelectorAll("span[data-node-id]");
-  for (const span of spans) {
-    const id = (span as HTMLElement).dataset.nodeId;
-    if (!id) continue;
+  // A <br> that sits outside any node-id span is only a soft break if it bridges
+  // two slices of the *same* text node; `pendingBreak` carries it forward until
+  // the next emitted text confirms (same id) or discards it (different node).
+  let lastId: string | null = null;
+  let pendingBreak = false;
 
-    const nodeInfo = nodeMap.get(id);
-    if (nodeInfo) {
-      try {
-        // Get text content, stripping any inner HTML formatting
-        const textContent = span.textContent || "";
-        updatedDoc = updateNodeAtPath(updatedDoc, nodeInfo.path, textContent);
-      } catch (error) {
-        console.error(`Error updating node ${id}:`, error);
+  const walk = (parent: Node, ancestorId: string | null) => {
+    parent.childNodes.forEach((child) => {
+      if (child.nodeType === Node.TEXT_NODE) {
+        if (ancestorId) {
+          if (pendingBreak && lastId === ancestorId) append(ancestorId, "\n");
+          pendingBreak = false;
+          append(ancestorId, child.textContent ?? "");
+          lastId = ancestorId;
+        }
+      } else if (child.nodeName === "BR") {
+        if (ancestorId) {
+          append(ancestorId, "\n");
+          lastId = ancestorId;
+        } else {
+          pendingBreak = true;
+        }
+      } else if (child instanceof HTMLElement) {
+        const id = child.dataset.nodeId ?? ancestorId;
+        walk(child, id);
       }
+    });
+  };
+  walk(tempDiv, null);
+
+  let updatedDoc = originalDoc;
+  for (const [id, value] of textById) {
+    const nodeInfo = nodeMap.get(id);
+    if (!nodeInfo) continue;
+    try {
+      updatedDoc = updateNodeAtPath(updatedDoc, nodeInfo.path, value);
+    } catch (error) {
+      console.error(`Error updating node ${id}:`, error);
     }
   }
 

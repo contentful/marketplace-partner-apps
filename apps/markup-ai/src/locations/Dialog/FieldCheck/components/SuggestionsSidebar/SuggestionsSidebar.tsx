@@ -26,7 +26,7 @@ import {
   SEVERITY_BAR_COLORS,
   SEVERITY_COLORS,
 } from "../../../../../utils/scoreColors";
-import { SuggestionCard, type FeedbackPayload } from "./SuggestionCard";
+import { SuggestionCard } from "./SuggestionCard";
 import { AgentsGroupedList } from "./AgentsGroupedList";
 import { AgentFilterPopover } from "./AgentFilterPopover";
 import { AuditTrailPopover } from "./AuditTrailPopover";
@@ -65,8 +65,6 @@ export interface SuggestionsSidebarProps {
   onViewModeChange: (next: SidebarViewMode) => void;
   styleAgentApplyAllPeerCountByIssueId: Map<string, number>;
   onSignOut: () => void;
-  onSubmitFeedback?: (payload: FeedbackPayload, issueIndex: number) => Promise<void>;
-  isFeedbackLoading?: boolean;
   /** Total number of issues from the initial scan (before any apply/dismiss). */
   totalIssueCount: number;
   appliedCount: number;
@@ -476,8 +474,6 @@ export const SuggestionsSidebar: React.FC<SuggestionsSidebarProps> = ({
   onViewModeChange,
   styleAgentApplyAllPeerCountByIssueId,
   onSignOut,
-  onSubmitFeedback,
-  isFeedbackLoading,
   totalIssueCount,
   appliedCount,
   dismissedCount,
@@ -816,8 +812,6 @@ export const SuggestionsSidebar: React.FC<SuggestionsSidebarProps> = ({
                 onApplyIssue={onApplyIssue}
                 onApplyAllMatching={onApplyAllMatching}
                 onDismissIssue={onDismissIssue}
-                onSubmitFeedback={onSubmitFeedback}
-                isFeedbackLoading={isFeedbackLoading}
                 styleAgentApplyAllPeerCountByIssueId={styleAgentApplyAllPeerCountByIssueId}
                 cardRefs={cardRefs}
               />
@@ -851,12 +845,6 @@ export const SuggestionsSidebar: React.FC<SuggestionsSidebarProps> = ({
                 onDismiss={() => {
                   onDismissIssue(issue, originalIndex);
                 }}
-                onSubmitFeedback={
-                  onSubmitFeedback
-                    ? (payload) => onSubmitFeedback(payload, originalIndex)
-                    : undefined
-                }
-                isFeedbackLoading={isFeedbackLoading}
               />
             );
           });

@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.1](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.1.0...ceros-contentful-app-v1.1.1) (2026-06-18)
+
+
+### Bug Fixes
+
+* **deps:** bump axios from 1.15.2 to 1.16.1 in /apps/ceros ([#8255](https://github.com/contentful/marketplace-partner-apps/issues/8255)) ([dbccccd](https://github.com/contentful/marketplace-partner-apps/commit/dbccccd6c32407536e9b2dfcc49903da243eccc7))
+* **deps:** bump esbuild, @contentful/app-scripts, @vitejs/plugin-react, vite and vitest in /apps/ceros ([#8319](https://github.com/contentful/marketplace-partner-apps/issues/8319)) ([ed1521f](https://github.com/contentful/marketplace-partner-apps/commit/ed1521f2c5dd8297a105713443b8bbb1c86ccba8))
+* **deps:** bump qs from 6.15.1 to 6.15.2 in /apps/ceros ([#8245](https://github.com/contentful/marketplace-partner-apps/issues/8245)) ([f852af2](https://github.com/contentful/marketplace-partner-apps/commit/f852af2f9234c35a8ae29addc7a666e199b8c5b4))
+
 ## [1.1.0](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.0.29...ceros-contentful-app-v1.1.0) (2026-05-12)
 
 

@@ -4,7 +4,9 @@ import { queryOptions, type UseMutationOptions } from "@tanstack/react-query";
 
 import { client } from "../client.gen";
 import {
+  accountGetAccount,
   accountGetAccountConfig,
+  authenticationGetUserOrganizations,
   cortexActivityEventsTrackActivityEvent,
   cortexAgentsGetAgent,
   cortexAgentsListCategories,
@@ -13,13 +15,8 @@ import {
   cortexWorkflowsGetWorkflowStatus,
   cortexWorkflowsListWorkflows,
   cortexWorkflowsStreamWorkflowEvents,
-  getAdminConstants,
-  internalListTargets,
-  internalSubmitFeedback,
   type Options,
-  styleAgentGetStyleAgentConfig,
-  styleAgentListStyleAgentContentProfiles,
-  styleAgentListStyleAgentTargets,
+  styleAgentListStyleGuides,
   terminologyCreateDomain,
   terminologyDeleteDomain,
   terminologyGetDomain,
@@ -30,6 +27,12 @@ import type {
   AccountGetAccountConfigData,
   AccountGetAccountConfigError,
   AccountGetAccountConfigResponse,
+  AccountGetAccountData,
+  AccountGetAccountError,
+  AccountGetAccountResponse,
+  AuthenticationGetUserOrganizationsData,
+  AuthenticationGetUserOrganizationsError,
+  AuthenticationGetUserOrganizationsResponse,
   CortexActivityEventsTrackActivityEventData,
   CortexActivityEventsTrackActivityEventError,
   CortexActivityEventsTrackActivityEventResponse,
@@ -53,24 +56,9 @@ import type {
   CortexWorkflowsListWorkflowsResponse,
   CortexWorkflowsStreamWorkflowEventsData,
   CortexWorkflowsStreamWorkflowEventsError,
-  GetAdminConstantsData,
-  GetAdminConstantsError,
-  GetAdminConstantsResponse,
-  InternalListTargetsData,
-  InternalListTargetsError,
-  InternalListTargetsResponse,
-  InternalSubmitFeedbackData,
-  InternalSubmitFeedbackError,
-  InternalSubmitFeedbackResponse,
-  StyleAgentGetStyleAgentConfigData,
-  StyleAgentGetStyleAgentConfigError,
-  StyleAgentGetStyleAgentConfigResponse,
-  StyleAgentListStyleAgentContentProfilesData,
-  StyleAgentListStyleAgentContentProfilesError,
-  StyleAgentListStyleAgentContentProfilesResponse,
-  StyleAgentListStyleAgentTargetsData,
-  StyleAgentListStyleAgentTargetsError,
-  StyleAgentListStyleAgentTargetsResponse,
+  StyleAgentListStyleGuidesData,
+  StyleAgentListStyleGuidesError,
+  StyleAgentListStyleGuidesResponse,
   TerminologyCreateDomainData,
   TerminologyCreateDomainError,
   TerminologyCreateDomainResponse,
@@ -127,36 +115,13 @@ const createQueryKey = <TOptions extends Options>(
   return [params];
 };
 
-export const getAdminConstantsQueryKey = (options?: Options<GetAdminConstantsData>) =>
-  createQueryKey("getAdminConstants", options);
-
-/**
- * Get Admin Constants
- */
-export const getAdminConstantsOptions = (options?: Options<GetAdminConstantsData>) =>
-  queryOptions<
-    GetAdminConstantsResponse,
-    GetAdminConstantsError,
-    GetAdminConstantsResponse,
-    ReturnType<typeof getAdminConstantsQueryKey>
-  >({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await getAdminConstants({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: getAdminConstantsQueryKey(options),
-  });
-
 export const terminologyListDomainsQueryKey = (options?: Options<TerminologyListDomainsData>) =>
   createQueryKey("terminologyListDomains", options);
 
 /**
  * List Domains
+ *
+ * @deprecated
  */
 export const terminologyListDomainsOptions = (options?: Options<TerminologyListDomainsData>) =>
   queryOptions<
@@ -179,6 +144,8 @@ export const terminologyListDomainsOptions = (options?: Options<TerminologyListD
 
 /**
  * Create Domain
+ *
+ * @deprecated
  */
 export const terminologyCreateDomainMutation = (
   options?: Partial<Options<TerminologyCreateDomainData>>,
@@ -206,6 +173,8 @@ export const terminologyCreateDomainMutation = (
 
 /**
  * Delete Domain
+ *
+ * @deprecated
  */
 export const terminologyDeleteDomainMutation = (
   options?: Partial<Options<TerminologyDeleteDomainData>>,
@@ -236,6 +205,8 @@ export const terminologyGetDomainQueryKey = (options: Options<TerminologyGetDoma
 
 /**
  * Get Domain
+ *
+ * @deprecated
  */
 export const terminologyGetDomainOptions = (options: Options<TerminologyGetDomainData>) =>
   queryOptions<
@@ -258,6 +229,8 @@ export const terminologyGetDomainOptions = (options: Options<TerminologyGetDomai
 
 /**
  * Update Domain
+ *
+ * @deprecated
  */
 export const terminologyUpdateDomainMutation = (
   options?: Partial<Options<TerminologyUpdateDomainData>>,
@@ -283,48 +256,26 @@ export const terminologyUpdateDomainMutation = (
   return mutationOptions;
 };
 
-/**
- * Submit Feedback
- */
-export const internalSubmitFeedbackMutation = (
-  options?: Partial<Options<InternalSubmitFeedbackData>>,
-): UseMutationOptions<
-  InternalSubmitFeedbackResponse,
-  InternalSubmitFeedbackError,
-  Options<InternalSubmitFeedbackData>
-> => {
-  const mutationOptions: UseMutationOptions<
-    InternalSubmitFeedbackResponse,
-    InternalSubmitFeedbackError,
-    Options<InternalSubmitFeedbackData>
-  > = {
-    mutationFn: async (fnOptions) => {
-      const { data } = await internalSubmitFeedback({
-        ...options,
-        ...fnOptions,
-        throwOnError: true,
-      });
-      return data;
-    },
-  };
-  return mutationOptions;
-};
-
-export const internalListTargetsQueryKey = (options?: Options<InternalListTargetsData>) =>
-  createQueryKey("internalListTargets", options);
+export const styleAgentListStyleGuidesQueryKey = (
+  options?: Options<StyleAgentListStyleGuidesData>,
+) => createQueryKey("styleAgentListStyleGuides", options);
 
 /**
- * List Targets
+ * List Style Guides
+ *
+ * List the style guides available to your organization.
  */
-export const internalListTargetsOptions = (options?: Options<InternalListTargetsData>) =>
+export const styleAgentListStyleGuidesOptions = (
+  options?: Options<StyleAgentListStyleGuidesData>,
+) =>
   queryOptions<
-    InternalListTargetsResponse,
-    InternalListTargetsError,
-    InternalListTargetsResponse,
-    ReturnType<typeof internalListTargetsQueryKey>
+    StyleAgentListStyleGuidesResponse,
+    StyleAgentListStyleGuidesError,
+    StyleAgentListStyleGuidesResponse,
+    ReturnType<typeof styleAgentListStyleGuidesQueryKey>
   >({
     queryFn: async ({ queryKey, signal }) => {
-      const { data } = await internalListTargets({
+      const { data } = await styleAgentListStyleGuides({
         ...options,
         ...queryKey[0],
         signal,
@@ -332,7 +283,64 @@ export const internalListTargetsOptions = (options?: Options<InternalListTargets
       });
       return data;
     },
-    queryKey: internalListTargetsQueryKey(options),
+    queryKey: styleAgentListStyleGuidesQueryKey(options),
+  });
+
+export const accountGetAccountQueryKey = (options?: Options<AccountGetAccountData>) =>
+  createQueryKey("accountGetAccount", options);
+
+/**
+ * Get Account
+ *
+ * Get account information for the authenticated user's organization
+ */
+export const accountGetAccountOptions = (options?: Options<AccountGetAccountData>) =>
+  queryOptions<
+    AccountGetAccountResponse,
+    AccountGetAccountError,
+    AccountGetAccountResponse,
+    ReturnType<typeof accountGetAccountQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await accountGetAccount({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: accountGetAccountQueryKey(options),
+  });
+
+export const authenticationGetUserOrganizationsQueryKey = (
+  options?: Options<AuthenticationGetUserOrganizationsData>,
+) => createQueryKey("authenticationGetUserOrganizations", options);
+
+/**
+ * Get User Organizations
+ *
+ * Get organizations that the authenticated user belongs to.
+ */
+export const authenticationGetUserOrganizationsOptions = (
+  options?: Options<AuthenticationGetUserOrganizationsData>,
+) =>
+  queryOptions<
+    AuthenticationGetUserOrganizationsResponse,
+    AuthenticationGetUserOrganizationsError,
+    AuthenticationGetUserOrganizationsResponse,
+    ReturnType<typeof authenticationGetUserOrganizationsQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await authenticationGetUserOrganizations({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: authenticationGetUserOrganizationsQueryKey(options),
   });
 
 /**
@@ -604,88 +612,4 @@ export const accountGetAccountConfigOptions = (options?: Options<AccountGetAccou
       return data;
     },
     queryKey: accountGetAccountConfigQueryKey(options),
-  });
-
-export const styleAgentGetStyleAgentConfigQueryKey = (
-  options?: Options<StyleAgentGetStyleAgentConfigData>,
-) => createQueryKey("styleAgentGetStyleAgentConfig", options);
-
-/**
- * Get Style Agent Config
- */
-export const styleAgentGetStyleAgentConfigOptions = (
-  options?: Options<StyleAgentGetStyleAgentConfigData>,
-) =>
-  queryOptions<
-    StyleAgentGetStyleAgentConfigResponse,
-    StyleAgentGetStyleAgentConfigError,
-    StyleAgentGetStyleAgentConfigResponse,
-    ReturnType<typeof styleAgentGetStyleAgentConfigQueryKey>
-  >({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await styleAgentGetStyleAgentConfig({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: styleAgentGetStyleAgentConfigQueryKey(options),
-  });
-
-export const styleAgentListStyleAgentTargetsQueryKey = (
-  options?: Options<StyleAgentListStyleAgentTargetsData>,
-) => createQueryKey("styleAgentListStyleAgentTargets", options);
-
-/**
- * List Style Agent Targets
- */
-export const styleAgentListStyleAgentTargetsOptions = (
-  options?: Options<StyleAgentListStyleAgentTargetsData>,
-) =>
-  queryOptions<
-    StyleAgentListStyleAgentTargetsResponse,
-    StyleAgentListStyleAgentTargetsError,
-    StyleAgentListStyleAgentTargetsResponse,
-    ReturnType<typeof styleAgentListStyleAgentTargetsQueryKey>
-  >({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await styleAgentListStyleAgentTargets({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: styleAgentListStyleAgentTargetsQueryKey(options),
-  });
-
-export const styleAgentListStyleAgentContentProfilesQueryKey = (
-  options?: Options<StyleAgentListStyleAgentContentProfilesData>,
-) => createQueryKey("styleAgentListStyleAgentContentProfiles", options);
-
-/**
- * List Style Agent Content Profiles
- */
-export const styleAgentListStyleAgentContentProfilesOptions = (
-  options?: Options<StyleAgentListStyleAgentContentProfilesData>,
-) =>
-  queryOptions<
-    StyleAgentListStyleAgentContentProfilesResponse,
-    StyleAgentListStyleAgentContentProfilesError,
-    StyleAgentListStyleAgentContentProfilesResponse,
-    ReturnType<typeof styleAgentListStyleAgentContentProfilesQueryKey>
-  >({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await styleAgentListStyleAgentContentProfiles({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: styleAgentListStyleAgentContentProfilesQueryKey(options),
   });

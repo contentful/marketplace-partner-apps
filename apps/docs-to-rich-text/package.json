@@ -16,7 +16,7 @@
     "file-type": "^19.6.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "uuid": "^11.1.0"
+    "uuid": "^14.0.0"
   },
   "scripts": {
     "start": "vite",
@@ -30,21 +30,21 @@
     "deploy:staging": "contentful-app-scripts upload --ci --bundle-dir ./dist --organization-id ${TEST_ORG_ID} --definition-id 6J4rXeXJ0DWrePRwZyULO8 --token ${TEST_CMA_TOKEN}"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "^2.5.6",
+    "@contentful/app-scripts": "^2.5.12",
     "@eslint/js": "9.39.0",
-    "@testing-library/react": "^16.3.0",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^22.9.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "@vitejs/plugin-react": "^4.7.0",
+    "@vitejs/plugin-react": "^6.0.2",
     "eslint": "^9.39.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
-    "happy-dom": "^20.8.9",
+    "eslint-plugin-prettier": "^5.5.6",
+    "happy-dom": "^20.10.4",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.2",
-    "vite": "^6.4.1",
-    "vitest": "^2.1.5"
+    "typescript-eslint": "^8.61.1",
+    "vite": "^8.0.16",
+    "vitest": "^4.1.9"
   },
   "overrides": {
     "slate": "0.94.1",

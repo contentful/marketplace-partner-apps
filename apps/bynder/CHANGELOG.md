@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.3](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.7.2...bynder-assets-v1.7.3) (2026-06-22)
+
+
+### Bug Fixes
+
+* **deps:** bump handlebars from 4.7.8 to 4.7.9 in /apps/bynder ([#8048](https://github.com/contentful/marketplace-partner-apps/issues/8048)) ([095e6fb](https://github.com/contentful/marketplace-partner-apps/commit/095e6fb8989d62a8c8b12a1f3b407921c61dc69e))
+* **deps:** bump tar and @contentful/app-scripts in /apps/bynder ([#8351](https://github.com/contentful/marketplace-partner-apps/issues/8351)) ([70cfcb3](https://github.com/contentful/marketplace-partner-apps/commit/70cfcb3ae1cb7da8d4c7eadccdb381a5c2202e77))
+
 ## [1.7.2](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.7.1...bynder-assets-v1.7.2) (2026-05-06)
 
 
