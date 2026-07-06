@@ -192,6 +192,15 @@ describe('getExperienceMetadata', () => {
       expect(result).toBeNull();
     });
 
+    it('logs a sanitized message (not the raw error) when extract throws', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      mockExtract.mockRejectedValue(new Error('Network error'));
+      await getExperienceMetadata('https://view.ceros.com/account/experience');
+      expect(consoleSpy).toHaveBeenCalledWith('Failed to fetch oembed metadata.');
+      expect(consoleSpy).not.toHaveBeenCalledWith(expect.any(Error));
+      consoleSpy.mockRestore();
+    });
+
     it('fills url from canonical URL when metadata has no url', async () => {
       const { url: _url, ...metadataWithoutUrl } = baseMetadata;
       mockExtract.mockResolvedValue(metadataWithoutUrl);
