@@ -234,7 +234,7 @@ async function fetchAllEntries(sdk: PageAppSDK, space: string, id: string, displ
         return data;
     }
     catch (err) {
-        console.error('Failed to fetch entries.');
+        console.error('Failed to fetch entries:', err instanceof Error ? err.message : String(err));
     }
 
     return null;
