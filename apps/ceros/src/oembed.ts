@@ -42,8 +42,7 @@ export async function getExperienceMetadata(experienceUrl: string): Promise<Oemb
   const url = parseCerosUrl(experienceUrl);
 
   if (!url) {
-    console.trace(`Experience URL '${experienceUrl}' isn't valid. Make sure it looks like
-        'https://<account>.ceros.site/experience' or 'https://view.ceros.com/account/experience'`);
+    console.error('Invalid Ceros experience URL.');
     return null;
   }
 

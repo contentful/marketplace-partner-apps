@@ -35,7 +35,7 @@ export default function useAssetsService() {
         contentType = retrievedContentType;
       }
     } catch (error) {
-      console.error(error);
+      console.error('Failed to retrieve asset content type.');
     }
     asset.fields.file[DEFAULT_LOCALE].contentType = contentType;
     return asset;
