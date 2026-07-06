@@ -196,7 +196,7 @@ describe('getExperienceMetadata', () => {
       const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       mockExtract.mockRejectedValue(new Error('Network error'));
       await getExperienceMetadata('https://view.ceros.com/account/experience');
-      expect(consoleSpy).toHaveBeenCalledWith('Failed to fetch oembed metadata:', 'Network error');
+      expect(consoleSpy).toHaveBeenCalledWith('Failed to fetch oembed metadata.');
       expect(consoleSpy).not.toHaveBeenCalledWith(expect.any(Error));
       consoleSpy.mockRestore();
     });
