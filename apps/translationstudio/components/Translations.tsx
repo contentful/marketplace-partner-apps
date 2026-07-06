@@ -234,7 +234,7 @@ async function fetchAllEntries(sdk: PageAppSDK, space: string, id: string, displ
         return data;
     }
     catch (err) {
-        console.error(err);
+        console.error('An error occurred. Please try again.');
     }
 
     return null;
