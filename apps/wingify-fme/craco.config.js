@@ -23,4 +23,15 @@ module.exports = {
       return webpackConfig;
     },
   },
+  jest: {
+    configure: {
+      roots: ['<rootDir>/src', '<rootDir>/functions'],
+      testMatch: [
+        '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
+        '<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}',
+        '<rootDir>/functions/**/__tests__/**/*.{js,jsx,ts,tsx}',
+        '<rootDir>/functions/**/*.{spec,test}.{js,jsx,ts,tsx}',
+      ],
+    },
+  },
 };
