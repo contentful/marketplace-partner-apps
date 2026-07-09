@@ -19,6 +19,11 @@
       "allowedVersions": "<=0.35.2"
     },
     {
+      "description": "Cap @types/node at <=18.15.3 across all apps, matching the previous Dependabot ignore rule",
+      "matchPackageNames": ["@types/node"],
+      "allowedVersions": "<=18.15.3"
+    },
+    {
       "description": "Apply contentful-owned label to PRs for bynder, cloudinary2, and shopify",
       "matchFileNames": [
         "apps/bynder/**",
