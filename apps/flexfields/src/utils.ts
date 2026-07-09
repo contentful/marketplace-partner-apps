@@ -248,3 +248,125 @@ export const getFieldName = (fieldId: string[], targetEntityId: string, allConte
 export const getSelectedTargetFields = ({ targetEntityFields, targetEntityField }: { targetEntityFields: any[]; targetEntityField: string[] }) => {
   return targetEntityFields.filter((field) => targetEntityField.includes(field.id)).map((field) => field.name);
 };
+
+// ----- Import / Export helpers -----
+
+export interface InvalidImportedRule {
+  rule: Rule;
+  reasons: string[];
+}
+
+export interface ImportValidationResult {
+  validRules: Rule[];
+  invalidRules: InvalidImportedRule[];
+}
+
+// Strip runtime-only properties so the exported file only contains the persisted rule shape.
+const toExportableRule = (rule: Rule): Rule => {
+  const { entryId, ...rest } = rule;
+  return rest as Rule;
+};
+
+// Build the JSON payload that is written to the exported configuration file.
+export const buildExportPayload = (rules: Rule[]) => ({
+  rules: (rules || []).map(toExportableRule),
+});
+
+// Parse the raw text of an imported configuration file into an array of rules.
+// Accepts either a bare array of rules or an object of the shape { rules: [...] }.
+export const parseImportedConfig = (raw: string): Rule[] => {
+  let data: unknown;
+  try {
+    data = JSON.parse(raw);
+  } catch (error) {
+    throw new Error('The selected file is not valid JSON.');
+  }
+
+  const rules = Array.isArray(data) ? data : (data as { rules?: unknown })?.rules;
+
+  if (!Array.isArray(rules)) {
+    throw new Error('Invalid configuration file: expected an array of rules or an object with a "rules" array.');
+  }
+
+  return rules as Rule[];
+};
+
+// Validate that every imported rule references content types and fields that exist
+// in the current environment. Rules that fail validation are reported with reasons.
+export const validateImportedRules = (rules: Rule[], allContentTypes: any[]): ImportValidationResult => {
+  const validRules: Rule[] = [];
+  const invalidRules: InvalidImportedRule[] = [];
+
+  const findContentType = (id: string) => allContentTypes.find((contentType) => contentType.sys.id === id);
+  const fieldExists = (contentType: any, fieldId: string) => !!contentType?.fields?.some((field: any) => field.id === fieldId);
+
+  rules.forEach((rule) => {
+    if (
+      !rule ||
+      typeof rule !== 'object' ||
+      !rule.contentType ||
+      !rule.contentTypeField ||
+      !rule.condition ||
+      !rule.targetEntity ||
+      !Array.isArray(rule.targetEntityField) ||
+      rule.targetEntityField.length === 0
+    ) {
+      invalidRules.push({ rule, reasons: ['Rule is missing required properties'] });
+      return;
+    }
+
+    const reasons: string[] = [];
+
+    const sourceContentType = findContentType(rule.contentType);
+    if (!sourceContentType) {
+      reasons.push(`Content type "${rule.contentType}" does not exist`);
+    } else if (!fieldExists(sourceContentType, rule.contentTypeField)) {
+      reasons.push(`Field "${rule.contentTypeField}" does not exist on content type "${rule.contentType}"`);
+    }
+
+    const targetContentType = findContentType(rule.targetEntity);
+    if (!targetContentType) {
+      reasons.push(`Target content type "${rule.targetEntity}" does not exist`);
+    } else {
+      const missingFields = rule.targetEntityField.filter((fieldId) => !fieldExists(targetContentType, fieldId));
+      if (missingFields.length) {
+        reasons.push(`Field(s) ${missingFields.map((fieldId) => `"${fieldId}"`).join(', ')} do not exist on content type "${rule.targetEntity}"`);
+      }
+    }
+
+    if (reasons.length) {
+      invalidRules.push({ rule, reasons });
+    } else {
+      validRules.push(rule);
+    }
+  });
+
+  return { validRules, invalidRules };
+};
+
+// Determine whether two rules describe the same condition/target, ignoring ordering of target fields.
+const isSameRule = (a: Rule, b: Rule): boolean => {
+  const sortedFields = (rule: Rule) => [...(rule.targetEntityField || [])].sort().join('|');
+  return (
+    a.contentType === b.contentType &&
+    a.contentTypeField === b.contentTypeField &&
+    a.condition === b.condition &&
+    a.conditionValue === b.conditionValue &&
+    a.targetEntity === b.targetEntity &&
+    a.isForSameEntity === b.isForSameEntity &&
+    sortedFields(a) === sortedFields(b)
+  );
+};
+
+// Merge incoming rules into existing ones, skipping duplicates.
+export const mergeRules = (existing: Rule[], incoming: Rule[]): Rule[] => {
+  const merged = [...(existing || [])];
+
+  (incoming || []).forEach((rule) => {
+    if (!merged.some((existingRule) => isSameRule(existingRule, rule))) {
+      merged.push(rule);
+    }
+  });
+
+  return merged;
+};
