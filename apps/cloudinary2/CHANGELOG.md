@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.5.0](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.4.6...cloudinary-assets-v1.5.0) (2026-06-25)
+
+
+### Features
+
+* **cloudinary:** add sidebar multi-field picker for batch asset assignment [ES-380] ([#8447](https://github.com/contentful/marketplace-partner-apps/issues/8447)) ([c3ea9d4](https://github.com/contentful/marketplace-partner-apps/commit/c3ea9d4f0b3edd7857c2c6c02d071e87c3e8174f))
+
+## [1.4.6](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.4.5...cloudinary-assets-v1.4.6) (2026-06-22)
+
+
+### Bug Fixes
+
+* **deps:** bump tmp and @contentful/app-scripts in /apps/cloudinary2 ([#8249](https://github.com/contentful/marketplace-partner-apps/issues/8249)) ([691281d](https://github.com/contentful/marketplace-partner-apps/commit/691281de24c36cd6be3d1cc0f9a598de5c8500e8))
+
+## [1.4.5](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.4.4...cloudinary-assets-v1.4.5) (2026-06-22)
+
+
+### Bug Fixes
+
+* **cloudinary2:** use static poster for long video thumbnails [] ([#8399](https://github.com/contentful/marketplace-partner-apps/issues/8399)) ([68bcb5c](https://github.com/contentful/marketplace-partner-apps/commit/68bcb5cc8e11f7b71beef6cbcd1d915866e6adb6))
+* **deps:** bump axios from 1.13.5 to 1.15.0 in /apps/cloudinary2 ([#8139](https://github.com/contentful/marketplace-partner-apps/issues/8139)) ([4e15f3d](https://github.com/contentful/marketplace-partner-apps/commit/4e15f3dc01ce06bfe5a6fd7d44ab0ea52cd6e07d))
+* **deps:** bump axios from 1.13.5 to 1.15.0 in /apps/cloudinary2 ([#8139](https://github.com/contentful/marketplace-partner-apps/issues/8139)) ([d8ac147](https://github.com/contentful/marketplace-partner-apps/commit/d8ac147f3caf075f7d2af29fe25184de9e102821))
+* **deps:** bump esbuild, @vitejs/plugin-react, vite and vitest in /apps/cloudinary2 ([#8334](https://github.com/contentful/marketplace-partner-apps/issues/8334)) ([533f1d1](https://github.com/contentful/marketplace-partner-apps/commit/533f1d1ed0e24ec6c2c3259edca7164362e535ec))
+* **deps:** bump lodash from 4.17.23 to 4.18.1 in /apps/cloudinary2 ([#8115](https://github.com/contentful/marketplace-partner-apps/issues/8115)) ([dcdc3ca](https://github.com/contentful/marketplace-partner-apps/commit/dcdc3ca7b5648de83a73ae9ef918cbe832c164ff))
+* **deps:** bump qs from 6.14.2 to 6.15.2 in /apps/cloudinary2 ([#8241](https://github.com/contentful/marketplace-partner-apps/issues/8241)) ([ac91d36](https://github.com/contentful/marketplace-partner-apps/commit/ac91d36c902c88f255a0ac1113a1493cfc4cd9c6))
+
 ## [1.4.4](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.4.3...cloudinary-assets-v1.4.4) (2026-06-18)
 
 

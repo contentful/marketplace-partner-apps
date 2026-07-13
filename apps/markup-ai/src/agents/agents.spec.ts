@@ -18,7 +18,7 @@ describe("agents catalog", () => {
     const style = AGENTS.find((a) => a.id === "style_agent");
     expect(style).toBeDefined();
     expect(style?.name.length).toBeGreaterThan(0);
-    expect(style?.configurationKeys).toContain("target_id");
+    expect(style?.configurationKeys).toContain("style_guide_id");
   });
 
   it("maps known agents to their icon key", () => {
@@ -37,9 +37,9 @@ describe("agents catalog", () => {
     expect(CATEGORIES[DEFAULT_CATEGORY]).toBeDefined();
   });
 
-  it("AGENT_CONFIG_KEY_META target_id is marked as a target_select", () => {
-    const meta = AGENT_CONFIG_KEY_META.target_id;
-    expect(meta?.inputType).toBe("target_select");
+  it("AGENT_CONFIG_KEY_META style_guide_id is marked as a style_guide_select", () => {
+    const meta = AGENT_CONFIG_KEY_META.style_guide_id;
+    expect(meta?.inputType).toBe("style_guide_select");
   });
 });
 

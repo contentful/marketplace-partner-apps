@@ -10,679 +10,67 @@ export type ClientOptions = {
 };
 
 /**
- * APIKeyCreate
+ * WorkflowStatus
  *
- * Model for creating a new API key.
+ * Status of a workflow execution.
  */
-export type ApiKeyCreate = {
-  /**
-   * Name
-   *
-   * The name of the API key.
-   */
-  name: string;
-  /**
-   * Expires At
-   *
-   * The date and time the API key will expire.
-   */
-  expires_at?: string | null;
-};
-
-/**
- * APIKeyRead
- *
- * Model for reading API key data. Contains only safe fields for security.
- */
-export type ApiKeyRead = {
-  /**
-   * Name
-   *
-   * The name of the API key.
-   */
-  name: string;
-  /**
-   * Expires At
-   *
-   * The date and time the API key will expire.
-   */
-  expires_at?: string | null;
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Truncated Key
-   */
-  truncated_key: string;
-  /**
-   * Organization Id
-   */
-  organization_id: string;
-  /**
-   * Created At
-   */
-  created_at: string;
-  /**
-   * Created By
-   */
-  created_by: string | null;
-};
-
-/**
- * APIKeyReadWithSecret
- *
- * Model for reading API key data including the secret key. Use with caution.
- */
-export type ApiKeyReadWithSecret = {
-  /**
-   * Name
-   *
-   * The name of the API key.
-   */
-  name: string;
-  /**
-   * Expires At
-   *
-   * The date and time the API key will expire.
-   */
-  expires_at?: string | null;
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Truncated Key
-   */
-  truncated_key: string;
-  /**
-   * Organization Id
-   */
-  organization_id: string;
-  /**
-   * Created At
-   */
-  created_at: string;
-  /**
-   * Created By
-   */
-  created_by: string | null;
-  /**
-   * Key
-   */
-  key: string;
-};
-
-/**
- * APIKeyUpdate
- *
- * Model for updating API key fields. All fields are optional.
- */
-export type ApiKeyUpdate = {
-  /**
-   * Name
-   *
-   * The name of the API key.
-   */
-  name?: string | null;
-  /**
-   * Expires At
-   *
-   * The date and time the API key will expire.
-   */
-  expires_at?: string | null;
-};
-
-/**
- * AbandonedSignupFollowupResponse
- *
- * Response model for abandoned signup followup job.
- */
-export type AbandonedSignupFollowupResponse = {
-  /**
-   * Workflow Id
-   *
-   * Temporal workflow ID (check Temporal UI for status)
-   */
-  workflow_id?: string | null;
-  /**
-   * Emails Sent
-   *
-   * Number of emails successfully sent (non-dry-run only)
-   */
-  emails_sent?: number | null;
-  /**
-   * Message
-   *
-   * Status message for early exit conditions
-   */
-  message?: string | null;
-  /**
-   * Error
-   *
-   * Error message if job failed
-   */
-  error?: string | null;
-  /**
-   * Dry Run
-   *
-   * Whether this was a dry run
-   */
-  dry_run?: boolean;
-  /**
-   * Would Send Count
-   *
-   * Number of emails that would be sent (dry-run only)
-   */
-  would_send_count?: number | null;
-  /**
-   * Users
-   *
-   * Users who would receive emails (dry-run only)
-   */
-  users?: Array<AbandonedSignupUserPreview> | null;
-  /**
-   * Excluded Count
-   *
-   * Number of users excluded (already sent or max retries exceeded)
-   */
-  excluded_count?: number | null;
-  /**
-   * Filtered Out Count
-   *
-   * Number of users filtered out by email pattern
-   */
-  filtered_out_count?: number | null;
-  /**
-   * Failed Count
-   *
-   * Number of emails that failed to send
-   */
-  failed_count?: number | null;
-  /**
-   * Errors
-   *
-   * Error messages for failed emails
-   */
-  errors?: Array<string> | null;
-};
-
-/**
- * AbandonedSignupUserPreview
- */
-export type AbandonedSignupUserPreview = {
-  /**
-   * Email
-   */
-  email: string;
-  /**
-   * Name
-   */
-  name?: string | null;
-  /**
-   * Created At
-   */
-  created_at: string;
-};
-
-/**
- * AccessPolicyRead
- *
- * Model for reading access policy data.
- */
-export type AccessPolicyRead = {
-  /**
-   * The subject type of the access policy (e.g., everyone, user, etc.).
-   */
-  subject_type: AccessPolicySubjectType;
-  /**
-   * Subject Id
-   *
-   * The subject the access policy applies to. Can be a user ID, API key ID, group ID, etc.
-   */
-  subject_id?: string | null;
-  /**
-   * Role Id
-   *
-   * The role assigned by this access policy.
-   */
-  role_id: string;
-  /**
-   * Scope
-   */
-  scope: string | null;
-  /**
-   * Created At
-   */
-  created_at: string;
-};
-
-/**
- * AccessPolicySubjectType
- */
-export enum AccessPolicySubjectType {
-  EVERYONE = "everyone",
-  AUTHENTICATED = "authenticated",
-  USER = "user",
-  APIKEY = "apikey",
-  ORG_MEMBER = "org_member",
-  ORG_USER = "org_user",
-  ORG_APIKEY = "org_apikey",
+export enum HeliosSharedCortexModelsResponseWorkflowStatus {
+  RUNNING = "running",
+  COMPLETED = "completed",
+  FAILED = "failed",
+  TIMED_OUT = "timed_out",
+  CANCELLED = "cancelled",
 }
 
 /**
- * AccessPolicyWrite
- *
- * Model for creating a new access policy in the global scope.
+ * StyleAgentMode
  */
-export type AccessPolicyWrite = {
+export enum StyleAgentMode {
+  DISABLED = "disabled",
+  ENABLED = "enabled",
+  ENABLED_TERMINOLOGY = "enabled_terminology",
+}
+
+/**
+ * Organization
+ */
+export type HeliosOneApiModulesAuthMainOrganization = {
   /**
-   * The subject type of the access policy (e.g., everyone, user, etc.).
+   * Id
    */
-  subject_type: AccessPolicySubjectType;
+  id: string;
   /**
-   * Subject Id
-   *
-   * The subject the access policy applies to. Can be a user ID, API key ID, group ID, etc.
+   * Name
    */
-  subject_id?: string | null;
+  name: string;
   /**
-   * Role Id
-   *
-   * The role assigned by this access policy.
+   * Display Name
    */
-  role_id: string;
+  display_name: string;
+  /**
+   * Picture
+   */
+  picture: string;
 };
 
 /**
- * AccountMetadata
- */
-export type AccountMetadata = {
-  /**
-   * First Name
-   */
-  first_name: string;
-  /**
-   * Last Name
-   */
-  last_name: string;
-  /**
-   * Job Title
-   */
-  job_title: string;
-  /**
-   * User Role
-   */
-  user_role: string;
-  /**
-   * Marketing Consent
-   */
-  marketing_consent: boolean;
-};
-
-/**
- * AccountResponse
- */
-export type AccountResponse = {
-  organization: OrganizationResponseFull;
-  user_profile: UserProfileResponse;
-  user?: UserRead | null;
-};
-
-/**
- * ActivityEventRequest
+ * WorkflowStatusResponse
  *
- * Request body for tracking a user action on an agent issue.
- *
- * workflow_id and request_id are promoted to top-level fields on the
- * ActivityEvent; the remaining fields are serialized into event_data.
+ * Status response for a workflow.
  */
-export type ActivityEventRequest = {
+export type WorkflowStatusResponse = {
   /**
    * Workflow Id
    *
-   * Workflow ID of the check that produced the issue
+   * Workflow ID
    */
   workflow_id: string;
-  /**
-   * Request Id
-   *
-   * Request ID of the check that produced the issue
-   */
-  request_id: string;
-  /**
-   * Session Id
-   *
-   * Client-generated UUID per sidepanel lifecycle
-   */
-  session_id: string;
-  /**
-   * Action
-   *
-   * Action taken (e.g., 'APPLY_CHANGE', 'dismiss', 'mark-resolve')
-   */
-  action: string;
-  /**
-   * Issue Id
-   *
-   * Backend-generated issue ID (iss_xxx)
-   */
-  issue_id?: string | null;
   /**
    * Agent Id
    *
-   * Stable agent ID (ag_<nanoid>)
+   * Agent that ran this workflow
    */
-  agent_id?: string | null;
-  /**
-   * Agent Name
-   *
-   * Agent that produced the issue
-   */
-  agent_name?: string | null;
-  /**
-   * Action Source
-   *
-   * Where the action was triggered (e.g., 'sidebar', 'tooltip')
-   */
-  action_source: string;
-  /**
-   * Document Ref
-   *
-   * Normalized document URL
-   */
-  document_ref?: string | null;
-  /**
-   * Status
-   *
-   * Outcome of the action: 'success' or 'failed'
-   */
-  status?: string | null;
-  /**
-   * Error Code
-   *
-   * Error description if the action failed
-   */
-  error_code?: string | null;
-  /**
-   * Timestamp
-   *
-   * Timestamp when the action was initiated
-   */
-  timestamp?: string | null;
-};
-
-/**
- * AdminStyleGuideResponse
- *
- * Admin response schema for style guides with full details including prompts and domains.
- */
-export type AdminStyleGuideResponse = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Created At
-   */
-  created_at: string;
-  /**
-   * Created By
-   */
-  created_by: string;
-  /**
-   * Status
-   */
-  status: string;
-  /**
-   * Updated At
-   */
-  updated_at?: string | null;
-  /**
-   * Updated By
-   */
-  updated_by?: string | null;
-  /**
-   * Deleted At
-   */
-  deleted_at?: string | null;
-  /**
-   * Deleted By
-   */
-  deleted_by?: string | null;
-  /**
-   * Summary
-   */
-  summary?: string | null;
-  base_style_guide_type?: BaseStyleGuideType | null;
-  /**
-   * Organization Id
-   */
-  organization_id?: string | null;
-  /**
-   * Consistency Prompt
-   */
-  consistency_prompt?: string | null;
-  /**
-   * Tone Prompt
-   */
-  tone_prompt?: string | null;
-  /**
-   * Clarity Sentence Structure Prompt
-   */
-  clarity_sentence_structure_prompt?: string | null;
-  /**
-   * Clarity Simple Vocabulary Prompt
-   */
-  clarity_simple_vocabulary_prompt?: string | null;
-  /**
-   * Terminology Domains
-   */
-  terminology_domains?: Array<TerminologyDomainInfo> | null;
-};
-
-/**
- * AgentListResult
- *
- * Result of listing agents with optional filtering and pagination.
- */
-export type AgentListResult = {
-  /**
-   * Agents
-   *
-   * Agents for the current page
-   */
-  agents: Array<AgentMetadata>;
-  /**
-   * Total
-   *
-   * Total number of agents matching filters
-   */
-  total: number;
-  /**
-   * Page
-   *
-   * Current page number (1-based)
-   */
-  page: number;
-  /**
-   * Page Size
-   *
-   * Number of items per page
-   */
-  page_size: number;
-  /**
-   * Total Pages
-   *
-   * Total number of pages
-   */
-  total_pages: number;
-};
-
-/**
- * AgentMetadata
- *
- * Metadata about a registered agent.
- */
-export type AgentMetadata = {
-  /**
-   * Id
-   *
-   * Stable agent ID (ag_<nanoid>) used for API routing
-   */
-  id: string;
-  /**
-   * Description
-   *
-   * Agent description
-   */
-  description?: string | null;
-  /**
-   * Labs
-   *
-   * Whether this agent is in labs
-   */
-  labs?: boolean;
-  /**
-   * Input Schema
-   *
-   * Input JSON schema
-   */
-  input_schema?: {
-    [key: string]: unknown;
-  } | null;
-  /**
-   * Name
-   *
-   * Agent name
-   */
-  name: string;
-  /**
-   * Output Schema
-   *
-   * Output JSON schema
-   */
-  output_schema?: {
-    [key: string]: unknown;
-  } | null;
-  /**
-   * Categories
-   *
-   * Category IDs for discovery and filtering
-   */
-  categories?: Array<string>;
-  /**
-   * UI metadata
-   */
-  ui?: AgentUiMetadata;
-};
-
-/**
- * AgentRunRequest
- *
- * Request to run an agent.
- */
-export type AgentRunRequest = {
-  /**
-   * Text
-   *
-   * Document text to analyze.
-   */
-  text: string;
-  /**
-   * Agents
-   *
-   * Agent IDs to execute. Resolved to agent names server-side.
-   */
-  agents?: Array<string> | null;
-  /**
-   * Domain Ids
-   *
-   * Terminology domain IDs.
-   */
-  domain_ids?: Array<string> | null;
-  /**
-   * Document Ref
-   *
-   * Caller-provided document identifier for tracking across scans.
-   */
-  document_ref?: string | null;
-  /**
-   * Url
-   *
-   * Document URL.
-   */
-  url?: string | null;
-  /**
-   * Document Name
-   *
-   * Document name or title.
-   */
-  document_name?: string | null;
-  /**
-   * Target Id
-   *
-   * Language-service target ID for style checking.
-   */
-  target_id?: string | null;
-  /**
-   * Content Profile Id
-   *
-   * Language-service content profile ID for style checking.
-   */
-  content_profile_id?: string | null;
-  /**
-   * Goal
-   *
-   * Document goal for agent recommendation.
-   */
-  goal?: string | null;
-  /**
-   * Persona Id
-   *
-   * Agent configuration UUID for persona selection. Used by: persona.
-   */
-  persona_id?: string | null;
-  /**
-   * Voice Profile Id
-   *
-   * Agent configuration UUID for brand voice profile selection. Used by: brand_voice.
-   */
-  voice_profile_id?: string | null;
-  /**
-   * Webhook Url
-   *
-   * Optional webhook URL for async result delivery.
-   */
-  webhook_url?: string | null;
-};
-
-/**
- * AgentRunResponse
- *
- * Response from agent run.
- */
-export type AgentRunResponse = {
-  /**
-   * Workflow Id
-   *
-   * Workflow ID for tracking
-   */
-  workflow_id: string;
-  /**
-   * Request Id
-   *
-   * Request tracking ID
-   */
-  request_id?: string | null;
-  /**
-   * Workflow status
-   */
-  status: HeliosSharedCortexModelsResponseWorkflowStatus;
+  agent_id?: string;
   /**
    * Document Ref
    *
@@ -690,9 +78,13 @@ export type AgentRunResponse = {
    */
   document_ref?: string | null;
   /**
+   * Current status
+   */
+  status: HeliosSharedCortexModelsResponseWorkflowStatus;
+  /**
    * Result
    *
-   * Execution result (if completed)
+   * Result (if completed)
    */
   result?: {
     [key: string]: unknown;
@@ -700,7 +92,7 @@ export type AgentRunResponse = {
   /**
    * Started At
    *
-   * Workflow start time
+   * Start time
    */
   started_at: string;
   /**
@@ -709,761 +101,221 @@ export type AgentRunResponse = {
    * Workflow completion time
    */
   completed_at?: string | null;
-  /**
-   * Duration Seconds
-   *
-   * Execution duration
-   */
-  duration_seconds?: number | null;
 };
 
 /**
- * AgentType
+ * WorkflowListResponse
  *
- * Type of agent executor.
- *
- * - YAML: Prompt -> LLM -> structured output (single-step)
- * - ACTIVITY: @activity.defn function (deterministic, can do I/O)
- * - WORKFLOW: @workflow.defn class (orchestrator, can call child workflows)
+ * Paginated list of workflow executions.
  */
-export enum AgentType {
-  YAML = "yaml",
-  ACTIVITY = "activity",
-  WORKFLOW = "workflow",
-}
-
-/**
- * AgentUIMetadata
- *
- * UI presentation metadata for an agent.
- */
-export type AgentUiMetadata = {
+export type WorkflowListResponse = {
   /**
-   * Title
+   * Workflows
    *
-   * Display name override
+   * Workflow executions
    */
-  title?: string | null;
+  workflows: Array<WorkflowStatusResponse>;
   /**
-   * Description
-   *
-   * Description override for UI
+   * Pagination metadata
    */
-  description?: string | null;
-  /**
-   * Icon
-   *
-   * Lucide icon key (e.g. 'spell-check')
-   */
-  icon?: string;
+  pagination: PaginationInfo;
 };
 
 /**
- * AnalysisScore
+ * PaginationInfo
+ *
+ * Cursor-based pagination metadata.
  */
-export type AnalysisScore = {
-  clarity?: ClarityScore | null;
-  tone?: ToneScore | null;
+export type PaginationInfo = {
+  /**
+   * Next Cursor
+   *
+   * Opaque cursor for fetching the next page
+   */
+  next_cursor?: string | null;
+  /**
+   * Has More
+   *
+   * Whether more results are available
+   */
+  has_more: boolean;
 };
 
 /**
- * AuthResponse
+ * WorkflowCancelResponse
+ *
+ * Response from cancelling a workflow.
  */
-export type AuthResponse = {
+export type WorkflowCancelResponse = {
   /**
-   * Api Key Id
+   * Workflow Id
    *
-   * Contains the ID of the API key within our api_keys table
+   * Workflow ID
    */
-  api_key_id?: string | null;
+  workflow_id: string;
+  /**
+   * Cancelled At
+   *
+   * Timestamp when cancellation was requested
+   */
+  cancelled_at: string;
+};
+
+/**
+ * ValidationErrorResponse
+ */
+export type ValidationErrorResponse = {
+  /**
+   * Detail
+   *
+   * A description of the error that occurred.
+   */
+  detail: string;
+  /**
+   * Status
+   *
+   * The HTTP status code generated by the server for this issue
+   */
+  status: number;
+  /**
+   * Request Id
+   *
+   * A unique ID associated with the HTTP request.
+   */
+  request_id: string;
+  /**
+   * Errors
+   *
+   * Detailed field-specific errors
+   */
+  errors?: Array<ValidationErrorItem>;
+};
+
+/**
+ * ValidationErrorItem
+ */
+export type ValidationErrorItem = {
+  /**
+   * Type
+   *
+   * The type of error that occurred.
+   */
+  type: string;
+  /**
+   * Loc
+   *
+   * The location of the error in the request.
+   */
+  loc: Array<unknown>;
+  /**
+   * Msg
+   *
+   * A description of the error that occurred.
+   */
+  msg: string;
+  /**
+   * Input
+   *
+   * The input that caused the error.
+   */
+  input?: unknown;
+  /**
+   * Ctx
+   *
+   * Additional context about the error.
+   */
+  ctx?: {
+    [key: string]: unknown;
+  };
+};
+
+/**
+ * UserRead
+ */
+export type UserRead = {
   /**
    * Email
-   *
-   * Contains the email of the user who signed in with the API key
    */
   email?: string | null;
   /**
-   * Id
-   *
-   * Contains the source prefix and truncated key of the API key used to authenticate the user. Example: key|1234567890
-   */
-  id: string;
-  /**
-   * Org Id
-   *
-   * Contains the ID of the organization to which the user belongs
-   */
-  org_id: string;
-  /**
-   * Org Name
-   *
-   * Contains the name of the organization to which the user belongs
-   */
-  org_name: string;
-  /**
-   * Permissions
-   *
-   * Contains the permissions assigned to the API key
-   */
-  permissions: Array<string>;
-  /**
-   * Tokens Used
-   *
-   * Number of tokens the organization has used
-   */
-  tokens_used?: number | null;
-  /**
-   * Token Limit
-   *
-   * Maximum number of tokens the organization can use
-   */
-  token_limit?: number | null;
-  /**
-   * Org Is Internal
-   *
-   * Whether the organization is an internal organization
-   */
-  org_is_internal?: boolean;
-  /**
    * Is Staff
-   *
-   * Whether the user is a staff member
    */
   is_staff?: boolean;
-};
-
-/**
- * BaseStyleGuideType
- */
-export enum BaseStyleGuideType {
-  AP = "ap",
-  CHICAGO = "chicago",
-  MICROSOFT = "microsoft",
-}
-
-/**
- * Body_Advanced Terminology-import_xml_dump_endpoint
- */
-export type BodyAdvancedTerminologyImportXmlDumpEndpoint = {
-  /**
-   * File
-   */
-  file: Blob | File;
-};
-
-/**
- * Body_Style Guides-update_style_guide
- */
-export type BodyStyleGuidesUpdateStyleGuide = {
-  /**
-   * Name
-   *
-   * The name of the style guide.
-   */
-  name?: string | null;
-  /**
-   * Terminology Domain Ids
-   *
-   * List of domain IDs to filter terminology searches by. NULL or empty list means no filtering.
-   */
-  terminology_domain_ids?: Array<string> | null;
-};
-
-/**
- * Body_Terminology-import_terminology
- */
-export type BodyTerminologyImportTerminology = {
-  /**
-   * File
-   *
-   * CSV or ACTIF XML file containing terminology data
-   */
-  file: Blob | File;
-};
-
-/**
- * BrandVoiceProfileCreate
- */
-export type BrandVoiceProfileCreate = {
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Identity
-   */
-  identity?: Array<string>;
-  /**
-   * Bright Lines
-   */
-  bright_lines?: Array<string>;
-  /**
-   * Fingerprints
-   */
-  fingerprints?: Array<FingerprintPayload>;
-  /**
-   * Exemplars
-   */
-  exemplars?: Array<ExemplarPayload>;
-};
-
-/**
- * BrandVoiceProfileListResponse
- */
-export type BrandVoiceProfileListResponse = {
-  /**
-   * Profiles
-   */
-  profiles: Array<BrandVoiceProfileResponse>;
-  /**
-   * Total
-   */
-  total: number;
-};
-
-/**
- * BrandVoiceProfileResponse
- */
-export type BrandVoiceProfileResponse = {
   /**
    * Id
    */
   id: string;
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Identity
-   */
-  identity: Array<string>;
-  /**
-   * Bright Lines
-   */
-  bright_lines: Array<string>;
-  /**
-   * Fingerprints
-   */
-  fingerprints: Array<FingerprintPayload>;
-  /**
-   * Exemplars
-   */
-  exemplars: Array<ExemplarPayload>;
-  /**
-   * Created By Email
-   */
-  created_by_email?: string | null;
-  /**
-   * Created At
-   */
-  created_at: string;
-  /**
-   * Updated At
-   */
-  updated_at: string;
 };
 
 /**
- * BrandVoiceProfileUpdate
+ * UserProfileResponse
  */
-export type BrandVoiceProfileUpdate = {
+export type UserProfileResponse = {
   /**
-   * Name
+   * First Name
    */
-  name?: string | null;
+  first_name: string | null;
   /**
-   * Identity
+   * Last Name
    */
-  identity?: Array<string> | null;
+  last_name: string | null;
   /**
-   * Bright Lines
+   * Job Title
    */
-  bright_lines?: Array<string> | null;
+  job_title: string | null;
   /**
-   * Fingerprints
+   * User Role
    */
-  fingerprints?: Array<FingerprintPayload> | null;
+  user_role: string | null;
   /**
-   * Exemplars
+   * Marketing Consent
    */
-  exemplars?: Array<ExemplarPayload> | null;
+  marketing_consent: boolean | null;
 };
 
 /**
- * BulkInvitationRequest
- */
-export type BulkInvitationRequest = {
-  /**
-   * Invitations
-   *
-   * List of invitations (max 50)
-   */
-  invitations: Array<Invitation>;
-};
-
-/**
- * BulkInvitationResponse
- */
-export type BulkInvitationResponse = {
-  /**
-   * Succeeded
-   */
-  succeeded: Array<string>;
-  /**
-   * Failed
-   */
-  failed: Array<InvitationResult>;
-  /**
-   * Total
-   */
-  total: number;
-  /**
-   * Success Count
-   */
-  success_count: number;
-  /**
-   * Failure Count
-   */
-  failure_count: number;
-};
-
-/**
- * BuyingAuthority
- */
-export enum BuyingAuthority {
-  DECISION_MAKER = "decision_maker",
-  RECOMMENDER = "recommender",
-  EVALUATOR = "evaluator",
-  INFLUENCER = "influencer",
-  END_USER = "end_user",
-}
-
-/**
- * CategoryCreateRequest
- */
-export type CategoryCreateRequest = {
-  /**
-   * Type
-   *
-   * Category type ID
-   */
-  type: string;
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Displayname
-   */
-  displayname: string;
-  /**
-   * Parent
-   */
-  parent?: string | null;
-  /**
-   * Priority
-   */
-  priority?: number;
-  /**
-   * Issystem
-   */
-  issystem?: boolean;
-};
-
-/**
- * CategoryDefinition
+ * StyleGuideSummaryResponse
  *
- * A single agent category for API responses.
+ * Style guide summary, as returned by ``GET /style-agent/style-guides``.
  */
-export type CategoryDefinition = {
-  /**
-   * Id
-   *
-   * Stable category ID (e.g. 'cat_r2FOEuqy06OR')
-   */
-  id: string;
-  /**
-   * Name
-   *
-   * Human-readable display name
-   */
-  name: string;
-  /**
-   * Description
-   *
-   * What this category covers
-   */
-  description: string;
-};
-
-/**
- * CategoryListResult
- *
- * Result of listing all available categories.
- */
-export type CategoryListResult = {
-  /**
-   * Categories
-   *
-   * All defined categories
-   */
-  categories: Array<CategoryDefinition>;
-  /**
-   * Total
-   *
-   * Total number of categories
-   */
-  total: number;
-};
-
-/**
- * CategoryResponse
- */
-export type CategoryResponse = {
+export type StyleGuideSummaryResponse = {
   /**
    * Id
    */
   id: string;
-  /**
-   * Type
-   */
-  type: string;
-  /**
-   * Parent
-   */
-  parent?: string | null;
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Displayname
-   */
-  displayname: string;
-  /**
-   * Priority
-   */
-  priority?: number | null;
-  /**
-   * Issystem
-   */
-  issystem: boolean;
-  /**
-   * Uuid
-   */
-  uuid: string;
-  /**
-   * External Id
-   */
-  external_id: string;
-};
-
-/**
- * CategoryTypeCreateRequest
- */
-export type CategoryTypeCreateRequest = {
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Displayname
-   */
-  displayname: string;
-  /**
-   * Hierarchical
-   */
-  hierarchical?: boolean;
-  /**
-   * System
-   */
-  system?: boolean;
-  /**
-   * Closed
-   */
-  closed?: boolean;
-  /**
-   * Relationtype
-   */
-  relationtype?: number;
-  /**
-   * Membershaveseparatedisplayname
-   */
-  membershaveseparatedisplayname?: boolean;
-};
-
-/**
- * CategoryTypeResponse
- */
-export type CategoryTypeResponse = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Displayname
-   */
-  displayname: string;
-  /**
-   * Hierarchical
-   */
-  hierarchical: boolean;
-  /**
-   * System
-   */
-  system: boolean;
-  /**
-   * Closed
-   */
-  closed: boolean;
-  /**
-   * Relationtype
-   */
-  relationtype: number;
-  /**
-   * Membershaveseparatedisplayname
-   */
-  membershaveseparatedisplayname: boolean;
-  /**
-   * Uuid
-   */
-  uuid: string;
-  /**
-   * External Id
-   */
-  external_id: string;
-  /**
-   * Category Count
-   */
-  category_count?: number;
-};
-
-/**
- * CategoryTypeUpdateRequest
- */
-export type CategoryTypeUpdateRequest = {
-  /**
-   * Name
-   */
-  name?: string | null;
-  /**
-   * Displayname
-   */
-  displayname?: string | null;
-  /**
-   * Hierarchical
-   */
-  hierarchical?: boolean | null;
-  /**
-   * Closed
-   */
-  closed?: boolean | null;
-  /**
-   * Relationtype
-   */
-  relationtype?: number | null;
-  /**
-   * Membershaveseparatedisplayname
-   */
-  membershaveseparatedisplayname?: boolean | null;
-};
-
-/**
- * CategoryUpdateRequest
- */
-export type CategoryUpdateRequest = {
-  /**
-   * Name
-   */
-  name?: string | null;
-  /**
-   * Displayname
-   */
-  displayname?: string | null;
-  /**
-   * Parent
-   */
-  parent?: string | null;
-  /**
-   * Priority
-   */
-  priority?: number | null;
-};
-
-/**
- * ClarityCategory
- */
-export enum ClarityCategory {
-  SIMPLER_WORDS = "Simpler Words",
-  COMPLEX_VERB_TENSES = "Complex Verb Tenses",
-  HIDDEN_VERBS = "Hidden Verbs",
-  DIRECT_STATEMENTS = "Direct Statements",
-  PASSIVE_VOICE = "Passive Voice",
-  PHRASAL_VERBS = "Phrasal Verbs",
-  FORMAL_GRAMMAR_FORMS = "Formal Grammar Forms",
-  UNNECESSARY_WORDS = "Unnecessary Words",
-  SENTENCE_SPLITTING = "Sentence Splitting",
-  CONCISE_WORDING = "Concise Wording",
-}
-
-/**
- * ClarityScore
- */
-export type ClarityScore = {
-  /**
-   * Score
-   */
-  score?: number | null;
-  /**
-   * Flesch Reading Ease
-   */
-  flesch_reading_ease?: number | null;
-  /**
-   * Sentence Complexity
-   */
-  sentence_complexity?: number | null;
-  /**
-   * Vocabulary Complexity
-   */
-  vocabulary_complexity?: number | null;
-  /**
-   * Sentence Count
-   */
-  sentence_count?: number | null;
-  /**
-   * Word Count
-   */
-  word_count?: number | null;
-  /**
-   * Average Sentence Length
-   */
-  average_sentence_length?: number | null;
-};
-
-/**
- * Color
- */
-export type Color = {
-  /**
-   * Value
-   */
-  value: string;
-  /**
-   * Min Score
-   */
-  min_score: number;
-};
-
-/**
- * ConfigOptions
- */
-export type ConfigOptions = {
-  dialect?: Dialects | null;
-  style_guide?: StyleGuide | null;
-  tone?: Tones | null;
-};
-
-/**
- * ConsistencyCategory
- */
-export enum ConsistencyCategory {
-  CONSISTENT_PUNCTUATION = "Consistent Punctuation",
-  CONSISTENT_CAPITALIZATION = "Consistent Capitalization",
-  "NUMBERS,_DATES,_AND_TIMES" = "Numbers, Dates, and Times",
-  INCLUSIVE_LANGUAGE = "Inclusive Language",
-  SPECIAL_STYLE_GUIDE_REQUIREMENTS = "Special Style Guide Requirements",
-  OTHER = "other",
-}
-
-/**
- * ConsistencyScore
- */
-export type ConsistencyScore = {
-  /**
-   * Score
-   */
-  score?: number | null;
-  /**
-   * Issues
-   */
-  issues?: number | null;
-};
-
-/**
- * ConstantsResponse
- */
-export type ConstantsResponse = {
-  /**
-   * Dialects
-   */
-  dialects?: Array<Dialects>;
-  /**
-   * Tones
-   */
-  tones?: Array<Tones>;
-  /**
-   * Style Guides
-   */
-  style_guides?: {
-    [key: string]: string;
-  };
-  /**
-   * Colors
-   */
-  colors?: {
-    [key: string]: Color;
-  };
-};
-
-/**
- * ContentProfileResponse
- */
-export type ContentProfileResponse = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Profile Id
-   */
-  profile_id: string;
-  /**
-   * Organization Name
-   */
-  organization_name: string;
   /**
    * Display Name
    */
   display_name: string;
   /**
+   * Is Default
+   */
+  is_default: boolean;
+  /**
+   * Enabled
+   */
+  enabled: boolean;
+  /**
    * Description
    */
   description?: string | null;
   /**
-   * Enabled
+   * Language
    */
-  enabled?: boolean | null;
+  language?: string | null;
   /**
-   * Inherited
+   * Language Name
    */
-  inherited?: boolean | null;
+  language_name?: string | null;
   /**
-   * Source Organization
+   * Language Variant
    */
-  source_organization?: string | null;
+  language_variant?: string | null;
+  /**
+   * Language Variant Name
+   */
+  language_variant_name?: string | null;
 };
-
-/**
- * ContextPolarity
- */
-export enum ContextPolarity {
-  INCLUDE = "include",
-  EXCLUDE = "exclude",
-}
 
 /**
  * CreatorResponse
@@ -1480,99 +332,29 @@ export type CreatorResponse = {
 };
 
 /**
- * CurrentPriority
+ * PaginatedDomainsResponse
  */
-export enum CurrentPriority {
-  PLATFORM_MIGRATION = "platform_migration",
-  TEAM_EFFICIENCY = "team_efficiency",
-  EXEC_PRESSURE = "exec_pressure",
-  INNOVATION_LEADERSHIP = "innovation_leadership",
-  REVENUE_GROWTH = "revenue_growth",
-  BRAND_AUTHENTICITY = "brand_authenticity",
-  LOYALTY_PROGRAMS = "loyalty_programs",
-  AI_ADOPTION = "ai_adoption",
-  CDP_EVALUATION = "cdp_evaluation",
-  CHANNEL_EXPANSION = "channel_expansion",
-  RETENTION = "retention",
-}
-
-/**
- * CustomFieldValueResponse
- *
- * One custom field's resolved value for a term.
- *
- * Backed by adv_customfieldejb (definition) + adv_customfieldvalueejb (value).
- * For CATEGORIES (multi-select), multiple value rows for the same (term, field)
- * pair are collapsed into a single response with `category_values` populated.
- *
- * `field_uuid` is the preserved XML uuid from the original Acrolinx dump. It
- * survives import/export round-trips and is what `termEditCfg` references —
- * use it (not `field_id`, which is our internal DB PK) for visibility lookups.
- */
-export type CustomFieldValueResponse = {
+export type PaginatedDomainsResponse = {
   /**
-   * Field Id
+   * Domains
    */
-  field_id: string;
+  domains: Array<DomainResponse>;
   /**
-   * Field Uuid
+   * Total Count
    */
-  field_uuid: string;
+  total_count: number;
   /**
-   * Name
+   * Page
    */
-  name: string;
+  page: number;
   /**
-   * Displayname
+   * Page Size
    */
-  displayname: string;
+  page_size: number;
   /**
-   * Type
+   * Total Pages
    */
-  type: string;
-  /**
-   * Isconceptlevel
-   */
-  isconceptlevel: boolean;
-  /**
-   * Ismultiline
-   */
-  ismultiline: boolean;
-  /**
-   * Location
-   */
-  location: number;
-  /**
-   * String Value
-   */
-  string_value?: string | null;
-  /**
-   * Category Values
-   */
-  category_values?: Array<CategoryResponse>;
-};
-
-/**
- * Dialects
- */
-export enum Dialects {
-  AMERICAN_ENGLISH = "american_english",
-  BRITISH_ENGLISH = "british_english",
-  CANADIAN_ENGLISH = "canadian_english",
-}
-
-/**
- * DomainCreateRequest
- */
-export type DomainCreateRequest = {
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Description
-   */
-  description?: string | null;
+  total_pages: number;
 };
 
 /**
@@ -1611,1071 +393,6 @@ export type DomainResponse = {
    * Term Set Count
    */
   term_set_count?: number;
-};
-
-/**
- * DomainSummary
- */
-export type DomainSummary = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Name
-   */
-  name: string;
-};
-
-/**
- * DomainUpdateRequest
- */
-export type DomainUpdateRequest = {
-  /**
-   * Name
-   */
-  name?: string | null;
-  /**
-   * Description
-   */
-  description?: string | null;
-};
-
-/**
- * DuplicateStyleGuideRequest
- *
- * Request to duplicate a style guide to another organization.
- */
-export type DuplicateStyleGuideRequest = {
-  /**
-   * Source Style Guide Id
-   *
-   * The ID of the style guide to duplicate
-   */
-  source_style_guide_id: string;
-  /**
-   * New Name
-   *
-   * Optional new name for the duplicated style guide. If not provided, uses the source name.
-   */
-  new_name?: string | null;
-};
-
-/**
- * DuplicateStyleGuideResponse
- *
- * Response after duplicating a style guide.
- */
-export type DuplicateStyleGuideResponse = {
-  /**
-   * Id
-   *
-   * The ID of the newly created style guide
-   */
-  id: string;
-  /**
-   * Name
-   *
-   * The name of the duplicated style guide
-   */
-  name: string;
-  /**
-   * Organization Id
-   *
-   * The target organization ID
-   */
-  organization_id: string;
-  /**
-   * Message
-   *
-   * Success message
-   */
-  message: string;
-};
-
-/**
- * EffortTolerance
- */
-export enum EffortTolerance {
-  LOW = "low",
-  MEDIUM = "medium",
-  HIGH = "high",
-}
-
-/**
- * EmailTestRequest
- */
-export type EmailTestRequest = {
-  /**
-   * Template Name
-   */
-  template_name?: string;
-  /**
-   * Context
-   */
-  context?: {
-    [key: string]: string;
-  } | null;
-};
-
-/**
- * ErrorResponse
- */
-export type ErrorResponse = {
-  /**
-   * Detail
-   *
-   * A description of the error that occurred.
-   */
-  detail: string;
-  /**
-   * Status
-   *
-   * The HTTP status code generated by the server for this issue
-   */
-  status: number;
-  /**
-   * Request Id
-   *
-   * A unique ID associated with the HTTP request.
-   */
-  request_id: string;
-};
-
-/**
- * ExemplarPayload
- */
-export type ExemplarPayload = {
-  /**
-   * Passage
-   */
-  passage: string;
-  /**
-   * Annotation
-   */
-  annotation?: string;
-  /**
-   * Fingerprint Names
-   */
-  fingerprint_names?: Array<string>;
-};
-
-/**
- * FeedbackRequest
- */
-export type FeedbackRequest = {
-  /**
-   * Workflow Id
-   */
-  workflow_id: string;
-  /**
-   * Request Id
-   */
-  request_id: string;
-  /**
-   * Helpful
-   */
-  helpful: boolean;
-  /**
-   * Feedback
-   */
-  feedback?: string | null;
-  /**
-   * Original
-   */
-  original?: string | null;
-  /**
-   * Suggestion
-   */
-  suggestion?: string | null;
-  /**
-   * Category
-   */
-  category?: string | null;
-};
-
-/**
- * FingerprintPayload
- */
-export type FingerprintPayload = {
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Description
-   */
-  description: string;
-  /**
-   * Source
-   */
-  source?: string;
-};
-
-/**
- * GenerateBrandVoiceRequest
- */
-export type GenerateBrandVoiceRequest = {
-  /**
-   * Guide Text
-   */
-  guide_text: string;
-  /**
-   * Exemplar Texts
-   */
-  exemplar_texts?: Array<string>;
-};
-
-/**
- * GenerateBrandVoiceResponse
- */
-export type GenerateBrandVoiceResponse = {
-  profile: GeneratedBrandVoiceProfile;
-};
-
-/**
- * GeneratePersonaRequest
- *
- * Request to generate a persona from a text description.
- */
-export type GeneratePersonaRequest = {
-  /**
-   * Description
-   */
-  description: string;
-};
-
-/**
- * GeneratePersonaResponse
- */
-export type GeneratePersonaResponse = {
-  /**
-   * Persona
-   *
-   * Generated persona fields (without id/timestamps)
-   */
-  persona: {
-    [key: string]: unknown;
-  };
-  /**
-   * Uncertain Fields
-   */
-  uncertain_fields: Array<UncertainField>;
-};
-
-/**
- * GenerateRuleRequest
- *
- * Request to generate a term rule from a natural language description.
- */
-export type GenerateRuleRequest = {
-  /**
-   * Prompt
-   *
-   * Natural language description of the term rule
-   */
-  prompt: string;
-};
-
-/**
- * GenerateRuleResponse
- *
- * Structured term rule extracted from a natural language description.
- */
-export type GenerateRuleResponse = {
-  /**
-   * Terms
-   *
-   * Terms being defined
-   */
-  terms?: Array<string>;
-  /**
-   * Term Type
-   *
-   * Type of rule: 'prohibited' or 'preferred'
-   */
-  term_type?: "prohibited" | "preferred";
-  /**
-   * Replacements
-   *
-   * Alternative/replacement terms
-   */
-  replacements?: Array<string>;
-  /**
-   * Context
-   *
-   * Contextual conditions or exceptions
-   */
-  context?: string;
-};
-
-/**
- * GenerateRulesResponse
- *
- * Multiple term rules extracted from a natural language description.
- */
-export type GenerateRulesResponse = {
-  /**
-   * Rules
-   *
-   * List of generated term rules
-   */
-  rules?: Array<GenerateRuleResponse>;
-};
-
-/**
- * GeneratedBrandVoiceProfile
- */
-export type GeneratedBrandVoiceProfile = {
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Identity
-   */
-  identity?: Array<string>;
-  /**
-   * Bright Lines
-   */
-  bright_lines?: Array<string>;
-  /**
-   * Fingerprints
-   */
-  fingerprints?: Array<FingerprintPayload>;
-  /**
-   * Exemplars
-   */
-  exemplars?: Array<ExemplarPayload>;
-};
-
-/**
- * GlobalDefaultsResponse
- */
-export type GlobalDefaultsResponse = {
-  /**
-   * Tier
-   */
-  tier: string;
-  /**
-   * Term Limit
-   */
-  term_limit: number;
-  /**
-   * Style Guide Limit
-   */
-  style_guide_limit: number;
-  /**
-   * Token Limit
-   */
-  token_limit: number;
-  /**
-   * Trial Period
-   */
-  trial_period: number;
-};
-
-/**
- * GlobalDefaultsUpdate
- */
-export type GlobalDefaultsUpdate = {
-  /**
-   * Term Limit
-   */
-  term_limit?: number | null;
-  /**
-   * Style Guide Limit
-   */
-  style_guide_limit?: number | null;
-  /**
-   * Token Limit
-   */
-  token_limit?: number | null;
-  /**
-   * Trial Period
-   */
-  trial_period?: number | null;
-};
-
-/**
- * GrammarCategory
- */
-export enum GrammarCategory {
-  GRAMMAR_AGREEMENT = "Grammar Agreement",
-  PUNCTUATION = "Punctuation",
-  CAPITALIZATION = "Capitalization",
-  SPELLING = "Spelling",
-  SENTENCE_STRUCTURE = "Sentence Structure",
-  VERB_FORMS = "Verb Forms",
-  CONTEXT_FIT = "Context Fit",
-  OTHER = "other",
-}
-
-/**
- * GrammarScore
- */
-export type GrammarScore = {
-  /**
-   * Score
-   */
-  score?: number | null;
-  /**
-   * Issues
-   */
-  issues?: number | null;
-};
-
-/**
- * GuidedModeSwitchFeedbackRequest
- */
-export type GuidedModeSwitchFeedbackRequest = {
-  /**
-   * Note
-   */
-  note: string;
-};
-
-/**
- * ImportSummary
- */
-export type ImportSummary = {
-  /**
-   * Entries Processed
-   */
-  entries_processed?: number;
-  /**
-   * Term Sets Created
-   */
-  term_sets_created?: number;
-  /**
-   * Term Sets Deleted
-   */
-  term_sets_deleted?: number;
-  /**
-   * Terms Created Or Updated
-   */
-  terms_created_or_updated?: number;
-  /**
-   * Domains Created
-   */
-  domains_created?: number;
-  /**
-   * Domains Deleted
-   */
-  domains_deleted?: number;
-  /**
-   * Errors
-   */
-  errors?: Array<string>;
-};
-
-/**
- * Industry
- */
-export enum Industry {
-  QSR = "qsr",
-  CPG = "cpg",
-  FINTECH = "fintech",
-  COSMETICS = "cosmetics",
-  BEVERAGE = "beverage",
-  RETAIL = "retail",
-  GAMING = "gaming",
-  B2B_SAAS = "b2b_saas",
-  HEALTHCARE = "healthcare",
-  MEDIA = "media",
-}
-
-/**
- * Invitation
- */
-export type Invitation = {
-  /**
-   * Role
-   */
-  role?: string | null;
-  /**
-   * Email
-   */
-  email: string;
-};
-
-/**
- * InvitationResult
- */
-export type InvitationResult = {
-  /**
-   * Email
-   */
-  email: string;
-  /**
-   * Success
-   */
-  success: boolean;
-  /**
-   * Error
-   */
-  error?: string | null;
-};
-
-/**
- * InvitedUser
- */
-export type InvitedUser = {
-  /**
-   * Role
-   */
-  role?: string | null;
-  /**
-   * Email
-   */
-  email: string;
-  /**
-   * Invite Sent At
-   */
-  invite_sent_at: string;
-};
-
-/**
- * Issue
- */
-export type Issue = {
-  /**
-   * Original
-   *
-   * The original text
-   */
-  original: string;
-  /**
-   * Position details of the issue
-   */
-  position: Position;
-  /**
-   * Subcategory
-   *
-   * The sub-category of the change
-   */
-  subcategory:
-    | GrammarCategory
-    | ClarityCategory
-    | ToneCategory
-    | ConsistencyCategory
-    | TermReplaceCategory;
-  readonly category: IssueCategory | null;
-  readonly severity: Severity;
-};
-
-/**
- * IssueCategory
- */
-export enum IssueCategory {
-  CLARITY = "clarity",
-  GRAMMAR = "grammar",
-  CONSISTENCY = "consistency",
-  TERMINOLOGY = "terminology",
-  TONE = "tone",
-}
-
-/**
- * LabsAgentAccessBulkUpdate
- *
- * Body for the bulk PUT endpoint.
- *
- * If `agent_ids` is omitted, applies `enabled` to every *current* labs agent
- * (the "enable all / disable all" button in the admin UI).
- */
-export type LabsAgentAccessBulkUpdate = {
-  /**
-   * Enabled
-   */
-  enabled: boolean;
-  /**
-   * Agent Ids
-   *
-   * Optional subset of current labs agent_ids to update. If omitted, applies to every current labs agent.
-   */
-  agent_ids?: Array<string> | null;
-};
-
-/**
- * LabsAgentAccessEntry
- *
- * One labs agent, with its display metadata and current toggle state.
- */
-export type LabsAgentAccessEntry = {
-  /**
-   * Agent Id
-   *
-   * Stable agent id, e.g. ag_FcW2nRs5tYzA
-   */
-  agent_id: string;
-  /**
-   * Name
-   *
-   * Internal agent name (matches agents.yaml key)
-   */
-  name: string;
-  /**
-   * Title
-   *
-   * Human-readable title (from ui.title)
-   */
-  title?: string | null;
-  /**
-   * Description
-   *
-   * Agent description
-   */
-  description?: string | null;
-  /**
-   * Icon
-   *
-   * Lucide icon key (from ui.icon)
-   */
-  icon: string;
-  /**
-   * Enabled
-   *
-   * Whether this org can use the agent
-   */
-  enabled: boolean;
-};
-
-/**
- * LabsAgentAccessList
- */
-export type LabsAgentAccessList = {
-  /**
-   * Agents
-   */
-  agents: Array<LabsAgentAccessEntry>;
-  /**
-   * Can Update
-   *
-   * Whether the current user can update labs agent access for this org
-   */
-  can_update: boolean;
-};
-
-/**
- * LabsAgentAccessUpdate
- *
- * Body for the single-toggle PUT endpoint.
- */
-export type LabsAgentAccessUpdate = {
-  /**
-   * Enabled
-   */
-  enabled: boolean;
-};
-
-/**
- * LinkedTermSummary
- */
-export type LinkedTermSummary = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Surface
-   */
-  surface: string;
-  status?: CategoryResponse | null;
-  language?: CategoryResponse | null;
-};
-
-/**
- * MatchedTerm
- */
-export type MatchedTerm = {
-  /**
-   * Term
-   */
-  term: string;
-  /**
-   * Matched Ngram
-   */
-  matched_ngram: string;
-};
-
-/**
- * Member
- */
-export type Member = {
-  /**
-   * Role
-   */
-  role?: string | null;
-};
-
-/**
- * OAuthExchangeResponse
- */
-export type OAuthExchangeResponse = {
-  /**
-   * Access Token
-   *
-   * Access token from Auth0
-   */
-  access_token: string;
-  /**
-   * Expires In
-   *
-   * Access token lifetime in seconds
-   */
-  expires_in: number;
-  /**
-   * Refresh Token
-   *
-   * Refresh token from Auth0 when offline_access scope is used
-   */
-  refresh_token?: string | null;
-};
-
-/**
- * OAuthLogoutResponse
- */
-export type OAuthLogoutResponse = {
-  /**
-   * Logout Url
-   *
-   * URL to open in the browser to logout
-   */
-  logout_url: string;
-};
-
-/**
- * OAuthPollResponse
- */
-export type OAuthPollResponse = {
-  /**
-   * Status
-   */
-  status: string;
-  /**
-   * Code
-   */
-  code?: string | null;
-  /**
-   * Error
-   */
-  error?: string | null;
-};
-
-/**
- * OAuthStartRequest
- *
- * Optional payload for /oauth/{integration_id}/start.
- *
- * When ``organization`` is supplied, the relay forwards it as the
- * ``organization`` query parameter on Auth0's ``/authorize`` URL so the
- * resulting access token is scoped to that org (token claims include
- * ``org_id`` and ``org_name``). When omitted, Auth0 falls back to the
- * organization picker per the integration_oauth client's
- * ``organization_require_behavior = "post_login_prompt"`` setting.
- */
-export type OAuthStartRequest = {
-  /**
-   * Organization
-   *
-   * Auth0 organization id (e.g. 'org_xxx') to scope the login to.
-   */
-  organization?: string | null;
-};
-
-/**
- * OAuthStartResponse
- */
-export type OAuthStartResponse = {
-  /**
-   * Read Key
-   *
-   * Key used by the plugin to poll for auth result
-   */
-  read_key: string;
-  /**
-   * Write Key
-   *
-   * Key used during browser auth flow
-   */
-  write_key: string;
-  /**
-   * Authorize Url
-   *
-   * URL to open in the browser for authorization
-   */
-  authorize_url: string;
-};
-
-/**
- * OAuthTokenRequest
- *
- * OAuth 2.0 token request. Use grant_type to select authorization_code or refresh_token.
- */
-export type OAuthTokenRequest = {
-  /**
-   * Grant Type
-   *
-   * Grant type: authorization_code to exchange a code, refresh_token to refresh
-   */
-  grant_type?: "authorization_code" | "refresh_token";
-  /**
-   * Code
-   *
-   * Authorization code (required when grant_type=authorization_code)
-   */
-  code?: string | null;
-  /**
-   * Refresh Token
-   *
-   * Refresh token (required when grant_type=refresh_token)
-   */
-  refresh_token?: string | null;
-};
-
-/**
- * OrganizationConfigResponse
- *
- * Org-level configuration slice that drives client-side behaviour.
- *
- * Returned by ``GET /account/config`` for both JWT and API-key auth. The
- * organization is identified by the auth credential — no request-side org
- * id is needed (the API key already carries one). This intentionally omits
- * user_profile / user fields that don't make sense for API-key callers.
- */
-export type OrganizationConfigResponse = {
-  /**
-   * Is Acrolinx Classic
-   */
-  is_acrolinx_classic: boolean;
-  style_agent: StyleAgentMode;
-  /**
-   * Style Agent Numeric Scoring
-   */
-  style_agent_numeric_scoring: boolean;
-};
-
-/**
- * OrganizationMember
- */
-export type OrganizationMember = {
-  /**
-   * Role
-   */
-  role?: string | null;
-  /**
-   * Email
-   */
-  email: string;
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * User Id
-   */
-  user_id?: string | null;
-  /**
-   * Is Staff
-   */
-  is_staff?: boolean;
-};
-
-/**
- * OrganizationRequest
- */
-export type OrganizationRequest = {
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Admin
-   */
-  admin?: string | null;
-  /**
-   * Domain
-   */
-  domain: string;
-  /**
-   * Display Name
-   */
-  display_name?: string | null;
-  /**
-   * Token Limit
-   */
-  token_limit?: number | null;
-  /**
-   * Expiration Days
-   */
-  expiration_days?: number | null;
-  /**
-   * Trial
-   */
-  trial?: boolean | null;
-  /**
-   * Tier
-   */
-  tier?: string;
-  /**
-   * Is Internal
-   */
-  is_internal?: boolean;
-  /**
-   * Is Acrolinx Classic
-   */
-  is_acrolinx_classic?: boolean;
-};
-
-/**
- * OrganizationResponse
- */
-export type OrganizationResponse = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Token Limit
-   */
-  token_limit: number;
-  /**
-   * Tokens Used
-   */
-  tokens_used: number;
-  /**
-   * Tier
-   */
-  tier: string;
-  /**
-   * Style Guide Limit
-   */
-  style_guide_limit: number;
-  /**
-   * Term Limit
-   */
-  term_limit: number;
-  /**
-   * Display Name
-   */
-  display_name?: string | null;
-  /**
-   * Created Date
-   */
-  created_date: string;
-  /**
-   * Expiration
-   */
-  expiration: string | null;
-  /**
-   * Domain
-   */
-  domain: string;
-  created_by: CreatorResponse | null;
-  /**
-   * Is Internal
-   */
-  is_internal: boolean;
-  /**
-   * Is Acrolinx Classic
-   */
-  is_acrolinx_classic: boolean;
-  /**
-   * Trial
-   */
-  readonly trial: boolean;
-  /**
-   * Tokens
-   */
-  readonly tokens: number;
-};
-
-/**
- * OrganizationResponseAdmin
- */
-export type OrganizationResponseAdmin = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Token Limit
-   */
-  token_limit: number;
-  /**
-   * Tokens Used
-   */
-  tokens_used: number;
-  /**
-   * Tier
-   */
-  tier: string;
-  /**
-   * Style Guide Limit
-   */
-  style_guide_limit: number;
-  /**
-   * Term Limit
-   */
-  term_limit: number;
-  /**
-   * Display Name
-   */
-  display_name?: string | null;
-  /**
-   * Created Date
-   */
-  created_date: string;
-  /**
-   * Expiration
-   */
-  expiration: string | null;
-  /**
-   * Domain
-   */
-  domain: string;
-  created_by: CreatorResponse | null;
-  /**
-   * Style Guides
-   */
-  style_guides?: number;
-  /**
-   * Term Sets
-   */
-  term_sets?: number;
-  /**
-   * Country
-   */
-  country: string | null;
-  /**
-   * Is Internal
-   */
-  is_internal: boolean;
-  /**
-   * Is Acrolinx Classic
-   */
-  is_acrolinx_classic: boolean;
-  style_agent?: StyleAgentMode;
-  /**
-   * Style Agent Numeric Scoring
-   */
-  style_agent_numeric_scoring?: boolean;
-  /**
-   * Trial
-   */
-  readonly trial: boolean;
-  /**
-   * Tokens
-   */
-  readonly tokens: number;
 };
 
 /**
@@ -2763,2116 +480,31 @@ export type OrganizationResponseFull = {
 };
 
 /**
- * OrganizationSignupRequest
+ * OrganizationConfigResponse
+ *
+ * Org-level configuration slice that drives client-side behaviour.
+ *
+ * Returned by ``GET /account/config`` for both JWT and API-key auth. The
+ * organization is identified by the auth credential — no request-side org
+ * id is needed (the API key already carries one). This intentionally omits
+ * user_profile / user fields that don't make sense for API-key callers.
  */
-export type OrganizationSignupRequest = {
-  /**
-   * Display Name
-   *
-   * Display name for the organization
-   */
-  display_name: string;
-  /**
-   * User Role
-   *
-   * User role in the organization
-   */
-  user_role?: string | null;
-  /**
-   * Country
-   *
-   * Country of the organization
-   */
-  country?: string | null;
-  /**
-   * First Name
-   *
-   * First name of the user
-   */
-  first_name?: string | null;
-  /**
-   * Last Name
-   *
-   * Last name of the user
-   */
-  last_name?: string | null;
-  /**
-   * Job Title
-   *
-   * Job title of the user
-   */
-  job_title?: string | null;
-  /**
-   * Marketing Consent
-   *
-   * User consent for marketing communications
-   */
-  marketing_consent?: boolean | null;
-  /**
-   * Captcha Response
-   *
-   * CAPTCHA response (optional for clients exempt via captcha_exempt_client_ids)
-   */
-  captcha_response?: string | null;
-};
-
-/**
- * OrganizationSignupResponse
- */
-export type OrganizationSignupResponse = {
-  /**
-   * Organization Id
-   */
-  organization_id: string;
-  /**
-   * Organization Name
-   */
-  organization_name: string;
-  /**
-   * Display Name
-   */
-  display_name: string;
-  /**
-   * Message
-   */
-  message: string;
-};
-
-/**
- * OrganizationUpdate
- */
-export type OrganizationUpdate = {
-  /**
-   * Domain
-   */
-  domain?: string | null;
-  /**
-   * Display Name
-   */
-  display_name?: string | null;
-  /**
-   * Token Limit
-   */
-  token_limit?: number | null;
-  /**
-   * Tokens Used
-   */
-  tokens_used?: number | null;
-  /**
-   * Expiration Days
-   */
-  expiration_days?: number | null;
-  /**
-   * Expiration Date
-   */
-  expiration_date?: string | null;
-  /**
-   * Trial
-   */
-  trial?: boolean | null;
-  /**
-   * Tier
-   */
-  tier?: string | null;
-  /**
-   * Style Guide Limit
-   */
-  style_guide_limit?: number | null;
-  /**
-   * Term Limit
-   */
-  term_limit?: number | null;
-  /**
-   * Is Internal
-   */
-  is_internal?: boolean | null;
+export type OrganizationConfigResponse = {
   /**
    * Is Acrolinx Classic
    */
-  is_acrolinx_classic?: boolean | null;
-  style_agent?: StyleAgentMode | null;
+  is_acrolinx_classic: boolean;
+  style_agent: StyleAgentMode;
   /**
    * Style Agent Numeric Scoring
    */
-  style_agent_numeric_scoring?: boolean | null;
+  style_agent_numeric_scoring: boolean;
 };
 
 /**
- * OriginalContent
+ * ErrorResponse
  */
-export type OriginalContent = {
-  /**
-   * Issues
-   */
-  issues?: Array<Issue>;
-  scores?: ScoreOutput | null;
-  /**
-   * High Risk Count
-   */
-  readonly high_risk_count: number;
-  /**
-   * Medium Risk Count
-   */
-  readonly medium_risk_count: number;
-  /**
-   * Low Risk Count
-   */
-  readonly low_risk_count: number;
-};
-
-/**
- * Page[APIKeyRead]
- */
-export type PageApiKeyRead = {
-  /**
-   * Items
-   */
-  items: Array<ApiKeyRead>;
-  /**
-   * Total Items
-   */
-  total_items: number;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-  /**
-   * Total Pages
-   *
-   * The total number of pages.
-   */
-  readonly total_pages: number;
-};
-
-/**
- * Page[AccessPolicyRead]
- */
-export type PageAccessPolicyRead = {
-  /**
-   * Items
-   */
-  items: Array<AccessPolicyRead>;
-  /**
-   * Total Items
-   */
-  total_items: number;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-  /**
-   * Total Pages
-   *
-   * The total number of pages.
-   */
-  readonly total_pages: number;
-};
-
-/**
- * Page[AdminStyleGuideResponse]
- */
-export type PageAdminStyleGuideResponse = {
-  /**
-   * Items
-   */
-  items: Array<AdminStyleGuideResponse>;
-  /**
-   * Total Items
-   */
-  total_items: number;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-  /**
-   * Total Pages
-   *
-   * The total number of pages.
-   */
-  readonly total_pages: number;
-};
-
-/**
- * Page[RoleRead]
- */
-export type PageRoleRead = {
-  /**
-   * Items
-   */
-  items: Array<RoleRead>;
-  /**
-   * Total Items
-   */
-  total_items: number;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-  /**
-   * Total Pages
-   *
-   * The total number of pages.
-   */
-  readonly total_pages: number;
-};
-
-/**
- * Page[TermSetWithTerms]
- */
-export type PageTermSetWithTerms = {
-  /**
-   * Items
-   */
-  items: Array<TermSetWithTerms>;
-  /**
-   * Total Items
-   */
-  total_items: number;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-  /**
-   * Total Pages
-   *
-   * The total number of pages.
-   */
-  readonly total_pages: number;
-};
-
-/**
- * Page[UserRead]
- */
-export type PageUserRead = {
-  /**
-   * Items
-   */
-  items: Array<UserRead>;
-  /**
-   * Total Items
-   */
-  total_items: number;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-  /**
-   * Total Pages
-   *
-   * The total number of pages.
-   */
-  readonly total_pages: number;
-};
-
-/**
- * PaginatedDomainsResponse
- */
-export type PaginatedDomainsResponse = {
-  /**
-   * Domains
-   */
-  domains: Array<DomainResponse>;
-  /**
-   * Total Count
-   */
-  total_count: number;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-  /**
-   * Total Pages
-   */
-  total_pages: number;
-};
-
-/**
- * PaginatedOrganizationResponse
- */
-export type PaginatedOrganizationResponse = {
-  /**
-   * Total
-   */
-  total: number;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-  /**
-   * Organizations
-   */
-  organizations: Array<OrganizationResponse>;
-};
-
-/**
- * PaginatedTermSetsResponse
- *
- * Pageable response for term sets in term management UI
- */
-export type PaginatedTermSetsResponse = {
-  /**
-   * Term Sets
-   */
-  term_sets: Array<TermSetWithTerms>;
-  /**
-   * Total Count
-   */
-  total_count: number;
-  /**
-   * Total Unfiltered Term Sets
-   */
-  total_unfiltered_term_sets: number;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-  /**
-   * Total Pages
-   */
-  total_pages: number;
-};
-
-/**
- * PaginatedTermsResponse
- */
-export type PaginatedTermsResponse = {
-  /**
-   * Terms
-   */
-  terms: Array<HeliosOneApiModulesAdvancedTerminologySchemasTermsTermResponse>;
-  /**
-   * Total Count
-   */
-  total_count: number;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-  /**
-   * Total Pages
-   */
-  total_pages: number;
-};
-
-/**
- * PaginationInfo
- *
- * Cursor-based pagination metadata.
- */
-export type PaginationInfo = {
-  /**
-   * Next Cursor
-   *
-   * Opaque cursor for fetching the next page
-   */
-  next_cursor?: string | null;
-  /**
-   * Has More
-   *
-   * Whether more results are available
-   */
-  has_more: boolean;
-};
-
-/**
- * PainPoint
- */
-export enum PainPoint {
-  LEAN_TEAM = "lean_team",
-  OVEREXTENDED = "overextended",
-  TOOL_FRAGMENTATION = "tool_fragmentation",
-  PROVING_ROI = "proving_roi",
-  SLOW_VENDOR = "slow_vendor",
-  LACK_OF_CREATIVE_IDEAS = "lack_of_creative_ideas",
-  TECHNICAL_DEBT = "technical_debt",
-  CROSS_TEAM_ALIGNMENT = "cross_team_alignment",
-  NEW_LEADERSHIP_PRESSURE = "new_leadership_pressure",
-}
-
-/**
- * PermissionsCheckRequest
- */
-export type PermissionsCheckRequest = {
-  /**
-   * Permissions
-   *
-   * List of permission strings to check.
-   */
-  permissions?: Array<string>;
-};
-
-/**
- * PermissionsCheckResponse
- */
-export type PermissionsCheckResponse = {
-  /**
-   * Has Permissions
-   *
-   * Indicates whether the user has all the specified permissions.
-   */
-  has_permissions?: {
-    [key: string]: boolean;
-  };
-};
-
-/**
- * PersonaListResponse
- */
-export type PersonaListResponse = {
-  /**
-   * Personas
-   */
-  personas: Array<PersonaResponse>;
-  /**
-   * Total
-   */
-  total: number;
-};
-
-/**
- * PersonaRequest
- *
- * API request body for creating or updating a persona.
- */
-export type PersonaRequest = {
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Title
-   */
-  title?: string | null;
-  seniority?: Seniority | null;
-  industry?: Industry | null;
-  technical_level: TechnicalLevel;
-  skepticism_level: SkepticismLevel;
-  effort_tolerance: EffortTolerance;
-  reading_goal: ReadingGoal;
-  buying_authority?: BuyingAuthority | null;
-  tone_preference: TonePreference;
-  /**
-   * Trust Triggers
-   */
-  trust_triggers?: Array<TrustTrigger>;
-  /**
-   * Pet Peeves
-   */
-  pet_peeves?: Array<PetPeeve>;
-  /**
-   * Current Priorities
-   */
-  current_priorities?: Array<CurrentPriority>;
-  /**
-   * Pain Points
-   */
-  pain_points?: Array<PainPoint>;
-};
-
-/**
- * PersonaResponse
- */
-export type PersonaResponse = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Organization Id
-   */
-  organization_id: string | null;
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Title
-   */
-  title: string | null;
-  seniority: Seniority | null;
-  industry: Industry | null;
-  technical_level: TechnicalLevel;
-  skepticism_level: SkepticismLevel;
-  effort_tolerance: EffortTolerance;
-  reading_goal: ReadingGoal;
-  buying_authority: BuyingAuthority | null;
-  tone_preference: TonePreference;
-  /**
-   * Trust Triggers
-   */
-  trust_triggers: Array<TrustTrigger>;
-  /**
-   * Pet Peeves
-   */
-  pet_peeves: Array<PetPeeve>;
-  /**
-   * Current Priorities
-   */
-  current_priorities: Array<CurrentPriority>;
-  /**
-   * Pain Points
-   */
-  pain_points: Array<PainPoint>;
-  /**
-   * Behavioral Context
-   */
-  behavioral_context: string;
-  /**
-   * Created By Email
-   */
-  created_by_email?: string | null;
-  /**
-   * Created At
-   */
-  created_at: string;
-  /**
-   * Updated At
-   */
-  updated_at: string;
-};
-
-/**
- * PersonaSuggestion
- */
-export type PersonaSuggestion = {
-  /**
-   * Title
-   */
-  title: string;
-  /**
-   * Description
-   */
-  description: string;
-};
-
-/**
- * PersonaSuggestionsResponse
- */
-export type PersonaSuggestionsResponse = {
-  /**
-   * Suggestions
-   */
-  suggestions: Array<PersonaSuggestion>;
-};
-
-/**
- * PetPeeve
- */
-export enum PetPeeve {
-  FLUFF = "fluff",
-  VAGUE_CLAIMS = "vague_claims",
-  OVER_EXPLANATION = "over_explanation",
-  SALES_SPEAK = "sales_speak",
-  JARGON = "jargon",
-  EXCESSIVE_HEDGING = "excessive_hedging",
-  SLOW_PACING = "slow_pacing",
-  LACK_OF_SPECIFICS = "lack_of_specifics",
-  CONDESCENDING_TONE = "condescending_tone",
-}
-
-/**
- * Position
- */
-export type Position = {
-  /**
-   * Start Index
-   *
-   * The start index of the issue in the text
-   */
-  start_index: number;
-};
-
-/**
- * QualityScore
- */
-export type QualityScore = {
-  /**
-   * Score
-   */
-  score?: number | null;
-  grammar?: GrammarScore | null;
-  consistency?: ConsistencyScore | null;
-  terminology?: TerminologyScore | null;
-};
-
-/**
- * ReadingGoal
- */
-export enum ReadingGoal {
-  QUICK_SCAN = "quick_scan",
-  DEEP_UNDERSTANDING = "deep_understanding",
-  DECISION_MAKING = "decision_making",
-  RESEARCH = "research",
-  VALIDATION = "validation",
-}
-
-/**
- * RetryPolicy
- *
- * Retry policy configuration for agent execution.
- */
-export type RetryPolicy = {
-  /**
-   * Max Attempts
-   *
-   * Maximum number of retry attempts
-   */
-  max_attempts?: number;
-  /**
-   * Initial Interval Seconds
-   *
-   * Initial retry interval in seconds
-   */
-  initial_interval_seconds?: number;
-  /**
-   * Backoff Coefficient
-   *
-   * Backoff multiplier for retry intervals
-   */
-  backoff_coefficient?: number;
-  /**
-   * Maximum Interval Seconds
-   *
-   * Maximum retry interval in seconds
-   */
-  maximum_interval_seconds?: number;
-  /**
-   * Non Retryable Error Types
-   *
-   * Error types that should never be retried (deterministic bugs)
-   */
-  non_retryable_error_types?: Array<string>;
-};
-
-/**
- * RewriteContent
- */
-export type RewriteContent = {
-  /**
-   * Text
-   */
-  text?: string | null;
-  scores?: ScoreOutput | null;
-};
-
-/**
- * RewriteResponse
- */
-export type RewriteResponse = {
-  config?: ConfigOptions | null;
-  original?: SuggestionOriginalContent | null;
-  rewrite?: RewriteContent | null;
-  workflow: WorkflowInfo;
-};
-
-/**
- * RoleRead
- *
- * Model for reading role data.
- */
-export type RoleRead = {
-  /**
-   * Name
-   *
-   * The name of the role.
-   */
-  name: string;
-  /**
-   * Description
-   *
-   * A description of the role.
-   */
-  description?: string | null;
-  /**
-   * Organization Id
-   *
-   * The ID of the organization this role belongs to, if any.
-   */
-  organization_id?: string | null;
-  /**
-   * Hidden
-   *
-   * Setting to true will hide this role from the UI, but the role is still assignable.
-   */
-  hidden?: boolean;
-  /**
-   * Superuser
-   *
-   * Setting to true will give this role all permissions.
-   */
-  superuser?: boolean;
-  /**
-   * Priority
-   *
-   * The priority level of the role, with higher numbers indicating higher priority. This is used to determine the order to display roles in the UI.
-   */
-  priority?: number;
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Created At
-   */
-  created_at: string;
-};
-
-/**
- * ScoreOutput
- */
-export type ScoreOutput = {
-  quality?: QualityScore | null;
-  analysis?: AnalysisScore | null;
-};
-
-/**
- * Seniority
- */
-export enum Seniority {
-  INDIVIDUAL_CONTRIBUTOR = "individual_contributor",
-  MANAGER = "manager",
-  SENIOR_MANAGER = "senior_manager",
-  DIRECTOR = "director",
-  SENIOR_DIRECTOR = "senior_director",
-  VP = "vp",
-  C_SUITE = "c_suite",
-}
-
-/**
- * SetupTicketRequest
- */
-export type SetupTicketRequest = {
-  /**
-   * Strategy
-   *
-   * Connection strategy. Picks which self-service profile to mint the ticket against.
-   */
-  strategy: "saml" | "oidc";
-};
-
-/**
- * SetupTicketResponse
- */
-export type SetupTicketResponse = {
-  /**
-   * Ticket Url
-   *
-   * Hosted Auth0 form URL for the admin.
-   */
-  ticket_url: string;
-  /**
-   * Expires At
-   *
-   * When the ticket URL stops working.
-   */
-  expires_at: string;
-};
-
-/**
- * Severity
- */
-export enum Severity {
-  HIGH = "high",
-  MEDIUM = "medium",
-  LOW = "low",
-}
-
-/**
- * SkepticismLevel
- */
-export enum SkepticismLevel {
-  LOW = "low",
-  MEDIUM = "medium",
-  HIGH = "high",
-  VERY_HIGH = "very_high",
-}
-
-/**
- * SsoAttributeConfig
- *
- * One claim-mapping rule. Multiple of these per org compose the full
- * extraction policy.
- */
-export type SsoAttributeConfig = {
-  /**
-   * Attribute
-   *
-   * JWT claim name carrying group identifiers for this attribute.
-   */
-  attribute: string;
-  /**
-   * Claim Format
-   *
-   * Shape of the claim value: array_strings | dn_strings | comma_separated.
-   */
-  claim_format: "array_strings" | "dn_strings" | "comma_separated";
-  /**
-   * Prefix Filter
-   *
-   * Optional prefix the IDP-emitted group string must start with to be kept; the prefix is stripped from the canonical identifier.
-   */
-  prefix_filter?: string | null;
-};
-
-/**
- * SsoConfig
- *
- * Per-org SSO group-mapping config.
- *
- * An empty config (`attributes=[]`, no primary, no ignores) is the valid
- * initial state. Field names form the contract with the post-login Action
- * and must stay stable.
- */
-export type SsoConfig = {
-  /**
-   * Attributes
-   *
-   * Ordered list of attribute mappings.
-   */
-  attributes?: Array<SsoAttributeConfig>;
-  /**
-   * Ignore Groups
-   *
-   * Org-level list of canonical (post-prefix-strip) group identifiers to drop from the extracted groups set.
-   */
-  ignore_groups?: Array<string>;
-  /**
-   * Primary Group Attribute
-   *
-   * Optional. Names one of `attributes[].attribute`; the first value the IDP emits for that attribute becomes the user's primary group.
-   */
-  primary_group_attribute?: string | null;
-};
-
-/**
- * SsoConnection
- *
- * Public projection of the org's Auth0 SSO connection.
- */
-export type SsoConnection = {
-  /**
-   * Id
-   *
-   * Auth0 connection ID
-   */
-  id: string;
-  /**
-   * Name
-   *
-   * Connection name, e.g. 'acme-corp-saml'.
-   */
-  name: string;
-  /**
-   * Strategy
-   *
-   * Normalized strategy ('saml' or 'oidc').
-   */
-  strategy: "saml" | "oidc";
-  /**
-   * Enabled
-   *
-   * Whether the connection is currently active for the org.
-   */
-  enabled: boolean;
-  /**
-   * Idp Entity Id
-   *
-   * IDP entity ID (SAML) or issuer URL (OIDC), if set.
-   */
-  idp_entity_id?: string | null;
-};
-
-/**
- * SsoConnectionsResponse
- */
-export type SsoConnectionsResponse = {
-  /**
-   * Connections
-   *
-   * The org's customer SSO connections (zero, one, or two — one per strategy). Empty list means no SSO is configured.
-   */
-  connections?: Array<SsoConnection>;
-};
-
-/**
- * StaffRequest
- */
-export type StaffRequest = {
-  /**
-   * Admin
-   */
-  admin?: boolean;
-  /**
-   * Email
-   */
-  email: string;
-};
-
-/**
- * StaffResponse
- */
-export type StaffResponse = {
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Email
-   */
-  email: string;
-  /**
-   * Admin
-   */
-  admin: boolean;
-  /**
-   * Id
-   */
-  id: string;
-};
-
-/**
- * StaffUpdate
- */
-export type StaffUpdate = {
-  /**
-   * Admin
-   */
-  admin?: boolean;
-};
-
-/**
- * StyleAgentMode
- */
-export enum StyleAgentMode {
-  DISABLED = "disabled",
-  ENABLED = "enabled",
-  ENABLED_TERMINOLOGY = "enabled_terminology",
-}
-
-/**
- * StyleCheckRequestBody
- */
-export type StyleCheckRequestBody = {
-  /**
-   * The language variant you'd like us to use for analysis. Choose from American English, British English, or other supported dialects.
-   */
-  dialect: Dialects;
-  /**
-   * The tone variation you're aiming for. Options include formal, academic, casual, and other tone variations to match your content goals.
-   */
-  tone?: Tones | null;
-  /**
-   * Style Guide
-   *
-   * The style guide to follow for your content. You can use a style guide ID or choose from built-in options: `ap`, `chicago`, or `microsoft`.
-   */
-  style_guide: string;
-  /**
-   * Webhook Url
-   *
-   * A URL that results will be POSTed to once the process completes.
-   */
-  webhook_url?: string | null;
-  /**
-   * File Upload
-   *
-   * The document to analyze. Text (.txt), Markdown (.md), HTML (.html .htm), DITA (.dita, .xml), and PDF (.pdf) files are accepted. The max file size is 1.5 MB.
-   */
-  file_upload: Blob | File;
-};
-
-/**
- * StyleCheckResponse
- */
-export type StyleCheckResponse = {
-  config?: ConfigOptions | null;
-  original?: OriginalContent | null;
-  workflow: WorkflowInfo;
-};
-
-/**
- * StyleGuide
- */
-export type StyleGuide = {
-  /**
-   * The type of style guide to use
-   */
-  style_guide_type?: StyleGuides | null;
-  /**
-   * Style Guide Id
-   *
-   * The ID of the style guide to use
-   */
-  style_guide_id?: string | null;
-};
-
-/**
- * StyleGuideRequestBody
- */
-export type StyleGuideRequestBody = {
-  /**
-   * File Upload
-   *
-   * The document to analyze. We accept PDF files (.pdf) up to 2 MB. Required unless copy_from is provided.
-   */
-  file_upload?: Blob | File | null;
-  /**
-   * Name
-   *
-   * A friendly name for your style guide. Required when creating from a document, optional when copying (auto-generated if not provided).
-   */
-  name?: string | null;
-  /**
-   * The base style guide to extend (AP, Chicago, or Microsoft). If not provided, the style guide will be created from scratch.
-   */
-  base_style_guide?: BaseStyleGuideType | null;
-  /**
-   * Terminology Domain Ids
-   *
-   * List of domain IDs to filter terminology searches by. NULL or empty list means no filtering.
-   */
-  terminology_domain_ids?: Array<string> | null;
-};
-
-/**
- * StyleGuideResponse
- */
-export type StyleGuideResponse = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Name
-   *
-   * The name of the style guide.
-   */
-  name: string;
-  /**
-   * Created At
-   *
-   * The UTC date and time the style guide was created.
-   */
-  created_at: string;
-  /**
-   * Created By
-   *
-   * The ID of the user who created the style guide.
-   */
-  created_by: string;
-  /**
-   * The status of the submitted style guide.
-   */
-  status: StyleGuideStatus;
-  /**
-   * Updated At
-   *
-   * The UTC datetime that the style guide was last updated. If null, the style guide has never been updated.
-   */
-  updated_at?: string | null;
-  /**
-   * Updated By
-   *
-   * The ID of the user who last updated the style guide. If null, the style guide has never been updated.
-   */
-  updated_by?: string | null;
-  /**
-   * Summary
-   *
-   * User-friendly summary of the style guide's contents and characteristics
-   */
-  summary?: string | null;
-  /**
-   * The base style guide type that this style guide extends (AP, Chicago, or Microsoft).
-   */
-  base_style_guide_type?: BaseStyleGuideType | null;
-  /**
-   * Terminology Domain Ids
-   *
-   * List of domain IDs to filter terminology searches by. NULL or empty list means no filtering.
-   */
-  terminology_domain_ids?: Array<string> | null;
-  /**
-   * Has Tone Prompt
-   *
-   * Whether this style guide has a tone prompt defined.
-   */
-  has_tone_prompt?: boolean;
-};
-
-/**
- * StyleGuideStatus
- */
-export enum StyleGuideStatus {
-  RUNNING = "running",
-  COMPLETED = "completed",
-  FAILED = "failed",
-  NOT_FOUND = "not_found",
-}
-
-/**
- * StyleGuides
- */
-export enum StyleGuides {
-  AP = "ap",
-  CHICAGO = "chicago",
-  MICROSOFT = "microsoft",
-  STYLE_BRAND_IMPORTER = "style_brand_importer",
-}
-
-/**
- * StyleRewriteRequestBody
- */
-export type StyleRewriteRequestBody = {
-  /**
-   * The language variant you'd like us to use for analysis. Choose from American English, British English, or other supported dialects.
-   */
-  dialect: Dialects;
-  /**
-   * The tone variation you're aiming for. Options include formal, academic, casual, and other tone variations to match your content goals.
-   */
-  tone?: Tones | null;
-  /**
-   * Style Guide
-   *
-   * The style guide to follow for your content. You can use a style guide ID or choose from built-in options: `ap`, `chicago`, or `microsoft`.
-   */
-  style_guide: string;
-  /**
-   * Webhook Url
-   *
-   * A URL that results will be POSTed to once the process completes.
-   */
-  webhook_url?: string | null;
-  /**
-   * File Upload
-   *
-   * The document to rewrite. Text (.txt), Markdown (.md), HTML (.html .htm), and DITA (.dita, .xml) files are accepted. The max file size is 1.5 MB.
-   */
-  file_upload: Blob | File;
-};
-
-/**
- * StyleSuggestionRequestBody
- */
-export type StyleSuggestionRequestBody = {
-  /**
-   * The language variant you'd like us to use for analysis. Choose from American English, British English, or other supported dialects.
-   */
-  dialect: Dialects;
-  /**
-   * The tone variation you're aiming for. Options include formal, academic, casual, and other tone variations to match your content goals.
-   */
-  tone?: Tones | null;
-  /**
-   * Style Guide
-   *
-   * The style guide to follow for your content. You can use a style guide ID or choose from built-in options: `ap`, `chicago`, or `microsoft`.
-   */
-  style_guide: string;
-  /**
-   * Webhook Url
-   *
-   * A URL that results will be POSTed to once the process completes.
-   */
-  webhook_url?: string | null;
-  /**
-   * File Upload
-   *
-   * The document to analyze. Text (.txt), Markdown (.md), HTML (.html .htm), DITA (.dita, .xml), and PDF (.pdf) files are accepted. The max file size is 1.5 MB.
-   */
-  file_upload: Blob | File;
-};
-
-/**
- * Suggestion
- */
-export type Suggestion = {
-  /**
-   * Original
-   *
-   * The original text
-   */
-  original: string;
-  /**
-   * Position details of the issue
-   */
-  position: Position;
-  /**
-   * Subcategory
-   *
-   * The sub-category of the change
-   */
-  subcategory:
-    | GrammarCategory
-    | ClarityCategory
-    | ToneCategory
-    | ConsistencyCategory
-    | TermReplaceCategory;
-  /**
-   * Suggestion
-   *
-   * The suggested replacement text
-   */
-  suggestion: string;
-  /**
-   * Explanation
-   *
-   * Explanation for the suggestion, generated by the LLM
-   */
-  explanation?: string | null;
-  readonly category: IssueCategory | null;
-  readonly severity: Severity;
-};
-
-/**
- * SuggestionOriginalContent
- */
-export type SuggestionOriginalContent = {
-  /**
-   * Issues
-   */
-  issues?: Array<Suggestion>;
-  scores?: ScoreOutput | null;
-  /**
-   * High Risk Count
-   */
-  readonly high_risk_count: number;
-  /**
-   * Medium Risk Count
-   */
-  readonly medium_risk_count: number;
-  /**
-   * Low Risk Count
-   */
-  readonly low_risk_count: number;
-};
-
-/**
- * SuggestionResponse
- */
-export type SuggestionResponse = {
-  config?: ConfigOptions | null;
-  original?: SuggestionOriginalContent | null;
-  workflow: WorkflowInfo;
-};
-
-/**
- * SurfaceResponse
- */
-export type SurfaceResponse = {
-  /**
-   * Surface
-   */
-  surface: string;
-  /**
-   * Lowercasesurface
-   */
-  lowercasesurface?: string | null;
-  /**
-   * Lemmastart
-   */
-  lemmastart: number;
-  /**
-   * Lemmalength
-   */
-  lemmalength: number;
-};
-
-/**
- * TargetResponse
- */
-export type TargetResponse = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Display Name
-   */
-  display_name: string;
-  /**
-   * Is Default
-   */
-  is_default: boolean;
-  /**
-   * Enabled
-   */
-  enabled: boolean;
-};
-
-/**
- * TechnicalLevel
- */
-export enum TechnicalLevel {
-  LOW = "low",
-  MODERATE = "moderate",
-  HIGH = "high",
-  VERY_HIGH = "very_high",
-}
-
-/**
- * TermDetail
- *
- * Detailed term information for term management UI
- */
-export type TermDetail = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Term
-   */
-  term: string;
-  type: TermType;
-  /**
-   * Created At
-   */
-  created_at: string;
-  /**
-   * Updated At
-   */
-  updated_at: string;
-  /**
-   * Created By
-   */
-  created_by?: string | null;
-  /**
-   * Updated By
-   */
-  updated_by?: string | null;
-};
-
-/**
- * TermDetailResponse
- *
- * Term with linked terms and history.
- */
-export type TermDetailResponse = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Uuid
-   */
-  uuid: string;
-  /**
-   * External Id
-   */
-  external_id: string;
-  /**
-   * Conceptid
-   */
-  conceptid: string;
-  /**
-   * Conceptuuid
-   */
-  conceptuuid: string;
-  /**
-   * Isconcept
-   */
-  isconcept: string;
-  surface?: SurfaceResponse | null;
-  language?: CategoryResponse | null;
-  status?: CategoryResponse | null;
-  msr?: CategoryResponse | null;
-  /**
-   * Categories
-   */
-  categories?: Array<CategoryResponse>;
-  /**
-   * Variantsconfigurations
-   */
-  variantsconfigurations?: string | null;
-  /**
-   * Frequency
-   */
-  frequency?: number;
-  /**
-   * Creationdate
-   */
-  creationdate?: string | null;
-  /**
-   * Creator
-   */
-  creator?: string | null;
-  /**
-   * Lastmodificationdate
-   */
-  lastmodificationdate?: string | null;
-  /**
-   * Lastmodifier
-   */
-  lastmodifier?: string | null;
-  /**
-   * Linked Term Count
-   */
-  linked_term_count?: number;
-  /**
-   * Member Count
-   */
-  member_count?: number;
-  /**
-   * Custom Fields
-   */
-  custom_fields?: {
-    [key: string]: string | null;
-  };
-  /**
-   * Custom Field Values
-   */
-  custom_field_values?: Array<CustomFieldValueResponse>;
-  /**
-   * Member Terms
-   */
-  member_terms?: Array<LinkedTermSummary>;
-};
-
-/**
- * TermEditorConfigResponse
- *
- * Parsed view of the legacy `termEditCfg` global setting.
- *
- * `configured=False` means the org never customized the layout (or the
- * setting failed to parse) — UIs should treat that as "show every custom
- * field" for backwards compatibility with the GWT default.
- */
-export type TermEditorConfigResponse = {
-  /**
-   * Configured
-   */
-  configured: boolean;
-  /**
-   * Visible Custom Field Uuids
-   */
-  visible_custom_field_uuids?: Array<string>;
-  /**
-   * Visible Custom Field Names
-   */
-  visible_custom_field_names?: Array<string>;
-  /**
-   * Raw
-   */
-  raw?: {
-    [key: string]: unknown;
-  } | null;
-};
-
-/**
- * TermHistoryResponse
- */
-export type TermHistoryResponse = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Eventtype
-   */
-  eventtype: string;
-  /**
-   * Eventtext
-   */
-  eventtext?: string | null;
-  /**
-   * Username
-   */
-  username?: string | null;
-  /**
-   * Eventdate
-   */
-  eventdate: string;
-};
-
-/**
- * TermItem
- */
-export type TermItem = {
-  /**
-   * Term
-   */
-  term: string;
-  /**
-   * Type
-   */
-  type: string;
-};
-
-/**
- * TermReplaceCategory
- */
-export enum TermReplaceCategory {
-  TERMINOLOGY = "Terminology",
-  OTHER = "other",
-}
-
-/**
- * TermSetCreateRequest
- *
- * Payload to create a new term set
- */
-export type TermSetCreateRequest = {
-  /**
-   * Context
-   */
-  context: string;
-  term_type?: TermType | null;
-  context_polarity?: ContextPolarity | null;
-  /**
-   * Terms
-   */
-  terms?: Array<HeliosOneApiModulesTerminologySchemasTermApiModelsTermCreateRequest> | null;
-  /**
-   * Domain Ids
-   */
-  domain_ids?: Array<string> | null;
-};
-
-/**
- * TermSetDetailResponse
- *
- * All terms in a concept/term set with full data.
- */
-export type TermSetDetailResponse = {
-  /**
-   * Concept Id
-   */
-  concept_id: string;
-  /**
-   * Concept Uuid
-   */
-  concept_uuid: string;
-  /**
-   * Terms
-   */
-  terms: Array<HeliosOneApiModulesAdvancedTerminologySchemasTermsTermResponse>;
-};
-
-/**
- * TermSetResponse
- *
- * DB-mapped representation of a term set (no terms).
- */
-export type TermSetResponse = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Context
-   */
-  context: string;
-  term_type?: TermType | null;
-  context_polarity?: ContextPolarity | null;
-  /**
-   * Created At
-   */
-  created_at: string;
-  /**
-   * Updated At
-   */
-  updated_at: string;
-  /**
-   * Created By
-   */
-  created_by?: string | null;
-  /**
-   * Updated By
-   */
-  updated_by?: string | null;
-};
-
-/**
- * TermSetResult
- */
-export type TermSetResult = {
-  /**
-   * Context
-   */
-  context: string;
-  /**
-   * Context Polarity
-   */
-  context_polarity?: string | null;
-  /**
-   * Terms
-   */
-  terms: Array<TermItem>;
-  /**
-   * Matched Terms
-   */
-  matched_terms: Array<MatchedTerm>;
-};
-
-/**
- * TermSetUpdateRequest
- *
- * Payload to update an existing term set
- */
-export type TermSetUpdateRequest = {
-  /**
-   * Context
-   */
-  context?: string | null;
-  term_type?: TermType | null;
-  context_polarity?: ContextPolarity | null;
-  /**
-   * Domain Ids
-   */
-  domain_ids?: Array<string> | null;
-};
-
-/**
- * TermSetWithTerms
- *
- * Term set with all associated terms for term management UI
- */
-export type TermSetWithTerms = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Context
-   */
-  context: string;
-  term_type?: TermType | null;
-  context_polarity?: ContextPolarity | null;
-  /**
-   * Created At
-   */
-  created_at: string;
-  /**
-   * Updated At
-   */
-  updated_at: string;
-  /**
-   * Created By
-   */
-  created_by?: string | null;
-  /**
-   * Updated By
-   */
-  updated_by?: string | null;
-  /**
-   * Terms
-   */
-  terms: Array<TermDetail>;
-  /**
-   * Domains
-   */
-  domains?: Array<DomainSummary>;
-};
-
-/**
- * TermType
- */
-export enum TermType {
-  PREFERRED = "preferred",
-  PROHIBITED = "prohibited",
-}
-
-/**
- * TerminologyDomainInfo
- *
- * Basic domain info for display in style guide responses.
- */
-export type TerminologyDomainInfo = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Name
-   */
-  name: string;
-};
-
-/**
- * TerminologyScore
- */
-export type TerminologyScore = {
-  /**
-   * Score
-   */
-  score?: number | null;
-  /**
-   * Issues
-   */
-  issues?: number | null;
-};
-
-/**
- * TerminologySearchResponse
- */
-export type TerminologySearchResponse = {
-  /**
-   * Results
-   */
-  results: Array<TermSetResult>;
-};
-
-/**
- * TokenUsageDataPoint
- */
-export type TokenUsageDataPoint = {
-  /**
-   * Report Date
-   */
-  report_date: string;
-  /**
-   * Tokens Used
-   */
-  tokens_used: number;
-};
-
-/**
- * TokenUsageHistoryResponse
- */
-export type TokenUsageHistoryResponse = {
-  /**
-   * Data
-   */
-  data: Array<TokenUsageDataPoint>;
-};
-
-/**
- * ToneCategory
- */
-export enum ToneCategory {
-  TONE_ALIGNED_WORDING = "Tone-Aligned Wording",
-  TONE_SHAPING_STRUCTURE = "Tone-Shaping Structure",
-  TONE_SIGNAL_PUNCTUATION = "Tone-Signal Punctuation",
-  TRANSITIONS_AND_FLOW = "Transitions and Flow",
-  ADDITIONAL_TONE_CHANGES = "Additional Tone Changes",
-  OTHER = "other",
-}
-
-/**
- * TonePreference
- */
-export enum TonePreference {
-  DIRECT = "direct",
-  FORMAL = "formal",
-  CONVERSATIONAL = "conversational",
-  TECHNICAL = "technical",
-  INSPIRATIONAL = "inspirational",
-  PEER_TO_PEER = "peer_to_peer",
-}
-
-/**
- * ToneScore
- */
-export type ToneScore = {
-  /**
-   * Score
-   */
-  score?: number | null;
-  /**
-   * Informality
-   */
-  informality?: number | null;
-  /**
-   * Liveliness
-   */
-  liveliness?: number | null;
-  /**
-   * Informality Alignment
-   */
-  informality_alignment?: number | null;
-  /**
-   * Liveliness Alignment
-   */
-  liveliness_alignment?: number | null;
-};
-
-/**
- * Tones
- */
-export enum Tones {
-  ACADEMIC = "academic",
-  CONFIDENT = "confident",
-  CONVERSATIONAL = "conversational",
-  EMPATHETIC = "empathetic",
-  ENGAGING = "engaging",
-  FRIENDLY = "friendly",
-  PROFESSIONAL = "professional",
-  STYLE_GUIDE = "style_guide",
-  TECHNICAL = "technical",
-}
-
-/**
- * TrustTrigger
- */
-export enum TrustTrigger {
-  DATA_AND_PROOF = "data_and_proof",
-  PEER_REFERENCES = "peer_references",
-  TECHNICAL_DEPTH = "technical_depth",
-  EXECUTIVE_ENDORSEMENT = "executive_endorsement",
-  CLEAR_ROI = "clear_roi",
-  TRANSPARENCY = "transparency",
-  INNOVATION_TRACK_RECORD = "innovation_track_record",
-  SPECIFICITY = "specificity",
-  CASE_STUDIES = "case_studies",
-}
-
-/**
- * UncertainField
- */
-export type UncertainField = {
-  /**
-   * Field
-   *
-   * The persona field name
-   */
-  field: string;
-  /**
-   * Chosen Value
-   *
-   * The value(s) selected by the agent
-   */
-  chosen_value: string | Array<string>;
-  /**
-   * Explanation
-   *
-   * Why this value was chosen and when the user might want to change it
-   */
-  explanation: string;
-  /**
-   * Alternatives
-   *
-   * Other values the user might consider
-   */
-  alternatives?: Array<string>;
-};
-
-/**
- * UserOrganizationWithDetails
- */
-export type UserOrganizationWithDetails = {
-  /**
-   * Role
-   *
-   * The role of the user in the organization.
-   */
-  role?: string | null;
-  /**
-   * First Name
-   *
-   * First name of the user.
-   */
-  first_name?: string | null;
-  /**
-   * Last Name
-   *
-   * Last name of the user.
-   */
-  last_name?: string | null;
-  /**
-   * Job Title
-   *
-   * Job title of the user.
-   */
-  job_title?: string | null;
-  /**
-   * Company Role
-   *
-   * Company role selected by the user (Developer, Content Owner, etc.).
-   */
-  company_role?: string | null;
-  /**
-   * Marketing Consent
-   *
-   * Whether the user has consented to marketing communications.
-   */
-  marketing_consent?: boolean | null;
-  /**
-   * Created At
-   *
-   * The date and time the mapping was created.
-   */
-  created_at?: string;
-  /**
-   * Updated At
-   *
-   * The date and time the mapping was last updated.
-   */
-  updated_at?: string;
-  /**
-   * User Id
-   *
-   * ID of the user
-   */
-  user_id: string;
-  /**
-   * Organization Id
-   *
-   * ID of the organization
-   */
-  organization_id: string;
-  organization: HeliosOneDatabaseModelsOrganizationOrganization;
-};
-
-/**
- * UserProfileResponse
- */
-export type UserProfileResponse = {
-  /**
-   * First Name
-   */
-  first_name: string | null;
-  /**
-   * Last Name
-   */
-  last_name: string | null;
-  /**
-   * Job Title
-   */
-  job_title: string | null;
-  /**
-   * User Role
-   */
-  user_role: string | null;
-  /**
-   * Marketing Consent
-   */
-  marketing_consent: boolean | null;
-};
-
-/**
- * UserRead
- */
-export type UserRead = {
-  /**
-   * Email
-   */
-  email?: string | null;
-  /**
-   * Is Staff
-   */
-  is_staff?: boolean;
-  /**
-   * Id
-   */
-  id: string;
-};
-
-/**
- * UserUpdate
- */
-export type UserUpdate = {
-  /**
-   * Is Staff
-   */
-  is_staff?: boolean | null;
-};
-
-/**
- * UserWithOrganizations
- */
-export type UserWithOrganizations = {
-  /**
-   * Email
-   */
-  email?: string | null;
-  /**
-   * Is Staff
-   */
-  is_staff?: boolean;
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * User Organizations
-   */
-  user_organizations?: Array<UserOrganizationWithDetails>;
-};
-
-/**
- * ValidationErrorItem
- */
-export type ValidationErrorItem = {
-  /**
-   * Type
-   *
-   * The type of error that occurred.
-   */
-  type: string;
-  /**
-   * Loc
-   *
-   * The location of the error in the request.
-   */
-  loc: Array<unknown>;
-  /**
-   * Msg
-   *
-   * A description of the error that occurred.
-   */
-  msg: string;
-  /**
-   * Input
-   *
-   * The input that caused the error.
-   */
-  input?: unknown;
-  /**
-   * Ctx
-   *
-   * Additional context about the error.
-   */
-  ctx?: {
-    [key: string]: unknown;
-  };
-};
-
-/**
- * ValidationErrorResponse
- */
-export type ValidationErrorResponse = {
+export type ErrorResponse = {
   /**
    * Detail
    *
@@ -4891,136 +523,130 @@ export type ValidationErrorResponse = {
    * A unique ID associated with the HTTP request.
    */
   request_id: string;
-  /**
-   * Errors
-   *
-   * Detailed field-specific errors
-   */
-  errors?: Array<ValidationErrorItem>;
 };
 
 /**
- * WebhookResponse
+ * DomainUpdateRequest
  */
-export type WebhookResponse = {
+export type DomainUpdateRequest = {
   /**
-   * Url
+   * Name
    */
-  url: string;
+  name?: string | null;
   /**
-   * Status Code
+   * Description
    */
-  status_code: number;
+  description?: string | null;
 };
 
 /**
- * WorkflowCancelResponse
+ * DomainCreateRequest
+ */
+export type DomainCreateRequest = {
+  /**
+   * Name
+   */
+  name: string;
+  /**
+   * Description
+   */
+  description?: string | null;
+};
+
+/**
+ * CategoryListResult
  *
- * Response from cancelling a workflow.
+ * Result of listing all available categories.
  */
-export type WorkflowCancelResponse = {
+export type CategoryListResult = {
   /**
-   * Workflow Id
+   * Categories
    *
-   * Workflow ID
+   * All defined categories
    */
-  workflow_id: string;
+  categories: Array<CategoryDefinition>;
   /**
-   * Cancelled At
+   * Total
    *
-   * Timestamp when cancellation was requested
+   * Total number of categories
    */
-  cancelled_at: string;
+  total: number;
 };
 
 /**
- * WorkflowInfo
+ * CategoryDefinition
+ *
+ * A single agent category for API responses.
  */
-export type WorkflowInfo = {
+export type CategoryDefinition = {
   /**
    * Id
    *
-   * Workflow ID
+   * Stable category ID (e.g. 'cat_r2FOEuqy06OR')
    */
   id: string;
   /**
-   * Api Version
+   * Name
    *
-   * API version
+   * Human-readable display name
    */
-  api_version?: string | null;
+  name: string;
   /**
-   * Filename
+   * Description
    *
-   * The original name of the file passed into the workflow
+   * What this category covers
    */
-  filename?: string | null;
-  /**
-   * Generated At
-   *
-   * UTC timestamp when the result was generated
-   */
-  generated_at?: string | null;
-  status?: HeliosOneApiModulesEngineSchemasWorkflowsWorkflowStatus;
-  /**
-   * Type
-   *
-   * Workflow type: checks, suggestions, or rewrites
-   */
-  type: string;
-  /**
-   * The status code received and URL used when sending the webhook if a webhook URL was included when starting the process.
-   */
-  webhook_response?: WebhookResponse | null;
+  description: string;
 };
 
 /**
- * WorkflowListResponse
+ * AgentUIMetadata
  *
- * Paginated list of workflow executions.
+ * UI presentation metadata for an agent.
  */
-export type WorkflowListResponse = {
+export type AgentUiMetadata = {
   /**
-   * Workflows
+   * Title
    *
-   * Workflow executions
+   * Display name override
    */
-  workflows: Array<WorkflowStatusResponse>;
+  title?: string | null;
   /**
-   * Pagination metadata
+   * Description
+   *
+   * Description override for UI
    */
-  pagination: PaginationInfo;
+  description?: string | null;
+  /**
+   * Icon
+   *
+   * Lucide icon key (e.g. 'spell-check')
+   */
+  icon?: string;
 };
 
 /**
- * WorkflowResponse
- */
-export type WorkflowResponse = {
-  status: HeliosOneApiModulesEngineSchemasWorkflowsWorkflowStatus;
-  /**
-   * Workflow Id
-   */
-  workflow_id: string;
-};
-
-/**
- * WorkflowStatusResponse
+ * AgentRunResponse
  *
- * Status response for a workflow.
+ * Response from agent run.
  */
-export type WorkflowStatusResponse = {
+export type AgentRunResponse = {
   /**
    * Workflow Id
    *
-   * Workflow ID
+   * Workflow ID for tracking
    */
   workflow_id: string;
   /**
-   * Agent Id
+   * Request Id
    *
-   * Agent that ran this workflow
+   * Request tracking ID
    */
-  agent_id?: string;
+  request_id?: string | null;
+  /**
+   * Workflow status
+   */
+  status: HeliosSharedCortexModelsResponseWorkflowStatus;
   /**
    * Document Ref
    *
@@ -5028,13 +654,9 @@ export type WorkflowStatusResponse = {
    */
   document_ref?: string | null;
   /**
-   * Current status
-   */
-  status: HeliosSharedCortexModelsResponseWorkflowStatus;
-  /**
    * Result
    *
-   * Result (if completed)
+   * Execution result (if completed)
    */
   result?: {
     [key: string]: unknown;
@@ -5042,7 +664,7 @@ export type WorkflowStatusResponse = {
   /**
    * Started At
    *
-   * Start time
+   * Workflow start time
    */
   started_at: string;
   /**
@@ -5051,583 +673,266 @@ export type WorkflowStatusResponse = {
    * Workflow completion time
    */
   completed_at?: string | null;
-};
-
-/**
- * PaginatedInvitationsResponse
- */
-export type HeliosOneApiModulesAdminOrganizationsPaginatedInvitationsResponse = {
   /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-  /**
-   * Invitations
-   */
-  invitations: Array<InvitedUser>;
-};
-
-/**
- * PaginatedMembersResponse
- */
-export type HeliosOneApiModulesAdminOrganizationsPaginatedMembersResponse = {
-  /**
-   * Total
-   */
-  total: number | null;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-  /**
-   * Members
-   */
-  members: Array<OrganizationMember>;
-};
-
-/**
- * TermCreateRequest
- */
-export type HeliosOneApiModulesAdvancedTerminologySchemasTermsTermCreateRequest = {
-  /**
-   * Surface
-   */
-  surface: string;
-  /**
-   * Language Id
-   */
-  language_id: string;
-  /**
-   * Status Id
-   */
-  status_id: string;
-  /**
-   * Msr Id
-   */
-  msr_id?: string | null;
-  /**
-   * Masterterm Id
+   * Duration Seconds
    *
-   * Link to existing head term. If null, creates a new head term.
+   * Execution duration
    */
-  masterterm_id?: string | null;
-  /**
-   * Variantsconfigurations
-   */
-  variantsconfigurations?: string | null;
-  /**
-   * Category Ids
-   */
-  category_ids?: Array<string> | null;
-  /**
-   * Concept Id
-   *
-   * Human-readable concept ID. Defaults to surface text.
-   */
-  concept_id?: string | null;
+  duration_seconds?: number | null;
 };
 
 /**
- * TermResponse
+ * AgentRunRequest
+ *
+ * Request to run an agent.
  */
-export type HeliosOneApiModulesAdvancedTerminologySchemasTermsTermResponse = {
+export type AgentRunRequest = {
+  /**
+   * Text
+   *
+   * Document text to analyze.
+   */
+  text: string;
+  /**
+   * Agents
+   *
+   * Agent IDs to execute. Resolved to agent names server-side.
+   */
+  agents?: Array<string> | null;
+  /**
+   * Domain Ids
+   *
+   * Terminology domain IDs.
+   */
+  domain_ids?: Array<string> | null;
+  /**
+   * Document Ref
+   *
+   * Caller-provided document identifier for tracking across scans.
+   */
+  document_ref?: string | null;
+  /**
+   * Url
+   *
+   * Document URL.
+   */
+  url?: string | null;
+  /**
+   * Document Name
+   *
+   * Document name or title.
+   */
+  document_name?: string | null;
+  /**
+   * Style Guide Id
+   *
+   * Style guide ID to check the document against. ``target_id`` is a deprecated alias for this field; send exactly one of the two names.
+   */
+  style_guide_id?: string | null;
+  /**
+   * Content Profile Id
+   *
+   * Language-service content profile ID for style checking.
+   */
+  content_profile_id?: string | null;
+  /**
+   * Goal
+   *
+   * Document goal for agent recommendation.
+   */
+  goal?: string | null;
+  /**
+   * Persona Id
+   *
+   * Agent configuration UUID for persona selection. Used by: persona.
+   */
+  persona_id?: string | null;
+  /**
+   * Voice Profile Id
+   *
+   * Agent configuration UUID for brand voice profile selection. Used by: brand_voice.
+   */
+  voice_profile_id?: string | null;
+  /**
+   * Webhook Url
+   *
+   * Optional webhook URL for async result delivery.
+   */
+  webhook_url?: string | null;
+};
+
+/**
+ * AgentMetadata
+ *
+ * Metadata about a registered agent.
+ */
+export type AgentMetadata = {
   /**
    * Id
+   *
+   * Stable agent ID (ag_<nanoid>) used for API routing
    */
   id: string;
   /**
-   * Uuid
+   * Description
+   *
+   * Agent description
    */
-  uuid: string;
+  description?: string | null;
   /**
-   * External Id
+   * Labs
+   *
+   * Whether this agent is in labs
    */
-  external_id: string;
+  labs?: boolean;
   /**
-   * Conceptid
+   * Input Schema
+   *
+   * Input JSON schema
    */
-  conceptid: string;
+  input_schema?: {
+    [key: string]: unknown;
+  } | null;
   /**
-   * Conceptuuid
+   * Name
+   *
+   * Agent name
    */
-  conceptuuid: string;
+  name: string;
   /**
-   * Isconcept
+   * Output Schema
+   *
+   * Output JSON schema
    */
-  isconcept: string;
-  surface?: SurfaceResponse | null;
-  language?: CategoryResponse | null;
-  status?: CategoryResponse | null;
-  msr?: CategoryResponse | null;
+  output_schema?: {
+    [key: string]: unknown;
+  } | null;
   /**
    * Categories
+   *
+   * Category IDs for discovery and filtering
    */
-  categories?: Array<CategoryResponse>;
+  categories?: Array<string>;
   /**
-   * Variantsconfigurations
+   * UI metadata
    */
-  variantsconfigurations?: string | null;
-  /**
-   * Frequency
-   */
-  frequency?: number;
-  /**
-   * Creationdate
-   */
-  creationdate?: string | null;
-  /**
-   * Creator
-   */
-  creator?: string | null;
-  /**
-   * Lastmodificationdate
-   */
-  lastmodificationdate?: string | null;
-  /**
-   * Lastmodifier
-   */
-  lastmodifier?: string | null;
-  /**
-   * Linked Term Count
-   */
-  linked_term_count?: number;
-  /**
-   * Member Count
-   */
-  member_count?: number;
-  /**
-   * Custom Fields
-   */
-  custom_fields?: {
-    [key: string]: string | null;
-  };
-  /**
-   * Custom Field Values
-   */
-  custom_field_values?: Array<CustomFieldValueResponse>;
+  ui?: AgentUiMetadata;
 };
 
 /**
- * TermUpdateRequest
- */
-export type HeliosOneApiModulesAdvancedTerminologySchemasTermsTermUpdateRequest = {
-  /**
-   * Surface
-   */
-  surface?: string | null;
-  /**
-   * Language Id
-   */
-  language_id?: string | null;
-  /**
-   * Status Id
-   */
-  status_id?: string | null;
-  /**
-   * Msr Id
-   */
-  msr_id?: string | null;
-  /**
-   * Variantsconfigurations
-   */
-  variantsconfigurations?: string | null;
-  /**
-   * Category Ids
-   */
-  category_ids?: Array<string> | null;
-};
-
-/**
- * Organization
- */
-export type HeliosOneApiModulesAuthMainOrganization = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Display Name
-   */
-  display_name: string;
-  /**
-   * Picture
-   */
-  picture: string;
-};
-
-/**
- * WorkflowStatus
- */
-export enum HeliosOneApiModulesEngineSchemasWorkflowsWorkflowStatus {
-  RUNNING = "running",
-  COMPLETED = "completed",
-  FAILED = "failed",
-  NOT_FOUND = "not_found",
-}
-
-/**
- * TermCreateRequest
+ * ActivityEventRequest
  *
- * Payload to create a new term for a term set
- */
-export type HeliosOneApiModulesTerminologySchemasTermApiModelsTermCreateRequest = {
-  /**
-   * Term
-   */
-  term: string;
-  type: TermType;
-};
-
-/**
- * TermResponse
+ * Request body for tracking a user action on an agent issue.
  *
- * DB-mapped representation of a term.
+ * workflow_id and request_id are promoted to top-level fields on the
+ * ActivityEvent; the remaining fields are serialized into event_data.
  */
-export type HeliosOneApiModulesTerminologySchemasTermApiModelsTermResponse = {
+export type ActivityEventRequest = {
   /**
-   * Id
+   * Workflow Id
+   *
+   * Workflow ID of the check that produced the issue (null for pre-scan actions)
    */
-  id: string;
+  workflow_id?: string | null;
   /**
-   * Term
+   * Request Id
+   *
+   * Request ID of the check that produced the issue (empty for pre-scan actions; handler falls back to API request ID)
    */
-  term: string;
-  type: TermType;
+  request_id?: string;
   /**
-   * Created At
+   * Session Id
+   *
+   * Client-generated UUID per sidepanel lifecycle
    */
-  created_at: string;
+  session_id: string;
   /**
-   * Updated At
+   * Action
+   *
+   * Action taken (e.g., 'APPLY_CHANGE', 'dismiss', 'mark-resolve')
    */
-  updated_at: string;
+  action: string;
   /**
-   * Created By
+   * Issue Id
+   *
+   * Backend-generated issue ID (iss_xxx)
    */
-  created_by?: string | null;
+  issue_id?: string | null;
   /**
-   * Updated By
+   * Agent Id
+   *
+   * Stable agent ID (ag_<nanoid>)
    */
-  updated_by?: string | null;
+  agent_id?: string | null;
+  /**
+   * Agent Name
+   *
+   * Agent that produced the issue
+   */
+  agent_name?: string | null;
+  /**
+   * Action Source
+   *
+   * Where the action was triggered (e.g., 'issue_panel', 'tooltip', 'work', 'goal', 'plan')
+   */
+  action_source: string;
+  /**
+   * Document Ref
+   *
+   * Normalized document URL
+   */
+  document_ref?: string | null;
+  /**
+   * Mode
+   *
+   * Workflow mode: 'guided' or 'manual'
+   */
+  mode?: string | null;
+  /**
+   * Goal Id
+   *
+   * Stable goal identifier (e.g., 'brand-consistency')
+   */
+  goal_id?: string | null;
+  /**
+   * Goal Agent Names
+   *
+   * Agent slugs associated with the selected goal
+   */
+  goal_agent_names?: Array<string> | null;
+  /**
+   * Goal Agent Ids
+   *
+   * Stable agent IDs (ag_<nanoid>) for the selected goal
+   */
+  goal_agent_ids?: Array<string> | null;
+  /**
+   * Status
+   *
+   * Outcome of the action: 'success' or 'failed'
+   */
+  status?: string | null;
+  /**
+   * Error Code
+   *
+   * Error description if the action failed
+   */
+  error_code?: string | null;
+  /**
+   * Timestamp
+   *
+   * Timestamp when the action was initiated
+   */
+  timestamp?: string | null;
 };
-
-/**
- * TermUpdateRequest
- *
- * Payload to update an existing term
- */
-export type HeliosOneApiModulesTerminologySchemasTermApiModelsTermUpdateRequest = {
-  /**
-   * Term
-   */
-  term: string;
-  type: TermType;
-};
-
-/**
- * Organization
- */
-export type HeliosOneDatabaseModelsOrganizationOrganization = {
-  /**
-   * Name
-   *
-   * The name of the organization.
-   */
-  name: string;
-  /**
-   * Display Name
-   *
-   * The display name of the organization.
-   */
-  display_name?: string | null;
-  /**
-   * Created At
-   *
-   * The date and time the organization was created.
-   */
-  created_at?: string;
-  /**
-   * Created By
-   *
-   * ID of the user who created the organization
-   */
-  created_by?: string | null;
-  /**
-   * Token Limit
-   *
-   * The maximum number of tokens the organization can use.
-   */
-  token_limit: number;
-  /**
-   * Tokens Used
-   *
-   * The number of tokens the organization has used.
-   */
-  tokens_used?: number;
-  /**
-   * Tokens Used Last Update
-   *
-   * The date and time the tokens used was last updated.
-   */
-  tokens_used_last_update?: string | null;
-  /**
-   * Email Domain
-   *
-   * The email domain of the organization.
-   */
-  email_domain: string;
-  /**
-   * Trial Expires At
-   *
-   * The date and time the organization's trial ends.
-   */
-  trial_expires_at?: string | null;
-  /**
-   * Tier
-   *
-   * The tier/plan for the organization.
-   */
-  tier?: string;
-  /**
-   * Style Guide Limit
-   *
-   * The maximum number of style guides for the organization.
-   */
-  style_guide_limit?: number;
-  /**
-   * Term Limit
-   *
-   * The maximum number of terms for the organization.
-   */
-  term_limit?: number;
-  /**
-   * Country
-   *
-   * The country of the organization.
-   */
-  country?: string | null;
-  /**
-   * Is Internal
-   *
-   * Whether the organization is an internal organization.
-   */
-  is_internal?: boolean;
-  /**
-   * Is Acrolinx Classic
-   *
-   * Whether the organization is an Acrolinx Classic customer.
-   */
-  is_acrolinx_classic?: boolean;
-  /**
-   * Style agent mode for the organization.
-   */
-  style_agent?: StyleAgentMode;
-  /**
-   * Style Agent Numeric Scoring
-   *
-   * Whether integrations should surface numeric scoring alongside the default risk-based scoring. Only meaningful when style_agent is not 'disabled'.
-   */
-  style_agent_numeric_scoring?: boolean;
-  /**
-   * Id
-   */
-  id?: string;
-};
-
-/**
- * WorkflowStatus
- *
- * Status of a workflow execution.
- */
-export enum HeliosSharedCortexModelsResponseWorkflowStatus {
-  RUNNING = "running",
-  COMPLETED = "completed",
-  FAILED = "failed",
-  TIMED_OUT = "timed_out",
-  CANCELLED = "cancelled",
-}
 
 /**
  * AccountResponse
  */
-export type AccountResponseWritable = {
-  organization: OrganizationResponseFullWritable;
+export type AccountResponse = {
+  organization: OrganizationResponseFull;
   user_profile: UserProfileResponse;
   user?: UserRead | null;
-};
-
-/**
- * Issue
- */
-export type IssueWritable = {
-  /**
-   * Original
-   *
-   * The original text
-   */
-  original: string;
-  /**
-   * Position details of the issue
-   */
-  position: Position;
-  /**
-   * Subcategory
-   *
-   * The sub-category of the change
-   */
-  subcategory:
-    | GrammarCategory
-    | ClarityCategory
-    | ToneCategory
-    | ConsistencyCategory
-    | TermReplaceCategory;
-};
-
-/**
- * OrganizationResponse
- */
-export type OrganizationResponseWritable = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Token Limit
-   */
-  token_limit: number;
-  /**
-   * Tokens Used
-   */
-  tokens_used: number;
-  /**
-   * Tier
-   */
-  tier: string;
-  /**
-   * Style Guide Limit
-   */
-  style_guide_limit: number;
-  /**
-   * Term Limit
-   */
-  term_limit: number;
-  /**
-   * Display Name
-   */
-  display_name?: string | null;
-  /**
-   * Created Date
-   */
-  created_date: string;
-  /**
-   * Expiration
-   */
-  expiration: string | null;
-  /**
-   * Domain
-   */
-  domain: string;
-  created_by: CreatorResponse | null;
-  /**
-   * Is Internal
-   */
-  is_internal: boolean;
-  /**
-   * Is Acrolinx Classic
-   */
-  is_acrolinx_classic: boolean;
-};
-
-/**
- * OrganizationResponseAdmin
- */
-export type OrganizationResponseAdminWritable = {
-  /**
-   * Id
-   */
-  id: string;
-  /**
-   * Name
-   */
-  name: string;
-  /**
-   * Token Limit
-   */
-  token_limit: number;
-  /**
-   * Tokens Used
-   */
-  tokens_used: number;
-  /**
-   * Tier
-   */
-  tier: string;
-  /**
-   * Style Guide Limit
-   */
-  style_guide_limit: number;
-  /**
-   * Term Limit
-   */
-  term_limit: number;
-  /**
-   * Display Name
-   */
-  display_name?: string | null;
-  /**
-   * Created Date
-   */
-  created_date: string;
-  /**
-   * Expiration
-   */
-  expiration: string | null;
-  /**
-   * Domain
-   */
-  domain: string;
-  created_by: CreatorResponse | null;
-  /**
-   * Style Guides
-   */
-  style_guides?: number;
-  /**
-   * Term Sets
-   */
-  term_sets?: number;
-  /**
-   * Country
-   */
-  country: string | null;
-  /**
-   * Is Internal
-   */
-  is_internal: boolean;
-  /**
-   * Is Acrolinx Classic
-   */
-  is_acrolinx_classic: boolean;
-  style_agent?: StyleAgentMode;
-  /**
-   * Style Agent Numeric Scoring
-   */
-  style_agent_numeric_scoring?: boolean;
 };
 
 /**
@@ -5707,285 +1012,13 @@ export type OrganizationResponseFullWritable = {
 };
 
 /**
- * OriginalContent
+ * AccountResponse
  */
-export type OriginalContentWritable = {
-  /**
-   * Issues
-   */
-  issues?: Array<IssueWritable>;
-  scores?: ScoreOutput | null;
+export type AccountResponseWritable = {
+  organization: OrganizationResponseFullWritable;
+  user_profile: UserProfileResponse;
+  user?: UserRead | null;
 };
-
-/**
- * Page[APIKeyRead]
- */
-export type PageApiKeyReadWritable = {
-  /**
-   * Items
-   */
-  items: Array<ApiKeyRead>;
-  /**
-   * Total Items
-   */
-  total_items: number;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-};
-
-/**
- * Page[AccessPolicyRead]
- */
-export type PageAccessPolicyReadWritable = {
-  /**
-   * Items
-   */
-  items: Array<AccessPolicyRead>;
-  /**
-   * Total Items
-   */
-  total_items: number;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-};
-
-/**
- * Page[AdminStyleGuideResponse]
- */
-export type PageAdminStyleGuideResponseWritable = {
-  /**
-   * Items
-   */
-  items: Array<AdminStyleGuideResponse>;
-  /**
-   * Total Items
-   */
-  total_items: number;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-};
-
-/**
- * Page[RoleRead]
- */
-export type PageRoleReadWritable = {
-  /**
-   * Items
-   */
-  items: Array<RoleRead>;
-  /**
-   * Total Items
-   */
-  total_items: number;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-};
-
-/**
- * Page[TermSetWithTerms]
- */
-export type PageTermSetWithTermsWritable = {
-  /**
-   * Items
-   */
-  items: Array<TermSetWithTerms>;
-  /**
-   * Total Items
-   */
-  total_items: number;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-};
-
-/**
- * Page[UserRead]
- */
-export type PageUserReadWritable = {
-  /**
-   * Items
-   */
-  items: Array<UserRead>;
-  /**
-   * Total Items
-   */
-  total_items: number;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-};
-
-/**
- * PaginatedOrganizationResponse
- */
-export type PaginatedOrganizationResponseWritable = {
-  /**
-   * Total
-   */
-  total: number;
-  /**
-   * Page
-   */
-  page: number;
-  /**
-   * Page Size
-   */
-  page_size: number;
-  /**
-   * Organizations
-   */
-  organizations: Array<OrganizationResponseWritable>;
-};
-
-/**
- * RewriteResponse
- */
-export type RewriteResponseWritable = {
-  config?: ConfigOptions | null;
-  original?: SuggestionOriginalContentWritable | null;
-  rewrite?: RewriteContent | null;
-  workflow: WorkflowInfo;
-};
-
-/**
- * StyleCheckResponse
- */
-export type StyleCheckResponseWritable = {
-  config?: ConfigOptions | null;
-  original?: OriginalContentWritable | null;
-  workflow: WorkflowInfo;
-};
-
-/**
- * Suggestion
- */
-export type SuggestionWritable = {
-  /**
-   * Original
-   *
-   * The original text
-   */
-  original: string;
-  /**
-   * Position details of the issue
-   */
-  position: Position;
-  /**
-   * Subcategory
-   *
-   * The sub-category of the change
-   */
-  subcategory:
-    | GrammarCategory
-    | ClarityCategory
-    | ToneCategory
-    | ConsistencyCategory
-    | TermReplaceCategory;
-  /**
-   * Suggestion
-   *
-   * The suggested replacement text
-   */
-  suggestion: string;
-  /**
-   * Explanation
-   *
-   * Explanation for the suggestion, generated by the LLM
-   */
-  explanation?: string | null;
-};
-
-/**
- * SuggestionOriginalContent
- */
-export type SuggestionOriginalContentWritable = {
-  /**
-   * Issues
-   */
-  issues?: Array<SuggestionWritable>;
-  scores?: ScoreOutput | null;
-};
-
-/**
- * SuggestionResponse
- */
-export type SuggestionResponseWritable = {
-  config?: ConfigOptions | null;
-  original?: SuggestionOriginalContentWritable | null;
-  workflow: WorkflowInfo;
-};
-
-export type GetAdminConstantsData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: "/v1/internal/constants";
-};
-
-export type GetAdminConstantsErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * Unprocessable Entity
-   */
-  422: ValidationErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type GetAdminConstantsError = GetAdminConstantsErrors[keyof GetAdminConstantsErrors];
-
-export type GetAdminConstantsResponses = {
-  /**
-   * Successful Response
-   */
-  200: ConstantsResponse;
-};
-
-export type GetAdminConstantsResponse =
-  GetAdminConstantsResponses[keyof GetAdminConstantsResponses];
 
 export type TerminologyListDomainsData = {
   body?: never;
@@ -6222,45 +1255,22 @@ export type TerminologyUpdateDomainResponses = {
 export type TerminologyUpdateDomainResponse =
   TerminologyUpdateDomainResponses[keyof TerminologyUpdateDomainResponses];
 
-export type InternalSubmitFeedbackData = {
-  body: FeedbackRequest;
-  path?: never;
-  query?: never;
-  url: "/internal/demo-feedback";
-};
-
-export type InternalSubmitFeedbackErrors = {
-  /**
-   * Unprocessable Entity
-   */
-  422: ValidationErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type InternalSubmitFeedbackError =
-  InternalSubmitFeedbackErrors[keyof InternalSubmitFeedbackErrors];
-
-export type InternalSubmitFeedbackResponses = {
-  /**
-   * Successful Response
-   */
-  204: void;
-};
-
-export type InternalSubmitFeedbackResponse =
-  InternalSubmitFeedbackResponses[keyof InternalSubmitFeedbackResponses];
-
-export type InternalListTargetsData = {
+export type StyleAgentListStyleGuidesData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/internal/targets";
+  url: "/style-agent/style-guides";
 };
 
-export type InternalListTargetsErrors = {
+export type StyleAgentListStyleGuidesErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
   /**
    * Unprocessable Entity
    */
@@ -6271,19 +1281,83 @@ export type InternalListTargetsErrors = {
   500: ErrorResponse;
 };
 
-export type InternalListTargetsError = InternalListTargetsErrors[keyof InternalListTargetsErrors];
+export type StyleAgentListStyleGuidesError =
+  StyleAgentListStyleGuidesErrors[keyof StyleAgentListStyleGuidesErrors];
 
-export type InternalListTargetsResponses = {
+export type StyleAgentListStyleGuidesResponses = {
   /**
-   * Response Internal-List Targets
+   * Response Style Agent-List Style Guides
    *
    * Successful Response
    */
-  200: Array<TargetResponse>;
+  200: Array<StyleGuideSummaryResponse>;
 };
 
-export type InternalListTargetsResponse =
-  InternalListTargetsResponses[keyof InternalListTargetsResponses];
+export type StyleAgentListStyleGuidesResponse =
+  StyleAgentListStyleGuidesResponses[keyof StyleAgentListStyleGuidesResponses];
+
+export type AccountGetAccountData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/account";
+};
+
+export type AccountGetAccountErrors = {
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type AccountGetAccountError = AccountGetAccountErrors[keyof AccountGetAccountErrors];
+
+export type AccountGetAccountResponses = {
+  /**
+   * Successful Response
+   */
+  200: AccountResponse;
+};
+
+export type AccountGetAccountResponse =
+  AccountGetAccountResponses[keyof AccountGetAccountResponses];
+
+export type AuthenticationGetUserOrganizationsData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/auth/organizations";
+};
+
+export type AuthenticationGetUserOrganizationsErrors = {
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type AuthenticationGetUserOrganizationsError =
+  AuthenticationGetUserOrganizationsErrors[keyof AuthenticationGetUserOrganizationsErrors];
+
+export type AuthenticationGetUserOrganizationsResponses = {
+  /**
+   * Response Authentication-Get User Organizations
+   *
+   * Successful Response
+   */
+  200: Array<HeliosOneApiModulesAuthMainOrganization>;
+};
+
+export type AuthenticationGetUserOrganizationsResponse =
+  AuthenticationGetUserOrganizationsResponses[keyof AuthenticationGetUserOrganizationsResponses];
 
 export type CortexActivityEventsTrackActivityEventData = {
   body: ActivityEventRequest;
@@ -6371,6 +1445,10 @@ export type CortexWorkflowsListWorkflowsErrors = {
    * Forbidden
    */
   403: ErrorResponse;
+  /**
+   * Agent not found
+   */
+  404: ErrorResponse;
   /**
    * Unprocessable Entity
    */
@@ -6725,124 +1803,3 @@ export type AccountGetAccountConfigResponses = {
 
 export type AccountGetAccountConfigResponse =
   AccountGetAccountConfigResponses[keyof AccountGetAccountConfigResponses];
-
-export type StyleAgentGetStyleAgentConfigData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: "/style-agent/config";
-};
-
-export type StyleAgentGetStyleAgentConfigErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * Unprocessable Entity
-   */
-  422: ValidationErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type StyleAgentGetStyleAgentConfigError =
-  StyleAgentGetStyleAgentConfigErrors[keyof StyleAgentGetStyleAgentConfigErrors];
-
-export type StyleAgentGetStyleAgentConfigResponses = {
-  /**
-   * Successful Response
-   */
-  200: OrganizationConfigResponse;
-};
-
-export type StyleAgentGetStyleAgentConfigResponse =
-  StyleAgentGetStyleAgentConfigResponses[keyof StyleAgentGetStyleAgentConfigResponses];
-
-export type StyleAgentListStyleAgentTargetsData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: "/style-agent/targets";
-};
-
-export type StyleAgentListStyleAgentTargetsErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * Unprocessable Entity
-   */
-  422: ValidationErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type StyleAgentListStyleAgentTargetsError =
-  StyleAgentListStyleAgentTargetsErrors[keyof StyleAgentListStyleAgentTargetsErrors];
-
-export type StyleAgentListStyleAgentTargetsResponses = {
-  /**
-   * Response Style Agent-List Style Agent Targets
-   *
-   * Successful Response
-   */
-  200: Array<TargetResponse>;
-};
-
-export type StyleAgentListStyleAgentTargetsResponse =
-  StyleAgentListStyleAgentTargetsResponses[keyof StyleAgentListStyleAgentTargetsResponses];
-
-export type StyleAgentListStyleAgentContentProfilesData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: "/style-agent/content-profiles";
-};
-
-export type StyleAgentListStyleAgentContentProfilesErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * Unprocessable Entity
-   */
-  422: ValidationErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type StyleAgentListStyleAgentContentProfilesError =
-  StyleAgentListStyleAgentContentProfilesErrors[keyof StyleAgentListStyleAgentContentProfilesErrors];
-
-export type StyleAgentListStyleAgentContentProfilesResponses = {
-  /**
-   * Response Style Agent-List Style Agent Content Profiles
-   *
-   * Successful Response
-   */
-  200: Array<ContentProfileResponse>;
-};
-
-export type StyleAgentListStyleAgentContentProfilesResponse =
-  StyleAgentListStyleAgentContentProfilesResponses[keyof StyleAgentListStyleAgentContentProfilesResponses];

@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { styleAgentGetStyleAgentConfig } from "../api-client/sdk.gen";
+import { accountGetAccountConfig } from "../api-client/sdk.gen";
 import type { OrganizationConfigResponse } from "../api-client/types.gen";
 import { useApiClient } from "./useApiClient";
 import { useAuth } from "../contexts/AuthContext";
-import { fingerprintApiKey } from "../utils/styleTargetsCache";
+import { fingerprintApiKey } from "../utils/styleGuidesCache";
 
 export interface UseAccountConfigResult {
   config: OrganizationConfigResponse | null;
@@ -12,14 +12,14 @@ export interface UseAccountConfigResult {
 }
 
 /**
- * Org-level capability flags from `GET /style-agent/config`. The org is
+ * Org-level capability flags from `GET /account/config`. The org is
  * identified by the auth credential, so we just need an authenticated
  * client; no params are passed.
  *
  * The response drives `useAgentAvailability` (which agents the user is
  * allowed to run). Org config rarely changes inside a session, so the
  * 5-minute staleTime keeps the network footprint small without needing a
- * cross-iframe localStorage layer the way `useStyleTargets` does. Add one
+ * cross-iframe localStorage layer the way `useStyleGuides` does. Add one
  * later if N field-iframes per page show up as a real cost.
  *
  * Fail-open: while loading or on error, callers see `config === null`.
@@ -32,8 +32,8 @@ export function useAccountConfig(): UseAccountConfigResult {
 
   // Key the query by a fingerprint of the auth token so a within-iframe
   // account/org switch (the cross-location auth sync in AuthContext) can
-  // never serve user A's `/style-agent/config` to user B from react-query's
-  // cache. Same pattern as `useStyleTargets`.
+  // never serve user A's `/account/config` to user B from react-query's
+  // cache. Same pattern as `useStyleGuides`.
   const apiKeyFp = token ? fingerprintApiKey(token) : "anonymous";
 
   // Also gate on token presence: AuthContext's silent-restore briefly has
@@ -43,9 +43,9 @@ export function useAccountConfig(): UseAccountConfigResult {
   const enabled = isAuthenticated && Boolean(token);
 
   const query = useQuery<OrganizationConfigResponse>({
-    queryKey: ["styleAgentGetStyleAgentConfig", apiKeyFp],
+    queryKey: ["accountGetAccountConfig", apiKeyFp],
     queryFn: async ({ signal }) => {
-      const { data } = await styleAgentGetStyleAgentConfig({
+      const { data } = await accountGetAccountConfig({
         client,
         signal,
         throwOnError: true,

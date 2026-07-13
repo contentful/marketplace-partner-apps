@@ -1,22 +1,22 @@
 {
   "name": "@contentful/bynder-assets",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "private": true,
   "devDependencies": {
     "@contentful/app-scripts": "^2.5.12",
-    "@jest/globals": "^30.2.0",
+    "@jest/globals": "^30.4.1",
     "@types/jest": "^30.0.0",
     "@types/node-fetch": "^2.6.13",
     "@vitejs/plugin-react": "^6.0.2",
     "cross-env": "7.0.3",
-    "jest": "^30.2.0",
+    "jest": "^30.4.2",
     "node-fetch": "^3.3.2",
-    "prettier": "^3.6.2",
-    "ts-jest": "^29.4.5",
+    "prettier": "^3.8.4",
+    "ts-jest": "^29.4.11",
     "vite": "^8.0.16"
   },
   "dependencies": {
-    "@contentful/app-sdk": "^4.29.0",
+    "@contentful/app-sdk": "^4.58.2",
     "@contentful/dam-app-base": "^3.0.9",
     "@contentful/f36-components": "^4.80.0",
     "@contentful/f36-icons": "^4.29.0",
@@ -24,7 +24,7 @@
     "@contentful/react-apps-toolkit": "^1.2.19",
     "contentful-management": "^11.66.0",
     "graphql-scalars": "^1.25.0",
-    "graphql-yoga": "^5.18.0",
+    "graphql-yoga": "^5.21.2",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },

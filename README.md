@@ -25,7 +25,7 @@ When a PR is opened that introduces a new app, a [GitHub action](.github/workflo
   - `build`
     - Creates a build artifact(s). `"vite build"` is common for most apps without specific needs, though whatever tool or process you prefer is fine so long as it creates artifacts that can be referenced in the deploy step.
   - `test`
-    - Having at least basic testing and coverage is required to ensure your app does not deploy if breaking changes are introduced by your work or dependabot (see below). `"vitest"` is common for many apps and should be considered if you do not have complicated tests.
+    - Having at least basic testing and coverage is required to ensure your app does not deploy if breaking changes are introduced by your work or Renovate (see below). `"vitest"` is common for many apps and should be considered if you do not have complicated tests.
   - `lint`
     - Runs a script to lint your app's code. This is a required script to ensure code quality and consistency, and it is recommended to use [ESLlint](https://eslint.org/) in your app. See the Cloudinary app for an example [ESLint configuration](apps/cloudinary2/.eslintrc.json).
 
@@ -36,7 +36,7 @@ When a PR is opened that introduces a new app, a [GitHub action](.github/workflo
 - Use [TypeScript](https://www.typescriptlang.org/). We require this to ensure code quality and maintainability for the marketplace apps.
 
 - Ensure dependencies are up to date. The validation checks will provide warnings if a new app has outdated dependencies.
-  > [!NOTE] > **Please note that dependabot is enabled in this repo and will run automatically.**
+  > [!NOTE] > **Please note that Renovate is enabled in this repo and will run automatically.**
   > While it will attempt to only upgrade dependencies without breaking changes, it is possible it will still introduce issues. Creating and maintaining comprehensive tests is critical to preventing code and build issues. See [Keeping dependencies up to date](#keeping-dependencies-up-to-date) for more details.
 
 ### After a new app is introduced
@@ -45,7 +45,7 @@ After a new app has been introduced into the repo, the Contentful team will make
 
 - All code deployed by the `marketplace-partner-apps` repo must be hosted by Contentful. The Contentful team will add the necessary `deploy` script that will deploy your app to an app definition in our shared, official space. Please do not update it in subsequent changes/pull requests; doing so will prevent future updates from being deployed to your marketplace app definition.
 
-- Add the new app to the repo's dependabot configuration.
+- Add the new app to the repo's Renovate configuration (if the app has dependency-specific ignores or labels; otherwise it is covered automatically).
 
 - Add the new app to the `release-please-config.json` file so that the release workflow will include the new app. The release workflow encapsulates versioning as well as the creation and maintenance of a changelog.
 
@@ -66,20 +66,20 @@ When you are ready to submit your app to the [marketplace apps repo](https://git
 
 It is the responsibility of all partner app developers to ensure their app is kept up to date with the latest versions of all dependencies required by their app. This is required not only to ensure their app continues to function as expected alongside the constantly evolving Contentful platform, but also to ensure that critical security updates are applied in a timely fashion and are not slowed down by out of date cross dependencies.
 
-To keep dependencies up to date, Contentful uses [Dependabot](https://docs.github.com/en/code-security/dependabot) in this repository. Dependabot will:
+To keep dependencies up to date, Contentful uses [Renovate](https://docs.renovatebot.com/) in this repository. Renovate will:
 
 - Open PRs to propose dependency updates for every dependency listed in your app's package.json file.
 - Automatically approve and merge PRs for patch and minor version updates.
 - Hold off on merging PRs for major version updates pending manual review by the app owner, you.
 
 > [!TIP]
-> We recommend specifying bare versions (e.g. `1.2.3`) of dependencies in your package.json file vs. a range of versions (e.g. `1.2.x` or `~1.2.3`). Dependabot will increment versions in your package.json file automatically.
+> We recommend specifying bare versions (e.g. `1.2.3`) of dependencies in your package.json file vs. a range of versions (e.g. `1.2.x` or `~1.2.3`). Renovate will increment versions in your package.json file automatically.
 
 As an app developer, it is important to review and approve any dependency update PRs assigned to you on a frequent basis. Specifically we ask that you:
 
 - Provide a reasonably confident test suite that exercises the main functionality of your app. Test suites generally do an excellent job of catching errors caused by breaking changes in updated dependencies.
-- Respond to, review, and approve (adding a PR comment suffices as an approval) any dependency-related PRs that are opened against your app (whether by Dependabot or the Contentful team) in a timely fashion. If errors exist in aforementioned dependency-related PRs, please resolve these errors.
-- Talk to us if you have a specific requirement to firmly pin a dependency version. We can make custom modifications to our Dependabot configuration to support exceptions as needed.
+- Respond to, review, and approve (adding a PR comment suffices as an approval) any dependency-related PRs that are opened against your app (whether by Renovate or the Contentful team) in a timely fashion. If errors exist in aforementioned dependency-related PRs, please resolve these errors.
+- Talk to us if you have a specific requirement to firmly pin a dependency version. We can make custom modifications to our Renovate configuration to support exceptions as needed.
 
 ## Building your own app
 

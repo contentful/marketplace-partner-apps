@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/contentful/marketplace-partner-apps/compare/markup-ai-contentful-app-v1.3.1...markup-ai-contentful-app-v1.4.0) (2026-06-23)
+
+
+### Features
+
+* scan document metadata, remove issue-card feedback, add org switcher, default grouped view [] ([#8209](https://github.com/contentful/marketplace-partner-apps/issues/8209)) ([3e46c83](https://github.com/contentful/marketplace-partner-apps/commit/3e46c831cd5227dec5df563f5e12d9cab073be8c))
+
 ## [1.3.1](https://github.com/contentful/marketplace-partner-apps/compare/markup-ai-contentful-app-v1.3.0...markup-ai-contentful-app-v1.3.1) (2026-06-18)
 
 

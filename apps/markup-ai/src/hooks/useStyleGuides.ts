@@ -1,25 +1,26 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { styleAgentListStyleAgentTargets } from "../api-client/sdk.gen";
-import type { TargetResponse } from "../api-client/types.gen";
+import { styleAgentListStyleGuides } from "../api-client/sdk.gen";
+import type { StyleGuideSummaryResponse } from "../api-client/types.gen";
 import { useApiClient } from "./useApiClient";
+import { defaultStyleGuideId } from "../agents/utils/defaultStyleGuide";
 import {
   fingerprintApiKey,
-  readStyleTargetsCache,
-  writeStyleTargetsCache,
-} from "../utils/styleTargetsCache";
+  readStyleGuidesCache,
+  writeStyleGuidesCache,
+} from "../utils/styleGuidesCache";
 
-export interface UseStyleTargetsResult {
-  targets: TargetResponse[];
+export interface UseStyleGuidesResult {
+  styleGuides: StyleGuideSummaryResponse[];
   isLoading: boolean;
   isError: boolean;
-  defaultTargetId: string | null;
+  defaultStyleGuideId: string | null;
 }
 
-const STYLE_TARGETS_QUERY_PREFIX = "styleAgentListStyleAgentTargets";
+const STYLE_GUIDES_QUERY_PREFIX = "styleAgentListStyleGuides";
 
 /**
- * Fetches the list of style guides ("targets") for the authenticated user.
+ * Fetches the list of style guides for the authenticated user.
  *
  * Crucially, results are cached in localStorage for 5 minutes. Each
  * Markup AI-enabled field on the entry editor renders inside its own
@@ -30,37 +31,33 @@ const STYLE_TARGETS_QUERY_PREFIX = "styleAgentListStyleAgentTargets";
  *
  * The react-query cache key includes a fingerprint of the api key so a
  * within-iframe account switch can never serve the previous user's
- * targets — the generated query key keys only on baseUrl, which would
+ * style guides — the generated query key keys only on baseUrl, which would
  * leak across users otherwise.
  */
-export function useStyleTargets(apiKey?: string | null): UseStyleTargetsResult {
+export function useStyleGuides(apiKey?: string | null): UseStyleGuidesResult {
   const client = useApiClient({ apiKey: apiKey ?? "" });
 
   // `undefined` is the "not yet read" sentinel; `null` means "read and the
   // cache was empty". Without the distinct sentinel, `??=` would re-read
   // localStorage on every render after a cache miss.
-  const cachedRef = useRef<TargetResponse[] | null | undefined>(undefined);
+  const cachedRef = useRef<StyleGuideSummaryResponse[] | null | undefined>(undefined);
   // Re-read the cache when `apiKey` changes — otherwise an in-iframe account
   // switch (sign-out + sign-in as a different user via the cross-location
-  // auth sync) would keep showing the previous account's targets, and the
+  // auth sync) would keep showing the previous account's style guides, and the
   // `enabled: !cached` short-circuit would block the refetch.
   const lastApiKeyRef = useRef<string | null | undefined>(undefined);
   if (cachedRef.current === undefined || lastApiKeyRef.current !== apiKey) {
     lastApiKeyRef.current = apiKey;
-    cachedRef.current = readStyleTargetsCache(apiKey);
+    cachedRef.current = readStyleGuidesCache(apiKey);
   }
   const cached = cachedRef.current;
 
   const apiKeyFp = apiKey ? fingerprintApiKey(apiKey) : "anonymous";
 
-  const query = useQuery<TargetResponse[]>({
-    queryKey: [STYLE_TARGETS_QUERY_PREFIX, apiKeyFp],
+  const query = useQuery<StyleGuideSummaryResponse[]>({
+    queryKey: [STYLE_GUIDES_QUERY_PREFIX, apiKeyFp],
     queryFn: async ({ signal }) => {
-      const { data } = await styleAgentListStyleAgentTargets({
-        client,
-        signal,
-        throwOnError: true,
-      });
+      const { data } = await styleAgentListStyleGuides({ client, signal, throwOnError: true });
       return data;
     },
     enabled: Boolean(apiKey) && !cached,
@@ -75,20 +72,24 @@ export function useStyleTargets(apiKey?: string | null): UseStyleTargetsResult {
     if (!apiKey) return;
     if (!query.data) return;
     if (cached === query.data) return;
-    writeStyleTargetsCache(apiKey, query.data);
+    writeStyleGuidesCache(apiKey, query.data);
   }, [apiKey, query.data, cached]);
 
-  const targets: TargetResponse[] = query.data ?? [];
+  const styleGuides: StyleGuideSummaryResponse[] = query.data ?? [];
 
-  const defaultTargetId = useMemo(
-    () => targets.find((t) => t.is_default)?.id ?? targets.find((t) => t.enabled)?.id ?? null,
-    [targets],
+  // Prefer a style guide named "Main" → API `is_default` → first enabled.
+  // Sending a style_guide_id is required: the backend does not consistently
+  // pick a default when the field is omitted, which produces analyses
+  // with `styleGuideDisplayName=null`. See sidebar-app INT-520.
+  const resolvedDefaultStyleGuideId = useMemo(
+    () => defaultStyleGuideId(styleGuides) ?? null,
+    [styleGuides],
   );
 
   return {
-    targets,
+    styleGuides,
     isLoading: query.isLoading && !cached,
     isError: query.isError,
-    defaultTargetId,
+    defaultStyleGuideId: resolvedDefaultStyleGuideId,
   };
 }

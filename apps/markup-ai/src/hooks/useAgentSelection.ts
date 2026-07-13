@@ -2,8 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { AgentID } from "../agents/agents";
 import { AGENTS } from "../agents/agents";
 import { DEFAULT_SELECTED_AGENT_IDS, SELECTABLE_AGENT_BACKEND_IDS } from "../agents/agenticConfig";
-
-const STORAGE_KEY = "markupai.agentSelection";
+import { AGENT_SELECTION_STORAGE_KEY } from "../constants/storageKeys";
 
 function sanitizeSelection(ids: unknown): AgentID[] {
   if (!Array.isArray(ids)) return [];
@@ -19,7 +18,7 @@ function loadSelection(): AgentID[] {
     return [...DEFAULT_SELECTED_AGENT_IDS];
   }
   try {
-    const raw = sessionStorage.getItem(STORAGE_KEY);
+    const raw = sessionStorage.getItem(AGENT_SELECTION_STORAGE_KEY);
     if (!raw) return [...DEFAULT_SELECTED_AGENT_IDS];
     const parsed = JSON.parse(raw) as unknown;
     const sanitized = sanitizeSelection(parsed);
@@ -32,7 +31,7 @@ function loadSelection(): AgentID[] {
 function saveSelection(ids: AgentID[]): void {
   if (typeof sessionStorage === "undefined") return;
   try {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+    sessionStorage.setItem(AGENT_SELECTION_STORAGE_KEY, JSON.stringify(ids));
   } catch {
     // ignore
   }

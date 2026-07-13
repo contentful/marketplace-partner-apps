@@ -30,7 +30,7 @@ export interface Agent {
   name: string;
   iconKey: AgentIconKey;
   description?: string | null;
-  /** Keys this agent supports in agent config (e.g. target_id for style_agent). */
+  /** Keys this agent supports in agent config (e.g. style_guide_id for style_agent). */
   configurationKeys: string[];
   category: AgentCategoryID;
 }
@@ -81,7 +81,7 @@ export const AGENT_CATEGORY_MAP: Record<string, AgentCategoryID> = {
 
 /** Per-agent configuration keys. Agents not listed here have no configuration. */
 const AGENT_CONFIG_KEYS: Record<string, string[]> = {
-  style_agent: ["target_id"],
+  style_agent: ["style_guide_id"],
   terminology: ["domain_ids"],
 };
 
@@ -136,7 +136,7 @@ export const AGENTS: Agent[] = getAgents();
 export interface AgentConfigKeyMeta {
   label: string;
   placeholder: string;
-  inputType: "csv" | "text" | "domain_select" | "target_select";
+  inputType: "csv" | "text" | "domain_select" | "style_guide_select";
   required?: boolean;
 }
 
@@ -146,10 +146,10 @@ export const AGENT_CONFIG_KEY_META: Partial<Record<string, AgentConfigKeyMeta>> 
     placeholder: "Select domains…",
     inputType: "domain_select",
   },
-  target_id: {
+  style_guide_id: {
     label: "Style Guide",
     placeholder: "Select a style guide…",
-    inputType: "target_select",
+    inputType: "style_guide_select",
   },
 };
 

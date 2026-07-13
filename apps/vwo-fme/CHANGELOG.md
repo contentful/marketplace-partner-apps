@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.0.17](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.16...vwo-fme-v1.0.17) (2026-07-02)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/f36-tokens from 6.1.2 to 6.1.3 in /apps/vwo-fme in the production-dependencies group ([#8530](https://github.com/contentful/marketplace-partner-apps/issues/8530)) ([c585ca5](https://github.com/contentful/marketplace-partner-apps/commit/c585ca5da992b55541fef63a269f17a21630467c))
+* **vwo-fme:** surface content-type-limit error on install [AIS-89] ([#8646](https://github.com/contentful/marketplace-partner-apps/issues/8646)) ([c27cead](https://github.com/contentful/marketplace-partner-apps/commit/c27cead77e5ff0c7a76b110bd8fbf2b8fe790292))
+
+## [1.0.16](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.15...vwo-fme-v1.0.16) (2026-06-29)
+
+
+### Bug Fixes
+
+* **vwo-fme:** exclude .cjs from CRA file-loader via craco [AIS-59] ([#8455](https://github.com/contentful/marketplace-partner-apps/issues/8455)) ([28cab5c](https://github.com/contentful/marketplace-partner-apps/commit/28cab5c308c0b4c585039a5f65f34e53ed0f6a4a))
+
+## [1.0.15](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.14...vwo-fme-v1.0.15) (2026-06-29)
+
+
+### Bug Fixes
+
+* **vwo-fme:** bump @contentful/app-sdk to 4.61.1 [AIS-59] ([#8452](https://github.com/contentful/marketplace-partner-apps/issues/8452)) ([8dc2e18](https://github.com/contentful/marketplace-partner-apps/commit/8dc2e18379babe42068b68c9fecf38ae70d93c73))
+
+## [1.0.14](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.13...vwo-fme-v1.0.14) (2026-06-26)
+
+
+### Bug Fixes
+
+* **vwo-fme:** use sdk.cma instead of manual createClient [AIS-59] ([#8449](https://github.com/contentful/marketplace-partner-apps/issues/8449)) ([693519c](https://github.com/contentful/marketplace-partner-apps/commit/693519c353710315e83fc4fc8b4525abc32e748f))
+
 ## [1.0.13](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.12...vwo-fme-v1.0.13) (2026-06-18)
 
 

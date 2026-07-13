@@ -20,7 +20,7 @@ import {
 } from "./ConfigScreen.utils";
 import { AboutView } from "../../components/About/AboutView";
 import { useAuth } from "../../contexts/AuthContext";
-import { useStyleTargets } from "../../hooks/useStyleTargets";
+import { useStyleGuides } from "../../hooks/useStyleGuides";
 import type {
   AppInstallationParameters,
   ContentTypeSettings,
@@ -75,8 +75,12 @@ export const ConfigScreen = () => {
   const [activeView, setActiveView] = useState<"config" | "about">("config");
 
   // Fetch style guide options ONCE for the whole screen so we never make
-  // multiple `/style-agent/targets` calls when there are many content types.
-  const { targets, isLoading: targetsLoading, isError: targetsError } = useStyleTargets(token);
+  // multiple `/style-agent/style-guides` calls when there are many content types.
+  const {
+    styleGuides,
+    isLoading: styleGuidesLoading,
+    isError: styleGuidesError,
+  } = useStyleGuides(token);
 
   const onConfigure = useCallback(() => {
     const newConfig: {
@@ -252,9 +256,9 @@ export const ConfigScreen = () => {
               <ContentTypeStyleGuideSelect
                 contentTypeId={contentTypeId}
                 value={contentTypeSettings[contentTypeId]?.styleGuide ?? null}
-                targets={targets}
-                isLoading={targetsLoading}
-                isError={targetsError}
+                styleGuides={styleGuides}
+                isLoading={styleGuidesLoading}
+                isError={styleGuidesError}
                 isAuthenticated={isAuthenticated}
                 onChange={handleStyleGuideChange}
               />

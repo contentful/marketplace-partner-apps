@@ -5,7 +5,7 @@ export const MARKUP_CONSOLE_URL = "https://console.markup.ai/" as const;
 export const MARKUP_DEVELOPER_PORTAL_URL = "https://docs.markup.ai/" as const;
 
 /** Markup AI support / contact form. */
-export const MARKUP_SUPPORT_URL = "https://markup.ai/contact-us-markup-ai/" as const;
+export const MARKUP_SUPPORT_URL = "https://community.markup.ai/" as const;
 
 /** Service status page. */
 export const MARKUP_STATUS_URL = "https://status.markup.ai/" as const;

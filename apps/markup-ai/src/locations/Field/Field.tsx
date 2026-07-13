@@ -86,6 +86,25 @@ const Field: React.FC = () => {
     // For RichText, pass the Document as-is; for text fields, fallback to empty string
     const fieldContent = fieldFormat === "RichText" ? fieldValue : fieldValue || "";
 
+    // Resolve the entry title (value of the content type's displayField) so
+    // the dialog can build the `document_name` / `document_ref` pair Cortex
+    // uses to track scans. Falls through silently when the entry has no
+    // displayField configured or the title is empty.
+    const displayFieldId: string | undefined = sdk.contentType.displayField;
+    let entryTitle: string | undefined;
+    if (displayFieldId) {
+      // `fields` is typed as an index signature, but at runtime entries
+      // without the displayField are absent — guard before .getValue() so
+      // we never throw on a misconfigured content type.
+      const displayField = Object.hasOwn(sdk.entry.fields, displayFieldId)
+        ? sdk.entry.fields[displayFieldId]
+        : undefined;
+      const titleValue: unknown = displayField?.getValue();
+      if (typeof titleValue === "string" && titleValue.trim().length > 0) {
+        entryTitle = titleValue;
+      }
+    }
+
     // Per-content-type style guide defaults are read by the dialog directly
     // from `sdk.parameters.installation`, so we don't need to pipe them
     // through invocation params here.
@@ -100,6 +119,7 @@ const Field: React.FC = () => {
         fieldFormat,
         fieldId,
         contentTypeId,
+        ...(entryTitle ? { entryTitle } : {}),
       } as unknown as Record<string, string>,
     });
 

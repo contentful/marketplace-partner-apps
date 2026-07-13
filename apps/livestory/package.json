@@ -3,7 +3,7 @@
   "version": "1.0.7",
   "private": true,
   "dependencies": {
-    "@contentful/app-sdk": "^4.45.0",
+    "@contentful/app-sdk": "^4.58.2",
     "@contentful/f36-components": "4.81.1",
     "@contentful/f36-tokens": "4.2.0",
     "@contentful/react-apps-toolkit": "1.2.16",
@@ -11,7 +11,7 @@
     "contentful-management": "10.46.4",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "superagent": "^10.2.3"
+    "superagent": "^10.3.0"
   },
   "scripts": {
     "start": "vite",
@@ -39,13 +39,13 @@
   "devDependencies": {
     "@contentful/app-scripts": "2.5.12",
     "@testing-library/jest-dom": "6.9.1",
-    "@testing-library/react": "16.3.0",
-    "@tsconfig/create-react-app": "2.0.8",
+    "@testing-library/react": "16.3.2",
+    "@tsconfig/create-react-app": "2.0.11",
     "@types/jest": "29.5.14",
     "@types/node": "^20",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
-    "@types/superagent": "^8.1.9",
+    "@types/superagent": "^8.1.10",
     "@vitejs/plugin-react": "^6.0.2",
     "cross-env": "10.1.0",
     "typescript": "5.9.3",

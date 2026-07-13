@@ -18,7 +18,7 @@ import {
   type AgentCategoryID,
 } from "../../../../../agents/agents";
 import type { CortexIssueWithId } from "../../../../../agents/types";
-import { SuggestionCard, type FeedbackPayload } from "./SuggestionCard";
+import { SuggestionCard } from "./SuggestionCard";
 
 const CATEGORY_ORDER: AgentCategoryID[] = ["integrity", "compliance", "brand", "geo"];
 
@@ -31,8 +31,6 @@ export interface AgentsGroupedListProps {
   onApplyIssue: (issue: CortexIssueWithId, index: number, appliedSuggestion?: string) => void;
   onApplyAllMatching: (issue: CortexIssueWithId, appliedSuggestion?: string) => void;
   onDismissIssue: (issue: CortexIssueWithId, index: number) => void;
-  onSubmitFeedback?: (payload: FeedbackPayload, issueIndex: number) => Promise<void>;
-  isFeedbackLoading?: boolean;
   styleAgentApplyAllPeerCountByIssueId: Map<string, number>;
   cardRefs: React.RefObject<Map<number, HTMLDivElement>>;
 }
@@ -155,8 +153,6 @@ interface AgentSectionProps {
   onApplyIssue: AgentsGroupedListProps["onApplyIssue"];
   onApplyAllMatching: AgentsGroupedListProps["onApplyAllMatching"];
   onDismissIssue: AgentsGroupedListProps["onDismissIssue"];
-  onSubmitFeedback?: AgentsGroupedListProps["onSubmitFeedback"];
-  isFeedbackLoading?: boolean;
   styleAgentApplyAllPeerCountByIssueId: Map<string, number>;
   cardRefs: AgentsGroupedListProps["cardRefs"];
 }
@@ -171,8 +167,6 @@ const AgentSection: React.FC<AgentSectionProps> = ({
   onApplyIssue,
   onApplyAllMatching,
   onDismissIssue,
-  onSubmitFeedback,
-  isFeedbackLoading,
   styleAgentApplyAllPeerCountByIssueId,
   cardRefs,
 }) => {
@@ -231,12 +225,6 @@ const AgentSection: React.FC<AgentSectionProps> = ({
                 onApplyAllMatching={(appliedSuggestion) => {
                   onApplyAllMatching(issue, appliedSuggestion);
                 }}
-                onSubmitFeedback={
-                  onSubmitFeedback
-                    ? (payload) => onSubmitFeedback(payload, originalIndex)
-                    : undefined
-                }
-                isFeedbackLoading={isFeedbackLoading}
               />
             );
           })}
@@ -257,8 +245,6 @@ export const AgentsGroupedList = forwardRef<HTMLDivElement, AgentsGroupedListPro
       onApplyIssue,
       onApplyAllMatching,
       onDismissIssue,
-      onSubmitFeedback,
-      isFeedbackLoading,
       styleAgentApplyAllPeerCountByIssueId,
       cardRefs,
     },
@@ -301,8 +287,6 @@ export const AgentsGroupedList = forwardRef<HTMLDivElement, AgentsGroupedListPro
                   onApplyIssue={onApplyIssue}
                   onApplyAllMatching={onApplyAllMatching}
                   onDismissIssue={onDismissIssue}
-                  onSubmitFeedback={onSubmitFeedback}
-                  isFeedbackLoading={isFeedbackLoading}
                   styleAgentApplyAllPeerCountByIssueId={styleAgentApplyAllPeerCountByIssueId}
                   cardRefs={cardRefs}
                 />
@@ -328,8 +312,6 @@ export const AgentsGroupedList = forwardRef<HTMLDivElement, AgentsGroupedListPro
                   onApplyIssue={onApplyIssue}
                   onApplyAllMatching={onApplyAllMatching}
                   onDismissIssue={onDismissIssue}
-                  onSubmitFeedback={onSubmitFeedback}
-                  isFeedbackLoading={isFeedbackLoading}
                   styleAgentApplyAllPeerCountByIssueId={styleAgentApplyAllPeerCountByIssueId}
                   cardRefs={cardRefs}
                 />

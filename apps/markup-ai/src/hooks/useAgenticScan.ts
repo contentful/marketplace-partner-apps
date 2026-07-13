@@ -23,9 +23,12 @@ import { INTEGRATION_ID } from "../constants/app";
 
 export interface ScanOptions {
   text: string;
+  /** Human-readable document title; mapped to API `document_name`. */
   documentName?: string;
+  /** Caller-built unique document identifier; mapped to API `document_ref`. */
+  documentRef?: string;
   backendIds: string[];
-  /** Flat agent config passed through to the parallel executor (e.g. target_id, domain_ids). */
+  /** Flat agent config passed through to the parallel executor (e.g. style_guide_id, domain_ids). */
   agentConfig?: Record<string, unknown>;
   onAgentResult?: (agentName: string, issues: CortexIssueWithId[]) => void;
   onStreamComplete?: () => void;
@@ -208,6 +211,7 @@ export function useAgenticScan(apiKey?: string | null): UseAgenticScanResult {
     async ({
       text,
       documentName,
+      documentRef,
       backendIds,
       agentConfig,
       onAgentResult,
@@ -246,9 +250,14 @@ export function useAgenticScan(apiKey?: string | null): UseAgenticScanResult {
       activeAbortRef.current = abortController;
 
       try {
+        // `document_ref` is the unique identifier Cortex tracks scans
+        // against; `document_name` is the human-readable title. Omit each
+        // when missing rather than sending an empty string — the backend
+        // treats both as optional.
         const body: AgentRunRequest = {
           text,
-          document_name: documentName,
+          ...(documentName ? { document_name: documentName } : {}),
+          ...(documentRef ? { document_ref: documentRef } : {}),
           agents: backendIds,
           ...sanitizeAgentConfig(agentConfig ?? {}),
         };

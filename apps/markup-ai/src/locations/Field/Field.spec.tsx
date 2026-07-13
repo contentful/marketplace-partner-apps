@@ -87,6 +87,12 @@ const createMockSdk = () => ({
         sys: { id: "blogPost" },
       },
     })),
+    fields: {
+      title: { getValue: vi.fn(() => "My Article") },
+    },
+  },
+  contentType: {
+    displayField: "title",
   },
   dialogs: {
     openCurrentApp: vi.fn(),
@@ -181,11 +187,66 @@ describe("Field", () => {
             fieldCheck: true,
             contentTypeId: "blogPost",
             fieldId: "title",
+            entryTitle: "My Article",
           }) as object,
           width: 1200,
         }),
       );
     });
+  });
+
+  it("omits entryTitle when displayField is unset", async () => {
+    mockUseAuth.mockReturnValue({
+      isLoading: false,
+      isAuthenticated: true,
+      user: { email: "test@example.com" },
+      token: "test-token",
+      error: null,
+      loginWithPopup: vi.fn(),
+      getAccessToken: vi.fn(),
+      logout: vi.fn(),
+    });
+
+    mockSdk.contentType.displayField = "";
+    mockSdk.dialogs.openCurrentApp.mockResolvedValue(null);
+
+    render(<Field />);
+    fireEvent.click(screen.getByText("Markup AI"));
+
+    await waitFor(() => {
+      expect(mockSdk.dialogs.openCurrentApp).toHaveBeenCalled();
+    });
+    const firstCall = mockSdk.dialogs.openCurrentApp.mock.calls[0] as unknown as [
+      { parameters: Record<string, unknown> },
+    ];
+    expect(firstCall[0].parameters).not.toHaveProperty("entryTitle");
+  });
+
+  it("omits entryTitle when the entry title is whitespace", async () => {
+    mockUseAuth.mockReturnValue({
+      isLoading: false,
+      isAuthenticated: true,
+      user: { email: "test@example.com" },
+      token: "test-token",
+      error: null,
+      loginWithPopup: vi.fn(),
+      getAccessToken: vi.fn(),
+      logout: vi.fn(),
+    });
+
+    mockSdk.entry.fields.title.getValue.mockReturnValueOnce("   ");
+    mockSdk.dialogs.openCurrentApp.mockResolvedValue(null);
+
+    render(<Field />);
+    fireEvent.click(screen.getByText("Markup AI"));
+
+    await waitFor(() => {
+      expect(mockSdk.dialogs.openCurrentApp).toHaveBeenCalled();
+    });
+    const firstCall = mockSdk.dialogs.openCurrentApp.mock.calls[0] as unknown as [
+      { parameters: Record<string, unknown> },
+    ];
+    expect(firstCall[0].parameters).not.toHaveProperty("entryTitle");
   });
 
   it("opens editor dialog after successful sign-in", async () => {

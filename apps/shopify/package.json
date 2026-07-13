@@ -1,18 +1,18 @@
 {
   "name": "@contentful/shopify-sku",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "Contentful app for importing Shopify products using the Storefront API",
   "private": true,
   "devDependencies": {
-    "@babel/core": "^7.28.5",
-    "@babel/preset-env": "^7.28.5",
+    "@babel/core": "^7.29.7",
+    "@babel/preset-env": "^7.29.7",
     "@contentful/app-scripts": "2.5.12",
-    "@testing-library/react": "^16.2.0",
+    "@testing-library/react": "^16.3.2",
     "@vitejs/plugin-react": "^6.0.2",
-    "babel-jest": "^30.2.0",
+    "babel-jest": "^30.4.1",
     "concurrently": "^9.2.3",
-    "happy-dom": "^20.8.8",
-    "jest": "^30.2.0",
+    "happy-dom": "^20.10.4",
+    "jest": "^30.4.2",
     "vite": "^8.0.16"
   },
   "dependencies": {
@@ -22,8 +22,8 @@
     "@contentful/f36-tokens": "^4.0.5",
     "@contentful/react-apps-toolkit": "^1.2.16",
     "@emotion/css": "^11.13.5",
-    "@shopify/storefront-api-client": "^1.0.9",
-    "core-js": "3.46.0",
+    "@shopify/storefront-api-client": "^1.0.10",
+    "core-js": "3.49.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

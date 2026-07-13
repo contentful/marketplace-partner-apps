@@ -1,19 +1,9 @@
-import { createClient } from 'contentful-management';
 import { globalConstants } from '../utils';
 
 class VwoAppActionService {
   constructor(sdk) {
     this.sdk = sdk;
-    this.cma = createClient(
-      { apiAdapter: sdk.cmaAdapter },
-      {
-        type: 'plain',
-        defaults: {
-          environmentId: sdk.ids.environment,
-          spaceId: sdk.ids.space,
-        },
-      }
-    );
+    this.cma = sdk.cma;
     this.actionId = null;
   }
 

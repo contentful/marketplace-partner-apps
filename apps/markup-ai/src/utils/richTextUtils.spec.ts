@@ -947,4 +947,129 @@ describe("richTextUtils", () => {
       );
     });
   });
+
+  describe("soft line breaks (shift/⌘+enter)", () => {
+    const docWithSoftBreak = (value: string, marks: { type: string }[] = []): Document => ({
+      nodeType: BLOCKS.DOCUMENT,
+      data: {},
+      content: [
+        {
+          nodeType: BLOCKS.PARAGRAPH,
+          data: {},
+          content: [{ nodeType: "text", value, marks, data: {} }],
+        },
+      ],
+    });
+
+    it("renders a newline in a text value as a self-closing <br />", () => {
+      const { html } = convertRichTextToHtml(docWithSoftBreak("Line one\nLine two"));
+      expect(html).toContain("Line one<br />Line two");
+      // The raw newline must not survive into the HTML (it would collapse).
+      expect(html).not.toContain("Line one\nLine two");
+      // A bare <br> trips the Language Server's XHTML parser.
+      expect(html).not.toMatch(/<br>/);
+    });
+
+    it("renders <br /> inside the marks wrapper, not outside", () => {
+      const { html } = convertRichTextToHtml(
+        docWithSoftBreak("Line one\nLine two", [{ type: MARKS.BOLD }]),
+      );
+      expect(html).toContain("<strong>Line one<br />Line two</strong>");
+    });
+
+    it("normalizes CRLF and lone CR to a single <br />", () => {
+      const { html } = convertRichTextToHtml(docWithSoftBreak("a\r\nb\rc"));
+      expect(html).toContain("a<br />b<br />c");
+    });
+
+    it("recovers the newline from a <br> inside one span", () => {
+      const original = docWithSoftBreak("Line one\nLine two");
+      const { nodeMap } = convertRichTextToHtml(original);
+      const nodeId = Array.from(nodeMap.keys())[0];
+      // Shape ProseMirror produces when the hard break stays inside the mark span.
+      const html = `<p><span data-node-id="${nodeId}">Line one<br>Line two</span></p>`;
+
+      const updated = convertHtmlToRichText(html, original, nodeMap);
+      const textNode = updated.content[0].content[0] as { value: string };
+      expect(textNode.value).toBe("Line one\nLine two");
+    });
+
+    it("recovers the newline from a <br> bridging two same-id spans", () => {
+      const original = docWithSoftBreak("Line one\nLine two");
+      const { nodeMap } = convertRichTextToHtml(original);
+      const nodeId = Array.from(nodeMap.keys())[0];
+      // Shape ProseMirror produces when the hard break splits the mark span.
+      const html =
+        `<p><span data-node-id="${nodeId}">Line one</span>` +
+        `<br><span data-node-id="${nodeId}">Line two</span></p>`;
+
+      const updated = convertHtmlToRichText(html, original, nodeMap);
+      const textNode = updated.content[0].content[0] as { value: string };
+      expect(textNode.value).toBe("Line one\nLine two");
+    });
+
+    it("does not invent a newline for a structural <br> between different nodes", () => {
+      const original: Document = {
+        nodeType: BLOCKS.DOCUMENT,
+        data: {},
+        content: [
+          {
+            nodeType: BLOCKS.PARAGRAPH,
+            data: {},
+            content: [
+              { nodeType: "text", value: "First", marks: [], data: {} },
+              { nodeType: "text", value: "Second", marks: [], data: {} },
+            ],
+          },
+        ],
+      };
+      const { nodeMap } = convertRichTextToHtml(original);
+      const [idA, idB] = Array.from(nodeMap.keys());
+      const html =
+        `<p><span data-node-id="${idA}">First</span>` +
+        `<br><span data-node-id="${idB}">Second</span></p>`;
+
+      const updated = convertHtmlToRichText(html, original, nodeMap);
+      const nodeA = updated.content[0].content[0] as { value: string };
+      const nodeB = updated.content[0].content[1] as { value: string };
+      expect(nodeA.value).toBe("First");
+      expect(nodeB.value).toBe("Second");
+    });
+
+    it("round-trips a multi-line value through HTML unchanged", () => {
+      const original = docWithSoftBreak("alpha\nbeta\ngamma");
+      const { html, nodeMap } = convertRichTextToHtml(original);
+      const updated = convertHtmlToRichText(html, original, nodeMap);
+      const textNode = updated.content[0].content[0] as { value: string };
+      expect(textNode.value).toBe("alpha\nbeta\ngamma");
+    });
+  });
+
+  describe("HTML escaping of text values", () => {
+    const docWithText = (value: string): Document => ({
+      nodeType: BLOCKS.DOCUMENT,
+      data: {},
+      content: [
+        {
+          nodeType: BLOCKS.PARAGRAPH,
+          data: {},
+          content: [{ nodeType: "text", value, marks: [], data: {} }],
+        },
+      ],
+    });
+
+    it("escapes &, < and > in text content", () => {
+      const { html } = convertRichTextToHtml(docWithText("a < b && c > d"));
+      expect(html).toContain("a &lt; b &amp;&amp; c &gt; d");
+      expect(html).not.toContain("a < b");
+    });
+
+    it("round-trips special characters back to their literal form", () => {
+      const original = docWithText("if (x < 1 && y > 2) return;");
+      const { html, nodeMap } = convertRichTextToHtml(original);
+      const updated = convertHtmlToRichText(html, original, nodeMap);
+      const textNode = updated.content[0].content[0] as { value: string };
+      expect(textNode.value).toBe("if (x < 1 && y > 2) return;");
+    });
+  });
 });

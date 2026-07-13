@@ -56,23 +56,27 @@ describe("agenticConfig", () => {
 
   describe("sanitizeAgentConfig", () => {
     it("keeps only allowlisted keys", () => {
-      expect(sanitizeAgentConfig({ target_id: "ap", nonsense: "x" })).toEqual({ target_id: "ap" });
+      expect(sanitizeAgentConfig({ style_guide_id: "ap", nonsense: "x" })).toEqual({
+        style_guide_id: "ap",
+      });
     });
 
     it("drops reserved body keys", () => {
-      expect(sanitizeAgentConfig({ text: "hi", target_id: "ap" })).toEqual({ target_id: "ap" });
+      expect(sanitizeAgentConfig({ text: "hi", style_guide_id: "ap" })).toEqual({
+        style_guide_id: "ap",
+      });
     });
 
     it("drops null, undefined, and empty string values", () => {
       expect(
         sanitizeAgentConfig({
-          target_id: "",
+          style_guide_id: "",
         }),
       ).toEqual({});
     });
 
     it("keeps non-empty string values", () => {
-      expect(sanitizeAgentConfig({ target_id: "ap" })).toEqual({ target_id: "ap" });
+      expect(sanitizeAgentConfig({ style_guide_id: "ap" })).toEqual({ style_guide_id: "ap" });
     });
   });
 });
