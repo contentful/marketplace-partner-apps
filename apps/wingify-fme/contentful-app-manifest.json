@@ -7,7 +7,7 @@
       "path": "functions/handleWingifyCalls.js",
       "entryFile": "functions/handleWingifyCalls.js",
       "allowNetworks": [
-        "https://*.wingify.com"
+        "https://app.wingify.com"
       ],
       "accepts": [
         "appaction.call"
