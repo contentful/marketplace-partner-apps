@@ -3,6 +3,9 @@ import { useEffect } from 'react';
 export function useAbTastyOAuth(onToken: (token: string) => void) {
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
+      if (event.origin !== 'https://integrations-oauth.abtasty.com') {
+        return;
+      }
       const data = (event as MessageEvent<any>).data;
       if (data?.type === 'ABTASTY_OAUTH_SUCCESS' && data.access_token) {
         onToken(data.access_token);
