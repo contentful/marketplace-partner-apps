@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.16](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.15...bynder-content-workflow-v1.0.16) (2026-07-20)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/react-apps-toolkit from 1.2.16 to 2.0.1 in /apps/bynder-content-workflow ([#8518](https://github.com/contentful/marketplace-partner-apps/issues/8518)) ([2f62a8d](https://github.com/contentful/marketplace-partner-apps/commit/2f62a8d757315e4d406389877f7a8ad7744d955a))
+* **deps:** bump the production-dependencies group in /apps/bynder-content-workflow with 2 updates ([#8477](https://github.com/contentful/marketplace-partner-apps/issues/8477)) ([2a0bbe6](https://github.com/contentful/marketplace-partner-apps/commit/2a0bbe660905c7592e94417f6187e8da1d4c8cb6))
+
 ## [1.0.15](https://github.com/contentful/marketplace-partner-apps/compare/bynder-content-workflow-v1.0.14...bynder-content-workflow-v1.0.15) (2026-06-18)
 
 
