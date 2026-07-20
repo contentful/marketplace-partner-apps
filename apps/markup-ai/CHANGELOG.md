@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/contentful/marketplace-partner-apps/compare/markup-ai-contentful-app-v1.4.0...markup-ai-contentful-app-v1.4.1) (2026-07-20)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/react-apps-toolkit from 1.2.22 to 1.2.23 in /apps/markup-ai ([#8638](https://github.com/contentful/marketplace-partner-apps/issues/8638)) ([f2504f5](https://github.com/contentful/marketplace-partner-apps/commit/f2504f58617ea6ce2037cd5c0d1c09cb3e47e124))
+
 ## [1.4.0](https://github.com/contentful/marketplace-partner-apps/compare/markup-ai-contentful-app-v1.3.1...markup-ai-contentful-app-v1.4.0) (2026-06-23)
 
 
