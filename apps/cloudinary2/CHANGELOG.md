@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.5.1](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.5.0...cloudinary-assets-v1.5.1) (2026-07-20)
+
+
+### Bug Fixes
+
+* **cloudinary2:** preserve custom CNAME delivery for edited assets [] ([#8440](https://github.com/contentful/marketplace-partner-apps/issues/8440)) ([cee42bf](https://github.com/contentful/marketplace-partner-apps/commit/cee42bf94942a0e92ff030fd0b8a512d8b069027))
+* **deps:** bump @contentful/react-apps-toolkit from 1.2.16 to 1.2.23 in /apps/cloudinary2 ([#8537](https://github.com/contentful/marketplace-partner-apps/issues/8537)) ([8b8447d](https://github.com/contentful/marketplace-partner-apps/commit/8b8447dbc5223bca4a403323c2c33ec955705f79))
+* **deps:** bump the production-dependencies group in /apps/cloudinary2 with 3 updates ([#8465](https://github.com/contentful/marketplace-partner-apps/issues/8465)) ([4779ea6](https://github.com/contentful/marketplace-partner-apps/commit/4779ea6cced03a35bf6f3c093eeb0319004c6c63))
+
 ## [1.5.0](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.4.6...cloudinary-assets-v1.5.0) (2026-06-25)
 
 
