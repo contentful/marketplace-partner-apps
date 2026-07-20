@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.3.2](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.3.1...transifex-contentful-app-v1.3.2) (2026-07-20)
+
+
+### Bug Fixes
+
+* **deps:** bump ajv from 6.12.6 to 6.14.0 in /apps/transifex ([#7842](https://github.com/contentful/marketplace-partner-apps/issues/7842)) ([dde74cc](https://github.com/contentful/marketplace-partner-apps/commit/dde74ccd0e0c27ce53cef7f331c09bbba159bfef))
+* **deps:** bump axios from 1.13.5 to 1.15.0 in /apps/transifex ([#8109](https://github.com/contentful/marketplace-partner-apps/issues/8109)) ([e721e71](https://github.com/contentful/marketplace-partner-apps/commit/e721e71507afd35d014855a892d172c676205988))
+* **deps:** bump brace-expansion from 1.1.12 to 1.1.13 in /apps/transifex ([#8043](https://github.com/contentful/marketplace-partner-apps/issues/8043)) ([ae575cb](https://github.com/contentful/marketplace-partner-apps/commit/ae575cb02a01375808988557f1e30dd264e038d5))
+* **deps:** bump esbuild, @vitejs/plugin-react, vite and vitest in /apps/transifex ([#8336](https://github.com/contentful/marketplace-partner-apps/issues/8336)) ([e19784f](https://github.com/contentful/marketplace-partner-apps/commit/e19784f9f8e6f9edbcc66048889635e754f1a758))
+* **deps:** bump flatted from 3.3.3 to 3.4.1 in /apps/transifex ([#7947](https://github.com/contentful/marketplace-partner-apps/issues/7947)) ([2f93766](https://github.com/contentful/marketplace-partner-apps/commit/2f9376668b640c41adb27b9fa0b8bac72ad67389))
+* **deps:** bump flatted from 3.4.1 to 3.4.2 in /apps/transifex ([#7979](https://github.com/contentful/marketplace-partner-apps/issues/7979)) ([043a167](https://github.com/contentful/marketplace-partner-apps/commit/043a167faa0efec79aecaab6a1a96a971d115b5d))
+* **deps:** bump minimatch from 3.1.2 to 3.1.3 in /apps/transifex ([#7848](https://github.com/contentful/marketplace-partner-apps/issues/7848)) ([186d904](https://github.com/contentful/marketplace-partner-apps/commit/186d904f0206eadfd8a531a4b495202113aa4ba2))
+* **deps:** bump picomatch from 4.0.3 to 4.0.4 in /apps/transifex ([#8004](https://github.com/contentful/marketplace-partner-apps/issues/8004)) ([e492adb](https://github.com/contentful/marketplace-partner-apps/commit/e492adbdc16a052484d860c33be8b54494e3f551))
+* **deps:** bump qs from 6.14.2 to 6.15.2 in /apps/transifex ([#8233](https://github.com/contentful/marketplace-partner-apps/issues/8233)) ([8239aea](https://github.com/contentful/marketplace-partner-apps/commit/8239aea20aea1a545a6939b5d46f85a1d2b9d1b6))
+* **deps:** bump rollup from 4.44.1 to 4.59.0 in /apps/transifex ([#7864](https://github.com/contentful/marketplace-partner-apps/issues/7864)) ([fdd619f](https://github.com/contentful/marketplace-partner-apps/commit/fdd619fb1101fa8c7874ca27053573936d50ff87))
+* **deps:** bump the production-dependencies group in /apps/transifex with 3 updates ([#8472](https://github.com/contentful/marketplace-partner-apps/issues/8472)) ([44983c4](https://github.com/contentful/marketplace-partner-apps/commit/44983c406bad98e085b76fc4e5fb98765eda234f))
+* **deps:** bump tmp and @contentful/app-scripts in /apps/transifex ([#8252](https://github.com/contentful/marketplace-partner-apps/issues/8252)) ([056617e](https://github.com/contentful/marketplace-partner-apps/commit/056617e913390c0e074af064041e580792466f85))
+* **deps:** bump yaml from 1.10.2 to 1.10.3 in /apps/transifex ([#7999](https://github.com/contentful/marketplace-partner-apps/issues/7999)) ([7afd2e8](https://github.com/contentful/marketplace-partner-apps/commit/7afd2e8d1160c0fbb1bd34dcc9facbaffd23264b))
+
 ## [1.3.1](https://github.com/contentful/marketplace-partner-apps/compare/transifex-contentful-app-v1.3.0...transifex-contentful-app-v1.3.1) (2025-12-03)
 
 
