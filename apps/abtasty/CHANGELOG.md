@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.4](https://github.com/contentful/marketplace-partner-apps/compare/abtasty-v1.1.3...abtasty-v1.1.4) (2026-07-20)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group in /apps/abtasty with 3 updates ([#8597](https://github.com/contentful/marketplace-partner-apps/issues/8597)) ([eccf939](https://github.com/contentful/marketplace-partner-apps/commit/eccf9394a08bdb1545a7132a8a8309f0ec484e98))
+
 ## [1.1.3](https://github.com/contentful/marketplace-partner-apps/compare/abtasty-v1.1.2...abtasty-v1.1.3) (2026-06-18)
 
 
