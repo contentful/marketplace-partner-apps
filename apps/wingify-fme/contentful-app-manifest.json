@@ -1,0 +1,42 @@
+{
+  "functions": [
+    {
+      "id": "handleWingifyCalls",
+      "name": "Wingify Calls",
+      "description": "Template for creating custom app actions. Add your own code to define how your app should respond when an action is triggered.",
+      "path": "functions/handleWingifyCalls.js",
+      "entryFile": "functions/handleWingifyCalls.js",
+      "allowNetworks": [
+        "https://app.wingify.com"
+      ],
+      "accepts": [
+        "appaction.call"
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "handleWingifyActions",
+      "name": "Wingify Actions",
+      "type": "function-invocation",
+      "functionId": "handleWingifyCalls",
+      "category": "Custom",
+      "parameters": [
+        {
+          "id": "action",
+          "type": "Symbol",
+          "name": "Action",
+          "description": "The action to perform",
+          "required": true
+        },
+        {
+          "id": "payload",
+          "type": "Symbol",
+          "name": "Payload",
+          "description": "The data to update the feature flag with",
+          "required": true
+        }
+      ]
+    }
+  ]
+}

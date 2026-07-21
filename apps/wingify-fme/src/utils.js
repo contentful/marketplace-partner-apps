@@ -1,0 +1,101 @@
+import { get } from 'lodash';
+
+export const getEntryStatus = (sys) => {
+  if (sys.archivedVersion) {
+    return 'archived';
+  } else if (sys.publishedVersion) {
+    if (sys.version > sys.publishedVersion + 1) {
+      return 'changed';
+    } else {
+      return 'published';
+    }
+  } else {
+    return 'draft';
+  }
+};
+
+export const validateCredentials = async (accountId, apiToken) => {
+  if (!apiToken || !accountId) {
+    return false;
+  }
+
+  let url = `https://app.wingify.com/api/v2/accounts/${accountId}/smartcode`;
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      token: apiToken,
+    },
+  });
+
+  if (response.ok) {
+    return {
+      code: 200,
+      message: 'User autherized with the Wingify',
+    };
+  } else {
+    const resp = await response.json();
+    return resp._errors[0];
+  }
+};
+
+export const getRequiredEntryInformation = (entry, contentTypes, defaultLocale) => {
+  const contentTypeId = get(entry, ['sys', 'contentType', 'sys', 'id']);
+  const contentType = contentTypes.find((contentType) => contentType.sys.id === contentTypeId);
+
+  if (!contentType) {
+    throw new Error(`Content type ${contentTypeId} is not present`);
+  }
+
+  const displayField = contentType.displayField;
+  const descriptionFieldType = contentType.fields.filter((field) => field.id !== displayField).find((field) => field.type === 'Text');
+
+  const description = descriptionFieldType ? get(entry, ['fields', descriptionFieldType.id, defaultLocale], '') : '';
+
+  const title = get(entry, ['fields', displayField, defaultLocale], 'Untitled');
+  const status = getEntryStatus(entry.sys);
+
+  return {
+    title,
+    description,
+    contentType: contentType.name,
+    status,
+  };
+};
+
+export const mapWingifyVariationsAndContent = async (wingifyVariations, contentTypes, defaultLocale, getEntries) => {
+  const _wingifyVariations = Array.isArray(wingifyVariations) ? wingifyVariations : [wingifyVariations];
+  const entryIds = [...new Set(_wingifyVariations.map((wingifyVariation) => wingifyVariation?.variables[0]?.value).filter(Boolean))];
+
+  let entryItems = [];
+  if (entryIds.length > 0) {
+    const entries = await getEntries({
+      'sys.id[in]': entryIds.join(','),
+    });
+    entryItems = entries.items;
+  }
+  return _wingifyVariations.map((wingifyVariation) => {
+    if (wingifyVariation.variables.length && wingifyVariation.variables[0].value) {
+      let contentId = wingifyVariation.variables[0].value;
+      let entry = entryItems.find((entry) => entry?.sys?.id === contentId || entry.id === contentId);
+      if (!entry) {
+        return { wingifyVariation };
+      }
+      let entryInformation = getRequiredEntryInformation(entry, contentTypes, defaultLocale);
+      return {
+        wingifyVariation,
+        variationContent: entryInformation,
+      };
+    }
+    return { wingifyVariation };
+  });
+};
+
+export const globalConstants = {
+  WINGIFY_APP_ACTION_ID: 'handleWingifyActions', // Find it in contentful-app-manifest.json
+  WINGIFY_APP_ACTION_NAME: 'Wingify Actions', // Find it in contentful-app-manifest.json
+  WINGIFY_GET_FEATURE_FLAG_ACTION: 'get',
+  WINGIFY_UPDATE_FEATURE_FLAG_ACTION: 'update',
+  WINGIFY_UPDATE_VARIATIONS_ACTION: 'updateVariations',
+  WINGIFY_CREATE_FEATURE_FLAG_ACTION: 'create',
+};
