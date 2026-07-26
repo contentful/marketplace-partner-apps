@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ContentGraph – Standalone Classify</title>
+    <style>
+      body { font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 16px; line-height: 1.4; }
+      h2 { margin: 0 0 12px; }
+      label { display:block; margin: 8px 0 4px; font-size: 12px; color:#555; }
+      input, select { width: 100%; padding: 8px; border:1px solid #e5e7eb; border-radius:6px; }
+      .row { margin: 10px 0; }
+      button { padding: 8px 12px; border:0; border-radius:6px; background:#2563eb; color:#fff; cursor:pointer; }
+      button.secondary { background:#111827; }
+      button:disabled { opacity: 0.6; cursor: not-allowed; }
+      .pill { display:inline-block; padding:2px 8px; border-radius:999px; background:#eef; margin-right:6px; font-size:12px; }
+      .warn { background:#fff5cc; }
+      .ok { background:#def6e0; }
+      pre { background:#f6f8fa; padding:10px; border-radius:8px; max-height:240px; overflow:auto; }
+      .card { border:1px solid #e5e7eb; border-radius:8px; padding:12px; margin-top:12px; }
+      .inline { display:flex; gap:8px; align-items:center; }
+      .inline > * { flex: 1; }
+      table { width: 100%; border-collapse: collapse; font-size: 12px; }
+      th, td { border-bottom: 1px solid #eee; padding: 6px 4px; vertical-align: top; text-align: left; }
+      th { color: #444; font-weight: 600; }
+      code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 11px; }
+    </style>
+  </head>
+  <body>
+    <h2>Standalone Entry Classification</h2>
+    <div class="row">Use this page if the Entry Sidebar button isn’t visible. Enter a real <strong>Contentful Entry ID</strong> to deep crawl and classify, then approve to save labels back to Contentful.</div>
+
+    <div class="card">
+      <label for="entryId">Entry ID</label>
+      <input id="entryId" placeholder="e.g., 3xYabc123..." />
+
+      <div class="inline">
+        <div>
+          <label for="contentType">Content Type (optional)</label>
+          <input id="contentType" placeholder="e.g., aiDemoAsset" />
+        </div>
+        <div>
+          <label for="locale">Locale (display only)</label>
+          <input id="locale" value="en-US" />
+        </div>
+      </div>
+
+      <div class="row">
+        <button id="classifyBtn" type="button">Classify</button>
+        <button id="approveBtn" type="button" class="secondary" disabled>Approve & Save Draft</button>
+        <button id="publishBtn" type="button" class="secondary" disabled>Approve & Publish</button>
+      </div>
+
+      <div id="status" class="row"></div>
+      <div id="summary" class="row"></div>
+      <div class="row"><pre id="json"></pre></div>
+    </div>
+
+      <div class="card">
+        <details id="diagPanel">
+          <summary>Diagnostics (for verification)</summary>
+          <div class="row">
+            <button id="diagRunBtn" type="button">Run connectivity check</button>
+            <button id="diagAiBtn" type="button">Test AI call</button>
+            <button id="diagCopyBtn" type="button">Copy report</button>
+          </div>
+          <div class="row"><pre id="diagLog"></pre></div>
+        </details>
+      </div>
+
+
+    <script>
+      (function(){
+        const $ = (id) => document.getElementById(id);
+        let lastResult = null;
+        let lastEntryId = '';
+
+        // Diagnostics + normalization helpers
+        const diag = { events: [] };
+        function diagPush(type, data){
+          const ts = new Date().toISOString();
+          diag.events.push({ ts, type, data });
+          if (diag.events.length > 100) diag.events.shift();
+          const logEl = document.getElementById('diagLog');
+          if (logEl) logEl.textContent = JSON.stringify(diag.events.slice(-20), null, 2);
+        }
+        async function diagConnectivity(){
+          const t0 = performance.now();
+          try {
+            const res = await fetch('/graph/search?limit=1');
+            const ms = Math.round(performance.now() - t0);
+            diagPush('connectivity', { endpoint: '/graph/search', status: res.status, ok: res.ok, ms });
+            setStatus(`Connectivity ${res.ok ? 'OK' : 'FAILED'} (${ms}ms)`, res.ok ? 'ok' : 'warn');
+          } catch (e) {
+            const ms = Math.round(performance.now() - t0);
+            diagPush('connectivity:error', { endpoint: '/graph/search', ms, error: (e && e.message) || String(e) });
+            setStatus('Connectivity FAILED', 'warn');
+          }
+        }
+        async function diagAiSmoke(){
+          const t0 = performance.now();
+          try {
+            const entryId = $('entryId').value.trim();
+            if(!entryId){ throw new Error('Enter a real Contentful entry ID first.'); }
+            const payload = { data: { entryId, deepCrawl: true } };
+            const res = await fetch('/api/tools/classify-content/execute', { method: 'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify(payload) });
+            const ms = Math.round(performance.now() - t0);
+            const json = await res.json().catch(()=>({}));
+            diagPush('ai:smoke', { endpoint: '/api/tools/classify-content/execute', entryId, deepCrawl: true, ok: res.ok, status: res.status, ms, sample: json && { topic: json?.topic, funnelStage: json?.funnelStage, overallConfidence: json?.overallConfidence } });
+            setStatus(`AI test ${res.ok ? 'OK' : 'FAILED'} (${ms}ms)`, res.ok ? 'ok' : 'warn');
+          } catch(e){
+            const ms = Math.round(performance.now() - t0);
+            diagPush('ai:smoke:error', { ms, error: (e && e.message) || String(e) });
+            setStatus('AI test FAILED', 'warn');
+          }
+        }
+        async function diagCopy(){
+          try {
+            const payload = {
+              header: { entryId: $('entryId').value.trim(), contentType: $('contentType').value.trim(), locale: $('locale').value.trim() },
+              events: diag.events
+            };
+            await navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
+            setStatus('Diagnostics copied to clipboard', 'ok');
+          } catch {
+            setStatus('Failed to copy diagnostics', 'warn');
+          }
+        }
+        function formatConfidence(c){
+          if(typeof c !== 'number' || Number.isNaN(c)) return '—';
+          return `${Math.round(c * 100)}%`;
+        }
+        function escapeHtml(s){
+          return String(s || '')
+            .replace(/&/g,'&amp;')
+            .replace(/</g,'&lt;')
+            .replace(/>/g,'&gt;')
+            .replace(/\"/g,'&quot;')
+            .replace(/'/g,'&#39;');
+        }
+        function formatValue(v){
+          if (v === null || v === undefined) return '—';
+          if (Array.isArray(v)) return escapeHtml(v.filter(Boolean).join(', ')) || '—';
+          const s = String(v).trim();
+          return s ? escapeHtml(s) : '—';
+        }
+        function computeAvgConfidence(result){
+          const fields = [
+            result?.assetType,
+            result?.assetSubType,
+            result?.schemaType,
+            result?.product,
+            result?.jobLevel,
+            result?.jobFunction,
+            result?.audience,
+            result?.topic,
+            result?.useCases,
+            result?.funnelStage,
+            result?.industry,
+            result?.companySize,
+            result?.region,
+            result?.language,
+            result?.usageRights,
+            result?.event,
+            result?.eventType,
+            result?.season,
+            result?.yearPublished,
+          ].filter(Boolean);
+          const cs = fields.map((x) => x && x.confidence).filter((c) => typeof c === 'number');
+          if(!cs.length) return undefined;
+          const avg = cs.reduce((a,b)=>a+b,0) / cs.length;
+          return Math.round(avg * 100) / 100;
+        }
+        function renderClassification(result, sourceLabel){
+          const avg = typeof result?.overallConfidence === 'number' ? result.overallConfidence : computeAvgConfidence(result);
+          const needs = typeof result?.needsReview === 'boolean' ? result.needsReview : (typeof avg === 'number' ? avg < 0.7 : true);
+          const rows = [
+            ['Asset Type', result?.assetType],
+            ['Asset Sub-Type', result?.assetSubType],
+            ['Schema Type', result?.schemaType],
+            ['Product', result?.product],
+            ['Job Level', result?.jobLevel],
+            ['Job Function', result?.jobFunction],
+            ['Audience', result?.audience],
+            ['Topic', result?.topic],
+            ['Use Cases', result?.useCases],
+            ['Funnel Stage', result?.funnelStage],
+            ['Industry', result?.industry],
+            ['Company Size', result?.companySize],
+            ['Region', result?.region],
+            ['Language', result?.language],
+            ['Event', result?.event],
+            ['Event Type', result?.eventType],
+            ['Season', result?.season],
+            ['Year Published', result?.yearPublished],
+            ['Usage Rights', result?.usageRights],
+          ].filter(([,v]) => !!v);
+          const table = `
+            <table>
+              <thead><tr><th>Dimension</th><th>Value</th><th>Confidence</th></tr></thead>
+              <tbody>
+                ${rows.map(([name,obj]) => {
+                  const v = obj && obj.value;
+                  const conf = obj && obj.confidence;
+                  return `<tr><td>${escapeHtml(name)}</td><td>${formatValue(v)}</td><td><code>${formatConfidence(conf)}</code></td></tr>`;
+                }).join('')}
+              </tbody>
+            </table>
+          `;
+          const reasoning = (result && typeof result.reasoning === 'string' && result.reasoning.trim())
+            ? `<details><summary>Reasoning</summary><pre>${escapeHtml(result.reasoning)}</pre></details>`
+            : '';
+          setStatus(`Completed. Avg confidence ${typeof avg === 'number' ? avg.toFixed(2) : '—'} • ${needs ? 'Needs review' : 'Looks good'}`, needs ? 'warn' : 'ok');
+          const modeLabel = sourceLabel === 'execution' ? 'Execution' : sourceLabel;
+          setSummary(`
+            ${modeLabel ? `<span class="pill">Source: ${escapeHtml(modeLabel)}</span>` : ''}
+            ${typeof avg === 'number' ? `<span class="pill ${needs ? 'warn' : 'ok'}">Avg: ${avg.toFixed(2)}</span>` : ''}
+            ${needs ? `<span class="pill warn">Needs review</span>` : `<span class="pill ok">Looks good</span>`}
+            ${table}
+            ${reasoning}
+          `);
+        }
+
+        function setStatus(text, kind){ const el=$('status'); el.textContent=text; el.className='row '+(kind||''); }
+        function setSummary(html){ $('summary').innerHTML = html||''; }
+        function setJson(obj){ const el=$('json'); el.textContent = obj ? JSON.stringify(obj, null, 2) : ''; }
+
+        async function classify(){
+          const entryId = $('entryId').value.trim();
+          const contentType = $('contentType').value.trim();
+          if(!entryId){ setStatus('Please enter an Entry ID.', 'warn'); return; }
+
+          setStatus('Deep crawling and classifying…', ''); setSummary(''); setJson(null);
+          try {
+            const runId = `run_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;
+            const payload = { data: { entryId, deepCrawl: true } };
+            diagPush('classify:req', { mode: 'deep-crawl', runId, entryId, contentType: contentType || undefined, payload });
+            const res = await fetch('/api/tools/classify-content/execute', {
+              method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+            });
+            const result = await res.json();
+            if(!res.ok){ throw new Error(result?.error || 'Classification failed'); }
+            lastResult = result;
+            lastEntryId = entryId;
+
+            renderClassification(result, 'execution');
+            setJson({ entryId, contentType: contentType || undefined, crawlDepth: 4, result });
+            diagPush('classify:res', { ok: true, entryId: lastEntryId, contentType: contentType || undefined, deepCrawl: true, result });
+            $('approveBtn').disabled = false;
+            $('publishBtn').disabled = false;
+          } catch(e){
+            setStatus('Error: ' + (e && e.message || String(e)), 'warn');
+            diagPush('classify:error', { message: (e && e.message) || String(e) });
+            $('approveBtn').disabled = true;
+            $('publishBtn').disabled = true;
+          }
+        }
+
+        async function approve(publish){
+          if(!lastResult || !lastEntryId){ return; }
+          setStatus(publish ? 'Saving & publishing…' : 'Saving to Contentful…', '');
+          try {
+            const locale = $('locale').value.trim() || 'en-US';
+            const now = new Date();
+            const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString();
+            diagPush('approve:req', { entryId: lastEntryId, locale, publish: !!publish });
+            const res = await fetch('/api/review/approve', {
+              method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ entryId: lastEntryId, classification: lastResult, locale, lastClassifiedAt: nowIso, publish: !!publish })
+            });
+            const data = await res.json();
+            if(!res.ok || !data.success){ throw new Error(data?.message || 'Approve failed'); }
+            const updated = Array.isArray(data?.updatedFields) ? data.updatedFields.join(', ') : '';
+            const pubLabel = data?.published ? ' Published.' : publish ? ' Publish failed.' : '';
+            setStatus(`Saved.${updated ? ` Updated: ${updated}` : ''}${pubLabel}`, data?.published || !publish ? 'ok' : 'warn');
+            diagPush('approve:res', { ok: true, entryId: lastEntryId, updatedFields: data?.updatedFields });
+          } catch(e){
+            setStatus('Error: ' + (e && e.message || String(e)), 'warn');
+            diagPush('approve:error', { message: (e && e.message) || String(e) });
+          }
+        }
+
+        $('classifyBtn').addEventListener('click', classify);
+        $('approveBtn').addEventListener('click', () => approve(false));
+        $('publishBtn').addEventListener('click', () => approve(true));
+        document.getElementById('diagRunBtn')?.addEventListener('click', diagConnectivity);
+        document.getElementById('diagAiBtn')?.addEventListener('click', diagAiSmoke);
+        document.getElementById('diagCopyBtn')?.addEventListener('click', diagCopy);
+
+      })();
+    </script>
+  </body>
+  </html>
