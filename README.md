@@ -16,6 +16,8 @@ The `marketplace-partner-apps` repo uses [Circle CI](https://circleci.com/docs/)
 
 When a PR is opened that introduces a new app, a [GitHub action](.github/workflows/new-app-review/README.md) runs to do some extra validation to ensure that the PR is ready for Contentful review. Specifically, here are some criteria it checks for:
 
+- **Support ownership**: Add a row for your app to [SUPPORT_OWNERSHIP.md](SUPPORT_OWNERSHIP.md). The table lists who provides support (Contentful or the partner). App id must match your app directory name (e.g. `apps/my-app` → App id `my-app`). This file can be linked from Confluence as the source of truth for support routing.
+
 - Have a `package.json` file with the following `scripts`:
 
   - `start`
