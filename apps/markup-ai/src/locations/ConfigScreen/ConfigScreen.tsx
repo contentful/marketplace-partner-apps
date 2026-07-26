@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import { ConfigAppSDK } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
 import { Box, Checkbox, Heading, Paragraph, Spinner, Subheading } from "@contentful/f36-components";
-import { createClient } from "contentful-management";
 import styled from "@emotion/styled";
 import tokens from "@contentful/f36-tokens";
 import {
@@ -113,21 +112,12 @@ export const ConfigScreen = () => {
 
   useEffect(() => {
     void (async () => {
-      const { app, cmaAdapter, ids } = sdk;
+      const { app } = sdk;
 
       const richTextFields: TextFieldsState = {};
       const activeFields: Record<string, boolean> = {};
 
-      const cma = createClient(
-        { apiAdapter: cmaAdapter },
-        {
-          type: "plain",
-          defaults: {
-            environmentId: ids.environmentAlias ?? ids.environment,
-            spaceId: ids.space,
-          },
-        },
-      );
+      const cma = sdk.cma;
 
       const content = await cma.contentType.getMany({ query: { limit: 1000 } });
       const currentState = await app.getCurrentState();
