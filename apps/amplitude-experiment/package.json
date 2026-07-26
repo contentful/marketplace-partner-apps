@@ -42,7 +42,7 @@
   "devDependencies": {
     "@contentful/app-scripts": "2.5.12",
     "@testing-library/jest-dom": "6.9.1",
-    "@testing-library/react": "^14.1.2",
+    "@testing-library/react": "^16.3.2",
     "@types/lodash": "^4.17.24",
     "@types/node": "^20",
     "@types/react": "18.3.10",
