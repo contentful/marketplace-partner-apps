@@ -22,7 +22,7 @@
     "@contentful/f36-icons": "^4.29.0",
     "@contentful/node-apps-toolkit": "^3.15.0",
     "@contentful/react-apps-toolkit": "^1.2.19",
-    "contentful-management": "^11.66.0",
+    "contentful-management": "^12.5.1",
     "graphql-scalars": "^1.25.0",
     "graphql-yoga": "^5.21.2",
     "react": "18.2.0",
