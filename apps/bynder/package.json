@@ -18,7 +18,7 @@
   "dependencies": {
     "@contentful/app-sdk": "^4.58.2",
     "@contentful/dam-app-base": "^3.0.9",
-    "@contentful/f36-components": "^4.80.0",
+    "@contentful/f36-components": "^6.11.1",
     "@contentful/f36-icons": "^4.29.0",
     "@contentful/node-apps-toolkit": "^3.15.0",
     "@contentful/react-apps-toolkit": "^1.2.19",
