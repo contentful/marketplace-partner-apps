@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.4](https://github.com/contentful/marketplace-partner-apps/compare/abtasty-v1.1.3...abtasty-v1.1.4) (2026-07-27)
+
+
+### Bug Fixes
+
+* **abtasty:** verify postMessage origin before accepting OAuth token[AIS-302] ([#8684](https://github.com/contentful/marketplace-partner-apps/issues/8684)) ([7036d45](https://github.com/contentful/marketplace-partner-apps/commit/7036d4577ba46fa03bb4b6c0d93f08ea213bf446))
+* **deps:** bump the production-dependencies group in /apps/abtasty with 3 updates ([#8597](https://github.com/contentful/marketplace-partner-apps/issues/8597)) ([eccf939](https://github.com/contentful/marketplace-partner-apps/commit/eccf9394a08bdb1545a7132a8a8309f0ec484e98))
+
 ## [1.1.3](https://github.com/contentful/marketplace-partner-apps/compare/abtasty-v1.1.2...abtasty-v1.1.3) (2026-06-18)
 
 
