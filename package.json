@@ -8,7 +8,7 @@
   "packageManager": "npm@8.19.4",
   "devDependencies": {
     "@actions/core": "^1.11.1",
-    "@actions/github": "^6.0.0",
+    "@actions/github": "^6.0.1",
     "@types/node": "^22.3.0",
     "husky": "^8.0.0",
     "jsonlint": "^1.6.3",
