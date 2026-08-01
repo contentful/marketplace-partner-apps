@@ -56,7 +56,7 @@
   },
   "homepage": ".",
   "optionalDependencies": {
-    "@rollup/rollup-linux-arm64-gnu": "^4.62.0",
+    "@rollup/rollup-linux-arm64-gnu": "^4.62.3",
     "@rollup/rollup-linux-arm64-musl": "^4.62.0",
     "@rollup/rollup-linux-x64-gnu": "^4.62.0",
     "@rollup/rollup-linux-x64-musl": "^4.62.0"
