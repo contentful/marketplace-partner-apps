@@ -10,7 +10,7 @@
     "@actions/core": "^1.11.1",
     "@actions/github": "^6.0.1",
     "@types/node": "^22.3.0",
-    "husky": "^8.0.0",
+    "husky": "^8.0.3",
     "jsonlint": "^1.6.3",
     "lint-staged": "^15.4.2",
     "prettier": "2.8.8"
