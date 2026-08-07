@@ -98,6 +98,9 @@
     "apps/vwo-fme": {
       "release-type": "node"
     },
+    "apps/wingify-fme": {
+      "release-type": "node"
+    },
     "apps/markup-ai": {
       "release-type": "node"
     },
