@@ -82,7 +82,7 @@
     "react-dom": "^19.2.5"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "2.5.12",
+    "@contentful/app-scripts": "3.0.1",
     "@emotion/jest": "11.14.2",
     "@eslint/js": "^10.0.1",
     "@hey-api/openapi-ts": "0.94.5",
