@@ -43,7 +43,7 @@
     "@contentful/app-scripts": "2.5.12",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "^14.1.2",
-    "@types/lodash": "^4.17.24",
+    "@types/lodash": "^4.17.25",
     "@types/node": "^20",
     "@types/react": "18.3.10",
     "@types/react-dom": "18.3.0",
