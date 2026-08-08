@@ -18,7 +18,7 @@
   "dependencies": {
     "@contentful/app-sdk": "^4.0.0",
     "@contentful/f36-components": "^4.0.0",
-    "@contentful/f36-icons": "^4.0.0",
+    "@contentful/f36-icons": "^4.29.1",
     "contentful-management": "^10.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
