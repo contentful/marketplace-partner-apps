@@ -42,7 +42,7 @@
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
     "happy-dom": "^20.10.4",
-    "@types/lodash": "^4.17.24"
+    "@types/lodash": "^4.17.25"
   },
   "scripts": {
     "install-ci": "npm ci",
