@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.4](https://github.com/contentful/marketplace-partner-apps/compare/frontify-assets-v1.0.3...frontify-assets-v1.0.4) (2026-08-08)
+
+
+### Bug Fixes
+
+* **deps:** Bump rollup from 4.46.1 to 4.59.0 in /apps/frontify ([#7877](https://github.com/contentful/marketplace-partner-apps/issues/7877)) ([79eacfb](https://github.com/contentful/marketplace-partner-apps/commit/79eacfbaaa8e20dc9014a1a1cb26bfad9cc8a728))
+* **deps:** bump tar and @contentful/app-scripts in /apps/frontify ([#8368](https://github.com/contentful/marketplace-partner-apps/issues/8368)) ([c46be89](https://github.com/contentful/marketplace-partner-apps/commit/c46be890ac126ebd25999d4871eb7a3b4fa08938))
+* **deps:** update dependency @contentful/dam-app-base to ^2.3.2 ([#8743](https://github.com/contentful/marketplace-partner-apps/issues/8743)) ([292381b](https://github.com/contentful/marketplace-partner-apps/commit/292381b4c407ff07d8ada5bcaa6bbfe4f2229d78))
+
 ## [1.0.3](https://github.com/contentful/marketplace-partner-apps/compare/frontify-assets-v1.0.2...frontify-assets-v1.0.3) (2025-07-28)
 
 
