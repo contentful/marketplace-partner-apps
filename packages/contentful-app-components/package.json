@@ -24,7 +24,7 @@
     "react-dom": "^18.0.0"
   },
   "devDependencies": {
-    "@contentful/f36-tokens": "^4.0.0",
+    "@contentful/f36-tokens": "^4.2.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@vitejs/plugin-react": "^4.0.0",
