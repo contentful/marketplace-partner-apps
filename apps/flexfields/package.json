@@ -52,7 +52,7 @@
     "@typescript-eslint/eslint-plugin": "^8.61.1",
     "@typescript-eslint/parser": "^8.18.0",
     "@vitejs/plugin-react": "^4.7.0",
-    "@vitest/browser": "^2.1.8",
+    "@vitest/browser": "^3.2.7",
     "happy-dom": "^20.10.4",
     "playwright": "^1.61.0",
     "typescript": "5.4.3",
