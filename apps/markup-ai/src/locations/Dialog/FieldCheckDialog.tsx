@@ -256,13 +256,31 @@ const FieldCheckDialog: React.FC = () => {
   const spaceId = sdk.ids.space;
   const environmentId = sdk.ids.environmentAlias ?? sdk.ids.environment;
 
-  const { effectiveStyleGuideId, setFieldStyleGuide } = useEffectiveStyleGuide({
-    spaceId,
-    environmentId,
-    contentTypeId: params.contentTypeId,
-    fieldId: params.fieldId,
-    contentTypeDefault,
-  });
+  const { effectiveStyleGuideId: persistedStyleGuideId, setFieldStyleGuide } =
+    useEffectiveStyleGuide({
+      spaceId,
+      environmentId,
+      contentTypeId: params.contentTypeId,
+      fieldId: params.fieldId,
+      contentTypeDefault,
+    });
+
+  // A persisted pick (field override or content-type default) can outlive the
+  // org's style guides: re-provisioning disables the old guides while creating
+  // replacements with the same names but new ids, and the backend 500s on a
+  // run with a disabled or unknown guide — a stale pick would brick Check on
+  // this field until someone re-picks. Once the list has loaded, treat a pick
+  // that is missing or disabled as "nothing picked" so the org default
+  // applies. While the list is loading or failed we can't validate, so pass
+  // the pick through (fail-open, matching the rest of the dialog).
+  const effectiveStyleGuideId = useMemo(() => {
+    if (!persistedStyleGuideId) return null;
+    if (styleGuidesLoading || styleGuidesError || styleGuides.length === 0) {
+      return persistedStyleGuideId;
+    }
+    const match = styleGuides.find((g) => g.id === persistedStyleGuideId);
+    return match?.enabled ? persistedStyleGuideId : null;
+  }, [persistedStyleGuideId, styleGuides, styleGuidesLoading, styleGuidesError]);
 
   const { issues, startScan, scanInFlight, workflowId, error: scanError } = useAgenticScan(apiKey);
 
