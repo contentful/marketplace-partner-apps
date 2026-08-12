@@ -269,10 +269,10 @@ export function useAgenticScan(apiKey?: string | null): UseAgenticScanResult {
           query: { wait: false },
           throwOnError: true,
           signal: abortController.signal,
-        } as Parameters<typeof cortexAgentsRunAgent>[0]);
+        });
 
         if (cancelledRef.current) return;
-        if (!data?.workflow_id) {
+        if (!data.workflow_id) {
           setError("Scan could not be started because the server did not return a workflow ID.");
           setScanState("error");
           safeOnStreamComplete();

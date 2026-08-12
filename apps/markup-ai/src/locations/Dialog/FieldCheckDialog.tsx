@@ -251,9 +251,7 @@ const FieldCheckDialog: React.FC = () => {
   // rather than threading it through invocation params — that way every dialog
   // open reads the freshest value Contentful saved on the config screen,
   // independent of how the field iframe constructed the invocation payload.
-  // Default to {} so a missing/undefined installation block doesn't throw.
-  const installationParams: AppInstallationParameters =
-    (sdk.parameters.installation as AppInstallationParameters | undefined) ?? {};
+  const installationParams: AppInstallationParameters = sdk.parameters.installation;
   const contentTypeDefault = installationParams.contentTypeSettings?.[params.contentTypeId];
   const spaceId = sdk.ids.space;
   const environmentId = sdk.ids.environmentAlias ?? sdk.ids.environment;

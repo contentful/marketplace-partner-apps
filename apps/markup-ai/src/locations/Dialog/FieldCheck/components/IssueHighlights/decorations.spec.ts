@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { EditorState } from "@tiptap/pm/state";
-import { schema as basicSchema } from "@tiptap/pm/schema-basic";
+import { schema as basicSchema } from "prosemirror-schema-basic";
 import { DOMParser as ProseMirrorDOMParser } from "@tiptap/pm/model";
 import type { CortexIssueWithId } from "../../../../../agents/types";
 import { buildState } from "./decorations";

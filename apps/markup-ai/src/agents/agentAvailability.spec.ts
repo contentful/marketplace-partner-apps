@@ -13,6 +13,7 @@ function config(overrides: Partial<OrganizationConfigResponse> = {}): Organizati
     is_acrolinx_classic: false,
     style_agent: StyleAgentMode.ENABLED,
     style_agent_numeric_scoring: false,
+    allow_user_tracking: false,
     ...overrides,
   };
 }

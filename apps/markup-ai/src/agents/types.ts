@@ -116,11 +116,7 @@ export interface SSEErrorEvent extends SSEEventBase {
 }
 
 export type SSEEvent =
-  | SSEConnectedEvent
-  | SSEStatusEvent
-  | SSEAgentResultEvent
-  | SSECompletionEvent
-  | SSEErrorEvent;
+  SSEConnectedEvent | SSEStatusEvent | SSEAgentResultEvent | SSECompletionEvent | SSEErrorEvent;
 
 export function isAgentResultEvent(event: SSEEvent): event is SSEAgentResultEvent {
   return event.type === "agent_result";
@@ -129,12 +125,7 @@ export function isAgentResultEvent(event: SSEEvent): event is SSEAgentResultEven
 // -- Scan state --
 
 export type AgenticScanState =
-  | "idle"
-  | "scanning"
-  | "streaming"
-  | "complete"
-  | "error"
-  | "cancelled";
+  "idle" | "scanning" | "streaming" | "complete" | "error" | "cancelled";
 
 export type AgentStatus = "pending" | "running" | "complete" | "error";
 
