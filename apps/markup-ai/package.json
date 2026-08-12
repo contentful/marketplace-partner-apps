@@ -85,7 +85,7 @@
     "@contentful/app-scripts": "2.5.12",
     "@emotion/jest": "11.14.2",
     "@eslint/js": "^10.0.1",
-    "@hey-api/openapi-ts": "0.99.0",
+    "@hey-api/openapi-ts": "0.95.0",
     "@rollup/plugin-commonjs": "^29.0.3",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",
