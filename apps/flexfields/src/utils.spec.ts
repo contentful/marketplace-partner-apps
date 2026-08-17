@@ -96,4 +96,82 @@ describe('mergeRules', () => {
     const incoming = [makeRule({ targetEntityField: ['video', 'primaryImage'] })];
     expect(mergeRules(existing, incoming)).toHaveLength(1);
   });
+
+  it('treats matching optional between values as duplicates', () => {
+    const existing = [makeRule({ condition: 'is between', conditionValueMin: '1', conditionValueMax: '5' })];
+    const incoming = [makeRule({ condition: 'is between', conditionValueMin: '1', conditionValueMax: '5' })];
+    expect(mergeRules(existing, incoming)).toHaveLength(1);
+  });
+
+  it('treats different optional between values as distinct', () => {
+    const existing = [makeRule({ condition: 'is between', conditionValueMin: '1', conditionValueMax: '5' })];
+    const incoming = [makeRule({ condition: 'is between', conditionValueMin: '2', conditionValueMax: '5' })];
+    expect(mergeRules(existing, incoming)).toHaveLength(2);
+  });
+
+  it('treats different min value of 0 and an undefined value as distinct', () => {
+    const existing = [makeRule({ condition: 'is between', conditionValueMin: '0', conditionValueMax: '5' })];
+    const incoming = [makeRule({ condition: 'is between', conditionValueMin: undefined, conditionValueMax: '5' })];
+    expect(mergeRules(existing, incoming)).toHaveLength(2);
+  });
+
+  it('treats different max value of 0 and an undefined value as distinct', () => {
+    const existing = [makeRule({ condition: 'is between', conditionValueMin: '1', conditionValueMax: '0' })];
+    const incoming = [makeRule({ condition: 'is between', conditionValueMin: '1', conditionValueMax: undefined })];
+    expect(mergeRules(existing, incoming)).toHaveLength(2);
+  });
+
+  it('treats a value of 0 and an empty string as distinct', () => {
+    const existing = [makeRule({ condition: 'is between', conditionValueMin: '0', conditionValueMax: '5' })];
+    const incoming = [makeRule({ condition: 'is between', conditionValueMin: '', conditionValueMax: '5' })];
+    expect(mergeRules(existing, incoming)).toHaveLength(2);
+  });
+
+  it('treats undefined and empty string between values as duplicates', () => {
+    const existing = [makeRule({ condition: 'is between', conditionValueMin: undefined, conditionValueMax: undefined })];
+    const incoming = [makeRule({ condition: 'is between', conditionValueMin: '', conditionValueMax: '' })];
+    expect(mergeRules(existing, incoming)).toHaveLength(1);
+  });
+
+  it('treats different isForSameEntity values as distinct', () => {
+    const existing = [makeRule({ isForSameEntity: true })];
+    const incoming = [makeRule({ isForSameEntity: false })];
+    expect(mergeRules(existing, incoming)).toHaveLength(2);
+  });
+
+  it('treats matching isForSameEntity values as duplicates', () => {
+    const existing = [makeRule({ isForSameEntity: true })];
+    const incoming = [makeRule({ isForSameEntity: true })];
+    expect(mergeRules(existing, incoming)).toHaveLength(1);
+  });
+
+  it('treats linkedEntryId and linkedEntryIds with the same ids as duplicates', () => {
+    const existing = [makeRule({ condition: 'includes entry', linkedEntryId: 'entry-1' })];
+    const incoming = [makeRule({ condition: 'includes entry', linkedEntryIds: ['entry-1'] })];
+    expect(mergeRules(existing, incoming)).toHaveLength(1);
+  });
+
+  it('treats different linkedEntryIds as distinct', () => {
+    const existing = [makeRule({ condition: 'includes entry', linkedEntryIds: ['entry-1'] })];
+    const incoming = [makeRule({ condition: 'includes entry', linkedEntryIds: ['entry-2'] })];
+    expect(mergeRules(existing, incoming)).toHaveLength(2);
+  });
+
+  it('treats different linkedEntryIds that are undefined as distinct from those with values', () => {
+    const existing = [makeRule({ condition: 'includes entry', linkedEntryIds: undefined })];
+    const incoming = [makeRule({ condition: 'includes entry', linkedEntryIds: ['entry-1'] })];
+    expect(mergeRules(existing, incoming)).toHaveLength(2);
+  });
+
+  it('treats the same linkedEntryIds that are both defined as duplicates', () => {
+    const existing = [makeRule({ condition: 'includes entry', linkedEntryIds: ['entry-1'] })];
+    const incoming = [makeRule({ condition: 'includes entry', linkedEntryIds: ['entry-1'] })];
+    expect(mergeRules(existing, incoming)).toHaveLength(1);
+  });
+
+  it('treats linkedEntryIds as duplicates regardless of order', () => {
+    const existing = [makeRule({ condition: 'includes entry', linkedEntryIds: ['a', 'b'] })];
+    const incoming = [makeRule({ condition: 'includes entry', linkedEntryIds: ['b', 'a'] })];
+    expect(mergeRules(existing, incoming)).toHaveLength(1);
+  });
 });

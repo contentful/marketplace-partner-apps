@@ -101,7 +101,7 @@ const ConfigScreen = () => {
   const [parameters, setParameters] = useState<AppInstallationParameters>({
     rules: [],
   });
-  const [isRuleDeleted, setIsRuleDeleted] = useState(false);
+  const [hasPendingRuleChanges, setHasPendingRuleChanges] = useState(false);
   const [ruleToEditIndex, setRuleToEditIndex] = useState<number>();
   const sdk = useSDK<AppExtensionSDK>();
 
@@ -136,8 +136,8 @@ const ConfigScreen = () => {
     // related to this app installation
     const currentState = await sdk.app.getCurrentState();
 
-    if (isRuleDeleted) {
-      setIsRuleDeleted(false);
+    if (hasPendingRuleChanges) {
+      setHasPendingRuleChanges(false);
 
       // Ensure editor interfaces are registered for every content type referenced by
       // the current rules. This matters after an import that introduces new content types.
@@ -296,7 +296,7 @@ const ConfigScreen = () => {
   }, [
     sdk.app,
     sdk.notifier,
-    isRuleDeleted,
+    hasPendingRuleChanges,
     contentType,
     contentTypeField,
     condition,
@@ -569,7 +569,7 @@ const ConfigScreen = () => {
       ...parameters,
       rules: rulesCopy,
     });
-    setIsRuleDeleted(true);
+    setHasPendingRuleChanges(true);
   };
 
   const toggleAll = (checked: boolean) => {
@@ -696,7 +696,7 @@ const ConfigScreen = () => {
       ...parameters,
       rules: newRules,
     });
-    setIsRuleDeleted(true);
+    setHasPendingRuleChanges(true);
     setRuleToEditIndex(undefined);
   };
 
@@ -767,7 +767,7 @@ const ConfigScreen = () => {
           FlexFields App Config
         </Heading>
 
-        {isRuleDeleted ? (
+        {hasPendingRuleChanges ? (
           <Flex
             alignItems="center"
             gap="8px"

@@ -24,7 +24,7 @@ const isFieldHidden = (fieldId: string, contentType: string, rules: Rule[], entr
     (rule) =>
       ((rule.isForSameEntity && rule.entryId === entryId) || (!rule.isForSameEntity && rule.entryId !== entryId)) &&
       rule.targetEntity === contentType &&
-      rule.targetEntityField.includes(fieldId)
+      rule.targetEntityField.includes(fieldId),
   );
 };
 
@@ -204,7 +204,7 @@ export const calculateEditorFields = (entryId: string, entryFields: KeyValueMap,
         item.targetEntity === rule.targetEntity &&
         item.targetEntityField === rule.targetEntityField &&
         item.condition === rule.condition &&
-        item.conditionValue === rule.conditionValue
+        item.conditionValue === rule.conditionValue,
     );
     if (!duplicate) {
       uniqueRulesList.push(rule);
@@ -347,6 +347,8 @@ export const validateImportedRules = (rules: Rule[], allContentTypes: any[]): Im
 // Determine whether two rules describe the same condition/target, ignoring ordering of target fields.
 const isSameRule = (a: Rule, b: Rule): boolean => {
   const sortedFields = (rule: Rule) => [...(rule.targetEntityField || [])].sort().join('|');
+  const sortedLinkedEntryIds = (rule: Rule) => [...getRuleLinkedEntryIds(rule)].sort().join('|');
+
   return (
     a.contentType === b.contentType &&
     a.contentTypeField === b.contentTypeField &&
@@ -354,6 +356,9 @@ const isSameRule = (a: Rule, b: Rule): boolean => {
     a.conditionValue === b.conditionValue &&
     a.targetEntity === b.targetEntity &&
     a.isForSameEntity === b.isForSameEntity &&
+    (a.conditionValueMin ?? '') === (b.conditionValueMin ?? '') &&
+    (a.conditionValueMax ?? '') === (b.conditionValueMax ?? '') &&
+    sortedLinkedEntryIds(a) === sortedLinkedEntryIds(b) &&
     sortedFields(a) === sortedFields(b)
   );
 };
