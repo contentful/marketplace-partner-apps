@@ -1,11 +1,30 @@
 import { useEffect } from 'react';
+import { OAUTH_ORIGIN, OAUTH_URL } from '@/constants';
+
+interface OAuthSuccessMessage {
+  type: 'ABTASTY_OAUTH_SUCCESS';
+  access_token: string;
+}
+
+function isOAuthSuccessMessage(data: unknown): data is OAuthSuccessMessage {
+  if (typeof data !== 'object' || data === null) {
+    return false;
+  }
+
+  const { type, access_token } = data as Record<string, unknown>;
+  return type === 'ABTASTY_OAUTH_SUCCESS' && typeof access_token === 'string' && access_token.length > 0;
+}
 
 export function useAbTastyOAuth(onToken: (token: string) => void) {
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      const data = (event as MessageEvent<any>).data;
-      if (data?.type === 'ABTASTY_OAUTH_SUCCESS' && data.access_token) {
-        onToken(data.access_token);
+      // Only trust token when it comes from the AB Tasty OAuth origin.
+      if (event.origin !== OAUTH_ORIGIN) {
+        return;
+      }
+
+      if (isOAuthSuccessMessage(event.data)) {
+        onToken(event.data.access_token);
       }
     };
 
@@ -17,11 +36,10 @@ export function useAbTastyOAuth(onToken: (token: string) => void) {
     const width = 600;
     const height = 700;
     const name = 'abtasty_oauth';
-    const url = 'https://integrations-oauth.abtasty.com/contentful/oauth';
     const left = window.screenX + (window.outerWidth - width) / 2;
     const top = window.screenY + (window.outerHeight - height) / 2;
     const popup = window.open(
-      url,
+      OAUTH_URL,
       name,
       `width=${width},height=${height},top=${top},left=${left},resizable,scrollbars=yes`
     );

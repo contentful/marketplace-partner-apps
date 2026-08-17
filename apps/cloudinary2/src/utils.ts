@@ -1,4 +1,5 @@
 import { FieldAppSDK } from '@contentful/app-sdk';
+import { Cloudinary as cloudinaryCore } from 'cloudinary-core';
 import { pick } from 'lodash';
 import { AppInstallationParameters, CloudinaryAsset, MediaLibraryResultAsset } from './types';
 
@@ -37,6 +38,77 @@ const FIELDS_TO_PERSIST = [
   'original_secure_url',
   'raw_transformation',
 ] as const;
+
+export function getDeliveryHostname(url: string): string | undefined {
+  try {
+    const { hostname } = new URL(url);
+    return hostname === 'res.cloudinary.com' ? undefined : hostname;
+  } catch {
+    return undefined;
+  }
+}
+
+export function getEditorTransformation(asset: CloudinaryAsset): string | undefined {
+  return asset.raw_transformation ?? asset.original_raw_transformation;
+}
+
+export function buildDeliveryUrl(
+  installationParams: AppInstallationParameters,
+  asset: CloudinaryAsset,
+  rawTransformation: string,
+  referenceUrl?: string
+): string {
+  const reference = referenceUrl ?? asset.original_secure_url ?? asset.secure_url ?? asset.url;
+  const deliveryHostname = reference ? getDeliveryHostname(reference) : undefined;
+
+  const config: Record<string, string | boolean> = {
+    cloud_name: installationParams.cloudName,
+    api_key: installationParams.apiKey,
+  };
+  if (deliveryHostname) {
+    config.cname = deliveryHostname;
+    config.secure_distribution = deliveryHostname;
+    config.private_cdn = true;
+  }
+
+  const cloudinary = new cloudinaryCore(config);
+  const options: Record<string, string | boolean> = {
+    type: asset.type,
+    rawTransformation: rawTransformation,
+    secure: !reference?.startsWith('http:'),
+  };
+  if (asset.version != null) {
+    options.version = String(asset.version);
+  }
+
+  let url = cloudinary.url(asset.public_id, options);
+  if (reference?.startsWith('http:')) {
+    url = url.replace(/^https:/, 'http:');
+  }
+  return url;
+}
+
+export function createEditedAsset(asset: CloudinaryAsset, installationParams: AppInstallationParameters, rawTransformation: string): CloudinaryAsset {
+  const referenceUrl = asset.original_secure_url ?? asset.secure_url ?? asset.url;
+  const secureUrl = buildDeliveryUrl(installationParams, asset, rawTransformation, referenceUrl);
+  const url = secureUrl.replace(/^https:/, 'http:');
+
+  const preservedOriginals = asset.original_secure_url
+    ? {}
+    : {
+        original_secure_url: asset.secure_url,
+        original_url: asset.url,
+        original_raw_transformation: asset.raw_transformation,
+      };
+
+  return {
+    ...asset,
+    ...preservedOriginals,
+    raw_transformation: rawTransformation,
+    secure_url: secureUrl,
+    url,
+  };
+}
 
 export function extractAsset(asset: MediaLibraryResultAsset): CloudinaryAsset {
   let res = pick(asset, FIELDS_TO_PERSIST) as CloudinaryAsset;

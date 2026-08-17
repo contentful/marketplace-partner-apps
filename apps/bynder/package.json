@@ -12,14 +12,14 @@
     "jest": "^30.4.2",
     "node-fetch": "^3.3.2",
     "prettier": "^3.8.4",
-    "ts-jest": "^29.4.11",
+    "ts-jest": "^29.4.12",
     "vite": "^8.0.16"
   },
   "dependencies": {
     "@contentful/app-sdk": "^4.58.2",
     "@contentful/dam-app-base": "^3.0.9",
     "@contentful/f36-components": "^4.80.0",
-    "@contentful/f36-icons": "^4.29.0",
+    "@contentful/f36-icons": "^4.29.1",
     "@contentful/node-apps-toolkit": "^3.15.0",
     "@contentful/react-apps-toolkit": "^1.2.19",
     "contentful-management": "^11.66.0",
