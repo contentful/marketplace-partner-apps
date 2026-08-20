@@ -1,0 +1,61 @@
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'primaryColor': '#0F7CFF',
+    'primaryTextColor': '#FFFFFF',
+    'primaryBorderColor': '#0F7CFF',
+    'secondaryColor': '#F5F7FB',
+    'secondaryTextColor': '#0F172A',
+    'tertiaryColor': '#22C3FF',
+    'lineColor': '#0F7CFF',
+    'fontSize': '14px',
+    'fontFamily': 'Inter, system-ui, sans-serif'
+  }
+}}%%
+
+flowchart TD
+    classDef input fill:#0F172A,stroke:#0F172A,color:#FFFFFF,stroke-width:2px,font-weight:bold
+    classDef layer1 fill:#0F7CFF,stroke:#0F7CFF,color:#FFFFFF,stroke-width:2px,font-weight:bold
+    classDef layer2 fill:#22C3FF,stroke:#22C3FF,color:#0F172A,stroke-width:2px,font-weight:bold
+    classDef layer3 fill:#0F7CFF,stroke:#0F7CFF,color:#FFFFFF,stroke-width:2px,font-weight:bold
+    classDef layer4 fill:#059669,stroke:#059669,color:#FFFFFF,stroke-width:2px,font-weight:bold
+    classDef output fill:#0F172A,stroke:#0F172A,color:#FFFFFF,stroke-width:2px,font-weight:bold
+    classDef detail fill:#F5F7FB,stroke:#D8DDE3,color:#5F6B7B,stroke-width:1px
+
+    INPUT["📄 Contentful Entry<br/>Editor clicks Classify with AI"]:::input
+
+    INPUT --> L1
+
+    subgraph L1BOX [" "]
+        direction LR
+        L1["LAYER 1<br/>Signal Detection"]:::layer1
+        L1D["URL patterns • CTA phrases<br/>Content structure • Language"]:::detail
+    end
+
+    L1BOX --> L2BOX
+
+    subgraph L2BOX [" "]
+        direction LR
+        L2["LAYER 2<br/>Company Enrichment"]:::layer2
+        L2D["Brand extraction • Industry mapping<br/>Company size • Seed data + Gemini search"]:::detail
+    end
+
+    L2BOX --> L3BOX
+
+    subgraph L3BOX [" "]
+        direction LR
+        L3["LAYER 3<br/>AI Classification"]:::layer3
+        L3D["Gemini reads full content<br/>Classifies 12 taxonomy fields<br/>Returns confidence scores"]:::detail
+    end
+
+    L3BOX --> L4BOX
+
+    subgraph L4BOX [" "]
+        direction LR
+        L4["LAYER 4<br/>Quality Overrides"]:::layer4
+        L4D["Human corrections • Business rules<br/>Consistency checks • Feedback loop"]:::detail
+    end
+
+    L4BOX --> OUTPUT
+
+    OUTPUT["✅ 12 Classified Fields<br/>98% Accuracy → Published to Taxonomy"]:::output

@@ -1,0 +1,108 @@
+{
+  "_comment": "Committed seed corrections — the source-of-truth plan for taxonomy fields that have been human-verified. feedbackStore.ts loads this as a baseline; runtime overrides in .cache/feedback-corrections.json merge on top. Add corrections here when you want them to persist across environments and CI runs.",
+  "hclvhMBxnJbxq8OQQv7HN": {
+    "entryId": "hclvhMBxnJbxq8OQQv7HN",
+    "title": "Contentful Platform",
+    "url": "/products/platform",
+    "correctedAt": "2026-03-03T00:00:00Z",
+    "correctedBy": "classifier-loop",
+    "notes": "Generic horizontal SaaS product page. Industry = Software/IT regardless of logo mentions (BMW/Target logos are proof points, not vertical signals). Topic = Headless CMS (core value prop). Buyers are Content and IT teams at Director level. Funnel = BOFU (Contact Sales CTA).",
+    "fields": {
+      "industry": ["Software, IT & Technology"],
+      "topic": ["Headless CMS"],
+      "funnelStage": "Evaluation/Engagement (BOFU)",
+      "jobFunction": ["Content", "IT/Engineering"],
+      "jobLevel": ["Director", "VP"]
+    }
+  },
+  "2t9rt3rGNWRzzjD860ZGcN": {
+    "entryId": "2t9rt3rGNWRzzjD860ZGcN",
+    "title": "Contentful Studio",
+    "url": "/products/studio",
+    "correctedAt": "2026-03-03T00:00:00Z",
+    "correctedBy": "classifier-loop",
+    "notes": "Studio is the visual content editing product. Topic = Content operations (editorial workflow, visual editing). Buyers are Content teams. Industry = Software/IT. Funnel = BOFU.",
+    "fields": {
+      "industry": ["Software, IT & Technology"],
+      "topic": ["Content operations"],
+      "funnelStage": "Evaluation/Engagement (BOFU)",
+      "jobFunction": ["Content"],
+      "jobLevel": ["Director", "Manager"]
+    }
+  },
+  "4k1s2LLivgOmEoBW0oIYa2": {
+    "entryId": "4k1s2LLivgOmEoBW0oIYa2",
+    "title": "Contentful AI Actions",
+    "url": "/products/ai-actions",
+    "correctedAt": "2026-03-03T00:00:00Z",
+    "correctedBy": "classifier-loop",
+    "notes": "AI Actions is Contentful's AI automation product. Topic = Artificial intelligence (AI) unambiguously — not Personalization, even though the page mentions personalization workflows as a use case. Buyers are Content and IT teams. Funnel = BOFU.",
+    "fields": {
+      "industry": ["Software, IT & Technology"],
+      "topic": ["Artificial intelligence (AI)"],
+      "funnelStage": "Evaluation/Engagement (BOFU)",
+      "jobFunction": ["Content", "IT/Engineering"],
+      "jobLevel": ["Director", "Manager"]
+    }
+  },
+  "157frRcpp3idwV1s1831V6": {
+    "entryId": "157frRcpp3idwV1s1831V6",
+    "title": "Contentful Ecosystem",
+    "url": "/products/ecosystem",
+    "correctedAt": "2026-03-03T00:00:00Z",
+    "correctedBy": "classifier-loop",
+    "notes": "Ecosystem page is about integrations and partner apps. Topic = Integrations. Buyers are IT/Engineering (developer integrations). Industry = Software/IT. Funnel = BOFU (Contact Sales CTA, not Consideration).",
+    "fields": {
+      "industry": ["Software, IT & Technology"],
+      "topic": ["Integrations"],
+      "funnelStage": "Evaluation/Engagement (BOFU)",
+      "jobFunction": ["IT/Engineering"],
+      "jobLevel": ["Director", "Manager"]
+    }
+  },
+  "5yRQig0lpBHEYEvAFz54S8": {
+    "entryId": "5yRQig0lpBHEYEvAFz54S8",
+    "title": "Contentful Personalization",
+    "url": "/products/personalization",
+    "correctedAt": "2026-03-03T00:00:00Z",
+    "correctedBy": "classifier-loop",
+    "notes": "Personalization (Ninetailed) product page. Topic = Personalization (not Experimentation). Buyers are Marketing teams (personalization = marketing/growth function, not content). Industry = Software/IT. Funnel = BOFU.",
+    "fields": {
+      "industry": ["Software, IT & Technology"],
+      "topic": ["Personalization"],
+      "funnelStage": "Evaluation/Engagement (BOFU)",
+      "jobFunction": ["Marketing"],
+      "jobLevel": ["Director", "VP"]
+    }
+  },
+  "3AUXJjWMUVyMT9oJRE5EZx": {
+    "entryId": "3AUXJjWMUVyMT9oJRE5EZx",
+    "title": "Contentful Analytics",
+    "url": "/products/analytics",
+    "correctedAt": "2026-03-03T00:00:00Z",
+    "correctedBy": "classifier-loop",
+    "notes": "Analytics product page. Topic = Analytics. Buyers are Marketing and Content teams tracking content performance. Industry = Software/IT. Funnel = BOFU.",
+    "fields": {
+      "industry": ["Software, IT & Technology"],
+      "topic": ["Analytics"],
+      "funnelStage": "Evaluation/Engagement (BOFU)",
+      "jobFunction": ["Marketing", "Content"],
+      "jobLevel": ["Director", "Manager"]
+    }
+  },
+  "36Nrw1F5VZ74VOIZgHEhMm": {
+    "entryId": "36Nrw1F5VZ74VOIZgHEhMm",
+    "title": "Contentful Front-end Hosting",
+    "url": "/products/hosting",
+    "correctedAt": "2026-03-03T00:00:00Z",
+    "correctedBy": "classifier-loop",
+    "notes": "Hosting/deployment capability page. Topic = Deployment (not Integrations). Buyers are Developers/Engineering (frontend deployment is a dev function). Industry = Software/IT. Funnel = BOFU.",
+    "fields": {
+      "industry": ["Software, IT & Technology"],
+      "topic": ["Deployment"],
+      "funnelStage": "Evaluation/Engagement (BOFU)",
+      "jobFunction": ["IT/Engineering"],
+      "jobLevel": ["Director", "Manager"]
+    }
+  }
+}

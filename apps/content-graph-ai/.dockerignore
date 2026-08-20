@@ -1,0 +1,11 @@
+.git
+.github
+node_modules
+docs/evidence
+tmp
+coverage
+.DS_Store
+.env
+.env.*
+governance-template.zip
+*.log

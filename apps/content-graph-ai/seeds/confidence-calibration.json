@@ -1,0 +1,326 @@
+{
+  "version": "2026-03-19-calibration-v21",
+  "notes": "Data-backing no longer gates needsReview. Calibration progress shown as [info] advisory with real reviewed count.",
+  "generatedAt": "2026-03-16T15:10:48.094Z",
+  "source": {
+    "historyEntries": 24,
+    "correctionEntries": 9,
+    "overlapEntries": 9,
+    "bandCount": 5,
+    "priorWeight": 3
+  },
+  "overall": {
+    "sampleSize": 9,
+    "exactAccuracy": 0.8889,
+    "averageRawConfidence": 0.94,
+    "bands": [
+      {
+        "min": 0,
+        "max": 0.2,
+        "sampleSize": 0,
+        "matches": 0,
+        "rawMean": 0.1,
+        "empiricalAccuracy": 0.8889,
+        "smoothedAccuracy": 0.8889
+      },
+      {
+        "min": 0.2,
+        "max": 0.4,
+        "sampleSize": 0,
+        "matches": 0,
+        "rawMean": 0.3,
+        "empiricalAccuracy": 0.8889,
+        "smoothedAccuracy": 0.8889
+      },
+      {
+        "min": 0.4,
+        "max": 0.6,
+        "sampleSize": 0,
+        "matches": 0,
+        "rawMean": 0.5,
+        "empiricalAccuracy": 0.8889,
+        "smoothedAccuracy": 0.8889
+      },
+      {
+        "min": 0.6,
+        "max": 0.8,
+        "sampleSize": 0,
+        "matches": 0,
+        "rawMean": 0.7,
+        "empiricalAccuracy": 0.8889,
+        "smoothedAccuracy": 0.8889
+      },
+      {
+        "min": 0.8,
+        "max": 1,
+        "sampleSize": 9,
+        "matches": 8,
+        "rawMean": 0.94,
+        "empiricalAccuracy": 0.8889,
+        "smoothedAccuracy": 0.8889
+      }
+    ]
+  },
+  "fields": {
+    "funnelStage": {
+      "sampleSize": 8,
+      "exactAccuracy": 0.875,
+      "averageRawConfidence": 0.985,
+      "bands": [
+        {
+          "min": 0,
+          "max": 0.2,
+          "sampleSize": 0,
+          "matches": 0,
+          "rawMean": 0.1,
+          "empiricalAccuracy": 0.875,
+          "smoothedAccuracy": 0.875
+        },
+        {
+          "min": 0.2,
+          "max": 0.4,
+          "sampleSize": 0,
+          "matches": 0,
+          "rawMean": 0.3,
+          "empiricalAccuracy": 0.875,
+          "smoothedAccuracy": 0.875
+        },
+        {
+          "min": 0.4,
+          "max": 0.6,
+          "sampleSize": 0,
+          "matches": 0,
+          "rawMean": 0.5,
+          "empiricalAccuracy": 0.875,
+          "smoothedAccuracy": 0.875
+        },
+        {
+          "min": 0.6,
+          "max": 0.8,
+          "sampleSize": 0,
+          "matches": 0,
+          "rawMean": 0.7,
+          "empiricalAccuracy": 0.875,
+          "smoothedAccuracy": 0.875
+        },
+        {
+          "min": 0.8,
+          "max": 1,
+          "sampleSize": 8,
+          "matches": 7,
+          "rawMean": 0.985,
+          "empiricalAccuracy": 0.875,
+          "smoothedAccuracy": 0.875
+        }
+      ]
+    },
+    "industry": {
+      "sampleSize": 8,
+      "exactAccuracy": 1,
+      "averageRawConfidence": 0.99,
+      "bands": [
+        {
+          "min": 0,
+          "max": 0.2,
+          "sampleSize": 0,
+          "matches": 0,
+          "rawMean": 0.1,
+          "empiricalAccuracy": 1,
+          "smoothedAccuracy": 1
+        },
+        {
+          "min": 0.2,
+          "max": 0.4,
+          "sampleSize": 0,
+          "matches": 0,
+          "rawMean": 0.3,
+          "empiricalAccuracy": 1,
+          "smoothedAccuracy": 1
+        },
+        {
+          "min": 0.4,
+          "max": 0.6,
+          "sampleSize": 0,
+          "matches": 0,
+          "rawMean": 0.5,
+          "empiricalAccuracy": 1,
+          "smoothedAccuracy": 1
+        },
+        {
+          "min": 0.6,
+          "max": 0.8,
+          "sampleSize": 0,
+          "matches": 0,
+          "rawMean": 0.7,
+          "empiricalAccuracy": 1,
+          "smoothedAccuracy": 1
+        },
+        {
+          "min": 0.8,
+          "max": 1,
+          "sampleSize": 8,
+          "matches": 8,
+          "rawMean": 0.99,
+          "empiricalAccuracy": 1,
+          "smoothedAccuracy": 1
+        }
+      ]
+    },
+    "jobFunction": {
+      "sampleSize": 7,
+      "exactAccuracy": 1,
+      "averageRawConfidence": 0.99,
+      "bands": [
+        {
+          "min": 0,
+          "max": 0.2,
+          "sampleSize": 0,
+          "matches": 0,
+          "rawMean": 0.1,
+          "empiricalAccuracy": 1,
+          "smoothedAccuracy": 1
+        },
+        {
+          "min": 0.2,
+          "max": 0.4,
+          "sampleSize": 0,
+          "matches": 0,
+          "rawMean": 0.3,
+          "empiricalAccuracy": 1,
+          "smoothedAccuracy": 1
+        },
+        {
+          "min": 0.4,
+          "max": 0.6,
+          "sampleSize": 0,
+          "matches": 0,
+          "rawMean": 0.5,
+          "empiricalAccuracy": 1,
+          "smoothedAccuracy": 1
+        },
+        {
+          "min": 0.6,
+          "max": 0.8,
+          "sampleSize": 0,
+          "matches": 0,
+          "rawMean": 0.7,
+          "empiricalAccuracy": 1,
+          "smoothedAccuracy": 1
+        },
+        {
+          "min": 0.8,
+          "max": 1,
+          "sampleSize": 7,
+          "matches": 7,
+          "rawMean": 0.99,
+          "empiricalAccuracy": 1,
+          "smoothedAccuracy": 1
+        }
+      ]
+    },
+    "jobLevel": {
+      "sampleSize": 7,
+      "exactAccuracy": 1,
+      "averageRawConfidence": 0.99,
+      "bands": [
+        {
+          "min": 0,
+          "max": 0.2,
+          "sampleSize": 0,
+          "matches": 0,
+          "rawMean": 0.1,
+          "empiricalAccuracy": 1,
+          "smoothedAccuracy": 1
+        },
+        {
+          "min": 0.2,
+          "max": 0.4,
+          "sampleSize": 0,
+          "matches": 0,
+          "rawMean": 0.3,
+          "empiricalAccuracy": 1,
+          "smoothedAccuracy": 1
+        },
+        {
+          "min": 0.4,
+          "max": 0.6,
+          "sampleSize": 0,
+          "matches": 0,
+          "rawMean": 0.5,
+          "empiricalAccuracy": 1,
+          "smoothedAccuracy": 1
+        },
+        {
+          "min": 0.6,
+          "max": 0.8,
+          "sampleSize": 0,
+          "matches": 0,
+          "rawMean": 0.7,
+          "empiricalAccuracy": 1,
+          "smoothedAccuracy": 1
+        },
+        {
+          "min": 0.8,
+          "max": 1,
+          "sampleSize": 7,
+          "matches": 7,
+          "rawMean": 0.99,
+          "empiricalAccuracy": 1,
+          "smoothedAccuracy": 1
+        }
+      ]
+    },
+    "topic": {
+      "sampleSize": 7,
+      "exactAccuracy": 1,
+      "averageRawConfidence": 0.99,
+      "bands": [
+        {
+          "min": 0,
+          "max": 0.2,
+          "sampleSize": 0,
+          "matches": 0,
+          "rawMean": 0.1,
+          "empiricalAccuracy": 1,
+          "smoothedAccuracy": 1
+        },
+        {
+          "min": 0.2,
+          "max": 0.4,
+          "sampleSize": 0,
+          "matches": 0,
+          "rawMean": 0.3,
+          "empiricalAccuracy": 1,
+          "smoothedAccuracy": 1
+        },
+        {
+          "min": 0.4,
+          "max": 0.6,
+          "sampleSize": 0,
+          "matches": 0,
+          "rawMean": 0.5,
+          "empiricalAccuracy": 1,
+          "smoothedAccuracy": 1
+        },
+        {
+          "min": 0.6,
+          "max": 0.8,
+          "sampleSize": 0,
+          "matches": 0,
+          "rawMean": 0.7,
+          "empiricalAccuracy": 1,
+          "smoothedAccuracy": 1
+        },
+        {
+          "min": 0.8,
+          "max": 1,
+          "sampleSize": 7,
+          "matches": 7,
+          "rawMean": 0.99,
+          "empiricalAccuracy": 1,
+          "smoothedAccuracy": 1
+        }
+      ]
+    }
+  }
+}
