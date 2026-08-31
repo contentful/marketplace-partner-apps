@@ -24,7 +24,13 @@ export interface ConfirmationModel {
 export interface ExperienceConfirmationProps {
     model: ConfirmationModel
     initialVariant?: EmbedVariant
-    onInsert: (embedCode: string, variant: EmbedVariant) => void
+    // Emits only the embed code, not the variant that produced it. Which
+    // variant an entry is stored in is re-derived from the stored markup by
+    // classifyVariant, and that is the only answer that survives a reload —
+    // the entry model has no field to persist a variant in. Handing callers a
+    // second, session-only source of truth would make refresh and preselect
+    // behave differently on a freshly inserted entry than on a reopened one.
+    onInsert: (embedCode: string) => void
     onBack: () => void
     insertLabel?: string
     isBusy?: boolean
@@ -167,7 +173,7 @@ export function ExperienceConfirmation({
                         </Button>
                         <Button
                             variant="positive"
-                            onClick={() => onInsert(selectedCode, selected)}
+                            onClick={() => onInsert(selectedCode)}
                             isDisabled={!selectedCode || isBusy}
                             isLoading={isBusy}
                         >

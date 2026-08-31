@@ -92,7 +92,7 @@ describe('ExperienceConfirmation', () => {
         )
         fireEvent.click(screen.getByLabelText(/embed script/i))
         fireEvent.click(screen.getByRole('button', { name: /insert/i }))
-        expect(onInsert).toHaveBeenCalledWith('<div data-flex-inline></div>', 'inline')
+        expect(onInsert).toHaveBeenCalledWith('<div data-flex-inline></div>')
     })
 
     it('preselects initialVariant when given', () => {
