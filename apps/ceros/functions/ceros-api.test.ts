@@ -129,6 +129,150 @@ describe('ceros-api function — getFolderExperiences request', () => {
     })
 })
 
+// folderId, resourceId and the account's own resourceId are the only values in
+// this file that get interpolated into a REST *path* rather than a query param.
+// URLSearchParams percent-encodes everything it emits, so the query side is
+// safe by construction; the path side is not, because `new URL()` resolves
+// dot segments when it parses. The picker UI never sends such a value, but the
+// app action is CMA-invokable, exactly like the pasted-URL host gate above, so
+// the segment has to be validated here rather than trusted from the caller.
+describe('ceros-api function — path segment validation', () => {
+    beforeEach(() => vi.stubGlobal('fetch', vi.fn()))
+    afterEach(() => vi.unstubAllGlobals())
+
+    // A dot-segment escape, the encoded form of one, and every character class
+    // that could otherwise split a path, open a query, start a fragment, or
+    // introduce percent-encoding. `%2f` matters on its own: it does NOT get
+    // normalised by new URL(), so it survives to the origin, where the gateway
+    // may decode it — which is why the guard is a character-class allowlist
+    // rather than a check for literal '/'.
+    const SMUGGLED_IDS: Array<[string, string]> = [
+        ['dot-segment escape', '../accounts/current-account'],
+        ['nested dot-segment escape', '../../accounts/current-account'],
+        ['encoded slash', '..%2f..%2faccounts'],
+        ['literal slash', 'f1/experiences/other'],
+        ['query injection', 'f1?filter=draft'],
+        ['fragment injection', 'f1#frag'],
+        ['percent encoding', 'f1%2e%2e'],
+        ['bare dot segment', '.'],
+        ['leading slash', '/accounts'],
+        ['whitespace', 'f1 f2'],
+        ['newline', 'f1\nf2'],
+        ['empty string', ''],
+    ]
+
+    describe('getFolderExperiences rejects a smuggled folderId before any request', () => {
+        it.each(SMUGGLED_IDS)('%s', async (_label, folderId) => {
+            const result = await handler(
+                makeEvent({ action: 'getFolderExperiences', folderId }),
+                makeContext('key') as any
+            )
+            expect(String(result.error)).toContain('folderId')
+            expect(fetch).not.toHaveBeenCalled()
+        })
+    })
+
+    describe('getEmbedCode rejects a smuggled resourceId before any request', () => {
+        it.each(SMUGGLED_IDS)('%s', async (_label, resourceId) => {
+            const result = await handler(
+                makeEvent({ action: 'getEmbedCode', resourceId }),
+                makeContext('key') as any
+            )
+            expect(String(result.error)).toContain('resourceId')
+            expect(fetch).not.toHaveBeenCalled()
+        })
+    })
+
+    it('rejects a non-string folderId rather than stringifying it into the path', async () => {
+        // The app-action body is JSON from an untrusted caller, so the declared
+        // `folderId?: string` type is a claim, not a guarantee.
+        for (const folderId of [42, true, null, { toString: () => '../accounts' }, ['../accounts']]) {
+            const result = await handler(
+                makeEvent({ action: 'getFolderExperiences', folderId: folderId as any }),
+                makeContext('key') as any
+            )
+            expect(String(result.error)).toContain('folderId')
+        }
+        expect(fetch).not.toHaveBeenCalled()
+    })
+
+    it('rejects an over-long id', async () => {
+        const result = await handler(
+            makeEvent({ action: 'getFolderExperiences', folderId: 'a'.repeat(129) }),
+            makeContext('key') as any
+        )
+        expect(String(result.error)).toContain('folderId')
+        expect(fetch).not.toHaveBeenCalled()
+    })
+
+    // The guard has to admit real IDs, not just reject bad ones — a
+    // reject-everything regex would pass every test above while breaking the
+    // picker entirely. Resource IDs are opaque, so the allowlist is deliberately
+    // wider than any shape we happen to have seen; these cover the character
+    // classes it must keep accepting.
+    it.each([
+        ['a hyphenated id', 'abc12345-x0f1e2d3c4b5a'],
+        ['an all-hex id', 'deadbeef'],
+        ['an underscored id', 'folder_1'],
+        ['a mixed-case id', 'AbC123'],
+        ['a 128-character id', 'a'.repeat(128)],
+    ])('accepts %s and puts it in the path verbatim', async (_label, folderId) => {
+        vi.mocked(fetch).mockResolvedValue(jsonOk({ resources: [], paging: null }) as any)
+
+        const result = await handler(
+            makeEvent({ action: 'getFolderExperiences', folderId }),
+            makeContext('key') as any
+        )
+
+        expect(result.error).toBeUndefined()
+        const url = new URL(String(vi.mocked(fetch).mock.calls[0][0]))
+        // Asserting the parsed pathname, not the raw string, is the point: the
+        // parse is where a dot-segment escape would have collapsed.
+        expect(url.pathname).toBe(`/folders/${folderId}/experiences`)
+        expect(url.origin).toBe('https://rest.ceros.com')
+    })
+
+    it('accepts a real-shaped resource id for getEmbedCode', async () => {
+        vi.mocked(fetch).mockResolvedValue(jsonOk({ viewUrl: '', title: '' }) as any)
+
+        await handler(
+            makeEvent({ action: 'getEmbedCode', resourceId: 'abc12345-x0f1e2d3c4b5a' }),
+            makeContext('key') as any
+        )
+
+        const url = new URL(String(vi.mocked(fetch).mock.calls[0][0]))
+        expect(url.pathname).toBe('/experiences/abc12345-x0f1e2d3c4b5a/embed-codes')
+    })
+
+    // The account id is second-hop: it comes back from /accounts/current-account
+    // rather than from the caller, so this is defence in depth against a
+    // compromised or misbehaving upstream, mirroring how resolveExperience
+    // re-validates the x-flex-manifest header value before fetching it.
+    it('rejects a malformed accountResourceId from the upstream account response', async () => {
+        vi.mocked(fetch).mockResolvedValueOnce(
+            jsonOk({ accountResourceId: '../../some-other-account' }) as any
+        )
+
+        const result = await handler(makeEvent({ action: 'getFolderTree' }), makeContext('key') as any)
+
+        expect(String(result.error)).toContain('account resource ID')
+        // The account lookup happened; the folder-tree request did not.
+        expect(vi.mocked(fetch)).toHaveBeenCalledTimes(1)
+    })
+
+    it('builds the folder-tree path from a well-formed accountResourceId', async () => {
+        vi.mocked(fetch)
+            .mockResolvedValueOnce(jsonOk({ accountResourceId: 'def67890-x9a8b7c6d5e4f' }) as any)
+            .mockResolvedValueOnce(jsonOk({ resources: [] }) as any)
+
+        await handler(makeEvent({ action: 'getFolderTree' }), makeContext('key') as any)
+
+        const url = new URL(String(vi.mocked(fetch).mock.calls[1][0]))
+        expect(url.pathname).toBe('/accounts/def67890-x9a8b7c6d5e4f/folder-tree')
+        expect(url.searchParams.get('depth')).toBe('2')
+    })
+})
+
 const MANIFEST_URL = 'https://myaccount.ceros.site/flex-experience/manifest.v1.json'
 // Deliberately a different path than FLEX_PAGE + '/manifest.v1.json', so a
 // concatenating implementation can't accidentally match it.

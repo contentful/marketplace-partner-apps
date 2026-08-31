@@ -71,6 +71,17 @@ function parseQuery(action: string, rawQuery: unknown): URLSearchParams {
   return params
 }
 
+// Path segments are interpolated into the REST path, so they must not be able
+// to escape it. Resource IDs are opaque: the API publishes no format to
+// validate against, and IDs issued at different times need not share a shape.
+// So gate on the character class rather than a pattern — it admits any opaque
+// ID the API can hand back, and rejects every character that could smuggle a
+// path (/ ? # % . whitespace).
+const RESOURCE_ID = /^[A-Za-z0-9_-]{1,128}$/
+function isResourceId(value: unknown): value is string {
+  return typeof value === 'string' && RESOURCE_ID.test(value)
+}
+
 // ── API helpers ──────────────────────────────────────────────────────────────
 
 const BASE_URL = 'https://rest.ceros.com'
@@ -293,7 +304,7 @@ async function run(
       if (accountResp._error) return { error: accountResp._error }
 
       const { accountResourceId } = accountResp
-      if (!accountResourceId) return { error: 'Could not determine account resource ID.' }
+      if (!isResourceId(accountResourceId)) return { error: 'Could not determine account resource ID.' }
 
       const qs = parseQuery('getFolderTree', query)
       if (!qs.has('depth')) qs.set('depth', '2') // depth is required by the API
@@ -309,7 +320,7 @@ async function run(
     case 'getFolderExperiences': {
       const apiKey = requireApiKey(context)
       if (!apiKey) return { error: NO_API_KEY_ERROR }
-      if (!folderId) return { error: 'folderId is required' }
+      if (!isResourceId(folderId)) return { error: 'folderId is required' }
 
       const qs = parseQuery('getFolderExperiences', query)
       qs.set('filter', 'published') // only published experiences are selectable
@@ -326,7 +337,7 @@ async function run(
     case 'getEmbedCode': {
       const apiKey = requireApiKey(context)
       if (!apiKey) return { error: NO_API_KEY_ERROR }
-      if (!resourceId) return { error: 'resourceId is required' }
+      if (!isResourceId(resourceId)) return { error: 'resourceId is required' }
 
       const resp = await cerosGet(`/experiences/${resourceId}/embed-codes`, apiKey)
       if (resp._error) return { error: resp._error }
