@@ -16,6 +16,10 @@ export interface AppInstallationParameters {
     titleFieldId: string
     urlFieldId: string
     embedCodeFieldId: string
+    // `cerosApiKey` is a Secret installation parameter on the App Definition. Reads from the
+    // browser (sdk.app.getParameters, sdk.parameters.installation) come back REDACTED — a mask,
+    // not the key — so its presence means "a key is stored" and its value means nothing. Only
+    // the Contentful Function sees the real value, via context.appInstallationParameters.
     cerosApiKey?: string
 }
 
@@ -37,20 +41,48 @@ const ConfigScreen = () => {
         titleFieldId: '',
         urlFieldId: '',
         embedCodeFieldId: '',
-        cerosApiKey: '',
     })
+
+    // The API key is kept out of `parameters` so it can never be saved by accident. What we load
+    // back is Contentful's fixed-width mask, not the key — the config screen cannot read the real
+    // value at all. `storedApiKey` holds that mask (empty when no key is stored) and `apiKeyInput`
+    // holds whatever the user typed this session.
+    const [storedApiKey, setStoredApiKey] = useState<string>('')
+    const [apiKeyInput, setApiKeyInput] = useState<string>('')
+    const hasStoredApiKey = Boolean(storedApiKey)
+
+    // Reads what is actually stored and syncs local state to it.
+    const loadParameters = useCallback(async () => {
+        const currentParameters = await sdk.app.getParameters()
+        const { cerosApiKey, ...rest } = (currentParameters ?? {}) as AppInstallationParameters
+
+        if (currentParameters) {
+            setParameters(rest)
+        }
+        // Presence, not value — the mask is truthy but is not the key.
+        setStoredApiKey(cerosApiKey ?? '')
+        setApiKeyInput('')
+    }, [sdk])
 
     useEffect(() => {
         ;(async () => {
-            const currentParameters = await sdk.app.getParameters()
-            if (currentParameters) {
-                setParameters(currentParameters as AppInstallationParameters)
-            }
+            await loadParameters()
 
             sdk.app.setReady()
             console.debug('Ceros app marked as ready.')
         })()
-    }, [sdk])
+    }, [sdk, loadParameters])
+
+    // Re-read after every save. Without this, "an API key is already saved" keeps reporting the
+    // state as of page load and can outlive the key it describes — the hint stays reassuring while
+    // the stored key is gone.
+    useEffect(() => {
+        sdk.app.onConfigurationCompleted((error) => {
+            if (!error) {
+                loadParameters()
+            }
+        })
+    }, [sdk, loadParameters])
 
     // State to store content types
     const [allContentTypes, setAllContentTypes] = useState<ContentTypeProps[]>([])
@@ -63,13 +95,18 @@ const ConfigScreen = () => {
 
     // Handles when a user clicks either "Install" or "Save" but before an app is installed or updated
     const onConfigure = useCallback(async () => {
-        if (parameters.contentTypeId === createDefaultContentTypeValue) {
+        // Build the saved values locally rather than mutating `parameters` in place, and return a
+        // payload assembled field by field. Returning the state object verbatim is what would let
+        // a redacted API key be written back over the real one.
+        let { contentTypeId, titleFieldId, urlFieldId, embedCodeFieldId } = parameters
+
+        if (contentTypeId === createDefaultContentTypeValue) {
             // Create default content type
             try {
-                parameters.contentTypeId = await createDefaultContentType(sdk, cma)
-                parameters.titleFieldId = DEFAULT_CONTENT_TYPE.fields[0].id
-                parameters.urlFieldId = DEFAULT_CONTENT_TYPE.fields[1].id
-                parameters.embedCodeFieldId = DEFAULT_CONTENT_TYPE.fields[2].id
+                contentTypeId = await createDefaultContentType(sdk, cma)
+                titleFieldId = DEFAULT_CONTENT_TYPE.fields[0].id
+                urlFieldId = DEFAULT_CONTENT_TYPE.fields[1].id
+                embedCodeFieldId = DEFAULT_CONTENT_TYPE.fields[2].id
                 fetchAllContentTypes(cma, sdk.ids.space, sdk.ids.environment, setAllContentTypes)
             } catch (error) {
                 handleError(
@@ -79,18 +116,13 @@ const ConfigScreen = () => {
                 )
                 return false
             }
-        } else if (
-            !parameters.contentTypeId ||
-            !parameters.titleFieldId ||
-            !parameters.urlFieldId ||
-            !parameters.embedCodeFieldId
-        ) {
+        } else if (!contentTypeId || !titleFieldId || !urlFieldId || !embedCodeFieldId) {
             handleError('All fields must be filled out before saving.', setErrorMessage)
             return false
         } else if (
-            parameters.titleFieldId === parameters.embedCodeFieldId ||
-            parameters.titleFieldId === parameters.urlFieldId ||
-            parameters.embedCodeFieldId === parameters.urlFieldId
+            titleFieldId === embedCodeFieldId ||
+            titleFieldId === urlFieldId ||
+            embedCodeFieldId === urlFieldId
         ) {
             handleError('Title field, embed code field, and URL field cannot be the same.', setErrorMessage)
             return false
@@ -104,7 +136,7 @@ const ConfigScreen = () => {
                 state = {
                     EditorInterface: {
                         ...state?.EditorInterface,
-                        [parameters.contentTypeId]: {
+                        [contentTypeId]: {
                             editors: { position: 0 },
                         },
                     },
@@ -119,12 +151,30 @@ const ConfigScreen = () => {
             }
         }
 
+        const savedParameters: AppInstallationParameters = {
+            contentTypeId,
+            titleFieldId,
+            urlFieldId,
+            embedCodeFieldId,
+        }
+
+        // Send the typed key when there is one. When there isn't, send back the mask we loaded:
+        // omitting the property clears the stored secret (verified against a Secret-declared App
+        // Definition on 2026-08-31), so "leave it out and it will be preserved" is not available
+        // to us. Sending the mask back is the only remaining way to re-save this screen without
+        // destroying a key the screen is not permitted to read.
+        const typedApiKey = apiKeyInput.trim()
+        const apiKeyToSave = typedApiKey || storedApiKey
+        if (apiKeyToSave) {
+            savedParameters.cerosApiKey = apiKeyToSave
+        }
+
         setErrorMessage(null)
         return {
-            parameters: parameters,
+            parameters: savedParameters,
             targetState: state,
         }
-    }, [assignAsEntryEditor, cma, parameters, sdk])
+    }, [apiKeyInput, assignAsEntryEditor, cma, parameters, sdk, storedApiKey])
 
     useEffect(() => {
         sdk.app.onConfigure(() => onConfigure())
@@ -306,11 +356,21 @@ const ConfigScreen = () => {
                         <FormControl.Label>Ceros API Key</FormControl.Label>
                         <TextInput
                             type="password"
-                            value={parameters.cerosApiKey ?? ''}
-                            placeholder="Enter your Ceros REST API key"
-                            onChange={(e) => setParameters((p) => ({ ...p, cerosApiKey: e.target.value }))}
+                            name="cerosApiKey"
+                            testId="ceros-api-key"
+                            value={apiKeyInput}
+                            placeholder={
+                                hasStoredApiKey
+                                    ? 'Leave blank to keep the saved API key'
+                                    : 'Enter your Ceros REST API key'
+                            }
+                            onChange={(e) => setApiKeyInput(e.target.value)}
                         />
-                        <FormControl.HelpText>Contact your Ceros account owner to get your REST API key.</FormControl.HelpText>
+                        <FormControl.HelpText>
+                            {hasStoredApiKey
+                                ? 'An API key is already saved. Leave this blank to keep it, or enter a new key to replace it.'
+                                : 'Contact your Ceros account owner to get your REST API key.'}
+                        </FormControl.HelpText>
                     </FormControl>
                 </Form>
             </Box>
