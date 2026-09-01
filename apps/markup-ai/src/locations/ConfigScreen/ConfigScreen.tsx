@@ -172,9 +172,7 @@ export const ConfigScreen = () => {
         }
         if (!prev[contentTypeId]) return prev;
         // Rebuild without the entry so the params stay tidy when cleared.
-        return Object.fromEntries(
-          Object.entries(prev).filter(([key]) => key !== contentTypeId),
-        ) as ContentTypeSettingsMap;
+        return Object.fromEntries(Object.entries(prev).filter(([key]) => key !== contentTypeId));
       });
     },
     [],

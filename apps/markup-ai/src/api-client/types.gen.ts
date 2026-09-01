@@ -5,7 +5,7 @@ export type ClientOptions = {
     | "https://api.markup.ai"
     | "https://api.stg.markup.ai"
     | "https://api.dev.markup.ai"
-    | "http://localhost:8000"
+    | "https://api.markupai.dev"
     | (string & {});
 };
 
@@ -78,6 +78,22 @@ export type WorkflowStatusResponse = {
    */
   document_ref?: string | null;
   /**
+   * How this check is counted (SUN-1836): 'batch' for a document checked as part of a batch, 'interactive' for a direct /run check.
+   */
+  check_type?: CheckType;
+  /**
+   * Assigned
+   *
+   * Whether the check counts as authoring activity for an author.
+   */
+  assigned?: boolean;
+  /**
+   * Batch Id
+   *
+   * Owning batch id (agbw_<nanoid>); null unless this is a batch check.
+   */
+  batch_id?: string | null;
+  /**
    * Current status
    */
   status: HeliosSharedCortexModelsResponseWorkflowStatus;
@@ -102,6 +118,27 @@ export type WorkflowStatusResponse = {
    */
   completed_at?: string | null;
 };
+
+/**
+ * CheckType
+ *
+ * How a content check should be counted (SUN-1836 / batch spec).
+ *
+ * The type fixes two things about a result: its priority (is someone waiting?)
+ * and its attribution (does it count as authoring activity for a person?).
+ *
+ * - INTERACTIVE: a writer checking content as they work — high priority, assigned.
+ * - AUTOMATED: a save/update check credited to the last editor — assigned.
+ * - BATCH: a bulk check of content you own — assigned to the content's author.
+ * - BASELINE: a check of content you do NOT own — a measurement, not authoring,
+ * so it is not assigned to anyone.
+ */
+export enum CheckType {
+  INTERACTIVE = "interactive",
+  AUTOMATED = "automated",
+  BATCH = "batch",
+  BASELINE = "baseline",
+}
 
 /**
  * WorkflowListResponse
@@ -470,6 +507,14 @@ export type OrganizationResponseFull = {
    */
   style_agent_numeric_scoring?: boolean;
   /**
+   * Allow User Tracking
+   */
+  allow_user_tracking?: boolean;
+  /**
+   * Can Self Extend
+   */
+  can_self_extend?: boolean;
+  /**
    * Trial
    */
   readonly trial: boolean;
@@ -477,6 +522,22 @@ export type OrganizationResponseFull = {
    * Tokens
    */
   readonly tokens: number;
+};
+
+/**
+ * OrganizationConfigUpdate
+ *
+ * Customer-settable slice of the org config (SUN-1820).
+ *
+ * Intentionally a single field: this is the whole write surface of the
+ * self-service `PATCH /account/config`, so an org admin can only ever flip
+ * their team's analytics gate — not any other org setting.
+ */
+export type OrganizationConfigUpdate = {
+  /**
+   * Allow User Tracking
+   */
+  allow_user_tracking: boolean;
 };
 
 /**
@@ -499,6 +560,10 @@ export type OrganizationConfigResponse = {
    * Style Agent Numeric Scoring
    */
   style_agent_numeric_scoring: boolean;
+  /**
+   * Allow User Tracking
+   */
+  allow_user_tracking: boolean;
 };
 
 /**
@@ -654,6 +719,22 @@ export type AgentRunResponse = {
    */
   document_ref?: string | null;
   /**
+   * How this check is counted (SUN-1836): 'batch' for a document checked as part of a batch, 'interactive' for a direct /run check.
+   */
+  check_type?: CheckType;
+  /**
+   * Assigned
+   *
+   * Whether the check counts as authoring activity for an author.
+   */
+  assigned?: boolean;
+  /**
+   * Batch Id
+   *
+   * Owning batch id (agbw_<nanoid>); null unless this is a batch check.
+   */
+  batch_id?: string | null;
+  /**
    * Result
    *
    * Execution result (if completed)
@@ -687,12 +768,6 @@ export type AgentRunResponse = {
  * Request to run an agent.
  */
 export type AgentRunRequest = {
-  /**
-   * Text
-   *
-   * Document text to analyze.
-   */
-  text: string;
   /**
    * Agents
    *
@@ -744,13 +819,13 @@ export type AgentRunRequest = {
   /**
    * Persona Id
    *
-   * Agent configuration UUID for persona selection. Used by: persona.
+   * Agent configuration UUID for persona selection. Used by: persona. Retrieve valid IDs from GET /personas.
    */
   persona_id?: string | null;
   /**
    * Voice Profile Id
    *
-   * Agent configuration UUID for brand voice profile selection. Used by: brand_voice.
+   * Agent configuration UUID for brand voice profile selection. Used by: brand_voice. Retrieve valid IDs from GET /brand-voice-profiles.
    */
   voice_profile_id?: string | null;
   /**
@@ -759,6 +834,12 @@ export type AgentRunRequest = {
    * Optional webhook URL for async result delivery.
    */
   webhook_url?: string | null;
+  /**
+   * Text
+   *
+   * Document text to analyze.
+   */
+  text: string;
 };
 
 /**
@@ -814,6 +895,12 @@ export type AgentMetadata = {
    */
   categories?: Array<string>;
   /**
+   * Cadence
+   *
+   * §2.4 session routing cadence (configured in agents.yaml)
+   */
+  cadence?: "per_chunk" | "per_fragment" | "doc_wide" | "on_demand";
+  /**
    * UI metadata
    */
   ui?: AgentUiMetadata;
@@ -843,9 +930,9 @@ export type ActivityEventRequest = {
   /**
    * Session Id
    *
-   * Client-generated UUID per sidepanel lifecycle
+   * Per-surface session correlation tag. The Chrome extension sends its per-document sidepanel session UUID; integrations without a session concept may omit it, and the handler falls back to the X-Markup-Session-Id header.
    */
-  session_id: string;
+  session_id?: string | null;
   /**
    * Action
    *
@@ -1009,6 +1096,14 @@ export type OrganizationResponseFullWritable = {
    * Style Agent Numeric Scoring
    */
   style_agent_numeric_scoring?: boolean;
+  /**
+   * Allow User Tracking
+   */
+  allow_user_tracking?: boolean;
+  /**
+   * Can Self Extend
+   */
+  can_self_extend?: boolean;
 };
 
 /**
@@ -1325,6 +1420,76 @@ export type AccountGetAccountResponses = {
 
 export type AccountGetAccountResponse =
   AccountGetAccountResponses[keyof AccountGetAccountResponses];
+
+export type AccountGetAccountConfigData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/account/config";
+};
+
+export type AccountGetAccountConfigErrors = {
+  /**
+   * Authentication failed or no valid API key provided.
+   */
+  401: ErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: ErrorResponse;
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type AccountGetAccountConfigError =
+  AccountGetAccountConfigErrors[keyof AccountGetAccountConfigErrors];
+
+export type AccountGetAccountConfigResponses = {
+  /**
+   * Successful Response
+   */
+  200: OrganizationConfigResponse;
+};
+
+export type AccountGetAccountConfigResponse =
+  AccountGetAccountConfigResponses[keyof AccountGetAccountConfigResponses];
+
+export type AccountUpdateAccountConfigData = {
+  body: OrganizationConfigUpdate;
+  path?: never;
+  query?: never;
+  url: "/account/config";
+};
+
+export type AccountUpdateAccountConfigErrors = {
+  /**
+   * Unprocessable Entity
+   */
+  422: ValidationErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type AccountUpdateAccountConfigError =
+  AccountUpdateAccountConfigErrors[keyof AccountUpdateAccountConfigErrors];
+
+export type AccountUpdateAccountConfigResponses = {
+  /**
+   * Successful Response
+   */
+  200: OrganizationConfigResponse;
+};
+
+export type AccountUpdateAccountConfigResponse =
+  AccountUpdateAccountConfigResponses[keyof AccountUpdateAccountConfigResponses];
 
 export type AuthenticationGetUserOrganizationsData = {
   body?: never;
@@ -1764,42 +1929,3 @@ export type CortexAgentsRunAgentResponses = {
 
 export type CortexAgentsRunAgentResponse =
   CortexAgentsRunAgentResponses[keyof CortexAgentsRunAgentResponses];
-
-export type AccountGetAccountConfigData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: "/account/config";
-};
-
-export type AccountGetAccountConfigErrors = {
-  /**
-   * Authentication failed or no valid API key provided.
-   */
-  401: ErrorResponse;
-  /**
-   * Forbidden
-   */
-  403: ErrorResponse;
-  /**
-   * Unprocessable Entity
-   */
-  422: ValidationErrorResponse;
-  /**
-   * Internal Server Error
-   */
-  500: ErrorResponse;
-};
-
-export type AccountGetAccountConfigError =
-  AccountGetAccountConfigErrors[keyof AccountGetAccountConfigErrors];
-
-export type AccountGetAccountConfigResponses = {
-  /**
-   * Successful Response
-   */
-  200: OrganizationConfigResponse;
-};
-
-export type AccountGetAccountConfigResponse =
-  AccountGetAccountConfigResponses[keyof AccountGetAccountConfigResponses];

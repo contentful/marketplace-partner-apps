@@ -457,7 +457,7 @@ export const IssueHighlights = Extension.create<IssueHighlightsOptions>({
               .filter((it) => !visibleSet || visibleSet.has(it.originalIndex))
               .map((it) => ({
                 item: it,
-                issue: state.issues[it.originalIndex] as CortexIssueWithId | undefined,
+                issue: state.issues.at(it.originalIndex),
               }))
               .filter(
                 (x): x is { item: SuggestItem; issue: CortexIssueWithId } => x.issue !== undefined,

@@ -6,6 +6,7 @@ import { client } from "../client.gen";
 import {
   accountGetAccount,
   accountGetAccountConfig,
+  accountUpdateAccountConfig,
   authenticationGetUserOrganizations,
   cortexActivityEventsTrackActivityEvent,
   cortexAgentsGetAgent,
@@ -30,6 +31,9 @@ import type {
   AccountGetAccountData,
   AccountGetAccountError,
   AccountGetAccountResponse,
+  AccountUpdateAccountConfigData,
+  AccountUpdateAccountConfigError,
+  AccountUpdateAccountConfigResponse,
   AuthenticationGetUserOrganizationsData,
   AuthenticationGetUserOrganizationsError,
   AuthenticationGetUserOrganizationsResponse,
@@ -313,6 +317,71 @@ export const accountGetAccountOptions = (options?: Options<AccountGetAccountData
     queryKey: accountGetAccountQueryKey(options),
   });
 
+export const accountGetAccountConfigQueryKey = (options?: Options<AccountGetAccountConfigData>) =>
+  createQueryKey("accountGetAccountConfig", options);
+
+/**
+ * Get Account Config
+ *
+ * Return the org-level config slice that drives integration behaviour.
+ *
+ * Auth: JWT or API key. The org is identified by the credential — no org
+ * id is taken from the request, so API-key consumers don't need to know
+ * which org they're tied to.
+ */
+export const accountGetAccountConfigOptions = (options?: Options<AccountGetAccountConfigData>) =>
+  queryOptions<
+    AccountGetAccountConfigResponse,
+    AccountGetAccountConfigError,
+    AccountGetAccountConfigResponse,
+    ReturnType<typeof accountGetAccountConfigQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await accountGetAccountConfig({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: accountGetAccountConfigQueryKey(options),
+  });
+
+/**
+ * Update Account Config
+ *
+ * Update the authenticated org's `allow_user_tracking` gate (org admins only).
+ *
+ * Turning it off disallows PostHog opt-in for every member of the org in both
+ * the Console and the extension; existing device-local consent is overridden
+ * client-side once the refreshed config is fetched. Returns the updated config
+ * slice so the caller reflects the new value immediately.
+ */
+export const accountUpdateAccountConfigMutation = (
+  options?: Partial<Options<AccountUpdateAccountConfigData>>,
+): UseMutationOptions<
+  AccountUpdateAccountConfigResponse,
+  AccountUpdateAccountConfigError,
+  Options<AccountUpdateAccountConfigData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    AccountUpdateAccountConfigResponse,
+    AccountUpdateAccountConfigError,
+    Options<AccountUpdateAccountConfigData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await accountUpdateAccountConfig({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
 export const authenticationGetUserOrganizationsQueryKey = (
   options?: Options<AuthenticationGetUserOrganizationsData>,
 ) => createQueryKey("authenticationGetUserOrganizations", options);
@@ -346,7 +415,14 @@ export const authenticationGetUserOrganizationsOptions = (
 /**
  * Track Activity Event
  *
- * Track a user action on an agent issue in the Chrome extension.
+ * Track a user action on an agent issue.
+ *
+ * Open to any integration with a sidebar-style review surface, not just the
+ * Chrome extension — the caller is identified by its ``x-integration-id``
+ * header. The emitted ``event_type`` is fixed to ``chrome-extension-activity``
+ * for every caller: the name is historical, but the grouping is deliberate so
+ * all review-surface engagement lands in one downstream dataset. See
+ * ``docs/activity-events-integration-guide.md``.
  *
  * Emits a single combined event (API metadata + activity data) to Kinesis.
  * Returns 204 immediately — event emission is non-blocking.
@@ -582,34 +658,3 @@ export const cortexAgentsRunAgentMutation = (
   };
   return mutationOptions;
 };
-
-export const accountGetAccountConfigQueryKey = (options?: Options<AccountGetAccountConfigData>) =>
-  createQueryKey("accountGetAccountConfig", options);
-
-/**
- * Get Account Config
- *
- * Return the org-level config slice that drives integration behaviour.
- *
- * Auth: JWT or API key. The org is identified by the credential — no org
- * id is taken from the request, so API-key consumers don't need to know
- * which org they're tied to.
- */
-export const accountGetAccountConfigOptions = (options?: Options<AccountGetAccountConfigData>) =>
-  queryOptions<
-    AccountGetAccountConfigResponse,
-    AccountGetAccountConfigError,
-    AccountGetAccountConfigResponse,
-    ReturnType<typeof accountGetAccountConfigQueryKey>
-  >({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await accountGetAccountConfig({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: accountGetAccountConfigQueryKey(options),
-  });

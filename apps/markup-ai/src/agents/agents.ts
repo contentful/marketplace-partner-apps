@@ -16,14 +16,7 @@ export type AgentID = string;
  * lets us swap icons without rewriting the catalog.
  */
 export type AgentIconKey =
-  | "bot"
-  | "spell-check"
-  | "palette"
-  | "shield-check"
-  | "cloud"
-  | "book"
-  | "file-check"
-  | "search";
+  "bot" | "spell-check" | "palette" | "shield-check" | "cloud" | "book" | "file-check" | "search";
 
 export interface Agent {
   id: AgentID;

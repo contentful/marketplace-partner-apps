@@ -33,6 +33,8 @@ function createWrapper() {
 describe("useAccountConfig", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Clear the cross-iframe localStorage cache so tests don't leak state.
+    localStorage.clear();
     mockUseAuth.mockReturnValue({ isAuthenticated: true, token: "test-token" });
   });
 
@@ -76,5 +78,61 @@ describe("useAccountConfig", () => {
       expect(result.current.isError).toBe(true);
     });
     expect(result.current.config).toBeNull();
+  });
+
+  it("hydrates from the cross-iframe cache and skips the network on a fresh mount", async () => {
+    mockAccountGetAccountConfig.mockResolvedValue({
+      data: {
+        is_acrolinx_classic: false,
+        style_agent: StyleAgentMode.ENABLED,
+        style_agent_numeric_scoring: false,
+      },
+    });
+
+    // First mount triggers a fetch — the response is written to localStorage.
+    const first = renderHook(() => useAccountConfig(), { wrapper: createWrapper() });
+    await waitFor(() => {
+      expect(first.result.current.isLoading).toBe(false);
+    });
+    expect(mockAccountGetAccountConfig).toHaveBeenCalledTimes(1);
+
+    // A fresh mount in a different react tree (simulating another iframe)
+    // hydrates from localStorage and skips the network entirely.
+    mockAccountGetAccountConfig.mockClear();
+    const second = renderHook(() => useAccountConfig(), { wrapper: createWrapper() });
+    expect(second.result.current.config?.style_agent).toBe(StyleAgentMode.ENABLED);
+    expect(mockAccountGetAccountConfig).not.toHaveBeenCalled();
+  });
+
+  it("ignores the cache and refetches when the token changes (account switch)", async () => {
+    mockAccountGetAccountConfig.mockResolvedValue({
+      data: {
+        is_acrolinx_classic: false,
+        style_agent: StyleAgentMode.ENABLED,
+        style_agent_numeric_scoring: false,
+      },
+    });
+
+    const first = renderHook(() => useAccountConfig(), { wrapper: createWrapper() });
+    await waitFor(() => {
+      expect(first.result.current.isLoading).toBe(false);
+    });
+    expect(mockAccountGetAccountConfig).toHaveBeenCalledTimes(1);
+
+    // A different user's token must not be served user A's cached config.
+    mockAccountGetAccountConfig.mockClear();
+    mockAccountGetAccountConfig.mockResolvedValue({
+      data: {
+        is_acrolinx_classic: true,
+        style_agent: StyleAgentMode.DISABLED,
+        style_agent_numeric_scoring: false,
+      },
+    });
+    mockUseAuth.mockReturnValue({ isAuthenticated: true, token: "other-token" });
+    const second = renderHook(() => useAccountConfig(), { wrapper: createWrapper() });
+    await waitFor(() => {
+      expect(second.result.current.config?.style_agent).toBe(StyleAgentMode.DISABLED);
+    });
+    expect(mockAccountGetAccountConfig).toHaveBeenCalledTimes(1);
   });
 });

@@ -24,11 +24,6 @@ export function useAppConfig(): UseAppConfigReturn {
       const appConfig = await fetchAppConfig();
 
       setConfig(appConfig);
-      console.log("[useAppConfig] Successfully fetched config:", {
-        domain: appConfig.auth0.domain,
-        clientId: appConfig.auth0.clientId,
-        audience: appConfig.auth0.audience,
-      });
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Failed to fetch configuration";
       setError(errorMessage);

@@ -8,6 +8,7 @@ import LocalhostWarning from "./components/LocalhostWarning/LocalhostWarning";
 import { LocalizationProvider } from "./contexts/LocalizationContext";
 import { queryClient } from "./hooks/useApiClient";
 import "./i18n"; // Initialize i18next
+import "./i18n/lingui"; // Activate lingui locale for the Contentful field editors
 
 const container = document.getElementById("root");
 if (!container) {

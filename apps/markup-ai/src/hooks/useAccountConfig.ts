@@ -1,9 +1,11 @@
+import { useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { accountGetAccountConfig } from "../api-client/sdk.gen";
 import type { OrganizationConfigResponse } from "../api-client/types.gen";
 import { useApiClient } from "./useApiClient";
 import { useAuth } from "../contexts/AuthContext";
 import { fingerprintApiKey } from "../utils/styleGuidesCache";
+import { readAccountConfigCache, writeAccountConfigCache } from "../utils/accountConfigCache";
 
 export interface UseAccountConfigResult {
   config: OrganizationConfigResponse | null;
@@ -17,10 +19,11 @@ export interface UseAccountConfigResult {
  * client; no params are passed.
  *
  * The response drives `useAgentAvailability` (which agents the user is
- * allowed to run). Org config rarely changes inside a session, so the
- * 5-minute staleTime keeps the network footprint small without needing a
- * cross-iframe localStorage layer the way `useStyleGuides` does. Add one
- * later if N field-iframes per page show up as a real cost.
+ * allowed to run). Org config rarely changes inside a session, so results
+ * are cached in localStorage for 5 minutes: each Markup AI-enabled field on
+ * the entry editor runs in its own iframe with its own react-query cache,
+ * so without the shared layer N enabled fields → N network calls per page
+ * load. Same pattern as `useStyleGuides`.
  *
  * Fail-open: while loading or on error, callers see `config === null`.
  * `computeAgentAvailability(null)` returns an empty map, so a transient
@@ -29,6 +32,21 @@ export interface UseAccountConfigResult {
 export function useAccountConfig(): UseAccountConfigResult {
   const { isAuthenticated, token } = useAuth();
   const client = useApiClient({ apiKey: token ?? "" });
+
+  // `undefined` is the "not yet read" sentinel; `null` means "read and the
+  // cache was empty". Without the distinct sentinel, we would re-read
+  // localStorage on every render after a cache miss.
+  const cachedRef = useRef<OrganizationConfigResponse | null | undefined>(undefined);
+  // Re-read the cache when the token changes — otherwise an in-iframe account
+  // switch (sign-out + sign-in as a different user via the cross-location
+  // auth sync) would keep showing the previous account's config, and the
+  // `enabled: !cached` short-circuit would block the refetch.
+  const lastTokenRef = useRef<string | null | undefined>(undefined);
+  if (cachedRef.current === undefined || lastTokenRef.current !== token) {
+    lastTokenRef.current = token;
+    cachedRef.current = readAccountConfigCache(token);
+  }
+  const cached = cachedRef.current;
 
   // Key the query by a fingerprint of the auth token so a within-iframe
   // account/org switch (the cross-location auth sync in AuthContext) can
@@ -40,7 +58,7 @@ export function useAccountConfig(): UseAccountConfigResult {
   // `isAuthenticated=true` before `getTokenSilently` populates `token`,
   // and firing the request in that window would build a client with an
   // empty bearer and 401 — harmless under fail-open but noisy.
-  const enabled = isAuthenticated && Boolean(token);
+  const enabled = isAuthenticated && Boolean(token) && !cached;
 
   const query = useQuery<OrganizationConfigResponse>({
     queryKey: ["accountGetAccountConfig", apiKeyFp],
@@ -54,7 +72,16 @@ export function useAccountConfig(): UseAccountConfigResult {
     },
     enabled,
     staleTime: 5 * 60 * 1000,
+    initialData: cached ?? undefined,
   });
+
+  // Persist freshly-fetched data so other iframes can skip the network call.
+  useEffect(() => {
+    if (!token) return;
+    if (!query.data) return;
+    if (cached === query.data) return;
+    writeAccountConfigCache(token, query.data);
+  }, [token, query.data, cached]);
 
   return {
     config: query.data ?? null,
