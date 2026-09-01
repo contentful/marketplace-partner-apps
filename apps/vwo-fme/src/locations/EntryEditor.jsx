@@ -25,7 +25,7 @@ const initialState = (sdk) => ({
   currentStep: 1,
   contentTypes: [],
   meta: sdk.entry.fields.meta?.getValue() || {},
-  featureFlag: sdk.entry.fields.featureFlag.getValue() || {},
+  featureFlag: sdk.entry.fields.featureFlag?.getValue() || {},
 });
 
 const actionTypes = {

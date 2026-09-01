@@ -60,7 +60,7 @@ function CreateContent(props) {
 
   const removeContent = useCallback(
     (vwoVariation) => {
-      if (vwoVariation.id === 1) {
+      if (vwoVariation?.id === CONTROL_VARIATION_ID) {
         props.sdk.notifier.error('Default variation content cannot be removed');
         return;
       }
