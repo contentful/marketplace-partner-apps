@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { EntryCard, TextInput, Modal, List, MenuItem, ButtonGroup, Button, Flex } from '@contentful/f36-components';
 import { SearchIcon } from '@contentful/f36-icons';
 import { css } from 'emotion';
+import { CONTROL_VARIATION_ID, getVariationContentEntryId } from '../utils';
 
 const styles = {
   menuList: css({
@@ -40,7 +41,13 @@ function CreateContent(props) {
 
   const editContent = (vwoVariation) => {
     setSelectContentType(false);
-    props.sdk.navigator.openEntry(vwoVariation.variables[0].value, { slideIn: { waitForClose: true } }).then((updatedEntry) => {
+    const entryId = getVariationContentEntryId(vwoVariation, props.featureVariables);
+
+    if (!entryId) {
+      return;
+    }
+
+    props.sdk.navigator.openEntry(entryId, { slideIn: { waitForClose: true } }).then((updatedEntry) => {
       if (updatedEntry && props.onRefreshVariationEntries) {
         props.onRefreshVariationEntries();
       }
@@ -73,7 +80,7 @@ function CreateContent(props) {
         return;
       }
       setProcessing(true);
-      await props.onCreateVariationEntry(props.variation.vwoVariation, contentType);
+      await props.onCreateVariationEntry(props.variation?.vwoVariation, contentType);
       setProcessing(false);
       setSelectContentType(false);
     },
@@ -121,7 +128,7 @@ function CreateContent(props) {
           <Button variant="secondary" size="small" onClick={() => setSelectContentType(true)}>
             Create entry and link
           </Button>
-          <Button variant="secondary" size="small" onClick={() => props.linkExistingEntry(props.variation.vwoVariation)}>
+          <Button variant="secondary" size="small" onClick={() => props.linkExistingEntry(props.variation?.vwoVariation)}>
             Link an existing entry
           </Button>
         </ButtonGroup>
@@ -132,12 +139,15 @@ function CreateContent(props) {
           contentType={props.variation.variationContent.contentType}
           title={props.variation.variationContent.title}
           description={props.variation.variationContent.description}
-          onClick={() => editContent(props.variation.vwoVariation)}
+          onClick={() => editContent(props.variation?.vwoVariation)}
           actions={[
-            <MenuItem key="edit" onClick={() => editContent(props.variation.vwoVariation)}>
+            <MenuItem key="edit" onClick={() => editContent(props.variation?.vwoVariation)}>
               Edit
             </MenuItem>,
-            <MenuItem key="remove" onClick={() => removeContent(props.variation.vwoVariation)} isDisabled={props.variation.vwoVariation.id === 1}>
+            <MenuItem
+              key="remove"
+              onClick={() => removeContent(props.variation?.vwoVariation)}
+              isDisabled={props.variation?.vwoVariation?.id === CONTROL_VARIATION_ID}>
               Remove
             </MenuItem>,
           ]}

@@ -1,6 +1,6 @@
 import { Button, Heading, List, Paragraph, Skeleton } from '@contentful/f36-components';
 import { css } from 'emotion';
-import { mapVwoVariationsAndContent } from '../utils';
+import { CONTROL_VARIATION_ID, getControlVariation, mapVwoVariationsAndContent } from '../utils';
 import React, { useCallback, useEffect, useState } from 'react';
 import VariationItem from './VariationItem';
 import tokens from '@contentful/f36-tokens';
@@ -42,9 +42,17 @@ function Variations(props) {
   const fetchMappedVariations = useCallback(async () => {
     try {
       setIsVariationsLoading(true);
-      const mappedVariations = await mapVwoVariationsAndContent(vwoVariations, props.contentTypes, props.sdk.locales.default, props.sdk.space.getEntries);
+      const mappedVariations = await mapVwoVariationsAndContent(
+        vwoVariations,
+        props.contentTypes,
+        props.sdk.locales.default,
+        props.sdk.space.getEntries,
+        props.featureFlag.variables
+      );
       setMappedVariations(mappedVariations);
-      const defaultVariation = mappedVariations.filter((variation) => variation.vwoVariation.id === 1)[0] || {};
+      const defaultVariation = mappedVariations.find((variation) => variation.vwoVariation?.id === CONTROL_VARIATION_ID) || {
+        vwoVariation: getControlVariation(vwoVariations),
+      };
       setDefaultVariation(defaultVariation);
       setIsDefaultVariationContentAdded(defaultVariation?.variationContent);
     } catch (error) {
@@ -52,7 +60,7 @@ function Variations(props) {
     } finally {
       setIsVariationsLoading(false);
     }
-  }, [vwoVariations, props.contentTypes, props.sdk.locales.default, props.sdk.space.getEntries]);
+  }, [vwoVariations, props.featureFlag.variables, props.contentTypes, props.sdk.locales.default, props.sdk.space.getEntries]);
 
   useEffect(() => {
     fetchMappedVariations();
@@ -77,6 +85,7 @@ function Variations(props) {
         <CreateContent
           sdk={props.sdk}
           variation={defaultVariation}
+          featureVariables={props.featureFlag.variables}
           contentTypes={props.contentTypes}
           onRefreshVariationEntries={fetchMappedVariations}
           linkExistingEntry={props.linkExistingEntry}
@@ -107,10 +116,10 @@ function Variations(props) {
           {!isVariationsLoading ? (
             <List style={{ width: '100%', listStyle: 'none', padding: '0px' }}>
               {mappedVariations
-                .filter((variation) => variation.vwoVariation.id !== 1)
+                .filter((variation) => variation.vwoVariation?.id !== CONTROL_VARIATION_ID)
                 .map((variation, index) => {
                   return (
-                    <List.Item key={variation.vwoVariation.id}>
+                    <List.Item key={variation.vwoVariation?.id ?? index}>
                       <VariationItem
                         index={mappedVariations.length - index - 1}
                         sdk={props.sdk}
