@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.0.9](https://github.com/contentful/marketplace-partner-apps/compare/eppo-contentful-app-v1.0.8...eppo-contentful-app-v1.0.9) (2026-09-02)
+
+
+### Bug Fixes
+
+* **deps:** bump @babel/plugin-transform-modules-systemjs from 7.27.1 to 7.29.4 in /apps/eppo ([#8189](https://github.com/contentful/marketplace-partner-apps/issues/8189)) ([32fbb6e](https://github.com/contentful/marketplace-partner-apps/commit/32fbb6e0581ab7fc1dfaeab90e7d16dccb8ed3ee))
+* **deps:** bump brace-expansion from 1.1.12 to 1.1.13 in /apps/eppo ([#8040](https://github.com/contentful/marketplace-partner-apps/issues/8040)) ([20e9f6a](https://github.com/contentful/marketplace-partner-apps/commit/20e9f6a14eeb44cc115621372fac82eec15b58f4))
+* **deps:** bump fast-uri from 3.0.6 to 3.1.2 in /apps/eppo ([#8185](https://github.com/contentful/marketplace-partner-apps/issues/8185)) ([f8009b2](https://github.com/contentful/marketplace-partner-apps/commit/f8009b2c804a47b6ffd74fdffe34f26b08a8f743))
+* **deps:** bump flatted from 3.3.3 to 3.4.1 in /apps/eppo ([#7949](https://github.com/contentful/marketplace-partner-apps/issues/7949)) ([c994557](https://github.com/contentful/marketplace-partner-apps/commit/c994557d513a8146431b4f837ad66ce054f3739d))
+* **deps:** bump flatted from 3.4.1 to 3.4.2 in /apps/eppo ([#7976](https://github.com/contentful/marketplace-partner-apps/issues/7976)) ([9c08b73](https://github.com/contentful/marketplace-partner-apps/commit/9c08b73df321c4bb45930c37415f620fd80435c8))
+* **deps:** bump node-forge from 1.3.1 to 1.4.0 in /apps/eppo ([#8038](https://github.com/contentful/marketplace-partner-apps/issues/8038)) ([d9a3c12](https://github.com/contentful/marketplace-partner-apps/commit/d9a3c123ceb3b432cdcc443973b14f00ae13bd4d))
+* **deps:** bump path-to-regexp from 0.1.12 to 0.1.13 in /apps/eppo ([#8059](https://github.com/contentful/marketplace-partner-apps/issues/8059)) ([ca9da4c](https://github.com/contentful/marketplace-partner-apps/commit/ca9da4c2b7f6c6f13e284a0bfc87414052262702))
+* **deps:** bump qs and express in /apps/eppo ([#8242](https://github.com/contentful/marketplace-partner-apps/issues/8242)) ([f0fadc9](https://github.com/contentful/marketplace-partner-apps/commit/f0fadc9c56548ab4586a4e90411d817ca3d8dfe9))
+* **deps:** bump shell-quote from 1.8.3 to 1.8.4 in /apps/eppo ([#8312](https://github.com/contentful/marketplace-partner-apps/issues/8312)) ([66ede8b](https://github.com/contentful/marketplace-partner-apps/commit/66ede8be7aaf96e700e8e5f0ef73d92b95cffc3d))
+* **deps:** bump tar and @contentful/app-scripts in /apps/eppo ([#8366](https://github.com/contentful/marketplace-partner-apps/issues/8366)) ([123cece](https://github.com/contentful/marketplace-partner-apps/commit/123cece1a02fabe67a343d4f81ba625c5f08efd1))
+* **deps:** bump ws in /apps/eppo ([#8424](https://github.com/contentful/marketplace-partner-apps/issues/8424)) ([bab3e26](https://github.com/contentful/marketplace-partner-apps/commit/bab3e269bcf469ddbb553c17adf9222fe1afc58b))
+* **deps:** update dependency @contentful/f36-core to ^4.81.1 ([#8745](https://github.com/contentful/marketplace-partner-apps/issues/8745)) ([1f694b1](https://github.com/contentful/marketplace-partner-apps/commit/1f694b112c28a9eb78ba7732acbc64afc5c05638))
+* **deps:** update dependency @contentful/f36-popover to ^4.81.1 ([#8748](https://github.com/contentful/marketplace-partner-apps/issues/8748)) ([afe6cc0](https://github.com/contentful/marketplace-partner-apps/commit/afe6cc006d18f9a950a3be0f8b130ce2320b8625))
+* **deps:** update dependency @contentful/f36-typography to ^4.81.1 ([#8752](https://github.com/contentful/marketplace-partner-apps/issues/8752)) ([a9071eb](https://github.com/contentful/marketplace-partner-apps/commit/a9071ebf42e1ab1fb6efb61c652947bf00b20b99))
+
 ## [1.0.8](https://github.com/contentful/marketplace-partner-apps/compare/eppo-contentful-app-v1.0.7...eppo-contentful-app-v1.0.8) (2025-08-01)
 
 
