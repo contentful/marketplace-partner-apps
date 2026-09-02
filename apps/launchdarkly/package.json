@@ -37,7 +37,7 @@
     "jsdom": "^26.1.0",
     "typescript": "^5.7.2",
     "vite": "^8.1.2",
-    "vitest": "^4.1.9"
+    "vitest": "^4.1.11"
   },
   "eslintConfig": {
     "extends": "react-app"
