@@ -195,7 +195,7 @@ const ConfigScreen = () => {
       throw new Error(`Please select at least one ${itemType}`);
     }
 
-    if (conditionValue === '' && !doesNotNeedValue.inclues(condition)) {
+    if (conditionValue === '' && !doesNotNeedValue.includes(condition)) {
       sdk.notifier.error('Please enter a condition value');
       throw new Error('Please enter a condition value');
     }
