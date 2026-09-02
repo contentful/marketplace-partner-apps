@@ -23,13 +23,19 @@ export const CEROS_ACTION_ID = 'cerosApi'
 
 // Looks up the CerosApi App Action's id. Prefers the pinned id, falling back to a
 // name match so installs created before the id was pinned keep resolving.
+//
+// Scoped by space/environment rather than organizationId: the app definition can be
+// managed in a different org than the one the app is installed into, so
+// sdk.ids.organization (the install org) can't be used to look up its App Actions.
 export async function findCerosActionId(sdk: EditorAppSDK): Promise<string> {
-    const actions = await sdk.cma.appAction.getMany({
-        organizationId: sdk.ids.organization,
-        appDefinitionId: sdk.ids.app || '',
+    const appId = sdk.ids.app || ''
+    const actions = await sdk.cma.appAction.getManyForEnvironment({
+        spaceId: sdk.ids.space,
+        environmentId: sdk.ids.environment,
     })
-    const found =
-        actions.items.find((a) => a.sys.id === CEROS_ACTION_ID) ?? actions.items.find((a) => a.name === 'CerosApi')
+    const found = actions.items.find(
+        (a) => a.sys.appDefinition?.sys.id === appId && (a.sys.id === CEROS_ACTION_ID || a.name === 'CerosApi')
+    )
     if (!found) throw new Error(CEROS_ACTION_MISSING_ERROR)
     return found.sys.id
 }
