@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.4](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.7.3...bynder-assets-v1.7.4) (2026-09-02)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group in /apps/bynder with 2 updates ([#8460](https://github.com/contentful/marketplace-partner-apps/issues/8460)) ([7886943](https://github.com/contentful/marketplace-partner-apps/commit/78869430ab49c5c02cf4b78493d6d1d967a4639a))
+* **deps:** update dependency @contentful/f36-icons to ^4.29.1 ([#8746](https://github.com/contentful/marketplace-partner-apps/issues/8746)) ([7ee8ec1](https://github.com/contentful/marketplace-partner-apps/commit/7ee8ec1437ac32631acabcdfc17b5e090300d7f8))
+
 ## [1.7.3](https://github.com/contentful/marketplace-partner-apps/compare/bynder-assets-v1.7.2...bynder-assets-v1.7.3) (2026-06-22)
 
 
