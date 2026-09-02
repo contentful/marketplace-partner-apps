@@ -16,7 +16,23 @@ The app is built on the [Contentful App Framework](https://www.contentful.com/de
 
 **Config Screen** — Installed once per Contentful space. You select (or auto-create) a content type and map three fields to it: a title field (Symbol), a URL field (Symbol), and an embed code field (Text). The app can also register itself as the entry editor for that content type automatically.
 
-**Entry Editor** — Replaces the default editor for entries of the configured content type. When an entry has no linked experience, it shows a URL input form. On submission, the app calls the Ceros [oEmbed](https://oembed.com/) endpoint for that experience using [`@extractus/oembed-extractor`](https://github.com/extractus/oembed-extractor), then writes the returned title, canonical URL, and HTML embed snippet into the configured Contentful fields and saves the entry. Once linked, the editor shows a live preview (rendered by injecting the embed HTML into a container div) along with buttons to unlink or refresh the embed code.
+**Entry Editor** — Replaces the default editor for entries of the configured content type. When an entry has no linked experience, it shows a URL input form (or a folder browser to pick an experience directly). On submission, the app resolves the experience server-side through the `resolveExperience` Contentful Function app action, which looks up the experience's title, canonical URL, and embed code(s) from Ceros. The author confirms an embed style — full height, scrollable, or, for Flex experiences, inline — and the app writes the result into the configured Contentful fields and saves the entry. Once linked, the editor shows a live preview through a shared preview component: iframe embeds are rendered by injecting the embed HTML into a container div, while inline (Flex) embeds render inside an isolated `srcDoc` iframe. Buttons let you unlink, refresh the embed code, or change the embed style.
+
+## Configuration
+
+The config screen maps the app to a content type and stores a **Ceros REST API key**.
+
+That key is a `Secret` installation parameter on the App Definition. Contentful redacts Secret
+parameters for every browser-side read — `sdk.app.getParameters()` and `sdk.parameters.installation`
+return a mask, never the key — so the value is only ever readable by the `CerosApi` Contentful
+Function, through `context.appInstallationParameters`. No client-side code in this app reads it.
+
+Because the config screen only ever sees the mask, it treats the key as write-only:
+
+- The API key field starts blank on every visit, even when a key is stored.
+- Saving without entering anything **omits** `cerosApiKey` from the payload, leaving the stored key
+  untouched. It never writes the mask back.
+- To rotate the key, type a new one and save; that value replaces the stored one.
 
 ## Development
 
