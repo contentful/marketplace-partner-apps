@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.18](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.17...vwo-fme-v1.0.18) (2026-09-02)
+
+
+### Bug Fixes
+
+* **vwo-fme:** handle missing control variation when linking default entry [] ([#8758](https://github.com/contentful/marketplace-partner-apps/issues/8758)) ([0581153](https://github.com/contentful/marketplace-partner-apps/commit/058115345d27ab86b8e8a722e807dd7ecf8b4c65))
+
 ## [1.0.17](https://github.com/contentful/marketplace-partner-apps/compare/vwo-fme-v1.0.16...vwo-fme-v1.0.17) (2026-07-02)
 
 
