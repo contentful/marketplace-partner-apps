@@ -18,7 +18,7 @@
   "dependencies": {
     "@contentful/app-sdk": "^4.0.0",
     "@contentful/f36-components": "^4.0.0",
-    "@contentful/f36-icons": "^4.0.0",
+    "@contentful/f36-icons": "^4.29.1",
     "contentful-management": "^10.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
@@ -33,8 +33,8 @@
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.0.0",
     "@testing-library/jest-dom": "^6.0.0",
-    "@types/testing-library__jest-dom": "^5.14.0",
+    "@types/testing-library__jest-dom": "^5.14.9",
     "vitest": "^3.2.4",
-    "jsdom": "^24.0.0"
+    "jsdom": "^24.1.3"
   }
 }

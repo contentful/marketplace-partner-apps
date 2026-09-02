@@ -1,0 +1,36 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["local>contentful/renovate-config:defaultNxMonorepo"],
+  "packageRules": [
+    {
+      "description": "Disable @contentful/app-sdk updates in apps that deliberately pin it",
+      "matchPackageNames": ["@contentful/app-sdk"],
+      "matchFileNames": [
+        "apps/cloudinary2/**",
+        "apps/docs-to-rich-text/**",
+        "apps/lottie-preview/**"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "Cap @uploadcare/blocks at <=0.35.2 in the uploadcare app",
+      "matchPackageNames": ["@uploadcare/blocks"],
+      "matchFileNames": ["apps/uploadcare/**"],
+      "allowedVersions": "<=0.35.2"
+    },
+    {
+      "description": "Cap @types/node at <=18.15.3 across all apps, matching the previous Dependabot ignore rule",
+      "matchPackageNames": ["@types/node"],
+      "allowedVersions": "<=18.15.3"
+    },
+    {
+      "description": "Apply contentful-owned label to PRs for bynder, cloudinary2, and shopify",
+      "matchFileNames": [
+        "apps/bynder/**",
+        "apps/cloudinary2/**",
+        "apps/shopify/**"
+      ],
+      "labels": ["contentful-owned"]
+    }
+  ]
+}

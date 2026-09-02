@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.4.6...cloudinary-assets-v1.5.0) (2026-06-25)
+
+
+### Features
+
+* **cloudinary:** add sidebar multi-field picker for batch asset assignment [ES-380] ([#8447](https://github.com/contentful/marketplace-partner-apps/issues/8447)) ([c3ea9d4](https://github.com/contentful/marketplace-partner-apps/commit/c3ea9d4f0b3edd7857c2c6c02d071e87c3e8174f))
+
 ## [1.4.6](https://github.com/contentful/marketplace-partner-apps/compare/cloudinary-assets-v1.4.5...cloudinary-assets-v1.4.6) (2026-06-22)
 
 
