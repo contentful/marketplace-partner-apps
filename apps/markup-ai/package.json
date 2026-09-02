@@ -95,7 +95,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "5.2.0",
-    "@vitest/coverage-v8": "4.1.4",
+    "@vitest/coverage-v8": "4.1.11",
     "cross-env": "10.1.0",
     "eslint": "10.2.0",
     "jsdom": "29.0.2",
@@ -104,6 +104,6 @@
     "typescript": "5.9.3",
     "typescript-eslint": "8.58.2",
     "vite": "8.0.16",
-    "vitest": "4.1.4"
+    "vitest": "4.1.11"
   }
 }

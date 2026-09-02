@@ -50,7 +50,7 @@
     "vite": "^8.0.16",
     "vite-plugin-eslint": "^1.8.1",
     "vite-tsconfig-paths": "^4.3.2",
-    "vitest": "^4.1.9"
+    "vitest": "^4.1.11"
   },
   "scripts": {
     "start": "vite",
