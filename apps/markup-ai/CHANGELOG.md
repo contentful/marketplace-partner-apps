@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.4.1](https://github.com/contentful/marketplace-partner-apps/compare/markup-ai-contentful-app-v1.4.0...markup-ai-contentful-app-v1.4.1) (2026-09-02)
+
+
+### Bug Fixes
+
+* **deps:** bump @contentful/react-apps-toolkit from 1.2.22 to 1.2.23 in /apps/markup-ai ([#8638](https://github.com/contentful/marketplace-partner-apps/issues/8638)) ([f2504f5](https://github.com/contentful/marketplace-partner-apps/commit/f2504f58617ea6ce2037cd5c0d1c09cb3e47e124))
+* **deps:** update codemirror ([#8742](https://github.com/contentful/marketplace-partner-apps/issues/8742)) ([12354bc](https://github.com/contentful/marketplace-partner-apps/commit/12354bc3739cf220929ef2342f9018d014a0cb1a))
+* **deps:** update dependency dompurify to v3.4.12 [security] ([#8691](https://github.com/contentful/marketplace-partner-apps/issues/8691)) ([baa97cd](https://github.com/contentful/marketplace-partner-apps/commit/baa97cd7adcad8f27103551234a2740ce043c074))
+* **deps:** update dependency dompurify to v3.4.13 [security] ([#8736](https://github.com/contentful/marketplace-partner-apps/issues/8736)) ([8cf8a4a](https://github.com/contentful/marketplace-partner-apps/commit/8cf8a4a3e4fe4ef81fdd9429e0431d9372456d6e))
+* **deps:** update dependency markdown-it to v14.2.0 [security] ([#8692](https://github.com/contentful/marketplace-partner-apps/issues/8692)) ([39c8613](https://github.com/contentful/marketplace-partner-apps/commit/39c861383e9d0e93a2e2b405877dff0fe3ce203f))
+
 ## [1.4.0](https://github.com/contentful/marketplace-partner-apps/compare/markup-ai-contentful-app-v1.3.1...markup-ai-contentful-app-v1.4.0) (2026-06-23)
 
 
