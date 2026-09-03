@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
-import DialogComponent from "../components/Dialog";
-import { Product } from "../types/Product";
-import { Category } from "../types/Category";
-import { MappedProductJson } from "../types/MappedProductJson";
-import jsonMapper from "../utils/JsonMapper";
-import { Blueprint } from "../types/Blueprint";
-import { replaceChannelAndApplication } from "../utils/replace";
+import React, { useCallback, useEffect, useState } from 'react';
+import DialogComponent from '../components/Dialog';
+import { Product } from '../types/Product';
+import { Category } from '../types/Category';
+import { MappedProductJson } from '../types/MappedProductJson';
+import jsonMapper from '../utils/JsonMapper';
+import { Blueprint } from '../types/Blueprint';
+import { replaceChannelAndApplication } from '../utils/replace';
 
 interface CategoryMetaData {
   categoryPath: Array<string>;
@@ -47,16 +47,8 @@ interface Props {
   selectedProductSkus: Array<string>;
   selectedCategories: Array<string>;
   onSaveSubmit: () => void;
-  onCategorySelect: (
-    id: string,
-    categoryPath: Array<string>,
-  ) => void;
-  onProductSelect: (
-    sku: string,
-    selected: boolean,
-    categoryId?: string,
-    categoryPath?: Array<string>
-  ) => void;
+  onCategorySelect: (id: string, categoryPath: Array<string>) => void;
+  onProductSelect: (sku: string, selected: boolean, categoryId?: string, categoryPath?: Array<string>) => void;
 }
 
 const Dialog = ({
@@ -75,38 +67,27 @@ const Dialog = ({
   channel,
   application,
 }: Props) => {
-  const [lastCategoryFilterId, setLastCategoryFilterId] = useState("");
+  const [lastCategoryFilterId, setLastCategoryFilterId] = useState('');
   const [initialLoad, setInitialLoad] = useState(true);
-  const [selectedCategoryIdsInitialized, setSelectedCategoryIdsInitialized] =
-    useState(false);
+  const [selectedCategoryIdsInitialized, setSelectedCategoryIdsInitialized] = useState(false);
   const [categoriesInitialized, setCategoriesInitialized] = useState(false);
   const [categoriesLoading, setCategoriesLoading] = useState(false);
   const [productsLoading, setProductsLoading] = useState(false);
   const [moreProductsAvailable, setMoreProductsAvailable] = useState(false);
   const [errors, setErrors] = useState<Errors>({ category: [], product: [] });
-  const [selectedCategoryIds, setSelectedCategoryIds] = useState<Array<string>>(
-    []
-  );
-  const [excludedCategoryProductSkus, setExcludedCategoryProductSkus] =
-    useState<CategoryExcludedProducts>({});
-  const [excludedProductSkus, setExcludedProductSkus] = useState<Array<string>>(
-    []
-  );
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<Array<string>>([]);
+  const [excludedCategoryProductSkus, setExcludedCategoryProductSkus] = useState<CategoryExcludedProducts>({});
+  const [excludedProductSkus, setExcludedProductSkus] = useState<Array<string>>([]);
   const [products, setProducts] = useState<Array<Product>>([]);
   const [selectedProducts, setSelectedProducts] = useState<Array<Product>>([]);
   const [categories, setCategories] = useState<Array<Category>>([]);
-  const [categoriesMetaDeta, setCategoriesMetaData] =
-    useState<CategoriesMetaData>({});
-  const [productsCategory, setProductsCategory] = useState<ProductsCategory>(
-    {}
-  );
+  const [categoriesMetaDeta, setCategoriesMetaData] = useState<CategoriesMetaData>({});
+  const [productsCategory, setProductsCategory] = useState<ProductsCategory>({});
 
   const mapCategories = useCallback(
     (categoriesToMap: Array<any>): Array<Category> =>
       categoriesToMap.map(({ totalProducts, subCategories, ...category }) => {
-        const mappedSubCategories = subCategories?.map((subCategory: any) =>
-          jsonMapper(categoryBlueprint, subCategory)
-        );
+        const mappedSubCategories = subCategories?.map((subCategory: any) => jsonMapper(categoryBlueprint, subCategory));
         setCategoriesMetaData((prev) => {
           prev[category.id] = {
             categoryPath: category.categoryPath,
@@ -118,12 +99,10 @@ const Dialog = ({
           ...category,
           totalProducts: totalProducts ?? 0,
           selected: selectedCategoryIds.includes(category.id),
-          subCategories: mappedSubCategories
-            ? mapCategories(mappedSubCategories)
-            : [],
+          subCategories: mappedSubCategories ? mapCategories(mappedSubCategories) : [],
         };
       }),
-    [categoryBlueprint, selectedCategoryIds]
+    [categoryBlueprint, selectedCategoryIds],
   );
 
   const mapProducts = useCallback(
@@ -137,27 +116,20 @@ const Dialog = ({
           price: `$${price}`,
         };
       }),
-    [imageBase]
+    [imageBase],
   );
 
   const fetchCategories = useCallback(
     () =>
-      fetch(
-        replaceChannelAndApplication(
-          `${apiBase}/categories?imageView=NO-IMAGE&view=tree&limit=10`,
-          { channel, application }
-        )
-      )
+      fetch(replaceChannelAndApplication(`${apiBase}/categories?imageView=NO-IMAGE&view=tree&limit=10`, { channel, application }))
         .then((res) => {
           if (res.status === 404) {
             throw new Error(res.statusText);
           }
           return res.json();
         })
-        .then(({ elements }: any) =>
-          elements.map((element: any) => jsonMapper(categoryBlueprint, element))
-        ),
-    [apiBase, imageType, application, categoryBlueprint, channel]
+        .then(({ elements }: any) => elements.map((element: any) => jsonMapper(categoryBlueprint, element))),
+    [apiBase, imageType, application, categoryBlueprint, channel],
   );
 
   const fetchProducts = useCallback(
@@ -165,7 +137,7 @@ const Dialog = ({
       amount,
       categoryPath,
       offset,
-      searchTerm = "",
+      searchTerm = '',
       skus,
     }: {
       amount?: number;
@@ -176,15 +148,11 @@ const Dialog = ({
     }) =>
       fetch(
         replaceChannelAndApplication(
-          `${apiBase}${
-            categoryPath ? `/categories/${categoryPath}` : ""
-          }/products?${amount ? `amount=${amount}` : ""}&${
-            offset ? `offset=${offset}` : ""
-          }&${
-            skus ? `sku=${skus}` : ""
+          `${apiBase}${categoryPath ? `/categories/${categoryPath}` : ''}/products?${amount ? `amount=${amount}` : ''}&${offset ? `offset=${offset}` : ''}&${
+            skus ? `sku=${skus}` : ''
           }&searchTerm=${searchTerm}&attrs=sku,manufacturer,image@${imageType},defaultCategory,listPrice`,
-          { channel, application }
-        )
+          { channel, application },
+        ),
       )
         .then((res) => {
           if (res.status === 404) {
@@ -194,21 +162,16 @@ const Dialog = ({
         })
         .then((json) => ({
           total: json.total ?? 0,
-          elements: json.elements.map((element: any) =>
-            jsonMapper(productBlueprint, element)
-          ),
+          elements: json.elements.map((element: any) => jsonMapper(productBlueprint, element)),
         }))
         .catch((error) => {
           setErrors((prevErrors) => ({
             ...prevErrors,
-            product: [
-              ...prevErrors.product,
-              `An error occurred while fetching products (${error})`,
-            ],
+            product: [...prevErrors.product, `An error occurred while fetching products (${error})`],
           }));
           setProductsLoading(false);
         }),
-    [apiBase, imageType, application, channel, productBlueprint]
+    [apiBase, imageType, application, channel, productBlueprint],
   );
 
   const loadCategories = useCallback(() => {
@@ -221,10 +184,7 @@ const Dialog = ({
       .catch((error) => {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          category: [
-            ...prevErrors.category,
-            `An error occurred while fetching categories (${error})`,
-          ],
+          category: [...prevErrors.category, `An error occurred while fetching categories (${error})`],
         }));
         setCategoriesLoading(false);
         setCategories([]);
@@ -232,96 +192,59 @@ const Dialog = ({
   }, [fetchCategories, mapCategories]);
 
   const loadProducts = useCallback(
-    ({
-      amount = 20,
-      offset = 0,
-      categoryId,
-      searchTerm = "",
-    }: {
-      amount?: number;
-      offset?: number;
-      categoryId?: string;
-      searchTerm?: string;
-    }) => {
+    ({ amount = 20, offset = 0, categoryId, searchTerm = '' }: { amount?: number; offset?: number; categoryId?: string; searchTerm?: string }) => {
       if (offset === 0) {
         setProducts([]);
       }
       setProductsLoading(true);
-      const categoryPath =
-        categoryId && categoriesMetaDeta[categoryId].categoryPath
-          ? categoriesMetaDeta[categoryId].categoryPath.join("/")
-          : "";
+      const categoryPath = categoryId && categoriesMetaDeta[categoryId].categoryPath ? categoriesMetaDeta[categoryId].categoryPath.join('/') : '';
       fetchProducts({ amount, categoryPath, offset, searchTerm })
         .then(({ total, elements }: any) => {
           setMoreProductsAvailable(total > 0 ? amount + offset < total : false);
           return elements;
         })
         .then((mappedJsonProducts: Array<MappedProductJson>) => {
-          const productsCategoryMap: ProductsCategory =
-            mappedJsonProducts.reduce<ProductsCategory>(
-              (acc, { defaultCategory, sku }) => {
-                acc[sku] = jsonMapper(
-                  productCategoryBlueprint,
-                  defaultCategory
-                );
-                return acc;
-              },
-              {}
-            );
+          const productsCategoryMap: ProductsCategory = mappedJsonProducts.reduce<ProductsCategory>((acc, { defaultCategory, sku }) => {
+            acc[sku] = jsonMapper(productCategoryBlueprint, defaultCategory);
+            return acc;
+          }, {});
           const newProducts = mapProducts(mappedJsonProducts);
 
-          setProductsCategory((prevProductsCategory) =>
-            offset === 0
-              ? productsCategoryMap
-              : { ...prevProductsCategory, ...productsCategoryMap }
-          );
-          setProducts((prevProducts) =>
-            offset === 0 ? newProducts : [...prevProducts, ...newProducts]
-          );
+          setProductsCategory((prevProductsCategory) => (offset === 0 ? productsCategoryMap : { ...prevProductsCategory, ...productsCategoryMap }));
+          setProducts((prevProducts) => (offset === 0 ? newProducts : [...prevProducts, ...newProducts]));
           setProductsLoading(false);
         })
         .catch((error) => {
           return setProducts([]);
         });
     },
-    [categoriesMetaDeta, fetchProducts, mapProducts, productCategoryBlueprint]
+    [categoriesMetaDeta, fetchProducts, mapProducts, productCategoryBlueprint],
   );
 
   const handleToggleProduct = useCallback(
     (sku: string, selected: boolean) => {
-      if (context === "category") {
-        const categoryPath =
-          categoriesMetaDeta[lastCategoryFilterId].categoryPath;
-        const rootCategory = categoryPath.length
-          ? categoryPath[0]
-          : lastCategoryFilterId;
+      if (context === 'category') {
+        const categoryPath = categoriesMetaDeta[lastCategoryFilterId].categoryPath;
+        const rootCategory = categoryPath.length ? categoryPath[0] : lastCategoryFilterId;
         onProductSelect(sku, selected, rootCategory, []);
       } else {
         onProductSelect(sku, selected);
       }
     },
-    [categoriesMetaDeta, context, lastCategoryFilterId, onProductSelect]
+    [categoriesMetaDeta, context, lastCategoryFilterId, onProductSelect],
   );
 
   const handleRequestProducts = useCallback(
-    ({
-      categoryId,
-      searchTerm,
-      offset,
-    }: {
-      categoryId?: string;
-      searchTerm?: string;
-      offset?: number;
-    }) => {
+    ({ categoryId, searchTerm, offset }: { categoryId?: string; searchTerm?: string; offset?: number }) => {
       setErrors((prevErrors) => ({ ...prevErrors, product: [] }));
-      if (categoryId && categoryId !== "") {
+      if (categoryId && categoryId !== '') {
         setLastCategoryFilterId(categoryId);
       }
       if (offset === 0 || moreProductsAvailable) {
         loadProducts({ categoryId, searchTerm, offset });
       }
     },
-    [loadProducts, moreProductsAvailable]
+    [loadProducts, moreProductsAvailable],
   );
 
   const handleCategorySelect = useCallback(
@@ -330,24 +253,19 @@ const Dialog = ({
         const { subCategories } = categoriesMetaDeta[id];
         return {
           id,
-          subCategories: subCategories.map((subCategoryId) =>
-            makeSubCategoryTree(subCategoryId)
-          ),
+          subCategories: subCategories.map((subCategoryId) => makeSubCategoryTree(subCategoryId)),
         };
       };
 
       const { categoryPath, subCategories } = categoriesMetaDeta[id];
-      onCategorySelect(
-        id,
-        categoryPath,
-      );
+      onCategorySelect(id, categoryPath);
     },
-    [categoriesMetaDeta, onCategorySelect]
+    [categoriesMetaDeta, onCategorySelect],
   );
 
   const initializeSelectedProducts = useCallback(() => {
     if (selectedProductSkus.length) {
-      fetchProducts({ skus: selectedProductSkus.join("_or_") })
+      fetchProducts({ skus: selectedProductSkus.join('_or_') })
         .then(({ elements }: any) => mapProducts(elements))
         .then((selectedProducts) => setSelectedProducts(selectedProducts))
         .catch(() => setProducts([]));
@@ -357,10 +275,7 @@ const Dialog = ({
   const updateSelectedProducts = useCallback(() => {
     setSelectedProducts((prevSelectedProducts) => {
       if (prevSelectedProducts.length < selectedProductSkus.length) {
-        const uniqueSku = selectedProductSkus.find(
-          (sku) =>
-            prevSelectedProducts.map(({ sku }) => sku).indexOf(sku) === -1
-        );
+        const uniqueSku = selectedProductSkus.find((sku) => prevSelectedProducts.map(({ sku }) => sku).indexOf(sku) === -1);
         const selectedProduct = products.find(({ sku }) => sku === uniqueSku);
         if (selectedProduct) {
           return [
@@ -373,9 +288,7 @@ const Dialog = ({
         }
         return prevSelectedProducts;
       } else {
-        const uniqueSku = prevSelectedProducts
-          .map(({ sku }) => sku)
-          .find((sku) => selectedProductSkus.indexOf(sku) === -1);
+        const uniqueSku = prevSelectedProducts.map(({ sku }) => sku).find((sku) => selectedProductSkus.indexOf(sku) === -1);
         return prevSelectedProducts.filter(({ sku }) => sku !== uniqueSku);
       }
     });
@@ -395,7 +308,7 @@ const Dialog = ({
 
   useEffect(() => {
     if (initialLoad && apiBase && context) {
-      if (context === "category") {
+      if (context === 'category') {
         // selectedCategories is already a flat array of IDs
         setSelectedCategoryIds(selectedCategories);
         setSelectedCategoryIdsInitialized(true);
@@ -405,16 +318,7 @@ const Dialog = ({
       }
       setInitialLoad(false);
     }
-  }, [
-    apiBase,
-    imageType,
-    context,
-    initialLoad,
-    initializeSelectedProducts,
-    loadCategories,
-    loadProducts,
-    selectedCategories,
-  ]);
+  }, [apiBase, imageType, context, initialLoad, initializeSelectedProducts, loadCategories, loadProducts, selectedCategories]);
 
   useEffect(() => {
     if (selectedCategoryIdsInitialized && !categoriesInitialized) {
@@ -422,54 +326,31 @@ const Dialog = ({
       loadProducts({});
       setCategoriesInitialized(true);
     }
-  }, [
-    categoriesInitialized,
-    loadCategories,
-    loadProducts,
-    selectedCategoryIdsInitialized,
-  ]);
+  }, [categoriesInitialized, loadCategories, loadProducts, selectedCategoryIdsInitialized]);
 
   useEffect(() => {
-    const updateCategory = ({
-      subCategories,
-      ...category
-    }: Category): Category => ({
+    const updateCategory = ({ subCategories, ...category }: Category): Category => ({
       ...category,
       selected: selectedCategoryIds.includes(category.id),
-      subCategories: subCategories.map((subCategory) =>
-        updateCategory(subCategory)
-      ),
+      subCategories: subCategories.map((subCategory) => updateCategory(subCategory)),
     });
 
     const updateProduct = (product: Product): Product => {
-      const categoryPath =
-        categoriesMetaDeta[lastCategoryFilterId]?.categoryPath;
+      const categoryPath = categoriesMetaDeta[lastCategoryFilterId]?.categoryPath;
       return {
         ...product,
-        canBeClicked:
-          context === "category"
-            ? lastCategoryFilterId !== "" &&
-              selectedCategoryIds.includes(lastCategoryFilterId)
-            : true,
+        canBeClicked: context === 'category' ? lastCategoryFilterId !== '' && selectedCategoryIds.includes(lastCategoryFilterId) : true,
         selected:
-          context === "category"
-            ? lastCategoryFilterId === ""
-              ? selectedCategoryIds.includes(
-                  productsCategory[product.sku].id
-                ) && !excludedProductSkus.includes(product.sku)
+          context === 'category'
+            ? lastCategoryFilterId === ''
+              ? selectedCategoryIds.includes(productsCategory[product.sku].id) && !excludedProductSkus.includes(product.sku)
               : selectedCategoryIds.includes(lastCategoryFilterId) &&
-                !excludedCategoryProductSkus[
-                  categoryPath.length ? categoryPath[0] : lastCategoryFilterId
-                ]?.includes(product.sku)
+                !excludedCategoryProductSkus[categoryPath.length ? categoryPath[0] : lastCategoryFilterId]?.includes(product.sku)
             : selectedProductSkus.includes(product.sku),
       };
     };
-    setCategories((prevCategories) =>
-      prevCategories.map((category) => updateCategory(category))
-    );
-    setProducts((prevProducts) =>
-      prevProducts.map((product) => updateProduct(product))
-    );
+    setCategories((prevCategories) => prevCategories.map((category) => updateCategory(category)));
+    setProducts((prevProducts) => prevProducts.map((product) => updateProduct(product)));
   }, [
     categoriesMetaDeta,
     context,
@@ -486,7 +367,7 @@ const Dialog = ({
       excludedProductsCount={excludedProductSkus.length}
       categoriesLoading={categoriesLoading}
       productsLoading={productsLoading}
-      withCategorySelector={context === "category"}
+      withCategorySelector={context === 'category'}
       categories={categories}
       products={products}
       selectedProducts={selectedProducts}
