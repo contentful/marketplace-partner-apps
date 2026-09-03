@@ -1,5 +1,5 @@
 import { Card, Flex, Text, Tooltip } from '@contentful/f36-components';
-import React, { CSSProperties } from 'react';
+import { CSSProperties } from 'react';
 import CloseButton from './CloseButton';
 
 interface ImageType {
