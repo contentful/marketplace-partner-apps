@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card, Flex, Grid, GridItem, Text } from '@contentful/f36-components';
 import { default as ProductCard, Props as CardProps } from './ProductCard';
 
