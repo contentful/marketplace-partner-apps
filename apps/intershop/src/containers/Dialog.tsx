@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import DialogComponent from '../components/Dialog';
 import { Product } from '../types/Product';
 import { Category } from '../types/Category';
