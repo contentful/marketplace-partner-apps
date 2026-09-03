@@ -266,7 +266,9 @@ const Dialog = ({
   const initializeSelectedProducts = useCallback(() => {
     if (selectedProductSkus.length) {
       fetchProducts({ skus: selectedProductSkus.join('_or_') })
-        .then(({ elements }: any) => mapProducts(elements))
+        .then(({ elements }: any) =>
+          mapProducts(elements).toSorted((productA, productB) => selectedProductSkus.indexOf(productA.sku) - selectedProductSkus.indexOf(productB.sku)),
+        )
         .then((selectedProducts) => setSelectedProducts(selectedProducts))
         .catch(() => setProducts([]));
     }
