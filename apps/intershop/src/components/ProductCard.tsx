@@ -37,7 +37,11 @@ const ProductCard = ({ identifier, price, subtitle, title, warning, style, image
       {onClose && <CloseButton aria-label={ariaCloseButton} onClick={onClose} style={{ position: 'absolute', top: '0.5em', right: '0.5em' }} />}
       <Flex flexDirection="column" justifyContent="space-between" alignItems="center" fullHeight padding={withDragHandle ? 'spacingM' : undefined}>
         <Flex flexDirection="column" style={{ marginRight: 'auto', maxWidth: '100%', height: '5.25em' }}>
-          <Text fontSize="fontSizeXl" fontWeight="fontWeightDemiBold" isTruncated style={{ maxWidth: `calc(100% - ${tokens.spacingM})` }}>
+          <Text
+            fontSize="fontSizeXl"
+            fontWeight="fontWeightDemiBold"
+            isTruncated
+            style={onClose ? { maxWidth: `calc(100% - ${tokens.spacingM})` } : { maxWidth: '100%' }}>
             {title}
           </Text>
           <Text
