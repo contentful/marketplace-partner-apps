@@ -14,7 +14,7 @@ interface Props {
 }
 
 const CardGrid = ({ loading, placeholder, cards, onCardClick }: Props) => (
-  <Grid columns="repeat(5, 1fr)" rows="repeat(2, 50%)" style={{ height: '100%' }} rowGap="spacingM">
+  <Grid columns="repeat(5, 1fr)" rows="none" style={{ height: '100%', gridAutoRows: '50%' }} rowGap="spacingM">
     {cards.length ? (
       cards.map(({ canBeClicked, sku, selected, ...card }, i) => (
         <GridItem key={i}>
