@@ -25,7 +25,7 @@ const CategoryCard = ({ aria = 'Close category', contentType, thumbnailSrc, titl
         },
       },
     })}>
-    {onClose && <CloseButton aria={aria} onClick={onClose} style={{ position: 'absolute', right: '10px', height: '24px' }} />}
+    {onClose && <CloseButton aria-label={aria} onClick={onClose} style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)' }} />}
 
     <Text fontColor="gray500">{description}</Text>
   </EntryCard>
