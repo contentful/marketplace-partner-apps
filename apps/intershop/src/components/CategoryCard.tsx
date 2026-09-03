@@ -1,5 +1,4 @@
 import { EntryCard, Text } from '@contentful/f36-components';
-import React from 'react';
 import CloseButton from './CloseButton';
 import { css } from 'emotion';
 import CategoryCardType from '../types/CategoryCard';
