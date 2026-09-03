@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { DialogAppSDK } from "@contentful/app-sdk";
-import { useSDK } from "@contentful/react-apps-toolkit";
-import DialogContainer from "../containers/Dialog";
-import { FieldJson } from "../types/FieldJson";
+import React, { useCallback, useEffect, useState } from 'react';
+import { DialogAppSDK } from '@contentful/app-sdk';
+import { useSDK } from '@contentful/react-apps-toolkit';
+import DialogContainer from '../containers/Dialog';
+import { FieldJson } from '../types/FieldJson';
 
 interface InvocationParameters {
   context: string;
@@ -12,66 +12,49 @@ interface InvocationParameters {
 const Dialog = () => {
   const sdk = useSDK<DialogAppSDK>();
 
-  const [data, setData] = useState<Omit<FieldJson, "type">>({
+  const [data, setData] = useState<Omit<FieldJson, 'type'>>({
     products: [],
     categories: [],
-    channel: "",
-    application: "",
+    channel: '',
+    application: '',
   });
-  const [context, setContext] = useState("");
+  const [context, setContext] = useState('');
 
   const handleOnSaveSubmit = useCallback(() => {
     sdk.close({ data });
   }, [data, sdk]);
 
-  const updateCategories = useCallback(
-    (categoryId: string, currentCategories: Array<string>): Array<string> => {
-      // Simple toggle: if category exists, remove it; otherwise, add it
-      const exists = currentCategories.includes(categoryId);
-      
-      if (exists) {
-        return currentCategories.filter(id => id !== categoryId);
-      } else {
-        return [...currentCategories, categoryId];
-      }
-    },
-    []
-  );
+  const updateCategories = useCallback((categoryId: string, currentCategories: Array<string>): Array<string> => {
+    // Simple toggle: if category exists, remove it; otherwise, add it
+    const exists = currentCategories.includes(categoryId);
 
-  const handleOnProductSelect = useCallback(
-    (
-      sku: string,
-      selected: boolean,
-      categoryId?: string,
-      categoryPath?: Array<string>
-    ) => {
-      // For product selection (not category-based), just toggle the product
-      setData((prevData) => ({
-        ...prevData,
-        products: selected
-          ? prevData.products.filter((productSku) => productSku !== sku)
-          : [...prevData.products, sku],
-      }));
-    },
-    []
-  );
+    if (exists) {
+      return currentCategories.filter((id) => id !== categoryId);
+    } else {
+      return [...currentCategories, categoryId];
+    }
+  }, []);
+
+  const handleOnProductSelect = useCallback((sku: string, selected: boolean, categoryId?: string, categoryPath?: Array<string>) => {
+    // For product selection (not category-based), just toggle the product
+    setData((prevData) => ({
+      ...prevData,
+      products: selected ? prevData.products.filter((productSku) => productSku !== sku) : [...prevData.products, sku],
+    }));
+  }, []);
 
   const handleCategorySelect = useCallback(
-    (
-      id: string,
-      categoryPath: Array<string>,
-    ) => {
+    (id: string, categoryPath: Array<string>) => {
       setData((prevData) => ({
         ...prevData,
         categories: updateCategories(id, prevData.categories),
       }));
     },
-    [updateCategories]
+    [updateCategories],
   );
 
   useEffect(() => {
-    const { data, context } = sdk.parameters
-      .invocation as unknown as InvocationParameters;
+    const { data, context } = sdk.parameters.invocation as unknown as InvocationParameters;
     setData(data);
     setContext(context);
   }, [sdk.parameters]);
@@ -83,9 +66,7 @@ const Dialog = () => {
       imageType={sdk.parameters.installation.imageType}
       categoryBlueprint={sdk.parameters.installation.categoryMapper}
       productBlueprint={sdk.parameters.installation.productMapper}
-      productCategoryBlueprint={
-        sdk.parameters.installation.productCategoryPathMapper
-      }
+      productCategoryBlueprint={sdk.parameters.installation.productCategoryPathMapper}
       context={context}
       selectedProductSkus={data.products}
       selectedCategories={data.categories}
