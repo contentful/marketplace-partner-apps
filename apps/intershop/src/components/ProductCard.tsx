@@ -1,6 +1,7 @@
 import { Card, Flex, Text, Tooltip } from '@contentful/f36-components';
 import { CSSProperties } from 'react';
 import CloseButton from './CloseButton';
+import tokens from '@contentful/f36-tokens';
 
 interface ImageType {
   alt: string;
@@ -31,10 +32,10 @@ const ProductCard = ({ selected, aria = 'Close product', identifier, price, subt
         ...(warning ? { cursor: 'not-allowed' } : {}),
         ...style,
       }}>
-      {onClose && <CloseButton aria={aria} onClick={onClose} style={{ position: 'absolute', top: '0.5em', right: '0.5em' }} />}
+      {onClose && <CloseButton aria-label={aria} onClick={onClose} style={{ position: 'absolute', top: '0.5em', right: '0.5em' }} />}
       <Flex flexDirection="column" justifyContent="space-between" alignItems="center" fullHeight>
         <Flex flexDirection="column" style={{ marginRight: 'auto', maxWidth: '100%', height: '5.25em' }}>
-          <Text fontSize="fontSizeXl" fontWeight="fontWeightDemiBold" isTruncated>
+          <Text fontSize="fontSizeXl" fontWeight="fontWeightDemiBold" isTruncated style={{ maxWidth: `calc(100% - ${tokens.spacingM})` }}>
             {title}
           </Text>
           <Text
