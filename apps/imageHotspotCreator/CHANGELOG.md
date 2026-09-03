@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.29](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.28...image-hotspot-creator-v1.0.29) (2026-09-02)
+
+
+### Bug Fixes
+
+* **deps:** bump markdown-it from 14.1.0 to 14.2.0 in /apps/imageHotspotCreator ([#8380](https://github.com/contentful/marketplace-partner-apps/issues/8380)) ([cc9535f](https://github.com/contentful/marketplace-partner-apps/commit/cc9535fd305323bff2d767e27ef837d9e3cd0f8c))
+* **deps:** bump qs from 6.14.2 to 6.15.2 in /apps/imageHotspotCreator ([#8228](https://github.com/contentful/marketplace-partner-apps/issues/8228)) ([50512a7](https://github.com/contentful/marketplace-partner-apps/commit/50512a7695614c9d62fee668b7c51a6d17fdc5dd))
+* **deps:** bump tar and @contentful/app-scripts in /apps/imageHotspotCreator ([#8357](https://github.com/contentful/marketplace-partner-apps/issues/8357)) ([9dd6493](https://github.com/contentful/marketplace-partner-apps/commit/9dd64934a0bc9c17dad47b8e1b50b0d02e12906d))
+
 ## [1.0.28](https://github.com/contentful/marketplace-partner-apps/compare/image-hotspot-creator-v1.0.27...image-hotspot-creator-v1.0.28) (2025-10-16)
 
 
