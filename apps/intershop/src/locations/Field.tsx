@@ -15,6 +15,7 @@ import CategoryCardType from '../types/CategoryCard';
 import LoadingIcon from '../components/LoadingIcon';
 import { replaceChannelAndApplication } from '../utils/replace';
 import FetchFilters from '../types/FetchFilters';
+import { SortableCardList } from '../components/SortableCardList';
 
 interface Popovers extends Record<'deleteSelection' | 'changeChannelOrApplication', boolean> {}
 
@@ -92,11 +93,13 @@ const Field = () => {
         .then((json) => json.elements.map((element: any) => jsonMapper(productMapper, element)))
         .then((mappedJsonElements: Array<MappedProductJson>) =>
           setProducts(
-            mappedJsonElements.map(({ image, price, ...product }) => ({
-              ...product,
-              image,
-              price: `$${price}`,
-            })),
+            mappedJsonElements
+              .map(({ image, price, ...product }) => ({
+                ...product,
+                image,
+                price: `$${price}`,
+              }))
+              .toSorted((productA, productB) => skus.indexOf(productA.sku) - skus.indexOf(productB.sku)),
           ),
         )
         .then(() => setLoading(false))
@@ -248,6 +251,15 @@ const Field = () => {
 
   const updatePopOverDisplay = useCallback((key: keyof Popovers, display: boolean) => {
     setDisplayPopovers((prevValue) => ({ ...prevValue, [key]: display }));
+  }, []);
+
+  const handleOnReorderProducts = useCallback((reorderedProducts: (Product & { id: string })[]) => {
+    const { ...data } = sdk.field.getValue();
+    sdk.field.setValue({
+      ...data,
+      products: reorderedProducts.map(({ sku }) => sku),
+    });
+    setProducts(reorderedProducts.map(({ id, ...product }) => product));
   }, []);
 
   useEffect(() => {
@@ -466,24 +478,27 @@ const Field = () => {
         {products.length || categories.length ? (
           <Stack flex="max-content" paddingBottom="spacingS" fullWidth style={{ overflowX: 'auto' }}>
             {products.length ? (
-              products.map(({ brand: title, title: subtitle, image, price, sku }, i) => (
-                <ProductCard
-                  key={i}
-                  price={price}
-                  title={title}
-                  subtitle={subtitle}
-                  identifier={sku}
-                  image={{
-                    src: image,
-                    alt: '',
-                  }}
-                  onClose={() => {
-                    handleOnCloseProduct(sku);
-                  }}
-                  aria="Remove product"
-                  style={{ width: '20%', height: '16.5em', flexShrink: 0 }}
-                />
-              ))
+              <SortableCardList
+                items={products.map((product) => ({
+                  ...product,
+                  id: product.sku,
+                }))}
+                onItemsChange={handleOnReorderProducts}
+                renderCard={(product, sortableCardProps) => (
+                  <ProductCard
+                    {...sortableCardProps}
+                    price={product.price}
+                    title={product.brand}
+                    subtitle={product.title}
+                    identifier={product.sku}
+                    image={{ src: product.image, alt: '' }}
+                    onClose={() => {
+                      handleOnCloseProduct(product.sku);
+                    }}
+                    style={{ width: '20%', height: '15em', flexShrink: 0 }}
+                  />
+                )}
+              />
             ) : (
               <Stack flexDirection="column" spacing="spacingS" alignItems="baseline" style={{ width: '100%' }}>
                 {categories.map((category) => category)}

@@ -1,9 +1,11 @@
 import { Card, Flex, Grid, GridItem, Text } from '@contentful/f36-components';
-import { default as ProductCard, Props as CardProps } from './ProductCard';
+import { default as ProductCard } from './ProductCard';
+import { ComponentProps } from 'react';
 
-interface CardType extends Omit<CardProps, 'onClick'> {
+interface CardType extends Omit<ComponentProps<typeof ProductCard>, 'onClick' | 'isSelected'> {
   canBeClicked?: boolean;
   sku: string;
+  selected?: boolean;
 }
 
 interface Props {
@@ -21,7 +23,7 @@ const CardGrid = ({ loading, placeholder, cards, onCardClick }: Props) => (
           <ProductCard
             {...card}
             identifier={sku}
-            selected={selected}
+            isSelected={selected}
             onClick={canBeClicked ? () => onCardClick(sku, selected ?? false) : undefined}
             style={{
               height: '100%',
