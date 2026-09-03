@@ -80,10 +80,14 @@ const Field = () => {
   }, []);
 
   const loadProducts = useCallback(
-    (skus: string, { ...filters }: FetchFilters) => {
+    (skus: string[], { ...filters }: FetchFilters) => {
       setLoading(true);
       const { apiBase, productMapper, imageBase, imageType } = sdk.parameters.installation;
-      fetch(replaceChannelAndApplication(`${apiBase}/products?sku=${skus}&attrs=sku,manufacturer,image@${imageType},defaultCategory,listPrice`, { ...filters }))
+      fetch(
+        replaceChannelAndApplication(`${apiBase}/products?sku=${skus.join('_or_')}&attrs=sku,manufacturer,image@${imageType},defaultCategory,listPrice`, {
+          ...filters,
+        }),
+      )
         .then((res) => {
           if (res.status === 404) {
             throw new Error(res.statusText);
@@ -208,7 +212,7 @@ const Field = () => {
     (products: Array<string>, categories: Array<string>, { ...filters }: FetchFilters) => {
       setErrors({ products: [], categories: [] });
       if (products.length) {
-        loadProducts(products.join('_or_'), { ...filters });
+        loadProducts(products, { ...filters });
       } else if (categories.length) {
         // categories is now a flat array of IDs
         setCategoryTotalExcludedProducts({});
