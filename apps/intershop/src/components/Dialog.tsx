@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import CardGrid from './CardGrid';
 import ProductBasket from './ProductBasket';
 import { Grid, GridItem, FormControl, TextInput, Stack, Text, Button, Flex, Note } from '@contentful/f36-components';
