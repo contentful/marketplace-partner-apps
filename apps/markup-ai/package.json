@@ -88,7 +88,7 @@
     "@hey-api/openapi-ts": "0.94.5",
     "@rollup/plugin-commonjs": "^29.0.3",
     "@testing-library/jest-dom": "6.9.1",
-    "@testing-library/react": "16.3.2",
+    "@testing-library/react": "16.3.3",
     "@types/js-beautify": "^1.14.3",
     "@types/markdown-it": "14.1.2",
     "@types/node": "25.6.0",
