@@ -13,6 +13,7 @@ type Props<TItem extends SortableItemData> = Omit<ComponentProps<typeof Sortable
 
 const SortableCardList = <TItem extends SortableItemData>({ renderCard, ...props }: Props<TItem>) => (
   <SortableList
+    {...props}
     renderItem={(item, { itemRef: ref, handleRef, isDragging }) =>
       renderCard(item, {
         withDragHandle: true,
@@ -22,7 +23,6 @@ const SortableCardList = <TItem extends SortableItemData>({ renderCard, ...props
         dragHandleRender: ({ drag }) => cloneElement(drag as ReactElement<DragHandleProps & RefAttributes<Element>>, { ref: handleRef }),
       })
     }
-    {...props}
   />
 );
 

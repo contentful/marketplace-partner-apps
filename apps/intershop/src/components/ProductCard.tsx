@@ -26,14 +26,14 @@ const ProductCard = ({ identifier, price, subtitle, title, warning, style, image
   const withDragHandle = 'withDragHandle' in props ? props.withDragHandle : false;
   const card = (
     <Card
+      {...props}
       style={{
         position: 'relative',
         ...(warning ? { cursor: 'not-allowed' } : {}),
         ...style,
       }}
       withDragHandle={withDragHandle}
-      padding={withDragHandle ? 'none' : padding}
-      {...props}>
+      padding={withDragHandle ? 'none' : padding}>
       {onClose && <CloseButton aria-label={ariaCloseButton} onClick={onClose} style={{ position: 'absolute', top: '0.5em', right: '0.5em' }} />}
       <Flex flexDirection="column" justifyContent="space-between" alignItems="center" fullHeight padding={withDragHandle ? 'spacingM' : undefined}>
         <Flex flexDirection="column" style={{ marginRight: 'auto', height: '5.25em', maxWidth: onClose ? `calc(100% - ${tokens.spacingM})` : '100%' }}>
