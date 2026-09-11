@@ -380,7 +380,9 @@ const Field = () => {
                 style={{ marginBottom: 0 }}
                 isDisabled={channels.length < 2}>
                 {channels.map((channel: string) => (
-                  <Select.Option value={channel}>{channel}</Select.Option>
+                  <Select.Option key={channel} value={channel}>
+                    {channel}
+                  </Select.Option>
                 ))}
               </Select>
             </FormControl>
@@ -393,7 +395,9 @@ const Field = () => {
                 value={selectedApplication}
                 isDisabled={applications.length < 2}>
                 {applications.map((application: string) => (
-                  <Select.Option value={application}>{application}</Select.Option>
+                  <Select.Option key={application} value={application}>
+                    {application}
+                  </Select.Option>
                 ))}
               </Select>
             </FormControl>
