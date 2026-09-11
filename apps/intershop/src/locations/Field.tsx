@@ -293,6 +293,10 @@ const Field = () => {
         });
         setChannel(channel);
         setApplication(application);
+        if (channels.length <= 1 && applications.length <= 1) {
+          setSelectedChannel(channel);
+          setSelectedApplication(application);
+        }
       } else {
         const { products, categories, type, channel, application } = sdk.field.getValue() as FieldJson;
         let filters = {
@@ -325,7 +329,13 @@ const Field = () => {
   });
 
   useEffect(() => {
-    const { application, channel, products, categories, ...data } = sdk.field.getValue();
+    const fieldValue = sdk.field.getValue();
+
+    if (fieldValue == undefined) {
+      return;
+    }
+
+    const { application, channel, products, categories, ...data } = fieldValue;
     if (
       (((selectedChannel === '' && !channels.length) || (selectedChannel !== '' && channels.length)) && channel !== selectedChannel) ||
       (((selectedApplication === '' && !applications.length) || (selectedApplication !== '' && applications.length)) && application !== selectedApplication)
