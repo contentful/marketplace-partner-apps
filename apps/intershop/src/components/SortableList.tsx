@@ -40,7 +40,7 @@ const SortableItem = <TItem extends SortableItemData>({ item, index, renderItem 
 type SortableListProps<TItem extends SortableItemData> = {
   items: TItem[];
   onItemsChange: (items: TItem[]) => void;
-  renderItem: (item: TItem, sortable: SortableItemRenderProps) => ReactNode;
+  renderItem: (item: TItem, sortableItemRenderProps: SortableItemRenderProps) => ReactNode;
 };
 
 const SortableList = <TItem extends SortableItemData>({ items, onItemsChange, renderItem }: SortableListProps<TItem>): ReactNode => (
