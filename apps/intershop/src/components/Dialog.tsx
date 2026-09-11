@@ -91,7 +91,7 @@ const Dialog = ({
         onRequestProducts({
           categoryId: categoryFilterProducts,
           searchTerm: searchValue,
-          offset: searchOffset === 0 ? 20 : searchOffset,
+          offset: searchOffset + 20,
         });
       }
     }
