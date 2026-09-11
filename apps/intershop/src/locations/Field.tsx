@@ -392,7 +392,7 @@ const Field = () => {
                 onChange={(event) => {
                   setApplication(event.target.value);
                 }}
-                value={selectedApplication}
+                value={application}
                 isDisabled={applications.length < 2}>
                 {applications.map((application: string) => (
                   <Select.Option key={application} value={application}>
