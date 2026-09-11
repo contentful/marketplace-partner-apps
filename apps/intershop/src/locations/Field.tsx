@@ -199,7 +199,7 @@ const Field = () => {
         .catch((error) => {
           setErrors((prevErrors) => ({
             ...prevErrors,
-            category: [...prevErrors.categories, `An error occurred while fetching categories (${error})`],
+            categories: [...prevErrors.categories, `An error occurred while fetching categories (${error})`],
           }));
           setCategories([]);
           return setLoading(false);
