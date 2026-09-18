@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [0.3.0](https://github.com/contentful/marketplace-partner-apps/compare/page-tree-app-v0.2.0...page-tree-app-v0.3.0) (2026-09-18)
+
+
+### Features
+
+* add PageTree app [] ([#8760](https://github.com/contentful/marketplace-partner-apps/issues/8760)) ([9afb619](https://github.com/contentful/marketplace-partner-apps/commit/9afb619b301c52145157ef1f6399e2fa842e0db7))
+
 ## [Unreleased]
 
 ### Added
