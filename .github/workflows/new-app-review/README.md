@@ -5,6 +5,8 @@ PRs containing new app submissions undergo some extra validation to ensure they 
 This workflow script will run these checks, comment on the PR with any failures,
 and label the PR according to the review result as either `Pending Contentful Review` or `Partner Action Needed`.
 
+Checks include: **support-ownership** (new apps must have a row in [SUPPORT_OWNERSHIP.md](../../../SUPPORT_OWNERSHIP.md)).
+
 ## Adding a New Check
 
 To add a new check to the validation process, simply add a [validator](./validators/)
