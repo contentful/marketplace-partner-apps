@@ -38,7 +38,7 @@
     "@storybook/react": "^8.3.1",
     "@storybook/react-vite": "^10.4.6",
     "@storybook/test": "^8.6.15",
-    "@storybook/test-runner": "^0.24.4",
+    "@storybook/test-runner": "^0.24.5",
     "@testing-library/react": "14.0.0",
     "@types/node": "^20",
     "@types/react": "18.2.14",
