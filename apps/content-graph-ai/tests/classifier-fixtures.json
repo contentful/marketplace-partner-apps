@@ -1,0 +1,473 @@
+[
+  {
+    "id": "platform-pillar",
+    "description": "Contentful Platform product page \u2014 product pillar",
+    "input": {
+      "entryId": "hclvhMBxnJbxq8OQQv7HN",
+      "title": "Contentful Platform",
+      "contentType": "page",
+      "slug": "/products/platform",
+      "textSnippet": "The Contentful Platform is a composable content platform that enables enterprise teams to create, manage, and deliver digital experiences at scale. Build powerful content models. Integrate with your favorite tools. Scale globally with confidence. Trusted by thousands of enterprise brands worldwide. With Contentful you can model content once and deliver everywhere. Our composable architecture works with any frontend. Connect to any third-party service through our Ecosystem. Request a demo today and see how Contentful can transform your digital operations. Contact sales to learn about Enterprise pricing."
+    },
+    "expected": {
+      "assetType": {
+        "value": "Webpage",
+        "confidence": 0.97
+      },
+      "assetSubType": {
+        "value": [
+          "Product"
+        ],
+        "confidence": 0.95
+      },
+      "schemaType": {
+        "value": "SoftwareApplication",
+        "confidence": 0.97
+      },
+      "product": {
+        "value": [
+          "Platform"
+        ],
+        "confidence": 0.87
+      },
+      "topic": {
+        "value": [
+          "Headless CMS"
+        ],
+        "confidence": 0.92
+      },
+      "funnelStage": {
+        "value": "Evaluation/Engagement (BOFU)",
+        "confidence": 0.95
+      },
+      "audience": {
+        "value": [],
+        "confidence": 0.86
+      },
+      "jobLevel": {
+        "value": [
+          "Director",
+          "VP"
+        ],
+        "confidence": 0.86
+      },
+      "jobFunction": {
+        "value": [
+          "Content",
+          "IT/Engineering"
+        ],
+        "confidence": 0.86
+      },
+      "industry": {
+        "value": [
+          "Software, IT & Technology"
+        ],
+        "confidence": 0.9
+      },
+      "companySize": {
+        "value": [
+          "Commercial ($10M - $500M revenue)"
+        ],
+        "confidence": 0.8
+      },
+      "language": {
+        "value": "EN",
+        "confidence": 0.99
+      },
+      "usageRights": {
+        "value": "External",
+        "confidence": 0.99
+      },
+      "region": {
+        "value": [
+          "Global"
+        ],
+        "confidence": 0.8
+      }
+    },
+    "expectedSignals": {
+      "urlPattern": "product",
+      "isProductPage": true,
+      "hasDemo": true,
+      "overrideSchemaType": "SoftwareApplication"
+    },
+    "recordedAt": "2026-03-23T00:00:00.000Z"
+  },
+  {
+    "id": "headless-cms-guide",
+    "description": "TOFU \"What is headless CMS\" long-form SEO guide",
+    "input": {
+      "entryId": "72SM66tqt9OxVvFSxQCqnp",
+      "title": "What is Headless CMS? A Complete Guide",
+      "contentType": "pageLongFormSeo",
+      "slug": "/headless-cms",
+      "textSnippet": "A headless CMS is a content management system that separates the content repository (the \"body\") from the presentation layer (the \"head\"). Unlike traditional CMS platforms, a headless CMS delivers content via APIs, enabling teams to build digital experiences across any channel."
+    },
+    "expected": {
+      "assetType": {
+        "value": "Webpage",
+        "confidence": 0.99
+      },
+      "assetSubType": {
+        "value": [
+          "Article"
+        ],
+        "confidence": 0.99
+      },
+      "schemaType": {
+        "value": "Article",
+        "confidence": 0.91
+      },
+      "funnelStage": {
+        "value": "Awareness (TOFU)",
+        "confidence": 0.74
+      },
+      "language": {
+        "value": "EN",
+        "confidence": 0.99
+      },
+      "usageRights": {
+        "value": "External",
+        "confidence": 0.99
+      },
+      "region": {
+        "value": [
+          "Global"
+        ],
+        "confidence": 0.74
+      },
+      "companySize": {
+        "value": [],
+        "confidence": 0.74
+      }
+    },
+    "expectedSignals": {
+      "urlPattern": "unknown",
+      "isProductPage": false,
+      "hasDemo": false
+    },
+    "recordedAt": "2026-03-23T00:00:00.000Z"
+  },
+  {
+    "id": "personalization-page",
+    "description": "Contentful Personalization product page \u2014 formerly Ninetailed",
+    "input": {
+      "entryId": "5yRQig0lpBHEYEvAFz54S8",
+      "title": "Contentful Personalization",
+      "contentType": "page",
+      "slug": "/products/personalization",
+      "textSnippet": "Deliver personalized experiences to every visitor. Powered by Ninetailed technology, Contentful Personalization lets you run A/B tests, multivariate experiments, and targeted audience segments. Define your audiences using behavioral signals, firmographic data, and real-time attributes. Connect personalization logic directly to your Contentful content model without engineering overhead. Enterprise teams use Contentful Personalization to increase conversion rates and improve customer engagement across channels. See how leading brands use Contentful Personalization at scale. Personalization rules are defined in the Contentful web app without code changes. Changes propagate instantly via the Content Delivery API. Request a demo to see Contentful Personalization in action with your own content. Our team will walk you through audience targeting, experimentation, and analytics. Contact sales for enterprise plans and volume pricing."
+    },
+    "expected": {
+      "assetType": {
+        "value": "Webpage",
+        "confidence": 0.91
+      },
+      "assetSubType": {
+        "value": [
+          "Product"
+        ],
+        "confidence": 0.91
+      },
+      "product": {
+        "value": [
+          "Personalization"
+        ],
+        "confidence": 0.87
+      },
+      "schemaType": {
+        "value": "SoftwareApplication",
+        "confidence": 0.97
+      },
+      "funnelStage": {
+        "value": "Evaluation/Engagement (BOFU)",
+        "confidence": 0.95
+      },
+      "language": {
+        "value": "EN",
+        "confidence": 0.99
+      },
+      "usageRights": {
+        "value": "External",
+        "confidence": 0.99
+      },
+      "region": {
+        "value": [
+          "Global"
+        ],
+        "confidence": 0.8
+      }
+    },
+    "expectedSignals": {
+      "urlPattern": "product",
+      "isProductPage": true,
+      "hasDemo": true
+    },
+    "recordedAt": "2026-03-23T00:00:00.000Z"
+  },
+  {
+    "id": "blog-post",
+    "description": "Blog post \u2014 should lock to BlogPosting schema, TOFU funnel",
+    "input": {
+      "entryId": "test-blog-001",
+      "title": "5 Ways Headless CMS Improves Developer Experience",
+      "contentType": "pageBlogPost",
+      "slug": "/blog/headless-cms-developer-experience",
+      "textSnippet": "Developers love headless CMS because it gives them the flexibility to use any front-end framework. In this article, we explore five ways a headless CMS improves developer experience."
+    },
+    "expected": {
+      "assetType": {
+        "value": "Blog",
+        "confidence": 0.99
+      },
+      "assetSubType": {
+        "value": [
+          "Blog"
+        ],
+        "confidence": 0.95
+      },
+      "schemaType": {
+        "value": "BlogPosting",
+        "confidence": 0.97
+      },
+      "funnelStage": {
+        "value": "Awareness (TOFU)",
+        "confidence": 0.74
+      },
+      "language": {
+        "value": "EN",
+        "confidence": 0.99
+      },
+      "usageRights": {
+        "value": "External",
+        "confidence": 0.99
+      },
+      "region": {
+        "value": [
+          "Global"
+        ],
+        "confidence": 0.74
+      },
+      "companySize": {
+        "value": [],
+        "confidence": 0.74
+      }
+    },
+    "expectedSignals": {
+      "urlPattern": "blog",
+      "overrideSchemaType": "BlogPosting"
+    },
+    "recordedAt": "2026-03-23T00:00:00.000Z"
+  },
+  {
+    "id": "docs-page",
+    "description": "Documentation page \u2014 should be TechArticle, Retention",
+    "input": {
+      "entryId": "test-docs-001",
+      "title": "Content Delivery API Reference",
+      "contentType": "page",
+      "slug": "/developers/docs/references/content-delivery-api",
+      "textSnippet": "The Content Delivery API (CDA) is a read-only API for delivering content from Contentful to apps, websites and other media. Content is delivered as JSON data and images, videos and other media as files."
+    },
+    "expected": {
+      "assetType": {
+        "value": "Webpage",
+        "confidence": 0.91
+      },
+      "assetSubType": {
+        "value": [
+          "Documentation"
+        ],
+        "confidence": 0.91
+      },
+      "schemaType": {
+        "value": "TechArticle",
+        "confidence": 0.97
+      },
+      "funnelStage": {
+        "value": "Retention",
+        "confidence": 0.74
+      },
+      "language": {
+        "value": "EN",
+        "confidence": 0.99
+      },
+      "usageRights": {
+        "value": "External",
+        "confidence": 0.99
+      },
+      "region": {
+        "value": [
+          "Global"
+        ],
+        "confidence": 0.74
+      }
+    },
+    "expectedSignals": {
+      "urlPattern": "docs",
+      "overrideFunnelStage": "Retention",
+      "overrideSchemaType": "TechArticle"
+    },
+    "recordedAt": "2026-03-23T00:00:00.000Z"
+  },
+  {
+    "id": "pricing-page",
+    "description": "Pricing page \u2014 SoftwareApplication schema, BOFU",
+    "input": {
+      "entryId": "test-pricing-001",
+      "title": "Contentful Pricing Plans",
+      "contentType": "pagePricing",
+      "slug": "/pricing",
+      "textSnippet": "Choose the plan that works for you. Free, Basic, and Enterprise options available. Per user per month pricing. Start for free. Enterprise plan includes unlimited users."
+    },
+    "expected": {
+      "assetType": {
+        "value": "Webpage",
+        "confidence": 0.99
+      },
+      "assetSubType": {
+        "value": [
+          "Webpage"
+        ],
+        "confidence": 0.99
+      },
+      "schemaType": {
+        "value": "SoftwareApplication",
+        "confidence": 0.93
+      },
+      "funnelStage": {
+        "value": "Evaluation/Engagement (BOFU)",
+        "confidence": 0.74
+      },
+      "language": {
+        "value": "EN",
+        "confidence": 0.99
+      },
+      "usageRights": {
+        "value": "External",
+        "confidence": 0.99
+      },
+      "region": {
+        "value": [
+          "Global"
+        ],
+        "confidence": 0.74
+      }
+    },
+    "expectedSignals": {
+      "urlPattern": "pricing",
+      "hasPricing": true
+    },
+    "recordedAt": "2026-03-23T00:00:00.000Z"
+  },
+  {
+    "id": "api-guide-seo-page",
+    "description": "SEO API explainer page \u2014 should not be treated as documentation",
+    "input": {
+      "entryId": "test-api-guide-001",
+      "title": "What is an API? How APIs work, simply explained",
+      "contentType": "pageLongFormSeo",
+      "slug": "/guides/api",
+      "textSnippet": "An API is a way for software systems to communicate. This guide explains endpoints, requests, responses, and why APIs matter for modern websites and apps. It is an educational primer, not reference documentation."
+    },
+    "expected": {
+      "assetType": {
+        "value": "Webpage",
+        "confidence": 0.99
+      },
+      "assetSubType": {
+        "value": [
+          "Article"
+        ],
+        "confidence": 0.99
+      },
+      "schemaType": {
+        "value": "Article",
+        "confidence": 0.91
+      },
+      "funnelStage": {
+        "value": "Awareness (TOFU)",
+        "confidence": 0.74
+      },
+      "language": {
+        "value": "EN",
+        "confidence": 0.99
+      },
+      "usageRights": {
+        "value": "External",
+        "confidence": 0.99
+      },
+      "region": {
+        "value": [
+          "Global"
+        ],
+        "confidence": 0.74
+      },
+      "jobFunction": {
+        "value": [
+          "Web Development"
+        ],
+        "confidence": 0.74
+      },
+      "companySize": {
+        "value": [],
+        "confidence": 0.74
+      }
+    },
+    "expectedSignals": {
+      "urlPattern": "unknown",
+      "isProductPage": false,
+      "overrideSchemaType": null,
+      "overrideFunnelStage": null,
+      "topicHints": [
+        "Web Development"
+      ]
+    },
+    "recordedAt": "2026-03-23T00:00:00.000Z"
+  },
+  {
+    "id": "french-page",
+    "description": "French-language page \u2014 language detection test",
+    "input": {
+      "entryId": "test-fr-001",
+      "title": "Qu'est-ce qu'un CMS headless?",
+      "contentType": "pageLongFormSeo",
+      "slug": "/fr/headless-cms",
+      "textSnippet": "Un CMS headless est un syst\u00e8me de gestion de contenu qui s\u00e9pare le contenu de la pr\u00e9sentation. Contrairement aux CMS traditionnels, le CMS headless livre le contenu via des API. Les \u00e9quipes peuvent cr\u00e9er des exp\u00e9riences num\u00e9riques sur tous les canaux."
+    },
+    "expected": {
+      "assetType": {
+        "value": "Webpage",
+        "confidence": 0.99
+      },
+      "assetSubType": {
+        "value": [
+          "Article"
+        ],
+        "confidence": 0.99
+      },
+      "language": {
+        "value": "FR",
+        "confidence": 0.99
+      },
+      "region": {
+        "value": [
+          "EMEA"
+        ],
+        "confidence": 0.74
+      },
+      "usageRights": {
+        "value": "External",
+        "confidence": 0.99
+      },
+      "funnelStage": {
+        "value": "Awareness (TOFU)",
+        "confidence": 0.74
+      }
+    },
+    "expectedSignals": {
+      "detectedLanguage": "FR"
+    },
+    "recordedAt": "2026-03-23T00:00:00.000Z"
+  }
+]

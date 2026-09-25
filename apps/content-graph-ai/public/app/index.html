@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ContentGraph – Quick Start</title>
+    <style>
+      body { font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 24px; line-height: 1.4; }
+      h1 { margin-bottom: 8px; }
+      h2 { margin-top: 24px; }
+      code, pre { background: #f6f8fa; padding: 2px 6px; border-radius: 4px; }
+      .card { border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin: 12px 0; }
+      .pill { display:inline-block; background:#eef; border-radius:999px; padding:2px 8px; margin-right:6px; font-size:12px; }
+      a { color:#2563eb; text-decoration:none; }
+      a:hover { text-decoration:underline; }
+      ul { margin: 8px 0 8px 18px; }
+    </style>
+  </head>
+  <body>
+    <h1>ContentGraph – Quick Start</h1>
+    <div>Focus on four pieces: Contentful Sidebar, Publish Webhook, Slack /cg, and Analytics Mix.</div>
+
+    <h2>1) Contentful App (Sidebar)</h2>
+    <div class="card">
+      <div>Location URL: <code>/app/sidebar.html</code></div>
+      <ul>
+        <li>Assign to your target content type(s).</li>
+        <li>Ensure fields for title/body exist (auto-detected).</li>
+        <li>Open an entry and click <em>Deep Crawl &amp; Classify</em>, then <em>Save Draft</em> or <em>Publish</em>.</li>
+      </ul>
+      <div><a href="/app/standalone-classify.html" target="_blank">Open classification preview (outside Contentful)</a></div>
+      <div style="margin-top:8px;">
+        <strong>Fallback (if sidebar button missing):</strong>
+        <a href="/app/standalone-classify.html" target="_blank">Open Standalone Classify Page</a>
+      </div>
+    </div>
+
+    <h2>2) Contentful Webhook (Auto-classify)</h2>
+    <div class="card">
+      <div>Webhook URL: <code>/webhooks/contentful</code></div>
+      <ul>
+        <li>Trigger: On Entry publish for your content types.</li>
+        <li>Queues classification processing and writes approved results back to Contentful.</li>
+      </ul>
+    </div>
+
+    <h2>3) Slack Slash Command</h2>
+    <div class="card">
+      <div>Command: <code>/cg</code> → Request URL: <code>/slack/cg</code></div>
+      <div class="pill">persona=</div><div class="pill">funnel=</div><div class="pill">industry=</div><div class="pill">topic=</div><div class="pill">limit=</div><div class="pill">public=true</div>
+      <div>Example: <code>/cg persona=decision-makers funnel=consideration industry=finance limit=3</code></div>
+    </div>
+
+    <h2>4) Analytics Quick View</h2>
+    <div class="card">
+      <div>Open the funnel mix chart: <a href="/app/mix.html" target="_blank">/app/mix.html</a></div>
+      <div>Or JSON: <a href="/analytics/content-mix" target="_blank">/analytics/content-mix</a></div>
+    </div>
+
+    <h2>Salesforce (Q&A)</h2>
+    <div class="card">
+      <ul>
+        <li>Phase 1: Use <code>/cg</code> in sales channels (<code>public=true</code> to post in-channel).</li>
+        <li>Phase 2: Lightning component calls <code>/graph/search</code> using a Named Credential.</li>
+      </ul>
+      <div>See <code>docs/SALESFORCE_DEMO.md</code> for copy-paste Apex + LWC.</div>
+    </div>
+
+    <h2>Live Demo Narrative</h2>
+    <div class="card">
+      <ol>
+        <li><strong>Context &amp; Goal:</strong> AI classifies in Contentful; Slack fetches best content by segment.</li>
+        <li><strong>Approach:</strong> Five labels power routing and recommendations.</li>
+        <li><strong>Steps:</strong> Sidebar classify → approve; publish → webhook auto-classify; Slack <code>/cg</code> to retrieve.</li>
+        <li><strong>Visuals:</strong> Funnel mix chart (<a href="/app/mix.html" target="_blank">open</a>).</li>
+        <li><strong>Impact:</strong> Tagging in seconds; better distribution; faster velocity.</li>
+      </ol>
+    </div>
+  </body>
+  </html>
