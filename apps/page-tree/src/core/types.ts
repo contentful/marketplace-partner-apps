@@ -8,7 +8,7 @@ export type TreeSourceConfig = {
 };
 
 export type AppConfig = {
-  baseUrl: string; // required; used for Preview URL: baseUrl + path
+  baseUrl: string; // optional; prefix for preview URLs (baseUrl + path)
   locale: string; // V1 default: 'en-US'
   sources: TreeSourceConfig[];
   detectOrphans?: boolean; // default true; set to false to disable orphan-page detection

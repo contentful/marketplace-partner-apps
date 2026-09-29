@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useSDK } from "@contentful/react-apps-toolkit";
-import { AppExtensionSDK } from "@contentful/app-sdk";
+import { AppExtensionSDK, AppState } from "@contentful/app-sdk";
 import {
   Accordion,
   Badge,
@@ -47,16 +47,18 @@ function normalizeRoutePrefix(prefix?: string) {
 function validate(cfg: AppConfig): string[] {
   const errors: string[] = [];
 
-  if (!cfg.baseUrl || !/^https?:\/\//i.test(cfg.baseUrl)) {
-    errors.push("Base URL is required and must start with http:// or https://");
+  if (cfg.baseUrl && !/^https?:\/\//i.test(cfg.baseUrl)) {
+    errors.push("Base URL must start with http:// or https:// (or leave it blank).");
   }
 
   if (!cfg.sources?.length) errors.push("Add at least one Content Type source.");
 
   const seen = new Set<string>();
-  for (const [i, s] of (cfg.sources ?? []).entries()) {
-    if (!s.contentTypeId) errors.push(`Source #${i + 1}: content type is required.`);
-    if (!s.pathFieldId) errors.push(`Source #${i + 1}: path/slug field is required.`);
+  for (const s of cfg.sources ?? []) {
+    const label = s.contentTypeId ? `"${s.contentTypeId}"` : "A source";
+
+    if (!s.contentTypeId) errors.push("Select a content type for every source.");
+    if (!s.pathFieldId) errors.push(`${label}: choose a path/slug field.`);
 
     if (s.contentTypeId) {
       if (seen.has(s.contentTypeId)) errors.push(`Duplicate content type: ${s.contentTypeId}`);
@@ -65,15 +67,15 @@ function validate(cfg: AppConfig): string[] {
 
     if (s.routePrefix) {
       if (!s.routePrefix.trim().startsWith("/")) {
-        errors.push(`Source #${i + 1}: route prefix must start with "/".`);
+        errors.push(`${label}: route prefix must start with "/".`);
       }
       if (/\s/.test(s.routePrefix)) {
-        errors.push(`Source #${i + 1}: route prefix cannot contain spaces.`);
+        errors.push(`${label}: route prefix cannot contain spaces.`);
       }
     }
   }
 
-  return errors;
+  return Array.from(new Set(errors));
 }
 
 function reindexAccordionStateAfterRemove(state: Record<number, boolean>, removedIdx: number) {
@@ -160,7 +162,23 @@ export default function ConfigScreen() {
         const v = validate(normalized);
         setErrors(v);
         if (v.length) return false;
-        return { parameters: normalized };
+
+        // PageTree's configured content types are the source of truth for the
+        // entry sidebar. Build the target editor-interface state from the
+        // configured sources alone (rather than merging the current state):
+        // configured content types get the sidebar, and any content type that is
+        // no longer configured is omitted here, so Contentful reconciles it away
+        // — i.e. adding a source assigns the sidebar and removing one removes it.
+        const editorInterface: AppState["EditorInterface"] = {};
+        for (const source of normalized.sources) {
+          if (!source.contentTypeId) continue;
+          editorInterface[source.contentTypeId] = { sidebar: { position: 0 } };
+        }
+
+        return {
+          parameters: normalized,
+          targetState: { EditorInterface: editorInterface },
+        };
       });
 
       sdk.app.setReady();
@@ -200,14 +218,15 @@ export default function ConfigScreen() {
   const addSource = () => {
     setConfig((prev) => ({
       ...prev,
+      // Prepend so the new source appears at the top of the list — no scrolling.
       sources: [
-        ...(prev.sources ?? []),
         {
           contentTypeId: "",
           pathFieldId: "slug",
           titleFieldId: "title",
           routePrefix: "",
         },
+        ...(prev.sources ?? []),
       ],
     }));
   };
@@ -253,10 +272,10 @@ export default function ConfigScreen() {
 
             <Form>
               {/* Base URL */}
-              <FormControl isRequired>
-                <FormControl.Label>Base URL</FormControl.Label>
+              <FormControl>
+                <FormControl.Label>Base URL (optional)</FormControl.Label>
                 <FormControl.HelpText>
-                  Used for “Open preview” links. Example: https://www.example.com
+                  Optional. Prefix for preview links. Example: https://www.example.com
                 </FormControl.HelpText>
                 <TextInput
                   name="baseUrl"
@@ -307,12 +326,16 @@ export default function ConfigScreen() {
                   <Button
                     variant="secondary"
                     onClick={() => {
-                      const nextIdx = config.sources?.length ?? 0; // new index after add
                       addSource();
-                      setAccordionState((prev) => ({
-                        ...prev,
-                        [nextIdx]: true,
-                      }));
+                      // New source is prepended at index 0: shift every existing
+                      // expand-state up by one and open the new one at the top.
+                      setAccordionState((prev) => {
+                        const shifted: Record<number, boolean> = { 0: true };
+                        Object.entries(prev).forEach(([k, v]) => {
+                          shifted[Number(k) + 1] = v;
+                        });
+                        return shifted;
+                      });
                     }}
                   >
                     Add content type
@@ -333,8 +356,8 @@ export default function ConfigScreen() {
                         <Flex alignItems="center" gap="spacingS">
                           <span>
                             {s.contentTypeId
-                              ? `Source #${idx + 1} — ${ctName || s.contentTypeId}`
-                              : `Source #${idx + 1}`}
+                              ? ctName || s.contentTypeId
+                              : "New content type"}
                           </span>
                           {needsSetup && (
                             <Badge variant="warning" size="small">
