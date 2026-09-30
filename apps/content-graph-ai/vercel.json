@@ -1,0 +1,76 @@
+{
+  "installCommand": "npm ci",
+  "buildCommand": "npm run build",
+  "crons": [
+    {
+      "path": "/api/cron/update-graph",
+      "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/cron/process-classification-queue",
+      "schedule": "30 8 * * *"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/health",
+      "destination": "/api/health"
+    },
+    {
+      "source": "/slack/cg",
+      "destination": "/api/slack/cg"
+    },
+    {
+      "source": "/slack/health",
+      "destination": "/api/slack/health"
+    },
+    {
+      "source": "/webhooks/contentful",
+      "destination": "/api/webhooks/contentful-classify"
+    },
+    {
+      "source": "/graph/search",
+      "destination": "/api/graph/search"
+    },
+    {
+      "source": "/graph/related",
+      "destination": "/api/graph/related"
+    },
+    {
+      "source": "/graph/gaps",
+      "destination": "/api/graph/related"
+    },
+    {
+      "source": "/graph/serp",
+      "destination": "/api/graph/related"
+    },
+    {
+      "source": "/graph/stats",
+      "destination": "/api/graph/stats"
+    },
+    {
+      "source": "/review/approve",
+      "destination": "/api/review/approve"
+    },
+    {
+      "source": "/review/correct",
+      "destination": "/api/review/correct"
+    },
+    {
+      "source": "/crm/recommendations",
+      "destination": "/api/crm/recommendations"
+    },
+    {
+      "source": "/analytics/content-mix",
+      "destination": "/api/analytics/content-mix"
+    },
+    {
+      "source": "/feeds/recommendations.json",
+      "destination": "/api/feeds/recommendations.json"
+    },
+    {
+      "source": "/feeds/recommendations.html",
+      "destination": "/api/feeds/recommendations.html"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ContentGraph – Content Mix</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+      body { font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 12px; }
+      h3 { margin: 8px 0 12px; }
+      .meta { color: #666; font-size: 12px; }
+      #wrap { max-width: 720px; }
+      canvas { max-width: 700px; }
+      pre { background: #f6f8fa; padding: 8px; border-radius: 6px; max-height: 240px; overflow: auto; }
+    </style>
+  </head>
+  <body>
+    <div id="wrap">
+      <h3>Content Mix by Funnel Stage</h3>
+      <div class="meta">Data from /analytics/content-mix</div>
+      <canvas id="chart" width="700" height="300"></canvas>
+      <pre id="raw"></pre>
+    </div>
+    <script>
+      async function main() {
+        const res = await fetch('/analytics/content-mix');
+        const data = await res.json();
+        document.getElementById('raw').textContent = JSON.stringify(data, null, 2);
+        const labels = (data.mix || []).map(r => r.stage);
+        const counts = (data.mix || []).map(r => r.count);
+        const ctx = document.getElementById('chart');
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels,
+            datasets: [{
+              label: 'Assets',
+              data: counts,
+              backgroundColor: '#4f7cff'
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: { y: { beginAtZero: true } }
+          }
+        });
+      }
+      main();
+    </script>
+  </body>
+  </html>
+

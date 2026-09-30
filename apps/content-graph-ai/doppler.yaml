@@ -1,0 +1,6 @@
+# Doppler project binding (non-secret — safe to commit).
+# Run `doppler setup` to create or change this file, or edit `project` / `config` to match your Doppler project.
+# https://docs.doppler.com/docs/cli
+setup:
+  project: content-graph
+  config: dev
