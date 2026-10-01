@@ -68,6 +68,9 @@
     "apps/lottie-preview": {
       "release-type": "node"
     },
+    "apps/page-tree": {
+      "release-type": "node"
+    },
     "apps/raster": {
       "release-type": "node"
     },

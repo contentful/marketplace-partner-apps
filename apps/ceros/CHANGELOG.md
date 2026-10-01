@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.2.0](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.1.1...ceros-contentful-app-v1.2.0) (2026-09-02)
+
+
+### Features
+
+* add ability to browse Ceros folders and in order to pick an experience to embed [] ([#8757](https://github.com/contentful/marketplace-partner-apps/issues/8757)) ([a112586](https://github.com/contentful/marketplace-partner-apps/commit/a11258653a2c4e4851fd5fc916fc42aea1160d03))
+
+
+### Bug Fixes
+
+* **ceros:** resolve App Action via space/environment, not install org [AIS-501] ([#8762](https://github.com/contentful/marketplace-partner-apps/issues/8762)) ([e02d08b](https://github.com/contentful/marketplace-partner-apps/commit/e02d08b7c31725198d39883a621df6cb75147973))
+* **deps:** bump @contentful/app-sdk from 4.55.1 to 4.58.2 in /apps/ceros in the production-dependencies group ([#8457](https://github.com/contentful/marketplace-partner-apps/issues/8457)) ([a425287](https://github.com/contentful/marketplace-partner-apps/commit/a425287b0a7b6dc261f12db7d9f395c373bfa2b4))
+* **security:** sanitize error disclosure in translationstudio and ceros [ACT-3449] ([#8653](https://github.com/contentful/marketplace-partner-apps/issues/8653)) ([e6f0816](https://github.com/contentful/marketplace-partner-apps/commit/e6f081647792574e57459d6bc3cca4cf062ee2b0))
+
 ## [1.1.1](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.1.0...ceros-contentful-app-v1.1.1) (2026-06-18)
 
 

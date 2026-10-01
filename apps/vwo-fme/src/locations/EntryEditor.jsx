@@ -25,7 +25,7 @@ const initialState = (sdk) => ({
   currentStep: 1,
   contentTypes: [],
   meta: sdk.entry.fields.meta?.getValue() || {},
-  featureFlag: sdk.entry.fields.featureFlag.getValue() || {},
+  featureFlag: sdk.entry.fields.featureFlag?.getValue() || {},
 });
 
 const actionTypes = {
@@ -224,6 +224,11 @@ const EntryEditor = (props) => {
   };
 
   const linkExistingEntry = async (vwoVariation) => {
+    if (!vwoVariation?.id) {
+      props.sdk.notifier.error('Default variation is not available. Please refresh and try again.');
+      return;
+    }
+
     const data = await props.sdk.dialogs.selectSingleEntry({
       locale: props.sdk.locales.default,
       contentTypes: state.contentTypes.map(contentType => contentType.sys.id).filter(contentType => contentType !== props.sdk.contentType.sys.id)
@@ -243,6 +248,11 @@ const EntryEditor = (props) => {
   }
 
   const onCreateVariationEntry = async(vwoVariation, contentType) => {
+    if (!vwoVariation?.id) {
+      props.sdk.notifier.error('Default variation is not available. Please refresh and try again.');
+      return;
+    }
+
     const data = await props.sdk.navigator.openNewEntry(contentType.sys.id,{
       slideIn: { waitForClose: true }
     }).then(async (updatedEntry) => {

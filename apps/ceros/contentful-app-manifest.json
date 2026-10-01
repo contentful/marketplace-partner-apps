@@ -1,0 +1,60 @@
+{
+  "functions": [
+    {
+      "id": "CerosApi",
+      "name": "CerosApi",
+      "description": "Fetches experiences from the Ceros REST API using a securely stored API key.",
+      "path": "functions/ceros-api.js",
+      "entryFile": "functions/ceros-api.ts",
+      "allowNetworks": ["rest.ceros.com", "*.ceros.site", "view.ceros.com"],
+      "accepts": ["appaction.call"]
+    }
+  ],
+  "actions": [
+    {
+      "id": "cerosApi",
+      "name": "CerosApi",
+      "description": "Fetches experiences from the Ceros REST API via the CerosApi Contentful Function.",
+      "type": "function-invocation",
+      "functionId": "CerosApi",
+      "category": "Custom",
+      "parameters": [
+        {
+          "id": "action",
+          "name": "Action",
+          "type": "Symbol",
+          "required": true,
+          "description": "One of: getFolderTree | getFolderExperiences | getEmbedCode | resolveExperience"
+        },
+        {
+          "id": "folderId",
+          "name": "Folder ID",
+          "type": "Symbol",
+          "required": false,
+          "description": "Required for getFolderExperiences"
+        },
+        {
+          "id": "resourceId",
+          "name": "Resource ID",
+          "type": "Symbol",
+          "required": false,
+          "description": "Required for getEmbedCode"
+        },
+        {
+          "id": "query",
+          "name": "Query",
+          "type": "Symbol",
+          "required": false,
+          "description": "JSON string of query params for the target endpoint (whitelisted per action)"
+        },
+        {
+          "id": "url",
+          "name": "Experience URL",
+          "type": "Symbol",
+          "required": false,
+          "description": "Required for resolveExperience — the pasted experience URL"
+        }
+      ]
+    }
+  ]
+}

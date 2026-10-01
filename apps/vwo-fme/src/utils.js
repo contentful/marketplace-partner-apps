@@ -63,9 +63,54 @@ export const getRequiredEntryInformation = (entry, contentTypes, defaultLocale) 
   };
 };
 
-export const mapVwoVariationsAndContent = async (vwoVariations, contentTypes, defaultLocale, getEntries) => {
-  const _vwoVariations = Array.isArray(vwoVariations) ? vwoVariations : [vwoVariations];
-  const entryIds = [...new Set(_vwoVariations.map((vwoVariation) => vwoVariation?.variables[0]?.value).filter(Boolean))];
+export const CONTROL_VARIATION_ID = 1;
+
+export const getControlVariation = (vwoVariations = []) => {
+  const variations = Array.isArray(vwoVariations) ? vwoVariations : [vwoVariations];
+  const controlVariation = variations.find((variation) => variation?.id === CONTROL_VARIATION_ID);
+
+  if (controlVariation) {
+    return controlVariation;
+  }
+
+  return {
+    id: CONTROL_VARIATION_ID,
+    name: 'Control',
+    key: '1',
+    variables: [],
+  };
+};
+
+export const getDefaultVariationContentId = (variables) => {
+  if (!variables) {
+    return '';
+  }
+
+  if (Array.isArray(variables)) {
+    return variables[0]?.defaultValue || '';
+  }
+
+  return variables.defaultValue || '';
+};
+
+export const getVariationContentEntryId = (vwoVariation, featureVariables) => {
+  if (!vwoVariation) {
+    return '';
+  }
+
+  if (vwoVariation.id === CONTROL_VARIATION_ID) {
+    return vwoVariation?.variables?.[0]?.value || getDefaultVariationContentId(featureVariables);
+  }
+
+  return vwoVariation?.variables?.[0]?.value || '';
+};
+
+export const mapVwoVariationsAndContent = async (vwoVariations, contentTypes, defaultLocale, getEntries, featureVariables) => {
+  const variations = Array.isArray(vwoVariations) ? vwoVariations : [vwoVariations];
+  const controlVariation = getControlVariation(variations);
+  const nonControlVariations = variations.filter((variation) => variation?.id !== CONTROL_VARIATION_ID);
+  const allVariations = [controlVariation, ...nonControlVariations];
+  const entryIds = [...new Set(allVariations.map((vwoVariation) => getVariationContentEntryId(vwoVariation, featureVariables)).filter(Boolean))];
 
   let entryItems = [];
   if (entryIds.length > 0) {
@@ -74,20 +119,24 @@ export const mapVwoVariationsAndContent = async (vwoVariations, contentTypes, de
     });
     entryItems = entries.items;
   }
-  return _vwoVariations.map((vwoVariation) => {
-    if (vwoVariation.variables.length && vwoVariation.variables[0].value) {
-      let contentId = vwoVariation.variables[0].value;
-      let entry = entryItems.find((entry) => entry?.sys?.id === contentId || entry.id === contentId);
-      if (!entry) {
-        return { vwoVariation };
-      }
-      let entryInformation = getRequiredEntryInformation(entry, contentTypes, defaultLocale);
-      return {
-        vwoVariation,
-        variationContent: entryInformation,
-      };
+
+  return allVariations.map((vwoVariation) => {
+    const contentId = getVariationContentEntryId(vwoVariation, featureVariables);
+
+    if (!contentId) {
+      return { vwoVariation };
     }
-    return { vwoVariation };
+
+    const entry = entryItems.find((entry) => entry?.sys?.id === contentId || entry.id === contentId);
+    if (!entry) {
+      return { vwoVariation };
+    }
+
+    const entryInformation = getRequiredEntryInformation(entry, contentTypes, defaultLocale);
+    return {
+      vwoVariation,
+      variationContent: entryInformation,
+    };
   });
 };
 

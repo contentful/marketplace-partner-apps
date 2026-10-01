@@ -190,6 +190,13 @@ const ConfigScreen = () => {
 
     const needsBetweenValues = ['between', 'reference count between'];
     const needsEntryId = ['includes entry', 'includes asset'];
+    const doesNotNeedValue = [
+      'is empty',
+      'is not empty',
+      'is false',
+      'is true',
+      ...needsBetweenValues
+    ];
 
     if (needsSingleValue.includes(condition) && conditionValue === '') {
       sdk.notifier.error('Please enter a condition value');
@@ -207,7 +214,7 @@ const ConfigScreen = () => {
       throw new Error(`Please select at least one ${itemType}`);
     }
 
-    if (conditionValue === '' && condition !== 'is empty' && condition !== 'is not empty' && !needsBetweenValues.includes(condition)) {
+    if (conditionValue === '' && !doesNotNeedValue.includes(condition)) {
       sdk.notifier.error('Please enter a condition value');
       throw new Error('Please enter a condition value');
     }
