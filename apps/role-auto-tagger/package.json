@@ -53,7 +53,8 @@
     "vitest": "^4.1.11"
   },
   "overrides": {
-    "axios": "1.19.0"
+    "axios": "1.19.0",
+    "contentful-sdk-core": "9.4.5"
   },
   "engines": {
     "node": ">=20.19.0",

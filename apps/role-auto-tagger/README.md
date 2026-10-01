@@ -446,6 +446,14 @@ When something fails, the message is the same one the function logs.
   - **Consequence:** `npm audit` reports the axios advisory.
   - **Lifting the pin:** only once a release no longer sets `cache`, and only after testing the App
     Action in a space.
+- **`contentful-sdk-core` is pinned to 9.4.5** (`overrides` in `package.json`).
+  - **Why:** `contentful-management` 12 depends on `contentful-sdk-core` 10, which declares
+    `node >=22`. The Marketplace repo's CI installs on Node 20 with `engine-strict`, so 10 makes
+    `npm ci` fail outright.
+  - **Why it's safe:** 9.4.5 declares Node ≥ 18 and exports all six functions the SDK imports from
+    it. Every Contentful SDK package now requires `contentful-management` 12, so downgrading that
+    instead is not possible.
+  - **Lifting the pin:** once the Marketplace CI moves to Node 22.
 - **A thrown error reaches the caller without its message.** When an App Function throws, the caller
   sees only `Invoking function … failed (code-error)`. So a **dry run** returns its failure as
   `{ failed: true, error, log }`, which is what lets the Troubleshooting tab show the real message.
