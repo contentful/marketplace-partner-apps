@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    // `tools/` are Node scripts, so the Node globals have to be declared. TypeScript 7 no longer
+    // leaks them in via node10 resolution.
+    "types": ["node"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    // TypeScript 7 removed "node" (node10). "bundler" matches how Vite resolves the app's imports.
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
+  },
+  // `tools` is included so the setup scripts are checked too, not just the app.
+  "include": ["src", "tools"]
+}
