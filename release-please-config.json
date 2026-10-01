@@ -74,6 +74,9 @@
     "apps/raster": {
       "release-type": "node"
     },
+    "apps/role-auto-tagger": {
+      "release-type": "node"
+    },
     "apps/sfmc-studio": {
       "release-type": "node"
     },

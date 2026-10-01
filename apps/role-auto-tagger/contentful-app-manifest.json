@@ -1,0 +1,53 @@
+{
+  "id": "role-auto-tagger",
+  "name": "Role auto tagger",
+  "locations": [
+    {
+      "location": "app-config"
+    }
+  ],
+  "functions": [
+    {
+      "id": "autoTagByRole",
+      "name": "Auto-tag by Role",
+      "description": "Applies the tags mapped to the roles of the user who created the entry. Pass the entry ID; the user is read from the entry's sys.createdBy.",
+      "path": "src/functions/autoTagByRole.js",
+      "entryFile": "src/functions/autoTagByRole.ts",
+      "accepts": ["appaction.call"],
+      "allowNetworks": ["api.contentful.com"]
+    }
+  ],
+  "actions": [
+    {
+      "id": "autoTagByRole",
+      "name": "Auto-tag by Role",
+      "description": "Looks up the user's role and applies the mapped tags to the entry",
+      "type": "function-invocation",
+      "functionId": "autoTagByRole",
+      "category": "Custom",
+      "parameters": [
+        {
+          "id": "entryId",
+          "name": "Entry ID",
+          "description": "The ID of the entry to tag. Required, except when simulating a role.",
+          "type": "Symbol",
+          "required": false
+        },
+        {
+          "id": "dryRun",
+          "name": "Dry run",
+          "description": "Work out the result without writing any tags. Leave unset in an Automation.",
+          "type": "Boolean",
+          "required": false
+        },
+        {
+          "id": "simulateRoleId",
+          "name": "Simulate role",
+          "description": "Use this role ID instead of the entry creator's roles. Dry run only; used by the Troubleshooting tab. Leave unset in an Automation.",
+          "type": "Symbol",
+          "required": false
+        }
+      ]
+    }
+  ]
+}

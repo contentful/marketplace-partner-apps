@@ -1,0 +1,17 @@
+node_modules/
+build/
+dist/
+
+# Vitest's coverage report — generated, and large.
+coverage/
+.env
+.env.local
+.env.*.local
+
+# Claude Code's local permission state. It records approved commands verbatim, so any command
+# ever run with an inline token is stored here in plain text.
+.claude/settings.local.json
+
+# Internal working notes, written for whoever changes this code. README.md is the document that has
+# to stand alone.
+CLAUDE.md
