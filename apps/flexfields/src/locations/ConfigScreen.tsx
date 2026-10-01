@@ -101,7 +101,7 @@ const ConfigScreen = () => {
   const [parameters, setParameters] = useState<AppInstallationParameters>({
     rules: [],
   });
-  const [isRuleDeleted, setIsRuleDeleted] = useState(false);
+  const [hasPendingRuleChanges, setHasPendingRuleChanges] = useState(false);
   const [ruleToEditIndex, setRuleToEditIndex] = useState<number>();
   const sdk = useSDK<AppExtensionSDK>();
 
@@ -136,8 +136,26 @@ const ConfigScreen = () => {
     // related to this app installation
     const currentState = await sdk.app.getCurrentState();
 
-    if (isRuleDeleted) {
-      setIsRuleDeleted(false);
+    if (hasPendingRuleChanges) {
+      setHasPendingRuleChanges(false);
+
+      // Ensure editor interfaces are registered for every content type referenced by
+      // the current rules. This matters after an import that introduces new content types.
+      if (currentState) {
+        (parameters.rules || []).forEach((rule) => {
+          [rule.contentType, rule.targetEntity].forEach((contentTypeId) => {
+            if (contentTypeId && !currentState.EditorInterface[contentTypeId]) {
+              currentState.EditorInterface[contentTypeId] = {
+                editors: {
+                  position: 0,
+                  settings: {},
+                },
+              };
+            }
+          });
+        });
+      }
+
       return {
         // Parameters to be persisted as the app configuration.
         parameters,
@@ -177,6 +195,7 @@ const ConfigScreen = () => {
       'is not empty',
       'is false',
       'is true',
+      ...needsBetweenValues
     ];
 
     if (needsSingleValue.includes(condition) && conditionValue === '') {
@@ -284,7 +303,7 @@ const ConfigScreen = () => {
   }, [
     sdk.app,
     sdk.notifier,
-    isRuleDeleted,
+    hasPendingRuleChanges,
     contentType,
     contentTypeField,
     condition,
@@ -342,7 +361,7 @@ const ConfigScreen = () => {
               } else {
                 return fetchEntryName(id);
               }
-            })
+            }),
           ).then((names) => {
             setLinkedEntryNames(names);
           });
@@ -557,7 +576,7 @@ const ConfigScreen = () => {
       ...parameters,
       rules: rulesCopy,
     });
-    setIsRuleDeleted(true);
+    setHasPendingRuleChanges(true);
   };
 
   const toggleAll = (checked: boolean) => {
@@ -662,7 +681,7 @@ const ConfigScreen = () => {
             } else {
               return fetchEntryName(id);
             }
-          })
+          }),
         )
           .then((names) => {
             setLinkedEntryNames(names);
@@ -674,6 +693,18 @@ const ConfigScreen = () => {
     } catch (error) {
       sdk.notifier.error('Failed to open entry selector');
     }
+  };
+
+  // Stage imported rules for saving. The import UI/logic lives in RulesList; this just
+  // updates the owning state and reuses the "pending save" flow so the user is prompted
+  // to click Save and editor interfaces get registered for any new content types.
+  const handleImportRules = (newRules: Rule[]) => {
+    setParameters({
+      ...parameters,
+      rules: newRules,
+    });
+    setHasPendingRuleChanges(true);
+    setRuleToEditIndex(undefined);
   };
 
   return (
@@ -742,7 +773,8 @@ const ConfigScreen = () => {
           </svg>
           FlexFields App Config
         </Heading>
-        {isRuleDeleted ? (
+
+        {hasPendingRuleChanges ? (
           <Flex
             alignItems="center"
             gap="8px"
@@ -859,16 +891,16 @@ const ConfigScreen = () => {
                     condition === 'reference count greater than' ||
                     condition === 'reference count equal' ||
                     condition === 'reference count not equal') && (
-                      <TextInput
-                        value={conditionValue}
-                        type="number"
-                        onChange={(e) => {
-                          updateInput('conditionValue', e.target.value);
-                        }}
-                        placeholder="Value"
-                        className={INPUT_STYLE_200}
-                      />
-                    )}
+                    <TextInput
+                      value={conditionValue}
+                      type="number"
+                      onChange={(e) => {
+                        updateInput('conditionValue', e.target.value);
+                      }}
+                      placeholder="Value"
+                      className={INPUT_STYLE_200}
+                    />
+                  )}
                   {/* Number field conditions - between (two values) */}
                   {(condition === 'between' || condition === 'reference count between') && (
                     <>
@@ -960,7 +992,7 @@ const ConfigScreen = () => {
                     currentSelection={getFieldName(
                       targetEntityField,
                       targetEntity.includes('-sameEntity') ? targetEntity.substring(0, targetEntity.indexOf('-sameEntity')) : targetEntity,
-                      contentTypes
+                      contentTypes,
                     )}
                     className={css({ width: '300px !important' })}>
                     <Multiselect.SelectAll
@@ -980,7 +1012,7 @@ const ConfigScreen = () => {
                                 const targetEntityFieldCopy = [...targetEntityField];
                                 targetEntityFieldCopy.splice(
                                   targetEntityField.findIndex((val) => val === ev.target.value),
-                                  1
+                                  1,
                                 );
                                 return targetEntityFieldCopy;
                               }
@@ -1000,7 +1032,13 @@ const ConfigScreen = () => {
       </Form>
 
       {!!parameters.rules && (
-        <RulesList deleteRule={deleteRule} rules={parameters.rules} setRuleToEditIndex={setRuleToEditIndex} ruleToEditIndex={ruleToEditIndex} />
+        <RulesList
+          deleteRule={deleteRule}
+          rules={parameters.rules}
+          setRuleToEditIndex={setRuleToEditIndex}
+          ruleToEditIndex={ruleToEditIndex}
+          onImportRules={handleImportRules}
+        />
       )}
 
       <Text
