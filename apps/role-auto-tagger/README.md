@@ -208,7 +208,7 @@ the parameters the app definition declares, and rejects anything undeclared with
 ### 5. Build and deploy
 
 ```bash
-npm run build:all     # the config screen and the App Function
+npm run build         # the config screen and the App Function
 npm run upload-ci     # upload the bundle, without activating it
 npm run activate      # attach the bundle and set the app's locations
 npm run sync-action   # create the "Auto-tag by Role" App Action
@@ -242,7 +242,7 @@ Then continue with [A. Set it up in a space](#a-set-it-up-in-a-space).
 After changing the code:
 
 ```bash
-npm run build:all && npm run upload-ci && npm run activate && npm run sync-action
+npm run build && npm run upload-ci && npm run activate && npm run sync-action
 ```
 
 - **Run `npm run sync-parameters` as well** if the change added or removed an installation
@@ -275,7 +275,7 @@ This serves the config screen on `http://localhost:3002`.
 npm test             # Vitest, against an in-memory fake CMA: no credentials, no network
 npm run typecheck    # tsc over src/ and tools/
 npm run lint         # ESLint, including the React hook-order rule
-npm run build:all
+npm run build
 ```
 
 All four must pass before a deploy.
@@ -394,7 +394,7 @@ When something fails, the message is the same one the function logs.
 |---|---|
 | `npm run create-app-definition` | Creates the app definition and prints its ID |
 | `npm run sync-parameters` | Declares the installation parameters. `-- --prune` also undeclares any this repository no longer uses |
-| `npm run build:all` | Builds the config screen and the App Function. `npm run build` and `npm run build:functions` do one each |
+| `npm run build` | Builds the config screen and the App Function. `npm run build:functions` builds only the function; `npm run build:all` is kept as an alias for `build` |
 | `npm run upload-ci` | Uploads the bundle, without activating it |
 | `npm run activate` | Attaches the newest bundle (or `-- <bundleId>`) and sets the locations |
 | `npm run sync-action` | Creates or updates the App Action and its parameters from the manifest |

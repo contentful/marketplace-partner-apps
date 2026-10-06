@@ -69,7 +69,7 @@ tools/                     # setup scripts: create-app-definition, sync-paramete
   the README's troubleshooting table, so change all three together.
 - **axios is pinned to 1.19.0** (`overrides`). From 1.20, its fetch adapter sets a `cache` option
   that the Functions runtime rejects, so every CMA call fails. The build passes regardless. After
-  `build:all`, `grep -c 'cache:"default"' build/src/functions/autoTagByRole.js` must be 0.
+  `build`, `grep -c 'cache:"default"' build/src/functions/autoTagByRole.js` must be 0.
 - **`contentful-sdk-core` is pinned to 9.4.5** (`overrides`). Version 10, pulled in by
   `contentful-management` 12, declares `node >=22`, and the MPA CI installs on Node 20 with
   `engine-strict`, so it fails `npm ci`. 9.4.5 exports everything CMA 12 imports from it. Do not
