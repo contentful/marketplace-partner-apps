@@ -1,0 +1,64 @@
+{
+  "name": "role-auto-tagger",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "install-ci": "npm ci",
+    "start": "vite",
+    "build": "tsc && vite build && npm run build:functions",
+    "build:functions": "contentful-app-scripts --ci build-functions --manifest-file contentful-app-manifest.json",
+    "build:all": "npm run build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:ci": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src tools",
+    "lint:fix": "eslint src tools --fix",
+    "create-app-definition": "tsx -r dotenv/config tools/create-app-definition.ts",
+    "sync-parameters": "tsx -r dotenv/config tools/sync-parameters.ts",
+    "upload-ci": "set -a; . ./.env; set +a; contentful-app-scripts --ci upload --organization-id \"$CONTENTFUL_ORG_ID\" --definition-id \"$CONTENTFUL_APP_DEF_ID\" --bundle-dir build --token \"$CONTENTFUL_ACCESS_TOKEN\" --skip-activation",
+    "activate": "tsx -r dotenv/config tools/activate-bundle.ts",
+    "sync-action": "tsx -r dotenv/config tools/sync-action.ts",
+    "show-definition": "tsx -r dotenv/config tools/show-definition.ts",
+    "check-members": "node --env-file=.env tools/check-members.mts"
+  },
+  "dependencies": {
+    "@contentful/app-sdk": "^4.71.0",
+    "@contentful/f36-components": "^6.22.1",
+    "@contentful/f36-tokens": "^6.3.1",
+    "@contentful/react-apps-toolkit": "^2.0.1",
+    "contentful-management": "^12.19.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "@babel/eslint-parser": "^7.29.9",
+    "@contentful/app-scripts": "^4.1.12",
+    "@contentful/node-apps-toolkit": "^4.1.0",
+    "@eslint/js": "^9.39.5",
+    "@types/node": "^20.19.43",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "@vitest/coverage-v8": "^4.1.11",
+    "dotenv": "^18.0.5",
+    "eslint": "^9.39.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.2",
+    "vitest": "^4.1.11"
+  },
+  "overrides": {
+    "axios": "1.19.0",
+    "contentful-sdk-core": "9.4.5"
+  },
+  "engines": {
+    "node": ">=20.19.0",
+    "npm": ">=9"
+  },
+  "license": "MIT"
+}
