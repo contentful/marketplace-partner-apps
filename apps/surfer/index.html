@@ -3,6 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      window.SURFER_EXT_CONF = {
+        iframeOrigin: '%VITE_SURFER_IFRAME_ORIGIN%',
+        debugRpc: '%VITE_SURFER_DEBUG_RPC%' === 'true',
+      };
+    </script>
     <script src="%VITE_REACT_APP_SURFER_GUIDELINES_URL%"></script>
     <style>
       iframe,
