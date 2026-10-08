@@ -11,16 +11,17 @@ This project was bootstrapped with [Create Contentful App](https://github.com/co
 
 ```json
 {
-  "@contentful/app-sdk": "^4.23.0",
-  "@contentful/f36-components": "4.50.2",
-  "@contentful/f36-image": "^4.0.0-alpha.0",
-  "@contentful/f36-tokens": "4.0.2",
+  "@contentful/app-sdk": "^4.58.2",
+  "@contentful/f36-components": "4.81.1",
+  "@contentful/f36-image": "^4.81.1",
+  "@contentful/f36-tokens": "4.2.0",
   "@contentful/react-apps-toolkit": "1.2.16",
-  "contentful-management": "10.45.1",
-  "emotion": "10.0.27",
-  "react": "18.2.0",
-  "react-dom": "18.2.0",
-  "react-scripts": "5.0.1"
+  "@dnd-kit/helpers": "0.5.0",
+  "@dnd-kit/react": "0.5.0",
+  "@emotion/css": "^11.13.5",
+  "contentful-management": "11.63.0",
+  "react": "19.2.7",
+  "react-dom": "19.2.7"
 }
 ```
 
@@ -30,16 +31,17 @@ This project was bootstrapped with [Create Contentful App](https://github.com/co
 
 ```json
 {
-  "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-  "@contentful/app-scripts": "1.13.0",
-  "@testing-library/jest-dom": "5.17.0",
-  "@testing-library/react": "14.0.0",
-  "@tsconfig/create-react-app": "2.0.1",
+  "@contentful/app-scripts": "3.0.1",
+  "@testing-library/jest-dom": "6.9.1",
+  "@testing-library/react": "^16.3.2",
   "@types/node": "^20",
-  "@types/react": "18.2.21",
-  "@types/react-dom": "18.2.7",
-  "cross-env": "7.0.3",
-  "typescript": "4.9.5"
+  "@types/react": "19.2.17",
+  "@types/react-dom": "19.2.3",
+  "@vitejs/plugin-react": "^4.7.0",
+  "happy-dom": "^20.10.4",
+  "typescript": "5.9.3",
+  "vite": "^7.3.6",
+  "vitest": "^3.2.4"
 }
 ```
 
