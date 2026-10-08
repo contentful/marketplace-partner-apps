@@ -10,6 +10,10 @@ const mockSdk: any = {
   ids: {
     app: 'test-app',
   },
+  hostnames: {
+    management: 'api.contentful.com',
+    webapp: 'app.contentful.com',
+  },
 };
 
 export { mockSdk };

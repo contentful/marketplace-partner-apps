@@ -8,11 +8,12 @@ export const generateMediaReport = async (
   spaceId: string,
   environmentId: string,
   setUnusedAssets: SetAssetsFn,
-  setHasGenerated: SetFlagFn
+  setHasGenerated: SetFlagFn,
+  cmaHostname: string
 ): Promise<void> => {
   try {
-    const allAssets = await fetchAllAssets(accessToken, spaceId, environmentId);
-    const allEntries = await fetchAllEntries(accessToken, spaceId, environmentId);
+    const allAssets = await fetchAllAssets(accessToken, spaceId, environmentId, cmaHostname);
+    const allEntries = await fetchAllEntries(accessToken, spaceId, environmentId, cmaHostname);
 
     const usedAssetIds = new Set<string>();
     allEntries.forEach((entry) => extractLinkedAssetIds(entry.fields as Entry['fields'], usedAssetIds));
@@ -30,10 +31,11 @@ export const generateMediaReport = async (
 const fetchAllAssets = async (
   accessToken: string,
   spaceId: string,
-  environmentId: string
+  environmentId: string,
+  cmaHostname: string
 ): Promise<Asset[]> => {
   const response = await fetch(
-    `https://api.contentful.com/spaces/${spaceId}/environments/${environmentId}/assets?limit=1000`,
+    `https://${cmaHostname}/spaces/${spaceId}/environments/${environmentId}/assets?limit=1000`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -48,7 +50,8 @@ const fetchAllAssets = async (
 const fetchAllEntries = async (
   accessToken: string,
   spaceId: string,
-  environmentId: string
+  environmentId: string,
+  cmaHostname: string
 ): Promise<Entry[]> => {
   const limit = 1000;
   let skip = 0;
@@ -56,7 +59,7 @@ const fetchAllEntries = async (
 
   while (true) {
     const res = await fetch(
-      `https://api.contentful.com/spaces/${spaceId}/environments/${environmentId}/entries?skip=${skip}&limit=${limit}`,
+      `https://${cmaHostname}/spaces/${spaceId}/environments/${environmentId}/entries?skip=${skip}&limit=${limit}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,

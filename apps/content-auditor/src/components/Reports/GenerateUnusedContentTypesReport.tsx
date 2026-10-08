@@ -22,6 +22,7 @@ type Props = {
   selectedTypes: string[];
   toggleTypeSelection: (id: string) => void;
   handleDeleteTypes: () => void;
+  webappHostname: string;
 };
 
 const GenerateUnusedContentTypesReport = ({
@@ -30,6 +31,7 @@ const GenerateUnusedContentTypesReport = ({
   selectedTypes,
   toggleTypeSelection,
   handleDeleteTypes,
+  webappHostname,
 }: Props) => {
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(20);
@@ -121,7 +123,7 @@ const GenerateUnusedContentTypesReport = ({
               onClick={() => {
                 const urn = type?.sys?.urn;
                 if (urn && urn.includes("content:")) {
-                  const url = `https://app.contentful.com/${
+                  const url = `https://${webappHostname}/${
                     urn.split("content:")[1]
                   }`;
                   window.open(url, "_blank");

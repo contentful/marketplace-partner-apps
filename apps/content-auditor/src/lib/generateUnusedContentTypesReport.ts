@@ -19,9 +19,10 @@ const fetchAllEntries = async (environment: any): Promise<any[]> => {
 export const generateUnusedContentTypesReport = async (
   accessToken: string,
   spaceId: string,
-  environmentId: string
+  environmentId: string,
+  cmaHostname: string
 ): Promise<any[]> => {
-  const client = createClient({ accessToken });
+  const client = createClient({ accessToken, host: cmaHostname });
   const space = await client.getSpace(spaceId);
   const environment = await space.getEnvironment(environmentId);
 
