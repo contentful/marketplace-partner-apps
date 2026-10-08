@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.6.4...thrillworks-flex-fields-app-v1.7.0) (2026-10-08)
+
+
+### Features
+
+* FlexFields - Add feature to export and import rules [] ([#8656](https://github.com/contentful/marketplace-partner-apps/issues/8656)) ([cf54e79](https://github.com/contentful/marketplace-partner-apps/commit/cf54e79ca69ba4270648a9f9c285eebae385a5ce))
+
 ## [1.6.4](https://github.com/contentful/marketplace-partner-apps/compare/thrillworks-flex-fields-app-v1.6.3...thrillworks-flex-fields-app-v1.6.4) (2026-09-02)
 
 
