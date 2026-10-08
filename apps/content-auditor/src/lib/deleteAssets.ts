@@ -3,11 +3,12 @@ export const deleteAssets = async (
   accessToken: string,
   spaceId: string,
   environmentId: string,
-  onComplete: () => void
+  onComplete: () => void,
+  cmaHostname: string
 ) => {
   for (const assetId of assetIds) {   
     const assetRes = await fetch(
-      `https://api.contentful.com/spaces/${spaceId}/environments/${environmentId}/assets/${assetId}`,
+      `https://${cmaHostname}/spaces/${spaceId}/environments/${environmentId}/assets/${assetId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -22,7 +23,7 @@ export const deleteAssets = async (
 
     if (isPublished) {
       const unpublishRes = await fetch(
-        `https://api.contentful.com/spaces/${spaceId}/environments/${environmentId}/assets/${assetId}/published`,
+        `https://${cmaHostname}/spaces/${spaceId}/environments/${environmentId}/assets/${assetId}/published`,
         {
           method: "DELETE",
           headers: {
@@ -35,7 +36,7 @@ export const deleteAssets = async (
     }
 
     await fetch(
-      `https://api.contentful.com/spaces/${spaceId}/environments/${environmentId}/assets/${assetId}`,
+      `https://${cmaHostname}/spaces/${spaceId}/environments/${environmentId}/assets/${assetId}`,
       {
         method: "DELETE",
         headers: {

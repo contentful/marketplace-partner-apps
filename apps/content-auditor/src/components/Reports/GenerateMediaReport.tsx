@@ -36,6 +36,7 @@ type Props = {
   selectedAssets: string[];
   toggleAssetSelection: (id: string) => void;
   handleDeleteAssets: () => void;
+  webappHostname: string;
 };
 
 const GenerateMediaReport = ({
@@ -43,6 +44,7 @@ const GenerateMediaReport = ({
   selectedAssets,
   toggleAssetSelection,
   handleDeleteAssets,
+  webappHostname,
 }: Props) => {
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(20);
@@ -164,7 +166,7 @@ const GenerateMediaReport = ({
                 onClick={() => {
                   const urn = asset?.sys?.urn;
                   if (urn && urn.includes("content:")) {
-                    const url = `https://app.contentful.com/${urn.split("content:")[1]}`;
+                    const url = `https://${webappHostname}/${urn.split("content:")[1]}`;
                     window.open(url, "_blank");
                   }
                 }}

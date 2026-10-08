@@ -6,14 +6,16 @@ export const generateReport = async (
   environmentId: string,
   setUnusedEntries: React.Dispatch<React.SetStateAction<any[]>>,
   setHasGenerated: React.Dispatch<React.SetStateAction<boolean>>,
-  selectedContentType: string
+  selectedContentType: string,
+  cmaHostname: string
 ) => {
   try {
     const unused = await fetchUnusedEntries(
       accessToken,
       spaceId,
       environmentId,
-      selectedContentType
+      selectedContentType,
+      cmaHostname
     );
     setUnusedEntries(unused);
   } catch (error) {

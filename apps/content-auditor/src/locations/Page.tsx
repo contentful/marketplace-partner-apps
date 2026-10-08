@@ -28,6 +28,8 @@ import GenerateUnusedContentTypesReport from "../components/Reports/GenerateUnus
 const Page = () => {
   const sdk = useSDK<PageAppSDK>();
   const defaultLocale = sdk?.locales?.default;
+  const cmaHostname = sdk.hostnames.management;
+  const webappHostname = sdk.hostnames.webapp;
   const [accessToken, setAccessToken] = useState("");
   const [, setSpaceName] = useState("");
   const [spaceId, setSpaceId] = useState("");
@@ -76,7 +78,8 @@ const Page = () => {
         const data = await fetchContentTypes(
           spaceId,
           environmentId,
-          accessToken
+          accessToken,
+          cmaHostname
         );
         setContentTypes(data.items);
         if (data.items.length > 0) setSelectedContentType(data.items[0].sys.id);
@@ -87,7 +90,7 @@ const Page = () => {
       }
     };
     fetchTypes();
-  }, [accessToken, spaceId, environmentId]);
+  }, [accessToken, spaceId, environmentId, cmaHostname]);
 
   useEffect(() => {
     // Auto-load report when selectedContentType is initially set
@@ -146,7 +149,8 @@ const Page = () => {
         spaceId,
         environmentId,
         setUnusedMedia,
-        () => setHasGenerated(true)
+        () => setHasGenerated(true),
+        cmaHostname
       );
     } catch (error) {
       console.error("Error generating media report:", error);
@@ -164,7 +168,8 @@ const Page = () => {
       const result = await generateUnusedContentTypesReport(
         accessToken,
         spaceId,
-        environmentId
+        environmentId,
+        cmaHostname
       );
       setUnusedContentTypes(result);
       setHasGenerated(true);
@@ -182,7 +187,7 @@ const handleDeleteContentTypes = async () => {
   for (const typeId of selectedContentTypes) {
     try {
       const unpublishRes = await fetch(
-        `https://api.contentful.com/spaces/${spaceId}/environments/${environmentId}/content_types/${typeId}/published`,
+        `https://${cmaHostname}/spaces/${spaceId}/environments/${environmentId}/content_types/${typeId}/published`,
         {
           method: "DELETE",
           headers: {
@@ -197,7 +202,7 @@ const handleDeleteContentTypes = async () => {
       }
 
       const deleteRes = await fetch(
-        `https://api.contentful.com/spaces/${spaceId}/environments/${environmentId}/content_types/${typeId}`,
+        `https://${cmaHostname}/spaces/${spaceId}/environments/${environmentId}/content_types/${typeId}`,
         {
           method: "DELETE",
           headers: {
@@ -259,7 +264,7 @@ const handleDeleteContentTypes = async () => {
         `Successfully deleted ${count} asset${count > 1 ? "s" : ""}`
       );
       handleGenerateMediaReport();
-    });
+    }, cmaHostname);
   };
 
   const handleDeleteEntries = (entryIds: string[]) => {
@@ -270,7 +275,7 @@ const handleDeleteContentTypes = async () => {
       Notification.success(
         `Successfully deleted ${count} entr${count > 1 ? "ies" : "y"}`
       );
-    });
+    }, cmaHostname);
   };
 
   const handleEntryReportSelect = async (contentTypeId: string) => {
@@ -285,7 +290,8 @@ const handleDeleteContentTypes = async () => {
         environmentId,
         setUnusedEntries,
         () => setHasGenerated(true),
-        contentTypeId
+        contentTypeId,
+        cmaHostname
       );
     } catch (error) {
       console.error("Error generating entry report:", error);
@@ -392,6 +398,7 @@ const handleDeleteContentTypes = async () => {
                       }}
                       searchQuery={searchQuery}
                       defaultLocale={defaultLocale}
+                      webappHostname={webappHostname}
                     />
                   ) : (
                     <NotFound />
@@ -417,6 +424,7 @@ const handleDeleteContentTypes = async () => {
                   selectedAssets={selectedAssets}
                   toggleAssetSelection={toggleAssetSelection}
                   handleDeleteAssets={handleDeleteAssets}
+                  webappHostname={webappHostname}
                 />
               ) : (
                 <NotFound />
@@ -441,6 +449,7 @@ const handleDeleteContentTypes = async () => {
                   selectedTypes={selectedContentTypes}
                   toggleTypeSelection={toggleContentTypeSelection}
                   handleDeleteTypes={handleDeleteContentTypes}
+                  webappHostname={webappHostname}
                 />
               ) : (
                 <NotFound />

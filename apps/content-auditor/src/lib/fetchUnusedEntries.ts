@@ -4,9 +4,10 @@ export const fetchUnusedEntries = async (
   accessToken: string,
   spaceId: string,
   environmentId: string,
-  selectedContentType: string
+  selectedContentType: string,
+  cmaHostname: string
 ) => {
-  const client = createClient({ accessToken });
+  const client = createClient({ accessToken, host: cmaHostname });
   const space = await client.getSpace(spaceId);
   const env = await space.getEnvironment(environmentId);
 
