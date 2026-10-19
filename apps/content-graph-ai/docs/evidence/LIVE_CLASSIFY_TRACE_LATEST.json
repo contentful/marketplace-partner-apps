@@ -1,0 +1,2636 @@
+{
+  "capturedAt": "2026-03-23T18:46:42.464Z",
+  "entryId": "hclvhMBxnJbxq8OQQv7HN",
+  "routeTrace": [
+    {
+      "step": "contentful-init",
+      "at": "2026-03-23T18:46:04.121Z",
+      "output": {
+        "spaceId": "jtqsy5pye0zd",
+        "environmentId": "zuhur-ai-sandbox"
+      }
+    },
+    {
+      "step": "deep-crawl",
+      "at": "2026-03-23T18:46:04.937Z",
+      "output": {
+        "entryId": "hclvhMBxnJbxq8OQQv7HN",
+        "requestedContentType": "page",
+        "crawlEntryId": "hclvhMBxnJbxq8OQQv7HN",
+        "parentEntryId": null,
+        "finalContentType": "page",
+        "title": "Platform (June & Fall Launch 2025 Updates)",
+        "slug": "products/platform",
+        "crawlSource": "cda",
+        "textLength": 33025,
+        "textPreview": "Platform (June & Fall Launch 2025 Updates)\nPlatform Page: SEO\nContentful Platform\nPower your brand with Contentful’s digital experience platform. A smarter, faster way to build, optimize, and scale experiences across every channel\nPlatform Page: Hero (June 2025)\nContentful Platform (June 2025)\nOne content platform, infinite flexibility\nPower your brand with Contentful’s digital experience platform at your core. A smarter, faster way to build, optimize, and scale experiences across every channel and any team.\n(Global) Contact sales button\nContact sales\nInternal\nView plans (generic)\nView plans\nInternal\nPlatform Page: Section Group (Basics) (June 2025)\nPlatform Page: Product Hero (June 2025)\nPlatform Hero: 3-Up Copy Block (June 2025)\nMade to move at lightspeed\nStreamlined workflows and AI-powered tools make content creation, personalization, and publishing faster for every team.\nScale across digital channels\nFrom peak traffic to global expansion, our infrastructure delivers fast, consistent content — on key channels where your brand lives.\nComposable marketing stack\nAPI-first and cloud-native, teams can plug in tools they love — DAMs, CRMs, commerce platforms — and create their ideal tech stack.\nleft\nAI Tout - Endless possibilities powered by AI\nEndless possibilities powered by AI\nEmpower your teams to automate content creation, streamline workflows, and deliver personalized, on-brand experiences — all while boosting efficiency and consistency.\nCTA: Explore AI at Contentful\nExpl..."
+      }
+    }
+  ],
+  "vendorTrace": {
+    "vendors": [
+      "chroma",
+      "contentful-cda",
+      "contentful-management",
+      "gemini",
+      "google-ai-studio",
+      "langsmith",
+      "nlp-sidecar",
+      "otel",
+      "postgres"
+    ],
+    "calls": [
+      {
+        "id": "vendor-call-1",
+        "at": "2026-03-23T18:46:03.703Z",
+        "vendor": "contentful-management",
+        "service": "management-client",
+        "category": "content-source",
+        "operation": "create-client",
+        "purpose": "initialize Contentful management client for live trace capture",
+        "status": "ok",
+        "durationMs": 0,
+        "input": {
+          "spaceId": "jtqsy5pye0zd",
+          "environmentId": "zuhur-ai-sandbox"
+        },
+        "output": {
+          "tokenConfigured": true
+        }
+      },
+      {
+        "id": "vendor-call-2",
+        "at": "2026-03-23T18:46:04.012Z",
+        "vendor": "contentful-management",
+        "service": "space",
+        "category": "content-source",
+        "operation": "get-space",
+        "purpose": "resolve Contentful space before fetching the entry",
+        "status": "ok",
+        "durationMs": 308,
+        "input": {
+          "spaceId": "jtqsy5pye0zd"
+        },
+        "output": {
+          "spaceId": "jtqsy5pye0zd"
+        }
+      },
+      {
+        "id": "vendor-call-3",
+        "at": "2026-03-23T18:46:04.121Z",
+        "vendor": "contentful-management",
+        "service": "environment",
+        "category": "content-source",
+        "operation": "get-environment",
+        "purpose": "resolve Contentful environment before fetching the entry",
+        "status": "ok",
+        "durationMs": 109,
+        "input": {
+          "environmentId": "zuhur-ai-sandbox"
+        },
+        "output": {
+          "environmentId": "zuhur-ai-sandbox"
+        }
+      },
+      {
+        "id": "vendor-call-4",
+        "at": "2026-03-23T18:46:04.494Z",
+        "vendor": "contentful-management",
+        "service": "entry",
+        "category": "content-source",
+        "operation": "get-entry",
+        "purpose": "fetch the requested Contentful entry",
+        "status": "ok",
+        "durationMs": 373,
+        "input": {
+          "entryId": "hclvhMBxnJbxq8OQQv7HN"
+        },
+        "output": {
+          "entryId": "hclvhMBxnJbxq8OQQv7HN",
+          "contentType": "page"
+        }
+      },
+      {
+        "id": "vendor-call-5",
+        "at": "2026-03-23T18:46:04.937Z",
+        "vendor": "contentful-cda",
+        "service": "recursive-crawl",
+        "category": "content-source",
+        "operation": "deep-crawl-entry",
+        "purpose": "fetch the full page body through the Contentful delivery APIs",
+        "status": "ok",
+        "durationMs": 443,
+        "input": {
+          "crawlEntryId": "hclvhMBxnJbxq8OQQv7HN"
+        },
+        "output": {
+          "textLength": 33025,
+          "textPreview": "Platform (June & Fall Launch 2025 Updates) Platform Page: SEO Contentful Platform Power your brand with Contentful’s digital experience platform. A smarter, faster way to build, optimize, and scale experiences across eve..."
+        }
+      },
+      {
+        "id": "vendor-call-6",
+        "at": "2026-03-23T18:46:12.402Z",
+        "vendor": "nlp-sidecar",
+        "service": "gliner+zero-shot",
+        "category": "nlp",
+        "operation": "enrich-content-signals",
+        "purpose": "enrich heuristic content signals with external NLP",
+        "status": "ok",
+        "durationMs": 7449,
+        "input": {
+          "endpoint": "http://127.0.0.1:8090/extract",
+          "slug": "products/platform",
+          "title": "Platform (June & Fall Launch 2025 Updates)",
+          "textLength": 33025,
+          "textPreview": "Platform (June & Fall Launch 2025 Updates) Platform Page: SEO Contentful Platform Power your brand with Contentful’s digital experience platform. A smarter, faster way to build, op..."
+        },
+        "output": {
+          "entityCount": 25,
+          "intentCount": 6,
+          "entities": [
+            {
+              "type": "company",
+              "value": "Contentful",
+              "confidence": 0.8570840358734131
+            },
+            {
+              "type": "company",
+              "value": "Contentful",
+              "confidence": 0.9715656042098999
+            },
+            {
+              "type": "company",
+              "value": "Contentful",
+              "confidence": 0.9073891639709473
+            },
+            {
+              "type": "company",
+              "value": "Contentful",
+              "confidence": 0.9741469025611877
+            },
+            {
+              "type": "technology",
+              "value": "DAMs",
+              "confidence": 0.5743315815925598
+            },
+            {
+              "type": "technology",
+              "value": "AI",
+              "confidence": 0.9371808171272278
+            },
+            {
+              "type": "technology",
+              "value": "AI",
+              "confidence": 0.9535004496574402
+            },
+            {
+              "type": "technology",
+              "value": "AI",
+              "confidence": 0.9506057500839233
+            }
+          ],
+          "intents": [
+            {
+              "label": "Start Trial",
+              "confidence": 0.8873196840286255
+            },
+            {
+              "label": "View Pricing",
+              "confidence": 0.8817974925041199
+            },
+            {
+              "label": "Read Documentation",
+              "confidence": 0.8675049543380737
+            },
+            {
+              "label": "Talk to Sales",
+              "confidence": 0.8673551678657532
+            },
+            {
+              "label": "Request Demo",
+              "confidence": 0.8640418648719788
+            },
+            {
+              "label": "Read FAQ",
+              "confidence": 0.8538535237312317
+            }
+          ]
+        }
+      },
+      {
+        "id": "vendor-call-7",
+        "at": "2026-03-23T18:46:12.881Z",
+        "vendor": "google-ai-studio",
+        "service": "gemini-embedding-001",
+        "category": "embedding",
+        "operation": "embed-few-shot-query",
+        "purpose": "build query embedding for dynamic few-shot retrieval",
+        "status": "ok",
+        "durationMs": 459,
+        "input": {
+          "model": "gemini-embedding-001",
+          "textLength": 390,
+          "textPreview": "Platform (June & Fall Launch 2025 Updates) | page | products/platform | Personalization | Platform (June & Fall Launch 2025 Updates) Platform (June & Fall Launc...",
+          "assetId": "hclvhMBxnJbxq8OQQv7HN",
+          "contentType": "page"
+        },
+        "output": {
+          "source": "api",
+          "dimensions": 3072
+        }
+      },
+      {
+        "id": "vendor-call-8",
+        "at": "2026-03-23T18:46:12.965Z",
+        "vendor": "chroma",
+        "service": "content-graph-corrections",
+        "category": "retrieval",
+        "operation": "query-few-shot-corrections",
+        "purpose": "retrieve similar human-corrected examples",
+        "status": "ok",
+        "durationMs": 72,
+        "input": {
+          "limit": 6,
+          "excludedEntryIds": [
+            "hclvhMBxnJbxq8OQQv7HN"
+          ],
+          "embeddingDimensions": 3072
+        },
+        "output": {
+          "resultCount": 5,
+          "topMatches": [
+            {
+              "entryId": "5yRQig0lpBHEYEvAFz54S8",
+              "similarity": 0.6231749918141565
+            },
+            {
+              "entryId": "4k1s2LLivgOmEoBW0oIYa2",
+              "similarity": 0.4418841265131488
+            },
+            {
+              "entryId": "36Nrw1F5VZ74VOIZgHEhMm",
+              "similarity": 0.4221763862502981
+            },
+            {
+              "entryId": "3AUXJjWMUVyMT9oJRE5EZx",
+              "similarity": 0.41354989467852166
+            },
+            {
+              "entryId": "2t9rt3rGNWRzzjD860ZGcN",
+              "similarity": 0.40389466864178203
+            }
+          ]
+        }
+      },
+      {
+        "id": "vendor-call-9",
+        "at": "2026-03-23T18:46:40.542Z",
+        "vendor": "gemini",
+        "service": "gemini-3.1-pro-preview",
+        "category": "llm",
+        "operation": "fact-stage-classification",
+        "purpose": "derive factual taxonomy fields from content and retrieval context",
+        "status": "ok",
+        "durationMs": 27575,
+        "input": {
+          "assetId": "hclvhMBxnJbxq8OQQv7HN",
+          "contentType": "page",
+          "executionMode": "default",
+          "promptLength": 15849,
+          "fewShotStrategy": "vector-store"
+        },
+        "output": {
+          "usage": {
+            "inputTokens": 3574,
+            "outputTokens": 3026,
+            "totalTokens": 6600,
+            "reasoningTokens": 2102,
+            "cachedInputTokens": 0
+          },
+          "fieldKeys": [
+            "assetType",
+            "assetSubType",
+            "schemaType",
+            "product",
+            "topic",
+            "useCases",
+            "industry",
+            "companySize",
+            "region",
+            "language",
+            "usageRights",
+            "event",
+            "eventType",
+            "season"
+          ]
+        }
+      },
+      {
+        "id": "vendor-call-10",
+        "at": "2026-03-23T18:46:42.057Z",
+        "vendor": "gemini",
+        "service": "gemini-2.5-flash-lite",
+        "category": "llm",
+        "operation": "subjective-stage-classification",
+        "purpose": "derive subjective taxonomy fields from content and fact summary",
+        "status": "ok",
+        "durationMs": 1513,
+        "input": {
+          "assetId": "hclvhMBxnJbxq8OQQv7HN",
+          "contentType": "page",
+          "executionMode": "default",
+          "promptLength": 11471
+        },
+        "output": {
+          "usage": {
+            "inputTokens": 2769,
+            "outputTokens": 400,
+            "totalTokens": 3169,
+            "reasoningTokens": 0,
+            "cachedInputTokens": 0
+          },
+          "fieldKeys": [
+            "jobLevel",
+            "jobFunction",
+            "audience",
+            "funnelStage",
+            "competitivePositioning",
+            "reasoning"
+          ]
+        }
+      },
+      {
+        "id": "vendor-call-11",
+        "at": "2026-03-23T18:46:42.411Z",
+        "vendor": "otel",
+        "service": "http://127.0.0.1:6006/v1/traces",
+        "category": "observability",
+        "operation": "export-classification-run",
+        "purpose": "export run trace to OTEL collectors",
+        "status": "ok",
+        "durationMs": 38,
+        "input": {
+          "entryId": "hclvhMBxnJbxq8OQQv7HN"
+        },
+        "output": {
+          "promptVersion": "2026-03-19-chain-v4",
+          "exported": true
+        }
+      },
+      {
+        "id": "vendor-call-12",
+        "at": "2026-03-23T18:46:42.430Z",
+        "vendor": "postgres",
+        "service": "classification_runs",
+        "category": "observability",
+        "operation": "persist-classification-run",
+        "purpose": "store structured classification trace in Postgres",
+        "status": "ok",
+        "durationMs": 307,
+        "input": {
+          "entryId": "hclvhMBxnJbxq8OQQv7HN",
+          "contentType": "page"
+        },
+        "output": {
+          "needsReview": false,
+          "overallConfidence": 0.94
+        }
+      },
+      {
+        "id": "vendor-call-13",
+        "at": "2026-03-23T18:46:42.462Z",
+        "vendor": "langsmith",
+        "service": "Taxonomy-Contentful",
+        "category": "observability",
+        "operation": "flush-pending-traces",
+        "purpose": "flush pending LangSmith traces produced by traceable steps",
+        "status": "ok",
+        "durationMs": 89,
+        "input": {
+          "entryId": "hclvhMBxnJbxq8OQQv7HN"
+        },
+        "output": {
+          "promptVersion": "2026-03-19-chain-v4",
+          "flushedPendingTraceBatches": true
+        }
+      }
+    ],
+    "wiring": [
+      {
+        "from": "contentful-management",
+        "to": "contentful-cda",
+        "description": "management API resolves the crawl root before CDA deep crawl"
+      },
+      {
+        "from": "contentful-cda",
+        "to": "signal-extraction",
+        "description": "deep-crawled Contentful text becomes classifier input"
+      },
+      {
+        "from": "signal-extraction",
+        "to": "nlp-sidecar",
+        "description": "heuristic signals are enriched by the NLP sidecar"
+      },
+      {
+        "from": "signal-extraction",
+        "to": "google-ai-studio",
+        "description": "page summary becomes an embedding query for few-shot retrieval"
+      },
+      {
+        "from": "google-ai-studio",
+        "to": "chroma",
+        "description": "query embedding is used to retrieve similar corrected examples"
+      },
+      {
+        "from": "few-shot-selection",
+        "to": "gemini-fact-stage",
+        "description": "retrieved examples are injected into the fact-stage prompt"
+      },
+      {
+        "from": "gemini-fact-stage",
+        "to": "gemini-subjective-stage",
+        "description": "fact output is summarized into the subjective-stage prompt"
+      },
+      {
+        "from": "classification-result",
+        "to": "otel",
+        "description": "final result is exported to OTEL collectors"
+      },
+      {
+        "from": "classification-result",
+        "to": "postgres",
+        "description": "final result is persisted into classification_runs"
+      },
+      {
+        "from": "classification-result",
+        "to": "langsmith",
+        "description": "pending LangSmith traces are flushed after classification completes"
+      }
+    ]
+  },
+  "logs": [
+    {
+      "level": "info",
+      "msg": "🧭 [ClassificationTool] Trace step",
+      "meta": {
+        "assetId": "hclvhMBxnJbxq8OQQv7HN",
+        "step": "content-quality",
+        "output": {
+          "bodyCharCount": 32982,
+          "headingCount": 240,
+          "contentQuality": "FULL_BODY",
+          "semanticConfidenceCeiling": 0.97,
+          "suspiciousEvidenceReasons": []
+        }
+      },
+      "at": "2026-03-23T18:46:04.941Z"
+    },
+    {
+      "level": "info",
+      "msg": "⚡ [ClassificationTool] Auto-extracted content signals",
+      "meta": {
+        "urlPattern": "product",
+        "isProductPage": true,
+        "hasDemo": false,
+        "mentionedCompanies": [
+          "Segment",
+          "DocuSign",
+          "Kraft Heinz"
+        ]
+      },
+      "at": "2026-03-23T18:46:04.951Z"
+    },
+    {
+      "level": "info",
+      "msg": "🧭 [ClassificationTool] Trace step",
+      "meta": {
+        "assetId": "hclvhMBxnJbxq8OQQv7HN",
+        "step": "signal-extraction",
+        "output": {
+          "urlPattern": "product",
+          "isProductPage": true,
+          "hasDemo": false,
+          "hasPricing": true,
+          "hasFAQ": true,
+          "hasVideo": true,
+          "hasDownload": false,
+          "hasStepByStep": false,
+          "detectedLanguage": "EN",
+          "mentionedProducts": [
+            "Platform",
+            "Personalization"
+          ],
+          "mentionedCompanies": [
+            "Segment",
+            "DocuSign",
+            "Kraft Heinz"
+          ],
+          "detectedSeasons": [
+            "Fall"
+          ],
+          "audienceHints": [],
+          "topicHints": [
+            "Personalization"
+          ],
+          "industryHints": [],
+          "overrides": {
+            "schemaType": "SoftwareApplication",
+            "assetType": null,
+            "assetSubType": "Product",
+            "funnelStage": "Evaluation/Engagement (BOFU)",
+            "season": "Fall",
+            "language": "EN",
+            "usageRights": "External",
+            "yearPublished": "2025",
+            "region": null
+          },
+          "structuredContent": {
+            "title": "Platform (June & Fall Launch 2025 Updates)",
+            "primaryCTAs": [
+              "get started",
+              "Contact sales"
+            ],
+            "mentionedBrands": [
+              "Segment",
+              "DocuSign",
+              "Kraft Heinz"
+            ],
+            "featureHeadings": [
+              "Platform Page: SEO",
+              "Contentful Platform",
+              "Contact sales",
+              "View plans",
+              "Made to move at lightspeed",
+              "Scale across digital channels",
+              "Composable marketing stack",
+              "AI Tout - Endless possibilities powered by AI"
+            ],
+            "bodySummary": "Platform (June & Fall Launch 2025 Updates) Platform (June & Fall Launch 2025 Updates) Platform Page: SEO Contentful Platform Power your brand with Contentful’s digital experience platform. A smarter, faster way to build, optimize, and scale experiences across every channel Platform Page: Hero (June 2025) Contentful Platform (June 2025) One content platform, infinite flexibility Power your brand with Contentful’s digital experience platform at your core. A smarter, faster way to build, optimize, and scale experiences across every channel and any team. (Global) Contact sales button View plans (generic) Platform Page: Section Group (Basics) (June 2025) Platform Page: Product Hero (June 2025) Platform Hero: 3-Up Copy Block (June 2025) Made to move at lightspeed Streamlined workflows and AI-powered tools make content creation, personalization, and publishing faster for every team. Scale across digital channels From peak traffic to global expansion, our infrastructure delivers fast, consistent content — on key channels where your brand lives. Composable marketing stack API-first and cloud-native, teams can plug in tools they love — DAMs, CRMs, commerce platforms — and create their ideal tech stack. AI Tout - Endless possibilities powered by AI Endless possibilities powered by AI Empower your teams to automate content creation, streamline workflows, and deliver personalized, on-brand experiences — all while boosting efficiency and consistency. CTA: Explore AI at Contentful Explore A..."
+          }
+        }
+      },
+      "at": "2026-03-23T18:46:04.951Z"
+    },
+    {
+      "level": "info",
+      "msg": "[NLP] Enriched content signals from sidecar",
+      "meta": {
+        "provider": "gliner+zero-shot",
+        "entities": 25,
+        "intents": 6
+      },
+      "at": "2026-03-23T18:46:12.403Z"
+    },
+    {
+      "level": "info",
+      "msg": "🧭 [ClassificationTool] Trace step",
+      "meta": {
+        "assetId": "hclvhMBxnJbxq8OQQv7HN",
+        "step": "nlp-enrichment",
+        "output": {
+          "provider": "gliner+zero-shot",
+          "source": "external",
+          "intents": [
+            {
+              "label": "Start Trial",
+              "confidence": 0.8873196840286255
+            },
+            {
+              "label": "View Pricing",
+              "confidence": 0.8817974925041199
+            },
+            {
+              "label": "Read Documentation",
+              "confidence": 0.8675049543380737
+            },
+            {
+              "label": "Talk to Sales",
+              "confidence": 0.8673551678657532
+            },
+            {
+              "label": "Request Demo",
+              "confidence": 0.8640418648719788
+            },
+            {
+              "label": "Read FAQ",
+              "confidence": 0.8538535237312317
+            }
+          ],
+          "entities": [
+            {
+              "type": "company",
+              "value": "Contentful",
+              "confidence": 0.8570840358734131
+            },
+            {
+              "type": "company",
+              "value": "Contentful",
+              "confidence": 0.9715656042098999
+            },
+            {
+              "type": "company",
+              "value": "Contentful",
+              "confidence": 0.9073891639709473
+            },
+            {
+              "type": "company",
+              "value": "Contentful",
+              "confidence": 0.9741469025611877
+            },
+            {
+              "type": "technology",
+              "value": "DAMs",
+              "confidence": 0.5743315815925598
+            },
+            {
+              "type": "technology",
+              "value": "AI",
+              "confidence": 0.9371808171272278
+            },
+            {
+              "type": "technology",
+              "value": "AI",
+              "confidence": 0.9535004496574402
+            },
+            {
+              "type": "technology",
+              "value": "AI",
+              "confidence": 0.9506057500839233
+            },
+            {
+              "type": "technology",
+              "value": "AI",
+              "confidence": 0.9489008188247681
+            },
+            {
+              "type": "company",
+              "value": "Contentful",
+              "confidence": 0.8797847628593445
+            },
+            {
+              "type": "technology",
+              "value": "AI",
+              "confidence": 0.953926146030426
+            },
+            {
+              "type": "company",
+              "value": "Contentful",
+              "confidence": 0.9604888558387756
+            },
+            {
+              "type": "technology",
+              "value": "AI",
+              "confidence": 0.9362786412239075
+            },
+            {
+              "type": "technology",
+              "value": "AI",
+              "confidence": 0.9413586854934692
+            },
+            {
+              "type": "technology",
+              "value": "AI",
+              "confidence": 0.957435667514801
+            },
+            {
+              "type": "company",
+              "value": "Contentful",
+              "confidence": 0.945486843585968
+            },
+            {
+              "type": "technology",
+              "value": "AI",
+              "confidence": 0.9432934522628784
+            },
+            {
+              "type": "technology",
+              "value": "AI",
+              "confidence": 0.9654451608657837
+            },
+            {
+              "type": "technology",
+              "value": "AI",
+              "confidence": 0.9602450132369995
+            },
+            {
+              "type": "company",
+              "value": "Contentful",
+              "confidence": 0.9679749011993408
+            },
+            {
+              "type": "technology",
+              "value": "AI-native",
+              "confidence": 0.6560680270195007
+            },
+            {
+              "type": "technology",
+              "value": "AI",
+              "confidence": 0.9413802027702332
+            },
+            {
+              "type": "technology",
+              "value": "AI",
+              "confidence": 0.9248993992805481
+            },
+            {
+              "type": "technology",
+              "value": "AI",
+              "confidence": 0.9449962377548218
+            },
+            {
+              "type": "technology",
+              "value": "AI",
+              "confidence": 0.9340275526046753
+            }
+          ],
+          "mergedSignals": {
+            "hasDemo": true,
+            "hasPricing": true,
+            "hasFAQ": true,
+            "mentionedCompanies": [
+              "Segment",
+              "DocuSign",
+              "Kraft Heinz"
+            ],
+            "mentionedProducts": [
+              "Platform",
+              "Personalization"
+            ]
+          }
+        }
+      },
+      "at": "2026-03-23T18:46:12.404Z"
+    },
+    {
+      "level": "info",
+      "msg": "🧭 [ClassificationTool] Trace step",
+      "meta": {
+        "assetId": "hclvhMBxnJbxq8OQQv7HN",
+        "step": "company-enrichment-skipped",
+        "output": {
+          "reason": "profile-disabled"
+        }
+      },
+      "at": "2026-03-23T18:46:12.404Z"
+    },
+    {
+      "level": "info",
+      "msg": "🔧 [ClassificationTool] Starting content classification",
+      "meta": {
+        "assetId": "hclvhMBxnJbxq8OQQv7HN",
+        "contentType": "page",
+        "textLength": 33025,
+        "taxonomyVersion": "v2"
+      },
+      "at": "2026-03-23T18:46:12.404Z"
+    },
+    {
+      "level": "info",
+      "msg": "🧲 [ClassificationTool] Semantic few-shot selection active",
+      "at": "2026-03-23T18:46:12.881Z"
+    },
+    {
+      "level": "info",
+      "msg": "🧭 [ClassificationTool] Trace step",
+      "meta": {
+        "assetId": "hclvhMBxnJbxq8OQQv7HN",
+        "step": "few-shot-selection",
+        "output": {
+          "strategy": "vector-store",
+          "exampleCount": 5,
+          "examples": [
+            {
+              "entryId": "5yRQig0lpBHEYEvAFz54S8",
+              "title": "Contentful Personalization",
+              "url": "/products/personalization",
+              "similarity": 0.6231749918141565,
+              "selectionStrategy": "vector-store",
+              "fields": {
+                "industry": [
+                  "Software, IT & Technology"
+                ],
+                "topic": [
+                  "Personalization"
+                ],
+                "funnelStage": "Evaluation/Engagement (BOFU)",
+                "jobFunction": [
+                  "Marketing"
+                ],
+                "jobLevel": [
+                  "Director",
+                  "VP"
+                ]
+              }
+            },
+            {
+              "entryId": "4k1s2LLivgOmEoBW0oIYa2",
+              "title": "Contentful AI Actions",
+              "url": "/products/ai-actions",
+              "similarity": 0.4418841265131488,
+              "selectionStrategy": "vector-store",
+              "fields": {
+                "industry": [
+                  "Software, IT & Technology"
+                ],
+                "topic": [
+                  "Artificial intelligence (AI)"
+                ],
+                "funnelStage": "Evaluation/Engagement (BOFU)",
+                "jobFunction": [
+                  "Content",
+                  "IT/Engineering"
+                ],
+                "jobLevel": [
+                  "Director",
+                  "Manager"
+                ]
+              }
+            },
+            {
+              "entryId": "36Nrw1F5VZ74VOIZgHEhMm",
+              "title": "Contentful Front-end Hosting",
+              "url": "/products/hosting",
+              "similarity": 0.4221763862502981,
+              "selectionStrategy": "vector-store",
+              "fields": {
+                "industry": [
+                  "Software, IT & Technology"
+                ],
+                "topic": [
+                  "Deployment"
+                ],
+                "funnelStage": "Evaluation/Engagement (BOFU)",
+                "jobFunction": [
+                  "IT/Engineering"
+                ],
+                "jobLevel": [
+                  "Director",
+                  "Manager"
+                ]
+              }
+            },
+            {
+              "entryId": "3AUXJjWMUVyMT9oJRE5EZx",
+              "title": "Contentful Analytics",
+              "url": "/products/analytics",
+              "similarity": 0.41354989467852166,
+              "selectionStrategy": "vector-store",
+              "fields": {
+                "industry": [
+                  "Software, IT & Technology"
+                ],
+                "topic": [
+                  "Analytics"
+                ],
+                "funnelStage": "Evaluation/Engagement (BOFU)",
+                "jobFunction": [
+                  "Marketing",
+                  "Content"
+                ],
+                "jobLevel": [
+                  "Director",
+                  "Manager"
+                ]
+              }
+            },
+            {
+              "entryId": "2t9rt3rGNWRzzjD860ZGcN",
+              "title": "Contentful Studio",
+              "url": "/products/studio",
+              "similarity": 0.40389466864178203,
+              "selectionStrategy": "vector-store",
+              "fields": {
+                "industry": [
+                  "Software, IT & Technology"
+                ],
+                "topic": [
+                  "Content operations"
+                ],
+                "funnelStage": "Evaluation/Engagement (BOFU)",
+                "jobFunction": [
+                  "Content"
+                ],
+                "jobLevel": [
+                  "Director",
+                  "Manager"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "at": "2026-03-23T18:46:12.966Z"
+    },
+    {
+      "level": "info",
+      "msg": "📝 [ClassificationTool] Requesting chained classification from AI",
+      "meta": {
+        "promptVersion": "2026-03-19-chain-v4",
+        "fewShotStrategy": "vector-store",
+        "executionMode": "default"
+      },
+      "at": "2026-03-23T18:46:12.966Z"
+    },
+    {
+      "level": "info",
+      "msg": "🧭 [ClassificationTool] Trace step",
+      "meta": {
+        "assetId": "hclvhMBxnJbxq8OQQv7HN",
+        "step": "fact-stage",
+        "output": {
+          "model": "gemini-3.1-pro-preview",
+          "promptPreview": "You are the factual stage of the Contentful taxonomy pipeline.\nPrompt version: 2026-03-19-chain-v4\n\nReturn only structured JSON matching the schema.\nDo not reason about buyer psychology or marketing subjectivity in this stage.\n\n\nFocus only on objective, evidentiary classification fields:\n- assetType\n- assetSubType\n- schemaType\n- product\n- topic\n- useCases\n- industry\n- companySize\n- region\n- language\n- usageRights\n- event\n- eventType\n- season\n- yearPublished\n\nRules:\n- Prefer explicit signals, URL structure, company enrichment, and grounded content evidence.\n- Use exact allowed labels where provided.\n- Keep multi-select fields tight: choose at most 3 values by default, and at most 4 only for genuinely broad educational TOFU content.\n- Do not invent product labels or taxonomy values.\n- Generic horizontal platform product pages should usually resolve to product=Platform, topic=Headless CMS, useCases=Digital experiences, and industry=Software, IT & Technology.\n- On generic platform pages, do not expand to AI, Personalization, General business, or Experimentation from secondary body mentions alone. Title, slug, and primary headings carry more weight than buried feature blurbs.\n- Migration and Replatforming belong in topic, not useCases.\n- If Personalization is already captured by the product field, avoid duplicating it in topic/useCases unless the page is truly about personalization as a broader concept rather than the product.\n- Season is only for time-bound campaigns or event-like content. Never use Season for evergreen pages.\n- Webinar pages stay Webinar even when they are live, on-demand, recap, recording, or registration pages. Event is only for physical in-person events.\n- GDPR references imply Global relevance, not EMEA-only targeting.\n- If a field is marked as an override in the signal block, copy it exactly.\n- Confidence must reflect the evidence ceiling in Section 0.\n\n\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nSECTION 0 — EVIDENCE QUALITY (READ THIS BEFORE ASSIGNING ANY CONFIDENCE)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nAvailable body text: 32982 chars (after title stripped)\nHeadings detected:   240\nEvidence level:      FULL BODY — sufficient text for confident classification\n\nCONFIDENCE RUBRIC — you MUST calibrate your confidence based on what evidence you actually have:\n  TITLE ONLY       → cap ALL semantic field confidence at 0.60 — you are inferring from a title, not reading content\n  TITLE + HEADINGS → cap ALL semantic field confidence at 0.74 — limited evidence\n  PARTIAL BODY     → cap ALL semantic field confidence at 0.87 — reasonable but incomplete\n  FULL BODY        → no cap — full confidence allowed\n\nYOUR CURRENT EVIDENCE CEILING: 97% for topic, useCases, jobLevel, jobFunction, industry, audience\n\nMANDATORY: If you are working from partial body text, state this explicitly in the reasoning field. Do NOT report confidence above 97% for any semantic field — a high confidence score on sparse content is a misrepresentation.\n\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nSECTION 1 — PRE-COMPUTED SIGNALS (ground truth, do not contradict unless you have overwhelming evidence)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nContent Type:       page [ground truth — use for schema/format decisions]\nURL Pattern:        product\nIs Product Page:    YES\nHas Demo CTA:       YES — get started, Contact sales\nHas Pricing:        YES\nHas FAQ structure:  YES\nHas Video content:  YES\nHas Download:       no\nHas Step-by-step:   no\nDetected Language:  EN\nMentioned Products: Platform, Personalization\nMentioned Brands:   suppressed — company enrichment disabled for this content type\nNLP Provider:       gliner+zero-shot (external)\nNLP Intents:        Start Trial (89%), View Pricing (88%), Read Documentation (87%), Talk to Sales (87%), Request Demo (86%), Read FAQ (85%)\nNLP Entities:       company:Contentful (86%), company:Contentful (97%), company:Contentful (91%), company:Contentful (97%), technology:DAMs (57%), technology:AI (94%), technology:AI (9...",
+          "output": {
+            "assetType": {
+              "value": "Webpage",
+              "confidence": 0.99
+            },
+            "assetSubType": {
+              "value": [
+                "Product"
+              ],
+              "confidence": 0.99
+            },
+            "schemaType": {
+              "value": "SoftwareApplication",
+              "confidence": 0.99
+            },
+            "product": {
+              "value": [
+                "Platform"
+              ],
+              "confidence": 0.95
+            },
+            "topic": {
+              "value": [
+                "Headless CMS"
+              ],
+              "confidence": 0.95
+            },
+            "useCases": {
+              "value": [
+                "Digital experiences"
+              ],
+              "confidence": 0.95
+            },
+            "industry": {
+              "value": [
+                "Software, IT & Technology"
+              ],
+              "confidence": 0.95
+            },
+            "companySize": {
+              "value": [
+                "Enterprise (>$500M revenue)",
+                "Commercial ($10M - $500M revenue)"
+              ],
+              "confidence": 0.85
+            },
+            "region": {
+              "value": [
+                "Global"
+              ],
+              "confidence": 0.99
+            },
+            "language": {
+              "value": "EN",
+              "confidence": 0.99
+            },
+            "usageRights": {
+              "value": "External",
+              "confidence": 0.99
+            },
+            "event": null,
+            "eventType": null,
+            "season": {
+              "value": "Fall午\nWait, the value should be exactly \"Fall\". Let me correct that typo in my thought process. I will output \"Fall\".\n\n```json\n{\n  \"assetType\": {\n    \"value\": \"Webpage\",\n    \"confidence\": 0.99\n  },\n  \"assetSubType\": {\n    \"value\": [\n      \"Product\"\n    ],\n    \"confidence\": 0.99\n  },\n  \"schemaType\": {\n    \"value\": \"SoftwareApplication\",\n    \"confidence\": 0.99\n  },\n  \"product\": {\n    \"value\": [\n      \"Platform\"\n    ],\n    \"confidence\": 0.95\n  },\n  \"topic\": {\n    \"value\": [\n      \"Headless CMS\"\n    ],\n    \"confidence\": 0.95\n  },\n  \"useCases\": {\n    \"value\": [\n      \"Digital experiences\"\n    ],\n    \"confidence\": 0.95\n  },\n  \"industry\": {\n    \"value\": [\n      \"Software, IT & Technology\"\n    ],\n    \"confidence\": 0.95\n  },\n  \"companySize\": {\n    \"value\": [\n      \"Enterprise (>$500M revenue)\",\n      \"Commercial ($10M - $500M revenue)\"\n    ],\n    \"confidence\": 0.85\n  },\n  \"region\": {\n    \"value\": [\n      \"Global\"\n    ],\n    \"confidence\": 0.99\n  },\n  \"language\": {\n    \"value\": \"EN\",\n    \"confidence\": 0.99\n  },\n  \"usageRights\": {\n    \"value\": \"External\",\n    \"confidence\": 0.99\n  },\n  \"event\": null,\n  \"eventType\": null,\n  \"season\": {\n    \"value\": \"Fall\",\n    \"confidence\": 0.99\n  },\n  \"yearPublished\": {\n    \"value\": \"2025\",\n    \"confidence\": 0.99\n  }\n}\n```"
+            }
+          },
+          "usage": {
+            "inputTokens": 3574,
+            "outputTokens": 3026,
+            "totalTokens": 6600,
+            "reasoningTokens": 2102,
+            "cachedInputTokens": 0
+          }
+        }
+      },
+      "at": "2026-03-23T18:46:40.542Z"
+    },
+    {
+      "level": "info",
+      "msg": "🧭 [ClassificationTool] Trace step",
+      "meta": {
+        "assetId": "hclvhMBxnJbxq8OQQv7HN",
+        "step": "subjective-stage",
+        "output": {
+          "model": "gemini-2.5-flash-lite",
+          "promptPreview": "You are the subjective stage of the Contentful taxonomy pipeline.\nPrompt version: 2026-03-19-chain-v4\n\nReturn only structured JSON matching the schema.\nDo not re-decide the objective facts unless the supplied fact block is obviously impossible.\n\n\nFocus only on subjective or audience-dependent fields:\n- jobLevel\n- jobFunction\n- audience\n- funnelStage\n- competitivePositioning\n- reasoning\n\nRules:\n- Treat the fact classification block as locked context unless the content clearly contradicts it.\n- Resolve funnelStage and jobLevel independently from the same content evidence. They may correlate, but neither field determines the other.\n- Funnel stage is about buyer journey intent, CTA strength, and page structure.\n- Job level is about the seniority and strategic depth of the content's intended reader.\n- Broad educational guides often span multiple non-executive levels, but strategic or executive-oriented educational content can still target VP or C-Level.\n- Case studies are Consideration (MOFU), not BOFU.\n- Transformational or strategic content should skew Director and above.\n- Funnel stage must follow CTA and page-structure evidence before tone-based inference.\n- Audience: only select if the content specifically addresses a group. If it doesn't target any particular audience, leave EMPTY. Do not default to \"Prospect\".\n- reasoning: Write ONE LINE PER FIELD for EVERY field below. Put each on its own line (use \\n).\n  Format: \"fieldName: [TAG] value — why\"\n\n  FACT FIELDS (from LOCKED FACT CLASSIFICATION above — explain why each was chosen):\n  assetType: [LOCKED] or [AI] — why\n  assetSubType: [LOCKED] or [AI] — why\n  schemaType: [LOCKED] or [AI] — why\n  product: [AI] — what products are mentioned in the content\n  topic: [AI] — what themes dominate the content\n  useCases: [AI] or [METADATA] — what outcomes are discussed\n  industry: [AI] or [ENRICHMENT] — cite company vertical or content language\n  companySize: [AI] or [ENRICHMENT] — cite revenue data or company scale\n  region: [SIGNAL] or [AI] — from signal or content\n  language: [SIGNAL] — from signal\n  usageRights: [SIGNAL] — from signal\n\n  SUBJECTIVE FIELDS (your decisions in this stage):\n  funnelStage: [LOCKED] or [AI] — why\n  jobLevel: [AI] — what evidence targets these levels\n  jobFunction: [AI] — what roles are addressed in the content\n  audience: [AI] — who is this for, or \"left blank — no specific audience\"\n  competitivePositioning: [AI] — competitors named? what positioning?\n\n  Use [METADATA] tag for any field that came from EXISTING ENTRY METADATA.\n  EVERY field must appear on its own line. Do not combine fields into paragraphs.\n- Confidence must reflect the evidence ceiling in Section 0.\n\n\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nSECTION 0 — EVIDENCE QUALITY (READ THIS BEFORE ASSIGNING ANY CONFIDENCE)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nAvailable body text: 32982 chars (after title stripped)\nHeadings detected:   240\nEvidence level:      FULL BODY — sufficient text for confident classification\n\nCONFIDENCE RUBRIC — you MUST calibrate your confidence based on what evidence you actually have:\n  TITLE ONLY       → cap ALL semantic field confidence at 0.60 — you are inferring from a title, not reading content\n  TITLE + HEADINGS → cap ALL semantic field confidence at 0.74 — limited evidence\n  PARTIAL BODY     → cap ALL semantic field confidence at 0.87 — reasonable but incomplete\n  FULL BODY        → no cap — full confidence allowed\n\nYOUR CURRENT EVIDENCE CEILING: 97% for topic, useCases, jobLevel, jobFunction, industry, audience\n\nMANDATORY: If you are working from partial body text, state this explicitly in the reasoning field. Do NOT report confidence above 97% for any semantic field — a high confidence score on sparse content is a misrepresentation.\n\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nSECTION 1 — PRE-COMPUTED SIGNALS (ground truth, do not contradict unless you have overwhelming evidence)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nContent Type:       page [ground truth —...",
+          "output": {
+            "jobLevel": {
+              "value": [
+                "Director",
+                "VP",
+                "C-Level"
+              ],
+              "confidence": 0.85
+            },
+            "jobFunction": {
+              "value": [
+                "Marketing",
+                "Digital",
+                "Digital strategists",
+                "Product"
+              ],
+              "confidence": 0.85
+            },
+            "audience": {
+              "value": [],
+              "confidence": 0.5
+            },
+            "funnelStage": {
+              "value": "Evaluation/Engagement (BOFU)",
+              "confidence": 0.95
+            },
+            "competitivePositioning": {
+              "mentionsCompetitors": false,
+              "competitorNames": [],
+              "positioningType": "none"
+            },
+            "reasoning": "jobLevel: [AI] Director, VP, C-Level — The content discusses platform updates and strategic capabilities like scaling across digital channels and a composable marketing stack, which typically appeal to senior leadership.\njobFunction: [AI] Marketing, Digital, Digital strategists, Product — The focus on digital experiences, personalization, and platform capabilities directly aligns with the responsibilities of marketing, digital, and product teams.\naudience: [AI]  — no specific audience is directly addressed; the content is broadly about the platform's capabilities.\nfunnelStage: [AI] Evaluation/Engagement (BOFU) — The presence of a \"Platform Page\" with \"Contact sales\" and \"View plans\" CTAs, along with detailed feature headings and product descriptions, indicates a focus on users evaluating the platform for purchase.\ncompetitivePositioning: [AI] none — no competitors are mentioned in the provided text, and no specific positioning against competitors is stated."
+          },
+          "usage": {
+            "inputTokens": 2769,
+            "outputTokens": 400,
+            "totalTokens": 3169,
+            "reasoningTokens": 0,
+            "cachedInputTokens": 0
+          }
+        }
+      },
+      "at": "2026-03-23T18:46:42.057Z"
+    },
+    {
+      "level": "info",
+      "msg": "🧑‍💼 [ClassificationTool] Human corrections applied for hclvhMBxnJbxq8OQQv7HN",
+      "meta": {
+        "fields": [
+          "jobFunction",
+          "jobLevel"
+        ]
+      },
+      "at": "2026-03-23T18:46:42.087Z"
+    },
+    {
+      "level": "info",
+      "msg": "🧭 [ClassificationTool] Trace step",
+      "meta": {
+        "assetId": "hclvhMBxnJbxq8OQQv7HN",
+        "step": "post-processing",
+        "output": {
+          "profile": {
+            "assetType": null,
+            "assetSubType": null,
+            "schemaType": {
+              "default": "Article",
+              "aiDecides": true
+            },
+            "funnelStage": {
+              "default": "Awareness (TOFU)",
+              "allowed": [
+                "Awareness (TOFU)",
+                "Consideration (MOFU)",
+                "Evaluation/Engagement (BOFU)",
+                "Retention",
+                "Sign-up"
+              ],
+              "never": []
+            },
+            "companyEnrichmentApplies": false
+          },
+          "lowContentWarning": null,
+          "consistencyWarnings": [],
+          "openQuestionFlags": [],
+          "humanOverrides": [
+            "jobFunction",
+            "jobLevel"
+          ],
+          "reviewReasons": [
+            "[info] Confidence not calibrated — 9 of 25 human-reviewed entries completed. Approve 16 more entries to enable data-backed calibration. Until then, scores are raw model confidence.",
+            "[info] Semantic calibration gaps — topic, jobLevel, jobFunction, useCases, funnelStage, industry still lack field-level data backing at this confidence band."
+          ],
+          "confidenceCalibration": {
+            "enabled": true,
+            "path": "seeds/confidence-calibration.json",
+            "profileVersion": "2026-03-19-calibration-v21",
+            "appliedFields": [],
+            "dataBacked": false,
+            "minimumSampleSize": 25,
+            "actualSampleSize": 9,
+            "uncalibratedSemanticFields": [
+              "topic",
+              "jobLevel",
+              "jobFunction",
+              "useCases",
+              "funnelStage",
+              "industry"
+            ],
+            "semanticFieldCoverage": [
+              {
+                "field": "topic",
+                "confidence": 0.99,
+                "sampleSize": 7,
+                "dataBacked": false
+              },
+              {
+                "field": "jobLevel",
+                "confidence": 0.99,
+                "sampleSize": 7,
+                "dataBacked": false
+              },
+              {
+                "field": "jobFunction",
+                "confidence": 0.99,
+                "sampleSize": 7,
+                "dataBacked": false
+              },
+              {
+                "field": "useCases",
+                "confidence": 0.95,
+                "sampleSize": 0,
+                "dataBacked": false
+              },
+              {
+                "field": "funnelStage",
+                "confidence": 0.99,
+                "sampleSize": 8,
+                "dataBacked": false
+              },
+              {
+                "field": "industry",
+                "confidence": 0.99,
+                "sampleSize": 8,
+                "dataBacked": false
+              }
+            ],
+            "overall": {
+              "raw": 0.94,
+              "calibrated": 0.94,
+              "sampleSize": 0,
+              "dataBacked": false
+            }
+          },
+          "finalFields": {
+            "assetType": {
+              "value": "Webpage",
+              "confidence": 0.99
+            },
+            "assetSubType": {
+              "value": [
+                "Product"
+              ],
+              "confidence": 0.95
+            },
+            "schemaType": {
+              "value": "SoftwareApplication",
+              "confidence": 0.97
+            },
+            "product": {
+              "value": [
+                "Platform"
+              ],
+              "confidence": 0.97
+            },
+            "jobLevel": {
+              "value": [
+                "Director",
+                "VP"
+              ],
+              "confidence": 0.99
+            },
+            "jobFunction": {
+              "value": [
+                "Content",
+                "IT/Engineering"
+              ],
+              "confidence": 0.99
+            },
+            "audience": {
+              "value": [],
+              "confidence": 0.5
+            },
+            "topic": {
+              "value": [
+                "Headless CMS"
+              ],
+              "confidence": 0.99
+            },
+            "useCases": {
+              "value": [
+                "Digital experiences"
+              ],
+              "confidence": 0.95
+            },
+            "funnelStage": {
+              "value": "Evaluation/Engagement (BOFU)",
+              "confidence": 0.99
+            },
+            "industry": {
+              "value": [
+                "Software, IT & Technology"
+              ],
+              "confidence": 0.99
+            },
+            "companySize": {
+              "value": [
+                "Commercial ($10M - $500M revenue)"
+              ],
+              "confidence": 0.85
+            },
+            "region": {
+              "value": [
+                "Global"
+              ],
+              "confidence": 0.97
+            },
+            "language": {
+              "value": "EN",
+              "confidence": 0.99
+            },
+            "usageRights": {
+              "value": "External",
+              "confidence": 0.99
+            },
+            "event": null,
+            "eventType": null,
+            "yearPublished": {
+              "value": "2025",
+              "confidence": 0.97
+            },
+            "competitivePositioning": {
+              "mentionsCompetitors": false,
+              "competitorNames": [],
+              "positioningType": "none"
+            },
+            "overallConfidence": 0.94,
+            "needsReview": false
+          }
+        }
+      },
+      "at": "2026-03-23T18:46:42.087Z"
+    },
+    {
+      "level": "info",
+      "msg": "✅ [ClassificationTool] Content classification completed",
+      "meta": {
+        "assetId": "hclvhMBxnJbxq8OQQv7HN",
+        "overallConfidence": 0.94,
+        "needsReview": false,
+        "executionMode": "default",
+        "stageTimings": {
+          "signalExtractionMs": 10,
+          "nlpMs": 7453,
+          "companyLookupMs": 0,
+          "queryEmbeddingMs": 465,
+          "fewShotSelectionMs": 81,
+          "factPromptMs": 27575,
+          "subjectivePromptMs": 1514,
+          "totalMs": 37146
+        },
+        "classifications": {
+          "assetType": "Webpage",
+          "topic": [
+            "Headless CMS"
+          ],
+          "funnelStage": "Evaluation/Engagement (BOFU)",
+          "industry": [
+            "Software, IT & Technology"
+          ]
+        }
+      },
+      "at": "2026-03-23T18:46:42.087Z"
+    }
+  ],
+  "result": {
+    "assetType": {
+      "value": "Webpage",
+      "confidence": 0.99
+    },
+    "assetSubType": {
+      "value": [
+        "Product"
+      ],
+      "confidence": 0.95
+    },
+    "schemaType": {
+      "value": "SoftwareApplication",
+      "confidence": 0.97
+    },
+    "product": {
+      "value": [
+        "Platform"
+      ],
+      "confidence": 0.97
+    },
+    "jobLevel": {
+      "value": [
+        "Director",
+        "VP"
+      ],
+      "confidence": 0.99
+    },
+    "jobFunction": {
+      "value": [
+        "Content",
+        "IT/Engineering"
+      ],
+      "confidence": 0.99
+    },
+    "audience": {
+      "value": [],
+      "confidence": 0.5
+    },
+    "topic": {
+      "value": [
+        "Headless CMS"
+      ],
+      "confidence": 0.99
+    },
+    "useCases": {
+      "value": [
+        "Digital experiences"
+      ],
+      "confidence": 0.95
+    },
+    "funnelStage": {
+      "value": "Evaluation/Engagement (BOFU)",
+      "confidence": 0.99
+    },
+    "industry": {
+      "value": [
+        "Software, IT & Technology"
+      ],
+      "confidence": 0.99
+    },
+    "companySize": {
+      "value": [
+        "Commercial ($10M - $500M revenue)"
+      ],
+      "confidence": 0.85
+    },
+    "region": {
+      "value": [
+        "Global"
+      ],
+      "confidence": 0.97
+    },
+    "event": null,
+    "eventType": null,
+    "language": {
+      "value": "EN",
+      "confidence": 0.99
+    },
+    "usageRights": {
+      "value": "External",
+      "confidence": 0.99
+    },
+    "competitivePositioning": {
+      "mentionsCompetitors": false,
+      "competitorNames": [],
+      "positioningType": "none"
+    },
+    "overallConfidence": 0.94,
+    "needsReview": false,
+    "reasoning": "jobLevel: [AI] Director, VP, C-Level — The content discusses platform updates and strategic capabilities like scaling across digital channels and a composable marketing stack, which typically appeal to senior leadership.\njobFunction: [AI] Marketing, Digital, Digital strategists, Product — The focus on digital experiences, personalization, and platform capabilities directly aligns with the responsibilities of marketing, digital, and product teams.\naudience: [AI]  — no specific audience is directly addressed; the content is broadly about the platform's capabilities.\nfunnelStage: [AI] Evaluation/Engagement (BOFU) — The presence of a \"Platform Page\" with \"Contact sales\" and \"View plans\" CTAs, along with detailed feature headings and product descriptions, indicates a focus on users evaluating the platform for purchase.\ncompetitivePositioning: [AI] none — no competitors are mentioned in the provided text, and no specific positioning against competitors is stated.\nFINAL OUTPUT SNAPSHOT\nassetType: [FINAL] Webpage — final stored value after policy normalization\nassetSubType: [FINAL] Product — final stored value after policy normalization\nschemaType: [FINAL] SoftwareApplication — final stored value after policy normalization\nproduct: [FINAL] Platform — final stored value after policy normalization\ntopic: [FINAL] Headless CMS — final stored value after policy normalization\nuseCases: [FINAL] Digital experiences — final stored value after policy normalization\nindustry: [FINAL] Software, IT & Technology — final stored value after policy normalization\ncompanySize: [FINAL] Commercial ($10M - $500M revenue) — final stored value after policy normalization\nregion: [FINAL] Global — final stored value after policy normalization\nlanguage: [FINAL] EN — final stored value after policy normalization\nusageRights: [FINAL] External — final stored value after policy normalization\njobLevel: [FINAL; HUMAN] Director, VP — final stored value after policy normalization\njobFunction: [FINAL; HUMAN] Content, IT/Engineering — final stored value after policy normalization\naudience: [FINAL] none — final stored value after policy normalization\nfunnelStage: [FINAL] Evaluation/Engagement (BOFU) — final stored value after policy normalization\nevent: [FINAL] none — final stored value after policy normalization\neventType: [FINAL] none — final stored value after policy normalization\nseason: [FINAL] none — final stored value after policy normalization\nyearPublished: [FINAL] 2025 — final stored value after policy normalization",
+    "yearPublished": {
+      "value": "2025",
+      "confidence": 0.97
+    },
+    "reviewReasons": [
+      "[info] Confidence not calibrated — 9 of 25 human-reviewed entries completed. Approve 16 more entries to enable data-backed calibration. Until then, scores are raw model confidence.",
+      "[info] Semantic calibration gaps — topic, jobLevel, jobFunction, useCases, funnelStage, industry still lack field-level data backing at this confidence band."
+    ],
+    "confidenceCalibration": {
+      "enabled": true,
+      "path": "seeds/confidence-calibration.json",
+      "profileVersion": "2026-03-19-calibration-v21",
+      "appliedFields": [],
+      "dataBacked": false,
+      "minimumSampleSize": 25,
+      "actualSampleSize": 9,
+      "uncalibratedSemanticFields": [
+        "topic",
+        "jobLevel",
+        "jobFunction",
+        "useCases",
+        "funnelStage",
+        "industry"
+      ],
+      "semanticFieldCoverage": [
+        {
+          "field": "topic",
+          "confidence": 0.99,
+          "sampleSize": 7,
+          "dataBacked": false
+        },
+        {
+          "field": "jobLevel",
+          "confidence": 0.99,
+          "sampleSize": 7,
+          "dataBacked": false
+        },
+        {
+          "field": "jobFunction",
+          "confidence": 0.99,
+          "sampleSize": 7,
+          "dataBacked": false
+        },
+        {
+          "field": "useCases",
+          "confidence": 0.95,
+          "sampleSize": 0,
+          "dataBacked": false
+        },
+        {
+          "field": "funnelStage",
+          "confidence": 0.99,
+          "sampleSize": 8,
+          "dataBacked": false
+        },
+        {
+          "field": "industry",
+          "confidence": 0.99,
+          "sampleSize": 8,
+          "dataBacked": false
+        }
+      ],
+      "overall": {
+        "raw": 0.94,
+        "calibrated": 0.94,
+        "sampleSize": 0,
+        "dataBacked": false
+      }
+    },
+    "debugTrace": {
+      "metadata": {
+        "assetId": "hclvhMBxnJbxq8OQQv7HN",
+        "title": "Platform (June & Fall Launch 2025 Updates)",
+        "contentType": "page",
+        "slug": "products/platform",
+        "taxonomyVersion": "v2",
+        "executionMode": "default",
+        "vendors": [
+          "chroma",
+          "contentful-cda",
+          "contentful-management",
+          "gemini",
+          "google-ai-studio",
+          "langsmith",
+          "nlp-sidecar",
+          "otel",
+          "postgres"
+        ]
+      },
+      "steps": [
+        {
+          "step": "content-quality",
+          "at": "2026-03-23T18:46:04.941Z",
+          "output": {
+            "bodyCharCount": 32982,
+            "headingCount": 240,
+            "contentQuality": "FULL_BODY",
+            "semanticConfidenceCeiling": 0.97,
+            "suspiciousEvidenceReasons": []
+          }
+        },
+        {
+          "step": "signal-extraction",
+          "at": "2026-03-23T18:46:04.951Z",
+          "output": {
+            "urlPattern": "product",
+            "isProductPage": true,
+            "hasDemo": false,
+            "hasPricing": true,
+            "hasFAQ": true,
+            "hasVideo": true,
+            "hasDownload": false,
+            "hasStepByStep": false,
+            "detectedLanguage": "EN",
+            "mentionedProducts": [
+              "Platform",
+              "Personalization"
+            ],
+            "mentionedCompanies": [
+              "Segment",
+              "DocuSign",
+              "Kraft Heinz"
+            ],
+            "detectedSeasons": [
+              "Fall"
+            ],
+            "audienceHints": [],
+            "topicHints": [
+              "Personalization"
+            ],
+            "industryHints": [],
+            "overrides": {
+              "schemaType": "SoftwareApplication",
+              "assetType": null,
+              "assetSubType": "Product",
+              "funnelStage": "Evaluation/Engagement (BOFU)",
+              "season": "Fall",
+              "language": "EN",
+              "usageRights": "External",
+              "yearPublished": "2025",
+              "region": null
+            },
+            "structuredContent": {
+              "title": "Platform (June & Fall Launch 2025 Updates)",
+              "primaryCTAs": [
+                "get started",
+                "Contact sales"
+              ],
+              "mentionedBrands": [
+                "Segment",
+                "DocuSign",
+                "Kraft Heinz"
+              ],
+              "featureHeadings": [
+                "Platform Page: SEO",
+                "Contentful Platform",
+                "Contact sales",
+                "View plans",
+                "Made to move at lightspeed",
+                "Scale across digital channels",
+                "Composable marketing stack",
+                "AI Tout - Endless possibilities powered by AI"
+              ],
+              "bodySummary": "Platform (June & Fall Launch 2025 Updates) Platform (June & Fall Launch 2025 Updates) Platform Page: SEO Contentful Platform Power your brand with Contentful’s digital experience platform. A smarter, faster way to build, optimize, and scale experiences across every channel Platform Page: Hero (June 2025) Contentful Platform (June 2025) One content platform, infinite flexibility Power your brand with Contentful’s digital experience platform at your core. A smarter, faster way to build, optimize, and scale experiences across every channel and any team. (Global) Contact sales button View plans (generic) Platform Page: Section Group (Basics) (June 2025) Platform Page: Product Hero (June 2025) Platform Hero: 3-Up Copy Block (June 2025) Made to move at lightspeed Streamlined workflows and AI-powered tools make content creation, personalization, and publishing faster for every team. Scale across digital channels From peak traffic to global expansion, our infrastructure delivers fast, consistent content — on key channels where your brand lives. Composable marketing stack API-first and cloud-native, teams can plug in tools they love — DAMs, CRMs, commerce platforms — and create their ideal tech stack. AI Tout - Endless possibilities powered by AI Endless possibilities powered by AI Empower your teams to automate content creation, streamline workflows, and deliver personalized, on-brand experiences — all while boosting efficiency and consistency. CTA: Explore AI at Contentful Explore A..."
+            }
+          }
+        },
+        {
+          "step": "nlp-enrichment",
+          "at": "2026-03-23T18:46:12.404Z",
+          "output": {
+            "provider": "gliner+zero-shot",
+            "source": "external",
+            "intents": [
+              {
+                "label": "Start Trial",
+                "confidence": 0.8873196840286255
+              },
+              {
+                "label": "View Pricing",
+                "confidence": 0.8817974925041199
+              },
+              {
+                "label": "Read Documentation",
+                "confidence": 0.8675049543380737
+              },
+              {
+                "label": "Talk to Sales",
+                "confidence": 0.8673551678657532
+              },
+              {
+                "label": "Request Demo",
+                "confidence": 0.8640418648719788
+              },
+              {
+                "label": "Read FAQ",
+                "confidence": 0.8538535237312317
+              }
+            ],
+            "entities": [
+              {
+                "type": "company",
+                "value": "Contentful",
+                "confidence": 0.8570840358734131
+              },
+              {
+                "type": "company",
+                "value": "Contentful",
+                "confidence": 0.9715656042098999
+              },
+              {
+                "type": "company",
+                "value": "Contentful",
+                "confidence": 0.9073891639709473
+              },
+              {
+                "type": "company",
+                "value": "Contentful",
+                "confidence": 0.9741469025611877
+              },
+              {
+                "type": "technology",
+                "value": "DAMs",
+                "confidence": 0.5743315815925598
+              },
+              {
+                "type": "technology",
+                "value": "AI",
+                "confidence": 0.9371808171272278
+              },
+              {
+                "type": "technology",
+                "value": "AI",
+                "confidence": 0.9535004496574402
+              },
+              {
+                "type": "technology",
+                "value": "AI",
+                "confidence": 0.9506057500839233
+              },
+              {
+                "type": "technology",
+                "value": "AI",
+                "confidence": 0.9489008188247681
+              },
+              {
+                "type": "company",
+                "value": "Contentful",
+                "confidence": 0.8797847628593445
+              },
+              {
+                "type": "technology",
+                "value": "AI",
+                "confidence": 0.953926146030426
+              },
+              {
+                "type": "company",
+                "value": "Contentful",
+                "confidence": 0.9604888558387756
+              },
+              {
+                "type": "technology",
+                "value": "AI",
+                "confidence": 0.9362786412239075
+              },
+              {
+                "type": "technology",
+                "value": "AI",
+                "confidence": 0.9413586854934692
+              },
+              {
+                "type": "technology",
+                "value": "AI",
+                "confidence": 0.957435667514801
+              },
+              {
+                "type": "company",
+                "value": "Contentful",
+                "confidence": 0.945486843585968
+              },
+              {
+                "type": "technology",
+                "value": "AI",
+                "confidence": 0.9432934522628784
+              },
+              {
+                "type": "technology",
+                "value": "AI",
+                "confidence": 0.9654451608657837
+              },
+              {
+                "type": "technology",
+                "value": "AI",
+                "confidence": 0.9602450132369995
+              },
+              {
+                "type": "company",
+                "value": "Contentful",
+                "confidence": 0.9679749011993408
+              },
+              {
+                "type": "technology",
+                "value": "AI-native",
+                "confidence": 0.6560680270195007
+              },
+              {
+                "type": "technology",
+                "value": "AI",
+                "confidence": 0.9413802027702332
+              },
+              {
+                "type": "technology",
+                "value": "AI",
+                "confidence": 0.9248993992805481
+              },
+              {
+                "type": "technology",
+                "value": "AI",
+                "confidence": 0.9449962377548218
+              },
+              {
+                "type": "technology",
+                "value": "AI",
+                "confidence": 0.9340275526046753
+              }
+            ],
+            "mergedSignals": {
+              "hasDemo": true,
+              "hasPricing": true,
+              "hasFAQ": true,
+              "mentionedCompanies": [
+                "Segment",
+                "DocuSign",
+                "Kraft Heinz"
+              ],
+              "mentionedProducts": [
+                "Platform",
+                "Personalization"
+              ]
+            }
+          }
+        },
+        {
+          "step": "company-enrichment-skipped",
+          "at": "2026-03-23T18:46:12.404Z",
+          "output": {
+            "reason": "profile-disabled"
+          }
+        },
+        {
+          "step": "few-shot-selection",
+          "at": "2026-03-23T18:46:12.966Z",
+          "output": {
+            "strategy": "vector-store",
+            "exampleCount": 5,
+            "examples": [
+              {
+                "entryId": "5yRQig0lpBHEYEvAFz54S8",
+                "title": "Contentful Personalization",
+                "url": "/products/personalization",
+                "similarity": 0.6231749918141565,
+                "selectionStrategy": "vector-store",
+                "fields": {
+                  "industry": [
+                    "Software, IT & Technology"
+                  ],
+                  "topic": [
+                    "Personalization"
+                  ],
+                  "funnelStage": "Evaluation/Engagement (BOFU)",
+                  "jobFunction": [
+                    "Marketing"
+                  ],
+                  "jobLevel": [
+                    "Director",
+                    "VP"
+                  ]
+                }
+              },
+              {
+                "entryId": "4k1s2LLivgOmEoBW0oIYa2",
+                "title": "Contentful AI Actions",
+                "url": "/products/ai-actions",
+                "similarity": 0.4418841265131488,
+                "selectionStrategy": "vector-store",
+                "fields": {
+                  "industry": [
+                    "Software, IT & Technology"
+                  ],
+                  "topic": [
+                    "Artificial intelligence (AI)"
+                  ],
+                  "funnelStage": "Evaluation/Engagement (BOFU)",
+                  "jobFunction": [
+                    "Content",
+                    "IT/Engineering"
+                  ],
+                  "jobLevel": [
+                    "Director",
+                    "Manager"
+                  ]
+                }
+              },
+              {
+                "entryId": "36Nrw1F5VZ74VOIZgHEhMm",
+                "title": "Contentful Front-end Hosting",
+                "url": "/products/hosting",
+                "similarity": 0.4221763862502981,
+                "selectionStrategy": "vector-store",
+                "fields": {
+                  "industry": [
+                    "Software, IT & Technology"
+                  ],
+                  "topic": [
+                    "Deployment"
+                  ],
+                  "funnelStage": "Evaluation/Engagement (BOFU)",
+                  "jobFunction": [
+                    "IT/Engineering"
+                  ],
+                  "jobLevel": [
+                    "Director",
+                    "Manager"
+                  ]
+                }
+              },
+              {
+                "entryId": "3AUXJjWMUVyMT9oJRE5EZx",
+                "title": "Contentful Analytics",
+                "url": "/products/analytics",
+                "similarity": 0.41354989467852166,
+                "selectionStrategy": "vector-store",
+                "fields": {
+                  "industry": [
+                    "Software, IT & Technology"
+                  ],
+                  "topic": [
+                    "Analytics"
+                  ],
+                  "funnelStage": "Evaluation/Engagement (BOFU)",
+                  "jobFunction": [
+                    "Marketing",
+                    "Content"
+                  ],
+                  "jobLevel": [
+                    "Director",
+                    "Manager"
+                  ]
+                }
+              },
+              {
+                "entryId": "2t9rt3rGNWRzzjD860ZGcN",
+                "title": "Contentful Studio",
+                "url": "/products/studio",
+                "similarity": 0.40389466864178203,
+                "selectionStrategy": "vector-store",
+                "fields": {
+                  "industry": [
+                    "Software, IT & Technology"
+                  ],
+                  "topic": [
+                    "Content operations"
+                  ],
+                  "funnelStage": "Evaluation/Engagement (BOFU)",
+                  "jobFunction": [
+                    "Content"
+                  ],
+                  "jobLevel": [
+                    "Director",
+                    "Manager"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "step": "fact-stage",
+          "at": "2026-03-23T18:46:40.542Z",
+          "output": {
+            "model": "gemini-3.1-pro-preview",
+            "promptPreview": "You are the factual stage of the Contentful taxonomy pipeline.\nPrompt version: 2026-03-19-chain-v4\n\nReturn only structured JSON matching the schema.\nDo not reason about buyer psychology or marketing subjectivity in this stage.\n\n\nFocus only on objective, evidentiary classification fields:\n- assetType\n- assetSubType\n- schemaType\n- product\n- topic\n- useCases\n- industry\n- companySize\n- region\n- language\n- usageRights\n- event\n- eventType\n- season\n- yearPublished\n\nRules:\n- Prefer explicit signals, URL structure, company enrichment, and grounded content evidence.\n- Use exact allowed labels where provided.\n- Keep multi-select fields tight: choose at most 3 values by default, and at most 4 only for genuinely broad educational TOFU content.\n- Do not invent product labels or taxonomy values.\n- Generic horizontal platform product pages should usually resolve to product=Platform, topic=Headless CMS, useCases=Digital experiences, and industry=Software, IT & Technology.\n- On generic platform pages, do not expand to AI, Personalization, General business, or Experimentation from secondary body mentions alone. Title, slug, and primary headings carry more weight than buried feature blurbs.\n- Migration and Replatforming belong in topic, not useCases.\n- If Personalization is already captured by the product field, avoid duplicating it in topic/useCases unless the page is truly about personalization as a broader concept rather than the product.\n- Season is only for time-bound campaigns or event-like content. Never use Season for evergreen pages.\n- Webinar pages stay Webinar even when they are live, on-demand, recap, recording, or registration pages. Event is only for physical in-person events.\n- GDPR references imply Global relevance, not EMEA-only targeting.\n- If a field is marked as an override in the signal block, copy it exactly.\n- Confidence must reflect the evidence ceiling in Section 0.\n\n\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nSECTION 0 — EVIDENCE QUALITY (READ THIS BEFORE ASSIGNING ANY CONFIDENCE)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nAvailable body text: 32982 chars (after title stripped)\nHeadings detected:   240\nEvidence level:      FULL BODY — sufficient text for confident classification\n\nCONFIDENCE RUBRIC — you MUST calibrate your confidence based on what evidence you actually have:\n  TITLE ONLY       → cap ALL semantic field confidence at 0.60 — you are inferring from a title, not reading content\n  TITLE + HEADINGS → cap ALL semantic field confidence at 0.74 — limited evidence\n  PARTIAL BODY     → cap ALL semantic field confidence at 0.87 — reasonable but incomplete\n  FULL BODY        → no cap — full confidence allowed\n\nYOUR CURRENT EVIDENCE CEILING: 97% for topic, useCases, jobLevel, jobFunction, industry, audience\n\nMANDATORY: If you are working from partial body text, state this explicitly in the reasoning field. Do NOT report confidence above 97% for any semantic field — a high confidence score on sparse content is a misrepresentation.\n\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nSECTION 1 — PRE-COMPUTED SIGNALS (ground truth, do not contradict unless you have overwhelming evidence)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nContent Type:       page [ground truth — use for schema/format decisions]\nURL Pattern:        product\nIs Product Page:    YES\nHas Demo CTA:       YES — get started, Contact sales\nHas Pricing:        YES\nHas FAQ structure:  YES\nHas Video content:  YES\nHas Download:       no\nHas Step-by-step:   no\nDetected Language:  EN\nMentioned Products: Platform, Personalization\nMentioned Brands:   suppressed — company enrichment disabled for this content type\nNLP Provider:       gliner+zero-shot (external)\nNLP Intents:        Start Trial (89%), View Pricing (88%), Read Documentation (87%), Talk to Sales (87%), Request Demo (86%), Read FAQ (85%)\nNLP Entities:       company:Contentful (86%), company:Contentful (97%), company:Contentful (91%), company:Contentful (97%), technology:DAMs (57%), technology:AI (94%), technology:AI (9...",
+            "output": {
+              "assetType": {
+                "value": "Webpage",
+                "confidence": 0.99
+              },
+              "assetSubType": {
+                "value": [
+                  "Product"
+                ],
+                "confidence": 0.99
+              },
+              "schemaType": {
+                "value": "SoftwareApplication",
+                "confidence": 0.99
+              },
+              "product": {
+                "value": [
+                  "Platform"
+                ],
+                "confidence": 0.95
+              },
+              "topic": {
+                "value": [
+                  "Headless CMS"
+                ],
+                "confidence": 0.95
+              },
+              "useCases": {
+                "value": [
+                  "Digital experiences"
+                ],
+                "confidence": 0.95
+              },
+              "industry": {
+                "value": [
+                  "Software, IT & Technology"
+                ],
+                "confidence": 0.95
+              },
+              "companySize": {
+                "value": [
+                  "Enterprise (>$500M revenue)",
+                  "Commercial ($10M - $500M revenue)"
+                ],
+                "confidence": 0.85
+              },
+              "region": {
+                "value": [
+                  "Global"
+                ],
+                "confidence": 0.99
+              },
+              "language": {
+                "value": "EN",
+                "confidence": 0.99
+              },
+              "usageRights": {
+                "value": "External",
+                "confidence": 0.99
+              },
+              "event": null,
+              "eventType": null,
+              "season": {
+                "value": "Fall午\nWait, the value should be exactly \"Fall\". Let me correct that typo in my thought process. I will output \"Fall\".\n\n```json\n{\n  \"assetType\": {\n    \"value\": \"Webpage\",\n    \"confidence\": 0.99\n  },\n  \"assetSubType\": {\n    \"value\": [\n      \"Product\"\n    ],\n    \"confidence\": 0.99\n  },\n  \"schemaType\": {\n    \"value\": \"SoftwareApplication\",\n    \"confidence\": 0.99\n  },\n  \"product\": {\n    \"value\": [\n      \"Platform\"\n    ],\n    \"confidence\": 0.95\n  },\n  \"topic\": {\n    \"value\": [\n      \"Headless CMS\"\n    ],\n    \"confidence\": 0.95\n  },\n  \"useCases\": {\n    \"value\": [\n      \"Digital experiences\"\n    ],\n    \"confidence\": 0.95\n  },\n  \"industry\": {\n    \"value\": [\n      \"Software, IT & Technology\"\n    ],\n    \"confidence\": 0.95\n  },\n  \"companySize\": {\n    \"value\": [\n      \"Enterprise (>$500M revenue)\",\n      \"Commercial ($10M - $500M revenue)\"\n    ],\n    \"confidence\": 0.85\n  },\n  \"region\": {\n    \"value\": [\n      \"Global\"\n    ],\n    \"confidence\": 0.99\n  },\n  \"language\": {\n    \"value\": \"EN\",\n    \"confidence\": 0.99\n  },\n  \"usageRights\": {\n    \"value\": \"External\",\n    \"confidence\": 0.99\n  },\n  \"event\": null,\n  \"eventType\": null,\n  \"season\": {\n    \"value\": \"Fall\",\n    \"confidence\": 0.99\n  },\n  \"yearPublished\": {\n    \"value\": \"2025\",\n    \"confidence\": 0.99\n  }\n}\n```"
+              }
+            },
+            "usage": {
+              "inputTokens": 3574,
+              "outputTokens": 3026,
+              "totalTokens": 6600,
+              "reasoningTokens": 2102,
+              "cachedInputTokens": 0
+            }
+          }
+        },
+        {
+          "step": "subjective-stage",
+          "at": "2026-03-23T18:46:42.057Z",
+          "output": {
+            "model": "gemini-2.5-flash-lite",
+            "promptPreview": "You are the subjective stage of the Contentful taxonomy pipeline.\nPrompt version: 2026-03-19-chain-v4\n\nReturn only structured JSON matching the schema.\nDo not re-decide the objective facts unless the supplied fact block is obviously impossible.\n\n\nFocus only on subjective or audience-dependent fields:\n- jobLevel\n- jobFunction\n- audience\n- funnelStage\n- competitivePositioning\n- reasoning\n\nRules:\n- Treat the fact classification block as locked context unless the content clearly contradicts it.\n- Resolve funnelStage and jobLevel independently from the same content evidence. They may correlate, but neither field determines the other.\n- Funnel stage is about buyer journey intent, CTA strength, and page structure.\n- Job level is about the seniority and strategic depth of the content's intended reader.\n- Broad educational guides often span multiple non-executive levels, but strategic or executive-oriented educational content can still target VP or C-Level.\n- Case studies are Consideration (MOFU), not BOFU.\n- Transformational or strategic content should skew Director and above.\n- Funnel stage must follow CTA and page-structure evidence before tone-based inference.\n- Audience: only select if the content specifically addresses a group. If it doesn't target any particular audience, leave EMPTY. Do not default to \"Prospect\".\n- reasoning: Write ONE LINE PER FIELD for EVERY field below. Put each on its own line (use \\n).\n  Format: \"fieldName: [TAG] value — why\"\n\n  FACT FIELDS (from LOCKED FACT CLASSIFICATION above — explain why each was chosen):\n  assetType: [LOCKED] or [AI] — why\n  assetSubType: [LOCKED] or [AI] — why\n  schemaType: [LOCKED] or [AI] — why\n  product: [AI] — what products are mentioned in the content\n  topic: [AI] — what themes dominate the content\n  useCases: [AI] or [METADATA] — what outcomes are discussed\n  industry: [AI] or [ENRICHMENT] — cite company vertical or content language\n  companySize: [AI] or [ENRICHMENT] — cite revenue data or company scale\n  region: [SIGNAL] or [AI] — from signal or content\n  language: [SIGNAL] — from signal\n  usageRights: [SIGNAL] — from signal\n\n  SUBJECTIVE FIELDS (your decisions in this stage):\n  funnelStage: [LOCKED] or [AI] — why\n  jobLevel: [AI] — what evidence targets these levels\n  jobFunction: [AI] — what roles are addressed in the content\n  audience: [AI] — who is this for, or \"left blank — no specific audience\"\n  competitivePositioning: [AI] — competitors named? what positioning?\n\n  Use [METADATA] tag for any field that came from EXISTING ENTRY METADATA.\n  EVERY field must appear on its own line. Do not combine fields into paragraphs.\n- Confidence must reflect the evidence ceiling in Section 0.\n\n\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nSECTION 0 — EVIDENCE QUALITY (READ THIS BEFORE ASSIGNING ANY CONFIDENCE)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nAvailable body text: 32982 chars (after title stripped)\nHeadings detected:   240\nEvidence level:      FULL BODY — sufficient text for confident classification\n\nCONFIDENCE RUBRIC — you MUST calibrate your confidence based on what evidence you actually have:\n  TITLE ONLY       → cap ALL semantic field confidence at 0.60 — you are inferring from a title, not reading content\n  TITLE + HEADINGS → cap ALL semantic field confidence at 0.74 — limited evidence\n  PARTIAL BODY     → cap ALL semantic field confidence at 0.87 — reasonable but incomplete\n  FULL BODY        → no cap — full confidence allowed\n\nYOUR CURRENT EVIDENCE CEILING: 97% for topic, useCases, jobLevel, jobFunction, industry, audience\n\nMANDATORY: If you are working from partial body text, state this explicitly in the reasoning field. Do NOT report confidence above 97% for any semantic field — a high confidence score on sparse content is a misrepresentation.\n\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nSECTION 1 — PRE-COMPUTED SIGNALS (ground truth, do not contradict unless you have overwhelming evidence)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nContent Type:       page [ground truth —...",
+            "output": {
+              "jobLevel": {
+                "value": [
+                  "Director",
+                  "VP",
+                  "C-Level"
+                ],
+                "confidence": 0.85
+              },
+              "jobFunction": {
+                "value": [
+                  "Marketing",
+                  "Digital",
+                  "Digital strategists",
+                  "Product"
+                ],
+                "confidence": 0.85
+              },
+              "audience": {
+                "value": [],
+                "confidence": 0.5
+              },
+              "funnelStage": {
+                "value": "Evaluation/Engagement (BOFU)",
+                "confidence": 0.95
+              },
+              "competitivePositioning": {
+                "mentionsCompetitors": false,
+                "competitorNames": [],
+                "positioningType": "none"
+              },
+              "reasoning": "jobLevel: [AI] Director, VP, C-Level — The content discusses platform updates and strategic capabilities like scaling across digital channels and a composable marketing stack, which typically appeal to senior leadership.\njobFunction: [AI] Marketing, Digital, Digital strategists, Product — The focus on digital experiences, personalization, and platform capabilities directly aligns with the responsibilities of marketing, digital, and product teams.\naudience: [AI]  — no specific audience is directly addressed; the content is broadly about the platform's capabilities.\nfunnelStage: [AI] Evaluation/Engagement (BOFU) — The presence of a \"Platform Page\" with \"Contact sales\" and \"View plans\" CTAs, along with detailed feature headings and product descriptions, indicates a focus on users evaluating the platform for purchase.\ncompetitivePositioning: [AI] none — no competitors are mentioned in the provided text, and no specific positioning against competitors is stated."
+            },
+            "usage": {
+              "inputTokens": 2769,
+              "outputTokens": 400,
+              "totalTokens": 3169,
+              "reasoningTokens": 0,
+              "cachedInputTokens": 0
+            }
+          }
+        },
+        {
+          "step": "post-processing",
+          "at": "2026-03-23T18:46:42.087Z",
+          "output": {
+            "profile": {
+              "assetType": null,
+              "assetSubType": null,
+              "schemaType": {
+                "default": "Article",
+                "aiDecides": true
+              },
+              "funnelStage": {
+                "default": "Awareness (TOFU)",
+                "allowed": [
+                  "Awareness (TOFU)",
+                  "Consideration (MOFU)",
+                  "Evaluation/Engagement (BOFU)",
+                  "Retention",
+                  "Sign-up"
+                ],
+                "never": []
+              },
+              "companyEnrichmentApplies": false
+            },
+            "lowContentWarning": null,
+            "consistencyWarnings": [],
+            "openQuestionFlags": [],
+            "humanOverrides": [
+              "jobFunction",
+              "jobLevel"
+            ],
+            "reviewReasons": [
+              "[info] Confidence not calibrated — 9 of 25 human-reviewed entries completed. Approve 16 more entries to enable data-backed calibration. Until then, scores are raw model confidence.",
+              "[info] Semantic calibration gaps — topic, jobLevel, jobFunction, useCases, funnelStage, industry still lack field-level data backing at this confidence band."
+            ],
+            "confidenceCalibration": {
+              "enabled": true,
+              "path": "seeds/confidence-calibration.json",
+              "profileVersion": "2026-03-19-calibration-v21",
+              "appliedFields": [],
+              "dataBacked": false,
+              "minimumSampleSize": 25,
+              "actualSampleSize": 9,
+              "uncalibratedSemanticFields": [
+                "topic",
+                "jobLevel",
+                "jobFunction",
+                "useCases",
+                "funnelStage",
+                "industry"
+              ],
+              "semanticFieldCoverage": [
+                {
+                  "field": "topic",
+                  "confidence": 0.99,
+                  "sampleSize": 7,
+                  "dataBacked": false
+                },
+                {
+                  "field": "jobLevel",
+                  "confidence": 0.99,
+                  "sampleSize": 7,
+                  "dataBacked": false
+                },
+                {
+                  "field": "jobFunction",
+                  "confidence": 0.99,
+                  "sampleSize": 7,
+                  "dataBacked": false
+                },
+                {
+                  "field": "useCases",
+                  "confidence": 0.95,
+                  "sampleSize": 0,
+                  "dataBacked": false
+                },
+                {
+                  "field": "funnelStage",
+                  "confidence": 0.99,
+                  "sampleSize": 8,
+                  "dataBacked": false
+                },
+                {
+                  "field": "industry",
+                  "confidence": 0.99,
+                  "sampleSize": 8,
+                  "dataBacked": false
+                }
+              ],
+              "overall": {
+                "raw": 0.94,
+                "calibrated": 0.94,
+                "sampleSize": 0,
+                "dataBacked": false
+              }
+            },
+            "finalFields": {
+              "assetType": {
+                "value": "Webpage",
+                "confidence": 0.99
+              },
+              "assetSubType": {
+                "value": [
+                  "Product"
+                ],
+                "confidence": 0.95
+              },
+              "schemaType": {
+                "value": "SoftwareApplication",
+                "confidence": 0.97
+              },
+              "product": {
+                "value": [
+                  "Platform"
+                ],
+                "confidence": 0.97
+              },
+              "jobLevel": {
+                "value": [
+                  "Director",
+                  "VP"
+                ],
+                "confidence": 0.99
+              },
+              "jobFunction": {
+                "value": [
+                  "Content",
+                  "IT/Engineering"
+                ],
+                "confidence": 0.99
+              },
+              "audience": {
+                "value": [],
+                "confidence": 0.5
+              },
+              "topic": {
+                "value": [
+                  "Headless CMS"
+                ],
+                "confidence": 0.99
+              },
+              "useCases": {
+                "value": [
+                  "Digital experiences"
+                ],
+                "confidence": 0.95
+              },
+              "funnelStage": {
+                "value": "Evaluation/Engagement (BOFU)",
+                "confidence": 0.99
+              },
+              "industry": {
+                "value": [
+                  "Software, IT & Technology"
+                ],
+                "confidence": 0.99
+              },
+              "companySize": {
+                "value": [
+                  "Commercial ($10M - $500M revenue)"
+                ],
+                "confidence": 0.85
+              },
+              "region": {
+                "value": [
+                  "Global"
+                ],
+                "confidence": 0.97
+              },
+              "language": {
+                "value": "EN",
+                "confidence": 0.99
+              },
+              "usageRights": {
+                "value": "External",
+                "confidence": 0.99
+              },
+              "event": null,
+              "eventType": null,
+              "yearPublished": {
+                "value": "2025",
+                "confidence": 0.97
+              },
+              "competitivePositioning": {
+                "mentionsCompetitors": false,
+                "competitorNames": [],
+                "positioningType": "none"
+              },
+              "overallConfidence": 0.94,
+              "needsReview": false
+            }
+          }
+        }
+      ],
+      "vendorCalls": [
+        {
+          "id": "vendor-call-1",
+          "at": "2026-03-23T18:46:03.703Z",
+          "vendor": "contentful-management",
+          "service": "management-client",
+          "category": "content-source",
+          "operation": "create-client",
+          "purpose": "initialize Contentful management client for live trace capture",
+          "status": "ok",
+          "durationMs": 0,
+          "input": {
+            "spaceId": "jtqsy5pye0zd",
+            "environmentId": "zuhur-ai-sandbox"
+          },
+          "output": {
+            "tokenConfigured": true
+          }
+        },
+        {
+          "id": "vendor-call-2",
+          "at": "2026-03-23T18:46:04.012Z",
+          "vendor": "contentful-management",
+          "service": "space",
+          "category": "content-source",
+          "operation": "get-space",
+          "purpose": "resolve Contentful space before fetching the entry",
+          "status": "ok",
+          "durationMs": 308,
+          "input": {
+            "spaceId": "jtqsy5pye0zd"
+          },
+          "output": {
+            "spaceId": "jtqsy5pye0zd"
+          }
+        },
+        {
+          "id": "vendor-call-3",
+          "at": "2026-03-23T18:46:04.121Z",
+          "vendor": "contentful-management",
+          "service": "environment",
+          "category": "content-source",
+          "operation": "get-environment",
+          "purpose": "resolve Contentful environment before fetching the entry",
+          "status": "ok",
+          "durationMs": 109,
+          "input": {
+            "environmentId": "zuhur-ai-sandbox"
+          },
+          "output": {
+            "environmentId": "zuhur-ai-sandbox"
+          }
+        },
+        {
+          "id": "vendor-call-4",
+          "at": "2026-03-23T18:46:04.494Z",
+          "vendor": "contentful-management",
+          "service": "entry",
+          "category": "content-source",
+          "operation": "get-entry",
+          "purpose": "fetch the requested Contentful entry",
+          "status": "ok",
+          "durationMs": 373,
+          "input": {
+            "entryId": "hclvhMBxnJbxq8OQQv7HN"
+          },
+          "output": {
+            "entryId": "hclvhMBxnJbxq8OQQv7HN",
+            "contentType": "page"
+          }
+        },
+        {
+          "id": "vendor-call-5",
+          "at": "2026-03-23T18:46:04.937Z",
+          "vendor": "contentful-cda",
+          "service": "recursive-crawl",
+          "category": "content-source",
+          "operation": "deep-crawl-entry",
+          "purpose": "fetch the full page body through the Contentful delivery APIs",
+          "status": "ok",
+          "durationMs": 443,
+          "input": {
+            "crawlEntryId": "hclvhMBxnJbxq8OQQv7HN"
+          },
+          "output": {
+            "textLength": 33025,
+            "textPreview": "Platform (June & Fall Launch 2025 Updates) Platform Page: SEO Contentful Platform Power your brand with Contentful’s digital experience platform. A smarter, faster way to build, optimize, and scale experiences across eve..."
+          }
+        },
+        {
+          "id": "vendor-call-6",
+          "at": "2026-03-23T18:46:12.402Z",
+          "vendor": "nlp-sidecar",
+          "service": "gliner+zero-shot",
+          "category": "nlp",
+          "operation": "enrich-content-signals",
+          "purpose": "enrich heuristic content signals with external NLP",
+          "status": "ok",
+          "durationMs": 7449,
+          "input": {
+            "endpoint": "http://127.0.0.1:8090/extract",
+            "slug": "products/platform",
+            "title": "Platform (June & Fall Launch 2025 Updates)",
+            "textLength": 33025,
+            "textPreview": "Platform (June & Fall Launch 2025 Updates) Platform Page: SEO Contentful Platform Power your brand with Contentful’s digital experience platform. A smarter, faster way to build, op..."
+          },
+          "output": {
+            "entityCount": 25,
+            "intentCount": 6,
+            "entities": [
+              {
+                "type": "company",
+                "value": "Contentful",
+                "confidence": 0.8570840358734131
+              },
+              {
+                "type": "company",
+                "value": "Contentful",
+                "confidence": 0.9715656042098999
+              },
+              {
+                "type": "company",
+                "value": "Contentful",
+                "confidence": 0.9073891639709473
+              },
+              {
+                "type": "company",
+                "value": "Contentful",
+                "confidence": 0.9741469025611877
+              },
+              {
+                "type": "technology",
+                "value": "DAMs",
+                "confidence": 0.5743315815925598
+              },
+              {
+                "type": "technology",
+                "value": "AI",
+                "confidence": 0.9371808171272278
+              },
+              {
+                "type": "technology",
+                "value": "AI",
+                "confidence": 0.9535004496574402
+              },
+              {
+                "type": "technology",
+                "value": "AI",
+                "confidence": 0.9506057500839233
+              }
+            ],
+            "intents": [
+              {
+                "label": "Start Trial",
+                "confidence": 0.8873196840286255
+              },
+              {
+                "label": "View Pricing",
+                "confidence": 0.8817974925041199
+              },
+              {
+                "label": "Read Documentation",
+                "confidence": 0.8675049543380737
+              },
+              {
+                "label": "Talk to Sales",
+                "confidence": 0.8673551678657532
+              },
+              {
+                "label": "Request Demo",
+                "confidence": 0.8640418648719788
+              },
+              {
+                "label": "Read FAQ",
+                "confidence": 0.8538535237312317
+              }
+            ]
+          }
+        },
+        {
+          "id": "vendor-call-7",
+          "at": "2026-03-23T18:46:12.881Z",
+          "vendor": "google-ai-studio",
+          "service": "gemini-embedding-001",
+          "category": "embedding",
+          "operation": "embed-few-shot-query",
+          "purpose": "build query embedding for dynamic few-shot retrieval",
+          "status": "ok",
+          "durationMs": 459,
+          "input": {
+            "model": "gemini-embedding-001",
+            "textLength": 390,
+            "textPreview": "Platform (June & Fall Launch 2025 Updates) | page | products/platform | Personalization | Platform (June & Fall Launch 2025 Updates) Platform (June & Fall Launc...",
+            "assetId": "hclvhMBxnJbxq8OQQv7HN",
+            "contentType": "page"
+          },
+          "output": {
+            "source": "api",
+            "dimensions": 3072
+          }
+        },
+        {
+          "id": "vendor-call-8",
+          "at": "2026-03-23T18:46:12.965Z",
+          "vendor": "chroma",
+          "service": "content-graph-corrections",
+          "category": "retrieval",
+          "operation": "query-few-shot-corrections",
+          "purpose": "retrieve similar human-corrected examples",
+          "status": "ok",
+          "durationMs": 72,
+          "input": {
+            "limit": 6,
+            "excludedEntryIds": [
+              "hclvhMBxnJbxq8OQQv7HN"
+            ],
+            "embeddingDimensions": 3072
+          },
+          "output": {
+            "resultCount": 5,
+            "topMatches": [
+              {
+                "entryId": "5yRQig0lpBHEYEvAFz54S8",
+                "similarity": 0.6231749918141565
+              },
+              {
+                "entryId": "4k1s2LLivgOmEoBW0oIYa2",
+                "similarity": 0.4418841265131488
+              },
+              {
+                "entryId": "36Nrw1F5VZ74VOIZgHEhMm",
+                "similarity": 0.4221763862502981
+              },
+              {
+                "entryId": "3AUXJjWMUVyMT9oJRE5EZx",
+                "similarity": 0.41354989467852166
+              },
+              {
+                "entryId": "2t9rt3rGNWRzzjD860ZGcN",
+                "similarity": 0.40389466864178203
+              }
+            ]
+          }
+        },
+        {
+          "id": "vendor-call-9",
+          "at": "2026-03-23T18:46:40.542Z",
+          "vendor": "gemini",
+          "service": "gemini-3.1-pro-preview",
+          "category": "llm",
+          "operation": "fact-stage-classification",
+          "purpose": "derive factual taxonomy fields from content and retrieval context",
+          "status": "ok",
+          "durationMs": 27575,
+          "input": {
+            "assetId": "hclvhMBxnJbxq8OQQv7HN",
+            "contentType": "page",
+            "executionMode": "default",
+            "promptLength": 15849,
+            "fewShotStrategy": "vector-store"
+          },
+          "output": {
+            "usage": {
+              "inputTokens": 3574,
+              "outputTokens": 3026,
+              "totalTokens": 6600,
+              "reasoningTokens": 2102,
+              "cachedInputTokens": 0
+            },
+            "fieldKeys": [
+              "assetType",
+              "assetSubType",
+              "schemaType",
+              "product",
+              "topic",
+              "useCases",
+              "industry",
+              "companySize",
+              "region",
+              "language",
+              "usageRights",
+              "event",
+              "eventType",
+              "season"
+            ]
+          }
+        },
+        {
+          "id": "vendor-call-10",
+          "at": "2026-03-23T18:46:42.057Z",
+          "vendor": "gemini",
+          "service": "gemini-2.5-flash-lite",
+          "category": "llm",
+          "operation": "subjective-stage-classification",
+          "purpose": "derive subjective taxonomy fields from content and fact summary",
+          "status": "ok",
+          "durationMs": 1513,
+          "input": {
+            "assetId": "hclvhMBxnJbxq8OQQv7HN",
+            "contentType": "page",
+            "executionMode": "default",
+            "promptLength": 11471
+          },
+          "output": {
+            "usage": {
+              "inputTokens": 2769,
+              "outputTokens": 400,
+              "totalTokens": 3169,
+              "reasoningTokens": 0,
+              "cachedInputTokens": 0
+            },
+            "fieldKeys": [
+              "jobLevel",
+              "jobFunction",
+              "audience",
+              "funnelStage",
+              "competitivePositioning",
+              "reasoning"
+            ]
+          }
+        },
+        {
+          "id": "vendor-call-11",
+          "at": "2026-03-23T18:46:42.411Z",
+          "vendor": "otel",
+          "service": "http://127.0.0.1:6006/v1/traces",
+          "category": "observability",
+          "operation": "export-classification-run",
+          "purpose": "export run trace to OTEL collectors",
+          "status": "ok",
+          "durationMs": 38,
+          "input": {
+            "entryId": "hclvhMBxnJbxq8OQQv7HN"
+          },
+          "output": {
+            "promptVersion": "2026-03-19-chain-v4",
+            "exported": true
+          }
+        },
+        {
+          "id": "vendor-call-12",
+          "at": "2026-03-23T18:46:42.430Z",
+          "vendor": "postgres",
+          "service": "classification_runs",
+          "category": "observability",
+          "operation": "persist-classification-run",
+          "purpose": "store structured classification trace in Postgres",
+          "status": "ok",
+          "durationMs": 307,
+          "input": {
+            "entryId": "hclvhMBxnJbxq8OQQv7HN",
+            "contentType": "page"
+          },
+          "output": {
+            "needsReview": false,
+            "overallConfidence": 0.94
+          }
+        },
+        {
+          "id": "vendor-call-13",
+          "at": "2026-03-23T18:46:42.462Z",
+          "vendor": "langsmith",
+          "service": "Taxonomy-Contentful",
+          "category": "observability",
+          "operation": "flush-pending-traces",
+          "purpose": "flush pending LangSmith traces produced by traceable steps",
+          "status": "ok",
+          "durationMs": 89,
+          "input": {
+            "entryId": "hclvhMBxnJbxq8OQQv7HN"
+          },
+          "output": {
+            "promptVersion": "2026-03-19-chain-v4",
+            "flushedPendingTraceBatches": true
+          }
+        }
+      ],
+      "wiring": [
+        {
+          "from": "contentful-management",
+          "to": "contentful-cda",
+          "description": "management API resolves the crawl root before CDA deep crawl"
+        },
+        {
+          "from": "contentful-cda",
+          "to": "signal-extraction",
+          "description": "deep-crawled Contentful text becomes classifier input"
+        },
+        {
+          "from": "signal-extraction",
+          "to": "nlp-sidecar",
+          "description": "heuristic signals are enriched by the NLP sidecar"
+        },
+        {
+          "from": "signal-extraction",
+          "to": "google-ai-studio",
+          "description": "page summary becomes an embedding query for few-shot retrieval"
+        },
+        {
+          "from": "google-ai-studio",
+          "to": "chroma",
+          "description": "query embedding is used to retrieve similar corrected examples"
+        },
+        {
+          "from": "few-shot-selection",
+          "to": "gemini-fact-stage",
+          "description": "retrieved examples are injected into the fact-stage prompt"
+        },
+        {
+          "from": "gemini-fact-stage",
+          "to": "gemini-subjective-stage",
+          "description": "fact output is summarized into the subjective-stage prompt"
+        },
+        {
+          "from": "classification-result",
+          "to": "otel",
+          "description": "final result is exported to OTEL collectors"
+        },
+        {
+          "from": "classification-result",
+          "to": "postgres",
+          "description": "final result is persisted into classification_runs"
+        },
+        {
+          "from": "classification-result",
+          "to": "langsmith",
+          "description": "pending LangSmith traces are flushed after classification completes"
+        }
+      ]
+    }
+  }
+}
