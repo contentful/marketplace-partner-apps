@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.2.0...ceros-contentful-app-v1.2.1) (2026-10-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @extractus/oembed-extractor to ^4.1.0 ([#8792](https://github.com/contentful/marketplace-partner-apps/issues/8792)) ([f2f64e5](https://github.com/contentful/marketplace-partner-apps/commit/f2f64e51537eadf883e1aca7c6389d5fbd5d313c))
+
 ## [1.2.0](https://github.com/contentful/marketplace-partner-apps/compare/ceros-contentful-app-v1.1.1...ceros-contentful-app-v1.2.0) (2026-09-02)
 
 
