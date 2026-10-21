@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.9](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.8...sfmc-studio-v1.2.9) (2026-10-21)
+
+
+### Bug Fixes
+
+* **deps:** bump the production-dependencies group in /apps/sfmc-studio with 10 updates ([#8574](https://github.com/contentful/marketplace-partner-apps/issues/8574)) ([af1203c](https://github.com/contentful/marketplace-partner-apps/commit/af1203cdf97d7bcc8c2d89a9f9923b6d0ae1a109))
+* **deps:** update dependency antd to ^5.29.3 ([#8797](https://github.com/contentful/marketplace-partner-apps/issues/8797)) ([e78bc1a](https://github.com/contentful/marketplace-partner-apps/commit/e78bc1a7c4c2130c0245834381debe2b693ace5d))
+
 ## [1.2.8](https://github.com/contentful/marketplace-partner-apps/compare/sfmc-studio-v1.2.7...sfmc-studio-v1.2.8) (2026-06-30)
 
 
