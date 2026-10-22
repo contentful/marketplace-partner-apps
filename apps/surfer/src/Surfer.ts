@@ -29,6 +29,11 @@ export class Surfer {
     const { $iframe, setPermalink, ...surferContext } = this.surferGuidelines.initWithOptions({ partner: 'contentful' });
 
     this.iframe = $iframe;
+
+    // required for iframe copy content features to work
+    const allow = this.iframe.getAttribute('allow');
+    this.iframe.setAttribute('allow', allow ? `${allow}; clipboard-write` : 'clipboard-write');
+
     this.surferContext = surferContext;
     setPermalink(this.buildPermalink(shareToken));
 

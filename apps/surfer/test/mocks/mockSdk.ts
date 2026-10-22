@@ -8,9 +8,6 @@ const mockSdk: any = {
   ids: {
     app: 'test-app',
   },
-  dialogs: {
-    openCurrentApp: vi.fn().mockResolvedValue({}),
-  },
 };
 
 export { mockSdk };

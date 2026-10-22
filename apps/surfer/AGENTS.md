@@ -1,7 +1,7 @@
 # Agent Guide — surfer
 
 ## What This App Does
-Integrates Surfer SEO with Contentful. Provides real-time SEO content scoring and keyword optimization suggestions in the Entry Sidebar and a Dialog for detailed SEO analysis. Published as `surfer-contentful-app`.
+Helps you write and optimize content for SEO and GEO, right where you already work. Provides real-time SEO and GEO content scoring by embedding the Surfer Content Editor panel (an iframe served by Surfer) in the Entry Sidebar and feeding it the entry's RichText content as HTML. All scoring happens inside the panel. Published as `surfer-contentful-app`.
 
 ## Archetype
 Standard Vite app.
@@ -10,9 +10,8 @@ Standard Vite app.
 
 | Location | File | Purpose |
 |----------|------|---------|
-| `LOCATION_APP_CONFIG` | `src/locations/ConfigScreen.tsx` | Configure Surfer API key and account settings |
-| `LOCATION_ENTRY_SIDEBAR` | `src/locations/Sidebar.tsx` | Real-time SEO score and keyword suggestions |
-| `LOCATION_DIALOG` | `src/locations/Dialog.tsx` | Detailed Surfer SEO analysis panel |
+| `LOCATION_APP_CONFIG` | `src/locations/ConfigScreen.tsx` | Select content types and RichText fields Surfer reads |
+| `LOCATION_ENTRY_SIDEBAR` | `src/locations/Sidebar.tsx` | Mounts the Surfer panel and sends it the selected fields' HTML |
 
 ## Key Dependencies
 
@@ -20,32 +19,30 @@ Standard Vite app.
 |---------|------|
 | `@contentful/app-sdk` | App Framework SDK |
 | `@contentful/f36-components` | Forma 36 UI |
-| `@contentful/f36-icons` | Icons |
-| `@contentful/f36-multiselect` | Multi-select for keyword selection |
-| `@contentful/react-apps-toolkit` | `useSDK()`, `useAutoResizer()` |
+| `@contentful/react-apps-toolkit` | `useSDK()` |
+| `@contentful/rich-text-html-renderer` | RichText → HTML for the panel |
 
 ## Source Layout
 
 ```
 src/
 ├── App.tsx
-├── locations/         # ConfigScreen, Sidebar, Dialog
+├── locations/         # ConfigScreen, Sidebar
 ├── assets/
 ├── components/
 ├── hooks/
 ├── types.ts
-└── Surfer.ts          # Surfer API client
+└── Surfer.ts          # Wrapper around the Surfer SDK (window.surferGuidelines)
 ```
 
 ## Sharp Edges & Invariants
 
-- **`Surfer.ts`** is the API client (not in a `services/` subdirectory as typical) — all Surfer API calls go through this module.
-- **`Surfer.spec.ts`** tests the API client — run these after any changes to `Surfer.ts`.
-- **Surfer API key** is in installation parameters — never log it.
-- SEO scoring is computed by Surfer's API, not client-side — the Sidebar makes API calls on load and potentially on field value changes. Debounce triggers to avoid hammering the API.
+- The Surfer SDK is loaded by a `<script>` in `index.html`. `window.SURFER_EXT_CONF` (panel origin, RPC debug) must be set before it. Values come from `VITE_*` env vars; production values live in `.env.production`, local overrides go in `.env.local`.
+- No Surfer API calls and no credentials — the user signs in to Surfer inside the panel.
+- The share token `${spaceId}_${entryId}` links an entry to its Surfer draft. Changing it unlinks every existing entry.
+- The panel iframe needs `allow="clipboard-write"` (set in `Surfer.initialize`) for copy to work.
 
 ## Never / Always
 
-- **Never** log the Surfer API key.
-- **Always** use `useAutoResizer()` in the Sidebar location.
-- **Always** debounce Surfer API calls triggered by field value changes.
+- **Never** change the share token format.
+- **Always** run `Surfer.spec.ts` after changes to `Surfer.ts`.
