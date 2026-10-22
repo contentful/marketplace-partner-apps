@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import MagicDropzone from "react-magic-dropzone";
 import { Button, TextInput } from "@contentful/f36-components";
 import cloneDeep from "clone-deep";
-import { AssetProps, createClient } from "contentful-management";
+import { AssetProps } from "contentful-management";
 import fieldMissing from "../../Assets/MissingField.svg";
 import ValidationPage from "../Validation";
 import { EditorAppSDK } from "@contentful/app-sdk";
@@ -140,22 +140,14 @@ const SelectImage = ({
    * @param {Blob} file - The blob file of the Image
    */
   const uploadImage = async (bufferData: any, file: any) => {
-    const cma = createClient({ apiAdapter: sdk.cmaAdapter });
-
-    const space = await cma.getSpace(sdk.ids.space);
-
     setImageAssets("");
-    await space
-      .getEnvironment(sdk.ids.environment)
-      .then((environment: any) =>
-        environment.createAssetFromFiles({
+    try {
+      const asset = await sdk.cma.asset.createFromFiles(
+        {},
+        {
           fields: {
-            title: {
-              [defaultLocale]: file?.name,
-            },
-            description: {
-              [defaultLocale]: file?.type,
-            },
+            title: { [defaultLocale]: file?.name },
+            description: { [defaultLocale]: file?.type },
             file: {
               [defaultLocale]: {
                 contentType: file?.type,
@@ -164,15 +156,14 @@ const SelectImage = ({
               },
             },
           },
-        })
-      )
-      .then((asset: any) => asset.processForAllLocales())
-      .then((asset: any) => {
-        getImageUrl(asset?.sys?.id, false);
-
-        asset.publish();
-      })
-      .catch(console.error);
+        }
+      );
+      const processed = await sdk.cma.asset.processForAllLocales({}, asset);
+      getImageUrl(processed?.sys?.id, false);
+      await sdk.cma.asset.publish({ assetId: processed.sys.id }, processed);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const isValidUrl = (url: string) => {
