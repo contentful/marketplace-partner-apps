@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Content Graph – Vercel Deployment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root {
+        color-scheme: dark light;
+        --bg: #050816;
+        --fg: #f9fafb;
+        --muted: #9ca3af;
+        --accent: #22d3ee;
+        --accent-soft: rgba(34, 211, 238, 0.12);
+        --border: rgba(148, 163, 184, 0.2);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+          "Inter", sans-serif;
+        background: radial-gradient(circle at top, #0b1120 0, #020617 55%, #000 100%);
+        color: var(--fg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+      .shell {
+        width: 100%;
+        max-width: 720px;
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        background: radial-gradient(circle at top, #020617 0, #020617 45%, #000 100%);
+        box-shadow:
+          0 30px 80px rgba(15, 23, 42, 0.9),
+          0 0 0 1px rgba(15, 23, 42, 0.9);
+        overflow: hidden;
+        backdrop-filter: blur(22px);
+      }
+      .shell-header {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.6rem 0.9rem;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+        background: radial-gradient(circle at top left, #0f172a 0, #020617 55%);
+      }
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+      }
+      .dot.red { background: #f97373; }
+      .dot.amber { background: #fbbf24; }
+      .dot.green { background: #4ade80; }
+      .content {
+        padding: 1.75rem 2rem 2rem;
+      }
+      h1 {
+        margin: 0 0 0.75rem;
+        font-size: 1.7rem;
+        letter-spacing: -0.03em;
+      }
+      p.lead {
+        margin: 0 0 1.6rem;
+        color: var(--muted);
+        font-size: 0.96rem;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.1rem 0.6rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--muted);
+        margin-bottom: 1.2rem;
+      }
+      .pill span {
+        width: 7px;
+        height: 7px;
+        border-radius: 999px;
+        background: #22c55e;
+        box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.18);
+      }
+      .grid {
+        display: grid;
+        gap: 0.9rem;
+        margin-top: 1.4rem;
+      }
+      @media (min-width: 640px) {
+        .grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      .card {
+        position: relative;
+        border-radius: 14px;
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        background:
+          radial-gradient(circle at top left, rgba(34, 211, 238, 0.08), transparent 55%),
+          rgba(15, 23, 42, 0.9);
+        padding: 0.9rem 1rem 1rem;
+      }
+      .card h2 {
+        margin: 0 0 0.35rem;
+        font-size: 0.95rem;
+      }
+      .card p {
+        margin: 0 0 0.65rem;
+        font-size: 0.82rem;
+        color: var(--muted);
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.1rem 0.45rem;
+        border-radius: 999px;
+        font-size: 0.7rem;
+        color: var(--accent);
+        background: var(--accent-soft);
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.75rem;
+      }
+      a.btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+        padding: 0.45rem 0.85rem;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        text-decoration: none;
+        border: 1px solid rgba(148, 163, 184, 0.38);
+        color: var(--fg);
+        background: rgba(15, 23, 42, 0.9);
+      }
+      a.btn.primary {
+        border-color: rgba(56, 189, 248, 0.9);
+        background: radial-gradient(circle at top, #0ea5e9, #0369a1);
+      }
+      .hint {
+        margin-top: 1.25rem;
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+          "Courier New", monospace;
+        font-size: 0.78rem;
+        padding: 0.05rem 0.3rem;
+        border-radius: 0.3rem;
+        background: rgba(15, 23, 42, 0.9);
+        border: 1px solid rgba(75, 85, 99, 0.8);
+        color: #e5e7eb;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <div class="shell-header">
+        <div class="dot red"></div>
+        <div class="dot amber"></div>
+        <div class="dot green"></div>
+      </div>
+      <div class="content">
+        <div class="pill">
+          <span></span>
+          CONTENT GRAPH · VERCEL
+        </div>
+        <h1>Content Graph deployment is live.</h1>
+        <p class="lead">
+          This project is running on Vercel with the real Contentful sidebar app and supporting
+          serverless API surface. Use the links below to open the actual tool.
+        </p>
+
+        <div class="grid">
+          <section class="card">
+            <div class="badge">Contentful Sidebar</div>
+            <h2>Sidebar app (for Contentful)</h2>
+            <p>
+              This is the UI that should be configured as the
+              <strong>Entry sidebar</strong> location in your Contentful App definition.
+            </p>
+            <div class="actions">
+              <a class="btn primary" href="/app/sidebar.html">Open sidebar.html</a>
+              <a class="btn" href="/app/index.html">Open app index</a>
+              <a class="btn" href="/app/standalone-classify.html">Open standalone classify</a>
+            </div>
+          </section>
+        </div>
+
+        <p class="hint">
+          To wire this into Contentful, set your App URL to
+          <code>https://content-graph-main.vercel.app/app/sidebar.html</code> and keep the webhook
+          target at <code>/webhooks/contentful</code>.
+        </p>
+      </div>
+    </main>
+  </body>
+  </html>
+

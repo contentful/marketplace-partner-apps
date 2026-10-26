@@ -1,0 +1,374 @@
+{
+  "generatedAt": "2026-03-18T20:31:10.121Z",
+  "model": "gemini-3.1-pro-preview",
+  "method": "synthetic-research-v1",
+  "note": "Synthetic fixtures support edge-case research and evaluation only. They do not replace human-corrected ground truth.",
+  "hardestFields": [
+    {
+      "field": "funnelStage",
+      "exactAccuracy": 0.875,
+      "sampleSize": 8
+    },
+    {
+      "field": "industry",
+      "exactAccuracy": 1,
+      "sampleSize": 8
+    },
+    {
+      "field": "jobFunction",
+      "exactAccuracy": 1,
+      "sampleSize": 7
+    },
+    {
+      "field": "jobLevel",
+      "exactAccuracy": 1,
+      "sampleSize": 7
+    },
+    {
+      "field": "topic",
+      "exactAccuracy": 1,
+      "sampleSize": 7
+    }
+  ],
+  "fixtures": [
+    {
+      "id": "edge-001",
+      "description": "TOFU vs MOFU and Topic overlap between AI and Content Operations",
+      "focusFields": [
+        "funnelStage",
+        "topic",
+        "jobFunction"
+      ],
+      "rationale": "High-level thought leadership on AI's impact on editing. Ambiguous because it touches on AI but focuses entirely on the editorial workflow (Content Operations) rather than technical implementation. It has no product pitch, making it TOFU despite being highly relevant to a BOFU feature.",
+      "input": {
+        "title": "How Generative AI is Reshaping the Editorial Workflow",
+        "contentType": "article",
+        "slug": "ai-editorial-workflow",
+        "textSnippet": "Discover how leading digital teams are leveraging generative AI to streamline content operations. This high-level overview explores emerging trends in automated drafting and metadata tagging without diving into specific software implementations."
+      },
+      "expected": {
+        "topic": [
+          "Artificial intelligence (AI)",
+          "Content operations"
+        ],
+        "useCases": [
+          "Digital experiences"
+        ],
+        "funnelStage": "Awareness (TOFU)"
+      }
+    },
+    {
+      "id": "edge-002",
+      "description": "Cross-industry webinar vs Software/IT base",
+      "focusFields": [
+        "industry",
+        "funnelStage"
+      ],
+      "rationale": "Product pages default to Software/IT, but targeted content pages like this webinar explicitly address multiple specific vertical industries undergoing digital transformation. Determining if this is generic business or specific verticals is an edge case.",
+      "input": {
+        "title": "Headless CMS for Healthcare & CPG",
+        "contentType": "webinar",
+        "slug": "headless-healthcare-cpg",
+        "textSnippet": "Join our experts as they discuss how traditional industries like Health & Wellness and Consumer Packaged Goods are undergoing digital transformation. Learn the criteria for evaluating a headless CMS to future-proof your tech stack."
+      },
+      "expected": {
+        "topic": [
+          "Digital experiences",
+          "Headless CMS"
+        ],
+        "funnelStage": "Consideration (MOFU)",
+        "industry": [
+          "Consumer Packaged Goods (CPG)",
+          "Health & Wellness"
+        ]
+      }
+    },
+    {
+      "id": "edge-003",
+      "description": "Technical topic (Composable) pitched to non-technical executives (Marketing CMO)",
+      "focusFields": [
+        "jobFunction",
+        "jobLevel",
+        "topic"
+      ],
+      "rationale": "Composable commerce is usually an IT/Dev topic, but this is an executive brief targeting marketing leaders (CMO/VP) focusing on agility rather than code. The classifier must correctly identify the business persona despite the technical topic.",
+      "input": {
+        "title": "A CMO's Guide to Composable Commerce",
+        "contentType": "whitepaper",
+        "slug": "cmo-guide-composable-commerce",
+        "textSnippet": "Marketing leaders are moving away from monolithic commerce suites to drive agility. While headless architecture speeds up development, this brief focuses on what composability means for the bottom line, brand consistency, and speed-to-market."
+      },
+      "expected": {
+        "topic": [
+          "Composable commerce"
+        ],
+        "jobLevel": [
+          "C-Level",
+          "VP"
+        ],
+        "jobFunction": [
+          "Marketing"
+        ],
+        "funnelStage": "Awareness (TOFU)"
+      }
+    },
+    {
+      "id": "edge-004",
+      "description": "Product-adjacent concept treated strictly as top-of-funnel educational content",
+      "focusFields": [
+        "funnelStage",
+        "topic"
+      ],
+      "rationale": "Content modeling is central to the Contentful product, tempting a BOFU or MOFU classification. However, a pure glossary definition is textbook TOFU.",
+      "input": {
+        "title": "What is Content Modeling?",
+        "contentType": "glossary",
+        "slug": "what-is-content-modeling",
+        "textSnippet": "Content modeling is the process of structuring content so that it can be reused across digital channels. It involves defining content types, fields, and relationships. Read our comprehensive definition and why it matters for structured content."
+      },
+      "expected": {
+        "topic": [
+          "Content modeling"
+        ],
+        "jobFunction": [
+          "Content",
+          "Developers"
+        ],
+        "funnelStage": "Awareness (TOFU)"
+      }
+    },
+    {
+      "id": "edge-005",
+      "description": "Ambiguity between Experimentation, Personalization, and Localization",
+      "focusFields": [
+        "topic",
+        "useCases",
+        "jobFunction"
+      ],
+      "rationale": "Running A/B tests on localized campaigns involves experimentation, localization, and often personalization. The model must separate the core topic (Experimentation) from the use case (Localization) accurately.",
+      "input": {
+        "title": "A/B Testing Your Localized Campaign Experiences",
+        "contentType": "blog_post",
+        "slug": "ab-testing-localized-campaigns",
+        "textSnippet": "Running A/B tests on regional sites can significantly boost conversions. Here is a guide on using experimentation platforms alongside your content platform to optimize localized messaging for different global markets."
+      },
+      "expected": {
+        "topic": [
+          "Experimentation"
+        ],
+        "jobFunction": [
+          "Digital strategists",
+          "Marketing"
+        ],
+        "useCases": [
+          "Experimentation",
+          "Localization"
+        ],
+        "funnelStage": "Consideration (MOFU)"
+      }
+    },
+    {
+      "id": "edge-006",
+      "description": "Cross-functional bridge between Design and Web Development",
+      "focusFields": [
+        "jobFunction",
+        "topic"
+      ],
+      "rationale": "This spans User Experience/Design and Developers. Headless CMS is typically Dev or Content, but design systems map strongly to UX. The classifier must allow for multiple distinct job functions.",
+      "input": {
+        "title": "Bridging the Gap: Figma to Headless CMS",
+        "contentType": "article",
+        "slug": "figma-to-headless-cms",
+        "textSnippet": "A technical and visual guide on how UX teams and front-end developers can collaborate. We break down how to map your Figma design system components directly into structured content API payloads."
+      },
+      "expected": {
+        "topic": [
+          "Design",
+          "Headless CMS"
+        ],
+        "jobFunction": [
+          "Designers",
+          "Developers",
+          "User Experience"
+        ],
+        "funnelStage": "Consideration (MOFU)"
+      }
+    },
+    {
+      "id": "edge-007",
+      "description": "High intent BOFU case study tagged to a specific industry and use case",
+      "focusFields": [
+        "funnelStage",
+        "industry",
+        "schemaType"
+      ],
+      "rationale": "Case studies with deep architectural metrics and high ROI proof points sit squarely in BOFU. The industry is explicitly Retail, overriding generic software.",
+      "input": {
+        "title": "How Sephora Scaled Omnichannel Delivery",
+        "contentType": "case_study",
+        "slug": "sephora-omnichannel",
+        "textSnippet": "Discover how Sephora scaled their omnichannel delivery by migrating to Contentful. This deep-dive explores their implementation architecture, reduced time-to-market metrics, and the massive ROI achieved across their web and mobile storefronts."
+      },
+      "expected": {
+        "topic": [
+          "Digital experiences"
+        ],
+        "useCases": [
+          "Omnichannel"
+        ],
+        "funnelStage": "Evaluation/Engagement (BOFU)",
+        "industry": [
+          "Retail & ecommerce"
+        ],
+        "schemaType": "Article"
+      }
+    },
+    {
+      "id": "edge-008",
+      "description": "Product vs Topic overlap (Studio vs Web Development)",
+      "focusFields": [
+        "topic",
+        "product",
+        "jobFunction"
+      ],
+      "rationale": "Visual editing feels like web development, but its core purpose is content operations (removing dev bottlenecks). The CTA signals Evaluation/Engagement.",
+      "input": {
+        "title": "Empowering Editors with Visual Canvas",
+        "contentType": "webpage",
+        "slug": "visual-canvas-webinar",
+        "textSnippet": "See Contentful Studio's newest feature in action. Our visual canvas eliminates developer bottlenecks, allowing content creators to visually assemble and preview digital experiences directly within the platform. Book a custom demo today."
+      },
+      "expected": {
+        "topic": [
+          "Content operations"
+        ],
+        "jobFunction": [
+          "Content"
+        ],
+        "funnelStage": "Evaluation/Engagement (BOFU)",
+        "product": [
+          "Studio"
+        ]
+      }
+    },
+    {
+      "id": "edge-009",
+      "description": "SEO topic targeted exclusively at Developers rather than Marketing",
+      "focusFields": [
+        "topic",
+        "jobFunction",
+        "funnelStage"
+      ],
+      "rationale": "SEO is historically a Marketing topic, but technical SEO for SPAs (SSR/SSG) is purely Web Development. This is TOFU educational content for engineers.",
+      "input": {
+        "title": "Technical SEO Best Practices for Single Page Applications",
+        "contentType": "guide",
+        "slug": "technical-seo-spa",
+        "textSnippet": "Single Page Applications can be tricky for search engines. This technical guide outlines how engineers can implement Server-Side Rendering (SSR) and Static Site Generation (SSG) to ensure web crawlers can index dynamic content properly."
+      },
+      "expected": {
+        "topic": [
+          "SEO",
+          "Web Development"
+        ],
+        "jobLevel": [
+          "Individual Contributor",
+          "Manager"
+        ],
+        "jobFunction": [
+          "Developers",
+          "Web Development"
+        ],
+        "funnelStage": "Awareness (TOFU)"
+      }
+    },
+    {
+      "id": "edge-010",
+      "description": "Analytics applied to Personalization workflows",
+      "focusFields": [
+        "topic",
+        "jobFunction"
+      ],
+      "rationale": "The article is fundamentally about measurement (Analytics), but applied entirely to tailored variants (Personalization). The target is marketing analysts mid-funnel.",
+      "input": {
+        "title": "Measuring the Impact of Tailored Customer Journeys",
+        "contentType": "article",
+        "slug": "measuring-personalization",
+        "textSnippet": "Personalizing content is only half the battle. This piece outlines how marketing analysts can set up dashboards to track engagement metrics and attribute revenue lift to tailored content variants deployed via Ninetailed."
+      },
+      "expected": {
+        "topic": [
+          "Analytics",
+          "Personalization"
+        ],
+        "jobFunction": [
+          "Digital strategists",
+          "Marketing"
+        ],
+        "funnelStage": "Consideration (MOFU)"
+      }
+    },
+    {
+      "id": "edge-011",
+      "description": "Deep technical content aimed strictly at Partners, not standard Prospects",
+      "focusFields": [
+        "audience",
+        "funnelStage",
+        "jobFunction"
+      ],
+      "rationale": "The explicit targeting of 'certified agency network' flips the primary audience from Direct Customer/Prospect to Partner. Funnel stage is Evaluation/Engagement since it's a deep architectural bootcamp.",
+      "input": {
+        "title": "Contentful Partner Certification: Architecture Bootcamp",
+        "contentType": "event",
+        "slug": "agency-architecture-bootcamp",
+        "textSnippet": "Exclusive to our certified agency network: Join our intensive technical bootcamp. Solution architects will dive deep into advanced content modeling, API rate limiting, and CI/CD pipelines for complex multi-brand deployments."
+      },
+      "expected": {
+        "topic": [
+          "Content modeling",
+          "Deployment"
+        ],
+        "audience": [
+          "Solution / Agency Partner"
+        ],
+        "jobFunction": [
+          "Developers",
+          "IT/Engineering"
+        ],
+        "funnelStage": "Evaluation/Engagement (BOFU)"
+      }
+    },
+    {
+      "id": "edge-012",
+      "description": "Purely generic business thought leadership with no technical specifics",
+      "focusFields": [
+        "industry",
+        "topic",
+        "jobLevel"
+      ],
+      "rationale": "Executive thought leadership without software specifics defaults to General business industry and TOFU. The topic is broad digital experience agility.",
+      "input": {
+        "title": "The Future of Work: Agility in the Enterprise",
+        "contentType": "article",
+        "slug": "agile-enterprise",
+        "textSnippet": "In an era of rapid disruption, enterprise agility is non-negotiable. This thought leadership piece examines how executives across all sectors must rethink organizational silos and digital strategy to stay competitive, without prescribing specific technology."
+      },
+      "expected": {
+        "topic": [
+          "Digital experiences"
+        ],
+        "jobLevel": [
+          "C-Level",
+          "VP"
+        ],
+        "jobFunction": [
+          "Digital strategists"
+        ],
+        "funnelStage": "Awareness (TOFU)",
+        "industry": [
+          "General business"
+        ]
+      }
+    }
+  ]
+}
