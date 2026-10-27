@@ -12,7 +12,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@emotion/css": "^11.13.5",
     "@emotion/react": "^11.14.0",
-    "@imagekit/react": "^5.0.2",
+    "@imagekit/react": "^5.0.3",
     "file-size": "^1.0.0",
     "imagekit-media-library-widget": "^2.4.1",
     "react": "18.2.0",
