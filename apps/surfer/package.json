@@ -18,6 +18,7 @@
   "scripts": {
     "install-ci": "npm ci",
     "start": "vite",
+    "start:prod": "vite preview",
     "build": "rm -rf build && tsc && vite build",
     "test": "vitest run --passWithNoTests",
     "create-app-definition": "contentful-app-scripts create-app-definition",
