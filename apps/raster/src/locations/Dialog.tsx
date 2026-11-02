@@ -1,164 +1,58 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import type { DialogAppSDK } from '@contentful/app-sdk';
-import { Skeleton, Spinner } from '@contentful/f36-components';
-import { ErrorCircleIcon } from '@contentful/f36-icons';
+import { Button } from '@contentful/f36-components';
 import { useSDK } from '@contentful/react-apps-toolkit';
-import clsx from 'clsx';
-import useSWR from 'swr';
-import type { Image, Library, Settings } from '@/lib/types';
+import { type Asset, RasterPicker, RasterProvider } from '@raster-app/react';
+import '@raster-app/react/styles.css';
+import type { Image } from '../lib/types';
 
-import { useImageStore } from '../lib/store/image-store';
-import { getImagesFromLibraryQuery, getLibraryListQuery } from '../lib/graphql/queries';
-import { swrImagesFetcher, swrLibreriesFetcher } from '../lib/fetcher';
+import { getRasterClient, readParameters } from '../lib/client';
+import { toImage, whyRefused } from '../lib/image';
 import RasterImagesList from '../components/ImageList';
 
 function Dialog() {
   const sdk = useSDK<DialogAppSDK>();
-  const { orgId, apiKey } = sdk.parameters.installation as Settings;
+  const { orgId, apiKey } = readParameters(sdk.parameters.installation);
 
   // Invocation parameters are passed to the dialog in `parameters` via sdk.dialogs.openCurrentApp
   const { currentValue } = sdk.parameters.invocation as {
     currentValue: Image[] | undefined;
   };
 
-  const [selectedImages, setSelectedImages] = useImageStore((state) => [state.selected, state.setSelected]);
+  const [selected, setSelected] = useState<Image[]>(currentValue ?? []);
 
-  const [selectedLibrary, setSelectedLibrary] = useState<Library | null>(null);
-  const [browseVersions, setBrowseVersions] = useState(false);
-
-  // Get the list of libraries
-  const {
-    data: libraries,
-    error,
-    isLoading,
-  } = useSWR(
-    {
-      query: getLibraryListQuery,
-      variables: {
-        organizationId: orgId,
-      },
-      settings: { apiKey, orgId },
-    },
-    swrLibreriesFetcher,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    },
-  );
-
-  // Get the list of images from the selected library
-  const {
-    data: images,
-    error: imageError,
-    isLoading: imagesLoading,
-  } = useSWR(
-    // Conditionally fetch images if a library is selected
-    // https://swr.vercel.app/docs/conditional-fetching
-    selectedLibrary
-      ? {
-          query: getImagesFromLibraryQuery,
-          variables: {
-            organizationId: orgId,
-            libraryId: selectedLibrary.id,
-          },
-          settings: { apiKey, orgId },
-        }
-      : null,
-    swrImagesFetcher,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    },
-  );
-
-  // Select library, and get images
-  const selectLibrary = async (library: Library) => {
-    // Set the selected library (for styling)
-    setSelectedLibrary(library);
-
-    // Close the versions dialog if open
-    setBrowseVersions(false);
+  const handlePick = (asset: Asset) => {
+    // The field has only held images, and sites render it as such.
+    const refused = whyRefused(asset);
+    if (refused !== null) {
+      sdk.notifier.warning(refused);
+      return;
+    }
+    setSelected((current) => (current.some((image) => image.id === asset.id) ? current : [...current, toImage(asset)]));
   };
 
-  // Update the selected images store if there are images when the dialog is opened
-  useEffect(() => {
-    if (!selectedImages?.length && currentValue) {
-      setSelectedImages(currentValue);
-    }
-  }, [currentValue, selectedImages, setSelectedImages]);
-
-  useEffect(() => {
-    if (libraries && libraries.length > 0 && !selectedLibrary) {
-      setSelectedLibrary(libraries[0]);
-    }
-  }, [libraries, selectedLibrary]);
-
-  // Show error message if there was an error fetching content.
-  if (error || imageError) {
-    return (
-      <div className="flex mt-10 border w-3/4 m-auto py-4 px-4 rounded space-x-2">
-        <ErrorCircleIcon variant="negative" />
-        <div>There was an error fetching content from Raster.</div>
-      </div>
-    );
-  }
-
   return (
-    <div className="my-5 mx-10">
-      {/* Librarie list */}
-      <div className="flex w-full h-full space-x-4">
-        <div className="relative">
-          <div className="sticky top-5 space-y-2">
-            {!isLoading ? (
-              libraries?.map((library) => (
-                <button
-                  type="button"
-                  className={clsx(
-                    'flex p-2 border rounded w-60 cursor-pointer',
-                    selectedLibrary?.id === library.id ? 'border-primary' : 'border-gray-200 hover:border-gray-400',
-                  )}
-                  key={library.id}
-                  onClick={() => selectLibrary(library)}>
-                  <div className="grow py-2 px-1">{library.name}</div>
-                  {library.imagesCount === 1 ? (
-                    <div className="text-xs self-center text-gray-500">{library.imagesCount} image</div>
-                  ) : (
-                    <div className="text-xs self-center text-gray-500">{library.imagesCount} images</div>
-                  )}
-                </button>
-              ))
-            ) : (
-              <Skeleton.Container>
-                <Skeleton.Image width={240} height={40} />
-                <Skeleton.Image width={240} height={40} offsetTop={48} />
-                <Skeleton.Image width={240} height={40} offsetTop={96} />
-              </Skeleton.Container>
-            )}
-          </div>
-        </div>
+    <div className="flex flex-col h-screen">
+      <div className="pt-5 px-10">
+        <RasterImagesList images={selected} onChange={setSelected} />
+      </div>
 
-        {/* Photos list */}
-        <div className="relative border-gray-800 w-full px-4 mb-60">
-          {images && !imagesLoading ? (
-            <RasterImagesList images={images} browseVersions={browseVersions} setBrowseVersions={setBrowseVersions} />
-          ) : (
-            /* Loading images */
-            <div className="flex h-full justify-center py-12">
-              {imagesLoading ? (
-                <div className="self-center flex flex-col space-y-2">
-                  <div className="self-center">
-                    <Spinner variant="default" />
-                  </div>
-                  <div>Loading images</div>
-                </div>
-              ) : (
-                <div className="self-center">Select a library to view 👀 images</div>
-              )}
-            </div>
-          )}
+      {/* The picker fills its container. */}
+      <div className="flex-1 min-h-0">
+        <RasterProvider {...getRasterClient(sdk.ids, orgId)}>
+          <RasterPicker organizationId={orgId} apiKey={apiKey} onPick={handlePick} onError={console.error} theme="light" />
+        </RasterProvider>
+      </div>
+
+      {/* Selected images count, confirm and cancel buttons */}
+      <div className="flex items-center justify-between border-t border-gray-200 py-4 px-7">
+        <span className="font-medium">{selected.length} selected</span>
+        <div className="flex gap-3">
+          <Button onClick={() => sdk.close()}>Cancel</Button>
+          <Button variant="positive" isDisabled={!selected.length} onClick={() => sdk.close(selected)}>
+            Confirm
+          </Button>
         </div>
       </div>
     </div>

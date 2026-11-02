@@ -79,9 +79,9 @@ function Field() {
                 ) : undefined,
               ]}
               contentType="Image"
-              title={entry.name}
+              title={entry.name ?? undefined}
               description={entry.description ? entry.description : 'Description not available, but can be generated with our AI tool in Raster.'}
-              thumbnailElement={<img alt={entry.description} src={entry.thumbUrl} />}
+              thumbnailElement={<img alt={entry.description ?? ''} src={entry.thumbUrl ?? undefined} />}
               onClick={() => openDialog()}
             />
           ))}
