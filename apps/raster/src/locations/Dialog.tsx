@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import type { DialogAppSDK } from '@contentful/app-sdk';
 import { Button } from '@contentful/f36-components';
-import { useSDK } from '@contentful/react-apps-toolkit';
+import { useAutoResizer, useSDK } from '@contentful/react-apps-toolkit';
 import { type Asset, RasterPicker, RasterProvider } from '@raster-app/react';
 import '@raster-app/react/styles.css';
 import type { Image } from '../lib/types';
@@ -13,6 +13,7 @@ import RasterImagesList from '../components/ImageList';
 
 function Dialog() {
   const sdk = useSDK<DialogAppSDK>();
+  useAutoResizer();
   const { orgId, apiKey } = readParameters(sdk.parameters.installation);
 
   // Invocation parameters are passed to the dialog in `parameters` via sdk.dialogs.openCurrentApp
@@ -33,13 +34,13 @@ function Dialog() {
   };
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col">
       <div className="pt-5 px-10">
         <RasterImagesList images={selected} onChange={setSelected} />
       </div>
 
-      {/* The picker fills its container. */}
-      <div className="flex-1 min-h-0">
+      {/* The picker fills its container, so it needs a height of its own. */}
+      <div className="h-[600px]">
         <RasterProvider {...getRasterClient(sdk.ids, orgId)}>
           <RasterPicker organizationId={orgId} apiKey={apiKey} onPick={handlePick} onError={console.error} theme="light" />
         </RasterProvider>

@@ -7,8 +7,11 @@ import Dialog from '../Dialog';
 import { toImage } from '../../lib/image';
 import { mockDialog, storedImage } from '../../../test/mocks';
 
+const useAutoResizer = vi.fn();
+
 vi.mock('@contentful/react-apps-toolkit', () => ({
   useSDK: () => mockDialog,
+  useAutoResizer: () => useAutoResizer(),
 }));
 
 const picked = {
@@ -56,6 +59,10 @@ describe('Dialog component', () => {
   beforeEach(() => {
     vi.mocked(mockDialog.close).mockReset();
     render(<Dialog />);
+  });
+
+  it('sizes the dialog to its content', () => {
+    expect(useAutoResizer).toHaveBeenCalled();
   });
 
   it('opens the picker on the installation’s organization and key', () => {

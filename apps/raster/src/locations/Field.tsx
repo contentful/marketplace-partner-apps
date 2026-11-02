@@ -29,7 +29,8 @@ function Field() {
       title: 'Select an image from Raster',
       shouldCloseOnOverlayClick: true,
       width: 'fullWidth',
-      minHeight: '100vh',
+      // The dialog grows with its content; a short window scrolls it instead of hiding its buttons.
+      allowHeightOverflow: true,
 
       // Passing parameters to the dialog
       ...(fieldValue?.length && {

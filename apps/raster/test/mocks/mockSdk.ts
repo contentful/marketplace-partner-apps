@@ -32,6 +32,9 @@ const defaultMockSdk = {
     getValue: vi.fn(),
     setValue: vi.fn(),
   },
+  dialogs: {
+    openCurrentApp: vi.fn(),
+  },
   ids: {
     app: 'test-app',
   },

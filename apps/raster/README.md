@@ -16,7 +16,6 @@ Editors sign in to Raster with their own account from the picker. Optionally, on
 - Set URL to the `localhost:port` if you are starting the app locally from the repository or drag and drop the `build` directory from `apps/raster`
 - In the Locations section, check the App configuration screen box.
 - Check the Entry field and the JSON object.
-- Check the Dialog box: the picker opens in a dialog.
 - Click the Save button.
 - Go to Apps, then select your app and install it to space.
 - On the config screen, optionally pin an organization or save an API key.
