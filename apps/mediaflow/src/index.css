@@ -1,0 +1,11 @@
+html {
+    scroll-behavior: smooth;
+}
+
+/*
+ * Forma 36 turns on the 'ss05' font feature on body, which breaks the icon glyphs of the Mediaflow file selector.
+ * Turned off only inside the file selector (see Dialog.tsx), so the rest of the app keeps Forma 36's typography.
+ */
+#mediaflow-file-selector-wrapper {
+    font-feature-settings: normal;
+}
