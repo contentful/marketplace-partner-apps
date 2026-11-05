@@ -43,13 +43,14 @@ describe('ConfigScreen', () => {
 
   it('calls onConfigure when app is configured', async () => {
     const mockOnConfigure = vi.fn();
+    const targetState = { EditorInterface: { ct1: {} } };
     mockUseSDK.mockReturnValue({
       app: {
         onConfigure: mockOnConfigure,
         onConfigurationCompleted: vi.fn(),
         getParameters: vi.fn().mockResolvedValue({}),
         setReady: vi.fn(),
-        getCurrentState: vi.fn().mockResolvedValue({}),
+        getCurrentState: vi.fn().mockResolvedValue(targetState),
       },
       cma: {
         editorInterface: {
@@ -67,6 +68,12 @@ describe('ConfigScreen', () => {
     render(<ConfigScreen />);
 
     expect(mockOnConfigure).toHaveBeenCalled();
+
+    const configureResult = await mockOnConfigure.mock.calls[0][0]();
+    expect(configureResult).toEqual({
+      parameters: {},
+      targetState,
+    });
   });
 
   it('calls onConfigurationCompleted when app configuration is completed', async () => {
