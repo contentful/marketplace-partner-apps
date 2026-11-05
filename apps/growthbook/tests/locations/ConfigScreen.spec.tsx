@@ -73,7 +73,9 @@ describe('ConfigScreen component', () => {
       render(<ConfigScreen />);
     });
     mockSdk.app.getCurrentState.mockResolvedValue({ EditorInterface: {} });
-    const result = await mockSdk.app.onConfigure.mock.calls[0][0]();
+    const configureHandler =
+      mockSdk.app.onConfigure.mock.calls[mockSdk.app.onConfigure.mock.calls.length - 1][0];
+    const result = await configureHandler();
     expect(mockSdk.app.onConfigure).toHaveBeenCalled();
     expect(result).toMatchObject({
       parameters: expect.objectContaining({
