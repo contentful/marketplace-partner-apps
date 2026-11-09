@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/react';
+import { act, render, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockCma, mockSdk } from '../../test/mocks';
 import ConfigScreen from './ConfigScreen';
@@ -124,8 +124,9 @@ describe('ConfigScreen', () => {
 
     render(<ConfigScreen />);
 
-    await mockSdk.configureCallback();
+    const result = await mockSdk.configureCallback();
 
+    expect(result).toBe(false);
     expect(mockSdk.notifier.error).toHaveBeenCalled();
   });
 
@@ -134,8 +135,9 @@ describe('ConfigScreen', () => {
 
     render(<ConfigScreen />);
 
-    await mockSdk.configureCallback();
+    const result = await mockSdk.configureCallback();
 
+    expect(result).toBe(false);
     expect(mockSdk.notifier.error).toHaveBeenCalledWith(
       CONVOX_APP_ERROR_MESSAGES.AUTHENTICATION_DEPLOY_KEY_ERROR_MESSAGE
     );
@@ -146,8 +148,9 @@ describe('ConfigScreen', () => {
 
     render(<ConfigScreen />);
 
-    await mockSdk.configureCallback();
+    const result = await mockSdk.configureCallback();
 
+    expect(result).toBe(false);
     expect(mockSdk.notifier.error).toHaveBeenCalledWith(
       "Please wait while we validate your authentication..."
     );
@@ -176,21 +179,25 @@ describe('ConfigScreen', () => {
       expect(mockSdk.app.setReady).toHaveBeenCalled();
     });
 
-    mockSdk.configureCallback = vi.fn().mockResolvedValue({
-      parameters: validConfig,
-      targetState: { EditorInterface: { contentType1: {} } }
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
     const result = await mockSdk.configureCallback();
 
-    expect(result).toBeTruthy();
+    expect(result).not.toBe(false);
     expect(mockSdk.notifier.error).not.toHaveBeenCalled();
-
     expect(result.parameters).toEqual(validConfig);
   });
 
 
   it('preserve content-type selection from existing configuration', async () => {
+    const contentTypesHelper = await import('../helpers/ContentTypesHelper');
+    vi.mocked(contentTypesHelper.targetStateToSelectedContentTypes).mockReturnValueOnce([
+      'contentType1',
+      'contentType2',
+    ]);
+
     mockSdk.app.isInstalled.mockResolvedValue(true);
     mockSdk.app.getCurrentState.mockResolvedValue({
       EditorInterface: { contentType1: {}, contentType2: {} }
@@ -215,16 +222,13 @@ describe('ConfigScreen', () => {
       expect(mockSdk.app.setReady).toHaveBeenCalled();
     });
 
-    mockSdk.configureCallback = vi.fn().mockResolvedValue({
-      parameters: existingConfig,
-      targetState: {
-        EditorInterface: { contentType1: {}, contentType2: {} }
-      }
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
     const result = await mockSdk.configureCallback();
 
-    expect(result).toBeTruthy();
+    expect(result).not.toBe(false);
     expect(result.parameters.selectedContentTypes).toEqual(['contentType1', 'contentType2']);
   });
 
@@ -239,26 +243,10 @@ describe('ConfigScreen', () => {
       expect(mockSdk.app.setReady).toHaveBeenCalled();
     });
 
-    const firstTimeConfig = {
-      workflowConfigs: [
-        {
-          workflow: { id: 'workflow-1', name: 'New Workflow' },
-          displayName: 'New Workflow'
-        }
-      ],
-      convoxDeployKey: 'new-key',
-      selectedContentTypes: ['contentType1']
-    };
-
-    mockSdk.configureCallback = vi.fn().mockResolvedValue({
-      parameters: firstTimeConfig,
-      targetState: { EditorInterface: { contentType1: {} } }
-    });
-
     const result = await mockSdk.configureCallback();
 
-    expect(result).toBeTruthy();
-    expect(result.parameters).toEqual(firstTimeConfig);
+    expect(result).toBe(false);
+    expect(mockSdk.notifier.error).toHaveBeenCalled();
   });
 
   it('updates workflow config correctly', async () => {
@@ -283,33 +271,14 @@ describe('ConfigScreen', () => {
       expect(mockSdk.app.setReady).toHaveBeenCalled();
     });
 
-    const updatedConfig = {
-      workflowConfigs: [
-        {
-          workflow: { id: 'workflow-1', name: 'Updated Workflow' },
-          displayName: 'Updated Workflow'
-        },
-        {
-          workflow: { id: 'workflow-2', name: 'New Workflow' },
-          displayName: 'New Workflow'
-        }
-      ],
-      convoxDeployKey: 'valid-key',
-      selectedContentTypes: ['contentType1', 'contentType2']
-    };
-
-    mockSdk.configureCallback = vi.fn().mockResolvedValue({
-      parameters: updatedConfig,
-      targetState: {
-        EditorInterface: { contentType1: {}, contentType2: {} }
-      }
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
     const result = await mockSdk.configureCallback();
 
-    expect(result).toBeTruthy();
-    expect(result.parameters.workflowConfigs.length).toBe(2);
-    expect(result.parameters.workflowConfigs[0].displayName).toBe('Updated Workflow');
-    expect(result.parameters.selectedContentTypes).toContain('contentType2');
+    expect(result).not.toBe(false);
+    expect(result.parameters.workflowConfigs).toEqual(initialConfig.workflowConfigs);
+    expect(result.parameters.convoxDeployKey).toBe('valid-key');
   });
 });
