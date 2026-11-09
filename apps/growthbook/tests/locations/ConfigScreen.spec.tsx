@@ -72,21 +72,47 @@ describe('ConfigScreen component', () => {
     await act(async () => {
       render(<ConfigScreen />);
     });
-    await mockSdk.app.onConfigure.mock.calls[0][0]();
+    mockSdk.app.getCurrentState.mockResolvedValue({ EditorInterface: {} });
+    const configureHandler =
+      mockSdk.app.onConfigure.mock.calls[mockSdk.app.onConfigure.mock.calls.length - 1][0];
+    const result = await configureHandler();
     expect(mockSdk.app.onConfigure).toHaveBeenCalled();
+    expect(result).toMatchObject({
+      parameters: expect.objectContaining({
+        growthbookServerUrl: 'https://api.growthbook.io',
+      }),
+    });
   });
 
   it('sets parameters correctly', async () => {
     await act(async () => {
       ({ getByLabelText } = render(<ConfigScreen />));
     });
-    await mockSdk.app.onConfigure.mock.calls[0][0]();
-    const serverInput = getByLabelText('Growthbook API Server URL (defaults to Growthbook Cloud api.growthbook.io)') as HTMLInputElement;
-    const apiKeyInput = getByLabelText('Growthbook API Key') as HTMLInputElement;
-    const datasourceIdInput = getByLabelText('Datasource Id (The datasource that tracking data gets sent to)') as HTMLInputElement;
+    await act(async () => {
+      fireEvent.change(
+        getByLabelText(
+          'Growthbook API Server URL (defaults to Growthbook Cloud api.growthbook.io)'
+        ),
+        { target: { value: 'https://custom.example' } }
+      );
+      fireEvent.change(getByLabelText('Growthbook API Key'), {
+        target: { value: 'secret-api-key' },
+      });
+      fireEvent.change(
+        getByLabelText('Datasource Id (The datasource that tracking data gets sent to)'),
+        { target: { value: 'ds-123' } }
+      );
+    });
 
-    expect(serverInput.value).toBe('https://api.growthbook.io');
-    expect(apiKeyInput.value).toBe('');
-    expect(datasourceIdInput.value).toBe('');
+    mockSdk.app.getCurrentState.mockResolvedValue({ EditorInterface: {} });
+    const configureHandler =
+      mockSdk.app.onConfigure.mock.calls[mockSdk.app.onConfigure.mock.calls.length - 1][0];
+    const result = await configureHandler();
+
+    expect(result.parameters).toMatchObject({
+      growthbookServerUrl: 'https://custom.example',
+      growthbookAPIKey: 'secret-api-key',
+      datasourceId: 'ds-123',
+    });
   });
 });
