@@ -2,6 +2,19 @@ import { vi } from 'vitest';
 import type { DialogAppSDK } from '@contentful/app-sdk';
 import type { Image } from '@/lib/types';
 
+// As the field has always stored it, so entries saved before the picker are covered.
+const storedImage: Image = {
+  id: '1',
+  blurhash: 'UUKJMXx',
+  thumbUrl: 'https://example.com/image-thumb.jpg',
+  url: 'https://example.com/image.jpg',
+  name: 'Barcelona Beach',
+  height: 1080,
+  width: 1920,
+  views: [],
+  description: 'Barcelona Beach at sunset',
+};
+
 const defaultMockSdk = {
   app: {
     onConfigure: vi.fn(),
@@ -9,12 +22,18 @@ const defaultMockSdk = {
     setReady: vi.fn(),
     getCurrentState: vi.fn(),
   },
+  notifier: {
+    error: vi.fn(),
+  },
   window: {
     startAutoResizer: vi.fn(),
   },
   field: {
     getValue: vi.fn(),
     setValue: vi.fn(),
+  },
+  dialogs: {
+    openCurrentApp: vi.fn(),
   },
   ids: {
     app: 'test-app',
@@ -32,23 +51,7 @@ const mockSdkWithImage = {
     startAutoResizer: vi.fn(),
   },
   field: {
-    getValue: (): Image[] => [
-      {
-        id: '1',
-        url: 'https://example.com/image.jpg',
-        name: 'Barcelona Beach',
-        blurhash: 'UUKJMXx',
-        description: 'Barcelona Beach at sunset',
-        height: '1080',
-        width: '1920',
-        libraryId: 'barcelona',
-        thumbUrl: 'https://example.com/image-thumb.jpg',
-        thumbUrlBlurred: 'https://example.com/image-thumb-blurred.jpg',
-        type: 'image',
-        views: undefined,
-        parentId: undefined,
-      },
-    ],
+    getValue: (): Image[] => [storedImage],
     setValue: vi.fn(),
   },
   ids: {
@@ -66,34 +69,24 @@ const mockDialog = {
   window: {
     startAutoResizer: vi.fn(),
   },
+  close: vi.fn(),
+  notifier: {
+    warning: vi.fn(),
+  },
   ids: {
     app: 'test-app',
+    space: 'test-space',
+    user: 'test-user',
   },
   parameters: {
     installation: {
-      orgId: 'org-id',
+      orgId: ' org-id ',
       apiKey: 'api-key',
     },
     invocation: {
-      currentValue: [
-        {
-          id: '1',
-          url: 'https://example.com/image.jpg',
-          name: 'Barcelona Beach',
-          blurhash: 'UUKJMXx',
-          description: 'Barcelona Beach at sunset',
-          height: '1080',
-          width: '1920',
-          libraryId: 'barcelona',
-          thumbUrl: 'https://example.com/image-thumb.jpg',
-          thumbUrlBlurred: 'https://example.com/image-thumb-blurred.jpg',
-          type: 'image',
-          views: undefined,
-          parentId: undefined,
-        },
-      ],
+      currentValue: [storedImage],
     },
   },
 } as unknown as DialogAppSDK;
 
-export { mockDialog, defaultMockSdk, mockSdkWithImage };
+export { mockDialog, defaultMockSdk, mockSdkWithImage, storedImage };

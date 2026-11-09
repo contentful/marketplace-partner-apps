@@ -3,17 +3,11 @@ import { useCallback, useEffect, useState } from 'react';
 import type { ConfigAppSDK } from '@contentful/app-sdk';
 import { Box, Flex, Form, FormControl, Heading, Paragraph, TextInput } from '@contentful/f36-components';
 import { useSDK } from '@contentful/react-apps-toolkit';
-
-export interface AppInstallationParameters {
-  orgId: string | undefined;
-  apiKey: string | undefined;
-}
+import { toUserMessage } from '@raster-app/react';
+import { readParameters, type Settings, verifyApiKey } from '../lib/client';
 
 function ConfigScreen() {
-  const [parameters, setParameters] = useState<AppInstallationParameters>({
-    orgId: '',
-    apiKey: '',
-  });
+  const [parameters, setParameters] = useState<Settings>({});
 
   const sdk = useSDK<ConfigAppSDK>();
   /*
@@ -27,13 +21,24 @@ function ConfigScreen() {
     // or "Save" in the configuration screen.
     // for more details see https://www.contentful.com/developers/docs/extensibility/ui-extensions/sdk-reference/#register-an-app-configuration-hook
 
+    const settings = readParameters(parameters);
+    if (settings.apiKey !== undefined) {
+      try {
+        await verifyApiKey(settings.apiKey, settings.orgId);
+      } catch (caught) {
+        sdk.notifier.error(`Raster refused the API key: ${toUserMessage(caught)}`);
+        // Returning false keeps the configuration as it was.
+        return false;
+      }
+    }
+
     // Get current the state of EditorInterface and other entities
     // related to this app installation
     const currentState = await sdk.app.getCurrentState();
 
     return {
       // Parameters to be persisted as the app configuration.
-      parameters,
+      parameters: settings,
       // In case you don't want to submit any update to app
       // locations, you can just pass the currentState as is
       targetState: currentState,
@@ -51,7 +56,7 @@ function ConfigScreen() {
     (async () => {
       // Get current parameters of the app.
       // If the app is not installed yet, `parameters` will be `null`.
-      const currentParameters: AppInstallationParameters | null = await sdk.app.getParameters();
+      const currentParameters: Settings | null = await sdk.app.getParameters();
 
       if (currentParameters) {
         setParameters(currentParameters);
@@ -69,20 +74,30 @@ function ConfigScreen() {
         <Heading>Raster</Heading>
         <Flex flexDirection="column" className="space-y-3">
           <img src="./raster-icon.svg" alt="Raster" className="w-24 h-24 mb-4 mx-auto" />
-          <Paragraph>
-            To utilize the Raster plugin, you must configure it. This requires your Organization ID and Public API Key, which must be set up in Raster
-            beforehand. These values can be found on your Raster organization settings page.
-          </Paragraph>
+          <Paragraph>Editors sign in to Raster with their own account the first time they open the picker. Both settings below are optional.</Paragraph>
           <Box>
-            <FormControl isRequired>
-              <FormControl.Label>Raster Organization Id (found on Raster organization settings)</FormControl.Label>
-              <TextInput value={parameters.orgId} type="text" onChange={(e) => setParameters({ ...parameters, orgId: e.target.value })} />
+            <FormControl>
+              <FormControl.Label>Raster Organization Id</FormControl.Label>
+              <TextInput value={parameters.orgId ?? ''} type="text" onChange={(e) => setParameters({ ...parameters, orgId: e.target.value })} />
+              <FormControl.HelpText>
+                The slug after raster.app/ in your organization&apos;s URL. Editors can then only sign in to that organization.
+              </FormControl.HelpText>
             </FormControl>
           </Box>
           <Box>
-            <FormControl isRequired>
-              <FormControl.Label>Raster API Key (found on Raster organization settings)</FormControl.Label>
-              <TextInput value={parameters.apiKey} type="password" onChange={(e) => setParameters({ ...parameters, apiKey: e.target.value })} />
+            <FormControl>
+              <FormControl.Label>Raster API Key</FormControl.Label>
+              <TextInput
+                value={parameters.apiKey ?? ''}
+                type="password"
+                // Browsers ignore `off` on a password field and fill in a saved password.
+                autoComplete="new-password"
+                onChange={(e) => setParameters({ ...parameters, apiKey: e.target.value })}
+              />
+              <FormControl.HelpText>
+                An organization API key connects every editor without signing in. Anyone in this space can read it, so give it Read access to only the libraries
+                editors need.
+              </FormControl.HelpText>
             </FormControl>
           </Box>
         </Flex>
