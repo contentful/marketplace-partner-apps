@@ -29,7 +29,10 @@ jobs:
           node-version: 20
           cache: 'npm'
       - name: Install Dependencies
-        run: npm ci
+        # min-release-age needs npm 11.10 or newer; Node 20 bundles npm 10. Only this install uses npm 11.
+        run: |
+          npm install --prefix "$HOME/npm11" npm@11.19.1
+          "$HOME/npm11/node_modules/.bin/npm" ci
       - name: Compile TypeScript
         # compilation is necessary because github-script does not support ts
         # https://github.com/actions/github-script/issues/294

@@ -14,7 +14,10 @@ jobs:
       - node/install
       - run:
           name: Install root dependencies
-          command: npm install
+          # min-release-age needs npm 11.10 or newer; Node 20 bundles npm 10. Only this install uses npm 11.
+          command: |
+            npm install --prefix "$HOME/npm11" npm@11.19.1
+            "$HOME/npm11/node_modules/.bin/npm" install
       - run:
           name: List changed packages
           command: npx lerna ls --since main --all 2>&1 | tee changed-packages.txt
