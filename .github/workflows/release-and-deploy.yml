@@ -59,7 +59,11 @@ jobs:
       # Install root-level dependencies (lerna, nx, etc.)
       # Required before we can run lerna commands
       - name: Install root-level project
-        run: npm ci
+        # min-release-age needs npm 11.10 or newer; Node 20 bundles npm 10. Only this install uses npm 11,
+        # so the apps below keep installing with the npm that Node ships.
+        run: |
+          npm install --prefix "$HOME/npm11" npm@11.19.1
+          "$HOME/npm11/node_modules/.bin/npm" ci
 
       # PRODUCTION PATH: Only install/build apps that were actually released
       # Uses --since HEAD~1 to detect which packages changed in the release commit
