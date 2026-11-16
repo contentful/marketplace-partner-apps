@@ -1,0 +1,53 @@
+{
+  "functions": [
+    {
+      "id": "alchemerProxy",
+      "name": "Alchemer API proxy",
+      "description": "Proxies read-only Alchemer REST API calls (list/get surveys) because the Alchemer API does not send CORS headers for browser calls.",
+      "path": "functions/alchemerProxy.js",
+      "entryFile": "functions/alchemerProxy.ts",
+      "allowNetworks": [
+        "api.alchemer.com",
+        "api.alchemer.eu",
+        "api.alchemer-ca.com",
+        "api.au.alchemer.com"
+      ],
+      "accepts": [
+        "appaction.call"
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "alchemerApi",
+      "name": "Alchemer API",
+      "description": "Read-only proxy to the Alchemer REST API used by the survey picker field editor.",
+      "type": "function-invocation",
+      "functionId": "alchemerProxy",
+      "category": "Custom",
+      "parameters": [
+        {
+          "id": "action",
+          "name": "Action",
+          "description": "One of listSurveys, getSurvey, testConnection",
+          "type": "Symbol",
+          "required": true
+        },
+        {
+          "id": "surveyId",
+          "name": "Survey ID",
+          "description": "Alchemer survey id, required for getSurvey",
+          "type": "Symbol",
+          "required": false
+        },
+        {
+          "id": "page",
+          "name": "Page",
+          "description": "1-based page number for listSurveys",
+          "type": "Number",
+          "required": false
+        }
+      ]
+    }
+  ]
+}
