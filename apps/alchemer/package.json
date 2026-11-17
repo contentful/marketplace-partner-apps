@@ -1,0 +1,77 @@
+{
+  "name": "alchemer",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "@contentful/app-sdk": "^4.29.1",
+    "@contentful/f36-components": "4.81.1",
+    "@contentful/f36-tokens": "4.2.0",
+    "@contentful/react-apps-toolkit": "1.2.16",
+    "contentful-management": "10.46.4",
+    "emotion": "10.0.27",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "install-ci": "npm ci",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p functions/tsconfig.json",
+    "build": "npm run typecheck && vite build && npm run build:functions",
+    "build:functions": "contentful-app-scripts build-functions --ci",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ci": "vitest run",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix",
+    "test:proxy": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/test-proxy.mts",
+    "bench:alchemer": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/bench-alchemer.mts",
+    "create-app-definition": "contentful-app-scripts create-app-definition",
+    "add-locations": "contentful-app-scripts add-locations",
+    "upload": "contentful-app-scripts upload --bundle-dir ./build",
+    "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN",
+    "upsert-actions": "contentful-app-scripts upsert-actions --ci --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@contentful/app-scripts": "^2.5.6",
+    "@contentful/node-apps-toolkit": "^3.11.1",
+    "@eslint/js": "^9.37.0",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@tsconfig/recommended": "1.0.8",
+    "@types/node": "^22.13.5",
+    "@types/react": "18.3.13",
+    "@types/react-dom": "18.3.1",
+    "@vitejs/plugin-react": "^4.0.3",
+    "eslint": "^9.37.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-unused-imports": "^4.2.0",
+    "globals": "^16.4.0",
+    "jiti": "^2.6.1",
+    "jsdom": "^26.0.0",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.46.1",
+    "vite": "^6.2.2",
+    "vitest": "^3.0.9"
+  },
+  "overrides": {
+    "@contentful/app-sdk": {
+      "contentful-management": "12.18.0"
+    }
+  }
+}
