@@ -5,7 +5,7 @@ import { injectGlobal } from '@emotion/css';
 import { css } from '@emotion/react';
 import { useCallback, useRef, useState } from 'react';
 import { AppInstallationParameters, CloudinaryAsset } from '../types';
-import { createEditedAsset, getDeliveryHostname, getEditorTransformation, loadScript } from '../utils';
+import { createEditedAsset, getDeliveryHostname, getEditorBaseTransformation, loadScript } from '../utils';
 import { MediaEditorWidget } from './types';
 
 const styles = {
@@ -47,14 +47,14 @@ const VideoEditorDialog = () => {
         editorRef.current = editorRef.current || window.cloudinary.mediaEditor({ appendTo: document.getElementById(container.id) });
 
         const configurationParams = sdk.parameters.installation;
-        const existingTransformation = getEditorTransformation(asset);
+        const baseTransformation = getEditorBaseTransformation(configurationParams);
         const deliveryHostname = getDeliveryHostname(asset.secure_url ?? asset.url);
         // allow local instances of the dialog to override the configuration maxFiles parameter
         editorRef.current.update({
           video: {
-            ...(existingTransformation
+            ...(baseTransformation
               ? {
-                  transformation: [{ rawTransformation: existingTransformation }],
+                  transformation: [{ rawTransformation: baseTransformation }],
                 }
               : {}),
             steps: ['trim'],

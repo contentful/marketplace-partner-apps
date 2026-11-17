@@ -4,7 +4,7 @@ import { injectGlobal } from '@emotion/css';
 import { css } from '@emotion/react';
 import { useCallback, useRef } from 'react';
 import { AppInstallationParameters, CloudinaryAsset } from '../types';
-import { createEditedAsset, getDeliveryHostname, getEditorTransformation, loadScript } from '../utils';
+import { createEditedAsset, getDeliveryHostname, getEditorBaseTransformation, loadScript } from '../utils';
 import { MediaEditorWidget } from './types';
 
 const styles = {
@@ -27,7 +27,9 @@ const ImageEditorDialog = () => {
    * Initialization is triggered using the div's ref to ensure the container exists in the DOM
    */
   const init = useCallback(
-    (container: HTMLDivElement) => {
+    (container: HTMLDivElement | null) => {
+      // React calls ref callbacks with null on unmount
+      if (!container) return;
       (async () => {
         await loadScript('https://media-editor.cloudinary.com/latest/all.js');
         // clear container
@@ -46,7 +48,7 @@ const ImageEditorDialog = () => {
         editorRef.current = editorRef.current || window.cloudinary.mediaEditor({ appendTo: document.getElementById(container.id) });
 
         const configurationParams = sdk.parameters.installation;
-        const existingTransformation = getEditorTransformation(asset);
+        const baseTransformation = getEditorBaseTransformation(configurationParams);
         const deliveryHostname = getDeliveryHostname(asset.secure_url ?? asset.url);
 
         // samples/logo,samples/man-portrait
@@ -71,9 +73,9 @@ const ImageEditorDialog = () => {
           layoutStyle: 'single',
           layout: 'tabs',
           image: {
-            ...(existingTransformation
+            ...(baseTransformation
               ? {
-                  transformation: [{ rawTransformation: existingTransformation }],
+                  transformation: [{ rawTransformation: baseTransformation }],
                 }
               : {}),
             steps,

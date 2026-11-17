@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { AppInstallationParameters, CloudinaryAsset } from './types';
-import { buildDeliveryUrl, createEditedAsset, getDeliveryHostname, getEditorTransformation } from './utils';
+import { buildDeliveryUrl, createEditedAsset, getDeliveryHostname, getEditorBaseTransformation } from './utils';
 
 const installationParams: AppInstallationParameters = {
   installationUuid: 'test',
@@ -41,24 +41,15 @@ describe('getDeliveryHostname', () => {
   });
 });
 
-describe('getEditorTransformation', () => {
-  it('prefers the current transformation over the original', () => {
-    const asset: CloudinaryAsset = {
-      ...baseAsset,
-      raw_transformation: 'c_crop,h_100,w_100,x_0,y_0',
-      original_raw_transformation: 'f_auto/q_auto',
-    };
-
-    expect(getEditorTransformation(asset)).toBe('c_crop,h_100,w_100,x_0,y_0');
+describe('getEditorBaseTransformation', () => {
+  it('builds the picker default format/quality suffix from the installation config', () => {
+    expect(getEditorBaseTransformation(installationParams)).toBe('f_auto/q_auto');
   });
 
-  it('falls back to the original transformation', () => {
-    const asset: CloudinaryAsset = {
-      ...baseAsset,
-      original_raw_transformation: 'f_auto/q_auto',
-    };
-
-    expect(getEditorTransformation(asset)).toBe('f_auto/q_auto');
+  it('skips format and quality configured as none', () => {
+    expect(getEditorBaseTransformation({ ...installationParams, format: 'none' })).toBe('q_auto');
+    expect(getEditorBaseTransformation({ ...installationParams, quality: 'none' })).toBe('f_auto');
+    expect(getEditorBaseTransformation({ ...installationParams, format: 'none', quality: 'none' })).toBeUndefined();
   });
 });
 

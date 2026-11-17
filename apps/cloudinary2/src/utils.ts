@@ -48,8 +48,17 @@ export function getDeliveryHostname(url: string): string | undefined {
   }
 }
 
-export function getEditorTransformation(asset: CloudinaryAsset): string | undefined {
-  return asset.raw_transformation ?? asset.original_raw_transformation;
+/**
+ * Base delivery transformation for the Media Editor's `transformation` option.
+ * The editor appends this after its own resize/crop and bakes it into the exported
+ * transformation, so it must only contain the picker's format/quality defaults —
+ * never a previous edit, whose pixel crop would no longer fit the editor's output.
+ */
+export function getEditorBaseTransformation(installationParams: AppInstallationParameters): string | undefined {
+  const parts: string[] = [];
+  if (installationParams.format && installationParams.format !== 'none') parts.push(`f_${installationParams.format}`);
+  if (installationParams.quality && installationParams.quality !== 'none') parts.push(`q_${installationParams.quality}`);
+  return parts.length > 0 ? parts.join('/') : undefined;
 }
 
 export function buildDeliveryUrl(
