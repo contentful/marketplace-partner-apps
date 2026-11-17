@@ -68,5 +68,10 @@
     "typescript-eslint": "^8.46.1",
     "vite": "^6.2.2",
     "vitest": "^3.0.9"
+  },
+  "overrides": {
+    "@contentful/app-sdk": {
+      "contentful-management": "12.18.0"
+    }
   }
 }

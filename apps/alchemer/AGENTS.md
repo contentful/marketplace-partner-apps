@@ -138,6 +138,12 @@ npm run bench:alchemer
 - **Alchemer folders are not exposed by the v5 API**; do not try to show them.
 - **Forma 36 has no progress bar component**; `LoadProgressBar` in `Field.tsx` is
   hand-rolled.
+- **`overrides` in package.json pins `@contentful/app-sdk`'s nested `contentful-management` to
+  12.18.0.** From 12.18.1 that package pulls `contentful-sdk-core` 10, which declares
+  `node >= 22`, and the marketplace-partner-apps CI runs Node 20 with `engine-strict`, so
+  `npm ci` fails with EBADENGINE (seen on the first PR run, 2026-11-16). Drop the override
+  only once that CI is on Node 22. Reproduce locally with `nvm use 20` and
+  `npm ci --engine-strict`.
 - **App action calls are scoped to an installation**: they 404 until the app is installed
   in the target environment, and run against that environment's saved credentials. The
   field editor and "Test connection" do nothing useful until the function bundle is

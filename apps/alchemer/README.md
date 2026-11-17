@@ -494,7 +494,10 @@ Logs.
 - `npm run lint` / `npm run lint:fix` — ESLint (flat config in `eslint.config.mts`); `lint`
   fails on warnings as well as errors.
 - `npm run install-ci` — `npm ci`, the install convention used by Contentful's app
-  monorepos.
+  monorepos. `package.json` carries an `overrides` entry pinning `@contentful/app-sdk`'s nested
+  `contentful-management` to 12.18.0, the last release that installs on Node 20 (newer ones
+  need `contentful-sdk-core` 10, which requires Node 22). Remove it when the hosting repo's CI
+  moves to Node 22.
 - `npm run preview` — serves the already-built `build/` frontend locally.
 - `npm run test` / `npm run test:ci` — vitest (watch / single run).
 - `npm run test:proxy -- <action> [arg]` — runs `functions/alchemerProxy.ts` locally against
