@@ -18,8 +18,6 @@ export enum SurferRpcCommands {
   DRAFT_LOADED = 'draft-loaded',
   DRAFT_LOADING = 'draft_loading',
   VIEW_RENDERED = 'view-rendered',
-  CONFIGURATION_CANCELLED = 'configuration-cancelled',
-  CONFIGURATION_TOGGLED = 'configuration-toggled',
 }
 
 export interface SurferRpcMessage {
