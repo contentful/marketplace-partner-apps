@@ -1,0 +1,315 @@
+[
+  {
+    "id": "platform-pillar",
+    "description": "Contentful Platform product page",
+    "input": {
+      "entryId": "hclvhMBxnJbxq8OQQv7HN",
+      "title": "Contentful Platform",
+      "contentType": "page",
+      "slug": "/products/platform",
+      "textSnippet": "The Contentful Platform is a composable content platform that enables enterprise teams to create, manage, and deliver digital experiences at scale. Request a demo today and contact sales to learn about Enterprise pricing."
+    },
+    "expectedSignals": {
+      "urlPattern": "product",
+      "isProductPage": true,
+      "hasDemo": true,
+      "overrideSchemaType": "SoftwareApplication"
+    }
+  },
+  {
+    "id": "headless-cms-guide",
+    "description": "TOFU headless CMS guide",
+    "input": {
+      "entryId": "72SM66tqt9OxVvFSxQCqnp",
+      "title": "What is Headless CMS? A Complete Guide",
+      "contentType": "pageLongFormSeo",
+      "slug": "/headless-cms",
+      "textSnippet": "A headless CMS is a content management system that separates the content repository from the presentation layer."
+    },
+    "expectedSignals": {
+      "urlPattern": "unknown",
+      "isProductPage": false,
+      "hasDemo": false
+    }
+  },
+  {
+    "id": "personalization-page",
+    "description": "Personalization product page",
+    "input": {
+      "entryId": "5yRQig0lpBHEYEvAFz54S8",
+      "title": "Contentful Personalization",
+      "contentType": "page",
+      "slug": "/products/personalization",
+      "textSnippet": "Deliver personalized experiences to every visitor. Powered by Ninetailed technology, Contentful Personalization lets you run A/B tests, multivariate experiments, and targeted audience segments. Define your audiences using behavioral signals, firmographic data, and real-time attributes. Connect personalization logic directly to your Contentful content model without engineering overhead. Enterprise teams use Contentful Personalization to increase conversion rates and improve customer engagement across channels. See how leading brands use Contentful Personalization at scale. Personalization rules are defined in the Contentful web app without code changes. Changes propagate instantly via the Content Delivery API. Request a demo to see Contentful Personalization in action with your own content. Our team will walk you through audience targeting, experimentation, and analytics. Contact sales for enterprise plans and volume pricing."
+    },
+    "expectedSignals": {
+      "urlPattern": "product",
+      "isProductPage": true,
+      "hasDemo": true
+    }
+  },
+  {
+    "id": "blog-post",
+    "description": "Blog post signal rules",
+    "input": {
+      "entryId": "test-blog-001",
+      "title": "5 Ways Headless CMS Improves Developer Experience",
+      "contentType": "pageBlogPost",
+      "slug": "/blog/headless-cms-developer-experience",
+      "textSnippet": "Developers love headless CMS because it gives them flexibility."
+    },
+    "expectedSignals": {
+      "urlPattern": "blog",
+      "overrideSchemaType": "BlogPosting"
+    }
+  },
+  {
+    "id": "docs-page",
+    "description": "Documentation page signal rules",
+    "input": {
+      "entryId": "test-docs-001",
+      "title": "Content Delivery API Reference",
+      "contentType": "page",
+      "slug": "/developers/docs/references/content-delivery-api",
+      "textSnippet": "The Content Delivery API is a read-only API for delivering content from Contentful to apps and websites."
+    },
+    "expectedSignals": {
+      "urlPattern": "docs",
+      "overrideFunnelStage": "Retention",
+      "overrideSchemaType": "TechArticle"
+    }
+  },
+  {
+    "id": "pricing-page",
+    "description": "Pricing page signal rules",
+    "input": {
+      "entryId": "test-pricing-001",
+      "title": "Contentful Pricing Plans",
+      "contentType": "pagePricing",
+      "slug": "/pricing",
+      "textSnippet": "Choose the plan that works for you. Per user per month pricing. Start for free."
+    },
+    "expectedSignals": {
+      "urlPattern": "pricing",
+      "hasPricing": true
+    }
+  },
+  {
+    "id": "french-page",
+    "description": "French language detection",
+    "input": {
+      "entryId": "test-fr-001",
+      "title": "Qu'est-ce qu'un CMS headless?",
+      "contentType": "pageLongFormSeo",
+      "slug": "/fr/headless-cms",
+      "textSnippet": "Un CMS headless est un syst\u00e8me de gestion de contenu qui s\u00e9pare le contenu de la pr\u00e9sentation. Contrairement aux CMS traditionnels, le CMS headless livre le contenu via des API. Les \u00e9quipes peuvent cr\u00e9er des exp\u00e9riences num\u00e9riques sur tous les canaux."
+    },
+    "expectedSignals": {
+      "detectedLanguage": "FR"
+    }
+  },
+  {
+    "id": "locale-prefixed-blog",
+    "description": "Locale-prefixed URL should normalize to blog pattern",
+    "input": {
+      "entryId": "test-locale-blog-001",
+      "title": "What is a Headless CMS?",
+      "contentType": "pageBlogPost",
+      "slug": "/en-us/blog/headless-cms",
+      "textSnippet": "A headless CMS decouples the content repository from the presentation layer."
+    },
+    "expectedSignals": {
+      "urlPattern": "blog",
+      "isProductPage": false,
+      "overrideSchemaType": "BlogPosting"
+    }
+  },
+  {
+    "id": "interactive-sidebar-product",
+    "description": "Sidebar interactive profile still preserves core product-page signals",
+    "input": {
+      "entryId": "interactive-sidebar-product-001",
+      "title": "Contentful Platform",
+      "contentType": "page",
+      "slug": "/products/platform",
+      "textSnippet": "The Contentful Platform helps teams create, manage, and deliver digital experiences at scale. Request a demo to see enterprise capabilities."
+    },
+    "expectedSignals": {
+      "urlPattern": "product",
+      "isProductPage": true,
+      "hasDemo": true,
+      "overrideSchemaType": "SoftwareApplication"
+    }
+  },
+  {
+    "id": "zone-aware-case-study",
+    "description": "Case study: speaker title in quote zone must not leak into jobFunction",
+    "input": {
+      "entryId": "zone-case-study-001",
+      "title": "How ACME Corp Scaled Content with Contentful",
+      "contentType": "pageCaseStudy",
+      "slug": "/customers/acme-corp",
+      "textSnippet": "[ZONE:hero] Platform Page: Hero\nACME Corp modernized their digital experience platform with Contentful.\n\n[ZONE:quote] Customer Quote\nContentful gave our team the freedom to move fast. \u2014 Jane Smith, VP Engineering at ACME Corp\n\n[ZONE:cta] CTA: Contact Sales\nReady to transform your digital experience? Contact sales."
+    },
+    "expectedSignals": {
+      "urlPattern": "caseStudy",
+      "zonesPresent": true,
+      "note": "jobFunction must derive from hero audience framing, not speaker zone VP Engineering title"
+    }
+  },
+  {
+    "id": "zone-aware-industry-no-logo-leakage",
+    "description": "Product page: footer logos must not inflate industry beyond hero vertical framing",
+    "input": {
+      "entryId": "zone-industry-001",
+      "title": "Contentful for Retail",
+      "contentType": "page",
+      "slug": "/solutions/retail",
+      "textSnippet": "[ZONE:hero] Solutions Hero\nDeliver personalized shopping experiences at scale with Contentful.\n\n[ZONE:body] Features\nConnects with your existing ecommerce stack.\n\n[ZONE:footer] Footer\nTrusted by Adobe, Salesforce, Microsoft, SAP, IBM, Oracle, and 3000+ enterprises."
+    },
+    "expectedSignals": {
+      "urlPattern": "solution",
+      "zonesPresent": true,
+      "note": "industry must derive from hero vertical framing (Retail & ecommerce), footer logo list must be suppressed"
+    }
+  },
+  {
+    "id": "evidence-map-funnelStage-cta-only",
+    "description": "EvidenceMap: funnelStage evidence block must contain only CTA zone text, not topic or body",
+    "input": {
+      "entryId": "evidence-map-001",
+      "title": "The Ultimate Guide to Headless CMS",
+      "contentType": "pageLongFormSeo",
+      "slug": "/headless-cms-guide",
+      "textSnippet": "A headless CMS separates content from presentation. Used by enterprise teams to deliver digital experiences. Request a demo to see Contentful in action."
+    },
+    "expectedSignals": {
+      "urlPattern": "unknown",
+      "hasDemo": true,
+      "note": "funnelStage [EVIDENCE:funnelStage] block must only contain CTA text; topic/body text must be absent from funnelStage evidence"
+    }
+  },
+  {
+    "id": "evidence-map-jobFunction-no-speaker",
+    "description": "EvidenceMap: jobFunction evidence must exclude speaker zone even when speaker has explicit role title",
+    "input": {
+      "entryId": "evidence-map-002",
+      "title": "How ASICS Scaled Content Operations",
+      "contentType": "pageCaseStudy",
+      "slug": "/customers/asics",
+      "textSnippet": "Delivering consistent digital experiences across global markets. Join Jane Smith, VP Engineering at ASICS, as she explains how Contentful transformed their stack."
+    },
+    "expectedSignals": {
+      "urlPattern": "caseStudy",
+      "hasDemo": false,
+      "note": "jobFunction [EVIDENCE:jobFunction] must not contain VP Engineering from speaker zone; only hero/summary audience phrasing allowed"
+    }
+  },
+  {
+    "id": "field-provenance-parsed",
+    "description": "Structured provenance: fieldProvenance record must be populated from reasoning string",
+    "input": {
+      "entryId": "provenance-test-001",
+      "title": "Contentful Platform",
+      "contentType": "page",
+      "slug": "/products/platform",
+      "textSnippet": "The Contentful Platform is a composable content platform that enables enterprise teams to create, manage, and deliver digital experiences at scale. Request a demo today."
+    },
+    "expectedSignals": {
+      "urlPattern": "product",
+      "isProductPage": true,
+      "note": "classification.fieldProvenance must be a non-null record with at least funnelStage and jobFunction entries after a real classify run"
+    }
+  },
+  {
+    "id": "funnel-stage-cta-priority",
+    "description": "funnelStage: BOFU CTA at bottom of page must not be hidden by weak top CTA",
+    "input": {
+      "entryId": "cta-priority-test-001",
+      "title": "What is Composable Commerce?",
+      "contentType": "pageLongFormSeo",
+      "slug": "/composable-commerce",
+      "textSnippet": "Learn more about composable commerce in our guide. Composable commerce separates the frontend from the backend. Contact our sales team to get enterprise pricing and start your free trial."
+    },
+    "expectedSignals": {
+      "urlPattern": "unknown",
+      "hasDemo": false,
+      "note": "funnelStage evidence must be ordered by CTA weight (strongest first) not by position \u2014 'Contact sales' CTA must not be dropped if a weaker 'Learn more' appears earlier in the page"
+    }
+  },
+  {
+    "id": "section-heading-zone-emitted",
+    "description": "section_heading zone type must be emitted by classifyZoneType for heading-named components",
+    "input": {
+      "entryId": "section-heading-test-001",
+      "title": "Platform Features",
+      "contentType": "page",
+      "slug": "/products/platform",
+      "textSnippet": "Contentful Platform features. Everything you need to build digital experiences."
+    },
+    "expectedSignals": {
+      "urlPattern": "product",
+      "isProductPage": true,
+      "note": "A Contentful component named 'sectionHeading' or 'h2Block' must produce zoneType=section_heading (weight 0.8), not fall through to body or unknown. Regression guard for v40 fix."
+    }
+  },
+  {
+    "id": "few-shot-gate-no-bypass",
+    "description": "selectFewShotExamples must return empty array when no corrections meet confirmationCount >= 2",
+    "input": {
+      "entryId": "gate-test-001",
+      "title": "Empty confirmed corrections corpus",
+      "contentType": "pageLongFormSeo",
+      "slug": "/test-page",
+      "textSnippet": "Test content."
+    },
+    "expectedSignals": {
+      "urlPattern": "unknown",
+      "note": "When all corrections have confirmationCount < 2, few-shot selection must return [] \u2014 not fall back to unconfirmed corrections. Regression guard for v40 P0 fix."
+    }
+  },
+  {
+    "id": "section-heading-ct-pattern",
+    "description": "section_heading must be emitted by ZONE_CT_PATTERNS for components with heading content-type IDs",
+    "input": {
+      "entryId": "ct-heading-test-001",
+      "title": "Contentful for Enterprise",
+      "contentType": "page",
+      "slug": "/enterprise",
+      "textSnippet": "Enterprise-grade composable content. Used by 30% of Fortune 500."
+    },
+    "expectedSignals": {
+      "urlPattern": "unknown",
+      "note": "A Contentful component with contentTypeId='sectionHeading' or 'h2Block' must produce zoneType=section_heading via ZONE_CT_PATTERNS. Regression guard for v40.3 fix."
+    }
+  },
+  {
+    "id": "asset-type-profile-blog",
+    "description": "v41 regression guard \u2014 pageBlogPost assetType must be Blog, not Document",
+    "note": "Guards the contentTypeProfiles.ts Document\u2192Blog fix",
+    "input": {
+      "slug": "/blog/headless-cms-tips",
+      "title": "5 Headless CMS Tips for Developers",
+      "contentType": "pageBlogPost",
+      "textSnippet": "Developers love headless CMS for its flexibility."
+    },
+    "expectedSignals": {
+      "urlPattern": "blog",
+      "overrideSchemaType": "BlogPosting"
+    }
+  },
+  {
+    "id": "event-fields-in-reasoning",
+    "description": "v41.1 regression guard \u2014 event pages include season/yearPublished in factReasoning",
+    "note": "Guards event/eventType/season/yearPublished factReasoning inclusion for time-bound content [v41.3: factReasoning .describe() fix verified]",
+    "input": {
+      "slug": "/events/webinar-composable-content-fall-2025",
+      "title": "Composable Content Webinar \u2014 Fall 2025",
+      "contentType": "pageEventDetail",
+      "textSnippet": "Join us for our Fall 2025 webinar on composable content strategy."
+    },
+    "expectedSignals": {
+      "urlPattern": "event"
+    }
+  }
+]

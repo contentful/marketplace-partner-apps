@@ -1,0 +1,60 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#FF5A5F"/>
+      <stop offset="100%" stop-color="#111111"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f6f6f3"/>
+    </linearGradient>
+    <style>
+      .eyebrow { font: 700 20px Aptos, Inter, system-ui, sans-serif; letter-spacing: 0.14em; fill: #111111 }
+      .title { font: 800 60px Aptos, Inter, system-ui, sans-serif; fill: #111111 }
+      .subtitle { font: 500 26px Aptos, Inter, system-ui, sans-serif; fill: #4f4f49 }
+      .chip { font: 700 18px Aptos, Inter, system-ui, sans-serif; fill: #111111 }
+      .caption { font: 600 20px Aptos, Inter, system-ui, sans-serif; fill: #ffffff }
+    </style>
+  </defs>
+  <rect width="1280" height="720" fill="#ffffff"/>
+  <rect x="0" y="0" width="1280" height="12" fill="url(#g)"/>
+  <text x="80" y="82" class="eyebrow">CONTENTFUL</text>
+  <text x="80" y="180" class="title">ContentGraph AI</text>
+  <text x="80" y="240" class="subtitle">Contentful-native taxonomy automation for faster editorial ops, stronger governance, and better reuse.</text>
+  <g transform="translate(860,86)">
+    <rect rx="24" width="320" height="182" fill="#111111"/>
+    <text x="28" y="52" class="caption">Editorial flow</text>
+    <text x="28" y="94" class="caption">Sidebar classify</text>
+    <text x="28" y="128" class="caption">Webhook classify</text>
+    <text x="28" y="162" class="caption">Review queue</text>
+  </g>
+  <g transform="translate(80,308)">
+    <rect rx="18" width="210" height="44" fill="#ffe3e4"/>
+    <text x="20" y="28" class="chip">Topic</text>
+    <g transform="translate(230,0)">
+      <rect rx="18" width="210" height="44" fill="#f1efe9"/>
+      <text x="20" y="28" class="chip">Intent</text>
+    </g>
+    <g transform="translate(460,0)">
+      <rect rx="18" width="210" height="44" fill="#e9f1ff"/>
+      <text x="20" y="28" class="chip">Persona</text>
+    </g>
+    <g transform="translate(690,0)">
+      <rect rx="18" width="210" height="44" fill="#f3f3ef"/>
+      <text x="20" y="28" class="chip">Funnel Stage</text>
+    </g>
+    <g transform="translate(920,0)">
+      <rect rx="18" width="210" height="44" fill="#f6f6f3"/>
+      <text x="20" y="28" class="chip">Industry</text>
+    </g>
+  </g>
+  <g transform="translate(80,420)">
+    <rect rx="28" width="1120" height="180" fill="url(#panel)" stroke="#111111" stroke-opacity="0.08"/>
+    <circle cx="34" cy="40" r="7" fill="#FF5A5F"/>
+    <text x="56" y="47" class="subtitle">Native to Contentful: sidebar app, publish webhook, management API writeback, and human review.</text>
+    <circle cx="34" cy="92" r="7" fill="#111111"/>
+    <text x="56" y="99" class="subtitle">Structured content in, taxonomy confidence out, editor trust preserved.</text>
+    <circle cx="34" cy="144" r="7" fill="#0059FF"/>
+    <text x="56" y="151" class="subtitle">Purpose-built for governance, findability, and campaign reuse.</text>
+  </g>
+</svg>

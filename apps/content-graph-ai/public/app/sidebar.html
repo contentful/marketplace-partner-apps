@@ -1,0 +1,1292 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ContentGraph – Sidebar</title>
+  <script src="https://cdn.jsdelivr.net/npm/@contentful/app-sdk@4/dist/cf-extension-api.bundled.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/contentful-management@11.57.1/dist/contentful-management.browser.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --card-2: #f8fafc;
+      --accent: #0f7cff;
+      --accent-2: #22c3ff;
+      --text: #0f172a;
+      --muted: #5f6b7b;
+      --border: #d8dde3;
+      --shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+      --radius: 10px;
+      --gap: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, Segoe UI, sans-serif;
+      margin: 0;
+      padding: 12px;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      max-width: 100%;
+      overflow-x: hidden;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    h3 {
+      margin: 0 0 6px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      font-size: 16px;
+    }
+
+    .shell {
+      display: grid;
+      gap: var(--gap);
+      max-width: 100%;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      box-shadow: var(--shadow);
+      min-width: 0;
+    }
+
+    .card.subtle {
+      background: var(--card-2);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 124, 255, 0.1);
+      color: #0f7cff;
+      font-size: 11px;
+      font-weight: 600;
+      border: 1px solid rgba(15, 124, 255, 0.25);
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+
+    button {
+      all: unset;
+      box-sizing: border-box;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 13px;
+      line-height: 1.4;
+      text-align: center;
+      transition: background 140ms ease, box-shadow 140ms ease;
+      border: 1px solid #0f7cff;
+      background: #0f7cff;
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(15, 124, 255, 0.15);
+    }
+
+    button:hover:not(:disabled) {
+      background: #0b6fe6;
+      box-shadow: 0 4px 12px rgba(15, 124, 255, 0.25);
+      transform: translateY(-1px);
+    }
+
+    button:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: 0 2px 6px rgba(15, 124, 255, 0.18);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: #475569;
+      border-color: #e2e8f0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      color: #0f7cff;
+    }
+
+    .btn-success {
+      background: #10b981;
+      border-color: #10b981;
+      box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2);
+    }
+
+    .btn-success:hover:not(:disabled) {
+      background: #059669;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-sm {
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 8px;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 11.5px;
+      line-height: 1.5;
+    }
+
+    .status {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+      font-size: 12px;
+      color: var(--muted);
+      min-height: 24px;
+    }
+
+    .status.ok {
+      color: #059669;
+    }
+
+    .status.warn {
+      color: #d97706;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      color: #64748b;
+    }
+
+    .pill.ok {
+      border-color: #a7f3d0;
+      background: #d1fae5;
+      color: #047857;
+    }
+
+    .pill.warn {
+      border-color: #fde68a;
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .pill.error {
+      border-color: #fecaca;
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .run-card {
+      display: grid;
+      gap: 10px;
+    }
+
+    .run-meta {
+      display: grid;
+      gap: 4px;
+      font-size: 11.5px;
+      color: var(--muted);
+    }
+
+    .run-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .run-stat {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      padding: 8px 10px;
+    }
+
+    .run-stat-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .run-stat-value {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      overflow-wrap: anywhere;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 8px;
+    }
+
+    .timeline-step {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .timeline-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #cbd5e1;
+      margin-top: 4px;
+      flex: 0 0 auto;
+    }
+
+    .timeline-step.active .timeline-dot {
+      background: #0f7cff;
+    }
+
+    .timeline-step.done .timeline-dot {
+      background: #10b981;
+    }
+
+    .timeline-step.error .timeline-dot {
+      background: #ef4444;
+    }
+
+    .timeline-copy {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .timeline-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .timeline-text {
+      font-size: 11.5px;
+      color: var(--muted);
+      overflow-wrap: anywhere;
+    }
+
+    .reason-list {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: #475569;
+      font-size: 12px;
+    }
+
+    .reason-list li + li {
+      margin-top: 4px;
+    }
+
+    .row-warn {
+      background: #fef9e7;
+    }
+
+    .row-warn td {
+      color: #b45309;
+    }
+
+    .copy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      font-size: 11px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      color: #64748b;
+      cursor: pointer;
+      border-radius: 6px;
+      margin-left: auto;
+    }
+
+    .copy-btn:hover {
+      background: #e2e8f0;
+      color: #0f7cff;
+    }
+
+    .reasoning-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #475569;
+    }
+
+    .reasoning-box .reasoning-label {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .reasoning-text {
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .reasoning-text.collapsed {
+      max-height: 60px;
+    }
+
+    .reasoning-text.expanded {
+      max-height: none;
+    }
+
+    .read-more-btn {
+      display: inline-block;
+      padding: 4px 8px;
+      font-size: 11px;
+      color: #0f7cff;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      width: auto;
+    }
+
+    .read-more-btn:hover {
+      text-decoration: underline;
+      background: none;
+      box-shadow: none;
+      transform: none;
+    }
+
+    pre {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      max-height: 120px;
+      overflow: auto;
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 11px;
+      color: #0f172a;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    details {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card-2);
+      padding: 10px 12px;
+    }
+
+    details summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text);
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12.5px;
+    }
+
+    details[open] summary {
+      margin-bottom: 8px;
+    }
+
+    details summary::after {
+      content: "▾";
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    details[open] summary::after {
+      content: "▴";
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      table-layout: fixed;
+      margin-top: 10px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--border);
+      padding: 8px 6px;
+      vertical-align: top;
+      text-align: left;
+      word-wrap: break-word;
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      background: var(--card-2);
+    }
+
+    td {
+      color: var(--text);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    #summary {
+      max-width: 100%;
+      overflow-wrap: anywhere;
+    }
+
+    code {
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 11px;
+      color: #0f172a;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+    <div class="card header">
+      <div class="stack" style="gap:4px">
+        <h3>AI Classification</h3>
+        <div class="meta" id="entryInfo"></div>
+      </div>
+      <span class="badge">Content Graph</span>
+    </div>
+
+    <div class="card">
+      <div class="controls">
+        <button id="classifyBtn" type="button">Deep Crawl & Classify</button>
+        <button id="approveBtn" type="button" class="btn-secondary" disabled>Save Draft</button>
+        <button id="publishBtn" type="button" class="btn-success" disabled>Publish</button>
+      </div>
+    </div>
+
+    <div class="card subtle stack" id="resultsCard" style="display: none;">
+      <div class="status" id="status"></div>
+      <div id="summary"></div>
+    </div>
+
+    <details id="payloadPanel" class="card">
+      <summary>Classification payload</summary>
+      <pre id="json"></pre>
+    </details>
+
+    <details id="diagPanel" class="card subtle">
+      <summary>Diagnostics</summary>
+      <div class="meta" id="diagStatus" style="margin-bottom: 8px;"></div>
+      <div class="controls">
+        <button id="diagRunBtn" type="button" class="btn-secondary btn-sm">Run connectivity check</button>
+        <button id="diagAiBtn" type="button" class="btn-secondary btn-sm">Test AI call</button>
+        <button id="diagCopyBtn" type="button" class="btn-secondary btn-sm">Copy report</button>
+      </div>
+      <pre id="diagLog" style="margin-top: 8px;"></pre>
+    </details>
+  </div>
+
+
+  <script>
+    (async function () {
+      let sdk = null;
+      function initSdk() {
+        return new Promise((resolve, reject) => {
+          // App Framework v4
+          if (window.contentfulApp && typeof window.contentfulApp.init === 'function') {
+            window.contentfulApp.init((appSdk) => {
+              resolve(appSdk);
+            });
+            return;
+          }
+          // Legacy UI Extensions SDK v3
+          if (window.contentfulExtension && typeof window.contentfulExtension.init === 'function') {
+            window.contentfulExtension.init((extSdk) => {
+              resolve({
+                entry: extSdk.entry,
+                contentType: extSdk.contentType,
+                locales: { default: extSdk.locales.default },
+                ids: {
+                  entry: extSdk.entry?.getSys?.().id,
+                  contentType: extSdk.contentType?.sys?.id,
+                },
+                window: extSdk.window,
+                location: extSdk.location,
+              });
+            });
+            return;
+          }
+          reject(new Error('Contentful SDK not found on window'));
+        });
+      }
+
+      try {
+        sdk = await initSdk();
+        sdk?.window?.startAutoResizer?.();
+      } catch (e) {
+        const hasGlobal = !!(window && window.contentfulApp);
+        const hasInit = hasGlobal && typeof window.contentfulApp.init === 'function';
+        const note = document.createElement('div');
+        note.style.cssText = 'font:12px/1.4 -apple-system,Segoe UI,Roboto,Arial,sans-serif; padding:8px; background:#fff5cc; border:1px solid #facc15; border-radius:6px; margin-bottom:8px';
+        note.innerHTML = 'This page must run inside Contentful as an Entry Sidebar app. For manual testing outside Contentful, use <a href="/app/standalone-classify.html" target="_blank">Standalone Classify</a>.' +
+          `<div style="margin-top:6px;font-family:monospace;font-size:11px;color:#444">SDK loaded: ${hasGlobal}; init(): ${hasInit}</div>`;
+        document.body.prepend(note);
+      }
+
+      // --- Diagnostics state & helpers (available in all code paths) ---
+      const diag = { events: [] };
+      function diagPush(type, data) {
+        const ts = new Date().toISOString();
+        diag.events.push({ ts, type, data });
+        if (diag.events.length > 100) diag.events.shift();
+        const logEl = document.getElementById('diagLog');
+        if (logEl) {
+          logEl.textContent = JSON.stringify(diag.events.slice(-20), null, 2);
+        }
+        const stEl = document.getElementById('diagStatus');
+        if (stEl && type === 'sdk-init') {
+          const d = data || {};
+          stEl.textContent = `SDK ok=${d.sdkOk} • Entry=${d.entryId || 'unknown'} • Type=${d.contentTypeId || 'entry'} • Locale=${d.locale || 'en-US'} • LocationOK=${d.locationOk}`;
+        }
+      }
+
+      async function sha256Hex(value) {
+        if (!value || !window.crypto?.subtle) return null;
+        const bytes = new TextEncoder().encode(value);
+        const digest = await window.crypto.subtle.digest('SHA-256', bytes);
+        return Array.from(new Uint8Array(digest))
+          .map((b) => b.toString(16).padStart(2, '0'))
+          .join('');
+      }
+
+      // Guard: ensure we are running in the Entry Sidebar location
+      try {
+        const locs = window.contentfulApp?.locations;
+        if (sdk.location?.is && locs && !sdk.location.is(locs.LOCATION_ENTRY_SIDEBAR)) {
+          const notice = document.createElement('div');
+          notice.style.cssText = 'font:12px/1.4 -apple-system,Segoe UI,Roboto,Arial,sans-serif; padding:8px; background:#fff5cc; border:1px solid #facc15; border-radius:6px; margin-bottom:8px';
+          notice.innerHTML = 'Note: This view is intended for the Entry Sidebar location, but it appears to be running in a different location. The UI will still function. Please configure your app locations so Entry Sidebar uses path <code>/app/sidebar.html</code> and assign it to your content type.';
+          document.body.prepend(notice);
+        }
+      } catch { /* ignore */ }
+
+      function richTextToPlain(rt) {
+        try {
+          if (!rt || typeof rt !== 'object' || rt.nodeType !== 'document') return '';
+          const out = [];
+          function walk(node) {
+            if (!node || typeof node !== 'object') return;
+            if (node.nodeType === 'text' && typeof node.value === 'string') {
+              out.push(node.value);
+            }
+            const children = node.content || node.children || [];
+            if (Array.isArray(children)) {
+              for (const c of children) walk(c);
+            }
+          }
+          walk(rt);
+          return out.join(' ').replace(/\s+/g, ' ').trim();
+        } catch {
+          return '';
+        }
+      }
+
+      function guessFields(entry, locale) {
+        // Match the exact pattern used in api/_shared/tools/contentfulTool.ts
+        const titleCandidates = ["title", "name"];
+        const bodyCandidates = ["description", "summary", "body", "content", "copy", "text"];
+        let title = "";
+        let body = "";
+        const fields = entry.fields || {};
+
+        // Helper to get field value (SDK v4 or v3)
+        function getFieldValue(fieldId) {
+          const field = fields[fieldId];
+          if (!field) return null;
+          // SDK v4: field.getValue(locale)
+          if (typeof field.getValue === 'function') {
+            return field.getValue(locale);
+          }
+          // Direct locale access (Management API style): field['en-US']
+          if (field[locale]) return field[locale];
+          if (field['en-US']) return field['en-US'];
+          return null;
+        }
+
+        // Try title fields in order (matches contentfulTool.ts)
+        for (const id of titleCandidates) {
+          const v = getFieldValue(id);
+          if (v && typeof v === 'string' && v.trim()) {
+            title = String(v).trim();
+            break;
+          }
+        }
+
+        // Try body/description fields
+        for (const id of bodyCandidates) {
+          const v = getFieldValue(id);
+          if (!v) continue;
+          if (typeof v === 'string' && v.trim()) {
+            body = v.trim();
+            break;
+          }
+          // Handle Rich Text
+          if (typeof v === 'object' && v.nodeType === 'document') {
+            const txt = richTextToPlain(v);
+            if (txt) {
+              body = txt;
+              break;
+            }
+          }
+        }
+
+        // Fallback: collect all text content from all fields
+        if (!body) {
+          const parts = [];
+          for (const [id, field] of Object.entries(fields)) {
+            const v = typeof field?.getValue === 'function' ? field.getValue(locale) : (field?.[locale] || field?.['en-US']);
+            if (typeof v === 'string' && v.trim()) parts.push(v.trim());
+            else if (v && typeof v === 'object' && v.nodeType === 'document') {
+              const txt = richTextToPlain(v);
+              if (txt) parts.push(txt);
+            }
+          }
+          body = parts.join("\n\n").slice(0, 8000);
+        }
+
+        return { title, body };
+      }
+
+      async function resolveAppToken() {
+        const installationToken = sdk?.parameters?.installation?.appToken || '';
+        if (installationToken) {
+          diagPush('app-token:direct', {
+            source: 'sdk.parameters.installation',
+            length: installationToken.length,
+            sha256: await sha256Hex(installationToken),
+          });
+          return installationToken;
+        }
+
+        diagPush('app-token:missing', {
+          hasSdk: !!sdk,
+          hasInstallationParameters: !!sdk?.parameters?.installation,
+          appId: sdk?.ids?.app || null,
+        });
+        return '';
+      }
+
+      const appToken = await resolveAppToken();
+
+      // Authenticated fetch helper — adds X-App-Token header to all API calls
+      function apiFetch(url, options = {}) {
+        const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+        if (appToken) headers['X-App-Token'] = appToken;
+        return fetch(url, { ...options, headers });
+      }
+
+      const defaultLocale = sdk?.locales?.default || 'en-US';
+      let contentTypeId = sdk?.ids?.contentType || sdk?.contentType?.sys?.id || 'entry';
+      let entryId = sdk?.ids?.entry || 'unknown';
+
+      // Fallback: try to read entry + content type from URL query params
+      try {
+        const params = new URLSearchParams(window.location.search || '');
+        const urlEntry = params.get('entryId') || params.get('entry_id') || params.get('entry');
+        const urlCt = params.get('contentTypeId') || params.get('content_type');
+        if ((!entryId || entryId === 'unknown') && urlEntry) {
+          entryId = urlEntry;
+        }
+        if ((!contentTypeId || contentTypeId === 'entry') && urlCt) {
+          contentTypeId = urlCt;
+        }
+      } catch { /* ignore */ }
+      try {
+        // Support legacy UI Extensions SDK (v3) shapes
+        const sysMaybe = sdk?.entry?.getSys?.();
+        if (sysMaybe && typeof sysMaybe.then === 'function') {
+          const sys = await sysMaybe;
+          entryId = sys?.id || entryId;
+          contentTypeId = sys?.contentType?.sys?.id || contentTypeId;
+        } else if (sysMaybe && typeof sysMaybe === 'object') {
+          entryId = sysMaybe.id || entryId;
+          contentTypeId = sysMaybe?.contentType?.sys?.id || contentTypeId;
+        } else if (sdk?.entry?.sys?.id) {
+          entryId = sdk.entry.sys.id;
+          contentTypeId = sdk.entry.sys.contentType?.sys?.id || contentTypeId;
+        }
+      } catch { /* ignore */ }
+      document.getElementById('entryInfo').textContent = `Entry: ${entryId} • Type: ${contentTypeId} • Locale: ${defaultLocale}`;
+
+      function formatConfidence(c) {
+        if (typeof c !== 'number' || Number.isNaN(c)) return '—';
+        return `${Math.round(c * 100)}%`;
+      }
+
+      function escapeHtml(s) {
+        return String(s || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/\"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function formatValue(v) {
+        if (v === null || v === undefined) return '—';
+        if (Array.isArray(v)) return escapeHtml(v.filter(Boolean).join(', ')) || '—';
+        const s = String(v).trim();
+        return s ? escapeHtml(s) : '—';
+      }
+
+      function computeAvgConfidence(result) {
+        const fields = [
+          result?.assetType,
+          result?.assetSubType,
+          result?.schemaType,
+          result?.product,
+          result?.jobLevel,
+          result?.jobFunction,
+          result?.audience,
+          result?.topic,
+          result?.useCases,
+          result?.funnelStage,
+          result?.industry,
+          result?.companySize,
+          result?.region,
+          result?.language,
+          result?.usageRights,
+          result?.event,
+          result?.eventType,
+          result?.season,
+          result?.yearPublished,
+        ].filter(Boolean);
+        const cs = fields.map((x) => x && x.confidence).filter((c) => typeof c === 'number');
+        if (!cs.length) return undefined;
+        const avg = cs.reduce((a, b) => a + b, 0) / cs.length;
+        return Math.round(avg * 100) / 100;
+      }
+
+      // Default/placeholder values that should be filtered out
+      const DEFAULT_VALUES = new Set([
+        'N/A', 'None', 'Unknown', 'Default', 'Other'
+      ]);
+
+      function isRealValue(obj) {
+        if (!obj || obj.value === null || obj.value === undefined) return false;
+        const v = Array.isArray(obj.value) ? obj.value[0] : obj.value;
+        if (!v || typeof v !== 'string') return false;
+        // Skip only truly meaningless placeholder values
+        if (DEFAULT_VALUES.has(v)) return false;
+        // Must have reasonable confidence (> 0.3)
+        if (typeof obj.confidence === 'number' && obj.confidence < 0.3) return false;
+        return true;
+      }
+
+      function formatTimestamp(ts) {
+        if (!ts) return '—';
+        const date = new Date(ts);
+        if (Number.isNaN(date.getTime())) return '—';
+        return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' });
+      }
+
+      function renderClassification(result, sourceLabel) {
+        const avg = typeof result?.overallConfidence === 'number' ? result.overallConfidence : computeAvgConfidence(result);
+
+        // Only show fields with real classified values (not defaults)
+        const allRows = [
+          ['Asset Type', result?.assetType],
+          ['Asset Sub-Type', result?.assetSubType],
+          ['Schema Type', result?.schemaType],
+          ['Product', result?.product],
+          ['Job Level', result?.jobLevel],
+          ['Job Function', result?.jobFunction],
+          ['Audience', result?.audience],
+          ['Topic', result?.topic],
+          ['Use Cases', result?.useCases],
+          ['Funnel Stage', result?.funnelStage],
+          ['Industry', result?.industry],
+          ['Company Size', result?.companySize],
+          ['Region', result?.region],
+          ['Language', result?.language],
+          ['Usage Rights', result?.usageRights],
+          ['Event', result?.event],
+          ['Event Type', result?.eventType],
+          ['Season', result?.season],
+          ['Year Published', result?.yearPublished],
+        ];
+
+        const rows = allRows.filter(([, obj]) => isRealValue(obj));
+
+        // Count how many rows have confidence below 70%
+        const lowConfidenceRows = rows.filter(([, obj]) => {
+          const conf = obj && obj.confidence;
+          return typeof conf === 'number' && conf < 0.7;
+        });
+        const hasLowConfidence = lowConfidenceRows.length > 0;
+
+        const table = rows.length > 0 ? `
+          <table>
+            <thead><tr><th>Field</th><th>Value</th><th>Conf</th></tr></thead>
+            <tbody>
+              ${rows.map(([name, obj]) => {
+                const v = obj && obj.value;
+                const conf = obj && obj.confidence;
+                const isLow = typeof conf === 'number' && conf < 0.7;
+                const rowClass = isLow ? 'row-warn' : '';
+                return `<tr class="${rowClass}"><td>${escapeHtml(name)}</td><td>${formatValue(v)}</td><td><code>${formatConfidence(conf)}</code></td></tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        ` : '<p class="meta">No taxonomy fields were classified.</p>';
+
+        const reviewReasons = Array.isArray(result?.reviewReasons)
+          ? result.reviewReasons.filter((item) => typeof item === 'string' && item.trim())
+          : [];
+
+        const reasoningText = (result && typeof result.reasoning === 'string') ? result.reasoning.trim() : '';
+        function formatReasoningHtml(text) {
+          if (!text) return '';
+          // Split on actual newlines first. If the model didn't use newlines,
+          // split on field boundaries like "fieldName: [TAG]"
+          let lines = text.split(/\n+/).map(s => s.trim()).filter(Boolean);
+          if (lines.length <= 3 && text.length > 200) {
+            // Model didn't use newlines — split on known field name boundaries
+            const fieldNames = ['assetType','assetSubType','schemaType','product','jobLevel','jobFunction','audience','topic','useCases','funnelStage','industry','companySize','region','language','usageRights','event','eventType','season','yearPublished','competitivePositioning','competitorNames'];
+            const pattern = new RegExp('(?=' + fieldNames.map(f => f + ':\\s*\\[').join('|') + ')', 'g');
+            lines = text.split(pattern).map(s => s.trim()).filter(Boolean);
+          }
+          const colors = { LOCKED: '#6366f1', SIGNAL: '#0891b2', ENRICHMENT: '#d97706', METADATA: '#dc2626', AI: '#059669' };
+          return lines.map(line => {
+            // Match "fieldName: [TAG] rest" or "[TAG] rest"
+            const tagMatch = line.match(/^(?:(\w[\w\s]*?):\s*)?\[(LOCKED|SIGNAL|ENRICHMENT|METADATA|AI)\]\s*(.*)/i);
+            if (tagMatch) {
+              const fieldName = tagMatch[1] || '';
+              const tag = tagMatch[2].toUpperCase();
+              const rest = tagMatch[3] || '';
+              const fieldLabel = fieldName ? `<strong>${escapeHtml(fieldName)}:</strong> ` : '';
+              return `<div style="margin-bottom:4px;">${fieldLabel}<span style="display:inline-block;font-size:10px;font-weight:600;color:white;background:${colors[tag] || '#64748b'};border-radius:3px;padding:1px 5px;margin-right:3px;">${escapeHtml(tag)}</span>${escapeHtml(rest)}</div>`;
+            }
+            return `<div style="margin-bottom:4px;">${escapeHtml(line)}</div>`;
+          }).filter(Boolean).join('');
+        }
+        const reasoning = reasoningText
+          ? `<div class="reasoning-box">
+              <div class="reasoning-label">
+                <span>Reasoning</span>
+                <button class="read-more-btn" onclick="toggleReasoning(this)">Read more</button>
+              </div>
+              <div class="reasoning-text collapsed">${formatReasoningHtml(reasoningText)}</div>
+            </div>`
+          : '';
+
+        const reviewBlock = reviewReasons.length
+          ? `<div class="reasoning-box">
+              <div class="reasoning-label"><span>Review signals</span></div>
+              <ul class="reason-list">
+                ${reviewReasons.map((reason) => `<li>${escapeHtml(reason)}</li>`).join('')}
+              </ul>
+            </div>`
+          : '';
+
+        // Competitive positioning
+        const compPos = result?.competitivePositioning;
+        const competitorMentions = compPos
+          ? [
+              ...(Array.isArray(compPos.competitorNames) ? compPos.competitorNames : []),
+              ...(Array.isArray(compPos.competitorCategories) ? compPos.competitorCategories : []),
+            ]
+          : [];
+        const compBlock = compPos && compPos.mentionsCompetitors
+          ? `<div class="reasoning-box">
+              <div class="reasoning-label"><span>Competitive mentions</span></div>
+              <div class="reasoning-text">${escapeHtml(
+                competitorMentions.length
+                  ? competitorMentions.join(', ')
+                  : compPos.positioningType || 'Yes'
+              )}</div>
+            </div>`
+          : '';
+
+        const actionsBlock = '';
+
+        const statusText = rows.length > 0
+          ? `${rows.length} field${rows.length > 1 ? 's' : ''} classified${hasLowConfidence ? ` (${lowConfidenceRows.length} low confidence)` : ''}`
+          : 'No fields classified';
+
+        const reviewTier = result?.needsReview
+          ? 'NEEDS REVIEW'
+          : typeof avg === 'number' && avg >= 0.85
+            ? 'READY'
+            : 'SPOT-CHECK';
+
+        const modeLabel = sourceLabel === 'execution'
+          ? 'Execution'
+          : 'Classification';
+
+        setStatus(statusText, hasLowConfidence ? 'warn' : 'ok');
+        setSummary(`
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;align-items:center;">
+            <span class="pill">${escapeHtml(modeLabel)}</span>
+            ${typeof avg === 'number' ? `<span class="pill ${hasLowConfidence ? 'warn' : 'ok'}">${Math.round(avg * 100)}% avg</span>` : ''}
+            <span class="pill ${reviewTier === 'READY' ? 'ok' : reviewTier === 'NEEDS REVIEW' ? 'warn' : ''}">${escapeHtml(reviewTier)}</span>
+            <button class="copy-btn" onclick="copyClassification()">Copy All</button>
+          </div>
+          ${table}
+          ${compBlock}
+          ${actionsBlock}
+          ${reviewBlock}
+          ${reasoning}
+        `);
+      }
+
+      // Copy entire classification + reasoning to clipboard as a formatted report
+      async function copyClassification() {
+        if (!lastResult) {
+          setStatus('Nothing to copy. Run classification first.', 'warn');
+          return;
+        }
+        try {
+          const r = lastResult;
+          const lines = [];
+          lines.push(`Classification Report`);
+          lines.push(`${'='.repeat(40)}`);
+          lines.push(`Entry:        ${effective.entryId}`);
+          lines.push(`Content Type: ${effective.contentTypeId}`);
+          lines.push(`Date:         ${new Date().toISOString().split('T')[0]}`);
+          if (typeof r.overallConfidence === 'number') {
+            lines.push(`Avg Confidence: ${Math.round(r.overallConfidence * 100)}%`);
+          }
+          lines.push('');
+
+          const reviewTier = r.needsReview
+            ? 'NEEDS REVIEW'
+            : typeof r.overallConfidence === 'number' && r.overallConfidence >= 0.85
+              ? 'READY'
+              : 'SPOT-CHECK';
+          lines.push(`Review Tier:    ${reviewTier}`);
+          lines.push('');
+
+          const fieldDefs = [
+            ['Asset Type', r.assetType],
+            ['Asset Sub-Type', r.assetSubType],
+            ['Schema Type', r.schemaType],
+            ['Product', r.product],
+            ['Job Level', r.jobLevel],
+            ['Job Function', r.jobFunction],
+            ['Audience', r.audience],
+            ['Topic', r.topic],
+            ['Use Cases', r.useCases],
+            ['Funnel Stage', r.funnelStage],
+            ['Industry', r.industry],
+            ['Company Size', r.companySize],
+            ['Region', r.region],
+            ['Language', r.language],
+            ['Usage Rights', r.usageRights],
+            ['Event', r.event],
+            ['Event Type', r.eventType],
+            ['Season', r.season],
+            ['Year Published', r.yearPublished],
+          ];
+
+          lines.push('Fields');
+          lines.push(`${'-'.repeat(40)}`);
+          for (const [name, obj] of fieldDefs) {
+            if (!obj || obj.value === null || obj.value === undefined) continue;
+            const val = Array.isArray(obj.value) ? obj.value.join(', ') : String(obj.value);
+            if (!val) continue;
+            const conf = typeof obj.confidence === 'number' ? ` (${Math.round(obj.confidence * 100)}%)` : '';
+            lines.push(`  ${name.padEnd(16)} ${val}${conf}`);
+          }
+
+          // Competitive mentions
+          const compPos = r.competitivePositioning;
+          if (compPos && compPos.mentionsCompetitors) {
+            lines.push('');
+            lines.push('Competitive Mentions');
+            lines.push(`${'-'.repeat(40)}`);
+            const mentions = [
+              ...(Array.isArray(compPos.competitorNames) ? compPos.competitorNames : []),
+              ...(Array.isArray(compPos.competitorCategories) ? compPos.competitorCategories : []),
+            ];
+            if (mentions.length) {
+              lines.push(`  ${mentions.join(', ')}`);
+            }
+            if (compPos.positioningType) lines.push(`  Positioning: ${compPos.positioningType}`);
+          }
+
+          if (Array.isArray(r.reviewReasons) && r.reviewReasons.length > 0) {
+            lines.push('');
+            lines.push('Review Signals');
+            lines.push(`${'-'.repeat(40)}`);
+            for (const reason of r.reviewReasons) {
+              lines.push(`  - ${reason}`);
+            }
+          }
+
+          if (r.reasoning && typeof r.reasoning === 'string' && r.reasoning.trim()) {
+            lines.push('');
+            lines.push('Reasoning');
+            lines.push(`${'-'.repeat(40)}`);
+            // Split on newlines or field boundaries if model didn't use newlines
+            let reasonLines = r.reasoning.trim().split(/\n+/).map(s => s.trim()).filter(Boolean);
+            if (reasonLines.length <= 3 && r.reasoning.length > 200) {
+              const fieldNames = ['assetType','assetSubType','schemaType','product','jobLevel','jobFunction','audience','topic','useCases','funnelStage','industry','companySize','region','language','usageRights','event','eventType','season','yearPublished','competitivePositioning','competitorNames'];
+              const pattern = new RegExp('(?=' + fieldNames.map(f => f + ':\\s*\\[').join('|') + ')', 'g');
+              reasonLines = r.reasoning.trim().split(pattern).map(s => s.trim()).filter(Boolean);
+            }
+            for (const rl of reasonLines) {
+              if (!rl) continue;
+              lines.push(`  ${rl}`);
+            }
+          }
+
+          await navigator.clipboard.writeText(lines.join('\n'));
+          setStatus('Report copied to clipboard!', 'ok');
+        } catch (e) {
+          setStatus('Failed to copy: ' + (e?.message || String(e)), 'warn');
+        }
+      }
+      // Make it globally available for onclick
+      window.copyClassification = copyClassification;
+
+      // Toggle reasoning expand/collapse
+      function toggleReasoning(btn) {
+        const box = btn.closest('.reasoning-box');
+        const text = box.querySelector('.reasoning-text');
+        if (text.classList.contains('collapsed')) {
+          text.classList.remove('collapsed');
+          text.classList.add('expanded');
+          btn.textContent = 'Show less';
+        } else {
+          text.classList.remove('expanded');
+          text.classList.add('collapsed');
+          btn.textContent = 'Read more';
+        }
+      }
+      window.toggleReasoning = toggleReasoning;
+
+      let effective = { entryId, contentTypeId };
+      let lastResult = null; // hold latest classification
+
+      // Diagnostics helpers using shared diag/diagPush
+      async function diagConnectivity() {
+        const t0 = performance.now();
+        try {
+          const res = await apiFetch('/graph/search?limit=1');
+          const ms = Math.round(performance.now() - t0);
+          const ok = res.ok;
+          diagPush('connectivity', { endpoint: '/graph/search', status: res.status, ok, ms });
+          setStatus(`Connectivity ${ok ? 'OK' : 'FAILED'} (${ms}ms)`, ok ? 'ok' : 'warn');
+        } catch (e) {
+          const ms = Math.round(performance.now() - t0);
+          diagPush('connectivity:error', { endpoint: '/graph/search', ms, error: (e && e.message) || String(e) });
+          setStatus('Connectivity FAILED', 'warn');
+        }
+      }
+      async function diagAiSmoke() {
+        const t0 = performance.now();
+        try {
+          const effEntryId = sdk?.ids?.entry || entryId;
+          if (!effEntryId || effEntryId === 'unknown') {
+            throw new Error('Cannot detect entry. AI smoke test requires a real Contentful entry.');
+          }
+          const payload = { data: { entryId: effEntryId, deepCrawl: true } };
+          const res = await apiFetch('/api/tools/classify-content/execute', { method: 'POST', body: JSON.stringify(payload) });
+          const ms = Math.round(performance.now() - t0);
+          const json = await res.json().catch(() => ({}));
+          diagPush('ai:smoke', { endpoint: '/api/tools/classify-content/execute', entryId: effEntryId, deepCrawl: true, ok: res.ok, status: res.status, ms, sample: json && { topic: json?.topic, funnelStage: json?.funnelStage, overallConfidence: json?.overallConfidence } });
+          setStatus(`AI test ${res.ok ? 'OK' : 'FAILED'} (${ms}ms)`, res.ok ? 'ok' : 'warn');
+        } catch (e) {
+          const ms = Math.round(performance.now() - t0);
+          diagPush('ai:smoke:error', { ms, error: (e && e.message) || String(e) });
+          setStatus('AI test FAILED', 'warn');
+        }
+      }
+      async function diagCopy() {
+        try {
+          const payload = {
+            header: document.getElementById('entryInfo')?.textContent || '',
+            events: diag.events,
+          };
+          await navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
+          setStatus('Diagnostics copied to clipboard', 'ok');
+        } catch {
+          setStatus('Failed to copy diagnostics', 'warn');
+        }
+      }
+
+      function setStatus(text, kind) {
+        const el = document.getElementById('status');
+        const card = document.getElementById('resultsCard');
+        el.textContent = text;
+        el.className = 'status ' + (kind || '');
+        if (text) {
+          card.style.display = '';
+        }
+      }
+      function setSummary(html) {
+        const el = document.getElementById('summary');
+        const card = document.getElementById('resultsCard');
+        el.innerHTML = html || '';
+        if (html) {
+          card.style.display = '';
+        }
+      }
+      function setJson(obj) {
+        const el = document.getElementById('json');
+        el.textContent = obj ? JSON.stringify(obj, null, 2) : '';
+      }
+
+      async function classify() {
+        setStatus('Deep crawling and classifying…', '');
+        setSummary('');
+        setJson(null);
+        try {
+          let effEntryId = sdk?.ids?.entry || entryId;
+          let effContentType = contentTypeId;
+
+          // Get entry ID from SDK if available
+          if (sdk && sdk.ids?.entry) {
+            effEntryId = sdk.ids.entry;
+          }
+
+          if (!effEntryId || effEntryId === 'unknown') {
+            setStatus('Cannot detect entry. Ensure this app is installed as an Entry Sidebar.', 'warn');
+            return;
+          }
+
+          let result = null;
+          const runId = `run_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+
+          // ALWAYS use server-side deep crawl (4-level recursive)
+          const payload = {
+            data: {
+              entryId: effEntryId,
+              deepCrawl: true  // Enable 4-level recursive content extraction
+            }
+          };
+          diagPush('classify:req', { mode: 'deep-crawl', runId, entryId: effEntryId, contentType: effContentType });
+
+          const res = await apiFetch('/api/tools/classify-content/execute', {
+            method: 'POST',
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data?.error || 'Classification failed');
+          result = data;
+
+          lastResult = result;
+          renderClassification(result, 'execution');
+          setJson({ result, crawlDepth: 4 });
+
+          // Update header
+          document.getElementById('entryInfo').textContent = `Entry: ${effEntryId} • Type: ${effContentType} • Locale: ${defaultLocale}`;
+
+          // Capture effective IDs for approve step
+          effective = { entryId: effEntryId, contentTypeId: effContentType };
+
+          // Enable approve buttons
+          document.getElementById('approveBtn').disabled = false;
+          document.getElementById('publishBtn').disabled = false;
+        } catch (e) {
+          setStatus('Error: ' + (e && e.message || String(e)), 'warn');
+          diagPush('classify:error', { message: (e && e.message) || String(e) });
+          document.getElementById('approveBtn').disabled = true;
+          document.getElementById('publishBtn').disabled = true;
+        }
+      }
+
+      async function approveSave(publish) {
+        if (!lastResult) return;
+        setStatus(publish ? 'Saving & publishing…' : 'Saving to Contentful…', '');
+        try {
+          const now = new Date();
+          const localIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString();
+          diagPush('approve:req', { entryId: effective.entryId, locale: defaultLocale, publish: !!publish });
+          const res = await apiFetch('/api/review/approve', {
+            method: 'POST',
+            body: JSON.stringify({ entryId: effective.entryId, classification: lastResult, locale: defaultLocale, lastClassifiedAt: localIso, publish: !!publish })
+          });
+          const data = await res.json();
+          if (!res.ok || !data.success) throw new Error(data?.message || 'Approve failed');
+
+          // Build status message
+          const fieldCount = Array.isArray(data?.updatedFields) ? data.updatedFields.length : 0;
+          const pubLabel = data?.published ? ' Published.' : (publish ? '' : '');
+          const taxonomyNote = data?.taxonomySkipped ? ' (Taxonomy concepts not enabled for space)' : '';
+
+          const statusMsg = fieldCount > 0
+            ? `Saved ${fieldCount} field${fieldCount > 1 ? 's' : ''}.${pubLabel}${taxonomyNote}`
+            : `Saved.${pubLabel}${taxonomyNote}`;
+
+          setStatus(statusMsg, data?.taxonomySkipped ? 'warn' : 'ok');
+          diagPush('approve:res', { ok: true, entryId: effective.entryId, updatedFields: data?.updatedFields, taxonomySkipped: data?.taxonomySkipped });
+        } catch (e) {
+          setStatus('Error: ' + (e && e.message || String(e)), 'warn');
+          diagPush('approve:error', { message: (e && e.message) || String(e) });
+        }
+      }
+
+      document.getElementById('classifyBtn').addEventListener('click', classify);
+      document.getElementById('approveBtn').addEventListener('click', () => approveSave(false));
+      document.getElementById('publishBtn').addEventListener('click', () => approveSave(true));
+      document.getElementById('diagRunBtn')?.addEventListener('click', diagConnectivity);
+      document.getElementById('diagAiBtn')?.addEventListener('click', diagAiSmoke);
+      document.getElementById('diagCopyBtn')?.addEventListener('click', diagCopy);
+    })();
+  </script>
+</body>
+
+</html>
